@@ -1,80 +1,90 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const startButton = document.getElementById("start-game");
-    const restartButton = document.getElementById("restart-game");
-    const gameScreen = document.getElementById("game-screen");
-    const startScreen = document.getElementById("start-screen");
-    const resultScreen = document.getElementById("result-screen");
-    const tileGrid = document.getElementById("tile-grid");
-    const scoreboard = {
-        team1: 0,
-        team2: 0,
-    };
-    let currentPlayer = "team1";
+document.addEventListener('DOMContentLoaded', () => {
+    const startScreen = document.getElementById('start-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const tileGrid = document.getElementById('tile-grid');
+    const team1Score = document.querySelector('#team1-score span');
+    const team2Score = document.querySelector('#team2-score span');
+    const correctionPopup = document.createElement('div');
+    correctionPopup.classList.add('correction');
+    document.body.appendChild(correctionPopup);
+    correctionPopup.style.display = 'none';
 
-    // Example questions
+    const NUM_TILES = 16;
     const questions = [
-        { question: "What is 2 + 2?", answer: 4, options: [3, 4, 5] },
-        { question: "What color is the sky?", answer: "Blue", options: ["Green", "Blue", "Red"] },
-        // Add more questions
+        {
+            question: "What is the capital of France?",
+            answers: ["Paris", "Rome", "Berlin", "Madrid"],
+            correct: 0,
+            gif: "paris.gif",
+        },
+        // Add more questions here
     ];
 
-    // Start game
-    startButton.addEventListener("click", () => {
-        startScreen.classList.add("hidden");
-        gameScreen.classList.remove("hidden");
-        renderTiles();
+    const gifs = {
+        correct: "correct.gif",
+        incorrect: "incorrect.gif",
+    };
+
+    let currentPlayer = 1;
+
+    document.getElementById('start-game').addEventListener('click', () => {
+        startScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
+        initializeGame();
     });
 
-    // Restart game
-    restartButton.addEventListener("click", () => {
-        location.reload();
-    });
-
-    function renderTiles() {
-        tileGrid.innerHTML = "";
-        for (let i = 0; i < 16; i++) {
-            const tile = document.createElement("div");
-            tile.classList.add("tile");
-            tile.addEventListener("click", () => handleTileClick(i));
+    function initializeGame() {
+        tileGrid.innerHTML = '';
+        for (let i = 1; i <= NUM_TILES; i++) {
+            const tile = document.createElement('div');
+            tile.classList.add('tile');
+            tile.innerHTML = `<span>${i}</span>`;
+            tile.addEventListener('click', () => handleTileClick(i));
             tileGrid.appendChild(tile);
         }
     }
 
-    function handleTileClick(index) {
-        const tile = document.querySelectorAll(".tile")[index];
-        tile.style.pointerEvents = "none";
+    function handleTileClick(tileNumber) {
+        const question = questions[tileNumber % questions.length];
+        const userAnswer = promptQuestion(question);
 
-        // Simulate showing a question
-        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-        const userAnswer = prompt(randomQuestion.question);
-
-        if (userAnswer == randomQuestion.answer) {
-            scoreboard[currentPlayer] += 25;
+        if (userAnswer === question.correct) {
+            displayGif(gifs.correct);
+            updateScore();
         } else {
-            scoreboard[currentPlayer] -= 5;
-        }
-
-        updateScoreboard();
-        switchPlayer();
-    }
-
-    function updateScoreboard() {
-        document.getElementById("team1-score").querySelector("span").innerText = scoreboard.team1;
-        document.getElementById("team2-score").querySelector("span").innerText = scoreboard.team2;
-
-        if (Object.values(scoreboard).reduce((a, b) => a + b, 0) >= 100) {
-            endGame();
+            displayCorrection(question.answers[question.correct]);
+            displayGif(gifs.incorrect);
         }
     }
 
-    function switchPlayer() {
-        currentPlayer = currentPlayer === "team1" ? "team2" : "team1";
+    function promptQuestion(question) {
+        // Display the question and answers, return the selected answer index
+        const answer = prompt(
+            `${question.question}\n${question.answers.map((a, i) => `${i + 1}. ${a}`).join('\n')}`
+        );
+        return parseInt(answer) - 1;
     }
 
-    function endGame() {
-        gameScreen.classList.add("hidden");
-        resultScreen.classList.remove("hidden");
-        const winner = scoreboard.team1 > scoreboard.team2 ? "Player 1" : "Player 2";
-        document.getElementById("winner").innerText = `Winner: ${winner}`;
+    function updateScore() {
+        const scoreElement = currentPlayer === 1 ? team1Score : team2Score;
+        const currentScore = parseInt(scoreElement.textContent);
+        scoreElement.textContent = currentScore + 1;
+        scoreElement.classList.add('animate');
+        setTimeout(() => scoreElement.classList.remove('animate'), 500);
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+    }
+
+    function displayCorrection(correctAnswer) {
+        correctionPopup.textContent = `Correct Answer: ${correctAnswer}`;
+        correctionPopup.style.display = 'block';
+        setTimeout(() => {
+            correctionPopup.style.display = 'none';
+        }, 3000);
+    }
+
+    function displayGif(gif) {
+        // Replace this with a modal or dynamic gif display
+        alert(`GIF: ${gif}`);
     }
 });
