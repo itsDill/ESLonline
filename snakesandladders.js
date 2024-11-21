@@ -3,17 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameScreen = document.getElementById('game-screen');
     const resultScreen = document.getElementById('result-screen');
     const board = document.getElementById('snakes-ladders-board');
+    const questions = [
+        "What is your favorite color?",
+        "What color is the grass?",
+        "How are you today?",
+        "How were you yesterday?",
+        "What is the color of the sky?"
+    ];
 
     // Game variables
     const players = [];
-    const avatars = ['🐱', '🐶', '🐸', '🐵', '🐧']; // Player avatars
+    const avatars = ['🐱', '🐶', '🐸', '🐵', '🐧'];
     const boardSize = 100;
-    const snakes = { 16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 87: 24, 93: 73, 95: 75, 98: 78 };
-    const ladders = { 3: 22, 5: 8, 15: 25, 18: 45, 21: 82, 28: 76, 36: 44, 50: 67, 63: 81, 71: 91 };
+    let snakes = { 16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 87: 24, 93: 73, 95: 75, 98: 78 };
+    let ladders = { 3: 22, 5: 8, 15: 25, 18: 45, 21: 82, 28: 76, 36: 44, 50: 67, 63: 81, 71: 91 };
     let currentPlayerIndex = 0;
 
-    // Tile images (you can customize these)
-    const tileImages = Array(boardSize).fill("tile.jpg"); // Default image
+    // Tile images
+    const tileImages = Array(boardSize).fill("tile.jpg");
     for (const snake in snakes) tileImages[snake - 1] = "snake.jpg";
     for (const ladder in ladders) tileImages[ladder - 1] = "ladder.jpg";
 
@@ -24,22 +31,44 @@ document.addEventListener('DOMContentLoaded', () => {
             const tile = document.createElement('div');
             tile.className = 'tile';
             tile.style.backgroundImage = `url(${tileImages[i - 1]})`;
-            tile.textContent = i; // Tile number
+            tile.textContent = i;
             board.appendChild(tile);
         }
     }
 
     // Add players
     function initializePlayers(numPlayers) {
+        players.length = 0;
         for (let i = 0; i < numPlayers; i++) {
-            players.push({ name: `Player ${i + 1}`, position: 0, avatar: avatars[i] });
+            const name = prompt(`Enter name for Player ${i + 1}:`) || `Player ${i + 1}`;
+            const avatar = avatars[i];
+            const color = prompt(`Choose a color for ${name}:`) || "black";
+            players.push({ name, position: 0, avatar, color });
         }
-        updateBoard(); // Display initial positions
+        updateBoard();
     }
 
-    // Roll the dice
-    function rollDice() {
-        return Math.floor(Math.random() * 6) + 1;
+    // Display random question before dice roll
+    function askQuestion() {
+        const randomIndex = Math.floor(Math.random() * questions.length);
+        alert(questions[randomIndex]);
+    }
+
+    // Dice roll animation
+    function rollDiceAnimation(callback) {
+        const dice = document.getElementById('dice');
+        let roll = 1;
+        const interval = setInterval(() => {
+            dice.textContent = `🎲 ${roll}`;
+            roll = roll === 6 ? 1 : roll + 1;
+        }, 100);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            const result = Math.floor(Math.random() * 6) + 1;
+            dice.textContent = `🎲 ${result}`;
+            callback(result);
+        }, 2000);
     }
 
     // Move player
@@ -66,7 +95,10 @@ document.addEventListener('DOMContentLoaded', () => {
         players.forEach(player => {
             const tile = tiles[player.position - 1];
             if (tile) {
-                tile.textContent += `${player.avatar}`;
+                const playerElem = document.createElement('span');
+                playerElem.textContent = player.avatar;
+                playerElem.style.color = player.color;
+                tile.appendChild(playerElem);
             }
         });
     }
@@ -90,22 +122,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Play the game
     function playGame() {
         const currentPlayer = players[currentPlayerIndex];
-        const diceRoll = rollDice();
-        alert(`${currentPlayer.name} rolled a ${diceRoll}!`);
-        movePlayer(currentPlayer, diceRoll);
-        updateBoard();
+        askQuestion();
+        rollDiceAnimation(diceRoll => {
+            alert(`${currentPlayer.name} rolled a ${diceRoll}!`);
+            movePlayer(currentPlayer, diceRoll);
+            updateBoard();
 
-        // Check for win
-        if (currentPlayer.position === boardSize) {
-            alert(`${currentPlayer.name} wins!`);
-            resultScreen.classList.remove('hidden');
-            gameScreen.classList.add('hidden');
-            return;
-        }
+            if (currentPlayer.position === boardSize) {
+                alert(`${currentPlayer.name} wins!`);
+                resultScreen.classList.remove('hidden');
+                gameScreen.classList.add('hidden');
+                return;
+            }
 
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-        setTimeout(playGame, 1000); // Continue after delay
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            setTimeout(playGame, 1000);
+        });
     }
+
+    // Allow editing snakes and ladders layout
+    document.getElementById('edit-board').addEventListener('click', () => {
+        const newSnakes = prompt("Enter new snakes as JSON (e.g., {16:6, 47:26}):");
+        const newLadders = prompt("Enter new ladders as JSON (e.g., {3:22, 5:8}):");
+
+        try {
+            snakes = JSON.parse(newSnakes);
+            ladders = JSON.parse(newLadders);
+
+            initializeBoard();
+            alert("Board layout updated!");
+        } catch (e) {
+            alert("Invalid JSON format. Try again.");
+        }
+    });
 
     // Restart game
     document.getElementById('restart-game').addEventListener('click', () => {
