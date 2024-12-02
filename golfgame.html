@@ -3,44 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golf Word Game</title>
+    <title>Quiz Tile Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
         }
-        canvas {
-            border: 2px solid #000;
+        #start-screen, #game-screen, #result-screen {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-screen.active, #start-screen.active, #result-screen.active {
             display: block;
+        }
+        #tile-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin: 20px auto;
+            max-width: 500px;
         }
-        #game-info {
-            margin: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #28a745;
+        .tile {
+            background: #3498db;
             color: #fff;
-            border: none;
-            border-radius: 5px;
+            font-size: 18px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #218838;
+        .tile:hover {
+            background: #2980b9;
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px auto;
+            max-width: 500px;
+        }
+        .scoreboard div {
+            font-size: 18px;
+        }
+        .correction {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #222;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        #gif-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+        #gif-modal img {
+            max-width: 80%;
+            margin: 10% auto;
         }
     </style>
 </head>
 <body>
-    <h1>Golf Word Game</h1>
-    <p>Hit the ball towards the correct word or letter target!</p>
-    <div id="game-info">
-        <p id="instruction">Find the word: <strong id="target-word">apple</strong></p>
-        <button id="restart">Restart Game</button>
+    <div id="start-screen" class="active">
+        <h1>Quiz Tile Game</h1>
+        <button id="start-game">Start Game</button>
     </div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
-
-    <script src="script.js"></script>
+    <div id="game-screen">
+        <div class="scoreboard">
+            <div id="team1-score">Team 1: <span>0</span></div>
+            <div id="team2-score">Team 2: <span>0</span></div>
+        </div>
+        <div id="tile-grid"></div>
+    </div>
+    <div id="gif-modal">
+        <img src="" alt="GIF">
+    </div>
+    <script src="quizGame.js"></script>
 </body>
 </html>
