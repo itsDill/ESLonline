@@ -5,88 +5,846 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golf Vocabulary Game</title>
     <style>
+        :root {
+            --primary: #28a745;
+            --secondary: #007bff;
+            --light-green: #c6e9c2;
+            --dark-green: #0e5f13;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --black: #000000;
+            --sand: #f8e1a6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: url('images/golf.png') no-repeat center center/cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('/api/placeholder/1920/1080') no-repeat center center/cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: #333;
         }
+
         .container {
             text-align: center;
             background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
         }
-        .golf-area {
+
+        h1 {
+            color: var(--dark-green);
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: var(--light-green);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark-green);
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+
+        .golf-course {
             position: relative;
-            width: 300px;
-            height: 200px;
-            border: 2px solid green;
+            width: 100%;
+            height: 220px;
+            border: 3px solid var(--dark-green);
             margin: 20px auto;
-            background-color: lightgreen;
-            border-radius: 10px;
+            background-color: var(--light-green);
+            border-radius: 15px;
+            overflow: hidden;
         }
+
+        .flag {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            width: 6px;
+            height: 60px;
+            background-color: var(--gray);
+        }
+
+        .flag::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 6px;
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-right: 30px solid var(--primary);
+            border-bottom: 15px solid transparent;
+        }
+
         #ball {
             width: 20px;
             height: 20px;
-            background: white;
+            background: var(--white);
+            border: 1px solid var(--gray);
             border-radius: 50%;
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            transition: transform 1s ease-in-out;
+            bottom: 20px;
+            left: 30px;
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 2;
         }
+
         #hole {
             width: 30px;
             height: 30px;
-            background: black;
+            background: var(--black);
             border-radius: 50%;
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 15px;
+            right: 30px;
+            z-index: 1;
         }
-        button {
+
+        /* Sand traps */
+        .sand-trap {
+            position: absolute;
+            background-color: var(--sand);
+            border-radius: 50%;
+        }
+
+        .sand-trap:nth-child(1) {
+            width: 70px;
+            height: 40px;
+            top: 100px;
+            left: 150px;
+        }
+
+        .sand-trap:nth-child(2) {
+            width: 50px;
+            height: 30px;
+            bottom: 40px;
+            right: 120px;
+        }
+
+        .question-area {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--light-green);
+            border-radius: 8px;
+        }
+
+        #question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+
+        #options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option-btn {
+            padding: 10px;
+            background-color: var(--white);
+            border: 2px solid var(--secondary);
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            background-color: #e6f2ff;
+        }
+
+        .option-btn.selected {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        #answer {
             padding: 10px 15px;
-            font-size: 16px;
+            font-size: 1rem;
+            border: 2px solid var(--gray);
+            border-radius: 5px;
+            width: 70%;
+            margin-right: 10px;
+        }
+
+        #submit {
+            padding: 10px 20px;
+            font-size: 1rem;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: var(--secondary);
             color: white;
-            margin: 10px;
+            transition: all 0.3s;
         }
-        button:hover {
+
+        #submit:hover {
             background-color: #0056b3;
+        }
+
+        .feedback {
+            margin: 15px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            height: 25px;
+        }
+
+        .correct {
+            color: var(--primary);
+        }
+
+        .incorrect {
+            color: #dc3545;
+        }
+
+        .level-selector {
+            margin: 15px 0;
+        }
+
+        .level-btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            background-color: var(--gray);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .level-btn.active {
+            background-color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            width: 80%;
+        }
+
+        .modal h2 {
+            color: var(--dark-green);
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: var(--dark-green);
+        }
+
+        /* Animation classes */
+        .swing-animation {
+            animation: swing 1s ease-out;
+        }
+
+        @keyframes swing {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(-15deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-5deg); }
+            80% { transform: rotate(2deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .bounce-animation {
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            #options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .golf-course {
+                height: 180px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Golf Vocabulary Game</h1>
-        <p>Answer correctly to hit the ball into the hole!</p>
-        <div class="golf-area">
+        <p class="intro-text">Test your English vocabulary while playing golf! Answer questions correctly to hit the ball toward the hole.</p>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Score</span>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Hole</span>
+                <span class="stat-value"><span id="current-hole">1</span>/<span id="total-holes">9</span></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Attempts</span>
+                <span class="stat-value" id="attempts">0</span>
+            </div>
+        </div>
+
+        <div class="level-selector">
+            <button class="level-btn active" data-level="beginner">Beginner</button>
+            <button class="level-btn" data-level="intermediate">Intermediate</button>
+            <button class="level-btn" data-level="advanced">Advanced</button>
+        </div>
+
+        <div class="golf-course">
+            <div class="sand-trap"></div>
+            <div class="sand-trap"></div>
+            <div class="flag"></div>
             <div id="ball"></div>
             <div id="hole"></div>
         </div>
-        <p id="question">What is the synonym of "happy"?</p>
-        <input type="text" id="answer">
-        <button id="submit">Hit Ball</button>
+
+        <div class="question-area">
+            <p id="question">What is a synonym for "happy"?</p>
+
+            <div id="options-container">
+                <button class="option-btn" data-index="0">joyful</button>
+                <button class="option-btn" data-index="1">angry</button>
+                <button class="option-btn" data-index="2">sad</button>
+                <button class="option-btn" data-index="3">tired</button>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="answer" placeholder="Or type your answer here...">
+                <button id="submit">Hit Ball</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="levelCompleteModal">
+        <div class="modal-content">
+            <h2>Hole Complete!</h2>
+            <p id="modal-message">You completed hole 1 in 2 attempts!</p>
+            <p>Score: <span id="modal-score">0</span></p>
+            <button id="nextHoleBtn">Next Hole</button>
+        </div>
+    </div>
+
+    <div class="modal" id="gameCompleteModal">
+        <div class="modal-content">
+            <h2>Game Complete!</h2>
+            <p>Congratulations! You've completed all holes.</p>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <p id="performance-message">Great job!</p>
+            <button id="playAgainBtn">Play Again</button>
+        </div>
     </div>
 
     <script>
-        document.getElementById("submit").addEventListener("click", function() {
-            let answer = document.getElementById("answer").value.toLowerCase();
-            if (answer === "joyful" || answer === "glad" || answer === "cheerful") {
-                document.getElementById("ball").style.transform = "translateX(250px)";
-                setTimeout(() => alert("Great! You scored!"), 1000);
-            } else {
-                alert("Try again!");
+        // Game data
+        const gameData = {
+            beginner: [
+                {
+                    question: "What is a synonym for 'happy'?",
+                    options: ["joyful", "angry", "sad", "tired"],
+                    correctAnswer: "joyful",
+                    acceptableAnswers: ["joyful", "glad", "cheerful", "delighted", "pleased"]
+                },
+                {
+                    question: "What is the opposite of 'big'?",
+                    options: ["small", "large", "huge", "enormous"],
+                    correctAnswer: "small",
+                    acceptableAnswers: ["small", "tiny", "little"]
+                },
+                {
+                    question: "Which word means 'to look at written words and understand them'?",
+                    options: ["read", "write", "speak", "listen"],
+                    correctAnswer: "read",
+                    acceptableAnswers: ["read", "reading"]
+                },
+                {
+                    question: "What color is a banana?",
+                    options: ["yellow", "red", "blue", "green"],
+                    correctAnswer: "yellow",
+                    acceptableAnswers: ["yellow"]
+                },
+                {
+                    question: "Which meal do you typically eat in the morning?",
+                    options: ["breakfast", "lunch", "dinner", "snack"],
+                    correctAnswer: "breakfast",
+                    acceptableAnswers: ["breakfast"]
+                },
+                {
+                    question: "What is the past tense of 'go'?",
+                    options: ["went", "gone", "going", "goes"],
+                    correctAnswer: "went",
+                    acceptableAnswers: ["went"]
+                },
+                {
+                    question: "How many days are in a week?",
+                    options: ["7", "5", "10", "14"],
+                    correctAnswer: "7",
+                    acceptableAnswers: ["7", "seven"]
+                },
+                {
+                    question: "What season comes after winter?",
+                    options: ["spring", "summer", "fall", "autumn"],
+                    correctAnswer: "spring",
+                    acceptableAnswers: ["spring"]
+                },
+                {
+                    question: "What do you wear on your feet?",
+                    options: ["shoes", "hat", "shirt", "pants"],
+                    correctAnswer: "shoes",
+                    acceptableAnswers: ["shoes", "socks", "sandals", "boots"]
+                }
+            ],
+            intermediate: [
+                {
+                    question: "What is another word for 'beautiful'?",
+                    options: ["gorgeous", "ugly", "plain", "simple"],
+                    correctAnswer: "gorgeous",
+                    acceptableAnswers: ["gorgeous", "attractive", "pretty", "lovely", "stunning"]
+                },
+                {
+                    question: "Which word describes something that happens once a year?",
+                    options: ["annual", "monthly", "weekly", "daily"],
+                    correctAnswer: "annual",
+                    acceptableAnswers: ["annual", "yearly"]
+                },
+                {
+                    question: "What is a 'synopsis'?",
+                    options: ["summary", "chapter", "novel", "character"],
+                    correctAnswer: "summary",
+                    acceptableAnswers: ["summary", "overview", "outline"]
+                },
+                {
+                    question: "Someone who is 'lethargic' feels:",
+                    options: ["tired", "angry", "happy", "excited"],
+                    correctAnswer: "tired",
+                    acceptableAnswers: ["tired", "sluggish", "lazy", "exhausted"]
+                },
+                {
+                    question: "What is the meaning of 'consecutive'?",
+                    options: ["one after another", "at the same time", "together", "separate"],
+                    correctAnswer: "one after another",
+                    acceptableAnswers: ["one after another", "following", "successive", "sequential"]
+                },
+                {
+                    question: "When something is 'transparent', it is:",
+                    options: ["see-through", "colorful", "opaque", "shiny"],
+                    correctAnswer: "see-through",
+                    acceptableAnswers: ["see-through", "clear", "translucent"]
+                },
+                {
+                    question: "What is a 'dilemma'?",
+                    options: ["difficult choice", "solution", "answer", "question"],
+                    correctAnswer: "difficult choice",
+                    acceptableAnswers: ["difficult choice", "problem", "predicament", "quandary"]
+                },
+                {
+                    question: "A 'euphemism' is a:",
+                    options: ["polite expression", "musical instrument", "type of food", "medical condition"],
+                    correctAnswer: "polite expression",
+                    acceptableAnswers: ["polite expression", "substitute", "indirect term"]
+                },
+                {
+                    question: "What does 'procrastinate' mean?",
+                    options: ["delay", "hurry", "forget", "remember"],
+                    correctAnswer: "delay",
+                    acceptableAnswers: ["delay", "postpone", "put off"]
+                }
+            ],
+            advanced: [
+                {
+                    question: "What is an 'ephemeral' experience?",
+                    options: ["short-lived", "long-lasting", "meaningful", "insignificant"],
+                    correctAnswer: "short-lived",
+                    acceptableAnswers: ["short-lived", "temporary", "fleeting", "transient"]
+                },
+                {
+                    question: "Someone who is 'loquacious' tends to:",
+                    options: ["talk a lot", "be quiet", "be angry", "be sad"],
+                    correctAnswer: "talk a lot",
+                    acceptableAnswers: ["talk a lot", "be talkative", "be chatty", "be verbose"]
+                },
+                {
+                    question: "What does 'ubiquitous' mean?",
+                    options: ["found everywhere", "rare", "unique", "unusual"],
+                    correctAnswer: "found everywhere",
+                    acceptableAnswers: ["found everywhere", "omnipresent", "pervasive", "universal"]
+                },
+                {
+                    question: "A 'perfunctory' task is performed:",
+                    options: ["with minimum effort", "carefully", "thoroughly", "enthusiastically"],
+                    correctAnswer: "with minimum effort",
+                    acceptableAnswers: ["with minimum effort", "mechanically", "routinely", "halfheartedly"]
+                },
+                {
+                    question: "What is 'insidious' behavior?",
+                    options: ["gradually harmful", "helpful", "obvious", "direct"],
+                    correctAnswer: "gradually harmful",
+                    acceptableAnswers: ["gradually harmful", "treacherous", "sneaky", "subtle"]
+                },
+                {
+                    question: "Someone who is 'taciturn' is:",
+                    options: ["reserved", "talkative", "friendly", "outgoing"],
+                    correctAnswer: "reserved",
+                    acceptableAnswers: ["reserved", "quiet", "uncommunicative", "silent"]
+                },
+                {
+                    question: "What does 'pernicious' mean?",
+                    options: ["harmful", "beneficial", "unimportant", "temporary"],
+                    correctAnswer: "harmful",
+                    acceptableAnswers: ["harmful", "destructive", "detrimental", "ruinous"]
+                },
+                {
+                    question: "A 'quixotic' idea is:",
+                    options: ["unrealistic", "practical", "common", "simple"],
+                    correctAnswer: "unrealistic",
+                    acceptableAnswers: ["unrealistic", "idealistic", "impractical", "fanciful"]
+                },
+                {
+                    question: "What does 'obfuscate' mean?",
+                    options: ["to confuse", "to clarify", "to simplify", "to help"],
+                    correctAnswer: "to confuse",
+                    acceptableAnswers: ["to confuse", "to bewilder", "to complicate", "to obscure"]
+                }
+            ]
+        };
+
+        // Game state
+        let gameState = {
+            currentLevel: "beginner",
+            currentHole: 0,
+            score: 0,
+            attempts: 0,
+            totalHoles: 9,
+            selectedAnswer: null,
+            ballInHole: false,
+            ballPosition: 0 // 0: start, 1-3: intermediate positions, 4: in hole
+        };
+
+        // DOM elements
+        const ball = document.getElementById("ball");
+        const hole = document.getElementById("hole");
+        const questionElement = document.getElementById("question");
+        const optionsContainer = document.getElementById("options-container");
+        const optionButtons = document.querySelectorAll(".option-btn");
+        const answerInput = document.getElementById("answer");
+        const submitButton = document.getElementById("submit");
+        const feedbackElement = document.getElementById("feedback");
+        const scoreElement = document.getElementById("score");
+        const currentHoleElement = document.getElementById("current-hole");
+        const totalHolesElement = document.getElementById("total-holes");
+        const attemptsElement = document.getElementById("attempts");
+        const levelButtons = document.querySelectorAll(".level-btn");
+        const levelCompleteModal = document.getElementById("levelCompleteModal");
+        const gameCompleteModal = document.getElementById("gameCompleteModal");
+        const modalMessage = document.getElementById("modal-message");
+        const modalScore = document.getElementById("modal-score");
+        const finalScore = document.getElementById("final-score");
+        const performanceMessage = document.getElementById("performance-message");
+        const nextHoleBtn = document.getElementById("nextHoleBtn");
+        const playAgainBtn = document.getElementById("playAgainBtn");
+
+        // Initialize the game
+        function initGame() {
+            gameState.currentHole = 0;
+            gameState.score = 0;
+            gameState.attempts = 0;
+            gameState.ballPosition = 0;
+            gameState.ballInHole = false;
+
+            updateUI();
+            loadQuestion();
+            resetBallPosition();
+
+            scoreElement.textContent = gameState.score;
+            currentHoleElement.textContent = gameState.currentHole + 1;
+            totalHolesElement.textContent = gameState.totalHoles;
+            attemptsElement.textContent = gameState.attempts;
+        }
+
+        // Load a question
+        function loadQuestion() {
+            const currentQuestion = gameData[gameState.currentLevel][gameState.currentHole];
+            questionElement.textContent = currentQuestion.question;
+
+            // Load options
+            optionButtons.forEach((button, index) => {
+                button.textContent = currentQuestion.options[index];
+                button.classList.remove("selected");
+            });
+
+            answerInput.value = "";
+            feedbackElement.textContent = "";
+            feedbackElement.className = "feedback";
+
+            gameState.selectedAnswer = null;
+        }
+
+        // Option button handler
+        optionsContainer.addEventListener("click", (e) => {
+            if (e.target.classList.contains("option-btn")) {
+                // Deselect all buttons
+                optionButtons.forEach(btn => btn.classList.remove("selected"));
+
+                // Select clicked button
+                e.target.classList.add("selected");
+
+                // Update selected answer
+                gameState.selectedAnswer = e.target.textContent;
+
+                // Set the input value to match selected option
+                answerInput.value = gameState.selectedAnswer;
             }
         });
+
+        // Level button handler
+        document.querySelectorAll(".level-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                // Change level only if not in the middle of a hole
+                if (gameState.ballPosition === 0 || confirm("Changing levels will reset your current game. Continue?")) {
+                    // Reset active class
+                    levelButtons.forEach(btn => btn.classList.remove("active"));
+                    button.classList.add("active");
+
+                    // Update game level
+                    gameState.currentLevel = button.getAttribute("data-level");
+
+                    // Reset game
+                    initGame();
+                }
+            });
+        });
+
+        // Submit answer
+        submitButton.addEventListener("click", function() {
+            if (gameState.ballInHole) {
+                return; // Prevent multiple submissions after hole is completed
+            }
+
+            let answer = answerInput.value.trim().toLowerCase();
+            const currentQuestion = gameData[gameState.currentLevel][gameState.currentHole];
+
+            // Increment attempts
+            gameState.attempts++;
+            attemptsElement.textContent = gameState.attempts;
+
+            // Check if answer is correct
+            const isCorrect = currentQuestion.acceptableAnswers.includes(answer);
+
+            if (isCorrect) {
+                feedbackElement.textContent = "Correct! Great shot!";
+                feedbackElement.className = "feedback correct";
+
+                // Animate the golf swing
+                submitButton.classList.add("swing-animation");
+                setTimeout(() => {
+                    submitButton.classList.remove("swing-animation");
+                }, 1000);
+
+                // Advance the ball position
+                moveBall();
+
+                // Check if ball is in hole
+                if (gameState.ballPosition >= 4) {
+                    completedHole();
+                }
+            } else {
+                feedbackElement.textContent = "Incorrect. Try again!";
+                feedbackElement.className = "feedback incorrect";
+
+                // Apply a slight swing animation for incorrect answers
+                ball.classList.add("bounce-animation");
+                setTimeout(() => {
+                    ball.classList.remove("bounce-animation");
+                }, 500);
+            }
+        });
+
+        // Handle Enter key press in input
+        answerInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                submitButton.click();
+            }
+        });
+
+        // Move the ball based on current position
+        function moveBall() {
+            gameState.ballPosition++;
+
+            switch(gameState.ballPosition) {
+                case 1:
+                    ball.style.transform = "translate(70px, -30px)";
+                    break;
+                case 2:
+                    ball.style.transform = "translate(140px, -15px)";
+                    break;
+                case 3:
+                    ball.style.transform = "translate(200px, -5px)";
+                    break;
+                case 4:
+                    ball.style.transform = "translate(240px, 0)";
+                    gameState.ballInHole = true;
+                    break;
+            }
+        }
+
+        // Reset ball position
+        function resetBallPosition() {
+            gameState.ballPosition = 0;
+            gameState.ballInHole = false;
+            ball.style.transform = "translate(0, 0)";
+        }
+
+        // Completed a hole
+        function completedHole() {
+            // Calculate points based on attempts
+            const points = Math.max(10 - (gameState.attempts - 1), 1);
+            gameState.score += points;
+            scoreElement.textContent = gameState.score;
+
+            // Show level complete modal
+            setTimeout(() => {
+                modalMessage.textContent = `You completed hole ${gameState.currentHole + 1} in ${gameState.attempts} attempts!`;
+                modalScore.textContent = gameState.score;
+                levelCompleteModal.style.display = "flex";
+            }, 1500);
+        }
+
+        // Next hole button handler
+        nextHoleBtn.addEventListener("click", () => {
+            levelCompleteModal.style.display = "none";
+
+            // Move to next hole or complete game
+            gameState.currentHole++;
+            gameState.attempts = 0;
+            attemptsElement.textContent = gameState.attempts;
+
+            if (gameState.currentHole < gameState.totalHoles) {
+                currentHoleElement.textContent = gameState.currentHole + 1;
+                resetBallPosition();
+                loadQuestion();
+            } else {
+                // Game complete
+                finalScore.textContent = gameState.score;
+
+                // Determine performance message
+                let perfMessage = "";
+                const maxScore = gameState.totalHoles * 10;
+                const scorePercentage = (gameState.score / maxScore) * 100;
+
+                if (scorePercentage >= 90) {
+                    perfMessage = "Outstanding! You're a vocabulary pro!";
+                } else if (scorePercentage >= 75) {
+                    perfMessage = "Great job! Your vocabulary is impressive!";
+                } else if (scorePercentage >= 60) {
+                    perfMessage = "Good work! Keep practicing to improve.";
+                } else {
+                    perfMessage = "Nice try! Keep learning and you'll get better.";
+                }
+
+                performanceMessage.textContent = perfMessage;
+                gameCompleteModal.style.display = "flex";
+            }
+        });
+
+        // Play again button handler
+        playAgainBtn.addEventListener("click", () => {
+            gameCompleteModal.style.display = "none";
+            initGame();
+        });
+
+        // Update UI elements
+        function updateUI() {
+            scoreElement.textContent = gameState.score;
+            currentHoleElement.textContent = gameState.currentHole + 1;
+            attemptsElement.textContent = gameState.attempts;
+        }
+
+        // Initialize the game on load
+        document.addEventListener("DOMContentLoaded", initGame);
     </script>
 </body>
 </html>
