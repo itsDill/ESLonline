@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Uno-Style Card Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
+            width: 800px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .player-hand, .computer-hand {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .card {
+            width: 100px;
+            height: 150px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            border: 2px solid black;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+        }
+
+        .card-actions {
+            margin-top: 20px;
+        }
+
+        .color-picker {
+            margin: 10px;
+        }
+
+        #draw-pile, #discard-pile {
+            display: inline-block;
+            width: 100px;
+            height: 150px;
+            border: 2px dashed #999;
+            border-radius: 10px;
+            margin: 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-status {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>ESL Uno-Style Card Game</h1>
+
+        <div class="game-status" id="game-status">Game Started!</div>
+
+        <div class="card-actions">
+            <button id="start-game-btn">Start New Game</button>
+            <button id="draw-card-btn">Draw Card</button>
+        </div>
+
+        <div class="game-board">
+            <div id="draw-pile">Draw Pile</div>
+            <div id="discard-pile">Discard Pile</div>
+        </div>
+
+        <div class="computer-hand" id="computer-hand"></div>
+
+        <div class="color-selection">
+            <label>Choose Card Color:</label>
+            <input type="color" id="custom-color-picker" value="#ff0000">
+        </div>
+
+        <div class="player-hand" id="player-hand"></div>
+    </div>
+
+    <script>
+        class UnoGame {
+            constructor() {
+                this.colors = ['red', 'blue', 'green', 'yellow'];
+                this.numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                this.specialCards = ['Skip', 'Reverse', 'Draw Two'];
+                this.deck = [];
+                this.playerHand = [];
+                this.computerHand = [];
+                this.discardPile = [];
+
+                this.playerHandElement = document.getElementById('player-hand');
+                this.computerHandElement = document.getElementById('computer-hand');
+                this.discardPileElement = document.getElementById('discard-pile');
+                this.drawPileElement = document.getElementById('draw-pile');
+                this.gameStatusElement = document.getElementById('game-status');
+                this.customColorPicker = document.getElementById('custom-color-picker');
+                this.startGameBtn = document.getElementById('start-game-btn');
+                this.drawCardBtn = document.getElementById('draw-card-btn');
+
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.startGameBtn.addEventListener('click', () => this.startGame());
+                this.drawCardBtn.addEventListener('click', () => this.drawCard('player'));
+            }
+
+            createDeck() {
+                this.deck = [];
+                this.colors.forEach(color => {
+                    // Add number cards
+                    this.numbers.forEach(number => {
+                        // Each number appears twice except zero
+                        const count = number === '0' ? 1 : 2;
+                        for (let i = 0; i < count; i++) {
+                            this.deck.push({
+                                color: color,
+                                value: number,
+                                type: 'number'
+                            });
+                        }
+                    });
+
+                    // Add special cards
+                    this.specialCards.forEach(special => {
+                        for (let i = 0; i < 2; i++) {
+                            this.deck.push({
+                                color: color,
+                                value: special,
+                                type: 'special'
+                            });
+                        }
+                    });
+                });
+
+                // Add wild cards
+                for (let i = 0; i < 4; i++) {
+                    this.deck.push({
+                        color: 'black',
+                        value: 'Wild',
+                        type: 'wild'
+                    });
+                    this.deck.push({
+                        color: 'black',
+                        value: 'Draw Four',
+                        type: 'wild'
+                    });
+                }
+
+                this.shuffleDeck();
+            }
+
+            shuffleDeck() {
+                for (let i = this.deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+                }
+            }
+
+            startGame() {
+                this.createDeck();
+                this.playerHand = [];
+                this.computerHand = [];
+
+                // Deal 7 cards to each player
+                for (let i = 0; i < 7; i++) {
+                    this.playerHand.push(this.deck.pop());
+                    this.computerHand.push(this.deck.pop());
+                }
+
+                // Place first card in discard pile
+                this.discardPile = [this.deck.pop()];
+                this.updateDisplay();
+                this.gameStatusElement.textContent = 'Game Started! Your turn.';
+            }
+
+            updateDisplay() {
+                this.playerHandElement.innerHTML = '';
+                this.computerHandElement.innerHTML = '';
+                this.discardPileElement.innerHTML = '';
+
+                // Display player's cards
+                this.playerHand.forEach((card, index) => {
+                    const cardElement = this.createCardElement(card, 'player', index);
+                    this.playerHandElement.appendChild(cardElement);
+                });
+
+                // Display computer's cards (face down)
+                this.computerHand.forEach(() => {
+                    const cardElement = this.createCardElement({
+                        color: 'gray',
+                        value: '?',
+                        type: 'hidden'
+                    }, 'computer');
+                    this.computerHandElement.appendChild(cardElement);
+                });
+
+                // Display top card of discard pile
+                const topCard = this.discardPile[this.discardPile.length - 1];
+                const discardElement = this.createCardElement(topCard, 'discard');
+                this.discardPileElement.appendChild(discardElement);
+
+                this.drawPileElement.textContent = `Draw Pile\n(${this.deck.length} cards)`;
+            }
+
+            createCardElement(card, type, index) {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+
+                // Use custom color if selected
+                const customColor = this.customColorPicker.value;
+                const backgroundColor = card.color === 'black'
+                    ? 'black'
+                    : (type === 'player' ? getCustomColor(card.color, this.getHueFromColor(customColor)) : card.color);
+
+                cardElement.style.backgroundColor = backgroundColor;
+                cardElement.style.color = ['black', 'gray'].includes(card.color) ? 'white' : 'black';
+                cardElement.textContent = card.value;
+
+                // Add click event for player's cards
+                if (type === 'player') {
+                    cardElement.addEventListener('click', () => this.playCard(index));
+                }
+
+                return cardElement;
+            }
+
+            getHueFromColor(hexColor) {
+                const rgb = this.hexToRgb(hexColor);
+                const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+                return Math.round(hsl.h * 360);
+            }
+
+            hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
+            }
+
+            rgbToHsl(r, g, b) {
+                r /= 255, g /= 255, b /= 255;
+                const max = Math.max(r, g, b), min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+
+                if (max === min) {
+                    h = s = 0;
+                } else {
+                    const d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    h /= 6;
+                }
+
+                return { h, s, l };
+            }
+
+            playCard(index) {
+                const card = this.playerHand[index];
+                const topCard = this.discardPile[this.discardPile.length - 1];
+
+                // Basic card matching logic (simplistic for now)
+                const canPlay =
+                    card.color === topCard.color ||
+                    card.value === topCard.value ||
+                    card.color === 'black';
+
+                if (canPlay) {
+                    this.discardPile.push(card);
+                    this.playerHand.splice(index, 1);
+
+                    // Simple computer play
+                    this.computerPlay();
+
+                    this.updateDisplay();
+                } else {
+                    alert('You cannot play this card!');
+                }
+            }
+
+            computerPlay() {
+                // Very basic computer play strategy
+                const playableCard = this.computerHand.findIndex(card =>
+                    card.color === this.discardPile[this.discardPile.length - 1].color ||
+                    card.value === this.discardPile[this.discardPile.length - 1].value ||
+                    card.color === 'black'
+                );
+
+                if (playableCard !== -1) {
+                    const card = this.computerHand[playableCard];
+                    this.discardPile.push(card);
+                    this.computerHand.splice(playableCard, 1);
+                } else {
+                    // Draw a card if no playable card
+                    this.drawCard('computer');
+                }
+            }
+
+            drawCard(player) {
+                if (this.deck.length === 0) {
+                    alert('No more cards in the deck!');
+                    return;
+                }
+
+                const drawnCard = this.deck.pop();
+                if (player === 'player') {
+                    this.playerHand.push(drawnCard);
+                } else {
+                    this.computerHand.push(drawnCard);
+                }
+
+                this.updateDisplay();
+            }
+        }
+
+        // Initialize the game
+        const game = new UnoGame();
+    </script>
+</body>
+</html>

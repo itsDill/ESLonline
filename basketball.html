@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Basketball Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f4f8;
+        }
+
+        #game-container {
+            width: 1000px;
+            height: 600px;
+            background-color: #2ecc71;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        #basketball-court {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to bottom, #3498db 0%, #2ecc71 100%);
+        }
+
+        .basketball-hoop {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            border: 5px solid white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #basketball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: orange;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        #question-area {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: white;
+        }
+
+        #attempts {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .shot-trajectory {
+            position: absolute;
+            background-color: rgba(255,255,255,0.5);
+            height: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="basketball-court"></div>
+        <div id="question-area">
+            <h2 id="question-text">Choose a hoop!</h2>
+        </div>
+        <div id="score">Score: 0</div>
+        <div id="attempts">Attempts: 3</div>
+        <div id="basketball"></div>
+    </div>
+
+    <script>
+        class ESLBasketballGame {
+            constructor() {
+                this.gameContainer = document.getElementById('game-container');
+                this.basketball = document.getElementById('basketball');
+                this.questionArea = document.getElementById('question-area');
+                this.questionText = document.getElementById('question-text');
+                this.scoreElement = document.getElementById('score');
+                this.attemptsElement = document.getElementById('attempts');
+
+                this.score = 0;
+                this.attempts = 3;
+                this.hoops = [];
+                this.currentQuestion = null;
+
+                this.questions = [
+                    {
+                        question: "What is the past tense of 'eat'?",
+                        answers: [
+                            { text: "Ate", correct: true },
+                            { text: "Eated", correct: false },
+                            { text: "Eaten", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Which is an adjective?",
+                        answers: [
+                            { text: "Running", correct: false },
+                            { text: "Beautiful", correct: true },
+                            { text: "Quickly", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Choose the correct preposition:",
+                        text: "I'm waiting __ the bus.",
+                        answers: [
+                            { text: "for", correct: true },
+                            { text: "at", correct: false },
+                            { text: "in", correct: false }
+                        ]
+                    },
+                    {
+                        question: "What is the plural of 'child'?",
+                        answers: [
+                            { text: "Childs", correct: false },
+                            { text: "Childes", correct: false },
+                            { text: "Children", correct: true }
+                        ]
+                    }
+                ];
+
+                this.setupGame();
+            }
+
+            setupGame() {
+                this.positionBasketball();
+                this.createHoops();
+                this.setupEventListeners();
+                this.generateQuestion();
+            }
+
+            positionBasketball() {
+                this.basketball.style.bottom = '50px';
+                this.basketball.style.left = '475px';
+            }
+
+            createHoops() {
+                const containerWidth = this.gameContainer.offsetWidth;
+                const containerHeight = this.gameContainer.offsetHeight;
+                const hoop1 = this.createHoop(containerWidth * 0.2, containerHeight * 0.3, this.questions[0].answers[0]);
+                const hoop2 = this.createHoop(containerWidth * 0.5, containerHeight * 0.3, this.questions[0].answers[1]);
+                const hoop3 = this.createHoop(containerWidth * 0.8, containerHeight * 0.3, this.questions[0].answers[2]);
+
+                this.hoops = [hoop1, hoop2, hoop3];
+            }
+
+            createHoop(left, top, answer) {
+                const hoop = document.createElement('div');
+                hoop.classList.add('basketball-hoop');
+                hoop.style.left = `${left}px`;
+                hoop.style.top = `${top}px`;
+                hoop.textContent = answer.text;
+                hoop.dataset.correct = answer.correct;
+
+                hoop.addEventListener('click', () => this.shootBasketball(hoop));
+
+                this.gameContainer.appendChild(hoop);
+                return hoop;
+            }
+
+            generateQuestion() {
+                const randomQuestion = this.questions[Math.floor(Math.random() * this.questions.length)];
+                this.currentQuestion = randomQuestion;
+
+                this.questionText.innerHTML = randomQuestion.question;
+
+                // Shuffle hoops and update their answers
+                this.shuffleHoops(randomQuestion.answers);
+            }
+
+            shuffleHoops(answers) {
+                // Shuffle the answers
+                for (let i = answers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [answers[i], answers[j]] = [answers[j], answers[i]];
+                }
+
+                // Update hoop texts and correct status
+                this.hoops.forEach((hoop, index) => {
+                    hoop.textContent = answers[index].text;
+                    hoop.dataset.correct = answers[index].correct;
+                });
+            }
+
+            setupEventListeners() {
+                this.basketball.addEventListener('click', () => {
+                    if (!this.currentQuestion) {
+                        this.generateQuestion();
+                    }
+                });
+            }
+
+            shootBasketball(targetHoop) {
+                if (this.attempts <= 0) {
+                    alert('Game Over! Refresh to play again.');
+                    return;
+                }
+
+                const basketballRect = this.basketball.getBoundingClientRect();
+                const hoop = targetHoop.getBoundingClientRect();
+
+                // Create shot trajectory
+                const trajectory = document.createElement('div');
+                trajectory.classList.add('shot-trajectory');
+                trajectory.style.top = `${basketballRect.bottom}px`;
+                trajectory.style.left = `${basketballRect.left}px`;
+                trajectory.style.width = this.calculateDistance(basketballRect, hoop) + 'px';
+                trajectory.style.transform = `rotate(${this.calculateAngle(basketballRect, hoop)}deg)`;
+                this.gameContainer.appendChild(trajectory);
+
+                // Animate basketball
+                this.basketball.style.left = `${hoop.left + hoop.width / 2 - 25}px`;
+                this.basketball.style.top = `${hoop.top + hoop.height / 2 - 25}px`;
+
+                // Check if answer is correct
+                const isCorrect = targetHoop.dataset.correct === 'true';
+
+                // Update score and attempts
+                this.attempts--;
+                this.attemptsElement.textContent = `Attempts: ${this.attempts}`;
+
+                if (isCorrect) {
+                    this.score++;
+                    this.scoreElement.textContent = `Score: ${this.score}`;
+                }
+
+                // Reset for next question
+                setTimeout(() => {
+                    this.positionBasketball();
+                    this.generateQuestion();
+
+                    // Remove trajectory
+                    this.gameContainer.removeChild(trajectory);
+                }, 1000);
+            }
+
+            calculateDistance(start, end) {
+                const dx = end.left - start.left;
+                const dy = end.top - start.top;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            calculateAngle(start, end) {
+                const dx = end.left - start.left;
+                const dy = end.top - start.top;
+                return Math.atan2(dy, dx) * 180 / Math.PI;
+            }
+        }
+
+        // Initialize the game
+        const game = new ESLBasketballGame();
+    </script>
+</body>
+</html>
