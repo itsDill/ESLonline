@@ -198,26 +198,28 @@
       }
 
       /* Dropdown Styles */
-      .dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 250px;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        box-shadow: var(--shadow-xl);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
-        z-index: 1000;
-      }
 
-      .nav-item:hover .dropdown {
+      .dropdown {
+        display: none;
+        position: static;
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background: var(--bg-secondary);
+        margin-top: 0.5rem;
+        border-radius: 8px;
+      }
+      .nav-item.open > .dropdown {
+        display: block;
+      }
+
+      /* Show dropdown on hover for desktop */
+      @media (min-width: 769px) {
+        .nav-item:hover > .dropdown {
+          display: block;
+        }
       }
 
       .dropdown-item {
@@ -1590,6 +1592,25 @@
       // Add loading animation
       window.addEventListener("load", () => {
         document.body.classList.add("loaded");
+      });
+
+      // ...existing code...
+
+      // Dropdown toggle for mobile
+      document.querySelectorAll(".nav-item > .nav-link").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          if (window.innerWidth <= 768) {
+            const navItem = this.parentElement;
+            // Close other open dropdowns
+            document.querySelectorAll(".nav-item.open").forEach((item) => {
+              if (item !== navItem) item.classList.remove("open");
+            });
+            // Toggle this dropdown
+            navItem.classList.toggle("open");
+            // Prevent navigation if dropdown exists
+            if (navItem.querySelector(".dropdown")) e.preventDefault();
+          }
+        });
       });
     </script>
   </body>
