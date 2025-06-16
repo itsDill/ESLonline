@@ -1323,5 +1323,48 @@
 
       lastScrollTop = scrollTop;
     });
+    // Mobile Dropdown Toggle
+    document.querySelectorAll(".nav-item > .nav-link").forEach((link) => {
+      link.addEventListener("click", function (e) {
+        if (window.innerWidth <= 768) {
+          const navItem = this.parentElement;
+          const hasDropdown = navItem.querySelector(".dropdown");
+          if (hasDropdown) {
+            e.preventDefault(); // Prevent navigation for parent menu
+            // Close other open dropdowns
+            document.querySelectorAll(".nav-item.open").forEach((item) => {
+              if (item !== navItem) item.classList.remove("open");
+            });
+            // Toggle this dropdown
+            navItem.classList.toggle("open");
+          }
+        }
+      });
+    });
+
+    // Only close mobile menu when a real link is clicked (not a parent menu)
+    document
+      .querySelectorAll(
+        ".dropdown-item, .nav-links > .nav-item > .nav-link:not([href='#'])"
+      )
+      .forEach((link) => {
+        link.addEventListener("click", function () {
+          const navLinks = document.getElementById("navLinks");
+          const mobileToggle = document.getElementById("mobileToggle");
+          if (
+            window.innerWidth <= 768 &&
+            navLinks.classList.contains("active")
+          ) {
+            navLinks.classList.remove("active");
+            const icon = mobileToggle.querySelector("i");
+            icon.classList.add("fa-bars");
+            icon.classList.remove("fa-times");
+            // Close all dropdowns
+            document.querySelectorAll(".nav-item.open").forEach((item) => {
+              item.classList.remove("open");
+            });
+          }
+        });
+      });
   </script>
 </html>
