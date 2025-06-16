@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English Snakes & Ladders - ESL Fun Online</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #4f46e5;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --danger-color: #ef4444;
+        --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        --card-hover-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        color: var(--text-primary);
+        overflow-x: hidden;
+      }
+
+      /* Header */
+      .game-header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .game-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .game-controls {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .control-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        background: var(--primary-color);
+        color: white;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      }
+
+      .control-btn.secondary {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+      }
+
+      /* Game Setup Screen */
+      .setup-screen {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .setup-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-hover-shadow);
+        max-width: 800px;
+        width: 100%;
+      }
+
+      .setup-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+      }
+
+      .setup-section {
+        margin-bottom: 2rem;
+      }
+
+      .setup-section h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      }
+
+      .board-selection {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+
+      .board-option {
+        aspect-ratio: 1;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .board-option:hover {
+        transform: scale(1.05);
+        box-shadow: var(--card-hover-shadow);
+      }
+
+      .board-option.selected {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+      }
+
+      .board-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 0.5rem;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .player-selection {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 1rem;
+      }
+
+      .player-option {
+        aspect-ratio: 1;
+        border: 3px solid transparent;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      }
+
+      .player-option:hover {
+        transform: scale(1.1);
+        box-shadow: var(--card-hover-shadow);
+      }
+
+      .player-option.selected {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+      }
+
+      .content-selection {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .content-option {
+        padding: 1rem 1.5rem;
+        border: 2px solid var(--text-secondary);
+        border-radius: 12px;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .content-option:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow);
+      }
+
+      .content-option.selected {
+        border-color: var(--accent-color);
+        background: var(--accent-color);
+        color: white;
+      }
+
+      .start-game-btn {
+        display: block;
+        width: 100%;
+        padding: 1rem 2rem;
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+      }
+
+      .start-game-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Game Screen */
+      .game-screen {
+        display: none;
+        flex: 1;
+        padding: 1rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .game-screen.active {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      /* Game Status */
+      .game-status {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--card-shadow);
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+      }
+
+      .player-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid var(--secondary-color);
+      }
+
+      .turn-indicator {
+        background: var(--warning-color);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      /* Game Board */
+      .game-board-container {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+        min-height: 0;
+      }
+
+      .board-area {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+        position: relative;
+      }
+
+      .game-board {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+        min-height: 500px;
+      }
+
+      .board-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        gap: 1px;
+      }
+
+      .board-cell {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.8rem;
+        color: var(--text-primary);
+      }
+
+      .player-piece {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid white;
+        box-shadow: var(--card-shadow);
+        transition: all 0.5s ease;
+        z-index: 10;
+      }
+
+      .player-piece.moving {
+        animation: bounce 0.5s ease-in-out;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
+
+      /* Game Controls */
+      .game-controls-panel {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .control-panel {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .dice-container {
+        text-align: center;
+      }
+
+      .dice {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border: 3px solid var(--primary-color);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 1rem auto;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+      }
+
+      .dice:hover {
+        transform: scale(1.05);
+        box-shadow: var(--card-hover-shadow);
+      }
+
+      .dice.rolling {
+        animation: roll 1s ease-in-out;
+      }
+
+      @keyframes roll {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(90deg);
+        }
+        50% {
+          transform: rotate(180deg);
+        }
+        75% {
+          transform: rotate(270deg);
+        }
+      }
+
+      .roll-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .roll-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      }
+
+      .roll-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Question Panel */
+      .question-panel {
+        display: none;
+      }
+
+      .question-panel.active {
+        display: block;
+      }
+
+      .question-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: var(--primary-color);
+      }
+
+      .question-content {
+        background: var(--bg-secondary);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+      }
+
+      .question-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .option-btn {
+        padding: 0.75rem;
+        border: 2px solid var(--text-secondary);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+      }
+
+      .option-btn:hover {
+        border-color: var(--primary-color);
+        background: rgba(79, 70, 229, 0.1);
+      }
+
+      .option-btn.correct {
+        border-color: var(--success-color);
+        background: rgba(16, 185, 129, 0.1);
+      }
+
+      .option-btn.incorrect {
+        border-color: var(--error-color);
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      .continue-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+      }
+
+      .continue-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+
+      /* Game Message Modal */
+      .game-message {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+      }
+
+      .game-message.show {
+        display: flex;
+      }
+
+      .message-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: var(--card-hover-shadow);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+      }
+
+      .message-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+      }
+
+      .message-text {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .message-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .message-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .game-board-container {
+          flex-direction: column;
+        }
+
+        .game-controls-panel {
+          width: 100%;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+
+        .control-panel {
+          flex: 1;
+          min-width: 200px;
+        }
+
+        .board-selection {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .player-selection {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        .content-selection {
+          flex-direction: column;
+        }
+
+        .game-status {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .dice {
+          width: 60px;
+          height: 60px;
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="game-header">
+      <div class="header-content">
+        <h1 class="game-title">🐍 English Snakes & Ladders</h1>
+        <div class="game-controls">
+          <button class="control-btn" onclick="newGame()">
+            <i class="fas fa-plus"></i>
+            New Game
+          </button>
+          <button class="control-btn secondary" onclick="showRules()">
+            <i class="fas fa-question-circle"></i>
+            Rules
+          </button>
+          <button class="control-btn secondary" onclick="showStats()">
+            <i class="fas fa-chart-bar"></i>
+            Stats
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Setup Screen -->
+    <div class="setup-screen" id="setupScreen">
+      <div class="setup-container">
+        <h2 class="setup-title">🎯 Game Setup</h2>
+
+        <!-- Board Selection -->
+        <div class="setup-section">
+          <h3><i class="fas fa-chess-board"></i> Choose Your Board</h3>
+          <div class="board-selection" id="boardSelection">
+            <!-- Board options will be populated here -->
+          </div>
+        </div>
+
+        <!-- Player Selection -->
+        <div class="setup-section">
+          <h3><i class="fas fa-user-circle"></i> Choose Your Player</h3>
+          <div class="player-selection" id="playerSelection">
+            <!-- Player options will be populated here -->
+          </div>
+        </div>
+
+        <!-- Content Type Selection -->
+        <div class="setup-section">
+          <h3><i class="fas fa-graduation-cap"></i> Learning Content</h3>
+          <div class="content-selection" id="contentSelection">
+            <button class="content-option" data-content="vocabulary">
+              <i class="fas fa-book"></i> Vocabulary
+            </button>
+            <button class="content-option" data-content="conversation">
+              <i class="fas fa-comments"></i> Conversation
+            </button>
+            <button class="content-option" data-content="grammar">
+              <i class="fas fa-spell-check"></i> Grammar
+            </button>
+          </div>
+        </div>
+
+        <button
+          class="start-game-btn"
+          id="startGameBtn"
+          onclick="startGame()"
+          disabled
+        >
+          <i class="fas fa-play"></i> Start Game
+        </button>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div class="game-screen" id="gameScreen">
+      <!-- Game Status -->
+      <div class="game-status">
+        <div class="status-item">
+          <div class="player-avatar" id="playerAvatar"></div>
+          <div>
+            <div>Player</div>
+            <div>Position: <span id="playerPosition">1</span></div>
+          </div>
+        </div>
+
+        <div class="turn-indicator" id="turnIndicator">
+          Your Turn - Roll the Dice!
+        </div>
+
+        <div class="status-item">
+          <div>
+            <div id="contentType">Vocabulary</div>
+            <div>Score: <span id="playerScore">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Board Container -->
+      <div class="game-board-container">
+        <!-- Game Board -->
+        <div class="board-area">
+          <div class="game-board" id="gameBoard">
+            <div class="board-grid" id="boardGrid">
+              <!-- Board cells will be generated here -->
+            </div>
+            <div class="player-piece" id="playerPiece"></div>
+          </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="game-controls-panel">
+          <!-- Dice Control -->
+          <div class="control-panel">
+            <h4>🎲 Roll Dice</h4>
+            <div class="dice-container">
+              <div class="dice" id="dice">
+                <i class="fas fa-dice-six"></i>
+              </div>
+              <button class="roll-btn" id="rollBtn" onclick="rollDice()">
+                Roll Dice
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Panel -->
+          <div class="control-panel question-panel" id="questionPanel">
+            <div class="question-title" id="questionTitle">
+              Vocabulary Challenge
+            </div>
+            <div class="question-content" id="questionContent">
+              <!-- Question will be displayed here -->
+            </div>
+            <div class="question-options" id="questionOptions">
+              <!-- Options will be displayed here -->
+            </div>
+            <button
+              class="continue-btn"
+              id="continueBtn"
+              onclick="continueGame()"
+              style="display: none"
+            >
+              Continue
+            </button>
+          </div>
+
+          <!-- Game Info -->
+          <div class="control-panel">
+            <h4>📊 Game Info</h4>
+            <div style="margin-top: 1rem">
+              <div>Moves: <span id="moveCount">0</span></div>
+              <div>Time: <span id="gameTime">0:00</span></div>
+              <div>Correct: <span id="correctAnswers">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Message Modal -->
+    <div class="game-message" id="gameMessage">
+      <div class="message-content">
+        <div class="message-title" id="messageTitle">Congratulations!</div>
+        <div class="message-text" id="messageText">You won the game!</div>
+        <button class="message-btn" onclick="closeMessage()">Continue</button>
+      </div>
+    </div>
+
+    <script>
+      // Game State
+      let gameState = {
+        selectedBoard: null,
+        selectedPlayer: null,
+        selectedContent: null,
+        playerPosition: 1,
+        playerScore: 0,
+        moveCount: 0,
+        correctAnswers: 0,
+        gameStartTime: null,
+        currentQuestion: null,
+        isMoving: false,
+        gameOver: false,
+        stats: {
+          gamesPlayed: parseInt(localStorage.getItem("sl_gamesPlayed") || "0"),
+          gamesWon: parseInt(localStorage.getItem("sl_gamesWon") || "0"),
+          totalTime: parseInt(localStorage.getItem("sl_totalTime") || "0"),
+        },
+      };
+
+      // Board configurations
+      const boards = [
+        {
+          id: "classic",
+          name: "Classic Board",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f0f8ff"/><g stroke="%23333" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23333">Classic Board</text></svg>',
+          snakes: { 91: 75, 87: 24, 93: 73, 95: 56, 88: 36 },
+          ladders: { 4: 56, 12: 50, 14: 55, 22: 58, 41: 79, 54: 88 },
+        },
+        {
+          id: "jungle",
+          name: "Jungle Adventure",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%2334d399"/><g stroke="%23059669" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23065f46">Jungle Board</text></svg>',
+          snakes: { 89: 53, 90: 48, 76: 63, 95: 24, 92: 51 },
+          ladders: { 8: 52, 6: 42, 21: 82, 28: 77, 36: 57, 71: 92 },
+        },
+        {
+          id: "ocean",
+          name: "Ocean Quest",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%2360a5fa"/><g stroke="%232563eb" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%231e40af">Ocean Board</text></svg>',
+          snakes: { 83: 19, 90: 48, 76: 63, 98: 79, 85: 23 },
+          ladders: { 1: 40, 9: 89, 16: 25, 51: 67, 65: 85, 68: 91 },
+        },
+        {
+          id: "space",
+          name: "Space Explorer",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23312e81"/><g stroke="%236366f1" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23c7d2fe">Space Board</text></svg>',
+          snakes: { 97: 78, 92: 53, 83: 27, 69: 33, 64: 16 },
+          ladders: { 3: 39, 10: 12, 27: 53, 40: 62, 43: 84, 74: 92 },
+        },
+      ];
+
+      // Player options
+      const players = [
+        {
+          id: "boy",
+          name: "Boy",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%234ade80"/><circle cx="50" cy="35" r="15" fill="%23fbbf24"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👦</text></svg>',
+        },
+        {
+          id: "girl",
+          name: "Girl",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f472b6"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👧</text></svg>',
+        },
+        {
+          id: "cat",
+          name: "Cat",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23fbbf24"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🐱</text></svg>',
+        },
+        {
+          id: "dog",
+          name: "Dog",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23fb7185"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🐶</text></svg>',
+        },
+        {
+          id: "robot",
+          name: "Robot",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%236366f1"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🤖</text></svg>',
+        },
+        {
+          id: "alien",
+          name: "Alien",
+          image:
+            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%2334d399"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👽</text></svg>',
+        },
+      ];
+
+      // Question banks
+      const questionBanks = {
+        vocabulary: [
+          {
+            question: "What is the opposite of 'big'?",
+            options: ["Small", "Large", "Huge", "Tiny"],
+            correct: 0,
+          },
+          {
+            question: "Which word means 'happy'?",
+            options: ["Sad", "Angry", "Joyful", "Tired"],
+            correct: 2,
+          },
+          {
+            question: "What do you call a young cat?",
+            options: ["Puppy", "Kitten", "Cub", "Chick"],
+            correct: 1,
+          },
+          {
+            question: "Which is a color?",
+            options: ["Chair", "Blue", "Run", "Happy"],
+            correct: 1,
+          },
+          {
+            question: "What is the plural of 'child'?",
+            options: ["Childs", "Children", "Childes", "Child"],
+            correct: 1,
+          },
+        ],
+        conversation: [
+          {
+            question: "How do you greet someone in the morning?",
+            options: ["Good night", "Good morning", "Goodbye", "See you later"],
+            correct: 1,
+          },
+          {
+            question: "What do you say when someone helps you?",
+            options: ["Sorry", "Please", "Thank you", "Excuse me"],
+            correct: 2,
+          },
+          {
+            question: "How do you ask for someone's name?",
+            options: [
+              "How old are you?",
+              "Where are you from?",
+              "What's your name?",
+              "How are you?",
+            ],
+            correct: 2,
+          },
+          {
+            question: "What's a polite way to interrupt someone?",
+            options: [
+              "Stop talking!",
+              "Excuse me",
+              "Be quiet!",
+              "Listen to me!",
+            ],
+            correct: 1,
+          },
+          {
+            question: "How do you ask for help?",
+            options: [
+              "Help me now!",
+              "Can you help me, please?",
+              "You must help me",
+              "I need help immediately",
+            ],
+            correct: 1,
+          },
+        ],
+        grammar: [
+          {
+            question: "Choose the correct sentence:",
+            options: [
+              "I am going to school",
+              "I are going to school",
+              "I is going to school",
+              "I be going to school",
+            ],
+            correct: 0,
+          },
+          {
+            question: "What is the past tense of 'go'?",
+            options: ["Goed", "Goes", "Went", "Going"],
+            correct: 2,
+          },
+          {
+            question: "Which is correct?",
+            options: [
+              "She don't like apples",
+              "She doesn't like apples",
+              "She not like apples",
+              "She no like apples",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Choose the correct article:",
+            options: [
+              "A elephant",
+              "An elephant",
+              "The elephants",
+              "Some elephant",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What's the correct question form?",
+            options: [
+              "You are happy?",
+              "Are you happy?",
+              "Happy you are?",
+              "You happy are?",
+            ],
+            correct: 1,
+          },
+        ],
+      };
+
+      // Initialize game
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeSetup();
+        updateStats();
+      });
+
+      function initializeSetup() {
+        // Populate board options
+        const boardSelection = document.getElementById("boardSelection");
+        boards.forEach((board) => {
+          const boardOption = document.createElement("div");
+          boardOption.className = "board-option";
+          boardOption.style.backgroundImage = `url("${board.image}")`;
+          boardOption.dataset.board = board.id;
+          boardOption.onclick = () => selectBoard(board.id);
+
+          const label = document.createElement("div");
+          label.className = "board-label";
+          label.textContent = board.name;
+          boardOption.appendChild(label);
+
+          boardSelection.appendChild(boardOption);
+        });
+
+        // Populate player options
+        const playerSelection = document.getElementById("playerSelection");
+        players.forEach((player) => {
+          const playerOption = document.createElement("div");
+          playerOption.className = "player-option";
+          playerOption.style.backgroundImage = `url("${player.image}")`;
+          playerOption.dataset.player = player.id;
+          playerOption.onclick = () => selectPlayer(player.id);
+          playerSelection.appendChild(playerOption);
+        });
+
+        // Content selection handlers
+        document.querySelectorAll(".content-option").forEach((btn) => {
+          btn.onclick = () => selectContent(btn.dataset.content);
+        });
+      }
+
+      function selectBoard(boardId) {
+        gameState.selectedBoard = boardId;
+        document
+          .querySelectorAll(".board-option")
+          .forEach((opt) => opt.classList.remove("selected"));
+        document
+          .querySelector(`[data-board="${boardId}"]`)
+          .classList.add("selected");
+        checkCanStart();
+      }
+
+      function selectPlayer(playerId) {
+        gameState.selectedPlayer = playerId;
+        document
+          .querySelectorAll(".player-option")
+          .forEach((opt) => opt.classList.remove("selected"));
+        document
+          .querySelector(`[data-player="${playerId}"]`)
+          .classList.add("selected");
+        checkCanStart();
+      }
+
+      function selectContent(contentType) {
+        gameState.selectedContent = contentType;
+        document
+          .querySelectorAll(".content-option")
+          .forEach((opt) => opt.classList.remove("selected"));
+        document
+          .querySelector(`[data-content="${contentType}"]`)
+          .classList.add("selected");
+        checkCanStart();
+      }
+
+      function checkCanStart() {
+        const canStart =
+          gameState.selectedBoard &&
+          gameState.selectedPlayer &&
+          gameState.selectedContent;
+        document.getElementById("startGameBtn").disabled = !canStart;
+      }
+
+      function startGame() {
+        // Hide setup screen, show game screen
+        document.getElementById("setupScreen").style.display = "none";
+        document.getElementById("gameScreen").classList.add("active");
+
+        // Initialize game state
+        gameState.playerPosition = 1;
+        gameState.playerScore = 0;
+        gameState.moveCount = 0;
+        gameState.correctAnswers = 0;
+        gameState.gameStartTime = Date.now();
+        gameState.gameOver = false;
+
+        // Setup game board
+        setupGameBoard();
+        updatePlayerPosition();
+        updateGameStatus();
+        startGameTimer();
+      }
+
+      function setupGameBoard() {
+        const selectedBoard = boards.find(
+          (b) => b.id === gameState.selectedBoard
+        );
+        const selectedPlayer = players.find(
+          (p) => p.id === gameState.selectedPlayer
+        );
+
+        // Set board background
+        document.getElementById(
+          "gameBoard"
+        ).style.backgroundImage = `url("${selectedBoard.image}")`;
+
+        // Set player avatar
+        document.getElementById(
+          "playerAvatar"
+        ).style.backgroundImage = `url("${selectedPlayer.image}")`;
+        document.getElementById(
+          "playerPiece"
+        ).style.backgroundImage = `url("${selectedPlayer.image}")`;
+
+        // Set content type display
+        document.getElementById("contentType").textContent =
+          gameState.selectedContent.charAt(0).toUpperCase() +
+          gameState.selectedContent.slice(1);
+
+        // Generate board grid
+        generateBoardGrid();
+      }
+
+      function generateBoardGrid() {
+        const boardGrid = document.getElementById("boardGrid");
+        boardGrid.innerHTML = "";
+
+        for (let i = 100; i >= 1; i--) {
+          const cell = document.createElement("div");
+          cell.className = "board-cell";
+          cell.dataset.position = i;
+          cell.id = `cell-${i}`;
+
+          // Add cell number for reference (can be styled to be invisible)
+          const cellNumber = document.createElement("span");
+          cellNumber.textContent = i;
+          cellNumber.style.fontSize = "0.6rem";
+          cellNumber.style.opacity = "0.3";
+          cell.appendChild(cellNumber);
+
+          boardGrid.appendChild(cell);
+        }
+      }
+
+      function rollDice() {
+        if (gameState.isMoving || gameState.gameOver) return;
+
+        const dice = document.getElementById("dice");
+        const rollBtn = document.getElementById("rollBtn");
+
+        dice.classList.add("rolling");
+        rollBtn.disabled = true;
+
+        setTimeout(() => {
+          const diceValue = Math.floor(Math.random() * 6) + 1;
+          dice.innerHTML = getDiceIcon(diceValue);
+          dice.classList.remove("rolling");
+
+          movePlayer(diceValue);
+        }, 1000);
+      }
+
+      function getDiceIcon(value) {
+        const icons = [
+          '<i class="fas fa-dice-one"></i>',
+          '<i class="fas fa-dice-two"></i>',
+          '<i class="fas fa-dice-three"></i>',
+          '<i class="fas fa-dice-four"></i>',
+          '<i class="fas fa-dice-five"></i>',
+          '<i class="fas fa-dice-six"></i>',
+        ];
+        return icons[value - 1];
+      }
+
+      function movePlayer(steps) {
+        gameState.isMoving = true;
+        gameState.moveCount++;
+
+        const newPosition = Math.min(gameState.playerPosition + steps, 100);
+
+        animatePlayerMovement(gameState.playerPosition, newPosition, () => {
+          gameState.playerPosition = newPosition;
+          updatePlayerPosition();
+          updateGameStatus();
+
+          if (newPosition === 100) {
+            endGame(true);
+            return;
+          }
+
+          checkSpecialSquares();
+        });
+      }
+
+      function animatePlayerMovement(from, to, callback) {
+        const piece = document.getElementById("playerPiece");
+        piece.classList.add("moving");
+
+        let current = from;
+        const interval = setInterval(() => {
+          current++;
+          positionPlayerPiece(current);
+
+          if (current >= to) {
+            clearInterval(interval);
+            piece.classList.remove("moving");
+            setTimeout(callback, 300);
+          }
+        }, 200);
+      }
+
+      function positionPlayerPiece(position) {
+        const cell = document.getElementById(`cell-${position}`);
+        const piece = document.getElementById("playerPiece");
+
+        if (cell) {
+          const rect = cell.getBoundingClientRect();
+          const boardRect = document
+            .getElementById("gameBoard")
+            .getBoundingClientRect();
+
+          piece.style.left = `${
+            rect.left - boardRect.left + rect.width / 2 - 15
+          }px`;
+          piece.style.top = `${
+            rect.top - boardRect.top + rect.height / 2 - 15
+          }px`;
+        }
+      }
+
+      function updatePlayerPosition() {
+        document.getElementById("playerPosition").textContent =
+          gameState.playerPosition;
+        positionPlayerPiece(gameState.playerPosition);
+      }
+
+      function updateGameStatus() {
+        document.getElementById("playerScore").textContent =
+          gameState.playerScore;
+        document.getElementById("moveCount").textContent = gameState.moveCount;
+        document.getElementById("correctAnswers").textContent =
+          gameState.correctAnswers;
+      }
+
+      function checkSpecialSquares() {
+        const selectedBoard = boards.find(
+          (b) => b.id === gameState.selectedBoard
+        );
+        const position = gameState.playerPosition;
+
+        if (selectedBoard.snakes[position]) {
+          showMessage(
+            "Snake Bite! 🐍",
+            `Oh no! You slid down from ${position} to ${selectedBoard.snakes[position]}!`,
+            () => {
+              gameState.playerPosition = selectedBoard.snakes[position];
+              updatePlayerPosition();
+              showQuestion();
+            }
+          );
+        } else if (selectedBoard.ladders[position]) {
+          showMessage(
+            "Ladder Climb! 🪜",
+            `Great! You climbed up from ${position} to ${selectedBoard.ladders[position]}!`,
+            () => {
+              gameState.playerPosition = selectedBoard.ladders[position];
+              updatePlayerPosition();
+              showQuestion();
+            }
+          );
+        } else {
+          showQuestion();
+        }
+      }
+
+      function showQuestion() {
+        const questions = questionBanks[gameState.selectedContent];
+        const randomQuestion =
+          questions[Math.floor(Math.random() * questions.length)];
+        gameState.currentQuestion = randomQuestion;
+
+        document.getElementById("questionTitle").textContent = `${
+          gameState.selectedContent.charAt(0).toUpperCase() +
+          gameState.selectedContent.slice(1)
+        } Challenge`;
+        document.getElementById("questionContent").textContent =
+          randomQuestion.question;
+
+        const optionsContainer = document.getElementById("questionOptions");
+        optionsContainer.innerHTML = "";
+
+        randomQuestion.options.forEach((option, index) => {
+          const button = document.createElement("button");
+          button.className = "option-btn";
+          button.textContent = option;
+          button.onclick = () => selectAnswer(index);
+          optionsContainer.appendChild(button);
+        });
+
+        document.getElementById("questionPanel").classList.add("active");
+      }
+
+      function selectAnswer(selectedIndex) {
+        const buttons = document.querySelectorAll(".option-btn");
+        const correct = gameState.currentQuestion.correct;
+
+        buttons.forEach((btn, index) => {
+          btn.disabled = true;
+          if (index === correct) {
+            btn.classList.add("correct");
+          } else if (index === selectedIndex && index !== correct) {
+            btn.classList.add("incorrect");
+          }
+        });
+
+        if (selectedIndex === correct) {
+          gameState.playerScore += 10;
+          gameState.correctAnswers++;
+          updateGameStatus();
+        }
+
+        document.getElementById("continueBtn").style.display = "block";
+      }
+
+      function continueGame() {
+        document.getElementById("questionPanel").classList.remove("active");
+        document.getElementById("continueBtn").style.display = "none";
+        document.getElementById("rollBtn").disabled = false;
+        gameState.isMoving = false;
+      }
+
+      function startGameTimer() {
+        setInterval(() => {
+          if (!gameState.gameOver && gameState.gameStartTime) {
+            const elapsed = Math.floor(
+              (Date.now() - gameState.gameStartTime) / 1000
+            );
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById(
+              "gameTime"
+            ).textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+          }
+        }, 1000);
+      }
+
+      function endGame(won) {
+        gameState.gameOver = true;
+        const gameTime = Math.floor(
+          (Date.now() - gameState.gameStartTime) / 1000
+        );
+
+        // Update stats
+        gameState.stats.gamesPlayed++;
+        gameState.stats.totalTime += gameTime;
+        if (won) {
+          gameState.stats.gamesWon++;
+        }
+
+        // Save stats
+        localStorage.setItem(
+          "sl_gamesPlayed",
+          gameState.stats.gamesPlayed.toString()
+        );
+        localStorage.setItem(
+          "sl_gamesWon",
+          gameState.stats.gamesWon.toString()
+        );
+        localStorage.setItem(
+          "sl_totalTime",
+          gameState.stats.totalTime.toString()
+        );
+
+        if (won) {
+          showMessage(
+            "🎉 Congratulations!",
+            `You won the game!\nTime: ${Math.floor(gameTime / 60)}:${(
+              gameTime % 60
+            )
+              .toString()
+              .padStart(2, "0")}\nScore: ${
+              gameState.playerScore
+            }\nCorrect Answers: ${gameState.correctAnswers}/${
+              gameState.moveCount
+            }`,
+            () => {
+              newGame();
+            }
+          );
+        }
+      }
+
+      function showMessage(title, text, callback) {
+        document.getElementById("messageTitle").textContent = title;
+        document.getElementById("messageText").textContent = text;
+        document.getElementById("gameMessage").classList.add("show");
+
+        document.querySelector(".message-btn").onclick = () => {
+          closeMessage();
+          if (callback) callback();
+        };
+      }
+
+      function closeMessage() {
+        document.getElementById("gameMessage").classList.remove("show");
+      }
+
+      function newGame() {
+        // Reset game state
+        gameState = {
+          selectedBoard: null,
+          selectedPlayer: null,
+          selectedContent: null,
+          playerPosition: 1,
+          playerScore: 0,
+          moveCount: 0,
+          correctAnswers: 0,
+          gameStartTime: null,
+          currentQuestion: null,
+          isMoving: false,
+          gameOver: false,
+          stats: gameState.stats,
+        };
+
+        // Reset UI
+        document.getElementById("gameScreen").classList.remove("active");
+        document.getElementById("setupScreen").style.display = "flex";
+        document
+          .querySelectorAll(".selected")
+          .forEach((el) => el.classList.remove("selected"));
+        document.getElementById("startGameBtn").disabled = true;
+        document.getElementById("rollBtn").disabled = false;
+        document.getElementById("questionPanel").classList.remove("active");
+      }
+
+      function showRules() {
+        showMessage(
+          "🎯 Game Rules",
+          "Roll the dice to move forward. Answer questions correctly to earn points. Climb ladders to go up, avoid snakes that take you down. First to reach square 100 wins!"
+        );
+      }
+
+      function showStats() {
+        const winRate =
+          gameState.stats.gamesPlayed > 0
+            ? Math.round(
+                (gameState.stats.gamesWon / gameState.stats.gamesPlayed) * 100
+              )
+            : 0;
+        const avgTime =
+          gameState.stats.gamesPlayed > 0
+            ? Math.round(
+                gameState.stats.totalTime / gameState.stats.gamesPlayed
+              )
+            : 0;
+
+        showMessage(
+          "📊 Your Stats",
+          `Games Played: ${gameState.stats.gamesPlayed}\nGames Won: ${
+            gameState.stats.gamesWon
+          }\nWin Rate: ${winRate}%\nAverage Time: ${Math.floor(
+            avgTime / 60
+          )}:${(avgTime % 60).toString().padStart(2, "0")}`
+        );
+      }
+
+      function updateStats() {
+        // This function can be called to refresh any stats displays
+      }
+    </script>
+  </body>
+</html>
