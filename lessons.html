@@ -18,9 +18,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="ESL Fun Online - Professional English and Coding Lessons in Southeast Asia. Interactive learning with expert instructors."
+      content="ESL Fun Online - Interactive Lesson Plans for English Teaching in Southeast Asia"
     />
-    <title>ESL Fun Online | Professional Lessons</title>
+    <title>ESL Fun Online | Interactive Lesson Plan</title>
     <!-- iOS Home Screen App Icon -->
     <link rel="apple-touch-icon" href="assets/images/icon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="images/Online.png" />
@@ -215,10 +215,47 @@
         display: none;
       }
 
+      /* Timer Controls */
+      .timer-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+      }
+
+      .timer-display {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        min-width: 60px;
+        text-align: center;
+      }
+
+      .timer-btn {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 50%;
+        background: var(--accent-color);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        font-size: 0.8rem;
+      }
+
+      .timer-btn:hover {
+        transform: scale(1.1);
+      }
+
       /* Page Banner */
       .page-banner {
         background: var(--gradient-primary);
-        height: 50vh;
+        height: 40vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -241,582 +278,390 @@
       }
 
       .page-banner h1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
         font-weight: 700;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         animation: fadeInUp 1s ease;
       }
 
-      .page-banner p {
-        font-size: 1.3rem;
-        opacity: 0.9;
+      .lesson-meta {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 20px;
         animation: fadeInUp 1s ease 0.2s both;
       }
 
-      .banner-badge {
-        position: absolute;
-        top: 30px;
-        right: 30px;
+      .meta-item {
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
         padding: 10px 20px;
-        border-radius: 50px;
+        border-radius: 20px;
         font-weight: 600;
-        animation: fadeInRight 1s ease 0.5s both;
       }
 
-      /* Section Styles */
-      .section {
-        padding: 80px 0;
-      }
-
-      .section-title {
-        text-align: center;
-        margin-bottom: 50px;
-        font-size: 2.5rem;
-        font-weight: 700;
-        position: relative;
-      }
-
-      .section-title:after {
-        content: "";
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: var(--gradient-primary);
-        border-radius: 2px;
-      }
-
-      /* Currency Toggle */
-      .currency-toggle {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 40px;
-        gap: 10px;
-      }
-
-      .currency-btn {
-        padding: 8px 20px;
-        border: 2px solid var(--light-border);
-        background: transparent;
-        color: var(--light-text);
-        border-radius: 50px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      body.dark-mode .currency-btn {
-        border-color: var(--dark-border);
-        color: var(--dark-text);
-      }
-
-      .currency-btn.active,
-      .currency-btn:hover {
-        border-color: var(--primary-color);
-        background: var(--primary-color);
-        color: white;
-      }
-
-      body.dark-mode .currency-btn.active,
-      body.dark-mode .currency-btn:hover {
-        border-color: var(--accent-color);
-        background: var(--accent-color);
-      }
-
-      /* Lessons Grid */
-      .lessons-grid {
+      /* Lesson Plan Grid */
+      .lesson-plan-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: 1fr 300px;
         gap: 30px;
-        margin-bottom: 50px;
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
       }
 
-      .lesson-card {
+      /* Main Content */
+      .main-content {
         background: var(--light-card);
         border-radius: var(--border-radius);
-        overflow: hidden;
         box-shadow: var(--shadow-light);
-        transition: var(--transition);
-        position: relative;
-        height: fit-content;
+        overflow: hidden;
       }
 
-      body.dark-mode .lesson-card {
+      body.dark-mode .main-content {
         background: var(--dark-card);
         box-shadow: var(--shadow-dark);
       }
 
-      .lesson-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(67, 97, 238, 0.15);
-      }
-
-      body.dark-mode .lesson-card:hover {
-        box-shadow: 0 20px 40px rgba(6, 214, 160, 0.15);
-      }
-
-      .lesson-header {
-        background: var(--gradient-primary);
-        color: white;
+      /* Lesson Sections */
+      .lesson-section {
         padding: 30px;
-        text-align: center;
-        position: relative;
+        border-bottom: 1px solid var(--light-border);
       }
 
-      .lesson-card.coding .lesson-header {
-        background: var(--gradient-secondary);
+      body.dark-mode .lesson-section {
+        border-color: var(--dark-border);
       }
 
-      .lesson-icon {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        opacity: 0.9;
+      .lesson-section:last-child {
+        border-bottom: none;
       }
 
-      .lesson-title {
-        font-size: 1.5rem;
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        cursor: pointer;
+        padding: 15px;
+        background: rgba(67, 97, 238, 0.05);
+        border-radius: 10px;
+        transition: var(--transition);
+      }
+
+      body.dark-mode .section-header {
+        background: rgba(6, 214, 160, 0.05);
+      }
+
+      .section-header:hover {
+        background: rgba(67, 97, 238, 0.1);
+      }
+
+      body.dark-mode .section-header:hover {
+        background: rgba(6, 214, 160, 0.1);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.3rem;
         font-weight: 700;
-        margin-bottom: 10px;
+        color: var(--primary-color);
       }
 
-      .lesson-subtitle {
-        font-size: 1rem;
-        opacity: 0.9;
+      body.dark-mode .section-title {
+        color: var(--accent-color);
       }
 
-      .lesson-badge {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        padding: 5px 15px;
-        border-radius: 20px;
+      .section-time {
+        background: var(--primary-color);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
         font-size: 0.8rem;
         font-weight: 600;
       }
 
-      .lesson-content {
-        padding: 30px;
-      }
-
-      .lesson-price {
-        text-align: center;
-        margin-bottom: 25px;
-      }
-
-      .price-display {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--primary-color);
-        margin-bottom: 5px;
-      }
-
-      body.dark-mode .price-display {
-        color: var(--accent-color);
-      }
-
-      .lesson-card.coding .price-display {
-        color: var(--secondary-color);
-      }
-
-      .price-period {
-        color: #6c757d;
-        font-size: 0.9rem;
-      }
-
-      body.dark-mode .price-period {
-        color: #adb5bd;
-      }
-
-      .lesson-features {
-        list-style: none;
-        margin-bottom: 30px;
-      }
-
-      .lesson-features li {
-        padding: 8px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .lesson-features i {
-        color: var(--success-color);
-        font-size: 1.1rem;
-      }
-
-      .lesson-cta {
-        text-align: center;
-      }
-
-      .btn-request {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 30px;
-        background: var(--gradient-primary);
-        color: white;
-        border: none;
-        border-radius: 50px;
-        font-size: 16px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: var(--transition);
-        cursor: pointer;
-        gap: 10px;
-        min-width: 200px;
-      }
-
-      .lesson-card.coding .btn-request {
-        background: var(--gradient-secondary);
-      }
-
-      .btn-request:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-      }
-
-      .lesson-card.coding .btn-request:hover {
-        box-shadow: 0 10px 20px rgba(247, 37, 133, 0.3);
-      }
-
-      /* Request Form Modal */
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-      }
-
-      .modal.active {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .modal-content {
-        background: var(--light-card);
-        border-radius: var(--border-radius);
-        width: 90%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-        transform: translateY(-50px);
-        transition: all 0.3s ease;
-      }
-
-      .modal.active .modal-content {
-        transform: translateY(0);
-      }
-
-      body.dark-mode .modal-content {
-        background: var(--dark-card);
-      }
-
-      .modal-header {
-        background: var(--gradient-primary);
-        color: white;
-        padding: 30px;
-        text-align: center;
-        position: relative;
-      }
-
-      .modal-close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(255, 255, 255, 0.2);
-        border: none;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        color: white;
-        cursor: pointer;
-        font-size: 1.2rem;
-        transition: var(--transition);
-      }
-
-      .modal-close:hover {
-        background: rgba(255, 255, 255, 0.3);
-      }
-
-      .modal-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
-      .modal-body {
-        padding: 30px;
-      }
-
-      .form-group {
-        margin-bottom: 25px;
-      }
-
-      .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: var(--light-text);
-      }
-
-      body.dark-mode .form-label {
-        color: var(--dark-text);
-      }
-
-      .form-input,
-      .form-select,
-      .form-textarea {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid var(--light-border);
-        border-radius: 8px;
-        font-size: 16px;
-        transition: var(--transition);
-        background: var(--light-bg);
-        color: var(--light-text);
-      }
-
-      body.dark-mode .form-input,
-      body.dark-mode .form-select,
-      body.dark-mode .form-textarea {
-        border-color: var(--dark-border);
-        background: var(--dark-bg);
-        color: var(--dark-text);
-      }
-
-      .form-input:focus,
-      .form-select:focus,
-      .form-textarea:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-      }
-
-      body.dark-mode .form-input:focus,
-      body.dark-mode .form-select:focus,
-      body.dark-mode .form-textarea:focus {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.1);
-      }
-
-      .form-textarea {
-        resize: vertical;
-        min-height: 100px;
-      }
-
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-
-      .checkbox-group {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-top: 10px;
-      }
-
-      .checkbox-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-        border: 2px solid var(--light-border);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      body.dark-mode .checkbox-item {
-        border-color: var(--dark-border);
-      }
-
-      .checkbox-item:hover,
-      .checkbox-item.selected {
-        border-color: var(--primary-color);
-        background: rgba(67, 97, 238, 0.05);
-      }
-
-      body.dark-mode .checkbox-item:hover,
-      body.dark-mode .checkbox-item.selected {
-        border-color: var(--accent-color);
-        background: rgba(6, 214, 160, 0.05);
-      }
-
-      .checkbox-item input[type="checkbox"] {
-        margin: 0;
-      }
-
-      .form-submit {
-        width: 100%;
-        padding: 15px;
-        background: var(--gradient-primary);
-        color: white;
-        border: none;
-        border-radius: 50px;
-        font-size: 18px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        margin-top: 20px;
-      }
-
-      .form-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-      }
-
-      /* Success Message */
-      .success-message {
-        text-align: center;
-        padding: 40px;
-      }
-
-      .success-icon {
-        font-size: 4rem;
-        color: var(--success-color);
-        margin-bottom: 20px;
-      }
-
-      .success-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: var(--success-color);
-      }
-
-      .success-text {
-        color: #6c757d;
-        margin-bottom: 30px;
-      }
-
-      body.dark-mode .success-text {
-        color: #adb5bd;
-      }
-
-      /* Footer */
-      footer {
-        background: var(--light-card);
-        padding: 50px 0 30px;
-        margin-top: 50px;
-        border-top: 1px solid var(--light-border);
-      }
-
-      body.dark-mode footer {
-        background: var(--dark-card);
-        border-color: var(--dark-border);
-      }
-
-      .footer-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 30px;
-        margin-bottom: 30px;
-      }
-
-      .footer-column h3 {
-        margin-bottom: 20px;
-        color: var(--primary-color);
-      }
-
-      body.dark-mode .footer-column h3 {
-        color: var(--accent-color);
-      }
-
-      .footer-links {
-        list-style: none;
-      }
-
-      .footer-links li {
-        margin-bottom: 8px;
-      }
-
-      .footer-links a {
-        color: var(--light-text);
-        text-decoration: none;
-        transition: var(--transition);
-      }
-
-      body.dark-mode .footer-links a {
-        color: var(--dark-text);
-      }
-
-      .footer-links a:hover {
-        color: var(--primary-color);
-      }
-
-      body.dark-mode .footer-links a:hover {
-        color: var(--accent-color);
-      }
-
-      .social-links {
-        display: flex;
-        gap: 15px;
-        margin-top: 20px;
-      }
-
-      .social-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: var(--light-border);
-        color: var(--light-text);
-        border-radius: 50%;
-        text-decoration: none;
-        transition: var(--transition);
-      }
-
-      body.dark-mode .social-links a {
-        background: var(--dark-border);
-        color: var(--dark-text);
-      }
-
-      .social-links a:hover {
-        background: var(--primary-color);
-        color: white;
-        transform: translateY(-2px);
-      }
-
-      body.dark-mode .social-links a:hover {
+      body.dark-mode .section-time {
         background: var(--accent-color);
       }
 
-      .footer-bottom {
-        text-align: center;
-        padding-top: 30px;
-        border-top: 1px solid var(--light-border);
-        color: #6c757d;
+      .section-content {
+        display: none;
+        animation: slideDown 0.3s ease;
       }
 
-      body.dark-mode .footer-bottom {
+      .section-content.active {
+        display: block;
+      }
+
+      .section-toggle {
+        transition: var(--transition);
+      }
+
+      .section-header.active .section-toggle {
+        transform: rotate(180deg);
+      }
+
+      /* Activity Items */
+      .activity-list {
+        list-style: none;
+        margin-top: 20px;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+        border: 2px solid var(--light-border);
+        border-radius: 10px;
+        margin-bottom: 15px;
+        transition: var(--transition);
+        cursor: pointer;
+      }
+
+      body.dark-mode .activity-item {
         border-color: var(--dark-border);
+      }
+
+      .activity-item:hover {
+        border-color: var(--primary-color);
+        background: rgba(67, 97, 238, 0.02);
+      }
+
+      body.dark-mode .activity-item:hover {
+        border-color: var(--accent-color);
+        background: rgba(6, 214, 160, 0.02);
+      }
+
+      .activity-item.completed {
+        border-color: var(--success-color);
+        background: rgba(6, 214, 160, 0.05);
+      }
+
+      .activity-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--light-border);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        flex-shrink: 0;
+      }
+
+      body.dark-mode .activity-checkbox {
+        border-color: var(--dark-border);
+      }
+
+      .activity-item.completed .activity-checkbox {
+        background: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+      }
+
+      .activity-content {
+        flex: 1;
+      }
+
+      .activity-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .activity-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      body.dark-mode .activity-description {
         color: #adb5bd;
       }
 
-      .contact-info p {
+      .activity-materials {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .material-tag {
+        background: var(--warning-color);
+        color: #333;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sidebar-card {
+        background: var(--light-card);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        box-shadow: var(--shadow-light);
+      }
+
+      body.dark-mode .sidebar-card {
+        background: var(--dark-card);
+        box-shadow: var(--shadow-dark);
+      }
+
+      .sidebar-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+
+      body.dark-mode .sidebar-title {
+        color: var(--accent-color);
+      }
+
+      /* Progress Tracker */
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--light-border);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      body.dark-mode .progress-bar {
+        background: var(--dark-border);
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--success-color);
+        transition: width 0.3s ease;
+        width: 0%;
+      }
+
+      .progress-text {
+        text-align: center;
+        font-weight: 600;
+        color: var(--success-color);
+      }
+
+      /* Vocabulary List */
+      .vocab-list {
+        list-style: none;
+      }
+
+      .vocab-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--light-border);
+      }
+
+      body.dark-mode .vocab-item {
+        border-color: var(--dark-border);
+      }
+
+      .vocab-item:last-child {
+        border-bottom: none;
+      }
+
+      .vocab-word {
+        font-weight: 600;
+      }
+
+      .vocab-definition {
+        font-size: 0.8rem;
+        color: #6c757d;
+        text-align: right;
+      }
+
+      body.dark-mode .vocab-definition {
+        color: #adb5bd;
+      }
+
+      /* Notes Section */
+      .notes-area {
+        width: 100%;
+        min-height: 120px;
+        border: 2px solid var(--light-border);
+        border-radius: 8px;
+        padding: 15px;
+        font-family: inherit;
+        resize: vertical;
+        transition: var(--transition);
+      }
+
+      body.dark-mode .notes-area {
+        background: var(--dark-bg);
+        border-color: var(--dark-border);
+        color: var(--dark-text);
+      }
+
+      .notes-area:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      body.dark-mode .notes-area:focus {
+        border-color: var(--accent-color);
+      }
+
+      /* Action Buttons */
+      .action-btn {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 10px;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: var(--gradient-secondary);
+        color: white;
+      }
+
+      .btn-success {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--light-border);
+        color: var(--light-text);
+      }
+
+      body.dark-mode .btn-outline {
+        border-color: var(--dark-border);
+        color: var(--dark-text);
+      }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       }
 
       /* Animations */
@@ -831,14 +676,14 @@
         }
       }
 
-      @keyframes fadeInRight {
+      @keyframes slideDown {
         from {
           opacity: 0;
-          transform: translateX(30px);
+          max-height: 0;
         }
         to {
           opacity: 1;
-          transform: translateX(0);
+          max-height: 500px;
         }
       }
 
@@ -877,74 +722,31 @@
           left: 0;
         }
 
-        .nav-links a {
-          font-size: 1.2rem;
-          margin: 10px 0;
-        }
-
         .mobile-toggle {
           display: block;
         }
 
-        .page-banner {
-          height: 40vh;
+        .lesson-plan-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .sidebar {
+          order: -1;
+        }
+
+        .lesson-meta {
+          flex-direction: column;
+          gap: 10px;
         }
 
         .page-banner h1 {
-          font-size: 2.5rem;
-        }
-
-        .page-banner p {
-          font-size: 1.1rem;
-        }
-
-        .banner-badge {
-          position: static;
-          display: inline-block;
-          margin-top: 20px;
-        }
-
-        .section-title {
           font-size: 2rem;
         }
 
-        .lessons-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .form-row {
-          grid-template-columns: 1fr;
-        }
-
-        .checkbox-group {
-          grid-template-columns: 1fr;
-        }
-
-        .currency-toggle {
+        .timer-controls {
           flex-wrap: wrap;
-        }
-      }
-
-      @media (max-width: 576px) {
-        .container {
-          padding: 0 15px;
-        }
-
-        .page-banner h1 {
-          font-size: 2rem;
-        }
-
-        .section {
-          padding: 60px 0;
-        }
-
-        .modal-content {
-          width: 95%;
-        }
-
-        .modal-header,
-        .modal-body {
-          padding: 20px;
+          gap: 5px;
         }
       }
     </style>
@@ -970,44 +772,52 @@
                 Home
               </a>
             </li>
-
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fas fa-book"></i>
                 English
               </a>
             </li>
-
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fas fa-code"></i>
                 Coding
               </a>
             </li>
-
             <li class="nav-item">
               <a href="games.html" class="nav-link">
                 <i class="fas fa-dice"></i>
                 Games
               </a>
             </li>
-
             <li class="nav-item">
               <a href="store.html" class="nav-link">
                 <i class="fas fa-shopping-cart"></i>
                 Store
               </a>
             </li>
-
             <li class="nav-item">
-              <a href="lessons.html" class="nav-link active">
-                <i class="fas fa-graduation-cap"></i>
-                Lessons
+              <a href="#" class="nav-link active">
+                <i class="fas fa-chalkboard-teacher"></i>
+                Lesson Plans
               </a>
             </li>
           </ul>
 
           <div class="controls">
+            <div class="timer-controls">
+              <button class="timer-btn" id="timerStart" title="Start Timer">
+                <i class="fas fa-play"></i>
+              </button>
+              <div class="timer-display" id="timerDisplay">45:00</div>
+              <button class="timer-btn" id="timerPause" title="Pause Timer">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button class="timer-btn" id="timerReset" title="Reset Timer">
+                <i class="fas fa-stop"></i>
+              </button>
+            </div>
+
             <button
               class="control-btn theme-toggle"
               id="themeToggle"
@@ -1031,488 +841,373 @@
     <!-- Page Banner -->
     <section class="page-banner">
       <div class="container">
-        <h1>Professional Lessons</h1>
-        <p>Master English & Coding with Expert Instructors in Southeast Asia</p>
-        <div class="banner-badge">🌏 Available in Thailand, Japan & Region</div>
-      </div>
-    </section>
-
-    <!-- Lessons Section -->
-    <section class="section" id="lessonsSection">
-      <div class="container">
-        <h2 class="section-title">Choose Your Learning Path</h2>
-
-        <!-- Currency Toggle -->
-        <div class="currency-toggle">
-          <button class="currency-btn active" data-currency="usd">
-            <i class="fas fa-dollar-sign"></i> USD
-          </button>
-          <button class="currency-btn" data-currency="thb">
-            <i class="fas fa-baht-sign"></i> THB
-          </button>
-          <button class="currency-btn" data-currency="jpy">
-            <i class="fas fa-yen-sign"></i> JPY
-          </button>
-        </div>
-
-        <!-- Lessons Grid -->
-        <div class="lessons-grid">
-          <!-- English Lessons Card -->
-          <div class="lesson-card">
-            <div class="lesson-header">
-              <div class="lesson-badge">Popular</div>
-              <div class="lesson-icon">
-                <i class="fas fa-comments"></i>
-              </div>
-              <h3 class="lesson-title">English Conversation</h3>
-              <p class="lesson-subtitle">Interactive Speaking & Listening</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="25"
-                  data-thb="900"
-                  data-jpy="3800"
-                >
-                  $25
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> Native English speakers</li>
-                <li><i class="fas fa-check"></i> Personalized curriculum</li>
-                <li><i class="fas fa-check"></i> Real-world conversations</li>
-                <li><i class="fas fa-check"></i> Cultural insights</li>
-                <li><i class="fas fa-check"></i> Flexible scheduling</li>
-                <li><i class="fas fa-check"></i> Progress tracking</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="English Conversation">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
+        <h1>Business English Conversation</h1>
+        <div class="lesson-meta">
+          <div class="meta-item"><i class="fas fa-clock"></i> 45 minutes</div>
+          <div class="meta-item">
+            <i class="fas fa-users"></i> Intermediate Level
           </div>
-
-          <!-- Business English Card -->
-          <div class="lesson-card">
-            <div class="lesson-header">
-              <div class="lesson-badge">Professional</div>
-              <div class="lesson-icon">
-                <i class="fas fa-briefcase"></i>
-              </div>
-              <h3 class="lesson-title">Business English</h3>
-              <p class="lesson-subtitle">Professional Communication</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="30"
-                  data-thb="1080"
-                  data-jpy="4560"
-                >
-                  $30
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> Meeting facilitation</li>
-                <li><i class="fas fa-check"></i> Email writing</li>
-                <li><i class="fas fa-check"></i> Presentation skills</li>
-                <li><i class="fas fa-check"></i> Negotiation tactics</li>
-                <li>
-                  <i class="fas fa-check"></i> Industry-specific vocabulary
-                </li>
-                <li><i class="fas fa-check"></i> Professional etiquette</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="Business English">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- IELTS Preparation Card -->
-          <div class="lesson-card">
-            <div class="lesson-header">
-              <div class="lesson-badge">Test Prep</div>
-              <div class="lesson-icon">
-                <i class="fas fa-graduation-cap"></i>
-              </div>
-              <h3 class="lesson-title">IELTS Preparation</h3>
-              <p class="lesson-subtitle">Achieve Your Target Score</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="35"
-                  data-thb="1260"
-                  data-jpy="5320"
-                >
-                  $35
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> All 4 skills covered</li>
-                <li><i class="fas fa-check"></i> Mock tests included</li>
-                <li>
-                  <i class="fas fa-check"></i> Score improvement guarantee
-                </li>
-                <li><i class="fas fa-check"></i> Exam strategies</li>
-                <li><i class="fas fa-check"></i> Detailed feedback</li>
-                <li><i class="fas fa-check"></i> Study materials provided</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="IELTS Preparation">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Coding Lessons Card -->
-          <div class="lesson-card coding">
-            <div class="lesson-header">
-              <div class="lesson-badge">Tech Skills</div>
-              <div class="lesson-icon">
-                <i class="fas fa-code"></i>
-              </div>
-              <h3 class="lesson-title">Programming Basics</h3>
-              <p class="lesson-subtitle">Learn to Code from Scratch</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="40"
-                  data-thb="1440"
-                  data-jpy="6080"
-                >
-                  $40
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> HTML, CSS, JavaScript</li>
-                <li><i class="fas fa-check"></i> Python fundamentals</li>
-                <li><i class="fas fa-check"></i> Project-based learning</li>
-                <li><i class="fas fa-check"></i> Portfolio development</li>
-                <li><i class="fas fa-check"></i> Career guidance</li>
-                <li><i class="fas fa-check"></i> Hands-on practice</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="Programming Basics">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Web Development Card -->
-          <div class="lesson-card coding">
-            <div class="lesson-header">
-              <div class="lesson-badge">Advanced</div>
-              <div class="lesson-icon">
-                <i class="fas fa-laptop-code"></i>
-              </div>
-              <h3 class="lesson-title">Web Development</h3>
-              <p class="lesson-subtitle">Build Modern Websites</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="45"
-                  data-thb="1620"
-                  data-jpy="6840"
-                >
-                  $45
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> React & Vue.js</li>
-                <li><i class="fas fa-check"></i> Node.js backend</li>
-                <li><i class="fas fa-check"></i> Database integration</li>
-                <li><i class="fas fa-check"></i> Responsive design</li>
-                <li><i class="fas fa-check"></i> API development</li>
-                <li><i class="fas fa-check"></i> Deployment strategies</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="Web Development">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kids English Card -->
-          <div class="lesson-card">
-            <div class="lesson-header">
-              <div class="lesson-badge">Ages 6-12</div>
-              <div class="lesson-icon">
-                <i class="fas fa-child"></i>
-              </div>
-              <h3 class="lesson-title">Kids English</h3>
-              <p class="lesson-subtitle">Fun Learning for Children</p>
-            </div>
-            <div class="lesson-content">
-              <div class="lesson-price">
-                <div
-                  class="price-display"
-                  data-usd="20"
-                  data-thb="720"
-                  data-jpy="3040"
-                >
-                  $20
-                </div>
-                <div class="price-period">per hour</div>
-              </div>
-              <ul class="lesson-features">
-                <li><i class="fas fa-check"></i> Interactive games</li>
-                <li><i class="fas fa-check"></i> Story-based learning</li>
-                <li><i class="fas fa-check"></i> Visual aids & props</li>
-                <li><i class="fas fa-check"></i> Phonics training</li>
-                <li><i class="fas fa-check"></i> Progress reports</li>
-                <li><i class="fas fa-check"></i> Parent communication</li>
-              </ul>
-              <div class="lesson-cta">
-                <button class="btn-request" data-lesson="Kids English">
-                  <i class="fas fa-calendar-plus"></i>
-                  Request Lesson
-                </button>
-              </div>
-            </div>
+          <div class="meta-item">
+            <i class="fas fa-target"></i> Speaking & Vocabulary
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Request Modal -->
-    <div class="modal" id="requestModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button class="modal-close" id="modalClose">
-            <i class="fas fa-times"></i>
-          </button>
-          <h2 class="modal-title">Request a Lesson</h2>
-          <p>
-            Fill out the form below and we'll get back to you within 24 hours
-          </p>
-        </div>
-        <div class="modal-body">
-          <form id="lessonRequestForm">
-            <div class="form-group">
-              <label class="form-label">Selected Lesson</label>
-              <input
-                type="text"
-                class="form-input"
-                id="selectedLesson"
-                readonly
-              />
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">First Name *</label>
-                <input type="text" class="form-input" id="firstName" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Last Name *</label>
-                <input type="text" class="form-input" id="lastName" required />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Email Address *</label>
-              <input type="email" class="form-input" id="email" required />
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Phone Number</label>
-                <input type="tel" class="form-input" id="phone" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Country *</label>
-                <select class="form-select" id="country" required>
-                  <option value="">Select your country</option>
-                  <option value="thailand">Thailand</option>
-                  <option value="japan">Japan</option>
-                  <option value="singapore">Singapore</option>
-                  <option value="malaysia">Malaysia</option>
-                  <option value="philippines">Philippines</option>
-                  <option value="vietnam">Vietnam</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Current Level</label>
-              <select class="form-select" id="level">
-                <option value="">Select your level</option>
-                <option value="beginner">Beginner</option>
-                <option value="elementary">Elementary</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="upper-intermediate">Upper Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Preferred Schedule</label>
-              <div class="checkbox-group">
-                <div class="checkbox-item">
-                  <input type="checkbox" id="morning" value="morning" />
-                  <label for="morning">Morning (9 AM - 12 PM)</label>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" id="afternoon" value="afternoon" />
-                  <label for="afternoon">Afternoon (1 PM - 5 PM)</label>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" id="evening" value="evening" />
-                  <label for="evening">Evening (6 PM - 9 PM)</label>
-                </div>
-                <div class="checkbox-item">
-                  <input type="checkbox" id="weekend" value="weekend" />
-                  <label for="weekend">Weekends</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Goals & Expectations</label>
-              <textarea
-                class="form-textarea"
-                id="goals"
-                placeholder="Tell us about your learning goals and what you hope to achieve..."
-              ></textarea>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Additional Notes</label>
-              <textarea
-                class="form-textarea"
-                id="notes"
-                placeholder="Any specific requirements or questions?"
-              ></textarea>
-            </div>
-
-            <button type="submit" class="form-submit">
-              <i class="fas fa-paper-plane"></i>
-              Send Request
-            </button>
-          </form>
-
-          <!-- Success Message (Hidden by default) -->
-          <div
-            class="success-message"
-            id="successMessage"
-            style="display: none"
-          >
-            <div class="success-icon">
-              <i class="fas fa-check-circle"></i>
-            </div>
-            <h3 class="success-title">Request Sent Successfully!</h3>
-            <p class="success-text">
-              Thank you for your interest! We'll review your request and get
-              back to you within 24 hours with lesson details and scheduling
-              options.
-            </p>
-            <button class="btn-request" onclick="closeModal()">
-              <i class="fas fa-arrow-left"></i>
-              Back to Lessons
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
+    <!-- Lesson Plan Content -->
+    <section class="section">
       <div class="container">
-        <div class="footer-container">
-          <div class="footer-column">
-            <h3>ESL Fun Online</h3>
-            <p>
-              Professional English and coding lessons for students across
-              Southeast Asia. Learn with certified instructors and modern
-              teaching methods.
-            </p>
-            <div class="social-links">
-              <a href="#" aria-label="Facebook"
-                ><i class="fab fa-facebook"></i
-              ></a>
-              <a href="#" aria-label="Twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="#" aria-label="Instagram"
-                ><i class="fab fa-instagram"></i
-              ></a>
-              <a href="#" aria-label="LinkedIn"
-                ><i class="fab fa-linkedin"></i
-              ></a>
-              <a href="#" aria-label="YouTube"
-                ><i class="fab fa-youtube"></i
-              ></a>
+        <div class="lesson-plan-grid">
+          <!-- Main Content -->
+          <div class="main-content">
+            <!-- Warm-up Section -->
+            <div class="lesson-section">
+              <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                  <i class="fas fa-fire"></i>
+                  Warm-up & Icebreaker
+                </div>
+                <div class="section-time">5 min</div>
+                <i class="fas fa-chevron-down section-toggle"></i>
+              </div>
+              <div class="section-content active">
+                <ul class="activity-list">
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Welcome & Small Talk</div>
+                      <div class="activity-description">
+                        Greet students and ask about their weekend/week. Create
+                        a comfortable atmosphere for learning.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Conversation</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Quick Review</div>
+                      <div class="activity-description">
+                        Briefly review previous lesson's key vocabulary and
+                        concepts.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Review</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Vocabulary Introduction -->
+            <div class="lesson-section">
+              <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Introduction
+                </div>
+                <div class="section-time">10 min</div>
+                <i class="fas fa-chevron-down section-toggle"></i>
+              </div>
+              <div class="section-content">
+                <ul class="activity-list">
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Present New Vocabulary</div>
+                      <div class="activity-description">
+                        Introduce 8-10 business-related terms with definitions,
+                        examples, and pronunciation practice.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Flashcards</span>
+                        <span class="material-tag">Whiteboard</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Vocabulary Matching Game</div>
+                      <div class="activity-description">
+                        Students match business terms with their definitions.
+                        Encourage peer collaboration.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Worksheets</span>
+                        <span class="material-tag">Interactive</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Main Activity -->
+            <div class="lesson-section">
+              <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                  <i class="fas fa-comments"></i>
+                  Main Speaking Activity
+                </div>
+                <div class="section-time">20 min</div>
+                <i class="fas fa-chevron-down section-toggle"></i>
+              </div>
+              <div class="section-content">
+                <ul class="activity-list">
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">
+                        Role-Play: Business Meeting
+                      </div>
+                      <div class="activity-description">
+                        Students simulate a business meeting scenario using new
+                        vocabulary. Provide role cards and situation prompts.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Role Cards</span>
+                        <span class="material-tag">Scenario Cards</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Group Discussion</div>
+                      <div class="activity-description">
+                        Facilitate a group discussion about business
+                        communication challenges and solutions.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Discussion</span>
+                        <span class="material-tag">Group Work</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Practice & Application -->
+            <div class="lesson-section">
+              <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                  <i class="fas fa-pencil-alt"></i>
+                  Practice & Application
+                </div>
+                <div class="section-time">8 min</div>
+                <i class="fas fa-chevron-down section-toggle"></i>
+              </div>
+              <div class="section-content">
+                <ul class="activity-list">
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Email Writing Exercise</div>
+                      <div class="activity-description">
+                        Students write a short business email using the
+                        vocabulary learned in today's lesson.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Writing</span>
+                        <span class="material-tag">Email Template</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Peer Review</div>
+                      <div class="activity-description">
+                        Students exchange emails and provide constructive
+                        feedback to their partners.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Peer Work</span>
+                        <span class="material-tag">Feedback</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Wrap-up -->
+            <div class="lesson-section">
+              <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title">
+                  <i class="fas fa-flag-checkered"></i>
+                  Wrap-up & Homework
+                </div>
+                <div class="section-time">2 min</div>
+                <i class="fas fa-chevron-down section-toggle"></i>
+              </div>
+              <div class="section-content">
+                <ul class="activity-list">
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Lesson Summary</div>
+                      <div class="activity-description">
+                        Quick recap of today's key vocabulary and main learning
+                        points.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Summary</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="activity-item" onclick="toggleActivity(this)">
+                    <div class="activity-checkbox">
+                      <i class="fas fa-check" style="display: none"></i>
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-title">Assign Homework</div>
+                      <div class="activity-description">
+                        Students practice using 5 new vocabulary words in real
+                        business contexts for next class.
+                      </div>
+                      <div class="activity-materials">
+                        <span class="material-tag">Homework</span>
+                        <span class="material-tag">Practice</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div class="footer-column">
-            <h3>Quick Links</h3>
-            <ul class="footer-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="lessons.html">Lessons</a></li>
-              <li><a href="games.html">Games</a></li>
-              <li><a href="store.html">Store</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <!-- Progress Tracker -->
+            <div class="sidebar-card">
+              <h3 class="sidebar-title">
+                <i class="fas fa-chart-line"></i>
+                Lesson Progress
+              </h3>
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
 
-          <div class="footer-column">
-            <h3>Lesson Types</h3>
-            <ul class="footer-links">
-              <li><a href="#english">English Conversation</a></li>
-              <li><a href="#business">Business English</a></li>
-              <li><a href="#ielts">IELTS Preparation</a></li>
-              <li><a href="#coding">Programming</a></li>
-              <li><a href="#web">Web Development</a></li>
-              <li><a href="#kids">Kids English</a></li>
-            </ul>
-          </div>
+            <!-- Key Vocabulary -->
+            <div class="sidebar-card">
+              <h3 class="sidebar-title">
+                <i class="fas fa-bookmark"></i>
+                Key Vocabulary
+              </h3>
+              <ul class="vocab-list">
+                <li class="vocab-item">
+                  <span class="vocab-word">Agenda</span>
+                  <span class="vocab-definition">Meeting plan</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Deadline</span>
+                  <span class="vocab-definition">Due date</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Revenue</span>
+                  <span class="vocab-definition">Income earned</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Stakeholder</span>
+                  <span class="vocab-definition">Interested party</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Proposal</span>
+                  <span class="vocab-definition">Business plan</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Negotiate</span>
+                  <span class="vocab-definition">Discuss terms</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Budget</span>
+                  <span class="vocab-definition">Money allocated</span>
+                </li>
+                <li class="vocab-item">
+                  <span class="vocab-word">Quarterly</span>
+                  <span class="vocab-definition">Every 3 months</span>
+                </li>
+              </ul>
+            </div>
 
-          <div class="footer-column contact-info">
-            <h3>Contact Info</h3>
-            <p><i class="fas fa-envelope"></i> info@eslfunonline.com</p>
-            <p><i class="fas fa-phone"></i> +66 (0) 123-456-789</p>
-            <p><i class="fas fa-map-marker-alt"></i> Bangkok, Thailand</p>
-            <p><i class="fas fa-clock"></i> Mon-Fri: 9 AM - 9 PM</p>
-            <p><i class="fas fa-clock"></i> Sat-Sun: 10 AM - 6 PM</p>
-          </div>
-        </div>
+            <!-- Teacher Notes -->
+            <div class="sidebar-card">
+              <h3 class="sidebar-title">
+                <i class="fas fa-sticky-note"></i>
+                Teacher Notes
+              </h3>
+              <textarea
+                class="notes-area"
+                placeholder="Add your notes here..."
+                id="teacherNotes"
+              ></textarea>
+              <button
+                class="action-btn btn-success"
+                onclick="saveNotes()"
+                style="margin-top: 10px; width: 100%"
+              >
+                <i class="fas fa-save"></i>
+                Save Notes
+              </button>
+            </div>
 
-        <div class="footer-bottom">
-          <p>
-            &copy; 2024 ESL Fun Online. All rights reserved. |
-            <a href="#privacy">Privacy Policy</a> |
-            <a href="#terms">Terms of Service</a>
-          </p>
+            <!-- Quick Actions -->
+            <div class="sidebar-card">
+              <h3 class="sidebar-title">
+                <i class="fas fa-tools"></i>
+                Quick Actions
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <button class="action-btn btn-primary" onclick="printLesson()">
+                  <i class="fas fa-print"></i>
+                  Print Lesson
+                </button>
+                <button
+                  class="action-btn btn-secondary"
+                  onclick="shareLesson()"
+                >
+                  <i class="fas fa-share"></i>
+                  Share Lesson
+                </button>
+                <button
+                  class="action-btn btn-outline"
+                  onclick="resetProgress()"
+                >
+                  <i class="fas fa-redo"></i>
+                  Reset Progress
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
+    </section>
 
     <script>
       // Theme Toggle
@@ -1521,172 +1216,184 @@
       const themeIcon = themeToggle.querySelector("i");
 
       // Load saved theme
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
+      if (localStorage.getItem("theme") === "dark") {
         body.classList.add("dark-mode");
-        themeIcon.className = "fas fa-sun";
+        themeIcon.classList.replace("fa-moon", "fa-sun");
       }
 
       themeToggle.addEventListener("click", () => {
         body.classList.toggle("dark-mode");
 
         if (body.classList.contains("dark-mode")) {
-          themeIcon.className = "fas fa-sun";
+          themeIcon.classList.replace("fa-moon", "fa-sun");
           localStorage.setItem("theme", "dark");
         } else {
-          themeIcon.className = "fas fa-moon";
+          themeIcon.classList.replace("fa-sun", "fa-moon");
           localStorage.setItem("theme", "light");
         }
       });
 
-      // Mobile Navigation
+      // Mobile Menu Toggle
       const mobileToggle = document.getElementById("mobileToggle");
       const navLinks = document.getElementById("navLinks");
 
       mobileToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
         const icon = mobileToggle.querySelector("i");
-        icon.className = navLinks.classList.contains("active")
-          ? "fas fa-times"
-          : "fas fa-bars";
+        icon.classList.toggle("fa-bars");
+        icon.classList.toggle("fa-times");
       });
 
-      // Currency Toggle
-      const currencyBtns = document.querySelectorAll(".currency-btn");
-      const priceDisplays = document.querySelectorAll(".price-display");
+      // Timer Functionality
+      let timerMinutes = 45;
+      let timerSeconds = 0;
+      let timerInterval;
+      let isRunning = false;
 
-      currencyBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          // Remove active class from all buttons
-          currencyBtns.forEach((b) => b.classList.remove("active"));
-          // Add active class to clicked button
-          btn.classList.add("active");
+      const timerDisplay = document.getElementById("timerDisplay");
+      const startBtn = document.getElementById("timerStart");
+      const pauseBtn = document.getElementById("timerPause");
+      const resetBtn = document.getElementById("timerReset");
 
-          const currency = btn.dataset.currency;
-
-          // Update all price displays
-          priceDisplays.forEach((display) => {
-            const price = display.dataset[currency];
-            let symbol = "$";
-
-            if (currency === "thb") symbol = "฿";
-            else if (currency === "jpy") symbol = "¥";
-
-            display.textContent = symbol + price;
-          });
-        });
-      });
-
-      // Modal Functionality
-      const modal = document.getElementById("requestModal");
-      const modalClose = document.getElementById("modalClose");
-      const requestBtns = document.querySelectorAll(".btn-request");
-      const selectedLessonInput = document.getElementById("selectedLesson");
-      const lessonForm = document.getElementById("lessonRequestForm");
-      const successMessage = document.getElementById("successMessage");
-
-      // Open modal
-      requestBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const lessonType = btn.dataset.lesson;
-          selectedLessonInput.value = lessonType;
-          modal.classList.add("active");
-          document.body.style.overflow = "hidden";
-        });
-      });
-
-      // Close modal
-      function closeModal() {
-        modal.classList.remove("active");
-        document.body.style.overflow = "auto";
-
-        // Reset form and hide success message
-        setTimeout(() => {
-          lessonForm.style.display = "block";
-          successMessage.style.display = "none";
-          lessonForm.reset();
-        }, 300);
+      function updateTimerDisplay() {
+        const minutes = String(timerMinutes).padStart(2, "0");
+        const seconds = String(timerSeconds).padStart(2, "0");
+        timerDisplay.textContent = `${minutes}:${seconds}`;
       }
 
-      modalClose.addEventListener("click", closeModal);
-
-      // Close modal when clicking outside
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-
-      // Close modal with Escape key
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeModal();
-        }
-      });
-
-      // Handle checkbox selections
-      const checkboxItems = document.querySelectorAll(".checkbox-item");
-      checkboxItems.forEach((item) => {
-        item.addEventListener("click", () => {
-          const checkbox = item.querySelector('input[type="checkbox"]');
-          checkbox.checked = !checkbox.checked;
-          item.classList.toggle("selected", checkbox.checked);
-        });
-      });
-
-      // Form submission
-      lessonForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // Collect form data
-        const formData = new FormData(lessonForm);
-        const scheduleCheckboxes = document.querySelectorAll(
-          'input[type="checkbox"]:checked'
-        );
-        const schedule = Array.from(scheduleCheckboxes).map((cb) => cb.value);
-
-        // Here you would typically send the data to your server
-        console.log("Form submitted:", {
-          lesson: selectedLessonInput.value,
-          firstName: formData.get("firstName"),
-          lastName: formData.get("lastName"),
-          email: formData.get("email"),
-          phone: formData.get("phone"),
-          country: formData.get("country"),
-          level: formData.get("level"),
-          schedule: schedule,
-          goals: formData.get("goals"),
-          notes: formData.get("notes"),
-        });
-
-        // Show success message
-        lessonForm.style.display = "none";
-        successMessage.style.display = "block";
-      });
-
-      // Smooth scrolling for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        });
-      });
-
-      // Add loading animation to request buttons
-      requestBtns.forEach((btn) => {
-        btn.addEventListener("click", function () {
-          this.classList.add("loading");
-          setTimeout(() => {
-            this.classList.remove("loading");
+      function startTimer() {
+        if (!isRunning) {
+          isRunning = true;
+          timerInterval = setInterval(() => {
+            if (timerSeconds === 0) {
+              if (timerMinutes === 0) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                alert("Time's up!");
+                return;
+              }
+              timerMinutes--;
+              timerSeconds = 59;
+            } else {
+              timerSeconds--;
+            }
+            updateTimerDisplay();
           }, 1000);
+        }
+      }
+
+      function pauseTimer() {
+        clearInterval(timerInterval);
+        isRunning = false;
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        timerMinutes = 45;
+        timerSeconds = 0;
+        updateTimerDisplay();
+      }
+
+      startBtn.addEventListener("click", startTimer);
+      pauseBtn.addEventListener("click", pauseTimer);
+      resetBtn.addEventListener("click", resetTimer);
+
+      // Section Toggle
+      function toggleSection(header) {
+        const content = header.nextElementSibling;
+        const isActive = content.classList.contains("active");
+
+        // Close all sections
+        document.querySelectorAll(".section-content").forEach((section) => {
+          section.classList.remove("active");
         });
+
+        document.querySelectorAll(".section-header").forEach((h) => {
+          h.classList.remove("active");
+        });
+
+        // Open clicked section if it wasn't active
+        if (!isActive) {
+          content.classList.add("active");
+          header.classList.add("active");
+        }
+      }
+
+      // Activity Toggle
+      function toggleActivity(item) {
+        item.classList.toggle("completed");
+        const checkbox = item.querySelector(".activity-checkbox i");
+
+        if (item.classList.contains("completed")) {
+          checkbox.style.display = "block";
+        } else {
+          checkbox.style.display = "none";
+        }
+
+        updateProgress();
+      }
+
+      // Progress Tracker
+      function updateProgress() {
+        const totalActivities =
+          document.querySelectorAll(".activity-item").length;
+        const completedActivities = document.querySelectorAll(
+          ".activity-item.completed"
+        ).length;
+        const percentage = Math.round(
+          (completedActivities / totalActivities) * 100
+        );
+
+        document.getElementById("progressFill").style.width = percentage + "%";
+        document.getElementById("progressText").textContent =
+          percentage + "% Complete";
+      }
+
+      // Quick Actions
+      function printLesson() {
+        window.print();
+      }
+
+      function shareLesson() {
+        if (navigator.share) {
+          navigator.share({
+            title: "Business English Conversation Lesson",
+            text: "Check out this interactive ESL lesson plan!",
+            url: window.location.href,
+          });
+        } else {
+          navigator.clipboard.writeText(window.location.href);
+          alert("Lesson URL copied to clipboard!");
+        }
+      }
+
+      function resetProgress() {
+        if (confirm("Are you sure you want to reset all progress?")) {
+          document.querySelectorAll(".activity-item").forEach((item) => {
+            item.classList.remove("completed");
+            item.querySelector(".activity-checkbox i").style.display = "none";
+          });
+          updateProgress();
+        }
+      }
+
+      function saveNotes() {
+        const notes = document.getElementById("teacherNotes").value;
+        localStorage.setItem("teacherNotes", notes);
+        alert("Notes saved successfully!");
+      }
+
+      // Load saved notes
+      window.addEventListener("load", () => {
+        const savedNotes = localStorage.getItem("teacherNotes");
+        if (savedNotes) {
+          document.getElementById("teacherNotes").value = savedNotes;
+        }
       });
+
+      // Initialize progress
+      updateProgress();
     </script>
   </body>
 </html>
