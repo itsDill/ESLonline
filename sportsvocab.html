@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soccer Vocabulary Challenge</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+
+      .game-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 800px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .game-header {
+        text-align: center;
+        margin-bottom: 30px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .game-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .score-board {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        padding: 15px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-radius: 15px;
+        color: white;
+        font-weight: bold;
+      }
+
+      .score-item {
+        text-align: center;
+      }
+
+      .score-number {
+        font-size: 2rem;
+        display: block;
+      }
+
+      .question-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .question-text {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .answers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .answer-btn {
+        padding: 15px 20px;
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .answer-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+      }
+
+      .answer-btn.correct {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        animation: correctAnswer 0.5s ease;
+      }
+
+      .answer-btn.incorrect {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        animation: incorrectAnswer 0.5s ease;
+      }
+
+      @keyframes correctAnswer {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes incorrectAnswer {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .game-field {
+        position: relative;
+        height: 400px;
+        background: linear-gradient(to bottom, #27ae60 0%, #2ecc71 100%);
+        border-radius: 15px;
+        margin: 20px 0;
+        overflow: hidden;
+        display: none;
+      }
+
+      .goal {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 4px solid white;
+        border-bottom: none;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .goalkeeper {
+        position: absolute;
+        top: 120px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 60px;
+        background: #ff6b6b;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .goalkeeper.diving-left {
+        transform: translateX(-80px) rotate(-30deg);
+      }
+
+      .goalkeeper.diving-right {
+        transform: translateX(-20px) rotate(30deg);
+      }
+
+      .ball {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 30px;
+        background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.5s ease;
+        z-index: 5;
+      }
+
+      .ball.shooting {
+        animation: shootBall 1s ease-in-out;
+      }
+
+      @keyframes shootBall {
+        0% {
+          bottom: 50px;
+          left: 50%;
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          bottom: 200px;
+          transform: translateX(-50%) scale(0.8);
+        }
+        100% {
+          bottom: 120px;
+          transform: translateX(var(--ball-end-x, -50%)) scale(0.6);
+        }
+      }
+
+      .ball.goal {
+        animation: goalCelebration 1.5s ease-out;
+      }
+
+      @keyframes goalCelebration {
+        0% {
+          bottom: 120px;
+          transform: translateX(var(--ball-end-x, -50%)) scale(0.6);
+        }
+        50% {
+          bottom: 150px;
+          transform: translateX(var(--ball-end-x, -50%)) scale(0.4);
+        }
+        100% {
+          bottom: -50px;
+          transform: translateX(var(--ball-end-x, -50%)) scale(0.2);
+        }
+      }
+
+      .shoot-controls {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        margin-top: 20px;
+      }
+
+      .shoot-btn {
+        padding: 15px 30px;
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+      }
+
+      .shoot-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      .back-btn {
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+      }
+
+      .feedback {
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        font-weight: bold;
+        font-size: 1.1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .feedback.show {
+        opacity: 1;
+      }
+
+      .feedback.correct {
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        color: white;
+      }
+
+      .feedback.incorrect {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        color: white;
+      }
+
+      .feedback.goal {
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        color: white;
+      }
+
+      .feedback.save {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: #ecf0f1;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .next-btn {
+        background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        float: right;
+        transition: all 0.3s ease;
+      }
+
+      .next-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+      }
+
+      .game-complete {
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 15px;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 3rem;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+
+      .restart-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .restart-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      .difficulty-selector {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .difficulty-btn {
+        padding: 10px 20px;
+        margin: 0 5px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .difficulty-btn.easy {
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        color: white;
+      }
+
+      .difficulty-btn.medium {
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        color: white;
+      }
+
+      .difficulty-btn.hard {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        color: white;
+      }
+
+      .difficulty-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .timer {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+      }
+
+      .timer-value {
+        color: #e74c3c;
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 15px;
+          width: 95%;
+        }
+
+        .game-header h1 {
+          font-size: 2rem;
+        }
+
+        .answers-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .game-field {
+          height: 300px;
+        }
+
+        .score-board {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .shoot-btn {
+          padding: 12px 20px;
+          margin: 5px;
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="game-header">
+        <h1>⚽ Soccer Vocabulary Challenge</h1>
+        <p>Answer questions correctly to earn penalty shots!</p>
+      </div>
+
+      <div class="difficulty-selector" id="difficulty-selector">
+        <h3>Select Difficulty:</h3>
+        <button class="difficulty-btn easy" onclick="setDifficulty('easy')">
+          Easy
+        </button>
+        <button class="difficulty-btn medium" onclick="setDifficulty('medium')">
+          Medium
+        </button>
+        <button class="difficulty-btn hard" onclick="setDifficulty('hard')">
+          Hard
+        </button>
+      </div>
+
+      <div class="score-board">
+        <div class="score-item">
+          <span class="score-number" id="score">0</span>
+          <span>Score</span>
+        </div>
+        <div class="score-item">
+          <span class="score-number" id="goals">0</span>
+          <span>Goals</span>
+        </div>
+        <div class="score-item">
+          <span class="score-number" id="question-num">1</span>
+          <span>Question</span>
+        </div>
+      </div>
+
+      <div class="timer" id="timer" style="display: none">
+        Time left: <span class="timer-value" id="timer-value">30</span>s
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+
+      <div class="question-section" id="question-section">
+        <div class="question-text" id="question-text">Loading question...</div>
+        <div class="answers-grid" id="answers-grid">
+          <!-- Answers will be populated by JavaScript -->
+        </div>
+        <button class="next-btn" id="next-btn" style="display: none">
+          Next Question
+        </button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="game-field" id="game-field">
+        <div class="goal"></div>
+        <div class="goalkeeper" id="goalkeeper"></div>
+        <div class="ball" id="ball"></div>
+      </div>
+
+      <div class="shoot-controls" id="shoot-controls" style="display: none">
+        <h3>Choose your shot direction!</h3>
+        <button class="shoot-btn" onclick="shootBall('left')">⬅️ Left</button>
+        <button class="shoot-btn" onclick="shootBall('center')">
+          ⬆️ Center
+        </button>
+        <button class="shoot-btn" onclick="shootBall('right')">Right ➡️</button>
+        <button class="back-btn" onclick="returnToQuestion()">
+          ↩️ Back to Question
+        </button>
+      </div>
+
+      <div class="game-complete" id="game-complete">
+        <h2>🎉 Game Complete! 🎉</h2>
+        <div class="final-score" id="final-score">0</div>
+        <p>Well done! You've completed the Soccer Vocabulary Challenge!</p>
+        <button class="restart-btn" onclick="restartGame()">Play Again</button>
+      </div>
+    </div>
+
+    <audio
+      id="correctSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"
+    ></audio>
+    <audio
+      id="incorrectSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"
+    ></audio>
+    <audio
+      id="goalSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-achieving-goal-2065.mp3"
+    ></audio>
+    <audio
+      id="saveSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"
+    ></audio>
+    <audio
+      id="kickSound"
+      src="https://assets.mixkit.co/sfx/preview/mixkit-quick-kick-1664.mp3"
+    ></audio>
+
+    <script>
+      // Game state
+      let currentQuestion = 0;
+      let score = 0;
+      let goals = 0;
+      let correctAnswers = 0;
+      let gamePhase = "question"; // 'question' or 'shoot'
+      let difficulty = "medium";
+      let timerInterval;
+      let timeLeft = 30;
+
+      // Soccer vocabulary questions organized by difficulty
+      const questions = {
+        easy: [
+          {
+            question: "What do you call the person who guards the goal?",
+            answers: ["Goalkeeper", "Defender", "Midfielder", "Striker"],
+            correct: 0,
+          },
+          {
+            question: "How many players are on a soccer team during a match?",
+            answers: ["10", "11", "12", "9"],
+            correct: 1,
+          },
+          {
+            question:
+              "What is it called when you kick the ball with your head?",
+            answers: ["Header", "Volley", "Tackle", "Dribble"],
+            correct: 0,
+          },
+          {
+            question: "Which famous soccer player is from Argentina?",
+            answers: ["Ronaldo", "Messi", "Neymar", "Mbappé"],
+            correct: 1,
+          },
+          {
+            question: "What color card means a player is sent off the field?",
+            answers: ["Yellow", "Red", "Green", "Blue"],
+            correct: 1,
+          },
+        ],
+        medium: [
+          {
+            question:
+              "What do you call it when you move the ball with your feet?",
+            answers: ["Passing", "Shooting", "Dribbling", "Heading"],
+            correct: 2,
+          },
+          {
+            question: "How long is a standard soccer match?",
+            answers: ["80 minutes", "90 minutes", "100 minutes", "120 minutes"],
+            correct: 1,
+          },
+          {
+            question: "What is the most important tournament in soccer?",
+            answers: [
+              "Olympics",
+              "World Cup",
+              "Champions League",
+              "Copa America",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What do you call the area in front of the goal?",
+            answers: ["Corner", "Penalty box", "Midfield", "Sideline"],
+            correct: 1,
+          },
+          {
+            question:
+              "Which body part CANNOT touch the ball (except for goalkeepers)?",
+            answers: ["Chest", "Head", "Hands", "Legs"],
+            correct: 2,
+          },
+        ],
+        hard: [
+          {
+            question:
+              "What is the name of the international soccer governing body?",
+            answers: ["FIFA", "UEFA", "CONMEBOL", "Premier League"],
+            correct: 0,
+          },
+          {
+            question:
+              "What is the term for a goal scored directly from a corner kick?",
+            answers: ["Volley", "Bicycle kick", "Olympico", "Header"],
+            correct: 2,
+          },
+          {
+            question: "Which country has won the most World Cup titles?",
+            answers: ["Germany", "Argentina", "Brazil", "Italy"],
+            correct: 2,
+          },
+          {
+            question:
+              "What is the term for when a player is behind the last defender when the ball is played to them?",
+            answers: ["Handball", "Offside", "Foul", "Penalty"],
+            correct: 1,
+          },
+          {
+            question:
+              "What is the minimum number of players a team needs to avoid forfeiting a match?",
+            answers: ["5", "6", "7", "8"],
+            correct: 2,
+          },
+        ],
+      };
+
+      // Audio elements
+      const correctSound = document.getElementById("correctSound");
+      const incorrectSound = document.getElementById("incorrectSound");
+      const goalSound = document.getElementById("goalSound");
+      const saveSound = document.getElementById("saveSound");
+      const kickSound = document.getElementById("kickSound");
+
+      // Set game difficulty
+      function setDifficulty(level) {
+        difficulty = level;
+        document.getElementById("difficulty-selector").style.display = "none";
+
+        // Show timer for medium and hard difficulties
+        if (difficulty !== "easy") {
+          document.getElementById("timer").style.display = "block";
+        }
+
+        initGame();
+      }
+
+      // Initialize game
+      function initGame() {
+        currentQuestion = 0;
+        score = 0;
+        goals = 0;
+        correctAnswers = 0;
+        gamePhase = "question";
+        timeLeft = 30;
+
+        updateDisplay();
+        loadQuestion();
+      }
+
+      // Start or reset timer
+      function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 30;
+        document.getElementById("timer-value").textContent = timeLeft;
+
+        if (difficulty !== "easy") {
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer-value").textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              timeUp();
+            }
+          }, 1000);
+        }
+      }
+
+      // Handle time up
+      function timeUp() {
+        const question = questions[difficulty][currentQuestion];
+        const buttons = document.querySelectorAll(".answer-btn");
+
+        // Disable all buttons
+        buttons.forEach((btn) => (btn.disabled = true));
+
+        showMessage(
+          "Time's up! The correct answer is: " +
+            question.answers[question.correct],
+          "incorrect"
+        );
+        incorrectSound.play();
+
+        // Show correct answer
+        buttons[question.correct].classList.add("correct");
+
+        // Show next button after delay
+        setTimeout(() => {
+          document.getElementById("next-btn").style.display = "block";
+        }, 2000);
+      }
+
+      // Load current question
+      function loadQuestion() {
+        if (currentQuestion >= questions[difficulty].length) {
+          endGame();
+          return;
+        }
+
+        const question = questions[difficulty][currentQuestion];
+        document.getElementById("question-text").textContent =
+          question.question;
+
+        const answersGrid = document.getElementById("answers-grid");
+        answersGrid.innerHTML = "";
+
+        question.answers.forEach((answer, index) => {
+          const button = document.createElement("button");
+          button.className = "answer-btn";
+          button.textContent = answer;
+          button.onclick = () => selectAnswer(index);
+          answersGrid.appendChild(button);
+        });
+
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("game-field").style.display = "none";
+        document.getElementById("shoot-controls").style.display = "none";
+        document.getElementById("question-section").style.display = "block";
+
+        gamePhase = "question";
+        hideMessage();
+
+        // Start timer for this question
+        startTimer();
+
+        // Always set the next question handler here!
+        document.getElementById("next-btn").onclick = nextQuestion;
+      }
+
+      // Handle answer selection
+      function selectAnswer(selectedIndex) {
+        clearInterval(timerInterval);
+
+        const question = questions[difficulty][currentQuestion];
+        const buttons = document.querySelectorAll(".answer-btn");
+
+        // Disable all buttons
+        buttons.forEach((btn) => (btn.disabled = true));
+
+        if (selectedIndex === question.correct) {
+          buttons[selectedIndex].classList.add("correct");
+          score += 10;
+          correctAnswers++;
+          correctSound.play();
+          showMessage("Correct! 🎉 You earned a penalty shot!", "correct");
+
+          // Show penalty shot after delay
+          setTimeout(() => {
+            showPenaltyShot();
+          }, 1500);
+        } else {
+          buttons[selectedIndex].classList.add("incorrect");
+          buttons[question.correct].classList.add("correct");
+          incorrectSound.play();
+          showMessage(
+            "Incorrect. The correct answer is: " +
+              question.answers[question.correct],
+            "incorrect"
+          );
+
+          // Show next button after delay
+          setTimeout(() => {
+            document.getElementById("next-btn").style.display = "block";
+          }, 2000);
+        }
+
+        updateDisplay();
+      }
+
+      // Show penalty shot phase
+      function showPenaltyShot() {
+        document.getElementById("question-section").style.display = "none";
+        document.getElementById("game-field").style.display = "block";
+        document.getElementById("shoot-controls").style.display = "block";
+
+        // Reset goalkeeper position
+        document.getElementById("goalkeeper").className = "goalkeeper";
+        document.getElementById("ball").className = "ball";
+
+        gamePhase = "shoot";
+        hideMessage();
+      }
+
+      // Return to question without shooting
+      function returnToQuestion() {
+        document.getElementById("game-field").style.display = "none";
+        document.getElementById("shoot-controls").style.display = "none";
+        document.getElementById("question-section").style.display = "block";
+        document.getElementById("next-btn").style.display = "block";
+
+        gamePhase = "question";
+      }
+
+      // Handle ball shooting
+      function shootBall(direction) {
+        kickSound.play();
+
+        const goalkeeper = document.getElementById("goalkeeper");
+        const ball = document.getElementById("ball");
+
+        // Disable shoot buttons
+        document
+          .querySelectorAll(".shoot-btn")
+          .forEach((btn) => (btn.disabled = true));
+
+        // Random goalkeeper movement
+        const goalkeeperMoves = ["left", "right", "center"];
+        const randomMove =
+          goalkeeperMoves[Math.floor(Math.random() * goalkeeperMoves.length)];
+
+        // Set ball end position based on direction
+        let ballEndX = "-50%";
+        if (direction === "left") ballEndX = "-70%";
+        if (direction === "right") ballEndX = "-30%";
+        ball.style.setProperty("--ball-end-x", ballEndX);
+
+        // Animate goalkeeper
+        setTimeout(() => {
+          if (randomMove === "left") {
+            goalkeeper.classList.add("diving-left");
+          } else if (randomMove === "right") {
+            goalkeeper.classList.add("diving-right");
+          }
+        }, 300);
+
+        // Animate ball
+        ball.classList.add("shooting");
+
+        // Determine if goal or save
+        setTimeout(() => {
+          if (direction === randomMove) {
+            // Save!
+            saveSound.play();
+            showMessage("Great save by the goalkeeper! 🥅", "save");
+            ball.classList.remove("shooting");
+          } else {
+            // Goal!
+            goalSound.play();
+            goals++;
+            score += 15;
+            showMessage("GOAL! ⚽ Amazing shot!", "goal");
+            ball.classList.add("goal");
+          }
+
+          updateDisplay();
+
+          // Show next button after delay
+          setTimeout(() => {
+            document.getElementById("next-btn").style.display = "block";
+            document.getElementById("next-btn").onclick = nextQuestion;
+          }, 2000);
+        }, 1000);
+      }
+
+      // Go to next question
+      function nextQuestion() {
+        currentQuestion++;
+        updateDisplay();
+        loadQuestion();
+      }
+
+      // Update display elements
+      function updateDisplay() {
+        document.getElementById("score").textContent = score;
+        document.getElementById("goals").textContent = goals;
+        document.getElementById("question-num").textContent =
+          currentQuestion + 1;
+
+        // Update progress bar
+        const progress =
+          ((currentQuestion + 1) / questions[difficulty].length) * 100;
+        document.getElementById("progress").style.width = progress + "%";
+      }
+
+      // Show message
+      function showMessage(text, type) {
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = text;
+        feedback.className = `feedback ${type} show`;
+      }
+
+      // Hide message
+      function hideMessage() {
+        const feedback = document.getElementById("feedback");
+        feedback.className = "feedback";
+      }
+
+      // End game
+      function endGame() {
+        document.getElementById("question-section").style.display = "none";
+        document.getElementById("game-field").style.display = "none";
+        document.getElementById("shoot-controls").style.display = "none";
+        document.getElementById("game-complete").style.display = "block";
+
+        document.getElementById("final-score").textContent = score;
+
+        // Show performance message
+        let performance = "";
+        let targetScore =
+          difficulty === "easy" ? 150 : difficulty === "medium" ? 200 : 250;
+
+        if (score >= targetScore + 50) {
+          performance =
+            "Outstanding performance! You're a soccer vocabulary champion! 🏆";
+        } else if (score >= targetScore) {
+          performance = "Great job! You really know your soccer terms! ⭐";
+        } else if (score >= targetScore - 50) {
+          performance = "Good work! Keep practicing to improve! 👍";
+        } else {
+          performance = "Nice try! Practice more to become a soccer expert! 💪";
+        }
+
+        document.querySelector(".game-complete p").textContent = performance;
+      }
+
+      // Restart game
+      function restartGame() {
+        document.getElementById("game-complete").style.display = "none";
+        document.getElementById("difficulty-selector").style.display = "block";
+      }
+    </script>
+  </body>
+</html>
