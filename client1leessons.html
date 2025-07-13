@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GameHub - Fun Learning Games</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .logo {
+        font-size: 3rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .tagline {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .user-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        font-weight: bold;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .score-display {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 15px;
+        color: white;
+        font-weight: bold;
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .game-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .game-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .game-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.5s;
+        opacity: 0;
+      }
+
+      .game-card:hover::before {
+        opacity: 1;
+        transform: rotate(45deg) translate(50%, 50%);
+      }
+
+      .game-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: block;
+        text-align: center;
+      }
+
+      .game-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .game-description {
+        color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .play-btn {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .play-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-size: 1.8rem;
+        color: white;
+        font-weight: bold;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Memory Game Styles */
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .memory-card {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+      }
+
+      .memory-card:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .memory-card.flipped {
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+      }
+
+      .memory-card.matched {
+        background: #4ecdc4;
+        color: white;
+        border-color: #45b7d1;
+      }
+
+      /* Quiz Game Styles */
+      .quiz-question {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        color: white;
+        font-size: 1.1rem;
+      }
+
+      .quiz-options {
+        display: grid;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .quiz-option {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: left;
+      }
+
+      .quiz-option:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .quiz-option.correct {
+        background: #4ecdc4;
+      }
+
+      .quiz-option.incorrect {
+        background: #ff6b6b;
+      }
+
+      /* Snake Game Styles */
+      .snake-game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .snake-board {
+        width: 400px;
+        height: 400px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .snake-controls {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 150px;
+      }
+
+      .snake-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .snake-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Word Game Styles */
+      .word-display {
+        font-size: 2rem;
+        color: white;
+        text-align: center;
+        margin: 20px 0;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .word-input {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        background: rgba(255, 255, 255, 0.9);
+        margin: 10px 0;
+      }
+
+      .word-input:focus {
+        outline: none;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      /* Reaction Game Styles */
+      .reaction-area {
+        width: 100%;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 20px 0;
+      }
+
+      .reaction-area.ready {
+        background: #ff6b6b;
+      }
+
+      .reaction-area.go {
+        background: #4ecdc4;
+      }
+
+      .game-stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        color: white;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
+        .games-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .memory-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .snake-board {
+          width: 300px;
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo">🎮 GameHub</div>
+        <div class="tagline">Fun Learning Games for Everyone!</div>
+        <div class="user-info">
+          <div class="avatar">🎯</div>
+          <div class="score-display">Score: <span id="totalScore">0</span></div>
+        </div>
+      </div>
+
+      <div class="games-grid">
+        <div class="game-card" onclick="openMemoryGame()">
+          <div class="game-icon">🧠</div>
+          <div class="game-title">Memory Match</div>
+          <div class="game-description">
+            Test your memory with colorful emojis
+          </div>
+          <button class="play-btn">Play Now</button>
+        </div>
+
+        <div class="game-card" onclick="openQuizGame()">
+          <div class="game-icon">🤔</div>
+          <div class="game-title">Quick Quiz</div>
+          <div class="game-description">Answer fun trivia questions</div>
+          <button class="play-btn">Play Now</button>
+        </div>
+
+        <div class="game-card" onclick="openSnakeGame()">
+          <div class="game-icon">🐍</div>
+          <div class="game-title">Snake Adventure</div>
+          <div class="game-description">Classic snake game with a twist</div>
+          <button class="play-btn">Play Now</button>
+        </div>
+
+        <div class="game-card" onclick="openWordGame()">
+          <div class="game-icon">📝</div>
+          <div class="game-title">Word Scramble</div>
+          <div class="game-description">Unscramble the hidden words</div>
+          <button class="play-btn">Play Now</button>
+        </div>
+
+        <div class="game-card" onclick="openReactionGame()">
+          <div class="game-icon">⚡</div>
+          <div class="game-title">Reaction Test</div>
+          <div class="game-description">How fast are your reflexes?</div>
+          <button class="play-btn">Play Now</button>
+        </div>
+
+        <div class="game-card" onclick="openMathGame()">
+          <div class="game-icon">🔢</div>
+          <div class="game-title">Math Challenge</div>
+          <div class="game-description">Solve math problems quickly</div>
+          <button class="play-btn">Play Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memory Game Modal -->
+    <div id="memoryModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Memory Match</div>
+          <button class="close-btn" onclick="closeModal('memoryModal')">
+            &times;
+          </button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="memoryScore">0</div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="memoryMoves">0</div>
+            <div class="stat-label">Moves</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="memoryTime">0</div>
+            <div class="stat-label">Time</div>
+          </div>
+        </div>
+        <div class="memory-grid" id="memoryGrid"></div>
+        <button class="play-btn" onclick="resetMemoryGame()">New Game</button>
+      </div>
+    </div>
+
+    <!-- Quiz Game Modal -->
+    <div id="quizModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Quick Quiz</div>
+          <button class="close-btn" onclick="closeModal('quizModal')">
+            &times;
+          </button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="quizScore">0</div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="quizQuestion">1</div>
+            <div class="stat-label">Question</div>
+          </div>
+        </div>
+        <div class="quiz-question" id="quizQuestionText"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <button
+          class="play-btn"
+          onclick="nextQuestion()"
+          id="nextBtn"
+          style="display: none"
+        >
+          Next Question
+        </button>
+      </div>
+    </div>
+
+    <!-- Snake Game Modal -->
+    <div id="snakeModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Snake Adventure</div>
+          <button class="close-btn" onclick="closeModal('snakeModal')">
+            &times;
+          </button>
+        </div>
+        <div class="snake-game">
+          <div class="game-stats">
+            <div class="stat-item">
+              <div class="stat-value" id="snakeScore">0</div>
+              <div class="stat-label">Score</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="snakeLevel">1</div>
+              <div class="stat-label">Level</div>
+            </div>
+          </div>
+          <canvas
+            id="snakeCanvas"
+            width="400"
+            height="400"
+            class="snake-board"
+          ></canvas>
+          <div class="snake-controls">
+            <div></div>
+            <button class="snake-btn" onclick="changeDirection('up')">↑</button>
+            <div></div>
+            <button class="snake-btn" onclick="changeDirection('left')">
+              ←
+            </button>
+            <button class="snake-btn" onclick="resetSnakeGame()">🔄</button>
+            <button class="snake-btn" onclick="changeDirection('right')">
+              →
+            </button>
+            <div></div>
+            <button class="snake-btn" onclick="changeDirection('down')">
+              ↓
+            </button>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Word Game Modal -->
+    <div id="wordModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Word Scramble</div>
+          <button class="close-btn" onclick="closeModal('wordModal')">
+            &times;
+          </button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="wordScore">0</div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="wordLevel">1</div>
+            <div class="stat-label">Level</div>
+          </div>
+        </div>
+        <div class="word-display" id="scrambledWord"></div>
+        <input
+          type="text"
+          class="word-input"
+          id="wordInput"
+          placeholder="Type your answer..."
+          onkeypress="checkWordEnter(event)"
+        />
+        <button class="play-btn" onclick="checkWord()">Submit</button>
+        <button class="play-btn" onclick="nextWord()">Next Word</button>
+      </div>
+    </div>
+
+    <!-- Reaction Game Modal -->
+    <div id="reactionModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Reaction Test</div>
+          <button class="close-btn" onclick="closeModal('reactionModal')">
+            &times;
+          </button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="reactionBest">0</div>
+            <div class="stat-label">Best (ms)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="reactionAvg">0</div>
+            <div class="stat-label">Average</div>
+          </div>
+        </div>
+        <div class="reaction-area" id="reactionArea" onclick="reactionClick()">
+          Click when the area turns green!
+        </div>
+        <button class="play-btn" onclick="startReactionTest()">
+          Start Test
+        </button>
+      </div>
+    </div>
+
+    <!-- Math Game Modal -->
+    <div id="mathModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Math Challenge</div>
+          <button class="close-btn" onclick="closeModal('mathModal')">
+            &times;
+          </button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="mathScore">0</div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="mathTime">30</div>
+            <div class="stat-label">Time</div>
+          </div>
+        </div>
+        <div class="word-display" id="mathProblem"></div>
+        <input
+          type="number"
+          class="word-input"
+          id="mathInput"
+          placeholder="Enter your answer..."
+          onkeypress="checkMathEnter(event)"
+        />
+        <button class="play-btn" onclick="checkMath()">Submit</button>
+        <button class="play-btn" onclick="startMathGame()">New Game</button>
+      </div>
+    </div>
+
+    <script>
+      let totalScore = 0;
+
+      // Create stars
+      function createStars() {
+        const starsContainer = document.getElementById("stars");
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          star.style.left = Math.random() * 100 + "%";
+          star.style.top = Math.random() * 100 + "%";
+          star.style.animationDelay = Math.random() * 2 + "s";
+          starsContainer.appendChild(star);
+        }
+      }
+
+      // Modal controls
+      function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      function updateTotalScore(points) {
+        totalScore += points;
+        document.getElementById("totalScore").textContent = totalScore;
+      }
+
+      // Memory Game
+      let memoryGame = {
+        cards: [],
+        flippedCards: [],
+        matches: 0,
+        moves: 0,
+        timer: 0,
+        interval: null,
+      };
+
+      const memoryEmojis = [
+        "🎯",
+        "🎮",
+        "🎨",
+        "🎭",
+        "🎪",
+        "🎨",
+        "🎯",
+        "🎮",
+        "🎭",
+        "🎪",
+      ];
+
+      function openMemoryGame() {
+        openModal("memoryModal");
+        resetMemoryGame();
+      }
+
+      function resetMemoryGame() {
+        memoryGame = {
+          cards: [],
+          flippedCards: [],
+          matches: 0,
+          moves: 0,
+          timer: 0,
+          interval: null,
+        };
+
+        if (memoryGame.interval) clearInterval(memoryGame.interval);
+        memoryGame.interval = setInterval(() => {
+          memoryGame.timer++;
+          document.getElementById("memoryTime").textContent = memoryGame.timer;
+        }, 1000);
+
+        const shuffled = [...memoryEmojis].sort(() => Math.random() - 0.5);
+        const grid = document.getElementById("memoryGrid");
+        grid.innerHTML = "";
+
+        shuffled.forEach((emoji, index) => {
+          const card = document.createElement("div");
+          card.className = "memory-card";
+          card.dataset.emoji = emoji;
+          card.dataset.index = index;
+          card.onclick = () => flipMemoryCard(card);
+          grid.appendChild(card);
+        });
+
+        document.getElementById("memoryScore").textContent = "0";
+        document.getElementById("memoryMoves").textContent = "0";
+        document.getElementById("memoryTime").textContent = "0";
+      }
+
+      function flipMemoryCard(card) {
+        if (
+          card.classList.contains("flipped") ||
+          card.classList.contains("matched") ||
+          memoryGame.flippedCards.length >= 2
+        )
+          return;
+
+        card.classList.add("flipped");
+        card.textContent = card.dataset.emoji;
+        memoryGame.flippedCards.push(card);
+
+        if (memoryGame.flippedCards.length === 2) {
+          memoryGame.moves++;
+          document.getElementById("memoryMoves").textContent = memoryGame.moves;
+
+          setTimeout(() => {
+            const [card1, card2] = memoryGame.flippedCards;
+
+            if (card1.dataset.emoji === card2.dataset.emoji) {
+              card1.classList.add("matched");
+              card2.classList.add("matched");
+              memoryGame.matches++;
+              updateTotalScore(10);
+              document.getElementById("memoryScore").textContent =
+                memoryGame.matches * 10;
+
+              if (memoryGame.matches === 5) {
+                clearInterval(memoryGame.interval);
+                setTimeout(() => alert("🎉 You won! Great memory!"), 500);
+              }
+            } else {
+              card1.classList.remove("flipped");
+              card2.classList.remove("flipped");
+              card1.textContent = "";
+              card2.textContent = "";
+            }
+
+            memoryGame.flippedCards = [];
+          }, 1000);
+        }
+      }
+
+      // Quiz Game
+      let quizGame = {
+        currentQuestion: 0,
+        score: 0,
+        questions: [
+          {
+            question: "What is the capital of France?",
+            options: ["London", "Berlin", "Paris", "Madrid"],
+            correct: 2,
+          },
+          {
+            question: "Which planet is closest to the sun?",
+            options: ["Venus", "Mercury", "Earth", "Mars"],
+            correct: 1,
+          },
+          {
+            question: "What is 15 + 27?",
+            options: ["42", "41", "43", "40"],
+            correct: 0,
+          },
+          {
+            question: "Who painted the Mona Lisa?",
+            options: ["Van Gogh", "Picasso", "Da Vinci", "Monet"],
+            correct: 2,
+          },
+          {
+            question: "What is the largest ocean?",
+            options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+            correct: 3,
+          },
+        ],
+      };
+
+      function openQuizGame() {
+        openModal("quizModal");
+        quizGame.currentQuestion = 0;
+        quizGame.score = 0;
+        document.getElementById("quizScore").textContent = "0";
+        showQuestion();
+      }
+
+      function showQuestion() {
+        const q = quizGame.questions[quizGame.currentQuestion];
+        document.getElementById("quizQuestionText").textContent = q.question;
+        document.getElementById("quizQuestion").textContent =
+          quizGame.currentQuestion + 1;
+
+        const optionsDiv = document.getElementById("quizOptions");
+        optionsDiv.innerHTML = "";
+
+        q.options.forEach((option, index) => {
+          const btn = document.createElement("button");
+          btn.className = "quiz-option";
+          btn.textContent = option;
+          btn.onclick = () => selectAnswer(index);
+          optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById("nextBtn").style.display = "none";
+      }
+
+      function selectAnswer(selected) {
+        const q = quizGame.questions[quizGame.currentQuestion];
+        const options = document.querySelectorAll(".quiz-option");
+
+        options.forEach((option, index) => {
+          option.disabled = true;
+          if (index === q.correct) {
+            option.classList.add("correct");
+          } else if (index === selected) {
+            option.classList.add("incorrect");
+          }
+        });
+
+        if (selected === q.correct) {
+          quizGame.score += 10;
+          updateTotalScore(10);
+          document.getElementById("quizScore").textContent = quizGame.score;
+        }
+
+        document.getElementById("nextBtn").style.display = "block";
+      }
+
+      function nextQuestion() {
+        quizGame.currentQuestion++;
+        if (quizGame.currentQuestion >= quizGame.questions.length) {
+          alert(`🎉 Quiz complete! Your score: ${quizGame.score}`);
+          closeModal("quizModal");
+        } else {
+          showQuestion();
+        }
+      }
+
+      // Snake Game
+      let snakeGame = {
+        canvas: null,
+        ctx: null,
+        snake: [{ x: 200, y: 200 }],
+        food: { x: 100, y: 100 },
+        direction: "right",
+        score: 0,
+        gameLoop: null,
+      };
+      function openSnakeGame() {
+        openModal("snakeModal");
+        const canvas = document.getElementById("snakeCanvas");
+        snakeGame.canvas = canvas;
+        snakeGame.ctx = canvas.getContext("2d");
+        resetSnakeGame();
+      }
+
+      function resetSnakeGame() {
+        snakeGame.snake = [{ x: 200, y: 200 }];
+        snakeGame.food = { x: 100, y: 100 };
+        snakeGame.direction = "right";
+        snakeGame.score = 0;
+        document.getElementById("snakeScore").textContent = "0";
+        document.getElementById("snakeLevel").textContent = "1";
+
+        if (snakeGame.gameLoop) clearInterval(snakeGame.gameLoop);
+        snakeGame.gameLoop = setInterval(updateSnake, 150);
+      }
+
+      function updateSnake() {
+        const head = { ...snakeGame.snake[0] };
+
+        switch (snakeGame.direction) {
+          case "up":
+            head.y -= 20;
+            break;
+          case "down":
+            head.y += 20;
+            break;
+          case "left":
+            head.x -= 20;
+            break;
+          case "right":
+            head.x += 20;
+            break;
+        }
+
+        // Check wall collision
+        if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400) {
+          gameOver();
+          return;
+        }
+
+        // Check self collision
+        if (
+          snakeGame.snake.some(
+            (segment) => segment.x === head.x && segment.y === head.y
+          )
+        ) {
+          gameOver();
+          return;
+        }
+
+        snakeGame.snake.unshift(head);
+
+        // Check food collision
+        if (head.x === snakeGame.food.x && head.y === snakeGame.food.y) {
+          snakeGame.score += 10;
+          updateTotalScore(10);
+          document.getElementById("snakeScore").textContent = snakeGame.score;
+          document.getElementById("snakeLevel").textContent =
+            Math.floor(snakeGame.score / 50) + 1;
+          generateFood();
+        } else {
+          snakeGame.snake.pop();
+        }
+
+        drawSnake();
+      }
+
+      function drawSnake() {
+        snakeGame.ctx.fillStyle = "#1a1a2e";
+        snakeGame.ctx.fillRect(0, 0, 400, 400);
+
+        // Draw snake
+        snakeGame.ctx.fillStyle = "#4ecdc4";
+        snakeGame.snake.forEach((segment, index) => {
+          snakeGame.ctx.fillRect(segment.x, segment.y, 18, 18);
+          if (index === 0) {
+            snakeGame.ctx.fillStyle = "#45b7d1";
+            snakeGame.ctx.fillRect(segment.x + 2, segment.y + 2, 14, 14);
+            snakeGame.ctx.fillStyle = "#4ecdc4";
+          }
+        });
+
+        // Draw food
+        snakeGame.ctx.fillStyle = "#ff6b6b";
+        snakeGame.ctx.fillRect(snakeGame.food.x, snakeGame.food.y, 18, 18);
+      }
+
+      function generateFood() {
+        snakeGame.food = {
+          x: Math.floor(Math.random() * 20) * 20,
+          y: Math.floor(Math.random() * 20) * 20,
+        };
+
+        // Make sure food doesn't spawn on snake
+        while (
+          snakeGame.snake.some(
+            (segment) =>
+              segment.x === snakeGame.food.x && segment.y === snakeGame.food.y
+          )
+        ) {
+          snakeGame.food = {
+            x: Math.floor(Math.random() * 20) * 20,
+            y: Math.floor(Math.random() * 20) * 20,
+          };
+        }
+      }
+
+      function changeDirection(newDirection) {
+        const opposites = {
+          up: "down",
+          down: "up",
+          left: "right",
+          right: "left",
+        };
+
+        if (opposites[newDirection] !== snakeGame.direction) {
+          snakeGame.direction = newDirection;
+        }
+      }
+
+      function gameOver() {
+        clearInterval(snakeGame.gameLoop);
+        alert(`Game Over! Your score: ${snakeGame.score}`);
+      }
+
+      // Word Scramble Game
+      let wordGame = {
+        words: [
+          "JAVASCRIPT",
+          "COMPUTER",
+          "KEYBOARD",
+          "MONITOR",
+          "PROGRAM",
+          "WEBSITE",
+          "INTERNET",
+          "DIGITAL",
+          "TECHNOLOGY",
+          "ALGORITHM",
+        ],
+        currentWord: "",
+        scrambledWord: "",
+        score: 0,
+        level: 1,
+      };
+
+      function openWordGame() {
+        openModal("wordModal");
+        wordGame.score = 0;
+        wordGame.level = 1;
+        document.getElementById("wordScore").textContent = "0";
+        document.getElementById("wordLevel").textContent = "1";
+        nextWord();
+      }
+
+      function nextWord() {
+        wordGame.currentWord =
+          wordGame.words[Math.floor(Math.random() * wordGame.words.length)];
+        wordGame.scrambledWord = scrambleWord(wordGame.currentWord);
+        document.getElementById("scrambledWord").textContent =
+          wordGame.scrambledWord;
+        document.getElementById("wordInput").value = "";
+        document.getElementById("wordInput").focus();
+      }
+
+      function scrambleWord(word) {
+        return word
+          .split("")
+          .sort(() => Math.random() - 0.5)
+          .join("");
+      }
+
+      function checkWord() {
+        const input = document.getElementById("wordInput").value.toUpperCase();
+
+        if (input === wordGame.currentWord) {
+          wordGame.score += wordGame.level * 10;
+          updateTotalScore(wordGame.level * 10);
+          document.getElementById("wordScore").textContent = wordGame.score;
+          wordGame.level++;
+          document.getElementById("wordLevel").textContent = wordGame.level;
+          alert("🎉 Correct! Well done!");
+          nextWord();
+        } else {
+          alert("❌ Try again!");
+          document.getElementById("wordInput").value = "";
+        }
+      }
+
+      function checkWordEnter(event) {
+        if (event.key === "Enter") {
+          checkWord();
+        }
+      }
+
+      // Reaction Test Game
+      let reactionGame = {
+        startTime: 0,
+        isWaiting: false,
+        isReady: false,
+        times: [],
+        timeout: null,
+      };
+
+      function openReactionGame() {
+        openModal("reactionModal");
+        reactionGame.times = [];
+        updateReactionStats();
+      }
+
+      function startReactionTest() {
+        const area = document.getElementById("reactionArea");
+        area.classList.remove("go", "ready");
+        area.textContent = "Wait for green...";
+        reactionGame.isWaiting = true;
+        reactionGame.isReady = false;
+
+        const delay = Math.random() * 4000 + 1000; // 1-5 seconds
+
+        reactionGame.timeout = setTimeout(() => {
+          area.classList.add("go");
+          area.textContent = "CLICK NOW!";
+          reactionGame.isReady = true;
+          reactionGame.startTime = Date.now();
+        }, delay);
+      }
+
+      function reactionClick() {
+        if (!reactionGame.isWaiting) return;
+
+        if (!reactionGame.isReady) {
+          clearTimeout(reactionGame.timeout);
+          const area = document.getElementById("reactionArea");
+          area.classList.add("ready");
+          area.textContent = "Too early! Try again.";
+          reactionGame.isWaiting = false;
+          return;
+        }
+
+        const reactionTime = Date.now() - reactionGame.startTime;
+        reactionGame.times.push(reactionTime);
+
+        const area = document.getElementById("reactionArea");
+        area.classList.remove("go");
+        area.textContent = `${reactionTime}ms! Click to try again.`;
+
+        reactionGame.isWaiting = false;
+        reactionGame.isReady = false;
+
+        updateReactionStats();
+      }
+
+      function updateReactionStats() {
+        if (reactionGame.times.length === 0) {
+          document.getElementById("reactionBest").textContent = "0";
+          document.getElementById("reactionAvg").textContent = "0";
+          return;
+        }
+
+        const best = Math.min(...reactionGame.times);
+        const avg = Math.round(
+          reactionGame.times.reduce((a, b) => a + b, 0) /
+            reactionGame.times.length
+        );
+
+        document.getElementById("reactionBest").textContent = best;
+        document.getElementById("reactionAvg").textContent = avg;
+      }
+
+      // Math Challenge Game
+      let mathGame = {
+        score: 0,
+        timeLeft: 30,
+        currentProblem: "",
+        currentAnswer: 0,
+        interval: null,
+      };
+
+      function openMathGame() {
+        openModal("mathModal");
+        startMathGame();
+      }
+
+      function startMathGame() {
+        mathGame.score = 0;
+        mathGame.timeLeft = 30;
+        document.getElementById("mathScore").textContent = "0";
+        document.getElementById("mathTime").textContent = "30";
+
+        if (mathGame.interval) clearInterval(mathGame.interval);
+        mathGame.interval = setInterval(() => {
+          mathGame.timeLeft--;
+          document.getElementById("mathTime").textContent = mathGame.timeLeft;
+
+          if (mathGame.timeLeft <= 0) {
+            clearInterval(mathGame.interval);
+            alert(`⏰ Time's up! Your score: ${mathGame.score}`);
+          }
+        }, 1000);
+
+        generateMathProblem();
+      }
+
+      function generateMathProblem() {
+        const operations = ["+", "-", "*"];
+        const operation =
+          operations[Math.floor(Math.random() * operations.length)];
+        let a, b;
+
+        switch (operation) {
+          case "+":
+            a = Math.floor(Math.random() * 50) + 1;
+            b = Math.floor(Math.random() * 50) + 1;
+            mathGame.currentAnswer = a + b;
+            break;
+          case "-":
+            a = Math.floor(Math.random() * 50) + 25;
+            b = Math.floor(Math.random() * 25) + 1;
+            mathGame.currentAnswer = a - b;
+            break;
+          case "*":
+            a = Math.floor(Math.random() * 12) + 1;
+            b = Math.floor(Math.random() * 12) + 1;
+            mathGame.currentAnswer = a * b;
+            break;
+        }
+
+        mathGame.currentProblem = `${a} ${operation} ${b}`;
+        document.getElementById("mathProblem").textContent =
+          mathGame.currentProblem + " = ?";
+        document.getElementById("mathInput").value = "";
+        document.getElementById("mathInput").focus();
+      }
+
+      function checkMath() {
+        const input = parseInt(document.getElementById("mathInput").value);
+
+        if (input === mathGame.currentAnswer) {
+          mathGame.score += 10;
+          updateTotalScore(10);
+          document.getElementById("mathScore").textContent = mathGame.score;
+          generateMathProblem();
+        } else {
+          alert("❌ Try again!");
+          document.getElementById("mathInput").value = "";
+        }
+      }
+
+      function checkMathEnter(event) {
+        if (event.key === "Enter") {
+          checkMath();
+        }
+      }
+
+      // Keyboard controls for Snake
+      document.addEventListener("keydown", (e) => {
+        if (document.getElementById("snakeModal").style.display === "block") {
+          switch (e.key) {
+            case "ArrowUp":
+              e.preventDefault();
+              changeDirection("up");
+              break;
+            case "ArrowDown":
+              e.preventDefault();
+              changeDirection("down");
+              break;
+            case "ArrowLeft":
+              e.preventDefault();
+              changeDirection("left");
+              break;
+            case "ArrowRight":
+              e.preventDefault();
+              changeDirection("right");
+              break;
+          }
+        }
+      });
+
+      // Close modals when clicking outside
+      window.onclick = function (event) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach((modal) => {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+      };
+
+      // Initialize the app
+      window.onload = function () {
+        createStars();
+      };
+    </script>
+  </body>
+</html>
