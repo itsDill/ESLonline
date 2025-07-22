@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESL Conversation Learning</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .header p {
+        text-align: center;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .nav {
+        background: white;
+        padding: 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-list {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        max-width: 1200px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+      }
+
+      .nav-list li {
+        margin: 0;
+      }
+
+      .nav-list a {
+        display: block;
+        padding: 1rem 1.5rem;
+        text-decoration: none;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 3px solid transparent;
+      }
+
+      .nav-list a:hover {
+        background: #3498db;
+        color: white;
+        border-bottom: 3px solid #2c3e50;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .section {
+        background: white;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .section h2 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 0.5rem;
+      }
+
+      .difficulty-levels {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .difficulty-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #3498db;
+        background: white;
+        color: #3498db;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .difficulty-btn.active,
+      .difficulty-btn:hover {
+        background: #3498db;
+        color: white;
+      }
+
+      .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .topic-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+      }
+
+      .topic-card h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+
+      .topic-card ul {
+        list-style-position: inside;
+        color: #555;
+      }
+
+      .topic-card li {
+        margin-bottom: 0.5rem;
+      }
+
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .review-item {
+        background: #e8f4fd;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 3px solid #3498db;
+      }
+
+      .review-item strong {
+        color: #2c3e50;
+      }
+
+      .accent-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1.5rem;
+      }
+
+      .accent-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-top: 4px solid #3498db;
+      }
+
+      .accent-card h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .exercise-container {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+      }
+
+      .exercise {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .exercise h4 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+
+      .exercise-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .exercise-option {
+        padding: 0.75rem;
+        background: #e8f4fd;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .exercise-option:hover {
+        background: #3498db;
+        color: white;
+      }
+
+      .exercise-option.selected {
+        background: #2c3e50;
+        color: white;
+      }
+
+      .exercise-option.correct {
+        background: #27ae60;
+        color: white;
+      }
+
+      .exercise-option.incorrect {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .timer-container {
+        text-align: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        color: white;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .timer-display {
+        font-size: 3rem;
+        font-weight: bold;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+      }
+
+      .topic-display {
+        font-size: 1.3rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .timer-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: #27ae60;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #229954;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #2c3e50;
+      }
+
+      .btn-secondary:hover {
+        background: #ecf0f1;
+      }
+
+      .btn-danger {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c0392b;
+      }
+
+      .print-section {
+        background: white;
+        padding: 2rem;
+        margin-top: 2rem;
+        border: 2px dashed #3498db;
+        border-radius: 8px;
+      }
+
+      @media print {
+        .nav,
+        .timer-container,
+        .exercise-container {
+          display: none;
+        }
+
+        .section {
+          display: block !important;
+          box-shadow: none;
+          border: 1px solid #ccc;
+        }
+
+        body {
+          background: white;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .nav-list {
+          flex-direction: column;
+        }
+
+        .nav-list a {
+          text-align: center;
+          padding: 0.75rem;
+        }
+
+        .accent-comparison {
+          grid-template-columns: 1fr;
+        }
+
+        .timer-display {
+          font-size: 2rem;
+        }
+
+        .timer-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>W</h1>
+      <p>Tuesday 13:00, Conversation</p>
+    </header>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li>
+          <a href="#" onclick="showSection('conversation')"
+            >Conversation Topics</a
+          >
+        </li>
+        <li><a href="#" onclick="showSection('review')">Review</a></li>
+        <li><a href="#" onclick="showSection('accents')">Accents</a></li>
+        <li><a href="#" onclick="showSection('exercises')">Exercises</a></li>
+        <li>
+          <a href="#" onclick="showSection('speaking')">Speaking Practice</a>
+        </li>
+        <li><a href="#" onclick="showSection('print')">Print Materials</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <!-- Conversation Topics Section -->
+      <div id="conversation" class="section active">
+        <h2>Conversation Topics</h2>
+        <div class="difficulty-levels">
+          <button
+            class="difficulty-btn active"
+            onclick="showDifficulty('beginner')"
+          >
+            Beginner
+          </button>
+          <button
+            class="difficulty-btn"
+            onclick="showDifficulty('intermediate')"
+          >
+            Intermediate
+          </button>
+          <button class="difficulty-btn" onclick="showDifficulty('advanced')">
+            Advanced
+          </button>
+        </div>
+
+        <div id="beginner-topics" class="topic-grid">
+          <div class="topic-card">
+            <h3>Introductions & Greetings</h3>
+            <ul>
+              <li>How to introduce yourself</li>
+              <li>Common greetings and responses</li>
+              <li>Asking about someone's day</li>
+              <li>Small talk basics</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Daily Routines</h3>
+            <ul>
+              <li>Describing your morning routine</li>
+              <li>Talking about work/school</li>
+              <li>Evening activities</li>
+              <li>Weekend plans</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Food & Dining</h3>
+            <ul>
+              <li>Ordering at a restaurant</li>
+              <li>Describing favorite foods</li>
+              <li>Cooking conversations</li>
+              <li>Grocery shopping</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Shopping & Services</h3>
+            <ul>
+              <li>Asking for help in stores</li>
+              <li>Describing what you need</li>
+              <li>Comparing prices</li>
+              <li>Making appointments</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="intermediate-topics" class="topic-grid" style="display: none">
+          <div class="topic-card">
+            <h3>Social Events</h3>
+            <ul>
+              <li>Making plans with friends</li>
+              <li>Discussing movies and entertainment</li>
+              <li>Party conversations</li>
+              <li>Apologizing and excusing yourself</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Travel & Transportation</h3>
+            <ul>
+              <li>Asking for directions</li>
+              <li>Describing your hometown</li>
+              <li>Travel experiences</li>
+              <li>Public transportation</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Opinions & Preferences</h3>
+            <ul>
+              <li>Expressing likes and dislikes</li>
+              <li>Giving opinions politely</li>
+              <li>Agreeing and disagreeing</li>
+              <li>Making suggestions</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Problem Solving</h3>
+            <ul>
+              <li>Describing problems</li>
+              <li>Asking for advice</li>
+              <li>Making complaints politely</li>
+              <li>Offering help</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="advanced-topics" class="topic-grid" style="display: none">
+          <div class="topic-card">
+            <h3>Abstract Discussions</h3>
+            <ul>
+              <li>Discussing current events</li>
+              <li>Talking about goals and dreams</li>
+              <li>Cultural differences</li>
+              <li>Personal growth and changes</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Professional Conversations</h3>
+            <ul>
+              <li>Networking at events</li>
+              <li>Discussing career goals</li>
+              <li>Making professional requests</li>
+              <li>Small talk in business settings</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Complex Situations</h3>
+            <ul>
+              <li>Handling misunderstandings</li>
+              <li>Negotiating and compromising</li>
+              <li>Expressing complex emotions</li>
+              <li>Giving presentations or speeches</li>
+            </ul>
+          </div>
+          <div class="topic-card">
+            <h3>Debate & Discussion</h3>
+            <ul>
+              <li>Presenting arguments</li>
+              <li>Considering different perspectives</li>
+              <li>Moderating discussions</li>
+              <li>Reaching conclusions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Section -->
+      <div id="review" class="section">
+        <h2>Review: Important Idioms & Phrasal Verbs</h2>
+
+        <h3>Common Idioms for Daily Conversation</h3>
+        <div class="review-grid">
+          <div class="review-item">
+            <strong>Break the ice</strong><br />
+            Start a conversation in a friendly way
+          </div>
+          <div class="review-item">
+            <strong>Hit the nail on the head</strong><br />
+            Say exactly the right thing
+          </div>
+          <div class="review-item">
+            <strong>Piece of cake</strong><br />
+            Something very easy
+          </div>
+          <div class="review-item">
+            <strong>Under the weather</strong><br />
+            Feeling sick or unwell
+          </div>
+          <div class="review-item">
+            <strong>Call it a day</strong><br />
+            Stop working for the day
+          </div>
+          <div class="review-item">
+            <strong>Get the ball rolling</strong><br />
+            Start something
+          </div>
+          <div class="review-item">
+            <strong>Keep your chin up</strong><br />
+            Stay positive
+          </div>
+          <div class="review-item">
+            <strong>Spill the beans</strong><br />
+            Tell a secret
+          </div>
+        </div>
+
+        <h3 style="margin-top: 2rem">Essential Phrasal Verbs</h3>
+        <div class="review-grid">
+          <div class="review-item">
+            <strong>Look forward to</strong><br />
+            Be excited about something in the future
+          </div>
+          <div class="review-item">
+            <strong>Get along with</strong><br />
+            Have a good relationship with someone
+          </div>
+          <div class="review-item">
+            <strong>Run into</strong><br />
+            Meet someone unexpectedly
+          </div>
+          <div class="review-item">
+            <strong>Catch up</strong><br />
+            Share recent news with someone
+          </div>
+          <div class="review-item">
+            <strong>Show up</strong><br />
+            Arrive or appear
+          </div>
+          <div class="review-item">
+            <strong>Put off</strong><br />
+            Postpone or delay
+          </div>
+          <div class="review-item">
+            <strong>Bring up</strong><br />
+            Mention or introduce a topic
+          </div>
+          <div class="review-item">
+            <strong>Figure out</strong><br />
+            Solve or understand
+          </div>
+        </div>
+      </div>
+
+      <!-- Accents Section -->
+      <div id="accents" class="section">
+        <h2>American vs British Accents</h2>
+
+        <div class="accent-comparison">
+          <div class="accent-card">
+            <h3>🇺🇸 American English</h3>
+            <h4>Pronunciation Patterns:</h4>
+            <ul>
+              <li>
+                <strong>R-sounds:</strong> Pronounced clearly (car, hard, water)
+              </li>
+              <li>
+                <strong>A-sounds:</strong> "ah" sound in words like "dance,
+                can't"
+              </li>
+              <li>
+                <strong>T-sounds:</strong> Often softened to "d" sound (water =
+                "wader")
+              </li>
+            </ul>
+
+            <h4>Common Vocabulary:</h4>
+            <ul>
+              <li>Apartment (not flat)</li>
+              <li>Elevator (not lift)</li>
+              <li>Vacation (not holiday)</li>
+              <li>Trash/Garbage (not rubbish)</li>
+              <li>Parking lot (not car park)</li>
+            </ul>
+          </div>
+
+          <div class="accent-card">
+            <h3>🇬🇧 British English</h3>
+            <h4>Pronunciation Patterns:</h4>
+            <ul>
+              <li>
+                <strong>R-sounds:</strong> Often not pronounced at end (car,
+                hard)
+              </li>
+              <li>
+                <strong>A-sounds:</strong> "ah" sound in words like "dance,
+                can't"
+              </li>
+              <li>
+                <strong>T-sounds:</strong> Clearly pronounced (water, butter)
+              </li>
+            </ul>
+
+            <h4>Common Vocabulary:</h4>
+            <ul>
+              <li>Flat (not apartment)</li>
+              <li>Lift (not elevator)</li>
+              <li>Holiday (not vacation)</li>
+              <li>Rubbish (not trash/garbage)</li>
+              <li>Car park (not parking lot)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="topic-card" style="margin-top: 2rem">
+          <h3>Practice Sentences</h3>
+          <p><strong>Try saying these in both accents:</strong></p>
+          <ul>
+            <li>"I parked my car in the car park/parking lot."</li>
+            <li>"The water bottle is in the rubbish/trash bin."</li>
+            <li>"I'm going on holiday/vacation next week."</li>
+            <li>"Take the lift/elevator to the third floor."</li>
+            <li>"My flat/apartment has a lovely garden/yard."</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Exercises Section -->
+      <div id="exercises" class="section">
+        <h2>Interactive Exercises</h2>
+
+        <div class="exercise-container">
+          <div class="exercise">
+            <h4>Complete the Idiom</h4>
+            <p>Choose the correct word to complete: "It's a piece of ____"</p>
+            <div class="exercise-options">
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                bread
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, true)">
+                cake
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                pie
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                cheese
+              </div>
+            </div>
+          </div>
+
+          <div class="exercise">
+            <h4>Phrasal Verb Match</h4>
+            <p>What does "run into" mean?</p>
+            <div class="exercise-options">
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                Start running
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, true)">
+                Meet someone unexpectedly
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                Hit something
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                Enter a building
+              </div>
+            </div>
+          </div>
+
+          <div class="exercise">
+            <h4>American vs British</h4>
+            <p>Which is the British word for "elevator"?</p>
+            <div class="exercise-options">
+              <div class="exercise-option" onclick="selectAnswer(this, true)">
+                lift
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                escalator
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                stairs
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                platform
+              </div>
+            </div>
+          </div>
+
+          <div class="exercise">
+            <h4>Conversation Response</h4>
+            <p>Someone says: "How are you doing?" Best casual response:</p>
+            <div class="exercise-options">
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                I am fine, thank you very much
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, true)">
+                Not bad, how about you?
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                I am doing very well indeed
+              </div>
+              <div class="exercise-option" onclick="selectAnswer(this, false)">
+                Perfectly fine, sir
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaking Practice Section -->
+      <div id="speaking" class="section">
+        <h2>Speaking Practice Timer</h2>
+
+        <div class="timer-container">
+          <div class="timer-display" id="timerDisplay">02:00</div>
+          <div class="topic-display" id="topicDisplay">
+            Click "New Topic" to get a conversation topic and start practicing!
+          </div>
+          <div class="timer-buttons">
+            <button class="btn btn-primary" onclick="newTopic()">
+              New Topic
+            </button>
+            <button
+              class="btn btn-primary"
+              onclick="startTimer()"
+              id="startBtn"
+            >
+              Start
+            </button>
+            <button
+              class="btn btn-danger"
+              onclick="stopTimer()"
+              id="stopBtn"
+              style="display: none"
+            >
+              Stop
+            </button>
+            <button class="btn btn-secondary" onclick="resetTimer()">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h3>Instructions:</h3>
+          <ul>
+            <li>Click "New Topic" to get a random conversation topic</li>
+            <li>Think about what you want to say for a moment</li>
+            <li>Click "Start" and speak for 2 minutes about the topic</li>
+            <li>Try to keep talking the entire time!</li>
+            <li>Use idioms and phrasal verbs when possible</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Print Materials Section -->
+      <div id="print" class="section">
+        <h2>Print Materials</h2>
+
+        <div class="print-section">
+          <h3>Quick Reference Guide</h3>
+
+          <h4>Common Conversation Starters:</h4>
+          <ul>
+            <li>How's it going?</li>
+            <li>What have you been up to?</li>
+            <li>How was your weekend?</li>
+            <li>Did you hear about...?</li>
+            <li>What do you think of...?</li>
+          </ul>
+
+          <h4>Essential Idioms:</h4>
+          <ul>
+            <li><strong>Break the ice</strong> - Start a conversation</li>
+            <li><strong>Piece of cake</strong> - Very easy</li>
+            <li><strong>Under the weather</strong> - Feeling sick</li>
+            <li><strong>Call it a day</strong> - Stop working</li>
+            <li>
+              <strong>Hit the nail on the head</strong> - Say exactly right
+              thing
+            </li>
+          </ul>
+
+          <h4>Key Phrasal Verbs:</h4>
+          <ul>
+            <li><strong>Look forward to</strong> - Be excited about</li>
+            <li><strong>Get along with</strong> - Have good relationship</li>
+            <li><strong>Run into</strong> - Meet unexpectedly</li>
+            <li><strong>Catch up</strong> - Share recent news</li>
+            <li><strong>Figure out</strong> - Solve or understand</li>
+          </ul>
+
+          <h4>American vs British Key Differences:</h4>
+          <ul>
+            <li>Apartment (US) / Flat (UK)</li>
+            <li>Elevator (US) / Lift (UK)</li>
+            <li>Vacation (US) / Holiday (UK)</li>
+            <li>Trash (US) / Rubbish (UK)</li>
+          </ul>
+
+          <button
+            class="btn btn-primary"
+            onclick="window.print()"
+            style="margin-top: 1rem"
+          >
+            Print This Page
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Navigation
+      function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => section.classList.remove("active"));
+
+        // Show selected section
+        document.getElementById(sectionId).classList.add("active");
+
+        // Update nav highlighting
+        const navLinks = document.querySelectorAll(".nav-list a");
+        navLinks.forEach((link) => (link.style.background = ""));
+      }
+
+      // Difficulty levels
+      function showDifficulty(level) {
+        // Hide all topic grids
+        document.getElementById("beginner-topics").style.display = "none";
+        document.getElementById("intermediate-topics").style.display = "none";
+        document.getElementById("advanced-topics").style.display = "none";
+
+        // Show selected level
+        document.getElementById(level + "-topics").style.display = "grid";
+
+        // Update button highlighting
+        const buttons = document.querySelectorAll(".difficulty-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+      }
+
+      // Exercise functionality
+      function selectAnswer(element, isCorrect) {
+        // Remove previous selections
+        const siblings = element.parentElement.children;
+        for (let sibling of siblings) {
+          sibling.classList.remove("selected", "correct", "incorrect");
+        }
+
+        // Mark selected answer
+        element.classList.add("selected");
+
+        setTimeout(() => {
+          if (isCorrect) {
+            element.classList.add("correct");
+          } else {
+            element.classList.add("incorrect");
+            // Show correct answer
+            for (let sibling of siblings) {
+              if (sibling.onclick.toString().includes("true")) {
+                sibling.classList.add("correct");
+              }
+            }
+          }
+        }, 500);
+      }
+
+      // Speaking Timer
+      let timer;
+      let timeLeft = 120; // 2 minutes in seconds
+      let isRunning = false;
+
+      const conversationTopics = [
+        "Describe your perfect weekend",
+        "What's your favorite way to relax after work?",
+        "Tell me about a memorable meal you've had",
+        "What would you do if you won the lottery?",
+        "Describe your hometown to someone who's never been there",
+        "What's the best advice you've ever received?",
+        "Talk about a hobby you'd like to try",
+        "Describe your ideal vacation",
+        "What's something you've learned recently?",
+        "Tell me about your favorite season and why",
+        "What would you change about your daily routine?",
+        "Describe a person who has influenced you",
+        "What's your opinion on social media?",
+        "Talk about a goal you're working towards",
+        "What's the most interesting place you've visited?",
+        "Describe your dream job",
+        "What's a skill you'd like to improve?",
+        "Tell me about your favorite book or movie",
+        "What's something that always makes you laugh?",
+        "Describe a typical day in your life",
+        "What's your favorite way to exercise?",
+        "Talk about a challenge you've overcome",
+        "What's the best gift you've ever received?",
+        "Describe your family traditions",
+        "What would you do with an extra hour each day?",
+      ];
+
+      function newTopic() {
+        const randomIndex = Math.floor(
+          Math.random() * conversationTopics.length
+        );
+        const topic = conversationTopics[randomIndex];
+        document.getElementById("topicDisplay").textContent = topic;
+      }
+
+      function startTimer() {
+        if (!isRunning) {
+          isRunning = true;
+          document.getElementById("startBtn").style.display = "none";
+          document.getElementById("stopBtn").style.display = "inline-block";
+
+          timer = setInterval(() => {
+            if (timeLeft > 0) {
+              timeLeft--;
+              updateDisplay();
+            } else {
+              stopTimer();
+              alert("Time's up! Great job practicing!");
+            }
+          }, 1000);
+        }
+      }
+
+      function stopTimer() {
+        if (isRunning) {
+          isRunning = false;
+          clearInterval(timer);
+          document.getElementById("startBtn").style.display = "inline-block";
+          document.getElementById("stopBtn").style.display = "none";
+        }
+      }
+
+      function resetTimer() {
+        stopTimer();
+        timeLeft = 120;
+        updateDisplay();
+      }
+
+      function updateDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const display = `${minutes.toString().padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+        document.getElementById("timerDisplay").textContent = display;
+      }
+    </script>
+  </body>
+</html>
