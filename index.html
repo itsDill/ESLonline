@@ -112,6 +112,99 @@
         line-height: 1.2;
       }
 
+      /* Animated Hero Title */
+      .animated-title {
+        display: inline-block;
+      }
+
+      .animated-title .letter {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: letterReveal 1.2s ease-out forwards;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+
+      .animated-title .letter.highlight {
+        background: linear-gradient(45deg, #fff, #ffd700, #fff);
+        background-size: 200% 200%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: letterReveal 0.8s ease-out forwards,
+          shimmer 2s ease-in-out infinite;
+      }
+
+      .animated-title .space {
+        display: inline-block;
+        width: 0.3em;
+      }
+
+      @keyframes letterReveal {
+        0% {
+          opacity: 0;
+          transform: translateY(30px) rotateX(90deg);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-10px) rotateX(0deg);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) rotateX(0deg);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        50% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      /* Interactive Hero Elements */
+      .hero-interactive {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        pointer-events: none;
+      }
+
+      .floating-icon {
+        position: absolute;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        animation: float 6s ease-in-out infinite;
+        pointer-events: auto;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 4;
+      }
+
+      .floating-icon:hover {
+        color: white;
+        transform: scale(1.5);
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(5deg);
+        }
+      }
+
       .hero p {
         font-size: clamp(1rem, 2vw, 1.25rem);
         margin-bottom: 2.5rem;
@@ -234,6 +327,191 @@
         color: var(--primary-hover);
       }
 
+      /* Dual Option Cards */
+      .dual-option-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dual-option-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--border-color),
+          transparent
+        );
+        transform: translateX(-50%);
+      }
+
+      .dual-option-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--primary-color);
+      }
+
+      .dual-option-card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .dual-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .option {
+        padding: 1rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+
+      .option:hover {
+        border-color: var(--primary-color);
+        background: rgba(79, 70, 229, 0.05);
+        transform: scale(1.05);
+      }
+
+      .option-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 0.5rem;
+        background: var(--gradient-secondary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      .option h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .option p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      /* Blog Section */
+      .blog-section {
+        background: var(--bg-secondary);
+        padding: 5rem 0;
+        overflow: hidden;
+      }
+
+      .blog-carousel {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        margin-top: 2rem;
+      }
+
+      .blog-track {
+        display: flex;
+        animation: scrollBlog 30s linear infinite;
+        height: 100%;
+      }
+
+      .blog-track:hover {
+        animation-play-state: paused;
+      }
+
+      @keyframes scrollBlog {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      .blog-post {
+        flex: 0 0 300px;
+        margin-right: 2rem;
+        background: var(--bg-primary);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 280px;
+      }
+
+      .blog-post:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      .blog-image {
+        width: 100%;
+        height: 150px;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+      }
+
+      .blog-content {
+        padding: 1.5rem;
+      }
+
+      .blog-date {
+        font-size: 0.875rem;
+        color: var(--text-light);
+        margin-bottom: 0.5rem;
+      }
+
+      .blog-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .blog-excerpt {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        box-orient: vertical;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
       /* CTA Section */
       .cta {
         background: var(--gradient-primary);
@@ -297,7 +575,47 @@
         box-shadow: var(--shadow-xl);
       }
 
-      /* Responsive Design */
+      /* Modal for interactive elements */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+        color: var(--text-primary);
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+      }
+
       @media (max-width: 768px) {
         .mobile-toggle {
           display: flex;
@@ -357,6 +675,108 @@
 
         .resources-grid {
           grid-template-columns: 1fr;
+        }
+
+        .dual-options {
+          grid-template-columns: 1fr;
+        }
+
+        .dual-option-card::before {
+          display: none;
+        }
+
+        .blog-post {
+          flex: 0 0 280px;
+        }
+
+        .animated-title {
+          font-size: 2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-content {
+          padding: 1rem;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .resource-card,
+        .dual-option-card {
+          padding: 1.5rem;
+        }
+
+        .cta h2 {
+          font-size: 2rem;
+        }
+      }
+
+      /* Loading Animation */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      /* Network Animation */
+      .network-dot {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .network-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        33% {
+          transform: translateY(-20px) rotate(120deg);
+        }
+        66% {
+          transform: translateY(10px) rotate(240deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scaleX(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scaleX(1.2);
         }
       }
     </style>
@@ -446,9 +866,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="lessons.html" class="nav-link">
+              <a href="blog.html" class="nav-link">
                 <i class="fas fa-book-open"></i>
-                Lessons
+                Blog
               </a>
             </li>
           </ul>
@@ -474,115 +894,136 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-      <canvas class="hero-network" id="heroNetwork"></canvas>
-      <div class="hero-content">
-        <h1>Master English & Code with Confidence</h1>
-        <p>
-          Premium resources for English language learning and coding education -
-          professionally designed to accelerate your journey to fluency and
-          technical expertise.
-        </p>
-        <div class="hero-buttons">
-          <a href="#" class="btn">
-            <i class="fas fa-shopping-cart"></i>
-            Shop Resources
-          </a>
-          <a href="#resources" class="btn btn-secondary">
-            <i class="fas fa-play"></i>
-            Start Learning
-          </a>
+    <section id="home" class="hero">
+      <canvas class="hero-network" id="networkCanvas"></canvas>
+      <div class="hero-interactive" id="heroInteractive"></div>
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="animated-title" id="heroTitle">ESL Fun Online</h1>
+          <p>
+            Discover premium English learning resources, interactive coding
+            tutorials, and comprehensive test preparation materials designed to
+            accelerate your learning journey.
+          </p>
+          <div class="hero-buttons">
+            <a href="#resources" class="btn">
+              <i class="fas fa-rocket"></i>
+              Get Started
+            </a>
+            <a href="#blog" class="btn btn-secondary">
+              <i class="fas fa-play"></i>
+              Watch Demo
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Resources Section -->
-    <section class="section" id="resources">
+    <section id="resources" class="section">
       <div class="container">
-        <h2 class="section-title">Free Learning Resources</h2>
+        <h2 class="section-title">Our Premium Resources</h2>
+
         <div class="resources-grid">
-          <div class="resource-card">
+          <!-- ESL Resources Card -->
+          <div class="resource-card fade-in-up">
             <div class="resource-icon">
-              <i class="fas fa-spell-check"></i>
+              <i class="fas fa-language"></i>
             </div>
-            <h3>Grammar Mastery</h3>
+            <h3>ESL Resources</h3>
             <p>
-              Comprehensive grammar guides covering all essential English
-              grammar rules with clear explanations and practical examples.
+              Comprehensive English learning materials including grammar guides,
+              vocabulary builders, and interactive exercises for all proficiency
+              levels.
             </p>
             <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
+              >Explore Resources <i class="fas fa-arrow-right"></i
             ></a>
           </div>
 
-          <div class="resource-card">
+          <!-- Test Prep Card -->
+          <div class="resource-card fade-in-up">
             <div class="resource-icon">
-              <i class="fas fa-book-open"></i>
+              <i class="fas fa-clipboard-check"></i>
             </div>
-            <h3>Vocabulary Builder</h3>
+            <h3>Test Preparation</h3>
             <p>
-              Expand your English vocabulary with themed word lists, interactive
-              exercises, and memory techniques.
+              Specialized preparation materials for TOEFL, IELTS, and other
+              English proficiency tests with practice questions and strategies.
             </p>
             <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
+              >Start Preparing <i class="fas fa-arrow-right"></i
             ></a>
           </div>
 
-          <div class="resource-card">
-            <div class="resource-icon">
-              <i class="fas fa-gamepad"></i>
-            </div>
-            <h3>ESL Games</h3>
-            <p>
-              Educational English games for interactive learning and skill
-              development.
-            </p>
-            <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
-            ></a>
-          </div>
-
-          <div class="resource-card">
-            <div class="resource-icon">
-              <i class="fas fa-comments"></i>
-            </div>
-            <h3>Conversation Practice</h3>
-            <p>
-              Improve your speaking skills with guided conversation topics and
-              pronunciation guides.
-            </p>
-            <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
-            ></a>
-          </div>
-
-          <div class="resource-card">
-            <div class="resource-icon">
-              <i class="fas fa-pen"></i>
-            </div>
-            <h3>Writing Development</h3>
-            <p>
-              Develop your English writing abilities with structured lessons and
-              practical exercises.
-            </p>
-            <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
-            ></a>
-          </div>
-
-          <div class="resource-card">
+          <!-- Coding Resources Card -->
+          <div class="resource-card fade-in-up">
             <div class="resource-icon">
               <i class="fas fa-code"></i>
             </div>
-            <h3>Coding Fundamentals</h3>
+            <h3>Coding Tutorials</h3>
             <p>
-              Start your coding journey with beginner-friendly tutorials and
-              projects.
+              Learn programming fundamentals with our beginner-friendly
+              tutorials covering HTML, CSS, JavaScript, and more.
             </p>
             <a href="#" class="read-more"
-              >Learn More <i class="fas fa-arrow-right"></i
+              >Start Coding <i class="fas fa-arrow-right"></i
             ></a>
+          </div>
+        </div>
+
+        <!-- Dual Option Cards -->
+        <div class="resources-grid" style="margin-top: 3rem">
+          <div class="dual-option-card fade-in-up">
+            <h3>Choose Your Learning Path</h3>
+            <div class="dual-options">
+              <div class="option">
+                <div class="option-icon">
+                  <i class="fas fa-user-graduate"></i>
+                </div>
+                <h4>Beginner Track</h4>
+                <p>Perfect for new learners starting their English journey</p>
+              </div>
+              <div class="option">
+                <div class="option-icon">
+                  <i class="fas fa-medal"></i>
+                </div>
+                <h4>Advanced Track</h4>
+                <p>For experienced learners seeking mastery</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="dual-option-card fade-in-up">
+            <h3>Study Methods</h3>
+            <div class="dual-options">
+              <div class="option">
+                <div class="option-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <h4>Group Learning</h4>
+                <p>Interactive sessions with fellow learners</p>
+              </div>
+              <div class="option">
+                <div class="option-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                <h4>Self-Paced</h4>
+                <p>Learn at your own rhythm and schedule</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog-section">
+      <div class="container">
+        <h2 class="section-title">Latest from Our Blog</h2>
+        <div class="blog-carousel">
+          <div class="blog-track" id="blogTrack">
+            <!-- Blog posts will be dynamically generated -->
           </div>
         </div>
       </div>
@@ -591,29 +1032,41 @@
     <!-- CTA Section -->
     <section class="cta">
       <div class="container">
-        <h2>Ready to Transform Your Learning Journey?</h2>
+        <h2>Ready to Start Your Learning Journey?</h2>
         <p>
-          Join thousands of successful learners who have achieved their English
-          and coding goals with our premium resources.
+          Join thousands of successful learners who have transformed their
+          English skills with our proven methods.
         </p>
-        <a href="#" class="btn">
-          <i class="fas fa-rocket"></i>
-          Start Learning Today
+        <a href="#contact" class="btn">
+          <i class="fas fa-paper-plane"></i>
+          Get Started Today
         </a>
       </div>
     </section>
+
+    <!-- Modal for interactive elements -->
+    <div class="modal" id="interactiveModal">
+      <div class="modal-content">
+        <span class="close-modal" id="closeModal">&times;</span>
+        <h3 id="modalTitle">Interactive Element</h3>
+        <p id="modalContent">
+          This is some content about the interactive element you clicked.
+        </p>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer>
       <div class="container">
         <div class="footer-content">
-          <p>&copy; 2025 ESL Fun Online. All rights reserved.</p>
+          <p>&copy; 2024 ESL Fun Online. All rights reserved.</p>
+          <p>Empowering learners worldwide with quality education resources.</p>
         </div>
       </div>
     </footer>
 
     <!-- Back to Top Button -->
-    <a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <a href="#home" class="back-to-top" id="backToTop">
       <i class="fas fa-chevron-up"></i>
     </a>
 
@@ -624,9 +1077,7 @@
 
       mobileToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
-        const icon = mobileToggle.querySelector("i");
-        icon.classList.toggle("fa-bars");
-        icon.classList.toggle("fa-times");
+        mobileToggle.classList.toggle("active");
       });
 
       // Theme Toggle
@@ -636,14 +1087,378 @@
       themeToggle.addEventListener("click", () => {
         body.classList.toggle("dark-mode");
         const icon = themeToggle.querySelector("i");
+
         if (body.classList.contains("dark-mode")) {
-          icon.classList.remove("fa-moon");
-          icon.classList.add("fa-sun");
+          icon.className = "fas fa-sun";
+          localStorage.setItem("theme", "dark");
         } else {
-          icon.classList.remove("fa-sun");
-          icon.classList.add("fa-moon");
+          icon.className = "fas fa-moon";
+          localStorage.setItem("theme", "light");
         }
       });
+
+      // Load saved theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        body.classList.add("dark-mode");
+        themeToggle.querySelector("i").className = "fas fa-sun";
+      }
+
+      // Animated Title with repeating animation
+      function animateTitle(repeat = false) {
+        const title = document.getElementById("heroTitle");
+        const text = "ESL Fun Online";
+        title.innerHTML = "";
+
+        [...text].forEach((letter, index) => {
+          const span = document.createElement("span");
+          span.textContent = letter === " " ? "\u00A0" : letter;
+          span.className = letter === " " ? "space" : "letter";
+
+          if (letter === "F" || letter === "O") {
+            span.classList.add("highlight");
+          }
+
+          // Slower animation: 0.25s per letter
+          span.style.animationDelay = `${index * 0.25}s`;
+
+          if (repeat) {
+            span.style.animation =
+              "letterReveal 1.2s ease-out forwards, shimmer 2s ease-in-out infinite";
+          }
+
+          title.appendChild(span);
+        });
+
+        // Set up repeating animation
+        if (repeat) {
+          setTimeout(() => {
+            const letters = document.querySelectorAll(
+              ".animated-title .letter"
+            );
+            letters.forEach((letter, index) => {
+              setTimeout(() => {
+                letter.style.animation = "none";
+                void letter.offsetWidth; // Trigger reflow
+                letter.style.animation = `letterReveal 1.2s ease-out forwards, shimmer 2s ease-in-out infinite ${
+                  index * 0.25
+                }s`;
+              }, 12000 + index * 250);
+            });
+          }, 12000);
+        }
+      }
+
+      // Network Animation Canvas
+      function initNetworkCanvas() {
+        const canvas = document.getElementById("networkCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 50;
+
+        class Particle {
+          constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 2 + 1;
+            this.highlight = false;
+            this.isDragging = false;
+          }
+
+          update() {
+            if (!this.isDragging) {
+              this.x += this.vx;
+              this.y += this.vy;
+              if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+              if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+          }
+
+          draw(highlight = false) {
+            ctx.beginPath();
+            ctx.arc(
+              this.x,
+              this.y,
+              highlight || this.isDragging ? this.radius + 6 : this.radius,
+              0,
+              Math.PI * 2
+            );
+            ctx.fillStyle =
+              highlight || this.isDragging
+                ? "rgba(255,255,200,1)"
+                : "rgba(255,255,255,0.7)";
+            ctx.shadowColor =
+              highlight || this.isDragging ? "#ffd700" : "transparent";
+            ctx.shadowBlur = highlight || this.isDragging ? 20 : 0;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+
+        let mouse = { x: null, y: null };
+        let draggingParticle = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        // Mouse events for dragging
+        canvas.addEventListener("mousedown", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const my = e.clientY - rect.top;
+          for (let p of particles) {
+            const dx = p.x - mx;
+            const dy = p.y - my;
+            if (Math.sqrt(dx * dx + dy * dy) < p.radius + 10) {
+              draggingParticle = p;
+              dragOffset.x = p.x - mx;
+              dragOffset.y = p.y - my;
+              p.isDragging = true;
+              break;
+            }
+          }
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouse.x = e.clientX - rect.left;
+          mouse.y = e.clientY - rect.top;
+          if (draggingParticle) {
+            draggingParticle.x = mouse.x + dragOffset.x;
+            draggingParticle.y = mouse.y + dragOffset.y;
+          }
+        });
+
+        canvas.addEventListener("mouseup", () => {
+          if (draggingParticle) draggingParticle.isDragging = false;
+          draggingParticle = null;
+        });
+
+        // Touch events for mobile
+        canvas.addEventListener("touchstart", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          const mx = touch.clientX - rect.left;
+          const my = touch.clientY - rect.top;
+          for (let p of particles) {
+            const dx = p.x - mx;
+            const dy = p.y - my;
+            if (Math.sqrt(dx * dx + dy * dy) < p.radius + 10) {
+              draggingParticle = p;
+              dragOffset.x = p.x - mx;
+              dragOffset.y = p.y - my;
+              break;
+            }
+          }
+        });
+
+        canvas.addEventListener("touchmove", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          mouse.x = touch.clientX - rect.left;
+          mouse.y = touch.clientY - rect.top;
+          if (draggingParticle) {
+            draggingParticle.x = mouse.x + dragOffset.x;
+            draggingParticle.y = mouse.y + dragOffset.y;
+          }
+        });
+
+        canvas.addEventListener("touchend", () => {
+          draggingParticle = null;
+        });
+
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          particles.forEach((particle) => {
+            particle.update();
+          });
+
+          // Find hovered or dragged particle
+          let activeParticle = null;
+          particles.forEach((particle) => {
+            let highlight = false;
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = particle.x - mouse.x;
+              const dy = particle.y - mouse.y;
+              if (Math.sqrt(dx * dx + dy * dy) < particle.radius + 10) {
+                highlight = true;
+                activeParticle = particle;
+              }
+            }
+            if (particle.isDragging) activeParticle = particle;
+            particle.draw(highlight || particle.isDragging);
+          });
+
+          // Draw connections
+          particles.forEach((a, i) => {
+            particles.slice(i + 1).forEach((b) => {
+              const distance = Math.hypot(a.x - b.x, a.y - b.y);
+              if (distance < 100) {
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+
+                // If either dot is active, highlight the line
+                let isActiveLine =
+                  activeParticle &&
+                  (a === activeParticle || b === activeParticle);
+
+                ctx.strokeStyle = isActiveLine
+                  ? "rgba(255, 255, 100, 0.95)"
+                  : `rgba(255, 255, 255, ${0.3 * (1 - distance / 100)})`;
+                ctx.lineWidth = isActiveLine ? 2.5 : 0.5;
+                ctx.shadowColor = isActiveLine ? "#ffd700" : "transparent";
+                ctx.shadowBlur = isActiveLine ? 12 : 0;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+              }
+            });
+          });
+
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener("resize", () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        });
+      }
+
+      // Interactive Hero Elements
+      function createInteractiveElements() {
+        const heroInteractive = document.getElementById("heroInteractive");
+        const icons = ["fa-book", "fa-globe", "fa-code", "fa-graduation-cap"];
+        const messages = [
+          "Explore our comprehensive grammar guides",
+          "Learn English from anywhere in the world",
+          "Discover our coding tutorials",
+          "Prepare for your English proficiency test",
+        ];
+
+        for (let i = 0; i < icons.length; i++) {
+          const icon = document.createElement("i");
+          icon.className = `floating-icon fas ${icons[i]}`;
+          const left = Math.random() * 80 + 10;
+          const top = Math.random() * 80 + 10;
+          icon.style.left = `${left}%`;
+          icon.style.top = `${top}%`;
+          icon.style.animationDelay = `${i * 0.5}s`;
+          icon.addEventListener("click", () => {
+            showModal(messages[i], icons[i]);
+          });
+          heroInteractive.appendChild(icon);
+        }
+      }
+
+      // Modal functionality
+      function showModal(content, iconClass) {
+        const modal = document.getElementById("interactiveModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalContent = document.getElementById("modalContent");
+        const closeModal = document.getElementById("closeModal");
+
+        // Set modal content
+        modalTitle.innerHTML = `<i class="fas ${iconClass}"></i> ${
+          content.split(" ")[0]
+        }`;
+        modalContent.textContent = content;
+
+        // Show modal
+        modal.classList.add("show");
+
+        // Close modal
+        closeModal.addEventListener("click", () => {
+          modal.classList.remove("show");
+        });
+
+        // Close when clicking outside
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.classList.remove("show");
+          }
+        });
+      }
+
+      // Blog Posts Data
+      const blogPosts = [
+        {
+          title: "10 Essential Grammar Rules Every ESL Student Should Master",
+          excerpt:
+            "Discover the fundamental grammar concepts that will improve your English fluency...",
+          date: "March 15, 2024",
+          icon: "fas fa-spell-check",
+        },
+        {
+          title: "IELTS Speaking Test: Tips for Success",
+          excerpt:
+            "Learn proven strategies to excel in your IELTS speaking examination...",
+          date: "March 10, 2024",
+          icon: "fas fa-microphone",
+        },
+        {
+          title: "Building Vocabulary: The Smart Way",
+          excerpt:
+            "Effective techniques to expand your English vocabulary naturally...",
+          date: "March 5, 2024",
+          icon: "fas fa-book-open",
+        },
+        {
+          title: "JavaScript for Beginners: Getting Started",
+          excerpt:
+            "Your first steps into the world of programming with JavaScript...",
+          date: "February 28, 2024",
+          icon: "fab fa-js-square",
+        },
+        {
+          title: "English Idioms That Native Speakers Use Daily",
+          excerpt:
+            "Master common idioms to sound more natural in conversations...",
+          date: "February 25, 2024",
+          icon: "fas fa-comments",
+        },
+        {
+          title: "CSS Grid vs Flexbox: When to Use Which",
+          excerpt:
+            "Understanding the differences and best use cases for modern CSS layouts...",
+          date: "February 20, 2024",
+          icon: "fab fa-css3-alt",
+        },
+      ];
+
+      // Generate Blog Posts
+      function generateBlogPosts() {
+        const blogTrack = document.getElementById("blogTrack");
+
+        // Duplicate posts for seamless scrolling
+        const allPosts = [...blogPosts, ...blogPosts];
+
+        allPosts.forEach((post) => {
+          const blogPost = document.createElement("div");
+          blogPost.className = "blog-post";
+          blogPost.innerHTML = `
+            <div class="blog-image">
+              <i class="${post.icon}"></i>
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">${post.date}</div>
+              <h3 class="blog-title">${post.title}</h3>
+              <p class="blog-excerpt">${post.excerpt}</p>
+            </div>
+          `;
+          blogTrack.appendChild(blogPost);
+        });
+      }
 
       // Back to Top Button
       const backToTop = document.getElementById("backToTop");
@@ -656,234 +1471,7 @@
         }
       });
 
-      backToTop.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      });
-
-      // Hero Network Animation
-      const canvas = document.getElementById("heroNetwork");
-      const ctx = canvas.getContext("2d");
-      const dots = [];
-      const maxDots = 50;
-      const maxDistance = 150;
-
-      // Set canvas size
-      function resizeCanvas() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
-
-      resizeCanvas();
-      window.addEventListener("resize", resizeCanvas);
-
-      // Dot class
-      class Dot {
-        constructor() {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
-          this.vx = (Math.random() - 0.5) * 0.5;
-          this.vy = (Math.random() - 0.5) * 0.5;
-          this.radius = Math.random() * 3 + 1;
-          this.opacity = Math.random() * 0.5 + 0.2;
-        }
-
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-
-          if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-          if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-        }
-
-        draw(highlight = false) {
-          ctx.beginPath();
-          ctx.arc(
-            this.x,
-            this.y,
-            highlight ? this.radius + 2 : this.radius,
-            0,
-            Math.PI * 2
-          );
-          ctx.fillStyle = highlight
-            ? `rgba(255,255,255,1)`
-            : `rgba(255,255,255,${this.opacity})`;
-          ctx.shadowColor = highlight ? "white" : "transparent";
-          ctx.shadowBlur = highlight ? 10 : 0;
-          ctx.fill();
-          ctx.shadowBlur = 0; // reset for next draw
-        }
-      }
-
-      // Initialize dots
-      for (let i = 0; i < maxDots; i++) {
-        dots.push(new Dot());
-      }
-
-      // Mouse position
-      let mouse = { x: null, y: null };
-
-      canvas.addEventListener("mousemove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-
-      canvas.addEventListener("mouseleave", () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
-
-      // Dragging functionality
-      let draggingDot = null;
-      let dragOffset = { x: 0, y: 0 };
-
-      // Mouse down: check if a dot is under the cursor
-      canvas.addEventListener("mousedown", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-        for (let i = 0; i < dots.length; i++) {
-          const dx = dots[i].x - mx;
-          const dy = dots[i].y - my;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < dots[i].radius + 5) {
-            // 5px tolerance
-            draggingDot = dots[i];
-            dragOffset.x = dx;
-            dragOffset.y = dy;
-            break;
-          }
-        }
-      });
-
-      // Mouse move: if dragging, update dot position
-      canvas.addEventListener("mousemove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-        if (draggingDot) {
-          draggingDot.x = mouse.x + dragOffset.x;
-          draggingDot.y = mouse.y + dragOffset.y;
-        }
-      });
-
-      // Mouse up: stop dragging
-      canvas.addEventListener("mouseup", () => {
-        draggingDot = null;
-      });
-
-      // Touch support (optional)
-      canvas.addEventListener("touchstart", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const mx = touch.clientX - rect.left;
-        const my = touch.clientY - rect.top;
-        for (let i = 0; i < dots.length; i++) {
-          const dx = dots[i].x - mx;
-          const dy = dots[i].y - my;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < dots[i].radius + 5) {
-            draggingDot = dots[i];
-            dragOffset.x = dx;
-            dragOffset.y = dy;
-            break;
-          }
-        }
-      });
-
-      canvas.addEventListener("touchmove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        mouse.x = touch.clientX - rect.left;
-        mouse.y = touch.clientY - rect.top;
-        if (draggingDot) {
-          draggingDot.x = mouse.x + dragOffset.x;
-          draggingDot.y = mouse.y + dragOffset.y;
-        }
-      });
-
-      canvas.addEventListener("touchend", () => {
-        draggingDot = null;
-      });
-
-      // Draw connections
-      function drawConnections() {
-        for (let i = 0; i < dots.length; i++) {
-          let highlightDot = false;
-
-          // Check if mouse is near this dot
-          if (mouse.x !== null && mouse.y !== null) {
-            const dx = dots[i].x - mouse.x;
-            const dy = dots[i].y - mouse.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 40) {
-              // highlight radius
-              highlightDot = true;
-            }
-          }
-
-          // Draw connections to other dots
-          for (let j = i + 1; j < dots.length; j++) {
-            const dx = dots[i].x - dots[j].x;
-            const dy = dots[i].y - dots[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < maxDistance) {
-              ctx.beginPath();
-              ctx.moveTo(dots[i].x, dots[i].y);
-              ctx.lineTo(dots[j].x, dots[j].y);
-              let opacity = (1 - distance / maxDistance) * 0.3;
-              // If either dot is highlighted, brighten the line
-              if (highlightDot) opacity = 0.9;
-              ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
-              ctx.lineWidth = highlightDot ? 2 : 1;
-              ctx.stroke();
-            }
-          }
-
-          // Draw connection to mouse
-          if (mouse.x !== null && mouse.y !== null) {
-            const dx = dots[i].x - mouse.x;
-            const dy = dots[i].y - mouse.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < maxDistance) {
-              ctx.beginPath();
-              ctx.moveTo(dots[i].x, dots[i].y);
-              ctx.lineTo(mouse.x, mouse.y);
-              let opacity = (1 - distance / maxDistance) * 0.6;
-              if (distance < 40) opacity = 1;
-              ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
-              ctx.lineWidth = distance < 40 ? 3 : 2;
-              ctx.stroke();
-            }
-          }
-
-          // Draw the dot, highlighting if needed
-          dots[i].draw(highlightDot);
-        }
-      }
-
-      // Animation loop
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        dots.forEach((dot) => {
-          dot.update();
-        });
-
-        drawConnections();
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-
-      // Smooth scrolling for anchor links
+      // Smooth Scrolling
       document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
           e.preventDefault();
@@ -896,6 +1484,124 @@
           }
         });
       });
+
+      // Intersection Observer for Animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationDelay = "0s";
+            entry.target.classList.add("fade-in-up");
+          }
+        });
+      }, observerOptions);
+
+      // Mouse position tracking for network interaction
+      let mouse = { x: null, y: null };
+      let draggingParticle = null;
+      let dragOffset = { x: 0, y: 0 };
+
+      // Initialize Everything
+      document.addEventListener("DOMContentLoaded", () => {
+        animateTitle(true); // Initialize with repeating animation
+        initNetworkCanvas();
+        generateBlogPosts();
+        createInteractiveElements();
+
+        // Observe elements for animation
+        document
+          .querySelectorAll(".resource-card, .dual-option-card")
+          .forEach((el) => {
+            observer.observe(el);
+          });
+      });
+
+      // Header scroll effect
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 100) {
+          header.style.background = "rgba(255, 255, 255, 0.95)";
+          header.style.backdropFilter = "blur(10px)";
+          header.style.boxShadow = "0 2px 20px rgba(0, 0, 0, 0.1)";
+        } else {
+          header.style.background = "rgba(255, 255, 255, 0.9)";
+          header.style.backdropFilter = "blur(5px)";
+          header.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.05)";
+        }
+      });
+
+      // Mouse events for network canvas
+      const canvas = document.getElementById("networkCanvas");
+
+      canvas.addEventListener("mousedown", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
+        // You would need access to the particles array here
+        // This is just a placeholder - in a real implementation you'd need to
+        // make the particles array accessible to this scope
+        /*
+        for (let p of particles) {
+          const dx = p.x - mx;
+          const dy = p.y - my;
+          if (Math.sqrt(dx * dx + dy * dy) < p.radius + 6) {
+            draggingParticle = p;
+            dragOffset.x = dx;
+            dragOffset.y = dy;
+            break;
+          }
+        }
+        */
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        if (draggingParticle) {
+          draggingParticle.x = mouse.x + dragOffset.x;
+          draggingParticle.y = mouse.y + dragOffset.y;
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        draggingParticle = null;
+      });
+
+      // Touch events for mobile
+      canvas.addEventListener("touchstart", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const mx = touch.clientX - rect.left;
+        const my = touch.clientY - rect.top;
+
+        // Similar to mousedown above
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        mouse.x = touch.clientX - rect.left;
+        mouse.y = touch.clientY - rect.top;
+        if (draggingParticle) {
+          draggingParticle.x = mouse.x + dragOffset.x;
+          draggingParticle.y = mouse.y + dragOffset.y;
+        }
+      });
+
+      canvas.addEventListener("touchend", () => {
+        draggingParticle = null;
+      });
+
+      // Repeating title animation every 10 seconds
+      setInterval(() => {
+        animateTitle(true);
+      }, 10000);
     </script>
   </body>
 </html>
