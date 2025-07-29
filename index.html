@@ -17,7 +17,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/shared.css" />
 
     <style>
       :root {
@@ -47,7 +47,7 @@
 
       /* Dark mode variables */
       .dark-mode {
-        --text-primary: #f9fafb;
+        --text-primary: #067bf0;
         --text-secondary: #d1d5db;
         --text-light: #9ca3af;
         --bg-primary: #1f2937;
@@ -62,7 +62,8 @@
       }
 
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont,
+          "Helvetica Neue", Arial, sans-serif;
         line-height: 1.6;
         color: var(--text-primary);
         background: var(--bg-primary);
@@ -72,7 +73,236 @@
       .container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 0 1.5rem;
+      }
+
+      /* Header Styles */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode header {
+        background: rgba(17, 24, 39, 0.95);
+      }
+
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+
+      .logo-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+      }
+
+      .logo-text {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Navigation Styles */
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-item {
+        position: relative;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--primary-color);
+        background: rgba(79, 70, 229, 0.1);
+      }
+
+      .nav-link i {
+        font-size: 0.875rem;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-item:hover .nav-link i {
+        transform: rotate(180deg);
+      }
+
+      /* Dropdown Styles */
+      .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 250px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-xl);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .nav-item:hover .dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: block;
+        padding: 0.875rem 1.25rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .dropdown-item:last-child {
+        border-bottom: none;
+      }
+
+      .dropdown-item:hover {
+        background: var(--bg-secondary);
+        color: var(--primary-color);
+        padding-left: 1.5rem;
+      }
+
+      .dropdown-item i {
+        width: 20px;
+        margin-right: 0.75rem;
+        color: var(--primary-color);
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .control-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: none;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .control-btn:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        transform: translateY(-2px);
+      }
+
+      .mobile-toggle {
+        display: none;
+      }
+
+      /* Page Header */
+      .page-header {
+        background: var(--gradient-hero);
+        color: white;
+        padding: 8rem 0 4rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.3;
+        z-index: 1;
+      }
+
+      .page-header-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .page-header h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 800;
+        margin-bottom: 1rem;
+      }
+
+      .page-header p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .breadcrumb a:hover {
+        opacity: 1;
       }
 
       /* Hero Section with Animated Network */
@@ -496,7 +726,6 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         line-clamp: 2;
-        box-orient: vertical;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -507,7 +736,6 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         line-clamp: 2;
-        box-orient: vertical;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -636,18 +864,51 @@
           visibility: hidden;
           transform: translateY(-10px);
           transition: all 0.3s ease;
+          max-height: 0;
+          overflow: hidden;
         }
 
         .nav-links.active {
           opacity: 1;
           visibility: visible;
           transform: translateY(0);
+          max-height: 1000px;
+          overflow: visible;
+        }
+
+        .nav-item {
+          width: 100%;
+        }
+
+        .dropdown {
+          position: static;
+          width: 100%;
+          box-shadow: none;
+          border: none;
+          opacity: 1;
+          visibility: visible;
+          transform: none;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+        }
+
+        .nav-item:hover .dropdown {
+          max-height: 0;
+        }
+
+        .nav-item.active .dropdown {
+          max-height: 1000px;
         }
 
         .nav-link {
           width: 100%;
-          justify-content: flex-start;
+          justify-content: space-between;
           padding: 1rem;
+        }
+
+        .dropdown-item {
+          padding-left: 2rem;
         }
 
         .hero-buttons {
@@ -908,11 +1169,11 @@
           <div class="hero-buttons">
             <a href="#resources" class="btn">
               <i class="fas fa-rocket"></i>
-              Get Started
+              Free Games
             </a>
-            <a href="#blog" class="btn btn-secondary">
+            <a href="games.html" class="btn btn-secondary">
               <i class="fas fa-play"></i>
-              Blog
+              Online lessons
             </a>
           </div>
         </div>
@@ -1074,10 +1335,30 @@
       // Mobile Navigation Toggle
       const mobileToggle = document.getElementById("mobileToggle");
       const navLinks = document.getElementById("navLinks");
+      const navItems = document.querySelectorAll(".nav-item");
 
       mobileToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
         mobileToggle.classList.toggle("active");
+      });
+
+      // Mobile dropdown toggle
+      navItems.forEach((item) => {
+        const link = item.querySelector(".nav-link");
+        if (link.querySelector(".fa-chevron-down")) {
+          link.addEventListener("click", (e) => {
+            if (window.innerWidth <= 768) {
+              e.preventDefault();
+              item.classList.toggle("active");
+              const dropdown = item.querySelector(".dropdown");
+              if (item.classList.contains("active")) {
+                dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+              } else {
+                dropdown.style.maxHeight = "0";
+              }
+            }
+          });
+        }
       });
 
       // Theme Toggle
@@ -1474,17 +1755,11 @@
         });
       }, observerOptions);
 
-      // Mouse position tracking for network interaction
-      let mouse = { x: null, y: null };
-      let draggingParticle = null;
-      let dragOffset = { x: 0, y: 0 };
-
       // Initialize Everything
       document.addEventListener("DOMContentLoaded", () => {
         animateTitle(true); // Initialize with repeating animation
         initNetworkCanvas();
         generateBlogPosts();
-        createInteractiveElements();
 
         // Observe elements for animation
         document
@@ -1506,70 +1781,6 @@
           header.style.backdropFilter = "blur(5px)";
           header.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.05)";
         }
-      });
-
-      // Mouse events for network canvas
-      const canvas = document.getElementById("networkCanvas");
-
-      canvas.addEventListener("mousedown", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-
-        // You would need access to the particles array here
-        // This is just a placeholder - in a real implementation you'd need to
-        // make the particles array accessible to this scope
-        /*
-        for (let p of particles) {
-          const dx = p.x - mx;
-          const dy = p.y - my;
-          if (Math.sqrt(dx * dx + dy * dy) < p.radius + 6) {
-            draggingParticle = p;
-            dragOffset.x = dx;
-            dragOffset.y = dy;
-            break;
-          }
-        }
-        */
-      });
-
-      canvas.addEventListener("mousemove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-        if (draggingParticle) {
-          draggingParticle.x = mouse.x + dragOffset.x;
-          draggingParticle.y = mouse.y + dragOffset.y;
-        }
-      });
-
-      canvas.addEventListener("mouseup", () => {
-        draggingParticle = null;
-      });
-
-      // Touch events for mobile
-      canvas.addEventListener("touchstart", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const mx = touch.clientX - rect.left;
-        const my = touch.clientY - rect.top;
-
-        // Similar to mousedown above
-      });
-
-      canvas.addEventListener("touchmove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        mouse.x = touch.clientX - rect.left;
-        mouse.y = touch.clientY - rect.top;
-        if (draggingParticle) {
-          draggingParticle.x = mouse.x + dragOffset.x;
-          draggingParticle.y = mouse.y + dragOffset.y;
-        }
-      });
-
-      canvas.addEventListener("touchend", () => {
-        draggingParticle = null;
       });
 
       // Repeating title animation every 10 seconds
