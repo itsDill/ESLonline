@@ -70,12 +70,6 @@
       }
 
       /* Blog Hero */
-      .blog-hero {
-        background: var(--gradient-primary);
-        color: white;
-        padding: 8rem 0 4rem;
-        text-align: center;
-      }
 
       .blog-hero h1 {
         font-family: "Poppins", sans-serif;
@@ -619,6 +613,24 @@
     </header>
 
     <!-- Blog Hero -->
+    <style>
+      .blog-hero {
+        background: var(--gradient-primary),
+          url("images/images/Blue Night Sky Cute Whale Desktop Wallpaper.png")
+            center/cover no-repeat;
+        color: white;
+        padding: 8rem 0 4rem;
+        text-align: center;
+        position: relative;
+      }
+      @media (max-width: 768px) {
+        .blog-hero {
+          background: var(--gradient-primary),
+            url("images/images/Blue Night Sky Cute Whale Desktop Wallpaper.png")
+              center/cover no-repeat;
+        }
+      }
+    </style>
     <section class="blog-hero">
       <div class="container">
         <h1>ESL & Coding Blog</h1>
@@ -913,7 +925,9 @@
         if (window.innerWidth <= 768) {
           e.preventDefault();
           englishDropdown.classList.toggle("active");
-          englishLink.querySelector("i.fa-chevron-down").classList.toggle("rotate");
+          englishLink
+            .querySelector("i.fa-chevron-down")
+            .classList.toggle("rotate");
         }
       });
 
@@ -922,7 +936,9 @@
         if (window.innerWidth <= 768) {
           e.preventDefault();
           codingDropdown.classList.toggle("active");
-          codingLink.querySelector("i.fa-chevron-down").classList.toggle("rotate");
+          codingLink
+            .querySelector("i.fa-chevron-down")
+            .classList.toggle("rotate");
         }
       });
 
@@ -963,169 +979,170 @@
 
       // Smooth Scrolling
       document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", functionanchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute("href"));
-            if (target) {
-              target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-              });
-            }
-          });
-        });
-
-        // Search functionality
-        const searchForm = document.querySelector('.search-form');
-        const searchInput = document.querySelector('.search-input');
-
-        searchForm.addEventListener('submit', (e) => {
+        anchor.addEventListener("click", function (e) {
           e.preventDefault();
-          const searchTerm = searchInput.value.trim();
-          if (searchTerm) {
-            // Here you would typically send the search query to your backend
-            console.log('Searching for:', searchTerm);
-            // For demo purposes, just alert the search term
-            alert(`Searching for: ${searchTerm}`);
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
           }
         });
+      });
 
-        // Add some interactive effects
-        const blogPosts = document.querySelectorAll('.blog-post');
+      // Search functionality
+      const searchForm = document.querySelector(".search-form");
+      const searchInput = document.querySelector(".search-input");
 
-        blogPosts.forEach(post => {
-          post.addEventListener('mouseenter', () => {
-            post.style.transform = 'translateY(-5px)';
-          });
+      searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          // Here you would typically send the search query to your backend
+          console.log("Searching for:", searchTerm);
+          // For demo purposes, just alert the search term
+          alert(`Searching for: ${searchTerm}`);
+        }
+      });
 
-          post.addEventListener('mouseleave', () => {
-            post.style.transform = 'translateY(0)';
-          });
+      // Add some interactive effects
+      const blogPosts = document.querySelectorAll(".blog-post");
+
+      blogPosts.forEach((post) => {
+        post.addEventListener("mouseenter", () => {
+          post.style.transform = "translateY(-5px)";
         });
 
-        // Category link interactions
-        const categoryLinks = document.querySelectorAll('.category-link');
-
-        categoryLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const category = link.textContent.trim().split(' ')[0];
-            console.log('Filtering by category:', category);
-            // Here you would implement category filtering
-            alert(`Showing posts for category: ${category}`);
-          });
+        post.addEventListener("mouseleave", () => {
+          post.style.transform = "translateY(0)";
         });
+      });
 
-        // Tag interactions
-        const tagLinks = document.querySelectorAll('.tag');
+      // Category link interactions
+      const categoryLinks = document.querySelectorAll(".category-link");
 
-        tagLinks.forEach(tag => {
-          tag.addEventListener('click', (e) => {
-            e.preventDefault();
-            const tagName = tag.textContent;
-            console.log('Filtering by tag:', tagName);
-            // Here you would implement tag filtering
-            alert(`Showing posts tagged with: ${tagName}`);
-          });
+      categoryLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const category = link.textContent.trim().split(" ")[0];
+          console.log("Filtering by category:", category);
+          // Here you would implement category filtering
+          alert(`Showing posts for category: ${category}`);
         });
+      });
 
-        // Pagination functionality
-        const pageLinks = document.querySelectorAll('.page-link');
+      // Tag interactions
+      const tagLinks = document.querySelectorAll(".tag");
 
-        pageLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            // Remove active class from all links
-            pageLinks.forEach(l => l.classList.remove('active'));
-
-            // Add active class to clicked link (unless it's a navigation arrow)
-            if (!link.querySelector('i')) {
-              link.classList.add('active');
-            }
-
-            const pageNum = link.textContent;
-            console.log('Loading page:', pageNum);
-            // Here you would load the new page content
-          });
+      tagLinks.forEach((tag) => {
+        tag.addEventListener("click", (e) => {
+          e.preventDefault();
+          const tagName = tag.textContent;
+          console.log("Filtering by tag:", tagName);
+          // Here you would implement tag filtering
+          alert(`Showing posts tagged with: ${tagName}`);
         });
+      });
 
-        // Header scroll effect
-        let lastScrollTop = 0;
-        const header = document.querySelector('header');
+      // Pagination functionality
+      const pageLinks = document.querySelectorAll(".page-link");
 
-        window.addEventListener('scroll', () => {
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      pageLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
 
-          if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scrolling down
-            header.style.transform = 'translateY(-100%)';
-          } else {
-            // Scrolling up
-            header.style.transform = 'translateY(0)';
+          // Remove active class from all links
+          pageLinks.forEach((l) => l.classList.remove("active"));
+
+          // Add active class to clicked link (unless it's a navigation arrow)
+          if (!link.querySelector("i")) {
+            link.classList.add("active");
           }
 
-          lastScrollTop = scrollTop;
+          const pageNum = link.textContent;
+          console.log("Loading page:", pageNum);
+          // Here you would load the new page content
         });
+      });
 
-        // Add loading animation for posts
-        const observerOptions = {
-          threshold: 0.1,
-          rootMargin: '0px 0px -50px 0px'
-        };
+      // Header scroll effect
+      let lastScrollTop = 0;
+      const header = document.querySelector("header");
 
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.style.opacity = '1';
-              entry.target.style.transform = 'translateY(0)';
-            }
-          });
-        }, observerOptions);
+      window.addEventListener("scroll", () => {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
 
-        // Initially hide posts for animation
-        blogPosts.forEach(post => {
-          post.style.opacity = '0';
-          post.style.transform = 'translateY(20px)';
-          post.style.transition = 'all 0.6s ease';
-          observer.observe(post);
-        });
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          // Scrolling down
+          header.style.transform = "translateY(-100%)";
+        } else {
+          // Scrolling up
+          header.style.transform = "translateY(0)";
+        }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-          if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
-            navLinks.classList.remove('active');
-            mobileToggle.classList.remove('active');
+        lastScrollTop = scrollTop;
+      });
+
+      // Add loading animation for posts
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
           }
         });
+      }, observerOptions);
 
-        // Keyboard navigation for accessibility
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            navLinks.classList.remove('active');
-            mobileToggle.classList.remove('active');
-            englishDropdown.classList.remove('active');
-            codingDropdown.classList.remove('active');
-          }
+      // Initially hide posts for animation
+      blogPosts.forEach((post) => {
+        post.style.opacity = "0";
+        post.style.transform = "translateY(20px)";
+        post.style.transition = "all 0.6s ease";
+        observer.observe(post);
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+          navLinks.classList.remove("active");
+          mobileToggle.classList.remove("active");
+        }
+      });
+
+      // Keyboard navigation for accessibility
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          navLinks.classList.remove("active");
+          mobileToggle.classList.remove("active");
+          englishDropdown.classList.remove("active");
+          codingDropdown.classList.remove("active");
+        }
+      });
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Blog page loaded successfully");
+
+        // Add subtle animations to widgets
+        const widgets = document.querySelectorAll(".widget");
+        widgets.forEach((widget, index) => {
+          widget.style.opacity = "0";
+          widget.style.transform = "translateY(20px)";
+          widget.style.transition = "all 0.6s ease";
+
+          setTimeout(() => {
+            widget.style.opacity = "1";
+            widget.style.transform = "translateY(0)";
+          }, index * 200);
         });
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', () => {
-          console.log('Blog page loaded successfully');
-
-          // Add subtle animations to widgets
-          const widgets = document.querySelectorAll('.widget');
-          widgets.forEach((widget, index) => {
-            widget.style.opacity = '0';
-            widget.style.transform = 'translateY(20px)';
-            widget.style.transition = 'all 0.6s ease';
-
-            setTimeout(() => {
-              widget.style.opacity = '1';
-              widget.style.transform = 'translateY(0)';
-            }, index * 200);
-          });
-        });
+      });
     </script>
   </body>
 </html>
