@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kyoko's Fun Learning Page - Sleep & Karaoke</title>
+    <title>ESL Learning Hub - Interactive Games</title>
     <style>
       * {
         margin: 0;
@@ -13,7 +13,7 @@
 
       body {
         font-family: "Arial", sans-serif;
-        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: #333;
         min-height: 100vh;
         padding: 20px;
@@ -37,6 +37,11 @@
         color: #fff;
       }
 
+      .header p {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
       .game-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -45,25 +50,96 @@
       }
 
       .game-card {
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(10px);
         border-radius: 15px;
         padding: 20px;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
 
       .game-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
       }
 
       .game-title {
         font-size: 1.5em;
         margin-bottom: 15px;
         text-align: center;
-        color: #ff6b88;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      /* Vocabulary Quiz */
+      .quiz-option {
+        background: rgba(255, 255, 255, 0.8);
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        margin: 8px 0;
+        font-size: 1em;
+      }
+
+      .quiz-option:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: scale(1.02);
+      }
+
+      .quiz-option.correct {
+        background: rgba(76, 175, 80, 0.3);
+        border-color: #4caf50;
+      }
+
+      .quiz-option.wrong {
+        background: rgba(244, 67, 54, 0.3);
+        border-color: #f44336;
+      }
+
+      /* Story Builder */
+      .story-part {
+        background: linear-gradient(45deg, #a8caba, #5d4e75);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        user-select: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin: 5px;
+        display: inline-block;
+      }
+
+      .story-part:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .story-part.used {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Word Association */
+      .word-bubble {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        margin: 8px;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+      }
+
+      .word-bubble:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       }
 
       /* Tic Tac Toe */
@@ -79,7 +155,7 @@
         width: 60px;
         height: 60px;
         background: rgba(255, 255, 255, 0.8);
-        border: 2px solid rgba(255, 107, 136, 0.3);
+        border: 2px solid rgba(102, 126, 234, 0.3);
         border-radius: 8px;
         font-size: 1.5em;
         font-weight: bold;
@@ -88,43 +164,46 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ff6b88;
+        color: #667eea;
       }
 
       .ttt-cell:hover {
         background: rgba(255, 255, 255, 0.9);
+        transform: scale(1.05);
       }
 
-      /* Quiz Game */
-      .quiz-option {
+      /* Memory Game */
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px auto;
+        width: 300px;
+      }
+
+      .memory-card {
+        width: 65px;
+        height: 65px;
         background: rgba(255, 255, 255, 0.8);
-        border: 2px solid rgba(255, 107, 136, 0.3);
+        border: 2px solid rgba(102, 126, 234, 0.3);
         border-radius: 8px;
-        padding: 15px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        font-size: 0.9em;
         text-align: center;
-        margin: 5px 0;
+        line-height: 61px;
+        transition: all 0.3s ease;
       }
 
-      .quiz-option:hover {
-        background: rgba(255, 255, 255, 0.9);
-      }
-
-      .quiz-option.correct {
-        background: rgba(76, 175, 80, 0.3);
-        border-color: #4caf50;
-      }
-
-      .quiz-option.wrong {
-        background: rgba(244, 67, 54, 0.3);
-        border-color: #f44336;
+      .memory-card.flipped {
+        background: #667eea;
+        color: white;
+        transform: rotateY(180deg);
       }
 
       /* Sentence Builder */
       .word-chip {
-        background: linear-gradient(45deg, #ffb8c6, #ffd3d3);
-        color: #333;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
         padding: 8px 15px;
         border-radius: 20px;
         cursor: move;
@@ -144,96 +223,43 @@
         cursor: not-allowed;
       }
 
-      /* Karaoke Challenge */
-      #karaoke-lyrics {
-        font-size: 1.2em;
-        line-height: 1.6;
-        text-align: center;
-        margin: 20px 0;
-        min-height: 120px;
-      }
-
-      .karaoke-word {
-        transition: all 0.3s ease;
-        display: inline-block;
-        padding: 2px 5px;
-        border-radius: 3px;
-      }
-
-      .karaoke-word.active {
-        background-color: #ff6b88;
-        color: white;
-        transform: scale(1.1);
-      }
-
-      /* Sleep Diary */
-      .sleep-entry {
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-      }
-
-      /* Memory Game */
-      .memory-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin: 20px auto;
-        width: 280px;
-      }
-
-      .memory-card {
-        width: 60px;
-        height: 60px;
-        background: rgba(255, 255, 255, 0.8);
-        border: 2px solid rgba(255, 107, 136, 0.3);
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 0.8em;
-        text-align: center;
-        line-height: 56px;
-        transition: all 0.3s ease;
-      }
-
-      .memory-card.flipped {
-        background: #ffb8c6;
-        color: #333;
-      }
-
-      /* Word Guess */
-      .word-display {
-        font-size: 2em;
-        text-align: center;
-        margin: 20px 0;
-        letter-spacing: 10px;
-        font-family: monospace;
-      }
-
-      .word-input {
+      /* Input fields */
+      .text-input {
         width: 100%;
-        padding: 10px;
-        border: 2px solid rgba(255, 107, 136, 0.3);
+        padding: 12px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
         border-radius: 8px;
         font-size: 1.1em;
         text-align: center;
         margin: 10px 0;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
       }
 
-      .word-hint {
-        background: rgba(255, 107, 136, 0.2);
-        padding: 10px;
+      .text-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .textarea-input {
+        width: 100%;
+        height: 100px;
+        padding: 12px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
         border-radius: 8px;
+        font-size: 1em;
         margin: 10px 0;
-        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        resize: vertical;
+        font-family: Arial, sans-serif;
       }
 
       .btn {
-        background: linear-gradient(45deg, #ff6b88, #ff8e9e);
+        background: linear-gradient(45deg, #667eea, #764ba2);
         color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 12px 24px;
         border-radius: 8px;
         font-size: 1em;
         font-weight: bold;
@@ -244,23 +270,54 @@
 
       .btn:hover {
         transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:active {
+        transform: scale(0.98);
       }
 
       .score {
         text-align: center;
         font-size: 1.2em;
         margin: 10px 0;
-        color: #ff6b88;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      .hint-box {
+        background: rgba(102, 126, 234, 0.1);
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        text-align: center;
+        font-size: 1.1em;
       }
 
       .conversation-starter {
-        background: rgba(255, 255, 255, 0.7);
-        border: 2px solid rgba(255, 107, 136, 0.3);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(102, 126, 234, 0.3);
         border-radius: 15px;
         padding: 20px;
         margin: 20px 0;
         text-align: center;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        width: 0%;
+        transition: width 0.5s ease;
       }
 
       @keyframes fadeInDown {
@@ -292,155 +349,140 @@
 
       .correct-answer {
         animation: bounce 0.6s ease;
-        background: rgba(76, 175, 80, 0.3) !important;
       }
 
-      /* Dream Journal */
-      #dream-text {
-        width: 100%;
-        height: 100px;
-        padding: 10px;
-        border: 2px solid rgba(255, 107, 136, 0.3);
-        border-radius: 8px;
-        font-size: 1em;
-        margin: 10px 0;
-        background: rgba(255, 255, 255, 0.8);
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
-      /* Karaoke Song Selector */
-      .song-selector {
-        width: 100%;
-        padding: 10px;
-        border: 2px solid rgba(255, 107, 136, 0.3);
-        border-radius: 8px;
-        font-size: 1em;
-        margin: 10px 0;
-        background: rgba(255, 255, 255, 0.8);
+      .pulse {
+        animation: pulse 0.5s ease;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>🎤 Kyoko's Learning Adventure 💤</h1>
-        <p>Let's practice English with karaoke and sleep topics!</p>
+        <h1>🎮 Kyoko 📚</h1>
+        <p>Practice English with fun games and activities!</p>
       </div>
 
-      <!-- Karaoke and Sleep Activities -->
+      <!-- Main Games Grid -->
       <div class="game-grid">
-        <!-- Karaoke Challenge -->
+        <!-- Vocabulary Quiz -->
         <div class="game-card">
-          <div class="game-title">🎤 Karaoke Challenge</div>
-          <div class="score" id="karaoke-score">Songs Completed: 0</div>
-          <select class="song-selector" id="song-selector">
-            <option value="">Select a song...</option>
-            <option value="twinkle">Twinkle Twinkle Little Star</option>
-            <option value="happy">Happy Birthday</option>
-            <option value="letitgo">Let It Go (Frozen)</option>
-            <option value="yesterday">Yesterday (The Beatles)</option>
-          </select>
-          <div id="karaoke-lyrics">
-            Select a song to see the lyrics and practice singing along!
+          <div class="game-title">📖 Vocabulary Challenge</div>
+          <div class="score" id="vocab-score">Score: 0</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="vocab-progress"></div>
           </div>
+          <div id="vocab-question" class="hint-box">
+            Click "New Question" to start!
+          </div>
+          <div id="vocab-options"></div>
           <div style="text-align: center">
-            <button class="btn" onclick="startKaraoke()">Start Singing</button>
-            <button class="btn" onclick="completeSong()">I Sang It!</button>
+            <button class="btn" onclick="newVocabQuestion()">
+              New Question
+            </button>
+            <button class="btn" onclick="showHint()">Hint</button>
           </div>
         </div>
 
-        <!-- Sleep Diary -->
+        <!-- Story Builder -->
         <div class="game-card">
-          <div class="game-title">💤 Sleep Diary</div>
-          <div class="score" id="sleep-score">Entries: 0</div>
-          <div id="sleep-prompt" style="text-align: center; margin: 15px 0">
-            How did you sleep last night?
-          </div>
-          <textarea
-            id="dream-text"
-            placeholder="Describe your sleep or any dreams you had..."
-          ></textarea>
-          <div style="text-align: center">
-            <button class="btn" onclick="saveSleepEntry()">Save Entry</button>
-            <button class="btn" onclick="newSleepPrompt()">New Prompt</button>
-          </div>
-          <div id="sleep-entries" style="margin-top: 20px"></div>
-        </div>
-      </div>
-
-      <!-- Word Games -->
-      <div class="game-grid">
-        <!-- Sentence Builder -->
-        <div class="game-card">
-          <div class="game-title">📝 Sentence Builder</div>
-          <div class="score" id="sentence-score">Sentences Built: 0</div>
-          <div id="sentence-prompt" style="text-align: center; margin: 15px 0">
-            Build a sentence using the words below!
+          <div class="game-title">📝 Story Builder</div>
+          <div class="score" id="story-score">Stories Created: 0</div>
+          <div id="story-prompt" class="hint-box">
+            Create a story using the story parts below!
           </div>
           <div
-            id="word-bank"
-            style="
-              display: flex;
-              flex-wrap: wrap;
-              justify-content: center;
-              margin: 20px 0;
-            "
+            id="story-parts"
+            style="margin: 15px 0; text-align: center"
           ></div>
           <div
-            id="sentence-area"
+            id="story-area"
             style="
-              min-height: 80px;
+              min-height: 100px;
               background: rgba(255, 255, 255, 0.5);
               border-radius: 8px;
               padding: 15px;
               margin: 15px 0;
-              text-align: center;
             "
           >
-            Drop words here to build your sentence
+            Click story parts above to build your story...
           </div>
           <div style="text-align: center">
-            <button class="btn" onclick="checkSentence()">
-              Check Sentence
-            </button>
-            <button class="btn" onclick="newSentenceChallenge()">
-              New Challenge
-            </button>
-            <button class="btn" onclick="clearSentence()">Clear</button>
+            <button class="btn" onclick="saveStory()">Save Story</button>
+            <button class="btn" onclick="newStoryPrompt()">New Story</button>
+            <button class="btn" onclick="clearStory()">Clear</button>
           </div>
         </div>
 
-        <!-- Word Guessing Game -->
+        <!-- Word Association Game -->
         <div class="game-card">
-          <div class="game-title">🔤 Word Detective</div>
-          <div class="score" id="word-score">Score: 0</div>
-          <div class="word-hint" id="word-hint">Click "New Word" to start!</div>
-          <div class="word-display" id="word-display">_ _ _ _</div>
+          <div class="game-title">🧠 Word Association</div>
+          <div class="score" id="association-score">Chains: 0</div>
+          <div
+            id="association-word"
+            class="hint-box"
+            style="font-size: 1.5em; font-weight: bold"
+          >
+            Click "Start" to begin!
+          </div>
           <input
             type="text"
-            class="word-input"
-            id="word-input"
-            placeholder="Type your guess here..."
+            class="text-input"
+            id="association-input"
+            placeholder="Type a related word..."
             maxlength="20"
           />
+          <div id="word-chain" style="margin: 15px 0; min-height: 60px"></div>
           <div style="text-align: center">
-            <button class="btn" onclick="checkWord()">Check Answer</button>
-            <button class="btn" onclick="newWord()">New Word</button>
-            <button class="btn" onclick="revealLetter()">
-              Reveal Letter (1 point)
-            </button>
+            <button class="btn" onclick="checkAssociation()">Add Word</button>
+            <button class="btn" onclick="startWordChain()">New Chain</button>
           </div>
         </div>
-      </div>
 
-      <div class="game-grid">
+        <!-- Sentence Scramble -->
+        <div class="game-card">
+          <div class="game-title">🔀 Sentence Scramble</div>
+          <div class="score" id="scramble-score">Sentences Fixed: 0</div>
+          <div class="hint-box" id="scramble-hint">
+            Unscramble the words to make a sentence!
+          </div>
+          <div
+            id="scrambled-words"
+            style="margin: 15px 0; text-align: center"
+          ></div>
+          <input
+            type="text"
+            class="text-input"
+            id="sentence-answer"
+            placeholder="Type the correct sentence here..."
+          />
+          <div style="text-align: center">
+            <button class="btn" onclick="checkSentence()">Check Answer</button>
+            <button class="btn" onclick="newScramble()">New Sentence</button>
+            <button class="btn" onclick="showSentenceHint()">Hint</button>
+          </div>
+        </div>
+
         <!-- Tic Tac Toe -->
         <div class="game-card">
-          <div class="game-title">🎯 Tic Tac Toe</div>
+          <div class="game-title">⭕ Tic Tac Toe</div>
           <div class="score" id="ttt-score">Player X: 0 | Player O: 0</div>
           <div class="ttt-grid" id="ttt-grid"></div>
           <div style="text-align: center">
             <button class="btn" onclick="resetTTT()">New Game</button>
-            <p style="margin-top: 10px; font-size: 0.9em">
+            <p style="margin-top: 10px; font-size: 1em; color: #667eea">
               Current Player: <span id="current-player">X</span>
             </p>
           </div>
@@ -448,7 +490,7 @@
 
         <!-- Memory Game -->
         <div class="game-card">
-          <div class="game-title">🧠 Memory Match</div>
+          <div class="game-title">🧩 Memory Match</div>
           <div class="score" id="memory-score">Matches: 0/8</div>
           <div class="memory-grid" id="memory-grid"></div>
           <div style="text-align: center">
@@ -457,34 +499,466 @@
         </div>
       </div>
 
-      <!-- Conversation Starters -->
-      <div class="conversation-starter">
-        <h3>🗣️ Let's Talk! Conversation Starters</h3>
-        <p id="conversation-text">
-          Click the button below to get a conversation topic!
-        </p>
-        <button
-          class="btn"
-          onclick="getConversationStarter()"
-          style="margin-top: 15px"
-        >
-          Get Topic
-        </button>
+      <!-- Conversation and Writing -->
+      <div class="game-grid">
+        <!-- Daily Writing Practice -->
+        <div class="game-card">
+          <div class="game-title">✏️ Writing Practice</div>
+          <div class="score" id="writing-score">Entries: 0</div>
+          <div id="writing-prompt" class="hint-box">
+            Click "New Prompt" to get a writing topic!
+          </div>
+          <textarea
+            class="textarea-input"
+            id="writing-area"
+            placeholder="Write your thoughts here..."
+          ></textarea>
+          <div style="text-align: center">
+            <button class="btn" onclick="saveWriting()">Save Writing</button>
+            <button class="btn" onclick="newWritingPrompt()">New Prompt</button>
+          </div>
+        </div>
+
+        <!-- Conversation Topics -->
+        <div class="game-card">
+          <div class="game-title">💬 Discussion Topics</div>
+          <div id="conversation-text" class="hint-box">
+            Click the button below to get a conversation topic!
+          </div>
+          <button
+            class="btn"
+            onclick="getConversationTopic()"
+            style="width: 100%; margin-top: 15px"
+          >
+            Get New Topic
+          </button>
+        </div>
       </div>
 
-      <!-- Fun Facts -->
+      <!-- Fun Facts Section -->
       <div class="conversation-starter">
-        <h3>🤔 Did You Know?</h3>
-        <p id="fun-fact">Click below to learn something interesting!</p>
+        <h3>🤔 Learn Something New!</h3>
+        <p id="fun-fact">Click below to discover an interesting fact!</p>
         <button class="btn" onclick="getFunFact()" style="margin-top: 15px">
-          Tell Me Something Cool!
+          Show Me a Cool Fact!
         </button>
       </div>
     </div>
 
     <script>
-      // Tic Tac Toe Game
-      let tttBoard = ["", "", "", "", "", "", "", "", ""];
+      // Global Variables
+      let vocabScore = 0,
+        storyCount = 0,
+        associationChains = 0;
+      let scrambleScore = 0,
+        writingEntries = 0;
+      let currentVocabQuestion = null;
+      let associationWords = [];
+
+      // Vocabulary Quiz Data
+      const vocabQuestions = [
+        {
+          question: "What does 'confident' mean?",
+          options: [
+            "Shy and quiet",
+            "Sure of yourself",
+            "Angry and upset",
+            "Confused",
+          ],
+          correct: 1,
+          hint: "Think about someone who believes in their abilities",
+        },
+        {
+          question: "What is a 'challenge'?",
+          options: [
+            "Something easy",
+            "A difficult task",
+            "A type of food",
+            "A place to visit",
+          ],
+          correct: 1,
+          hint: "It's something that tests your skills",
+        },
+        {
+          question: "If something is 'fascinating', it is:",
+          options: ["Boring", "Very interesting", "Expensive", "Dangerous"],
+          correct: 1,
+          hint: "Think of something that captures your attention completely",
+        },
+        {
+          question: "What does 'influence' mean?",
+          options: [
+            "To ignore",
+            "To affect or change",
+            "To copy",
+            "To destroy",
+          ],
+          correct: 1,
+          hint: "When one thing has an effect on another thing",
+        },
+        {
+          question: "Someone who is 'ambitious' is:",
+          options: ["Lazy", "Has big goals", "Confused", "Angry"],
+          correct: 1,
+          hint: "Think of someone who wants to achieve great things",
+        },
+      ];
+
+      // Sentence Scramble Data
+      const scrambleSentences = [
+        {
+          original: "I love learning new languages every day",
+          scrambled: [
+            "day",
+            "every",
+            "languages",
+            "new",
+            "learning",
+            "love",
+            "I",
+          ],
+          hint: "Start with 'I' and think about enjoying education",
+        },
+        {
+          original: "Technology makes communication much easier today",
+          scrambled: [
+            "today",
+            "easier",
+            "much",
+            "communication",
+            "makes",
+            "Technology",
+          ],
+          hint: "What makes talking to people simpler nowadays?",
+        },
+        {
+          original: "Students should practice speaking English regularly",
+          scrambled: [
+            "regularly",
+            "English",
+            "speaking",
+            "practice",
+            "should",
+            "Students",
+          ],
+          hint: "What should learners do often to improve?",
+        },
+        {
+          original: "Reading books helps improve vocabulary skills",
+          scrambled: [
+            "skills",
+            "vocabulary",
+            "improve",
+            "helps",
+            "books",
+            "Reading",
+          ],
+          hint: "How can you get better at using words?",
+        },
+      ];
+
+      // Story Parts
+      const storyParts = [
+        ["Once upon a time", "Yesterday", "Last week", "In the future"],
+        [
+          "a brave student",
+          "a curious teenager",
+          "a smart girl",
+          "a funny boy",
+        ],
+        ["discovered", "found", "learned", "realized"],
+        ["a secret", "something amazing", "a new skill", "an opportunity"],
+        ["that changed", "which helped", "that improved", "which transformed"],
+        ["their life forever", "everything", "their future", "the world"],
+      ];
+
+      // Writing Prompts
+      const writingPrompts = [
+        "Describe your perfect weekend. What would you do and why?",
+        "If you could have any superpower, what would it be and how would you use it?",
+        "Write about a time when you helped someone. How did it make you feel?",
+        "Describe your dream job. What would you do every day?",
+        "If you could travel anywhere in the world, where would you go and what would you see?",
+        "Write about your favorite hobby and why you enjoy it.",
+        "Describe what you think the world will be like in 20 years.",
+        "Write about a person who inspires you and explain why.",
+        "If you could learn any new skill instantly, what would it be?",
+        "Describe your ideal school. What would make it perfect?",
+      ];
+
+      // Conversation Topics
+      const conversationTopics = [
+        "What's the most interesting place you've ever visited or would like to visit?",
+        "How do you think social media affects friendships?",
+        "What's your opinion on online learning vs. traditional classroom learning?",
+        "If you could solve one world problem, what would it be and how?",
+        "What role should technology play in education?",
+        "How important is it to learn about other cultures? Why?",
+        "What makes a good friend? Describe the qualities you value most.",
+        "Do you think it's important to follow your dreams even if they seem impossible?",
+        "How has learning English changed your perspective on the world?",
+        "What advice would you give to someone who's just starting to learn English?",
+      ];
+
+      // Fun Facts
+      const funFacts = [
+        "The word 'set' has over 400 different meanings in English!",
+        "Shakespeare invented over 1,700 words that we still use today, including 'eyeball' and 'fashionable'.",
+        "The most common letter in English is 'E' - it appears in about 11% of all words.",
+        "The shortest complete sentence in English is 'Go!' (subject 'you' is implied).",
+        "There are over 170,000 words currently in use in the English language.",
+        "The word 'pronunciation' is often mispronounced - it's not 'pronounciation'!",
+        "English is the official language of the sky - all pilots must speak English on international flights.",
+        "The longest English word is 45 letters long: pneumonoultramicroscopicsilicovolcanocon.",
+        "'I am' is the shortest complete sentence using a contraction in English.",
+        "About 4,000 new words are added to English dictionaries every year!",
+      ];
+
+      // Vocabulary Quiz Functions
+      function newVocabQuestion() {
+        currentVocabQuestion =
+          vocabQuestions[Math.floor(Math.random() * vocabQuestions.length)];
+        document.getElementById("vocab-question").textContent =
+          currentVocabQuestion.question;
+
+        const optionsDiv = document.getElementById("vocab-options");
+        optionsDiv.innerHTML = "";
+
+        currentVocabQuestion.options.forEach((option, index) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "quiz-option";
+          optionDiv.textContent = option;
+          optionDiv.onclick = () => checkVocabAnswer(index, optionDiv);
+          optionsDiv.appendChild(optionDiv);
+        });
+      }
+
+      function checkVocabAnswer(selectedIndex, element) {
+        const options = document.querySelectorAll(".quiz-option");
+        options.forEach((opt) => (opt.style.pointerEvents = "none"));
+
+        if (selectedIndex === currentVocabQuestion.correct) {
+          element.classList.add("correct");
+          vocabScore += 10;
+          updateVocabScore();
+          setTimeout(() => {
+            alert("Correct! Well done!");
+            newVocabQuestion();
+          }, 1000);
+        } else {
+          element.classList.add("wrong");
+          options[currentVocabQuestion.correct].classList.add("correct");
+          setTimeout(() => {
+            alert(
+              `Not quite! The correct answer was: ${
+                currentVocabQuestion.options[currentVocabQuestion.correct]
+              }`
+            );
+            newVocabQuestion();
+          }, 2000);
+        }
+      }
+
+      function showHint() {
+        if (currentVocabQuestion && currentVocabQuestion.hint) {
+          alert(`Hint: ${currentVocabQuestion.hint}`);
+        }
+      }
+
+      function updateVocabScore() {
+        document.getElementById(
+          "vocab-score"
+        ).textContent = `Score: ${vocabScore}`;
+        const progress = Math.min((vocabScore / 100) * 100, 100);
+        document.getElementById("vocab-progress").style.width = `${progress}%`;
+      }
+
+      // Story Builder Functions
+      let selectedStoryParts = [];
+      let currentStorySet = 0;
+
+      function newStoryPrompt() {
+        selectedStoryParts = [];
+        currentStorySet = 0;
+        showNextStoryParts();
+        document.getElementById("story-area").textContent =
+          "Click story parts above to build your story...";
+      }
+
+      function showNextStoryParts() {
+        const partsDiv = document.getElementById("story-parts");
+        partsDiv.innerHTML = "";
+
+        if (currentStorySet < storyParts.length) {
+          const currentParts = storyParts[currentStorySet];
+          currentParts.forEach((part) => {
+            const partDiv = document.createElement("div");
+            partDiv.className = "story-part";
+            partDiv.textContent = part;
+            partDiv.onclick = () => selectStoryPart(part, partDiv);
+            partsDiv.appendChild(partDiv);
+          });
+        }
+      }
+
+      function selectStoryPart(part, element) {
+        selectedStoryParts.push(part);
+        element.style.opacity = "0.5";
+        element.onclick = null;
+
+        updateStoryArea();
+
+        currentStorySet++;
+        setTimeout(() => {
+          if (currentStorySet < storyParts.length) {
+            showNextStoryParts();
+          }
+        }, 500);
+      }
+
+      function updateStoryArea() {
+        const area = document.getElementById("story-area");
+        if (selectedStoryParts.length > 0) {
+          area.innerHTML =
+            selectedStoryParts.join(" ") +
+            (currentStorySet < storyParts.length
+              ? ' <span style="opacity: 0.5;">...</span>'
+              : "");
+        }
+      }
+
+      function saveStory() {
+        if (selectedStoryParts.length >= 4) {
+          storyCount++;
+          document.getElementById(
+            "story-score"
+          ).textContent = `Stories Created: ${storyCount}`;
+          alert("Great story! You're becoming a wonderful writer!");
+          newStoryPrompt();
+        } else {
+          alert("Please build a longer story first!");
+        }
+      }
+
+      function clearStory() {
+        newStoryPrompt();
+      }
+
+      // Word Association Functions
+      let currentAssociationWord = "";
+
+      function startWordChain() {
+        const startWords = [
+          "happy",
+          "school",
+          "friend",
+          "music",
+          "travel",
+          "food",
+          "sport",
+          "book",
+        ];
+        currentAssociationWord =
+          startWords[Math.floor(Math.random() * startWords.length)];
+        associationWords = [currentAssociationWord];
+
+        document.getElementById("association-word").textContent =
+          currentAssociationWord;
+        document.getElementById("association-input").value = "";
+        updateWordChain();
+      }
+
+      function checkAssociation() {
+        const input = document
+          .getElementById("association-input")
+          .value.trim()
+          .toLowerCase();
+        if (input && !associationWords.includes(input)) {
+          associationWords.push(input);
+          currentAssociationWord = input;
+          document.getElementById("association-word").textContent = input;
+          document.getElementById("association-input").value = "";
+          updateWordChain();
+
+          if (associationWords.length >= 5) {
+            associationChains++;
+            document.getElementById(
+              "association-score"
+            ).textContent = `Chains: ${associationChains}`;
+            alert("Great word chain! Starting a new one...");
+            setTimeout(startWordChain, 1000);
+          }
+        } else if (associationWords.includes(input)) {
+          alert("You already used that word! Try a different one.");
+        } else {
+          alert("Please enter a word!");
+        }
+      }
+
+      function updateWordChain() {
+        const chainDiv = document.getElementById("word-chain");
+        chainDiv.innerHTML = "";
+        associationWords.forEach((word, index) => {
+          const bubble = document.createElement("span");
+          bubble.className = "word-bubble";
+          bubble.textContent = word;
+          if (index === associationWords.length - 1) {
+            bubble.style.background =
+              "linear-gradient(45deg, #ff6b6b, #ee5a24)";
+          }
+          chainDiv.appendChild(bubble);
+        });
+      }
+
+      // Sentence Scramble Functions
+      let currentScramble = null;
+
+      function newScramble() {
+        currentScramble =
+          scrambleSentences[
+            Math.floor(Math.random() * scrambleSentences.length)
+          ];
+        const scrambledDiv = document.getElementById("scrambled-words");
+        scrambledDiv.innerHTML = "";
+
+        currentScramble.scrambled.forEach((word) => {
+          const wordDiv = document.createElement("span");
+          wordDiv.className = "word-bubble";
+          wordDiv.textContent = word;
+          scrambledDiv.appendChild(wordDiv);
+        });
+
+        document.getElementById("sentence-answer").value = "";
+        document.getElementById("scramble-hint").textContent =
+          "Unscramble the words to make a sentence!";
+      }
+
+      function checkSentence() {
+        const answer = document.getElementById("sentence-answer").value.trim();
+        if (answer.toLowerCase() === currentScramble.original.toLowerCase()) {
+          scrambleScore++;
+          document.getElementById(
+            "scramble-score"
+          ).textContent = `Sentences Fixed: ${scrambleScore}`;
+          alert("Perfect! You unscrambled the sentence correctly!");
+          newScramble();
+        } else {
+          alert(
+            `Not quite right. Try again! The correct sentence was: "${currentScramble.original}"`
+          );
+        }
+      }
+
+      function showSentenceHint() {
+        if (currentScramble && currentScramble.hint) {
+          document.getElementById(
+            "scramble-hint"
+          ).textContent = `Hint: ${currentScramble.hint}`;
+        }
+      }
+
+      // Tic Tac Toe Functions
+      let tttBoard = Array(9).fill("");
       let currentPlayer = "X";
       let tttScores = { X: 0, O: 0 };
 
@@ -494,235 +968,82 @@
         for (let i = 0; i < 9; i++) {
           const cell = document.createElement("div");
           cell.className = "ttt-cell";
-          cell.onclick = () => makeTTTMove(i);
-          cell.id = `cell-${i}`;
+          cell.onclick = () => makeTTTMove(i, cell);
           grid.appendChild(cell);
         }
-        updateTTTDisplay();
       }
 
-      function makeTTTMove(index) {
-        if (tttBoard[index] === "" && !checkTTTWinner()) {
+      function makeTTTMove(index, cell) {
+        if (tttBoard[index] === "") {
           tttBoard[index] = currentPlayer;
-          document.getElementById(`cell-${index}`).textContent = currentPlayer;
+          cell.textContent = currentPlayer;
+          cell.onclick = null;
 
           if (checkTTTWinner()) {
             tttScores[currentPlayer]++;
-            updateTTTDisplay();
-            setTimeout(() => alert(`Player ${currentPlayer} wins!`), 100);
-          } else if (!tttBoard.includes("")) {
-            setTimeout(() => alert("It's a tie!"), 100);
+            updateTTTScore();
+            alert(`Player ${currentPlayer} wins!`);
+            setTimeout(resetTTT, 1000);
+          } else if (tttBoard.every((cell) => cell !== "")) {
+            alert("It's a tie!");
+            setTimeout(resetTTT, 1000);
           } else {
             currentPlayer = currentPlayer === "X" ? "O" : "X";
-            updateTTTDisplay();
+            document.getElementById("current-player").textContent =
+              currentPlayer;
           }
         }
       }
 
       function checkTTTWinner() {
-        const wins = [
+        const winPatterns = [
           [0, 1, 2],
           [3, 4, 5],
-          [6, 7, 8],
+          [6, 7, 8], // rows
           [0, 3, 6],
           [1, 4, 7],
-          [2, 5, 8],
+          [2, 5, 8], // columns
           [0, 4, 8],
-          [2, 4, 6],
+          [2, 4, 6], // diagonals
         ];
-        return wins.some(
-          (combo) =>
-            tttBoard[combo[0]] &&
-            tttBoard[combo[0]] === tttBoard[combo[1]] &&
-            tttBoard[combo[1]] === tttBoard[combo[2]]
-        );
+
+        return winPatterns.some((pattern) => {
+          return pattern.every((index) => tttBoard[index] === currentPlayer);
+        });
       }
 
       function resetTTT() {
-        tttBoard = ["", "", "", "", "", "", "", "", ""];
+        tttBoard = Array(9).fill("");
         currentPlayer = "X";
+        document.getElementById("current-player").textContent = currentPlayer;
         initTTT();
       }
 
-      function updateTTTDisplay() {
+      function updateTTTScore() {
         document.getElementById(
           "ttt-score"
         ).textContent = `Player X: ${tttScores.X} | Player O: ${tttScores.O}`;
-        document.getElementById("current-player").textContent = currentPlayer;
       }
 
-      // Sentence Builder
-      const sentenceChallenges = [
-        {
-          prompt: "Make a sentence about singing karaoke:",
-          words: [
-            "I",
-            "love",
-            "singing",
-            "karaoke",
-            "with",
-            "friends",
-            "on",
-            "weekends",
-            "loudly",
-            "happily",
-          ],
-        },
-        {
-          prompt: "Make a sentence about sleeping:",
-          words: [
-            "I",
-            "usually",
-            "sleep",
-            "for",
-            "eight",
-            "hours",
-            "dream",
-            "about",
-            "sometimes",
-            "comfortably",
-          ],
-        },
-        {
-          prompt: "Make a sentence about your favorite song:",
-          words: [
-            "My",
-            "favorite",
-            "song",
-            "is",
-            "because",
-            "it",
-            "makes",
-            "me",
-            "feel",
-            "happy",
-            "energetic",
-          ],
-        },
-        {
-          prompt: "Make a sentence about dreams:",
-          words: [
-            "Last",
-            "night",
-            "I",
-            "dreamed",
-            "that",
-            "was",
-            "flying",
-            "singing",
-            "eating",
-            "strange",
-          ],
-        },
-      ];
-
-      let currentSentenceChallenge = 0;
-      let sentenceCount = 0;
-      let selectedWords = [];
-
-      function newSentenceChallenge() {
-        currentSentenceChallenge = Math.floor(
-          Math.random() * sentenceChallenges.length
-        );
-        const challenge = sentenceChallenges[currentSentenceChallenge];
-
-        document.getElementById("sentence-prompt").textContent =
-          challenge.prompt;
-
-        const wordBank = document.getElementById("word-bank");
-        wordBank.innerHTML = "";
-
-        challenge.words.forEach((word, index) => {
-          const wordChip = document.createElement("div");
-          wordChip.className = "word-chip";
-          wordChip.textContent = word;
-          wordChip.draggable = true;
-          wordChip.onclick = () => addWordToSentence(word, wordChip);
-          wordBank.appendChild(wordChip);
-        });
-
-        selectedWords = [];
-        updateSentenceArea();
-      }
-
-      function addWordToSentence(word, chip) {
-        if (!chip.classList.contains("used")) {
-          selectedWords.push(word);
-          chip.classList.add("used");
-          updateSentenceArea();
-        }
-      }
-
-      function updateSentenceArea() {
-        const area = document.getElementById("sentence-area");
-        if (selectedWords.length > 0) {
-          area.textContent = selectedWords.join(" ");
-        } else {
-          area.textContent = "Drop words here to build your sentence";
-        }
-      }
-
-      function checkSentence() {
-        if (selectedWords.length >= 4) {
-          sentenceCount++;
-          updateSentenceScore();
-          alert(
-            `Great sentence: "${selectedWords.join(
-              " "
-            )}"! Let's make another one.`
-          );
-          newSentenceChallenge();
-        } else {
-          alert("Try to use more words to make a complete sentence!");
-        }
-      }
-
-      function clearSentence() {
-        selectedWords = [];
-        document.querySelectorAll(".word-chip").forEach((chip) => {
-          chip.classList.remove("used");
-        });
-        updateSentenceArea();
-      }
-
-      function updateSentenceScore() {
-        document.getElementById(
-          "sentence-score"
-        ).textContent = `Sentences Built: ${sentenceCount}`;
-      }
-
-      // Memory Game
-      const memoryWords = [
-        "🎤",
-        "💤",
-        "🎵",
-        "🛏️",
-        "🎶",
-        "😴",
-        "🎼",
-        "🛌",
-        "🎧",
-        "🌙",
-        "🎸",
-        "🛏️",
-        "🎹",
-        "😪",
-        "🎷",
-        "🌛",
-      ];
+      // Memory Game Functions
       let memoryCards = [];
       let flippedCards = [];
       let memoryMatches = 0;
 
       function startMemoryGame() {
-        memoryMatches = 0;
+        const words = [
+          "cat",
+          "dog",
+          "sun",
+          "moon",
+          "star",
+          "tree",
+          "bird",
+          "fish",
+        ];
+        memoryCards = [...words, ...words].sort(() => Math.random() - 0.5);
         flippedCards = [];
-
-        // Create pairs
-        const gameCards = memoryWords.slice(0, 8);
-        memoryCards = [...gameCards, ...gameCards].sort(
-          () => Math.random() - 0.5
-        );
+        memoryMatches = 0;
 
         const grid = document.getElementById("memory-grid");
         grid.innerHTML = "";
@@ -731,20 +1052,18 @@
           const card = document.createElement("div");
           card.className = "memory-card";
           card.textContent = "?";
-          card.dataset.word = word;
-          card.dataset.index = index;
-          card.onclick = () => flipCard(card, index);
+          card.onclick = () => flipCard(index, card, word);
           grid.appendChild(card);
         });
 
         updateMemoryScore();
       }
 
-      function flipCard(card, index) {
+      function flipCard(index, card, word) {
         if (flippedCards.length < 2 && !card.classList.contains("flipped")) {
+          card.textContent = word;
           card.classList.add("flipped");
-          card.textContent = card.dataset.word;
-          flippedCards.push({ card, index });
+          flippedCards.push({ index, card, word });
 
           if (flippedCards.length === 2) {
             setTimeout(checkMemoryMatch, 1000);
@@ -753,22 +1072,19 @@
       }
 
       function checkMemoryMatch() {
-        const [first, second] = flippedCards;
+        const [card1, card2] = flippedCards;
 
-        if (first.card.dataset.word === second.card.dataset.word) {
+        if (card1.word === card2.word) {
           memoryMatches++;
           updateMemoryScore();
           if (memoryMatches === 8) {
-            setTimeout(
-              () => alert("Congratulations! You found all matches!"),
-              100
-            );
+            alert("Congratulations! You found all matches!");
           }
         } else {
-          first.card.classList.remove("flipped");
-          first.card.textContent = "?";
-          second.card.classList.remove("flipped");
-          second.card.textContent = "?";
+          card1.card.textContent = "?";
+          card1.card.classList.remove("flipped");
+          card2.card.textContent = "?";
+          card2.card.classList.remove("flipped");
         }
 
         flippedCards = [];
@@ -780,256 +1096,30 @@
         ).textContent = `Matches: ${memoryMatches}/8`;
       }
 
-      // Word Guessing Game
-      const wordBank = [
-        { word: "LYRICS", hint: "The words of a song" },
-        { word: "MICROPHONE", hint: "What you hold when singing karaoke" },
-        { word: "MELODY", hint: "The tune of a song" },
-        { word: "PILLOW", hint: "You rest your head on this when sleeping" },
-        { word: "SNORE", hint: "Noise some people make while sleeping" },
-        { word: "CHORUS", hint: "The repeated part of a song" },
-        { word: "BLANKET", hint: "Keeps you warm in bed" },
-        { word: "DREAM", hint: "Stories you see while sleeping" },
-        {
-          word: "HARMONY",
-          hint: "When voices sing different notes together beautifully",
-        },
-        { word: "ALARM", hint: "What wakes you up in the morning" },
-        { word: "REFRESH", hint: "How you feel after a good sleep" },
-        { word: "DUET", hint: "A song sung by two people" },
-      ];
-
-      let currentWord = {};
-      let wordScore = 0;
-      let revealedLetters = [];
-
-      function newWord() {
-        currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-        revealedLetters = [];
-        updateWordDisplay();
-        document.getElementById("word-hint").textContent = currentWord.hint;
-        document.getElementById("word-input").value = "";
+      // Writing Practice Functions
+      function newWritingPrompt() {
+        const prompt =
+          writingPrompts[Math.floor(Math.random() * writingPrompts.length)];
+        document.getElementById("writing-prompt").textContent = prompt;
+        document.getElementById("writing-area").value = "";
       }
 
-      function updateWordDisplay() {
-        let display = "";
-        for (let letter of currentWord.word) {
-          if (revealedLetters.includes(letter) || letter === " ") {
-            display += letter + " ";
-          } else {
-            display += "_ ";
-          }
-        }
-        document.getElementById("word-display").textContent = display.trim();
-      }
-
-      function checkWord() {
-        const guess = document.getElementById("word-input").value.toUpperCase();
-        if (guess === currentWord.word) {
-          wordScore += currentWord.word.length - revealedLetters.length;
-          updateWordScore();
-          document
-            .getElementById("word-display")
-            .classList.add("correct-answer");
-          setTimeout(() => {
-            document
-              .getElementById("word-display")
-              .classList.remove("correct-answer");
-            alert(
-              `Correct! +${
-                currentWord.word.length - revealedLetters.length
-              } points`
-            );
-            newWord();
-          }, 600);
-        } else {
-          alert("Not quite right! Try again or reveal a letter.");
-        }
-      }
-
-      function revealLetter() {
-        if (revealedLetters.length < currentWord.word.length) {
-          for (let letter of currentWord.word) {
-            if (!revealedLetters.includes(letter) && letter !== " ") {
-              revealedLetters.push(letter);
-              wordScore = Math.max(0, wordScore - 1);
-              updateWordDisplay();
-              updateWordScore();
-              break;
-            }
-          }
-        }
-      }
-
-      function updateWordScore() {
-        document.getElementById(
-          "word-score"
-        ).textContent = `Score: ${wordScore}`;
-      }
-
-      // Karaoke Challenge
-      const karaokeSongs = {
-        twinkle: {
-          title: "Twinkle Twinkle Little Star",
-          lyrics:
-            "Twinkle twinkle little star, How I wonder what you are, Up above the world so high, Like a diamond in the sky",
-          hint: "A classic children's song about stars",
-        },
-        happy: {
-          title: "Happy Birthday",
-          lyrics:
-            "Happy birthday to you, Happy birthday to you, Happy birthday dear friend, Happy birthday to you",
-          hint: "The song everyone sings on their birthday",
-        },
-        letitgo: {
-          title: "Let It Go (Frozen)",
-          lyrics:
-            "Let it go, let it go, Can't hold it back anymore, Let it go, let it go, Turn away and slam the door",
-          hint: "Popular song from the Disney movie Frozen",
-        },
-        yesterday: {
-          title: "Yesterday (The Beatles)",
-          lyrics:
-            "Yesterday, all my troubles seemed so far away, Now it looks as though they're here to stay, Oh I believe in yesterday",
-          hint: "A famous Beatles song about the past",
-        },
-      };
-
-      let karaokeSongsCompleted = 0;
-      let currentKaraokeSong = null;
-      let karaokeInterval = null;
-      let currentWordIndex = 0;
-
-      function startKaraoke() {
-        const songId = document.getElementById("song-selector").value;
-        if (!songId) {
-          alert("Please select a song first!");
-          return;
-        }
-
-        currentKaraokeSong = karaokeSongs[songId];
-        const lyricsDiv = document.getElementById("karaoke-lyrics");
-        lyricsDiv.innerHTML = "";
-
-        const words = currentKaraokeSong.lyrics.split(/[ ,]+/);
-        words.forEach((word, index) => {
-          const wordSpan = document.createElement("span");
-          wordSpan.className = "karaoke-word";
-          wordSpan.textContent = word + " ";
-          wordSpan.id = `word-${index}`;
-          lyricsDiv.appendChild(wordSpan);
-        });
-
-        currentWordIndex = 0;
-        if (karaokeInterval) clearInterval(karaokeInterval);
-
-        karaokeInterval = setInterval(() => {
-          if (currentWordIndex > 0) {
-            document
-              .getElementById(`word-${currentWordIndex - 1}`)
-              .classList.remove("active");
-          }
-          if (currentWordIndex < words.length) {
-            document
-              .getElementById(`word-${currentWordIndex}`)
-              .classList.add("active");
-            currentWordIndex++;
-          } else {
-            clearInterval(karaokeInterval);
-          }
-        }, 800);
-      }
-
-      function completeSong() {
-        if (currentKaraokeSong) {
-          karaokeSongsCompleted++;
+      function saveWriting() {
+        const text = document.getElementById("writing-area").value.trim();
+        if (text.length > 50) {
+          writingEntries++;
           document.getElementById(
-            "karaoke-score"
-          ).textContent = `Songs Completed: ${karaokeSongsCompleted}`;
-          alert(`Great job singing ${currentKaraokeSong.title}!`);
-          if (karaokeInterval) clearInterval(karaokeInterval);
+            "writing-score"
+          ).textContent = `Entries: ${writingEntries}`;
+          alert("Great writing! Keep practicing to improve your English!");
+          newWritingPrompt();
         } else {
-          alert("Please start a song first!");
+          alert("Please write at least 50 characters to save your entry.");
         }
       }
 
-      // Sleep Diary
-      const sleepPrompts = [
-        "How did you sleep last night?",
-        "Describe your dreams from last night",
-        "What time did you go to bed and wake up?",
-        "How do you feel when you wake up?",
-        "Do you remember any dreams? Describe them",
-        "What helps you sleep well?",
-        "Do you have any bedtime routines?",
-        "What makes it hard for you to sleep?",
-      ];
-
-      let sleepEntriesCount = 0;
-      let sleepEntries = [];
-
-      function newSleepPrompt() {
-        const randomPrompt =
-          sleepPrompts[Math.floor(Math.random() * sleepPrompts.length)];
-        document.getElementById("sleep-prompt").textContent = randomPrompt;
-        document.getElementById("dream-text").value = "";
-      }
-
-      function saveSleepEntry() {
-        const entryText = document.getElementById("dream-text").value.trim();
-        if (entryText) {
-          sleepEntriesCount++;
-          sleepEntries.push({
-            prompt: document.getElementById("sleep-prompt").textContent,
-            response: entryText,
-            date: new Date().toLocaleDateString(),
-          });
-
-          document.getElementById(
-            "sleep-score"
-          ).textContent = `Entries: ${sleepEntriesCount}`;
-
-          // Display entries
-          const entriesDiv = document.getElementById("sleep-entries");
-          entriesDiv.innerHTML = "";
-          sleepEntries
-            .slice()
-            .reverse()
-            .forEach((entry) => {
-              const entryDiv = document.createElement("div");
-              entryDiv.className = "sleep-entry";
-              entryDiv.innerHTML = `
-              <p><strong>${entry.prompt}</strong></p>
-              <p>${entry.response}</p>
-              <small>${entry.date}</small>
-            `;
-              entriesDiv.appendChild(entryDiv);
-            });
-
-          document.getElementById("dream-text").value = "";
-          newSleepPrompt();
-        } else {
-          alert("Please write something about your sleep first!");
-        }
-      }
-
-      // Conversation Starters
-      const conversationTopics = [
-        "What's your favorite karaoke song to sing and why?",
-        "Describe your perfect night's sleep.",
-        "If you could sing a duet with any singer, who would it be?",
-        "What do you usually dream about?",
-        "Tell me about the last time you sang karaoke with friends.",
-        "What helps you fall asleep when you can't sleep?",
-        "If you could write a song about sleeping, what would it be called?",
-        "Do you remember any funny dreams? Tell me about them.",
-        "What's your bedtime routine?",
-        "Would you rather sing perfectly but never sleep well, or sleep perfectly but never sing well?",
-        "What's the best place you've ever slept?",
-        "If you could have any celebrity sing you a lullaby, who would you choose?",
-      ];
-
-      function getConversationStarter() {
+      // Conversation Topics Function
+      function getConversationTopic() {
         const topic =
           conversationTopics[
             Math.floor(Math.random() * conversationTopics.length)
@@ -1037,42 +1127,22 @@
         document.getElementById("conversation-text").textContent = topic;
       }
 
-      // Fun Facts
-      const funFacts = [
-        "The world record for longest karaoke marathon is 1,536 hours (64 days)!",
-        "Humans spend about 1/3 of their lives sleeping.",
-        "The most popular karaoke song worldwide is 'I Will Survive' by Gloria Gaynor.",
-        "Dreams can last anywhere from a few seconds to 20-30 minutes.",
-        "The word 'karaoke' comes from Japanese words meaning 'empty orchestra'.",
-        "The longest recorded time without sleep is 11 days (264 hours).",
-        "Singing releases endorphins that make you feel happy and reduce stress.",
-        "Newborn babies sleep about 14-17 hours a day.",
-        "The highest note ever sung by a human is G10 by Georgia Brown.",
-        "During REM sleep (when you dream), your body is temporarily paralyzed.",
-        "The most expensive karaoke machine costs over $100,000!",
-        "Some people can hear music in their dreams.",
-      ];
-
+      // Fun Facts Function
       function getFunFact() {
         const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
         document.getElementById("fun-fact").textContent = fact;
       }
 
-      // Enter key support for word game
-      document
-        .getElementById("word-input")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            checkWord();
-          }
-        });
-
-      // Initialize games
-      initTTT();
-      startMemoryGame();
-      newWord();
-      newSentenceChallenge();
-      newSleepPrompt();
+      // Initialize games when page loads
+      window.onload = function () {
+        newVocabQuestion();
+        newStoryPrompt();
+        startWordChain();
+        newScramble();
+        initTTT();
+        startMemoryGame();
+        newWritingPrompt();
+      };
     </script>
   </body>
 </html>

@@ -3,13 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Login to ESL Fun Online - Access premium resources for teachers and students"
-    />
     <title>Login | ESL Fun Online</title>
-
-    <!-- Use the same styles as your main page -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -18,15 +12,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/header.css" />
 
     <style>
-      /* Reuse your existing root variables */
       :root {
         --primary-color: #4f46e5;
         --primary-hover: #4338ca;
         --secondary-color: #10b981;
         --accent-color: #f59e0b;
+        --student-color: #3b82f6;
+        --teacher-color: #8b5cf6;
         --text-primary: #1f2937;
         --text-secondary: #6b7280;
         --text-light: #9ca3af;
@@ -37,7 +31,6 @@
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       }
 
       * {
@@ -48,656 +41,606 @@
 
       body {
         font-family: "Inter", sans-serif;
-        background-color: var(--bg-secondary);
-        color: var(--text-primary);
         line-height: 1.6;
+        overflow-x: hidden;
       }
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
-      }
-
-      /* Login Page Header */
-      .login-header {
-        background: var(--gradient-primary);
-        color: white;
-        padding: 6rem 0 3rem;
-        text-align: center;
+      /* Hero Background Section */
+      .hero-login {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
-        overflow: hidden;
+        background: url("images/Blue Night Sky Cute Whale Desktop Wallpaper.png")
+          center/cover;
       }
 
-      .login-header h1 {
-        font-family: "Poppins", sans-serif;
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 700;
-        margin-bottom: 1rem;
+      /* Floating particles animation */
+      .hero-login::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 50%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 80%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          );
+        animation: float 6s ease-in-out infinite;
       }
 
-      .login-header p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        max-width: 600px;
-        margin: 0 auto;
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(-20px) scale(1.05);
+        }
       }
 
       /* Login Container */
       .login-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 2rem;
-        padding: 3rem 0;
-        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 400px;
+        padding: 0 20px;
       }
 
       /* Login Card */
       .login-card {
-        background: var(--bg-primary);
-        border-radius: 16px;
-        box-shadow: var(--shadow-lg);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
         padding: 2.5rem;
-        width: 100%;
-        max-width: 450px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          border-color 0.3s ease;
       }
 
       .login-card:hover {
         transform: translateY(-5px);
-        box-shadow: var(--shadow-xl);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
       }
 
-      .login-card h2 {
-        font-family: "Poppins", sans-serif;
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
-        color: var(--primary-color);
+      /* Dynamic card colors based on user type */
+      .login-card.student-mode {
+        border-color: rgba(59, 130, 246, 0.3);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+      }
+
+      .login-card.teacher-mode {
+        border-color: rgba(139, 92, 246, 0.3);
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+      }
+
+      /* Logo Section */
+      .logo-section {
         text-align: center;
+        margin-bottom: 2rem;
       }
 
-      .login-card .icon {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1.5rem;
-      }
-
-      .login-card .icon i {
-        font-size: 3rem;
-        color: var(--primary-color);
-        background: linear-gradient(
-          135deg,
-          rgba(79, 70, 229, 0.1) 0%,
-          rgba(118, 75, 162, 0.1) 100%
-        );
-        width: 80px;
-        height: 80px;
+      .logo-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-color);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-
-      .form-group {
-        margin-bottom: 1.5rem;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: var(--text-primary);
-      }
-
-      .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .form-control:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
+        margin: 0 auto 1rem;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
         transition: all 0.3s ease;
-        width: 100%;
       }
 
-      .btn:hover {
-        background: var(--primary-hover);
-        transform: translateY(-2px);
+      .logo-icon.student-mode {
+        background: var(--student-color);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
       }
 
-      .btn i {
-        font-size: 1rem;
+      .logo-icon.teacher-mode {
+        background: var(--teacher-color);
+        box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
       }
 
-      .login-footer {
-        text-align: center;
-        margin-top: 1.5rem;
+      .logo-icon i {
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      .login-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        transition: color 0.3s ease;
+      }
+
+      .login-subtitle {
         color: var(--text-secondary);
         font-size: 0.9rem;
       }
 
-      .login-footer a {
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 500;
-      }
-
-      .login-footer a:hover {
-        text-decoration: underline;
-      }
-
-      /* Social Login */
-      .social-login {
-        margin-top: 1.5rem;
-      }
-
-      .social-login p {
-        text-align: center;
-        color: var(--text-secondary);
-        margin-bottom: 1rem;
+      /* User Type Toggle */
+      .user-type-toggle {
+        display: flex;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 2rem;
         position: relative;
       }
 
-      .social-login p::before,
-      .social-login p::after {
+      .toggle-option {
+        flex: 1;
+        padding: 0.75rem;
+        text-align: center;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+      }
+
+      .toggle-option.active.student {
+        color: white;
+        background: var(--student-color);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      }
+
+      .toggle-option.active.teacher {
+        color: white;
+        background: var(--teacher-color);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+      }
+
+      .toggle-option i {
+        margin-right: 0.5rem;
+      }
+
+      /* Form Styles */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .form-input:focus {
+        outline: none;
+        transform: translateY(-1px);
+      }
+
+      .form-input.student-mode:focus {
+        border-color: var(--student-color);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      }
+
+      .form-input.teacher-mode:focus {
+        border-color: var(--teacher-color);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+      }
+
+      .form-input::placeholder {
+        color: var(--text-light);
+      }
+
+      /* Login Button */
+      .login-btn {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--primary-hover) 100%
+        );
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-btn.student-mode {
+        background: linear-gradient(
+          135deg,
+          var(--student-color) 0%,
+          #2563eb 100%
+        );
+      }
+
+      .login-btn.teacher-mode {
+        background: linear-gradient(
+          135deg,
+          var(--teacher-color) 0%,
+          #7c3aed 100%
+        );
+      }
+
+      .login-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .login-btn.student-mode:hover {
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+      }
+
+      .login-btn.teacher-mode:hover {
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      .login-btn i {
+        margin-right: 0.5rem;
+      }
+
+      /* Loading state */
+      .login-btn.loading {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .login-btn.loading::after {
         content: "";
         position: absolute;
-        top: 50%;
-        width: 30%;
-        height: 1px;
-        background: var(--border-color);
-      }
-
-      .social-login p::before {
+        width: 20px;
+        height: 20px;
+        margin: auto;
+        border: 2px solid white;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        top: 0;
         left: 0;
-      }
-
-      .social-login p::after {
+        bottom: 0;
         right: 0;
       }
 
-      .social-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
-      .social-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        color: var(--text-secondary);
-        transition: all 0.3s ease;
+      /* Footer Links */
+      .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
       }
 
-      .social-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-sm);
-      }
-
-      .social-btn.google:hover {
-        color: #db4437;
-        border-color: #db4437;
-      }
-
-      .social-btn.facebook:hover {
-        color: #4267b2;
-        border-color: #4267b2;
-      }
-
-      .social-btn.apple:hover {
-        color: #000000;
-        border-color: #000000;
-      }
-
-      /* Tabs for login type */
-      .login-tabs {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .tab-btn {
-        padding: 0.75rem 1.5rem;
-        background: none;
-        border: none;
-        border-bottom: 3px solid transparent;
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .tab-btn.active {
+      .footer-link {
         color: var(--primary-color);
-        border-bottom-color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        display: block;
+        margin-bottom: 0.5rem;
       }
 
-      .tab-content {
+      .footer-link:hover {
+        color: var(--primary-hover);
+      }
+
+      .home-link {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .home-link:hover {
+        color: var(--text-primary);
+      }
+
+      /* Error/Success Messages */
+      .message {
+        padding: 0.875rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
         display: none;
       }
 
-      .tab-content.active {
-        display: block;
+      .message.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+      }
+
+      .message.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+      }
+
+      /* Info Box for Demo Credentials */
+      .demo-info {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
+        color: #1e40af;
+      }
+
+      .demo-info h4 {
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .demo-info p {
+        margin-bottom: 0.25rem;
       }
 
       /* Responsive */
       @media (max-width: 768px) {
-        .login-container {
-          flex-direction: column;
-          align-items: center;
-        }
-
         .login-card {
-          padding: 1.5rem;
+          padding: 2rem 1.5rem;
+          margin: 20px;
         }
 
-        .login-header {
-          padding: 4rem 0 2rem;
+        .login-title {
+          font-size: 1.5rem;
+        }
+
+        .demo-info {
+          font-size: 0.8rem;
         }
       }
     </style>
   </head>
   <body>
-    <!-- Header (reuse from your main page) -->
-    <header>
-      <div class="container">
-        <nav class="navbar">
-          <a href="index.html" class="logo-container">
-            <img
-              src="images/Online.png"
-              alt="ESL Fun Online Logo"
-              class="logo-image"
-            />
-            <span class="logo-text">ESL Fun Online</span>
-          </a>
-
-          <ul class="nav-links" id="navLinks">
-            <li class="nav-item">
-              <a href="index.html" class="nav-link">
-                <i class="fas fa-home"></i>
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="eslresources.html" class="nav-link">
-                <i class="fas fa-book"></i>
-                English
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="codingresources.html" class="nav-link">
-                <i class="fas fa-code"></i>
-                Coding
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="games.html" class="nav-link">
-                <i class="fas fa-dice"></i>
-                Games
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="login.html" class="nav-link active">
-                <i class="fas fa-sign-in-alt"></i>
-                Login
-              </a>
-            </li>
-          </ul>
-
-          <div class="controls">
-            <button
-              class="control-btn theme-toggle"
-              id="themeToggle"
-              aria-label="Toggle dark mode"
-            >
-              <i class="fas fa-moon"></i>
-            </button>
-            <button
-              class="control-btn mobile-toggle"
-              id="mobileToggle"
-              aria-label="Toggle mobile menu"
-            >
-              <i class="fas fa-bars"></i>
-            </button>
-          </div>
-        </nav>
-      </div>
-    </header>
-
-    <!-- Login Header -->
-    <section class="login-header">
-      <div class="container">
-        <h1>Welcome Back!</h1>
-        <p>
-          Sign in to access your personalized dashboard, teaching resources, or
-          student materials.
-        </p>
-      </div>
-    </section>
-
-    <!-- Login Tabs -->
-    <div class="container">
-      <div class="login-tabs">
-        <button class="tab-btn active" data-tab="student">Student Login</button>
-        <button class="tab-btn" data-tab="teacher">Teacher Login</button>
-      </div>
-    </div>
-
-    <!-- Login Container -->
-    <div class="container">
+    <div class="hero-login">
       <div class="login-container">
-        <!-- Student Login -->
-        <div class="login-card tab-content active" id="student-login">
-          <div class="icon">
-            <i class="fas fa-user-graduate"></i>
+        <div class="login-card" id="loginCard">
+          <!-- Logo Section -->
+          <div class="logo-section">
+            <div class="logo-icon" id="logoIcon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle" id="loginSubtitle">
+              Sign in to continue your learning journey
+            </p>
           </div>
-          <h2>Student Login</h2>
-          <form id="studentForm">
+
+          <!-- User Type Toggle -->
+          <div class="user-type-toggle">
+            <div class="toggle-option active student" data-type="student">
+              <i class="fas fa-user-graduate"></i>
+              Student
+            </div>
+            <div class="toggle-option teacher" data-type="teacher">
+              <i class="fas fa-chalkboard-teacher"></i>
+              Teacher
+            </div>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm">
+            <!-- Messages -->
+            <div id="messageContainer" class="message"></div>
+
             <div class="form-group">
-              <label for="student-email">Email Address</label>
+              <label class="form-label" for="userId" id="userIdLabel"
+                >Student ID</label
+              >
               <input
-                type="email"
-                id="student-email"
-                class="form-control"
-                placeholder="Enter your email"
+                type="text"
+                id="userId"
+                class="form-input student-mode"
+                placeholder="Enter your Student ID"
                 required
               />
             </div>
+
             <div class="form-group">
-              <label for="student-password">Password</label>
+              <label class="form-label" for="password">Password</label>
               <input
                 type="password"
-                id="student-password"
-                class="form-control"
+                id="password"
+                class="form-input student-mode"
                 placeholder="Enter your password"
                 required
               />
             </div>
-            <div class="form-group">
-              <button type="submit" class="btn">
-                <i class="fas fa-sign-in-alt"></i> Sign In
-              </button>
-            </div>
-            <div class="login-footer">
-              <p>
-                Don't have an account?
-                <a href="register.html?type=student">Register as student</a>
-              </p>
-              <p><a href="forgot-password.html">Forgot password?</a></p>
-            </div>
+
+            <button type="submit" class="login-btn student-mode">
+              <i class="fas fa-sign-in-alt"></i>
+              Sign In
+            </button>
           </form>
 
-          <div class="social-login">
-            <p>Or sign in with</p>
-            <div class="social-buttons">
-              <button
-                class="social-btn google"
-                aria-label="Sign in with Google"
-              >
-                <i class="fab fa-google"></i>
-              </button>
-              <button
-                class="social-btn facebook"
-                aria-label="Sign in with Facebook"
-              >
-                <i class="fab fa-facebook-f"></i>
-              </button>
-              <button class="social-btn apple" aria-label="Sign in with Apple">
-                <i class="fab fa-apple"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Teacher Login -->
-        <div class="login-card tab-content" id="teacher-login">
-          <div class="icon">
-            <i class="fas fa-chalkboard-teacher"></i>
-          </div>
-          <h2>Teacher Login</h2>
-          <form id="teacherForm">
-            <div class="form-group">
-              <label for="teacher-email">Email Address</label>
-              <input
-                type="email"
-                id="teacher-email"
-                class="form-control"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="teacher-password">Password</label>
-              <input
-                type="password"
-                id="teacher-password"
-                class="form-control"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn">
-                <i class="fas fa-sign-in-alt"></i> Sign In
-              </button>
-            </div>
-            <div class="login-footer">
-              <p>
-                Don't have an account?
-                <a href="register.html?type=teacher">Register as teacher</a>
-              </p>
-              <p><a href="forgot-password.html">Forgot password?</a></p>
-            </div>
-          </form>
-
-          <div class="social-login">
-            <p>Or sign in with</p>
-            <div class="social-buttons">
-              <button
-                class="social-btn google"
-                aria-label="Sign in with Google"
-              >
-                <i class="fab fa-google"></i>
-              </button>
-              <button
-                class="social-btn facebook"
-                aria-label="Sign in with Facebook"
-              >
-                <i class="fab fa-facebook-f"></i>
-              </button>
-              <button class="social-btn apple" aria-label="Sign in with Apple">
-                <i class="fab fa-apple"></i>
-              </button>
-            </div>
+          <!-- Footer Links -->
+          <div class="login-footer">
+            <a href="register.html" class="footer-link"
+              >Don't have an account? Register here</a
+            >
+            <a href="index.html" class="footer-link home-link">
+              <i class="fas fa-arrow-left"></i>
+              Back to Home
+            </a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer (reuse from your main page) -->
-    <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>ESL Fun Online</h3>
-            <p>
-              Empowering learners worldwide with premium English and coding
-              education. Our mission is to make quality education accessible,
-              engaging, and effective for everyone.
-            </p>
-            <div class="social-links">
-              <a href="#" aria-label="Facebook"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a href="#" aria-label="Twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="#" aria-label="Instagram"
-                ><i class="fab fa-instagram"></i
-              ></a>
-              <a href="#" aria-label="LinkedIn"
-                ><i class="fab fa-linkedin-in"></i
-              ></a>
-              <a href="#" aria-label="YouTube"
-                ><i class="fab fa-youtube"></i
-              ></a>
-            </div>
-          </div>
-
-          <div class="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li>
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
-              </li>
-              <li>
-                <a href="login.html"
-                  ><i class="fas fa-sign-in-alt"></i> Login</a
-                >
-              </li>
-              <li>
-                <a href="register.html"
-                  ><i class="fas fa-user-plus"></i> Register</a
-                >
-              </li>
-              <li>
-                <a href="contact.html"
-                  ><i class="fas fa-envelope"></i> Contact</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div class="footer-section">
-            <h3>Legal</h3>
-            <ul>
-              <li>
-                <a href="privacy.html"
-                  ><i class="fas fa-lock"></i> Privacy Policy</a
-                >
-              </li>
-              <li>
-                <a href="terms.html"
-                  ><i class="fas fa-file-contract"></i> Terms of Service</a
-                >
-              </li>
-              <li>
-                <a href="cookies.html"
-                  ><i class="fas fa-cookie"></i> Cookie Policy</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="footer-bottom">
-          <p>&copy; 2023 ESL Fun Online. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+    <!-- Load credentials -->
+    <script src="credentials.js"></script>
 
     <script>
-      // Tab functionality
+      // User type toggle functionality
       document.addEventListener("DOMContentLoaded", function () {
-        const tabBtns = document.querySelectorAll(".tab-btn");
-        const tabContents = document.querySelectorAll(".tab-content");
+        const toggleOptions = document.querySelectorAll(".toggle-option");
+        const loginForm = document.getElementById("loginForm");
+        const messageContainer = document.getElementById("messageContainer");
+        const loginCard = document.getElementById("loginCard");
+        const logoIcon = document.getElementById("logoIcon");
+        const loginSubtitle = document.getElementById("loginSubtitle");
+        const userIdLabel = document.getElementById("userIdLabel");
+        const userIdInput = document.getElementById("userId");
+        const passwordInput = document.getElementById("password");
+        const loginBtn = document.querySelector(".login-btn");
 
-        tabBtns.forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const tabId = this.getAttribute("data-tab");
+        let selectedUserType = "student";
 
-            // Update active tab button
-            tabBtns.forEach((btn) => btn.classList.remove("active"));
+        // Update UI based on user type
+        function updateUIForUserType(userType) {
+          // Remove all mode classes
+          loginCard.classList.remove("student-mode", "teacher-mode");
+          logoIcon.classList.remove("student-mode", "teacher-mode");
+          userIdInput.classList.remove("student-mode", "teacher-mode");
+          passwordInput.classList.remove("student-mode", "teacher-mode");
+          loginBtn.classList.remove("student-mode", "teacher-mode");
+
+          // Add appropriate mode class
+          loginCard.classList.add(`${userType}-mode`);
+          logoIcon.classList.add(`${userType}-mode`);
+          userIdInput.classList.add(`${userType}-mode`);
+          passwordInput.classList.add(`${userType}-mode`);
+          loginBtn.classList.add(`${userType}-mode`);
+
+          // Update text content
+          if (userType === "student") {
+            userIdLabel.textContent = "Student ID";
+            userIdInput.placeholder = "Enter your Student ID";
+            loginSubtitle.textContent =
+              "Sign in to continue your learning journey";
+          } else {
+            userIdLabel.textContent = "Teacher ID";
+            userIdInput.placeholder = "Enter your Teacher ID";
+            loginSubtitle.textContent = "Sign in to manage your classroom";
+          }
+
+          // Clear form
+          userIdInput.value = "";
+          passwordInput.value = "";
+        }
+
+        // Toggle between student and teacher
+        toggleOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            toggleOptions.forEach((opt) => {
+              opt.classList.remove("active");
+            });
             this.classList.add("active");
-
-            // Update active tab content
-            tabContents.forEach((content) =>
-              content.classList.remove("active")
-            );
-            document.getElementById(`${tabId}-login`).classList.add("active");
+            selectedUserType = this.dataset.type;
+            updateUIForUserType(selectedUserType);
           });
         });
+
+        // Show message function
+        function showMessage(text, type) {
+          messageContainer.textContent = text;
+          messageContainer.className = `message ${type}`;
+          messageContainer.style.display = "block";
+
+          setTimeout(() => {
+            messageContainer.style.display = "none";
+          }, 5000);
+        }
 
         // Form submission
-        document
-          .getElementById("studentForm")
-          .addEventListener("submit", function (e) {
-            e.preventDefault();
-            // Add your student login logic here
-            alert("Student login functionality would be implemented here");
-          });
+        loginForm.addEventListener("submit", function (e) {
+          e.preventDefault();
 
-        document
-          .getElementById("teacherForm")
-          .addEventListener("submit", function (e) {
-            e.preventDefault();
-            // Add your teacher login logic here
-            alert("Teacher login functionality would be implemented here");
-          });
+          const userId = document.getElementById("userId").value.trim();
+          const password = document.getElementById("password").value;
 
-        // Social login buttons
-        document.querySelectorAll(".social-btn").forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const provider = this.classList.contains("google")
-              ? "Google"
-              : this.classList.contains("facebook")
-              ? "Facebook"
-              : "Apple";
-            alert(`${provider} login would be implemented here`);
-          });
+          // Show loading state
+          loginBtn.classList.add("loading");
+          loginBtn.innerHTML = "";
+
+          // Simulate API call delay
+          setTimeout(() => {
+            // Use credentials from external file
+            const authResult = validateCredentials(
+              userId,
+              password,
+              selectedUserType
+            );
+
+            if (authResult.success) {
+              showMessage("Login successful! Redirecting...", "success");
+
+              // Create user session data
+              const userData = {
+                id: authResult.userId,
+                type: selectedUserType,
+                loginTime: new Date().toISOString(),
+              };
+
+              // Store user session
+              sessionStorage.setItem("userSession", JSON.stringify(userData));
+
+              // Redirect to user-specific page
+              setTimeout(() => {
+                if (selectedUserType === "student") {
+                  window.location.href = `student-dashboard.html?user=${authResult.userId}`;
+                } else {
+                  window.location.href = `teacher-dashboard.html?user=${authResult.userId}`;
+                }
+              }, 1500);
+            } else {
+              showMessage(
+                authResult.message || "Invalid credentials. Please try again.",
+                "error"
+              );
+
+              // Reset button
+              loginBtn.classList.remove("loading");
+              loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+            }
+          }, 1000);
         });
 
-        // Theme toggle (reuse from your main page if needed)
-        const themeToggle = document.getElementById("themeToggle");
-        if (themeToggle) {
-          themeToggle.addEventListener("click", function () {
-            document.body.classList.toggle("dark-theme");
-            const icon = this.querySelector("i");
-            if (document.body.classList.contains("dark-theme")) {
-              icon.classList.replace("fa-moon", "fa-sun");
-            } else {
-              icon.classList.replace("fa-sun", "fa-moon");
-            }
-          });
-        }
-
-        // Mobile menu toggle (reuse from your main page if needed)
-        const mobileToggle = document.getElementById("mobileToggle");
-        if (mobileToggle) {
-          mobileToggle.addEventListener("click", function () {
-            document.getElementById("navLinks").classList.toggle("active");
-          });
-        }
+        // Initialize with student mode
+        updateUIForUserType("student");
       });
     </script>
   </body>

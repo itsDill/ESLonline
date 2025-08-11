@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unlimited Code Ball Adventure</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+      }
+
+      .game-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      .stat-item {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #4ecdc4;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-top: 5px;
+      }
+
+      .game-area-container {
+        width: 100%;
+        height: 400px;
+        position: relative;
+        overflow: auto; /* <-- allow scrolling */
+        margin: 20px 0;
+      }
+
+      .game-area {
+        width: 2000px; /* Make it much wider for scrolling */
+        height: 1000px; /* Make it much taller for scrolling */
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: visible; /* allow elements to overflow */
+      }
+
+      .ball {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        border-radius: 50%;
+        position: absolute;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        z-index: 10;
+        transform-origin: center;
+      }
+
+      .target {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #ffd93d;
+        border-radius: 50%;
+        position: absolute;
+        background: rgba(255, 217, 61, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        animation: targetPulse 2s infinite;
+        z-index: 5;
+      }
+
+      @keyframes targetPulse {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.7);
+        }
+        50% {
+          transform: scale(1.1);
+          box-shadow: 0 0 0 20px rgba(255, 217, 61, 0);
+        }
+      }
+
+      .obstacle {
+        position: absolute;
+        background: linear-gradient(45deg, #ff4757, #ff3742);
+        border-radius: 10px;
+        opacity: 0.8;
+        animation: obstacleFloat 3s ease-in-out infinite;
+        z-index: 5;
+      }
+
+      @keyframes obstacleFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .powerup {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(45deg, #ffd93d, #ffc107);
+        border-radius: 50%;
+        animation: powerupSpin 2s linear infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        z-index: 5;
+      }
+
+      @keyframes powerupSpin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .controls-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 20px 0;
+      }
+
+      .preset-commands {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+      }
+
+      .custom-commands {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+      }
+
+      .section-title {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .command-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 8px;
+      }
+
+      .command-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        text-align: left;
+      }
+
+      .command-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .custom-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-family: "Courier New", monospace;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }
+
+      .custom-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .execute-btn {
+        background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 10px;
+        transition: all 0.3s;
+      }
+
+      .execute-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .objective-panel {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        border-left: 5px solid #ffd93d;
+      }
+
+      .objective-title {
+        color: #ffd93d;
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .objective-text {
+        color: white;
+        font-size: 1rem;
+        margin-bottom: 15px;
+      }
+
+      .progress-bar {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        height: 10px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+        height: 100%;
+        width: 0%;
+        transition: width 0.5s ease;
+        border-radius: 10px;
+      }
+
+      .level-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin: 20px 0;
+        color: white;
+      }
+
+      .level-badge {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .hint-box {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+        color: rgba(255, 255, 255, 0.9);
+        font-style: italic;
+        border-left: 3px solid #4ecdc4;
+      }
+
+      .achievement-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        z-index: 1000;
+        border: 3px solid #ffd93d;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease;
+      }
+
+      .achievement-popup.show {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .reset-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ff4757);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: all 0.3s;
+        width: 100%;
+      }
+
+      .reset-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .command-history {
+        margin-top: 15px;
+        max-height: 100px;
+        overflow-y: auto;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      .command-history-item {
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .command-history-item:last-child {
+        border-bottom: none;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f00;
+        opacity: 0;
+        z-index: 100;
+      }
+
+      @media (max-width: 768px) {
+        .controls-section {
+          grid-template-columns: 1fr;
+        }
+
+        .command-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .game-area-container {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo">🎮 Unlimited Code Ball</div>
+        <div style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem">
+          Control the ball with no limits - go anywhere, be any size or color!
+        </div>
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="score">0</div>
+          <div class="stat-label">Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="level">1</div>
+          <div class="stat-label">Level</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="commands">0</div>
+          <div class="stat-label">Commands</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="achievements">0</div>
+          <div class="stat-label">Achievements</div>
+        </div>
+      </div>
+
+      <div class="objective-panel">
+        <div class="objective-title">🎯 Current Objective</div>
+        <div class="objective-text" id="objectiveText">
+          Reach the golden target to advance!
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="hint-box" id="hintBox">
+          💡 Try using moveRight(2000) or setPosition(-100, 500) to move the
+          ball anywhere!
+        </div>
+      </div>
+
+      <div class="game-area-container">
+        <div class="game-area" id="gameArea">
+          <div class="ball" id="ball"></div>
+          <div class="target" id="target">🎯</div>
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="preset-commands">
+          <div class="section-title">📋 Preset Commands</div>
+          <div class="command-grid" id="presetCommands"></div>
+          <button class="reset-btn" onclick="resetGame()">
+            🔄 Reset Level
+          </button>
+        </div>
+
+        <div class="custom-commands">
+          <div class="section-title">✨ Custom Commands</div>
+          <input
+            type="text"
+            class="custom-input"
+            id="customCommand"
+            placeholder="Try: moveRight(2000), setColor('#ff00ff'), setSize(500)"
+            onkeypress="handleKeyPress(event)"
+          />
+          <button class="execute-btn" onclick="executeCustomCommand()">
+            Execute Command
+          </button>
+          <div class="command-history" id="commandHistory"></div>
+          <div
+            style="
+              margin-top: 15px;
+              color: rgba(255, 255, 255, 0.8);
+              font-size: 0.9rem;
+            "
+          >
+            <strong>Available functions:</strong><br />
+            moveRight(x), moveLeft(x), moveUp(x), moveDown(x)<br />
+            setPosition(x, y), setColor(color), setSize(size)<br />
+            spin(), bounce(), glow(), pulse(), fade()
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="achievement-popup" id="achievementPopup">
+      <div style="font-size: 2rem; margin-bottom: 15px">🏆</div>
+      <div style="font-size: 1.3rem; font-weight: bold" id="achievementTitle">
+        Achievement Unlocked!
+      </div>
+      <div style="margin-top: 10px" id="achievementDesc">
+        You completed your first objective!
+      </div>
+    </div>
+
+    <script>
+      // Game state management
+      let gameState = {
+        score: 0,
+        level: 1,
+        commands: 0,
+        achievements: 0,
+        ballPosition: { x: 50, y: 200 },
+        targetPosition: { x: 300, y: 200 },
+        obstacles: [],
+        powerups: [],
+        currentObjective: "reach_target",
+        objectiveProgress: 0,
+        ballProperties: {
+          color: "linear-gradient(45deg, #ff6b6b, #4ecdc4)",
+          size: 40,
+          rotation: 0,
+        },
+        commandHistory: [],
+      };
+
+      const levels = [
+        {
+          objective: "Reach the golden target!",
+          hint: "💡 Try using moveRight(2000) or setPosition(-100, 500) to move the ball anywhere!",
+          targetPos: { x: 300, y: 200 },
+          obstacles: [],
+          requiredCommands: 1,
+        },
+        {
+          objective: "Navigate around the red obstacle to reach the target!",
+          hint: "💡 Use moveUp() or moveDown() to avoid obstacles, then continue to the target!",
+          targetPos: { x: 800, y: 100 },
+          obstacles: [{ x: 400, y: 150, width: 30, height: 100 }],
+          requiredCommands: 2,
+        },
+        {
+          objective: "Collect the power-up, then reach the target!",
+          hint: "💡 Visit the spinning power-up first, then head to the target for bonus points!",
+          targetPos: { x: -200, y: 400 },
+          obstacles: [
+            { x: 150, y: 100, width: 25, height: 80 },
+            { x: 300, y: 200, width: 80, height: 25 },
+          ],
+          powerups: [{ x: 250, y: 150, type: "speed" }],
+          requiredCommands: 3,
+        },
+        {
+          objective:
+            "Master of movement! Use custom commands to style your ball!",
+          hint: "💡 Try setColor('anycolor'), spin(), glow() and other effects before reaching the target!",
+          targetPos: { x: 1200, y: -100 },
+          obstacles: [
+            { x: 120, y: 50, width: 25, height: 120 },
+            { x: 250, y: 180, width: 100, height: 25 },
+            { x: 400, y: 80, width: 25, height: 100 },
+          ],
+          powerups: [
+            { x: 180, y: 300, type: "style" },
+            { x: 350, y: 50, type: "bonus" },
+          ],
+          requiredCommands: 5,
+        },
+        {
+          objective: "Final Challenge! Navigate the maze to reach the target!",
+          hint: "💡 Combine all your commands to solve this complex level!",
+          targetPos: { x: 1500, y: 300 },
+          obstacles: [
+            { x: 100, y: 0, width: 20, height: 200 },
+            { x: 200, y: 100, width: 20, height: 200 },
+            { x: 300, y: 0, width: 20, height: 150 },
+            { x: 400, y: 150, width: 20, height: 250 },
+            { x: 500, y: 0, width: 20, height: 250 },
+          ],
+          powerups: [
+            { x: 150, y: 250, type: "speed" },
+            { x: 350, y: 50, type: "style" },
+            { x: 450, y: 350, type: "bonus" },
+          ],
+          requiredCommands: 8,
+        },
+      ];
+
+      const presetCommands = [
+        { text: "moveRight(200)", action: () => moveRight(200) },
+        { text: "moveLeft(200)", action: () => moveLeft(200) },
+        { text: "moveUp(200)", action: () => moveUp(200) },
+        { text: "moveDown(200)", action: () => moveDown(200) },
+        { text: "setPosition(500, 300)", action: () => setPosition(500, 300) },
+        { text: 'setColor("purple")', action: () => setColor("purple") },
+        { text: 'setColor("gold")', action: () => setColor("gold") },
+        { text: "setSize(100)", action: () => setSize(100) },
+        { text: "spin()", action: () => spin() },
+        { text: "bounce()", action: () => bounce() },
+        { text: "glow()", action: () => glow() },
+        { text: "pulse()", action: () => pulse() },
+      ];
+
+      // Create stars background
+      function createStars() {
+        const starsContainer = document.getElementById("stars");
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          star.style.left = Math.random() * 100 + "%";
+          star.style.top = Math.random() * 100 + "%";
+          star.style.animationDelay = Math.random() * 2 + "s";
+          starsContainer.appendChild(star);
+        }
+      }
+
+      // Initialize game
+      function initGame() {
+        createStars();
+        loadPresetCommands();
+        loadLevel(gameState.level);
+        updateUI();
+      }
+
+      function loadPresetCommands() {
+        const container = document.getElementById("presetCommands");
+        presetCommands.forEach((command) => {
+          const btn = document.createElement("button");
+          btn.className = "command-btn";
+          btn.textContent = command.text;
+          btn.onclick = () => {
+            command.action();
+            incrementCommands(command.text);
+          };
+          container.appendChild(btn);
+        });
+      }
+
+      function loadLevel(levelNum) {
+        const level = levels[levelNum - 1];
+        if (!level) return;
+
+        gameState.currentObjective = "reach_target";
+        gameState.objectiveProgress = 0;
+        gameState.ballPosition = { x: 50, y: 200 };
+        gameState.targetPosition = level.targetPos;
+        gameState.commandHistory = [];
+
+        // Reset ball position and properties
+        const ball = document.getElementById("ball");
+        ball.style.left = "50px";
+        ball.style.top = "200px";
+        ball.style.transform = "translate(0, 0)";
+        ball.style.animation = "none";
+        ball.style.boxShadow = "0 0 20px rgba(255, 255, 255, 0.4)";
+        gameState.ballProperties = {
+          color: "linear-gradient(45deg, #ff6b6b, #4ecdc4)",
+          size: 40,
+          rotation: 0,
+        };
+        updateBallAppearance();
+
+        // Update UI
+        updateCommandHistory();
+
+        // Update objective text and hint
+        document.getElementById("objectiveText").textContent = level.objective;
+        document.getElementById("hintBox").innerHTML = level.hint;
+
+        // Position target
+        const target = document.getElementById("target");
+        target.style.left = level.targetPos.x + "px";
+        target.style.top = level.targetPos.y + "px";
+
+        // Clear and add obstacles
+        clearGameElements(".obstacle");
+        level.obstacles?.forEach((obs) => {
+          const obstacle = document.createElement("div");
+          obstacle.className = "obstacle";
+          obstacle.style.left = obs.x + "px";
+          obstacle.style.top = obs.y + "px";
+          obstacle.style.width = obs.width + "px";
+          obstacle.style.height = obs.height + "px";
+          document.getElementById("gameArea").appendChild(obstacle);
+        });
+
+        // Clear and add powerups
+        clearGameElements(".powerup");
+        level.powerups?.forEach((power) => {
+          const powerup = document.createElement("div");
+          powerup.className = "powerup";
+          powerup.style.left = power.x + "px";
+          powerup.style.top = power.y + "px";
+          powerup.textContent =
+            power.type === "speed"
+              ? "⚡"
+              : power.type === "style"
+              ? "🎨"
+              : "💎";
+          powerup.onclick = () => collectPowerup(power);
+          document.getElementById("gameArea").appendChild(powerup);
+        });
+
+        updateUI();
+      }
+
+      function clearGameElements(selector) {
+        document.querySelectorAll(selector).forEach((el) => el.remove());
+      }
+
+      // Movement functions - NO LIMITS!
+      function moveRight(distance) {
+        gameState.ballPosition.x += distance;
+        updateBallPosition();
+        checkCollisions();
+      }
+
+      function moveLeft(distance) {
+        gameState.ballPosition.x -= distance;
+        updateBallPosition();
+        checkCollisions();
+      }
+
+      function moveUp(distance) {
+        gameState.ballPosition.y -= distance;
+        updateBallPosition();
+        checkCollisions();
+      }
+
+      function moveDown(distance) {
+        gameState.ballPosition.y += distance;
+        updateBallPosition();
+        checkCollisions();
+      }
+
+      function setPosition(x, y) {
+        gameState.ballPosition.x = x;
+        gameState.ballPosition.y = y;
+        updateBallPosition();
+        checkCollisions();
+      }
+
+      function updateBallPosition() {
+        const ball = document.getElementById("ball");
+        ball.style.left = gameState.ballPosition.x + "px";
+        ball.style.top = gameState.ballPosition.y + "px";
+
+        // Auto-scroll game area if ball moves out of view
+        const gameArea = document.getElementById("gameArea");
+        const ballRect = ball.getBoundingClientRect();
+        const gameAreaRect = gameArea.getBoundingClientRect();
+
+        if (
+          ballRect.right > gameAreaRect.right ||
+          ballRect.left < gameAreaRect.left ||
+          ballRect.bottom > gameAreaRect.bottom ||
+          ballRect.top < gameAreaRect.top
+        ) {
+          gameArea.scrollTo({
+            left: gameState.ballPosition.x - gameArea.clientWidth / 2,
+            top: gameState.ballPosition.y - gameArea.clientHeight / 2,
+            behavior: "smooth",
+          });
+        }
+      }
+
+      // Visual effect functions
+      function setColor(color) {
+        if (color.toLowerCase() === "rainbow") {
+          setRainbowColor();
+        } else {
+          // Accept any valid CSS color
+          gameState.ballProperties.color = color;
+          updateBallAppearance();
+        }
+      }
+
+      function setSize(size) {
+        // No size limits - can be as big as you want!
+        gameState.ballProperties.size = Math.max(1, size);
+        updateBallAppearance();
+      }
+
+      function spin() {
+        const ball = document.getElementById("ball");
+        ball.style.animation = "none";
+        setTimeout(() => {
+          ball.style.animation = "spin 1s linear infinite";
+        }, 10);
+      }
+
+      function bounce() {
+        const ball = document.getElementById("ball");
+        ball.style.animation = "none";
+        setTimeout(() => {
+          ball.style.animation = "bounce 0.6s ease-in-out infinite";
+        }, 10);
+      }
+
+      function glow() {
+        const ball = document.getElementById("ball");
+        ball.style.boxShadow =
+          "0 0 40px rgba(255, 255, 255, 0.8), 0 0 80px rgba(76, 205, 196, 0.6)";
+        setTimeout(() => {
+          ball.style.boxShadow = "0 0 20px rgba(255, 255, 255, 0.4)";
+        }, 2000);
+      }
+
+      function pulse() {
+        const ball = document.getElementById("ball");
+        ball.style.animation = "none";
+        setTimeout(() => {
+          ball.style.animation = "pulse 1s ease-in-out infinite";
+        }, 10);
+      }
+
+      function fade() {
+        const ball = document.getElementById("ball");
+        ball.style.opacity = "0.3";
+        setTimeout(() => {
+          ball.style.opacity = "1";
+        }, 1500);
+      }
+
+      function updateBallAppearance() {
+        const ball = document.getElementById("ball");
+        ball.style.background = gameState.ballProperties.color;
+        ball.style.width = gameState.ballProperties.size + "px";
+        ball.style.height = gameState.ballProperties.size + "px";
+      }
+
+      function setRainbowColor() {
+        const ball = document.getElementById("ball");
+        ball.style.background =
+          "linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)";
+        ball.style.backgroundSize = "400% 400%";
+        ball.style.animation = "rainbow 2s ease infinite";
+      }
+
+      // Custom command execution
+      function executeCustomCommand() {
+        const input = document.getElementById("customCommand");
+        const command = input.value.trim();
+        if (!command) return;
+
+        try {
+          // Safe evaluation of movement and styling commands
+          if (
+            command.match(
+              /^(moveRight|moveLeft|moveUp|moveDown|setPosition|setColor|setSize|spin|bounce|glow|pulse|fade)\s*\(/
+            )
+          ) {
+            eval(command);
+            incrementCommands(command);
+            input.value = "";
+          } else {
+            throw new Error("Invalid command");
+          }
+        } catch (error) {
+          alert("Invalid command! Check the available functions list.");
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          executeCustomCommand();
+        }
+      }
+
+      function incrementCommands(commandText) {
+        gameState.commands++;
+        if (commandText) {
+          gameState.commandHistory.push(commandText);
+          if (gameState.commandHistory.length > 5) {
+            gameState.commandHistory.shift();
+          }
+          updateCommandHistory();
+        }
+        updateUI();
+      }
+
+      function updateCommandHistory() {
+        const historyContainer = document.getElementById("commandHistory");
+        historyContainer.innerHTML = "";
+        gameState.commandHistory.forEach((cmd) => {
+          const item = document.createElement("div");
+          item.className = "command-history-item";
+          item.textContent = "> " + cmd;
+          historyContainer.appendChild(item);
+        });
+      }
+
+      // Game logic
+      function checkCollisions() {
+        // Check target collision
+        const ball = document.getElementById("ball");
+        const target = document.getElementById("target");
+
+        const ballRect = ball.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        if (
+          ballRect.right > targetRect.left &&
+          ballRect.left < targetRect.right &&
+          ballRect.bottom > targetRect.top &&
+          ballRect.top < targetRect.bottom
+        ) {
+          completeObjective();
+        }
+
+        // Check powerup collisions
+        document.querySelectorAll(".powerup").forEach((powerup) => {
+          const powerupRect = powerup.getBoundingClientRect();
+
+          if (
+            ballRect.right > powerupRect.left &&
+            ballRect.left < powerupRect.right &&
+            ballRect.bottom > powerupRect.top &&
+            ballRect.top < powerupRect.bottom
+          ) {
+            collectPowerup({
+              type:
+                powerup.textContent === "⚡"
+                  ? "speed"
+                  : powerup.textContent === "🎨"
+                  ? "style"
+                  : "bonus",
+            });
+            powerup.remove();
+          }
+        });
+      }
+
+      function collectPowerup(powerup) {
+        gameState.score += 50;
+
+        if (powerup.type === "speed") {
+          showAchievement("Speed Boost!", "Collected a speed power-up!");
+        } else if (powerup.type === "style") {
+          setColor(getRandomColor());
+          showAchievement("Stylish!", "Collected a style power-up!");
+        } else {
+          gameState.score += 100;
+          showAchievement("Bonus Points!", "Collected bonus power-up!");
+        }
+
+        updateUI();
+      }
+
+      function completeObjective() {
+        const level = levels[gameState.level - 1];
+        gameState.score += 200;
+        gameState.achievements++;
+
+        createConfetti();
+
+        if (gameState.level < levels.length) {
+          showAchievement(
+            "Level Complete!",
+            `Level ${gameState.level} completed! Moving to level ${
+              gameState.level + 1
+            }!`
+          );
+          gameState.level++;
+          setTimeout(() => loadLevel(gameState.level), 2000);
+        } else {
+          showAchievement(
+            "Game Complete!",
+            "Congratulations! You completed all levels!"
+          );
+        }
+
+        updateUI();
+      }
+
+      function createConfetti() {
+        const gameArea = document.getElementById("gameArea");
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = gameState.ballPosition.x + "px";
+          confetti.style.top = gameState.ballPosition.y + "px";
+          confetti.style.backgroundColor = getRandomColor();
+          gameArea.appendChild(confetti);
+
+          // Animate confetti
+          const angle = Math.random() * Math.PI * 2;
+          const velocity = 3 + Math.random() * 3;
+          const xVel = Math.cos(angle) * velocity;
+          const yVel = Math.sin(angle) * velocity;
+
+          let posX = gameState.ballPosition.x;
+          let posY = gameState.ballPosition.y;
+          let opacity = 1;
+          let scale = 0.5 + Math.random();
+
+          const animate = () => {
+            posX += xVel;
+            posY += yVel - 0.1; // slight upward bias
+            opacity -= 0.02;
+            scale -= 0.01;
+
+            confetti.style.left = posX + "px";
+            confetti.style.top = posY + "px";
+            confetti.style.opacity = opacity;
+            confetti.style.transform = `scale(${scale}) rotate(${posX}deg)`;
+            confetti.style.width = `${10 * scale}px`;
+            confetti.style.height = `${10 * scale}px`;
+
+            if (opacity > 0) {
+              requestAnimationFrame(animate);
+            } else {
+              confetti.remove();
+            }
+          };
+
+          setTimeout(() => {
+            requestAnimationFrame(animate);
+          }, i * 20);
+        }
+      }
+
+      function getRandomColor() {
+        const colors = [
+          "#ff0000",
+          "#00ff00",
+          "#0000ff",
+          "#ffff00",
+          "#ff00ff",
+          "#00ffff",
+          "#ff8800",
+          "#ff0088",
+          "#8800ff",
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      function showAchievement(title, desc) {
+        const popup = document.getElementById("achievementPopup");
+        document.getElementById("achievementTitle").textContent = title;
+        document.getElementById("achievementDesc").textContent = desc;
+        popup.classList.add("show");
+
+        setTimeout(() => {
+          popup.classList.remove("show");
+        }, 3000);
+      }
+
+      function updateUI() {
+        document.getElementById("score").textContent = gameState.score;
+        document.getElementById("level").textContent = gameState.level;
+        document.getElementById("commands").textContent = gameState.commands;
+        document.getElementById("achievements").textContent =
+          gameState.achievements;
+
+        // Update progress bar
+        const progressFill = document.getElementById("progressFill");
+        const currentLevel = levels[gameState.level - 1];
+        if (currentLevel) {
+          const progress = Math.min(
+            100,
+            (gameState.commands / currentLevel.requiredCommands) * 100
+          );
+          progressFill.style.width = progress + "%";
+        }
+      }
+
+      function resetGame() {
+        gameState = {
+          score: 0,
+          level: 1,
+          commands: 0,
+          achievements: 0,
+          ballPosition: { x: 50, y: 200 },
+          targetPosition: { x: 300, y: 200 },
+          obstacles: [],
+          powerups: [],
+          currentObjective: "reach_target",
+          objectiveProgress: 0,
+          ballProperties: {
+            color: "linear-gradient(45deg, #ff6b6b, #4ecdc4)",
+            size: 40,
+            rotation: 0,
+          },
+          commandHistory: [],
+        };
+
+        loadLevel(1);
+      }
+
+      // Add CSS animations that were referenced
+      const style = document.createElement("style");
+      style.textContent = `
+          @keyframes spin {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+          }
+
+          @keyframes bounce {
+              0%, 100% { transform: translateY(0) scale(1); }
+              50% { transform: translateY(-20%) scale(1.1); }
+          }
+
+          @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.2); }
+          }
+
+          @keyframes rainbow {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+          }
+      `;
+      document.head.appendChild(style);
+
+      // Initialize the game when page loads
+      window.addEventListener("DOMContentLoaded", initGame);
+    </script>
+  </body>
+</html>

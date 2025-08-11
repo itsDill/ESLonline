@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive LEGO Builder</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+        overflow-x: hidden;
+        padding: 20px;
+        user-select: none;
+      }
+
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+      }
+
+      .tagline {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+      }
+
+      .game-layout {
+        display: grid;
+        grid-template-columns: 250px 1fr 200px;
+        gap: 20px;
+        height: 600px;
+      }
+
+      .piece-selector {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow-y: auto;
+      }
+
+      .selector-title {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 1.1rem;
+      }
+
+      .piece-category {
+        margin-bottom: 20px;
+      }
+
+      .category-title {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .piece-item {
+        width: 100%;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        cursor: grab;
+        transition: all 0.3s;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+      }
+
+      .piece-item:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+      }
+
+      .piece-item:active {
+        cursor: grabbing;
+      }
+
+      .build-area {
+        background: linear-gradient(135deg, #2e8b57, #228b22);
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background-image: radial-gradient(
+            circle at 25% 25%,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 2px
+          ),
+          radial-gradient(
+            circle at 75% 75%,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 2px
+          );
+        background-size: 40px 40px;
+      }
+
+      .ground-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: rgba(139, 69, 19, 0.8);
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .controls-panel {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .panel-title {
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .control-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+        font-weight: bold;
+      }
+
+      .control-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+      }
+
+      .stats {
+        color: white;
+        font-size: 0.9rem;
+        text-align: center;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      /* LEGO Piece Styles */
+      .lego-piece {
+        position: absolute;
+        cursor: grab;
+        transition: all 0.3s ease;
+        z-index: 10;
+        transform-origin: center bottom;
+      }
+
+      .lego-piece:hover {
+        filter: brightness(1.1);
+      }
+
+      .lego-piece.dragging {
+        cursor: grabbing;
+        z-index: 100;
+        transform: rotate(5deg) scale(1.1);
+        filter: brightness(1.2) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+      }
+
+      .lego-piece.falling {
+        animation: fall 0.8s ease-in;
+      }
+
+      .lego-piece.wobble {
+        animation: wobble 1s ease-in-out;
+      }
+
+      .lego-piece.balanced {
+        animation: balance 2s ease-in-out;
+      }
+
+      /* Brick Styles */
+      .brick-1x1 {
+        width: 40px;
+        height: 30px;
+        border-radius: 4px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .brick-1x1:before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 15px;
+        height: 6px;
+        border-radius: 3px;
+        background: inherit;
+        filter: brightness(0.9);
+      }
+
+      .brick-2x1 {
+        width: 80px;
+        height: 30px;
+        border-radius: 4px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .brick-2x1:before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: 25%;
+        width: 15px;
+        height: 6px;
+        border-radius: 3px;
+        background: inherit;
+        filter: brightness(0.9);
+        box-shadow: 35px 0 0 0 currentColor;
+      }
+
+      .brick-2x2 {
+        width: 80px;
+        height: 30px;
+        border-radius: 4px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .brick-2x2:before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: 20%;
+        width: 12px;
+        height: 6px;
+        border-radius: 3px;
+        background: inherit;
+        filter: brightness(0.9);
+        box-shadow: 20px 0 0 0 currentColor, 40px 0 0 0 currentColor,
+          20px -8px 0 0 currentColor;
+      }
+
+      .minifig {
+        width: 25px;
+        height: 50px;
+        border-radius: 12px 12px 4px 4px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .minifig:before {
+        content: "😊";
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 20px;
+        background: #fdbcb4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Color Classes */
+      .red {
+        background: #dc3545;
+      }
+      .blue {
+        background: #007bff;
+      }
+      .yellow {
+        background: #ffc107;
+      }
+      .green {
+        background: #28a745;
+      }
+      .orange {
+        background: #fd7e14;
+      }
+      .purple {
+        background: #6f42c1;
+      }
+      .pink {
+        background: #e83e8c;
+      }
+      .cyan {
+        background: #17a2b8;
+      }
+
+      /* Animations */
+      @keyframes fall {
+        0% {
+          transform: translateY(-10px) rotate(0deg);
+        }
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+      }
+
+      @keyframes wobble {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-2deg);
+        }
+        75% {
+          transform: rotate(2deg);
+        }
+      }
+
+      @keyframes balance {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(-1deg);
+        }
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
+        .game-layout {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto 1fr;
+          height: auto;
+          gap: 10px;
+        }
+
+        .piece-selector {
+          max-height: 200px;
+        }
+
+        .build-area {
+          height: 400px;
+        }
+      }
+
+      .delete-zone {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 60px;
+        height: 60px;
+        background: rgba(220, 53, 69, 0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        opacity: 0;
+        transition: all 0.3s;
+        pointer-events: none;
+      }
+
+      .delete-zone.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+      <div class="header">
+        <div class="logo">🧱 Interactive LEGO Builder</div>
+        <div class="tagline">Drag & Drop • Physics • Balance • Create!</div>
+      </div>
+
+      <div class="game-layout">
+        <div class="piece-selector">
+          <div class="selector-title">🎯 Choose Pieces</div>
+
+          <div class="piece-category">
+            <div class="category-title">Basic Bricks</div>
+            <div class="piece-item red" data-type="brick-1x1" data-color="red">
+              1x1 Red
+            </div>
+            <div
+              class="piece-item blue"
+              data-type="brick-1x1"
+              data-color="blue"
+            >
+              1x1 Blue
+            </div>
+            <div
+              class="piece-item yellow"
+              data-type="brick-1x1"
+              data-color="yellow"
+            >
+              1x1 Yellow
+            </div>
+            <div
+              class="piece-item green"
+              data-type="brick-1x1"
+              data-color="green"
+            >
+              1x1 Green
+            </div>
+          </div>
+
+          <div class="piece-category">
+            <div class="category-title">Long Bricks</div>
+            <div class="piece-item red" data-type="brick-2x1" data-color="red">
+              2x1 Red
+            </div>
+            <div
+              class="piece-item blue"
+              data-type="brick-2x1"
+              data-color="blue"
+            >
+              2x1 Blue
+            </div>
+            <div
+              class="piece-item yellow"
+              data-type="brick-2x1"
+              data-color="yellow"
+            >
+              2x1 Yellow
+            </div>
+            <div
+              class="piece-item green"
+              data-type="brick-2x1"
+              data-color="green"
+            >
+              2x1 Green
+            </div>
+          </div>
+
+          <div class="piece-category">
+            <div class="category-title">Special Pieces</div>
+            <div
+              class="piece-item orange"
+              data-type="brick-2x2"
+              data-color="orange"
+            >
+              2x2 Orange
+            </div>
+            <div
+              class="piece-item purple"
+              data-type="brick-2x2"
+              data-color="purple"
+            >
+              2x2 Purple
+            </div>
+            <div class="piece-item pink" data-type="minifig" data-color="pink">
+              Minifig
+            </div>
+            <div class="piece-item cyan" data-type="minifig" data-color="cyan">
+              Minifig
+            </div>
+          </div>
+        </div>
+
+        <div class="build-area" id="buildArea">
+          <div class="ground-line"></div>
+          <div class="delete-zone" id="deleteZone">🗑️</div>
+        </div>
+
+        <div class="controls-panel">
+          <div class="panel-title">⚡ Physics</div>
+          <button class="control-btn" onclick="applyGravity()">
+            🌍 Apply Gravity
+          </button>
+          <button class="control-btn" onclick="checkBalance()">
+            ⚖️ Check Balance
+          </button>
+          <button class="control-btn" onclick="shake()">🌪️ Shake</button>
+          <button class="control-btn" onclick="clearAll()">🧹 Clear All</button>
+
+          <div class="stats">
+            <div>Pieces: <span id="pieceCount">0</span></div>
+            <div>Balanced: <span id="balanceStatus">✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let gameState = {
+        pieces: [],
+        draggedPiece: null,
+        dragOffset: { x: 0, y: 0 },
+        pieceId: 0,
+        gravity: true,
+      };
+
+      // Create stars
+      function createStars() {
+        const starsContainer = document.getElementById("stars");
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement("div");
+          star.className = "star";
+          star.style.left = Math.random() * 100 + "%";
+          star.style.top = Math.random() * 100 + "%";
+          star.style.animationDelay = Math.random() * 2 + "s";
+          starsContainer.appendChild(star);
+        }
+      }
+
+      // Piece creation from selector
+      function createPieceFromSelector(e) {
+        const selectorItem = e.target;
+        const type = selectorItem.dataset.type;
+        const color = selectorItem.dataset.color;
+
+        if (type && color) {
+          const rect = selectorItem.getBoundingClientRect();
+          const buildArea = document.getElementById("buildArea");
+          const buildRect = buildArea.getBoundingClientRect();
+
+          const piece = createPiece(type, color, 50, 50);
+          buildArea.appendChild(piece);
+
+          // Start dragging immediately
+          gameState.draggedPiece = piece;
+          const pieceRect = piece.getBoundingClientRect();
+          gameState.dragOffset = {
+            x: pieceRect.width / 2,
+            y: pieceRect.height / 2,
+          };
+          piece.classList.add("dragging");
+          document.getElementById("deleteZone").classList.add("active");
+        }
+      }
+
+      // Create a LEGO piece
+      function createPiece(type, color, x, y) {
+        const piece = document.createElement("div");
+        piece.className = `lego-piece ${type} ${color}`;
+        piece.style.left = x + "px";
+        piece.style.top = y + "px";
+        piece.dataset.id = gameState.pieceId++;
+        piece.dataset.type = type;
+        piece.dataset.color = color;
+
+        // Add event listeners
+        piece.addEventListener("mousedown", startDrag);
+        piece.addEventListener("touchstart", startDrag, { passive: false });
+
+        gameState.pieces.push({
+          id: piece.dataset.id,
+          element: piece,
+          x: x,
+          y: y,
+          type: type,
+          color: color,
+          width: type.includes("1x1")
+            ? 40
+            : type.includes("2x1")
+            ? 80
+            : type.includes("2x2")
+            ? 80
+            : 25,
+          height: type === "minifig" ? 50 : 30,
+        });
+
+        updateStats();
+        return piece;
+      }
+
+      // Drag functionality
+      function startDrag(e) {
+        e.preventDefault();
+        const piece = e.target.closest(".lego-piece");
+        if (!piece) return;
+
+        gameState.draggedPiece = piece;
+        piece.classList.add("dragging");
+        document.getElementById("deleteZone").classList.add("active");
+
+        const rect = piece.getBoundingClientRect();
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+
+        gameState.dragOffset = {
+          x: clientX - rect.left,
+          y: clientY - rect.top,
+        };
+
+        document.addEventListener("mousemove", dragPiece);
+        document.addEventListener("mouseup", stopDrag);
+        document.addEventListener("touchmove", dragPiece, { passive: false });
+        document.addEventListener("touchend", stopDrag);
+      }
+
+      function dragPiece(e) {
+        if (!gameState.draggedPiece) return;
+        e.preventDefault();
+
+        const buildArea = document.getElementById("buildArea");
+        const buildRect = buildArea.getBoundingClientRect();
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+
+        const x = clientX - buildRect.left - gameState.dragOffset.x;
+        const y = clientY - buildRect.top - gameState.dragOffset.y;
+
+        gameState.draggedPiece.style.left =
+          Math.max(
+            0,
+            Math.min(buildRect.width - gameState.draggedPiece.offsetWidth, x)
+          ) + "px";
+        gameState.draggedPiece.style.top =
+          Math.max(
+            0,
+            Math.min(buildRect.height - gameState.draggedPiece.offsetHeight, y)
+          ) + "px";
+
+        // Check if over delete zone
+        const deleteZone = document.getElementById("deleteZone");
+        const deleteRect = deleteZone.getBoundingClientRect();
+        if (
+          clientX >= deleteRect.left &&
+          clientX <= deleteRect.right &&
+          clientY >= deleteRect.top &&
+          clientY <= deleteRect.bottom
+        ) {
+          deleteZone.style.background = "rgba(220, 53, 69, 1)";
+          deleteZone.style.transform = "scale(1.2)";
+        } else {
+          deleteZone.style.background = "rgba(220, 53, 69, 0.8)";
+          deleteZone.style.transform = "scale(1.1)";
+        }
+      }
+
+      function stopDrag(e) {
+        if (!gameState.draggedPiece) return;
+
+        const piece = gameState.draggedPiece;
+        piece.classList.remove("dragging");
+        document.getElementById("deleteZone").classList.remove("active");
+
+        // Check if dropped on delete zone
+        const deleteZone = document.getElementById("deleteZone");
+        const deleteRect = deleteZone.getBoundingClientRect();
+        const clientX = e.clientX || e.changedTouches[0].clientX;
+        const clientY = e.clientY || e.changedTouches[0].clientY;
+
+        if (
+          clientX >= deleteRect.left &&
+          clientX <= deleteRect.right &&
+          clientY >= deleteRect.top &&
+          clientY <= deleteRect.bottom
+        ) {
+          deletePiece(piece);
+        } else {
+          // Apply physics
+          applyPhysicsToPiece(piece);
+          checkPieceBalance(piece);
+        }
+
+        gameState.draggedPiece = null;
+        deleteZone.style.background = "rgba(220, 53, 69, 0.8)";
+        deleteZone.style.transform = "scale(1.1)";
+
+        document.removeEventListener("mousemove", dragPiece);
+        document.removeEventListener("mouseup", stopDrag);
+        document.removeEventListener("touchmove", dragPiece);
+        document.removeEventListener("touchend", stopDrag);
+      }
+
+      function deletePiece(piece) {
+        const index = gameState.pieces.findIndex(
+          (p) => p.id === piece.dataset.id
+        );
+        if (index > -1) {
+          gameState.pieces.splice(index, 1);
+        }
+        piece.remove();
+        updateStats();
+      }
+
+      // Physics functions
+      function applyPhysicsToPiece(piece) {
+        const buildArea = document.getElementById("buildArea");
+        const pieceRect = piece.getBoundingClientRect();
+        const buildRect = buildArea.getBoundingClientRect();
+
+        const pieceData = gameState.pieces.find((p) => p.element === piece);
+        if (!pieceData) return;
+
+        const pieceLeft = parseInt(piece.style.left);
+        const pieceTop = parseInt(piece.style.top);
+        const pieceWidth = pieceData.width;
+        const pieceHeight = pieceData.height;
+        const groundLevel = buildArea.offsetHeight - pieceHeight - 3; // Account for ground line
+
+        // Find the highest Y where the piece can sit (ground or on top of another piece)
+        let maxY = groundLevel;
+
+        gameState.pieces.forEach((other) => {
+          if (other.element === piece) return;
+
+          const otherRect = other.element.getBoundingClientRect();
+          const otherLeft = parseInt(other.element.style.left);
+          const otherTop = parseInt(other.element.style.top);
+          const otherWidth = other.width;
+          const otherHeight = other.height;
+
+          // Check horizontal overlap - more precise collision detection
+          const horizontalOverlap =
+            pieceLeft + pieceWidth > otherLeft &&
+            pieceLeft < otherLeft + otherWidth;
+
+          const verticalOverlap =
+            pieceTop + pieceHeight > otherTop &&
+            pieceTop < otherTop + otherHeight;
+
+          // If we're above the other piece and overlapping horizontally
+          if (horizontalOverlap && pieceTop < otherTop) {
+            const possibleY = otherTop - pieceHeight;
+            if (possibleY < maxY) {
+              maxY = possibleY;
+            }
+          }
+        });
+
+        // Animate falling
+        const currentTop = parseInt(piece.style.top);
+        if (currentTop < maxY) {
+          piece.classList.add("falling");
+          piece.style.top = maxY + "px";
+          setTimeout(() => {
+            piece.classList.remove("falling");
+          }, 800);
+
+          // Update piece data in gameState
+          pieceData.y = maxY;
+        } else if (currentTop > maxY) {
+          // Snap to stack if already below
+          piece.style.top = maxY + "px";
+          pieceData.y = maxY;
+        }
+      }
+
+      function checkPieceBalance(piece) {
+        const rect = piece.getBoundingClientRect();
+        const buildRect = document
+          .getElementById("buildArea")
+          .getBoundingClientRect();
+
+        // Check if piece is near the edge
+        const leftEdgeDistance = rect.left - buildRect.left;
+        const rightEdgeDistance = buildRect.right - rect.right;
+
+        if (leftEdgeDistance < 20 || rightEdgeDistance < 20) {
+          piece.classList.add("wobble");
+          setTimeout(() => {
+            piece.classList.remove("wobble");
+          }, 1000);
+          return false;
+        } else {
+          piece.classList.add("balanced");
+          setTimeout(() => {
+            piece.classList.remove("balanced");
+          }, 2000);
+          return true;
+        }
+      }
+
+      // Control functions
+      function applyGravity() {
+        // Sort pieces by their current Y position (top to bottom)
+        const sortedPieces = [...gameState.pieces].sort((a, b) => {
+          return parseInt(a.element.style.top) - parseInt(b.element.style.top);
+        });
+
+        sortedPieces.forEach((pieceData) => {
+          applyPhysicsToPiece(pieceData.element);
+        });
+      }
+
+      function checkBalance() {
+        let allBalanced = true;
+        gameState.pieces.forEach((pieceData) => {
+          const balanced = checkPieceBalance(pieceData.element);
+          if (!balanced) allBalanced = false;
+        });
+        updateBalanceStatus(allBalanced);
+      }
+
+      function shake() {
+        const buildArea = document.getElementById("buildArea");
+        buildArea.style.animation = "wobble 1s ease-in-out";
+
+        gameState.pieces.forEach((pieceData, index) => {
+          setTimeout(() => {
+            pieceData.element.classList.add("wobble");
+            const randomX = Math.random() * 20 - 10;
+            const currentLeft = parseInt(pieceData.element.style.left);
+            pieceData.element.style.left =
+              Math.max(0, currentLeft + randomX) + "px";
+
+            setTimeout(() => {
+              pieceData.element.classList.remove("wobble");
+              applyPhysicsToPiece(pieceData.element);
+            }, 1000);
+          }, index * 100);
+        });
+
+        setTimeout(() => {
+          buildArea.style.animation = "";
+        }, 1000);
+      }
+
+      function clearAll() {
+        gameState.pieces.forEach((pieceData) => {
+          pieceData.element.remove();
+        });
+        gameState.pieces = [];
+        updateStats();
+      }
+
+      function updateStats() {
+        document.getElementById("pieceCount").textContent =
+          gameState.pieces.length;
+        updateBalanceStatus(gameState.pieces.length > 0);
+      }
+
+      function updateBalanceStatus(isBalanced) {
+        let balanced;
+        if (gameState.pieces.length === 0) {
+          balanced = "—";
+        } else if (isBalanced) {
+          balanced = "✓";
+        } else {
+          balanced = "✗";
+        }
+        document.getElementById("balanceStatus").textContent = balanced;
+      }
+
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        createStars();
+
+        // Add click listeners to piece selector items
+        document.querySelectorAll(".piece-item").forEach((item) => {
+          item.addEventListener("click", createPieceFromSelector);
+        });
+
+        updateStats();
+      });
+
+      // Prevent context menu on long press for mobile
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+    </script>
+  </body>
+</html>
