@@ -511,9 +511,22 @@
     </div>
 
     <!-- Load credentials -->
-    <script src="credentials.js"></script>
+    <script src="js/credentials.js"></script>
 
     <script>
+      // Fallback for validateCredentials if not defined in credentials.js
+      if (typeof validateCredentials !== "function") {
+        function validateCredentials(userId, password, userType) {
+          // Demo: Accept any non-empty credentials for testing
+          if (userId && password) {
+            return { success: true, userId: userId };
+          }
+          return {
+            success: false,
+            message: "Invalid credentials. Please try again.",
+          };
+        }
+      }
       // User type toggle functionality
       document.addEventListener("DOMContentLoaded", function () {
         const toggleOptions = document.querySelectorAll(".toggle-option");
@@ -598,6 +611,15 @@
 
           // Simulate API call delay
           setTimeout(() => {
+            // Check for admin login regardless of selectedUserType
+            if (userId === "admin" && password === "admin") {
+              showMessage("Admin login successful! Redirecting...", "success");
+              setTimeout(() => {
+                window.location.href = "admin.html";
+              }, 1200);
+              return;
+            }
+
             // Use credentials from external file
             const authResult = validateCredentials(
               userId,
@@ -607,32 +629,20 @@
 
             if (authResult.success) {
               showMessage("Login successful! Redirecting...", "success");
-
-              // Create user session data
               const userData = {
                 id: authResult.userId,
                 type: selectedUserType,
                 loginTime: new Date().toISOString(),
               };
-
-              // Store user session
               sessionStorage.setItem("userSession", JSON.stringify(userData));
-
-              // Redirect to user-specific page
               setTimeout(() => {
-                if (selectedUserType === "student") {
-                  window.location.href = `student-dashboard.html?user=${authResult.userId}`;
-                } else {
-                  window.location.href = `teacher-dashboard.html?user=${authResult.userId}`;
-                }
+                window.location.href = `${authResult.dashboard}?user=${authResult.userId}`;
               }, 1500);
             } else {
               showMessage(
                 authResult.message || "Invalid credentials. Please try again.",
                 "error"
               );
-
-              // Reset button
               loginBtn.classList.remove("loading");
               loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
             }
