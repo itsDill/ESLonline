@@ -12,7 +12,6 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-9G9RD6BHLN");
     </script>
     <meta charset="UTF-8" />
@@ -41,1342 +40,1706 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="css/header.css" />
-    
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8fafc;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      /* Header and Navigation */
+      header {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: background-color 0.3s;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #4361ee;
+      }
+
+      .logo-image {
+        width: 40px;
+        height: 40px;
+        margin-right: 0.5rem;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-item {
+        position: relative;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s;
+      }
+
+      .nav-link:hover {
+        color: #4361ee;
+        background: rgba(67, 97, 238, 0.1);
+      }
+
+      .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #fff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        min-width: 200px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s;
+        z-index: 1001;
+      }
+
+      .nav-item:hover .dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: #333;
+        transition: background 0.2s;
+        border-radius: 6px;
+        margin: 0.25rem;
+      }
+
+      .dropdown-item:hover {
+        background: rgba(67, 97, 238, 0.1);
+        color: #4361ee;
+      }
+
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .control-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: #333;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s;
+      }
+
+      .control-btn:hover {
+        color: #4361ee;
+        background: rgba(67, 97, 238, 0.1);
+      }
+
+      .mobile-toggle {
+        display: none;
+      }
+
+      /* Dark Mode */
+      body.dark-mode {
+        background-color: #1a1a2e;
+        color: #eee;
+      }
+
+      body.dark-mode header {
+        background: #16213e;
+      }
+
+      body.dark-mode .nav-link,
+      body.dark-mode .control-btn {
+        color: #eee;
+      }
+
+      body.dark-mode .dropdown {
+        background: #16213e;
+      }
+
+      body.dark-mode .dropdown-item {
+        color: #eee;
+      }
+
+      /* Hero Section */
+      .hero {
+        position: relative;
+        min-height: 340px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: none;
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.92;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 2rem 1.5rem;
+        color: #fff;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-title {
+        font-family: "Poppins", sans-serif;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: 0.01em;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        opacity: 0.95;
+        margin-bottom: 0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #f3f4f6;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      }
+
+      .floating-element {
+        position: absolute;
+        font-size: 3rem;
+        opacity: 0.1;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .element-1 {
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .element-2 {
+        top: 30%;
+        right: 15%;
+        animation-delay: 2s;
+      }
+      .element-3 {
+        bottom: 30%;
+        left: 20%;
+        animation-delay: 4s;
+      }
+      .element-4 {
+        bottom: 20%;
+        right: 10%;
+        animation-delay: 1s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+      }
+
+      /* Section Styles */
+      .section {
+        padding: 4rem 0;
+        background: white;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #4361ee;
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+      }
+
+      /* Overview Content */
+      .overview-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+        align-items: start;
+      }
+
+      .overview-text p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+      }
+
+      .info-card {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+        box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+      }
+
+      .info-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+
+      .overview-image img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Sections Grid */
+      .sections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .section-card {
+        background: white;
+        padding: 2.5rem 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+        border: 1px solid #f1f5f9;
+      }
+
+      .section-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .section-icon {
+        font-size: 3rem;
+        color: #667eea;
+        margin-bottom: 1.5rem;
+        display: block;
+      }
+
+      .section-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .btn-outline {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        border: 2px solid #667eea;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: all 0.3s;
+      }
+
+      .btn-outline:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Resources Cards */
+      .resources-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .resource-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .resource-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .resource-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+      }
+
+      .badge-free {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+      }
+
+      .badge-premium {
+        background: linear-gradient(135deg, #ee0979, #ff6a00);
+      }
+
+      .resource-content {
+        padding: 2rem;
+      }
+
+      .resource-content h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .resource-content p {
+        color: #666;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+
+      /* Calculator Section */
+      .calculator-section {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        padding: 3rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 3rem;
+      }
+
+      .calculator-section h3 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .calculator-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .form-group {
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1rem 3rem;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 1rem;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .calc-result {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+
+      .result-score {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #11998e;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Accordion */
+      .tips-accordion {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .accordion-item {
+        background: white;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        cursor: pointer;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transition: all 0.3s;
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+
+      .accordion-header h3 {
+        font-size: 1.2rem;
+        margin: 0;
+      }
+
+      .accordion-icon {
+        transition: transform 0.3s;
+      }
+
+      .accordion-icon.active {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s;
+      }
+
+      .accordion-inner {
+        padding: 2rem;
+        background: #f8fafc;
+      }
+
+      .accordion-inner p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+      }
+
+      /* Featured Products */
+      .featured-products {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        padding: 4rem 0;
+        margin-top: 2rem;
+      }
+
+      .product-slider {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .product-content {
+        padding: 2rem;
+      }
+
+      .product-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #11998e;
+        margin-bottom: 1rem;
+      }
+
+      .product-description {
+        color: #666;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .btn-shop {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        color: white;
+        text-decoration: none;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s;
+      }
+
+      .btn-shop:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
+      }
+
+      /* Footer */
+      footer {
+        background: #1a202c;
+        color: #e2e8f0;
+        padding: 3rem 0 1rem;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-column h3 {
+        color: #667eea;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-links a {
+        color: #cbd5e0;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-links a:hover {
+        color: #667eea;
+      }
+
+      .social-icons {
+        margin-top: 1rem;
+      }
+
+      .social-icons a {
+        color: #667eea;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        transition: color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: #11998e;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #2d3748;
+        color: #a0aec0;
+      }
+
+      /* Hero Section */
+      .hero {
+        position: relative;
+        min-height: 340px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: none;
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.92;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 2rem 1.5rem;
+        color: #fff;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-title {
+        font-family: "Poppins", sans-serif;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: 0.01em;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        opacity: 0.95;
+        margin-bottom: 0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #f3f4f6;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: white;
+          flex-direction: column;
+          padding: 1rem;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links.show {
+          display: flex;
+        }
+
+        .mobile-toggle {
+          display: block;
+        }
+
+        .dropdown {
+          position: static;
+          opacity: 1;
+          visibility: visible;
+          transform: none;
+          box-shadow: none;
+          margin-left: 1rem;
+        }
+
+        .resources-hero h1 {
+          font-size: 2rem;
+        }
+
+        .overview-content {
+          grid-template-columns: 1fr;
+        }
+
+        .calculator-form {
+          grid-template-columns: 1fr;
+        }
+
+        .newsletter-form input {
+          min-width: 250px;
+        }
+
+        .section {
+          padding: 2rem 0;
+          margin-bottom: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 0.5rem;
+        }
+
+        .resources-hero {
+          padding: 2rem 0;
+        }
+
+        .section-title {
+          font-size: 1.8rem;
+        }
+
+        .newsletter-form {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .newsletter-form input {
+          min-width: 250px;
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Dark mode styles */
+      body.dark-mode .section,
+      body.dark-mode .resource-card,
+      body.dark-mode .section-card,
+      body.dark-mode .test-card,
+      body.dark-mode .product-card,
+      body.dark-mode .accordion-item {
+        background: #2d3748;
+        color: #e2e8f0;
+      }
+
+      body.dark-mode .section-title,
+      body.dark-mode .section-card h3,
+      body.dark-mode .resource-content h3,
+      body.dark-mode .product-title {
+        color: #667eea;
+      }
+
+      body.dark-mode .calc-result,
+      body.dark-mode .accordion-inner {
+        background: #2d3748;
+        color: #e2e8f0;
+      }
+
+      body.dark-mode .form-control {
+        background: #4a5568;
+        border-color: #718096;
+        color: #e2e8f0;
+      }
+    </style>
   </head>
   <body>
-        <!-- Header & Navigation -->
-        <header>
-            <div class="container">
-              <nav class="navbar">
-                <a href="index.html" class="logo-container">
-                  <img
-                    src="images/Online.png"
-                    alt="ESL Fun Online Logo"
-                    class="logo-image"
-                  />
-                  <span class="logo-text">ESL Fun Online</span>
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="index.html" class="logo-container">
+            <img
+              src="https://via.placeholder.com/40x40/667eea/ffffff?text=ESL"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
                 </a>
-      
-                <ul class="nav-links" id="navLinks">
-                  <li class="nav-item">
-                    <a href="index.html" class="nav-link">
-                      <i class="fas fa-home"></i>
-                      Home
-                    </a>
-                  </li>
-      
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-book"></i>
-                      English
-                      <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <div class="dropdown">
-                      <a href="grammar.html" class="dropdown-item">
-                        <i class="fas fa-spell-check"></i>
-                        Grammar Guides
-                      </a>
-                      <a href="vocabguide.html" class="dropdown-item">
-                        <i class="fas fa-book-open"></i>
-                        Vocabulary Building
-                      </a>
-                      <a href="ielts.html" class="dropdown-item">
-                        <i class="fas fa-certificate"></i>
-                        IELTS Preparation
-                      </a>
-                      <a href="toeic.html" class="dropdown-item">
-                        <i class="fas fa-briefcase"></i>
-                        TOEIC Preparation
-                      </a>
-                      <a href="eiken.html" class="dropdown-item">
-                        <i class="fas fa-graduation-cap"></i>
-                        EIKEN Preparation
-                      </a>
-                    </div>
-                  </li>
-      
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-code"></i>
-                      Coding
-                      <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <div class="dropdown">
-                      <a href="coding/web-development.html" class="dropdown-it
-                        <i class="fab fa-html5"></i>
-                        Web Development
-                      </a>
-                      <a href="javascript.html" class="dropdown-item">
-                        <i class="fab fa-js"></i>
-                        JavaScript
-                      </a>
-                      <a href="python.html" class="dropdown-item">
-                        <i class="fab fa-python"></i>
-                        Python
-                      </a>
-                      <a href="coding/nodejs.html" class="dropdown-item">
-                        <i class="fab fa-robot"></i>
-                        Ai
-                      </a>
-                      <a href="coding/databases.html" class="dropdown-item">
-                        <i class="fas fa-database"></i>
-                        SQL
-                      </a>
-                      <a href="coding/projects.html" class="dropdown-item">
-                        <i class="fas fa-laptop-code"></i>
-                        Tech
-                      </a>
-                    </div>
-                  </li>
-      
-                  <li class="nav-item">
-                    <a href="games.html" class="nav-link">
-                      <i class="fas fa-dice"></i>
-                      Games
-                      <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <div class="dropdown">
-                      <a href="games.html" class="dropdown-item">
-                        <i class="fas fa-spell-check"></i>
-                        English Games
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="fas fa-code"></i>
-                        Coding Games
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="fas fa-trophy"></i>
-                        Leaderboards
-                      </a>
-                    </div>
-                  </li>
-      
-                  <li class="nav-item">
-                    <a href="store.html" class="nav-link">
-                      <i class="fas fa-shopping-cart"></i>
-                      Store
-                    </a>
-                  </li>
-      
-                  <li class="nav-item">
-                    <a href="lessons.html" class="nav-link">
-                      <i class="fas fa-book-open"></i>
-                      Lessons
-                    </a>
-                  </li>
-                </ul>
-      
-                <div class="controls">
-                  <button
-                    class="control-btn theme-toggle"
-                    id="themeToggle"
-                    aria-label="Toggle dark mode"
-                  >
-                    <i class="fas fa-moon"></i>
-                  </button>
-      
-                  <button
-                    class="control-btn mobile-toggle"
-                    id="mobileToggle"
-                    aria-label="Toggle mobile menu"
-                  >
-                    <i class="fas fa-bars"></i>
-                  </button>
-                </div>
-              </nav>
-            </div>
-          </header>
+                <a href="vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+                <a href="ielts.html" class="dropdown-item">
+                  <i class="fas fa-certificate"></i>
+                  IELTS Preparation
+                </a>
+                <a href="toeic.html" class="dropdown-item">
+                  <i class="fas fa-briefcase"></i>
+                  TOEIC Preparation
+                </a>
+                <a href="eiken.html" class="dropdown-item">
+                  <i class="fas fa-graduation-cap"></i>
+                  EIKEN Preparation
+                </a>
+              </div>
+            </li>
 
-    <main>
-      <!-- Hero Section -->
-      <section class="resources-hero">
-        <div class="container">
-          <div class="resources-hero-content">
-            <h1>Free ESL Resources</h1>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-code"></i>
+                Coding
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="coding/web-development.html" class="dropdown-item">
+                  <i class="fab fa-html5"></i>
+                  Web Development
+                </a>
+                <a href="javascript.html" class="dropdown-item">
+                  <i class="fab fa-js"></i>
+                  JavaScript
+                </a>
+                <a href="python.html" class="dropdown-item">
+                  <i class="fab fa-python"></i>
+                  Python
+                </a>
+                <a href="coding/nodejs.html" class="dropdown-item">
+                  <i class="fas fa-robot"></i>
+                  AI
+                </a>
+                <a href="coding/databases.html" class="dropdown-item">
+                  <i class="fas fa-database"></i>
+                  SQL
+                </a>
+                <a href="coding/projects.html" class="dropdown-item">
+                  <i class="fas fa-laptop-code"></i>
+                  Tech
+                </a>
+              </div>
+            </li>
+
+            <li class="nav-item">
+              <a href="games.html" class="nav-link">
+                <i class="fas fa-dice"></i>
+                Games
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="games.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  English Games
+                </a>
+                <a href="#" class="dropdown-item">
+                  <i class="fas fa-code"></i>Coding Games
+                </a>
+              </div>
+            </li>
+
+            <li class="nav-item">
+              <a href="shop.html" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                Shop
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="contact.html" class="nav-link">
+                <i class="fas fa-envelope"></i>
+                Contact
+              </a>
+            </li>
+          </ul>
+
+          <div class="controls">
+            <button class="control-btn" id="fontSizeToggle">
+              <i class="fas fa-text-height"></i>
+            </button>
+            <button class="control-btn" id="darkModeToggle">
+              <i class="fas fa-moon"></i>
+            </button>
+            <button class="control-btn mobile-toggle" id="mobileToggle">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <img src="images/11.png" alt="" class="hero-bg" />
+      <div class="hero-content">
+        <h1 class="hero-title">IELTS Preparation Hub</h1>
+        <p class="hero-subtitle">
+          Unlock your IELTS success with expert strategies, practice tests, and
+          vocabulary resources. Everything you need for band 9!
+        </p>
+      </div>
+    </section>
+
+    <div class="floating-element element-1">📚</div>
+    <div class="floating-element element-2">✏️</div>
+    <div class="floating-element element-3">🎯</div>
+    <div class="floating-element element-4">🏆</div>
+    </section>
+
+    <div class="container">
+      <!-- Overview Section -->
+      <section class="section">
+        <h2 class="section-title">IELTS Overview</h2>
+        <div class="overview-content">
+          <div class="overview-text">
             <p>
-              Browse our collection of high-quality resources for English
-              language learners and teachers. Find games, quizzes, worksheets,
-              guides, and more to enhance your English learning journey.
+              The International English Language Testing System (IELTS) is one
+              of the world's most popular English language proficiency tests.
+              It's designed to assess the language ability of candidates who
+              need to study or work where English is used as the language of
+              communication.
             </p>
-          </div>
-          <div class="floating-element element-1">
-            <i class="fas fa-book"></i>
-          </div>
-          <div class="floating-element element-2">
-            <i class="fas fa-pencil-alt"></i>
-          </div>
-          <div class="floating-element element-3">
-            <i class="fas fa-gamepad"></i>
-          </div>
-          <div class="floating-element element-4">
-            <i class="fas fa-file-alt"></i>
-          </div>
-        </div>
-      </section>
 
-      <section class="section" id="overview">
-        <div class="container">
-          <h2 class="section-title">IELTS Exam Overview</h2>
-          <div class="overview-content">
-            <div class="overview-text">
-              <p>
-                The International English Language Testing System (IELTS) is
-                designed to assess the language ability of people who want to
-                study or work where English is the language of communication.
-              </p>
-              <p>
-                There are two versions of the test: IELTS Academic and IELTS
-                General Training. The test has four components: Listening,
-                Reading, Writing, and Speaking.
-              </p>
-              <div class="info-card">
-                <h3>Exam Format</h3>
-                <p>
-                  The total test time is 2 hours and 45 minutes. The Speaking
-                  test may be conducted on the same day or up to a week before
-                  or after the other tests.
-                </p>
-              </div>
-            </div>
-            <div class="overview-image">
-              <img src="images/ielts-overview.jpg" alt="IELTS Exam Overview" />
-            </div>
-          </div>
-          <div class="sections-grid">
-            <div class="section-card">
-              <i class="fas fa-headphones section-icon"></i>
-              <h3>Listening</h3>
-              <p>30 minutes + 10 minutes transfer time</p>
-              <a href="listening.html" class="btn-outline">Learn More</a>
-            </div>
-            <div class="section-card">
-              <i class="fas fa-book-open section-icon"></i>
-              <h3>Reading</h3>
-              <p>60 minutes</p>
-              <a href="reading.html" class="btn-outline">Learn More</a>
-            </div>
-            <div class="section-card">
-              <i class="fas fa-pen-fancy section-icon"></i>
-              <h3>Writing</h3>
-              <p>60 minutes</p>
-              <a href="writing.html" class="btn-outline">Learn More</a>
-            </div>
-            <div class="section-card">
-              <i class="fas fa-comments section-icon"></i>
-              <h3>Speaking</h3>
-              <p>11-14 minutes</p>
-              <a href="speaking.html" class="btn-outline">Learn More</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section resources-section" id="resources">
-        <div class="container">
-          <h2 class="section-title">Study Resources</h2>
-          <div class="resources-cards">
-            <div class="resource-card">
-              <img
-                src="images/vocab-resource.jpg"
-                alt="Vocabulary Resources"
-                class="resource-image"
-              />
-              <span class="badge badge-free">Free</span>
-              <div class="resource-content">
-                <h3>Essential Vocabulary</h3>
-                <p>
-                  Build your IELTS vocabulary with topic-specific word lists,
-                  practice exercises, and flashcards.
-                </p>
-                <a href="vocabulary.html" class="btn-outline"
-                  >Access Resources</a
-                >
-              </div>
-            </div>
-            <div class="resource-card">
-              <img
-                src="images/writing-resource.jpg"
-                alt="Writing Resources"
-                class="resource-image"
-              />
-              <span class="badge badge-premium">Premium</span>
-              <div class="resource-content">
-                <h3>Writing Mastery</h3>
-                <p>
-                  Learn how to craft high-scoring essays with templates, sample
-                  answers, and detailed feedback.
-                </p>
-                <a href="writing-resources.html" class="btn-outline"
-                  >Access Resources</a
-                >
-              </div>
-            </div>
-            <div class="resource-card">
-              <img
-                src="images/speaking-resource.jpg"
-                alt="Speaking Resources"
-                class="resource-image"
-              />
-              <span class="badge badge-free">Free</span>
-              <div class="resource-content">
-                <h3>Speaking Practice</h3>
-                <p>
-                  Prepare for your speaking test with practice questions, model
-                  answers, and pronunciation guides.
-                </p>
-                <a href="speaking-resources.html" class="btn-outline"
-                  >Access Resources</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section practice-tests" id="practice">
-        <div class="container">
-          <h2 class="section-title">Practice Tests</h2>
-          <div class="test-grid">
-            <div class="test-card">
-              <i class="fas fa-headphones test-icon"></i>
-              <h3>Listening Tests</h3>
-              <p>
-                Practice with authentic IELTS-style listening questions and
-                improve your comprehension skills.
-              </p>
-              <a href="listening-tests.html" class="btn-outline">Take a Test</a>
-            </div>
-            <div class="test-card">
-              <i class="fas fa-book-open test-icon"></i>
-              <h3>Reading Tests</h3>
-              <p>
-                Test your reading skills with IELTS-style passages and questions
-                for both Academic and General Training.
-              </p>
-              <a href="reading-tests.html" class="btn-outline">Take a Test</a>
-            </div>
-            <div class="test-card">
-              <i class="fas fa-pen-fancy test-icon"></i>
-              <h3>Writing Tasks</h3>
-              <p>
-                Practice writing tasks with detailed guidelines, sample answers,
-                and scoring criteria.
-              </p>
-              <a href="writing-tasks.html" class="btn-outline">Start Writing</a>
-            </div>
-          </div>
-          <div class="calculator-section">
-            <h3>IELTS Score Calculator</h3>
             <p>
-              Estimate your overall IELTS band score based on your performance
-              in each section.
+              IELTS is recognized by more than 10,000 organizations worldwide,
+              including schools, universities, employers, immigration
+              authorities and professional bodies. It's the world's proven
+              English test.
             </p>
-            <div class="calculator-form">
-              <div class="form-group">
-                <label for="listening-score">Listening Score</label>
-                <select id="listening-score" class="form-control">
-                  <option value="0">Select score</option>
-                  <option value="9">9.0</option>
-                  <option value="8.5">8.5</option>
-                  <option value="8">8.0</option>
-                  <option value="7.5">7.5</option>
-                  <option value="7">7.0</option>
-                  <option value="6.5">6.5</option>
-                  <option value="6">6.0</option>
-                  <option value="5.5">5.5</option>
-                  <option value="5">5.0</option>
-                  <option value="4.5">4.5</option>
-                  <option value="4">4.0</option>
-                  <option value="3.5">3.5</option>
-                  <option value="3">3.0</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="reading-score">Reading Score</label>
-                <select id="reading-score" class="form-control">
-                  <option value="0">Select score</option>
-                  <option value="9">9.0</option>
-                  <option value="8.5">8.5</option>
-                  <option value="8">8.0</option>
-                  <option value="7.5">7.5</option>
-                  <option value="7">7.0</option>
-                  <option value="6.5">6.5</option>
-                  <option value="6">6.0</option>
-                  <option value="5.5">5.5</option>
-                  <option value="5">5.0</option>
-                  <option value="4.5">4.5</option>
-                  <option value="4">4.0</option>
-                  <option value="3.5">3.5</option>
-                  <option value="3">3.0</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="writing-score">Writing Score</label>
-                <select id="writing-score" class="form-control">
-                  <option value="0">Select score</option>
-                  <option value="9">9.0</option>
-                  <option value="8.5">8.5</option>
-                  <option value="8">8.0</option>
-                  <option value="7.5">7.5</option>
-                  <option value="7">7.0</option>
-                  <option value="6.5">6.5</option>
-                  <option value="6">6.0</option>
-                  <option value="5.5">5.5</option>
-                  <option value="5">5.0</option>
-                  <option value="4.5">4.5</option>
-                  <option value="4">4.0</option>
-                  <option value="3.5">3.5</option>
-                  <option value="3">3.0</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="speaking-score">Speaking Score</label>
-                <select id="speaking-score" class="form-control">
-                  <option value="0">Select score</option>
-                  <option value="9">9.0</option>
-                  <option value="8.5">8.5</option>
-                  <option value="8">8.0</option>
-                  <option value="7.5">7.5</option>
-                  <option value="7">7.0</option>
-                  <option value="6.5">6.5</option>
-                  <option value="6">6.0</option>
-                  <option value="5.5">5.5</option>
-                  <option value="5">5.0</option>
-                  <option value="4.5">4.5</option>
-                  <option value="4">4.0</option>
-                  <option value="3.5">3.5</option>
-                  <option value="3">3.0</option>
-                </select>
-              </div>
+
+            <div class="info-card">
+              <h3>Quick Facts</h3>
+              <p>
+                • Test Duration: 2 hours 45 minutes<br />
+                • Four Skills: Listening, Reading, Writing, Speaking<br />
+                • Band Scores: 0-9 scale<br />
+                • Valid for: 2 years
+              </p>
             </div>
-            <button id="calculate-btn" class="btn">Calculate Score</button>
-            <div id="calc-result" class="calc-result">
-              <div id="result-score" class="result-score">0.0</div>
-              <p id="result-message">Your estimated overall band score.</p>
+          </div>
+
+          <div class="overview-image">
+            <img
+              src="https://via.placeholder.com/400x300/667eea/ffffff?text=IELTS+Overview"
+              alt="IELTS Test Overview"
+            />
+          </div>
+        </div>
+
+        <div class="sections-grid">
+          <div class="section-card">
+            <i class="fas fa-headphones section-icon"></i>
+            <h3>Listening</h3>
+            <p>
+              30 minutes with 40 questions testing your ability to understand
+              spoken English in various contexts.
+            </p>
+            <a href="#listening" class="btn-outline">Learn More</a>
+          </div>
+
+          <div class="section-card">
+            <i class="fas fa-book-open section-icon"></i>
+            <h3>Reading</h3>
+            <p>
+              60 minutes with 40 questions based on three reading passages of
+              increasing difficulty.
+            </p>
+            <a href="#reading" class="btn-outline">Learn More</a>
+          </div>
+
+          <div class="section-card">
+            <i class="fas fa-pen section-icon"></i>
+            <h3>Writing</h3>
+            <p>
+              60 minutes with two writing tasks: Task 1 (150 words) and Task 2
+              (250 words).
+            </p>
+            <a href="#writing" class="btn-outline">Learn More</a>
+          </div>
+
+          <div class="section-card">
+            <i class="fas fa-comments section-icon"></i>
+            <h3>Speaking</h3>
+            <p>
+              11-14 minute face-to-face conversation with a certified IELTS
+              examiner.
+            </p>
+            <a href="#speaking" class="btn-outline">Learn More</a>
+          </div>
+        </div>
+      </section>
+
+
+        <!-- Score Calculator -->
+        <div class="calculator-section">
+          <h3>IELTS Band Score Calculator</h3>
+          <p>
+            Calculate your overall IELTS band score based on your individual
+            section scores
+          </p>
+
+          <div class="calculator-form">
+            <div class="form-group">
+              <label for="listening-score">Listening Score</label>
+              <select class="form-control" id="listening-score">
+                <option value="">Select Score</option>
+                <option value="9">9.0</option>
+                <option value="8.5">8.5</option>
+                <option value="8">8.0</option>
+                <option value="7.5">7.5</option>
+                <option value="7">7.0</option>
+                <option value="6.5">6.5</option>
+                <option value="6">6.0</option>
+                <option value="5.5">5.5</option>
+                <option value="5">5.0</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4.0</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reading-score">Reading Score</label>
+              <select class="form-control" id="reading-score">
+                <option value="">Select Score</option>
+                <option value="9">9.0</option>
+                <option value="8.5">8.5</option>
+                <option value="8">8.0</option>
+                <option value="7.5">7.5</option>
+                <option value="7">7.0</option>
+                <option value="6.5">6.5</option>
+                <option value="6">6.0</option>
+                <option value="5.5">5.5</option>
+                <option value="5">5.0</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4.0</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="writing-score">Writing Score</label>
+              <select class="form-control" id="writing-score">
+                <option value="">Select Score</option>
+                <option value="9">9.0</option>
+                <option value="8.5">8.5</option>
+                <option value="8">8.0</option>
+                <option value="7.5">7.5</option>
+                <option value="7">7.0</option>
+                <option value="6.5">6.5</option>
+                <option value="6">6.0</option>
+                <option value="5.5">5.5</option>
+                <option value="5">5.0</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4.0</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="speaking-score">Speaking Score</label>
+              <select class="form-control" id="speaking-score">
+                <option value="">Select Score</option>
+                <option value="9">9.0</option>
+                <option value="8.5">8.5</option>
+                <option value="8">8.0</option>
+                <option value="7.5">7.5</option>
+                <option value="7">7.0</option>
+                <option value="6.5">6.5</option>
+                <option value="6">6.0</option>
+                <option value="5.5">5.5</option>
+                <option value="5">5.0</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4.0</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn" onclick="calculateIELTSScore()">
+            Calculate Overall Score
+          </button>
+
+          <div class="calc-result" id="scoreResult">
+            <div class="result-score" id="overallScore">0.0</div>
+            <p>Your Overall IELTS Band Score</p>
+            <div id="scoreInterpretation"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Study Resources -->
+      <section class="section" id="resources">
+        <h2 class="section-title">Study Resources</h2>
+        <div class="resources-cards">
+          <div class="resource-card">
+            <div
+              class="resource-image"
+              style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              📖
+            </div>
+            <div class="badge badge-free">FREE</div>
+            <div class="resource-content">
+              <h3>IELTS Vocabulary Builder</h3>
+              <p>
+                Comprehensive vocabulary lists organized by topics commonly
+                tested in IELTS exams.
+              </p>
+              <a href="#" class="btn-outline">Access Resource</a>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div
+              class="resource-image"
+              style="
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              📝
+            </div>
+            <div class="badge badge-premium">PREMIUM</div>
+            <div class="resource-content">
+              <h3>Writing Task Templates</h3>
+              <p>
+                Proven templates and structures for both Task 1 and Task 2
+                writing sections.
+              </p>
+              <a href="#" class="btn-outline">View Templates</a>
+            </div>
+          </div>
+
+          <div class="resource-card">
+            <div
+              class="resource-image"
+              style="
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              🎧
+            </div>
+            <div class="badge badge-free">FREE</div>
+            <div class="resource-content">
+              <h3>Listening Practice</h3>
+              <p>
+                Audio materials with transcripts covering all types of IELTS
+                listening tasks.
+              </p>
+              <a href="#" class="btn-outline">Start Listening</a>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- Tips & Strategies -->
       <section class="section" id="tips">
-        <div class="container">
-          <h2 class="section-title">Expert Tips & Strategies</h2>
-          <div class="tips-accordion">
-            <div class="accordion-item">
-              <div class="accordion-header">
-                <h3>Listening Test Strategies</h3>
-                <i class="fas fa-chevron-down accordion-icon"></i>
-              </div>
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  <p>
-                    Skim through the questions before the audio starts playing
-                    to get a general idea of what information you need to listen
-                    for.
-                  </p>
-                  <p>
-                    Pay attention to signpost words like "first," "then,"
-                    "however," and "finally" to help you follow the speaker's
-                    logic.
-                  </p>
-                  <p>
-                    Be careful of distractors in the audio – the speaker may
-                    mention all the options but only one will be the correct
-                    answer.
-                  </p>
-                </div>
+        <h2 class="section-title">Tips & Strategies</h2>
+        <div class="tips-accordion">
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <h3>Listening Section Tips</h3>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <p>
+                  Master the listening section with these proven strategies:
+                </p>
+                <p>
+                  • Read questions before the audio begins to understand what to
+                  listen for
+                </p>
+                <p>
+                  • Pay attention to keywords and synonyms - answers often use
+                  different words than the questions
+                </p>
+                <p>
+                  • Don't get stuck on one question - move on and come back if
+                  you have time
+                </p>
+                <p>
+                  • Use the 10 minutes at the end to transfer answers to the
+                  answer sheet carefully
+                </p>
               </div>
             </div>
-            <div class="accordion-item">
-              <div class="accordion-header">
-                <h3>Reading Test Techniques</h3>
-                <i class="fas fa-chevron-down accordion-icon"></i>
-              </div>
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  <p>
-                    Don't read the entire passage in detail first. Instead, skim
-                    the text to get the main idea and then focus on the
-                    questions.
-                  </p>
-                  <p>
-                    For matching headings questions, focus on the main idea of
-                    each paragraph rather than specific details.
-                  </p>
-                  <p>
-                    Use the time wisely – if you get stuck on a difficult
-                    question, move on and come back to it later if you have
-                    time.
-                  </p>
-                </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <h3>Reading Section Tips</h3>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <p>Improve your reading performance with these techniques:</p>
+                <p>
+                  • Skim the passage first to get the general idea, then read
+                  questions
+                </p>
+                <p>
+                  • Look for keywords in questions and scan the text for similar
+                  or related words
+                </p>
+                <p>• Manage your time: spend about 20 minutes per passage</p>
+                <p>
+                  • For True/False/Not Given questions, be very careful about
+                  the distinction
+                </p>
               </div>
             </div>
-            <div class="accordion-item">
-              <div class="accordion-header">
-                <h3>Writing Task Approaches</h3>
-                <i class="fas fa-chevron-down accordion-icon"></i>
-              </div>
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  <p>
-                    Always analyze the task carefully to ensure you're
-                    addressing all parts of the question.
-                  </p>
-                  <p>
-                    Use a clear structure with an introduction, body paragraphs,
-                    and conclusion.
-                  </p>
-                  <p>
-                    Aim to demonstrate a range of vocabulary and grammatical
-                    structures, but prioritize accuracy over complexity.
-                  </p>
-                </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <h3>Writing Section Tips</h3>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <p>Excel in writing with these essential strategies:</p>
+                <p>
+                  • Plan before you write - spend 2-3 minutes organizing your
+                  ideas
+                </p>
+                <p>
+                  • Task 2 is worth twice as much as Task 1, so allocate time
+                  accordingly (20 min Task 1, 40 min Task 2)
+                </p>
+                <p>• Use a variety of vocabulary and sentence structures</p>
+                <p>• Always answer the question directly and stay on topic</p>
               </div>
             </div>
-            <div class="accordion-item">
-              <div class="accordion-header">
-                <h3>Speaking Test Success</h3>
-                <i class="fas fa-chevron-down accordion-icon"></i>
-              </div>
-              <div class="accordion-content">
-                <div class="accordion-inner">
-                  <p>
-                    Provide extended answers with examples and explanations, not
-                    just short responses.
-                  </p>
-                  <p>
-                    It's okay to take a moment to collect your thoughts before
-                    answering a question.
-                  </p>
-                  <p>
-                    Show your range of vocabulary by using synonyms and varied
-                    expressions rather than repeating the same words.
-                  </p>
-                </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <h3>Speaking Section Tips</h3>
+              <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                <p>Boost your speaking confidence with these tips:</p>
+                <p>• Speak clearly and at a natural pace - don't rush</p>
+                <p>• Extend your answers with examples and explanations</p>
+                <p>
+                  • Practice common topics like hobbies, work, family, and
+                  current events
+                </p>
+                <p>
+                  • Don't worry about minor mistakes - focus on communicating
+                  your ideas effectively
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+    </div>
 
-      <section class="featured-products">
-        <div class="container">
-          <h2 class="section-title">Featured Study Materials</h2>
-          <div class="product-slider">
-            <div class="product-card">
-              <img
-                src="images/product1.jpg"
-                alt="Writing Guide"
-                class="product-image"
-              />
-              <div class="product-content">
-                <h3 class="product-title">Ultimate Writing Guide</h3>
-                <p class="product-price">$24.99</p>
-                <p class="product-description">
-                  Comprehensive guide to mastering IELTS Writing Tasks 1 & 2
-                  with sample essays.
-                </p>
-                <a href="shop-writing-guide.html" class="btn-shop"
-                  >View Details</a
-                >
-              </div>
+    <!-- Featured Products -->
+    <section class="featured-products">
+      <div class="container">
+        <h2 class="section-title" style="color: #333; margin-bottom: 2rem">
+          Featured IELTS Posts
+        </h2>
+        <div class="product-slider">
+          <div class="product-card">
+            <div
+              class="product-image"
+              style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              📚
             </div>
-            <div class="product-card">
-              <img
-                src="images/product2.jpg"
-                alt="Vocabulary Builder"
-                class="product-image"
-              />
-              <div class="product-content">
-                <h3 class="product-title">Advanced Vocabulary Builder</h3>
-                <p class="product-price">$19.99</p>
-                <p class="product-description">
-                  1000+ essential IELTS vocabulary words with usage examples and
-                  practice exercises.
-                </p>
-                <a href="shop-vocab-builder.html" class="btn-shop"
-                  >View Details</a
-                >
-              </div>
+            <div class="product-content">
+              <h3 class="product-title">Complete IELTS Course</h3>
+              <div class="product-price">$49.99</div>
+              <p class="product-description">
+                Comprehensive online course covering all four IELTS sections
+                with practice tests and expert feedback.
+              </p>
+              <a href="#" class="btn-shop">Buy Now</a>
             </div>
-            <div class="product-card">
-              <img
-                src="images/product3.jpg"
-                alt="Practice Test Pack"
-                class="product-image"
-              />
-              <div class="product-content">
-                <h3 class="product-title">Complete Practice Test Pack</h3>
-                <p class="product-price">$29.99</p>
-                <p class="product-description">
-                  10 full-length practice tests with detailed answers and score
-                  analysis.
-                </p>
-                <a href="shop-test-pack.html" class="btn-shop">View Details</a>
-              </div>
+          </div>
+
+          <div class="product-card">
+            <div
+              class="product-image"
+              style="
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              🎯
             </div>
-            <div class="product-card">
-              <img
-                src="images/product4.jpg"
-                alt="Speaking Success"
-                class="product-image"
-              />
-              <div class="product-content">
-                <h3 class="product-title">Speaking Success Program</h3>
-                <p class="product-price">$34.99</p>
-                <p class="product-description">
-                  Video tutorials, practice questions, and advanced speaking
-                  strategies for a high score.
-                </p>
-                <a href="shop-speaking-program.html" class="btn-shop"
-                  >View Details</a
-                >
-              </div>
+            <div class="product-content">
+              <h3 class="product-title">IELTS Speaking Coach</h3>
+              <div class="product-price">$29.99</div>
+              <p class="product-description">
+                1-on-1 speaking practice sessions with certified IELTS
+                instructors via video call.
+              </p>
+              <a href="#" class="btn-shop">Book Session</a>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div
+              class="product-image"
+              style="
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                color: white;
+              "
+            >
+              📊
+            </div>
+            <div class="product-content">
+              <h3 class="product-title">Score Guarantee Package</h3>
+              <div class="product-price">$99.99</div>
+              <p class="product-description">
+                Achieve your target score or get your money back. Includes
+                premium resources and personal tutor.
+              </p>
+              <a href="#" class="btn-shop">Learn More</a>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="cta-section">
-        <div class="container">
-          <div class="cta-content">
-            <h2>Ready to Boost Your IELTS Score?</h2>
-            <p>
-              Sign up for our newsletter to receive free tips, practice
-              materials, and exclusive offers.
-            </p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Your email address" required />
-              <button type="submit" class="btn">Subscribe</button>
-            </form>
-            <p class="privacy-note">
-              We respect your privacy. Unsubscribe at any time.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
 
+    <!-- Footer -->
     <footer>
       <div class="container">
         <div class="footer-content">
           <div class="footer-column">
+            <h3>ESL Fun Online</h3>
             <p>
-              Helping students achieve their target IELTS scores since 2010.
+              Empowering learners worldwide with comprehensive English language
+              resources and innovative learning tools.
             </p>
             <div class="social-icons">
-              <a href="#" aria-label="Facebook"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a href="#" aria-label="Twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="#" aria-label="Instagram"
-                ><i class="fab fa-instagram"></i
-              ></a>
-              <a href="#" aria-label="YouTube"
-                ><i class="fab fa-youtube"></i
-              ></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
+
           <div class="footer-column">
             <h3>Quick Links</h3>
             <ul class="footer-links">
               <li><a href="index.html">Home</a></li>
-              <li><a href="resources.html">Resources</a></li>
-              <li><a href="practice.html">Practice Tests</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="about.html">About Us</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="grammar.html">Grammar Guides</a></li>
+              <li><a href="vocabguide.html">Vocabulary</a></li>
+              <li><a href="games.html">Games</a></li>
+              <li><a href="shop.html">Shop</a></li>
             </ul>
           </div>
+
           <div class="footer-column">
-            <h3>Resources</h3>
+            <h3>Test Preparation</h3>
             <ul class="footer-links">
-              <li><a href="listening.html">Listening</a></li>
-              <li><a href="reading.html">Reading</a></li>
-              <li><a href="writing.html">Writing</a></li>
-              <li><a href="speaking.html">Speaking</a></li>
-              <li><a href="vocabulary.html">Vocabulary</a></li>
-              <li><a href="grammar.html">Grammar</a></li>
+              <li><a href="ielts.html">IELTS</a></li>
+              <li><a href="toeic.html">TOEIC</a></li>
+              <li><a href="eiken.html">EIKEN</a></li>
+              <li><a href="#">Cambridge Exams</a></li>
+              <li><a href="#">TOEFL</a></li>
             </ul>
           </div>
+
           <div class="footer-column">
             <h3>Support</h3>
             <ul class="footer-links">
-              <li><a href="faq.html">FAQ</a></li>
-              <li><a href="terms.html">Terms of Service</a></li>
-              <li><a href="privacy.html">Privacy Policy</a></li>
-              <li><a href="shipping.html">Shipping Policy</a></li>
-              <li><a href="refund.html">Refund Policy</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Site Map</a></li>
             </ul>
           </div>
         </div>
+
         <div class="footer-bottom">
-          <p>&copy; 2025 ESL Fun Online. All rights reserved.</p>
+          <p>&copy; 2024 ESL Fun Online. All rights reserved.</p>
         </div>
       </div>
     </footer>
 
     <script>
-      // Mobile menu toggle
+      // Mobile Navigation Toggle
       document
-        .querySelector(".mobile-toggle")
+        .getElementById("mobileToggle")
         .addEventListener("click", function () {
-          document.querySelector(".nav-links").classList.toggle("show");
+          const navLinks = document.getElementById("navLinks");
+          navLinks.classList.toggle("show");
         });
 
-      // Theme toggle functionality
+      // Dark Mode Toggle
       document
-        .querySelector(".theme-toggle")
+        .getElementById("darkModeToggle")
         .addEventListener("click", function () {
           document.body.classList.toggle("dark-mode");
           const icon = this.querySelector("i");
-          if (icon.classList.contains("fa-moon")) {
-            icon.classList.replace("fa-moon", "fa-sun");
+          if (document.body.classList.contains("dark-mode")) {
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+            localStorage.setItem("darkMode", "enabled");
           } else {
-            icon.classList.replace("fa-sun", "fa-moon");
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+            localStorage.setItem("darkMode", "disabled");
           }
         });
 
-      // Accordion functionality
-      const accordionHeaders = document.querySelectorAll(".accordion-header");
-      accordionHeaders.forEach((header) => {
-        header.addEventListener("click", function () {
-          const content = this.nextElementSibling;
-          this.classList.toggle("active");
-          this.querySelector(".accordion-icon").classList.toggle("active");
+      // Load dark mode preference
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        document
+          .querySelector("#darkModeToggle i")
+          .classList.replace("fa-moon", "fa-sun");
+      }
 
-          if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-          } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-          }
-        });
-      });
-
-      // IELTS Calculator functionality
+      // Font Size Toggle
+      let currentFontSize = 16;
       document
-        .getElementById("calculate-btn")
+        .getElementById("fontSizeToggle")
         .addEventListener("click", function () {
-          const listeningScore =
-            parseFloat(document.getElementById("listening-score").value) || 0;
-          const readingScore =
-            parseFloat(document.getElementById("reading-score").value) || 0;
-          const writingScore =
-            parseFloat(document.getElementById("writing-score").value) || 0;
-          const speakingScore =
-            parseFloat(document.getElementById("speaking-score").value) || 0;
-
-          if (
-            listeningScore === 0 ||
-            readingScore === 0 ||
-            writingScore === 0 ||
-            speakingScore === 0
-          ) {
-            document.getElementById("result-message").textContent =
-              "Please select a score for each section.";
-            return;
-          }
-
-          const overallScore = (
-            (listeningScore + readingScore + writingScore + speakingScore) /
-            4
-          ).toFixed(1);
-          document.getElementById("result-score").textContent = overallScore;
-
-          let message = "";
-          // Completing the calculator function that was cut off
-          if (overallScore >= 8.0) {
-            message = "Excellent score! You've achieved an advanced level.";
-          } else if (overallScore >= 7.0) {
-            message = "Great score! You have good English language abilities.";
-          } else if (overallScore >= 6.0) {
-            message = "Good score! You have a competent command of English.";
-          } else if (overallScore >= 5.0) {
-            message = "You have a modest command of English.";
-          } else {
-            message = "More practice needed to improve your score.";
-          }
-
-          document.getElementById("result-message").textContent = message;
-          document.getElementById("calc-result").style.display = "block";
+          currentFontSize =
+            currentFontSize === 16 ? 18 : currentFontSize === 18 ? 20 : 16;
+          document.documentElement.style.fontSize = currentFontSize + "px";
+          localStorage.setItem("fontSize", currentFontSize);
         });
 
-      // Product slider functionality (simple version)
-      const productSlider = document.querySelector(".product-slider");
-      let isDown = false;
-      let startX;
-      let scrollLeft;
+      // Load font size preference
+      const savedFontSize = localStorage.getItem("fontSize");
+      if (savedFontSize) {
+        currentFontSize = parseInt(savedFontSize);
+        document.documentElement.style.fontSize = currentFontSize + "px";
+      }
 
-      productSlider.addEventListener("mousedown", (e) => {
-        isDown = true;
-        startX = e.pageX - productSlider.offsetLeft;
-        scrollLeft = productSlider.scrollLeft;
-      });
+      // Accordion Toggle
+      function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector(".accordion-icon");
 
-      productSlider.addEventListener("mouseleave", () => {
-        isDown = false;
-      });
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.classList.remove("active");
+        } else {
+          // Close all other accordion items
+          document.querySelectorAll(".accordion-content").forEach((item) => {
+            item.style.maxHeight = null;
+          });
+          document.querySelectorAll(".accordion-icon").forEach((icon) => {
+            icon.classList.remove("active");
+          });
 
-      productSlider.addEventListener("mouseup", () => {
-        isDown = false;
-      });
+          // Open clicked accordion
+          content.style.maxHeight = content.scrollHeight + "px";
+          icon.classList.add("active");
+        }
+      }
 
-      productSlider.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - productSlider.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll speed multiplier
-        productSlider.scrollLeft = scrollLeft - walk;
-      });
+      // IELTS Score Calculator
+      function calculateIELTSScore() {
+        const listening = parseFloat(
+          document.getElementById("listening-score").value
+        );
+        const reading = parseFloat(
+          document.getElementById("reading-score").value
+        );
+        const writing = parseFloat(
+          document.getElementById("writing-score").value
+        );
+        const speaking = parseFloat(
+          document.getElementById("speaking-score").value
+        );
 
-      // Form submission handling
-      const newsletterForm = document.querySelector(".newsletter-form");
-      if (newsletterForm) {
-        newsletterForm.addEventListener("submit", function (e) {
+        if (!listening || !reading || !writing || !speaking) {
+          alert("Please select scores for all four sections");
+          return;
+        }
+
+        const average = (listening + reading + writing + speaking) / 4;
+        let overallScore;
+
+        // IELTS rounding rules
+        if (average % 1 < 0.25) {
+          overallScore = Math.floor(average);
+        } else if (average % 1 < 0.75) {
+          overallScore = Math.floor(average) + 0.5;
+        } else {
+          overallScore = Math.ceil(average);
+        }
+
+        document.getElementById("overallScore").textContent =
+          overallScore.toFixed(1);
+        document.getElementById("scoreResult").style.display = "block";
+
+        // Score interpretation
+        let interpretation = "";
+        if (overallScore >= 8.5) {
+          interpretation =
+            "Excellent! You have a very high level of English proficiency.";
+        } else if (overallScore >= 7.5) {
+          interpretation =
+            "Very good! You have a good command of the language.";
+        } else if (overallScore >= 6.5) {
+          interpretation =
+            "Good! You have an effective operational command of English.";
+        } else if (overallScore >= 5.5) {
+          interpretation =
+            "Modest user. You can handle basic communication in familiar situations.";
+        } else {
+          interpretation =
+            "Keep practicing! Consider additional preparation before taking the test.";
+        }
+
+        document.getElementById(
+          "scoreInterpretation"
+        ).innerHTML = `<p style="margin-top: 1rem; font-size: 1.1rem;">${interpretation}</p>`;
+      }
+
+      // Newsletter Form
+      document
+        .querySelector(".newsletter-form")
+        .addEventListener("submit", function (e) {
           e.preventDefault();
           const email = this.querySelector('input[type="email"]').value;
           if (email) {
-            // You would typically send this to a server
-            alert("Thank you for subscribing! We'll send updates to " + email);
-            this.reset();
+            alert(
+              "Thank you for subscribing! You'll receive free IELTS tips in your inbox."
+            );
+            this.querySelector('input[type="email"]').value = "";
           }
         });
-      }
 
-      // Initialize on page load
-      document.addEventListener("DOMContentLoaded", function () {
-        // Hide calculator result initially
-        document.getElementById("calc-result").style.display = "none";
-
-        // Check for stored theme preference
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
-          document.body.classList.add("dark-mode");
-          document
-            .querySelector(".theme-toggle i")
-            .classList.replace("fa-moon", "fa-sun");
-        }
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute("href");
-            if (targetId === "#") return;
-
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-              targetElement.scrollIntoView({
-                behavior: "smooth",
-              });
-            }
-          });
+      // Smooth scrolling for internal links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
         });
       });
     </script>
-
-    <style>
-      /* Hero Section */
-.resources-hero {
-  background: linear-gradient(120deg, #4f8cff 0%, #a6e1fa 100%);
-  padding: 4rem 0 2.5rem 0;
-  position: relative;
-  overflow: hidden;
-}
-.resources-hero-content {
-  text-align: center;
-  color: #fff;
-  max-width: 700px;
-  margin: 0 auto 2.5rem auto;
-}
-.resources-hero h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.7rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  letter-spacing: 0.01em;
-}
-.resources-hero p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 0;
-}
-.floating-element {
-  position: absolute;
-  font-size: 2.2rem;
-  opacity: 0.18;
-  pointer-events: none;
-  animation: float 6s ease-in-out infinite;
-}
-.element-1 { left: 8%; top: 18%; animation-delay: 0s; }
-.element-2 { right: 10%; top: 22%; animation-delay: 1.5s; }
-.element-3 { left: 15%; bottom: 12%; animation-delay: 3s; }
-.element-4 { right: 12%; bottom: 10%; animation-delay: 4.5s; }
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-18px); }
-}
-
-/* Section Titles */
-.section-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #4361ee;
-  text-align: center;
-}
-
-/* Overview Section */
-.overview-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: flex-start;
-  margin-bottom: 2.5rem;
-}
-.overview-text {
-  flex: 2 1 320px;
-  min-width: 260px;
-}
-.overview-image {
-  flex: 1 1 220px;
-  min-width: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.overview-image img {
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(67,97,238,0.08);
-}
-.info-card {
-  background: #f3f7ff;
-  border-left: 4px solid #4361ee;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  margin-top: 1.2rem;
-}
-.info-card h3 {
-  margin-top: 0;
-  color: #4361ee;
-}
-
-/* Section Cards */
-.sections-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-.section-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(67,97,238,0.07);
-  padding: 2rem 1.2rem 1.2rem 1.2rem;
-  text-align: center;
-  transition: box-shadow 0.2s;
-}
-.section-card:hover {
-  box-shadow: 0 6px 24px rgba(67,97,238,0.13);
-}
-.section-icon {
-  font-size: 2.2rem;
-  color: #4361ee;
-  margin-bottom: 0.7rem;
-}
-.btn-outline {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.5rem 1.2rem;
-  border: 2px solid #4361ee;
-  border-radius: 25px;
-  background: none;
-  color: #4361ee;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-.btn-outline:hover {
-  background: #4361ee;
-  color: #fff;
-}
-
-/* Resource Cards */
-.resources-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-.resource-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(67,97,238,0.07);
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  transition: box-shadow 0.2s;
-}
-.resource-card:hover {
-  box-shadow: 0 6px 24px rgba(67,97,238,0.13);
-}
-.resource-image {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-}
-.badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 0.3em 0.9em;
-  border-radius: 12px;
-  font-size: 0.95em;
-  font-weight: 600;
-  color: #fff;
-  background: #4361ee;
-  box-shadow: 0 2px 8px rgba(67,97,238,0.13);
-}
-.badge-free { background: #06d6a0; }
-.badge-premium { background: #ff6b6b; }
-.resource-content {
-  padding: 1.2rem 1.2rem 1rem 1.2rem;
-  flex: 1 1 auto;
-}
-
-/* Practice Tests */
-.test-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-.test-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(67,97,238,0.07);
-  padding: 2rem 1.2rem 1.2rem 1.2rem;
-  text-align: center;
-  transition: box-shadow 0.2s;
-}
-.test-card:hover {
-  box-shadow: 0 6px 24px rgba(67,97,238,0.13);
-}
-.test-icon {
-  font-size: 2.2rem;
-  color: #4361ee;
-  margin-bottom: 0.7rem;
-}
-
-/* Calculator */
-.calculator-section {
-  margin-top: 2.5rem;
-  background: #f3f7ff;
-  border-radius: 12px;
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  box-shadow: 0 2px 12px rgba(67,97,238,0.05);
-  text-align: center;
-}
-.calculator-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  justify-content: center;
-  margin-bottom: 1.2rem;
-}
-.form-group {
-  min-width: 140px;
-  flex: 1 1 140px;
-  text-align: left;
-}
-.form-group label {
-  font-weight: 500;
-  color: #4361ee;
-  margin-bottom: 0.3em;
-  display: block;
-}
-.form-control {
-  width: 100%;
-  padding: 0.4em 0.7em;
-  border-radius: 8px;
-  border: 1px solid #bcd0fa;
-  font-size: 1em;
-  margin-top: 0.2em;
-}
-.btn {
-  background: #4361ee;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 0.6em 2em;
-  font-size: 1.1em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 1em;
-}
-.btn:hover {
-  background: #2746b6;
-}
-.calc-result {
-  margin-top: 1.2em;
-  display: none;
-}
-.result-score {
-  font-size: 2.2em;
-  font-weight: 700;
-  color: #06d6a0;
-  margin-bottom: 0.2em;
-}
-
-/* Accordion */
-.tips-accordion {
-  margin-top: 2rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.accordion-item {
-  background: #fff;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 12px rgba(67,97,238,0.07);
-  overflow: hidden;
-  transition: box-shadow 0.2s;
-}
-.accordion-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 1.1rem 1.5rem;
-  font-weight: 600;
-  color: #4361ee;
-  background: #f3f7ff;
-  border-bottom: 1px solid #e5e7eb;
-  transition: background 0.2s;
-}
-.accordion-header.active,
-.accordion-header:hover {
-  background: #e0eaff;
-}
-.accordion-icon {
-  margin-left: 1em;
-  transition: transform 0.3s;
-}
-.accordion-icon.active {
-  transform: rotate(180deg);
-}
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  background: #fff;
-  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-.accordion-header.active + .accordion-content,
-.accordion-content[style*="max-height"] {
-  border-top: 1px solid #e5e7eb;
-}
-.accordion-inner {
-  padding: 1.2rem 1.5rem;
-  color: #333;
-}
-
-/* Product Slider */
-.product-slider {
-  display: flex;
-  gap: 1.2rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scroll-behavior: smooth;
-  margin-top: 2rem;
-}
-.product-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(67,97,238,0.07);
-  min-width: 260px;
-  max-width: 320px;
-  flex: 0 0 auto;
-  padding: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: box-shadow 0.2s;
-}
-.product-card:hover {
-  box-shadow: 0 6px 24px rgba(67,97,238,0.13);
-}
-.product-image {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-.product-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.product-price {
-  color: #06d6a0;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-.product-description {
-  font-size: 0.97rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
-.btn-shop {
-  background: #4361ee;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 0.5em 1.5em;
-  font-size: 1em;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.btn-shop:hover {
-  background: #2746b6;
-}
-
-/* CTA Section */
-.cta-section {
-  background: linear-gradient(120deg, #a6e1fa 0%, #4f8cff 100%);
-  color: #fff;
-  text-align: center;
-  padding: 3rem 0 2rem 0;
-  margin-top: 2.5rem;
-}
-.cta-content h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-}
-.cta-content p {
-  font-size: 1.1rem;
-  margin-bottom: 1.2rem;
-}
-.newsletter-form {
-  display: flex;
-  justify-content: center;
-  gap: 0.7rem;
-  margin-bottom: 0.7rem;
-  flex-wrap: wrap;
-}
-.newsletter-form input[type="email"] {
-  padding: 0.6em 1em;
-  border-radius: 25px;
-  border: none;
-  font-size: 1em;
-  min-width: 220px;
-  max-width: 320px;
-}
-.newsletter-form button {
-  background: #06d6a0;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 0.6em 2em;
-  font-size: 1.1em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.newsletter-form button:hover {
-  background: #049e7f;
-}
-.privacy-note {
-  font-size: 0.93em;
-  opacity: 0.8;
-  margin-top: 0.5em;
-}
-
-/* Footer */
-footer {
-  background: #22223b;
-  color: #e9ecef;
-  padding: 2.5rem 0 1.2rem 0;
-  margin-top: 2.5rem;
-}
-.footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2rem;
-  max-width: 1100px;
-  margin: 0 auto 1.5rem auto;
-}
-.footer-column h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.7rem;
-  color: #a6e1fa;
-}
-.footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.footer-links li {
-  margin-bottom: 0.5em;
-}
-.footer-links a {
-  color: #e9ecef;
-  text-decoration: none;
-  opacity: 0.85;
-  transition: opacity 0.2s;
-}
-.footer-links a:hover {
-  opacity: 1;
-  text-decoration: underline;
-}
-.social-icons {
-  margin-top: 1em;
-}
-.social-icons a {
-  color: #a6e1fa;
-  font-size: 1.3em;
-  margin-right: 0.7em;
-  opacity: 0.8;
-  transition: opacity 0.2s, color 0.2s;
-}
-.social-icons a:hover {
-  color: #06d6a0;
-  opacity: 1;
-}
-.footer-bottom {
-  text-align: center;
-  font-size: 0.97em;
-  opacity: 0.7;
-  margin-top: 1.2em;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .overview-content { flex-direction: column; }
-  .overview-image { margin-top: 1.5rem; }
-  .footer-content { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  .resources-hero { padding: 2.5rem 0 1.5rem 0; }
-  .resources-hero h1 { font-size: 2rem; }
-  .section-title { font-size: 1.3rem; }
-  .overview-content { gap: 1rem; }
-  .sections-grid, .resources-cards, .test-grid { gap: 1rem; }
-  .footer-content { grid-template-columns: 1fr; }
-  .product-card { min-width: 180px; max-width: 100%; }
-}
-    </style>
   </body>
 </html>
