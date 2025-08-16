@@ -285,11 +285,15 @@
             <div class="category-title">👔 OUTFIT</div>
             <div class="option-row">
               <span class="option-label">Style:</span>
-              <button onclick="cycleOption('outfit')">Survival Gear</button>
+              <button onclick="cycleOption('outfit', event)">
+                Survival Gear
+              </button>
             </div>
             <div class="option-row">
               <span class="option-label">Color:</span>
-              <button onclick="cycleOption('outfitColor')">Forest Green</button>
+              <button onclick="cycleOption('outfitColor', event)">
+                Forest Green
+              </button>
             </div>
           </div>
 
@@ -297,15 +301,17 @@
             <div class="category-title">💇 HAIR</div>
             <div class="option-row">
               <span class="option-label">Style:</span>
-              <button onclick="cycleOption('hair')">Rugged</button>
+              <button onclick="cycleOption('hair', event)">Rugged</button>
             </div>
             <div class="option-row">
               <span class="option-label">Color:</span>
-              <button onclick="cycleOption('hairColor')">Dark Brown</button>
+              <button onclick="cycleOption('hairColor', event)">
+                Dark Brown
+              </button>
             </div>
             <div class="option-row">
               <span class="option-label">Length:</span>
-              <button onclick="cycleOption('hairLength')">Short</button>
+              <button onclick="cycleOption('hairLength', event)">Short</button>
             </div>
           </div>
 
@@ -313,11 +319,11 @@
             <div class="category-title">💄 APPEARANCE</div>
             <div class="option-row">
               <span class="option-label">Face:</span>
-              <button onclick="cycleOption('faceType')">Oval</button>
+              <button onclick="cycleOption('faceType', event)">Oval</button>
             </div>
             <div class="option-row">
               <span class="option-label">Eyes:</span>
-              <button onclick="cycleOption('eyeColor')">Brown</button>
+              <button onclick="cycleOption('eyeColor', event)">Brown</button>
             </div>
           </div>
 
@@ -325,15 +331,15 @@
             <div class="category-title">🏗️ BUILD</div>
             <div class="option-row">
               <span class="option-label">Body:</span>
-              <button onclick="cycleOption('build')">Athletic</button>
+              <button onclick="cycleOption('build', event)">Athletic</button>
             </div>
             <div class="option-row">
               <span class="option-label">Height:</span>
-              <button onclick="cycleOption('height')">Average</button>
+              <button onclick="cycleOption('height', event)">Average</button>
             </div>
             <div class="option-row">
               <span class="option-label">Gender:</span>
-              <button onclick="cycleOption('gender')">Male</button>
+              <button onclick="cycleOption('gender', event)">Male</button>
             </div>
           </div>
 
@@ -341,7 +347,7 @@
             <div class="category-title">🎨 SKIN</div>
             <div class="option-row">
               <span class="option-label">Tone:</span>
-              <button onclick="cycleOption('skinTone')">Medium</button>
+              <button onclick="cycleOption('skinTone', event)">Medium</button>
             </div>
           </div>
 
@@ -349,15 +355,17 @@
             <div class="category-title">🎒 GEAR</div>
             <div class="option-row">
               <span class="option-label">Hat:</span>
-              <button onclick="cycleOption('hat')">None</button>
+              <button onclick="cycleOption('hat', event)">None</button>
             </div>
             <div class="option-row">
               <span class="option-label">Backpack:</span>
-              <button onclick="cycleOption('backpack')">Standard</button>
+              <button onclick="cycleOption('backpack', event)">Standard</button>
             </div>
             <div class="option-row">
               <span class="option-label">Boots:</span>
-              <button onclick="cycleOption('boots')">Hiking Boots</button>
+              <button onclick="cycleOption('boots', event)">
+                Hiking Boots
+              </button>
             </div>
           </div>
 
@@ -1003,17 +1011,17 @@
       }
 
       // Customization cycling function
-      function cycleOption(optionType) {
+      function cycleOption(optionType, event) {
         const options = customizationOptions[optionType];
         if (options) {
           currentOptions[optionType] =
             (currentOptions[optionType] + 1) % options.length;
-          updateButtonText(optionType);
+          updateButtonText(optionType, event);
           updatePlayerAppearance();
         }
       }
 
-      function updateButtonText(optionType) {
+      function updateButtonText(optionType, event) {
         const button = event.target;
         const options = customizationOptions[optionType];
         const currentIndex = currentOptions[optionType];
@@ -1082,14 +1090,22 @@
         keys[event.code] = false;
       }
 
+      let cameraPitch = 0; // Add this near your game state variables
+      let cameraYaw = 0; // Track yaw for camera/player rotation
+
       function onMouseMove(event) {
         if (gameStarted && document.pointerLockElement) {
           const sensitivity = 0.002;
-          player.rotation.y -= event.movementX * sensitivity;
-          camera.rotation.x -= event.movementY * sensitivity;
-          camera.rotation.x = Math.max(
+
+          // Update yaw (Y axis) for player and camera
+          cameraYaw -= event.movementX * sensitivity;
+          player.rotation.y = cameraYaw;
+
+          // Update pitch (X axis) and clamp
+          cameraPitch -= event.movementY * sensitivity;
+          cameraPitch = Math.max(
             -Math.PI / 2,
-            Math.min(Math.PI / 2, camera.rotation.x)
+            Math.min(Math.PI / 2, cameraPitch)
           );
         }
       }
@@ -1174,6 +1190,14 @@
         document.getElementById("wordLearningPanel").style.display = "none";
       }
 
+      /*************  ✨ Windsurf Command ⭐  *************/
+
+      /**
+       * Updates the UI with the current game state.
+       * Updates the health, hunger, wood count, words learned, and game day.
+       */
+      /*******  b9ab2c8b-8a4d-4cdd-bc21-5fe8815faaba  *******/
+
       function updateUI() {
         document.getElementById("healthFill").style.width = health + "%";
         document.getElementById("hungerFill").style.width = hunger + "%";
@@ -1184,7 +1208,7 @@
       }
 
       function movePlayer() {
-        if (!gameStarted) return;
+        if (!gameStarted || !player) return;
 
         const moveSpeed = 0.2;
         const direction = new THREE.Vector3();
@@ -1208,18 +1232,22 @@
         }
       }
 
+      /*************  ✨ Windsurf Command ⭐  *************/
+      /**
+       * Updates the position and rotation of the camera based on the player's
+       * position and rotation. The camera's pitch is updated based on the
+       * `cameraPitch` value, while the yaw is unaffected.
+       */
       function updateCamera() {
-        if (gameStarted && player) {
-          const offset = new THREE.Vector3(0, 5, 8);
-          offset.applyEuler(
-            new THREE.Euler(camera.rotation.x, player.rotation.y, 0)
-          );
-          camera.position.copy(player.position).add(offset);
+        if (!gameStarted || !player || !camera) return;
+        const offset = new THREE.Vector3(0, 5, 8);
+        offset.applyEuler(new THREE.Euler(cameraPitch, cameraYaw, 0));
+        camera.position.copy(player.position).add(offset);
 
-          const lookAt = player.position.clone();
-          lookAt.y += 2;
-          camera.lookAt(lookAt);
-        }
+        const lookAt = player.position.clone();
+        lookAt.y += 2;
+        camera.lookAt(lookAt);
+        // Removed direct assignment to camera.rotation.x to avoid conflicts with lookAt
       }
 
       function animate() {
@@ -1232,9 +1260,11 @@
       }
 
       function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        if (camera && renderer) {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
       }
 
       // Initialize the game

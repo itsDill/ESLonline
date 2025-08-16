@@ -175,6 +175,7 @@
         height: 3px;
         background: rgba(139, 69, 19, 0.8);
         box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 2;
       }
 
       .controls-panel {
@@ -587,7 +588,9 @@
 
       // Piece creation from selector
       function createPieceFromSelector(e) {
-        const selectorItem = e.target;
+        // Ensure we always get the .piece-item element, not a child text node
+        const selectorItem = e.target.closest(".piece-item");
+        if (!selectorItem) return;
         const type = selectorItem.dataset.type;
         const color = selectorItem.dataset.color;
 
@@ -657,8 +660,18 @@
         document.getElementById("deleteZone").classList.add("active");
 
         const rect = piece.getBoundingClientRect();
-        const clientX = e.clientX || e.touches[0].clientX;
-        const clientY = e.clientY || e.touches[0].clientY;
+        const clientX =
+          e.clientX !== undefined
+            ? e.clientX
+            : e.touches && e.touches[0]
+            ? e.touches[0].clientX
+            : 0;
+        const clientY =
+          e.clientY !== undefined
+            ? e.clientY
+            : e.touches && e.touches[0]
+            ? e.touches[0].clientY
+            : 0;
 
         gameState.dragOffset = {
           x: clientX - rect.left,
@@ -677,22 +690,31 @@
 
         const buildArea = document.getElementById("buildArea");
         const buildRect = buildArea.getBoundingClientRect();
-        const clientX = e.clientX || e.touches[0].clientX;
-        const clientY = e.clientY || e.touches[0].clientY;
+        const clientX =
+          e.clientX !== undefined
+            ? e.clientX
+            : e.touches && e.touches[0]
+            ? e.touches[0].clientX
+            : 0;
+        const clientY =
+          e.clientY !== undefined
+            ? e.clientY
+            : e.touches && e.touches[0]
+            ? e.touches[0].clientY
+            : 0;
 
         const x = clientX - buildRect.left - gameState.dragOffset.x;
         const y = clientY - buildRect.top - gameState.dragOffset.y;
 
+        // Clamp to build area
+        const maxX = buildArea.offsetWidth - gameState.draggedPiece.offsetWidth;
+        const maxY =
+          buildArea.offsetHeight - gameState.draggedPiece.offsetHeight - 3; // 3px for ground line
+
         gameState.draggedPiece.style.left =
-          Math.max(
-            0,
-            Math.min(buildRect.width - gameState.draggedPiece.offsetWidth, x)
-          ) + "px";
+          Math.max(0, Math.min(maxX, x)) + "px";
         gameState.draggedPiece.style.top =
-          Math.max(
-            0,
-            Math.min(buildRect.height - gameState.draggedPiece.offsetHeight, y)
-          ) + "px";
+          Math.max(0, Math.min(maxY, y)) + "px";
 
         // Check if over delete zone
         const deleteZone = document.getElementById("deleteZone");
@@ -721,8 +743,18 @@
         // Check if dropped on delete zone
         const deleteZone = document.getElementById("deleteZone");
         const deleteRect = deleteZone.getBoundingClientRect();
-        const clientX = e.clientX || e.changedTouches[0].clientX;
-        const clientY = e.clientY || e.changedTouches[0].clientY;
+        const clientX =
+          e.clientX !== undefined
+            ? e.clientX
+            : e.changedTouches && e.changedTouches[0]
+            ? e.changedTouches[0].clientX
+            : 0;
+        const clientY =
+          e.clientY !== undefined
+            ? e.clientY
+            : e.changedTouches && e.changedTouches[0]
+            ? e.changedTouches[0].clientY
+            : 0;
 
         if (
           clientX >= deleteRect.left &&
@@ -761,41 +793,46 @@
       // Physics functions
       function applyPhysicsToPiece(piece) {
         const buildArea = document.getElementById("buildArea");
-        const pieceRect = piece.getBoundingClientRect();
-        const buildRect = buildArea.getBoundingClientRect();
-
         const pieceData = gameState.pieces.find((p) => p.element === piece);
         if (!pieceData) return;
 
-        const pieceLeft = parseInt(piece.style.left);
-        const pieceTop = parseInt(piece.style.top);
+        // Ensure left/top are numbers, default to 0 if not set
+        const pieceLeft = isNaN(parseInt(piece.style.left))
+          ? 0
+          : parseInt(piece.style.left);
+        const pieceTop = isNaN(parseInt(piece.style.top))
+          ? 0
+          : parseInt(piece.style.top);
         const pieceWidth = pieceData.width;
         const pieceHeight = pieceData.height;
         const groundLevel = buildArea.offsetHeight - pieceHeight - 3; // Account for ground line
 
-        // Find the highest Y where the piece can sit (ground or on top of another piece)
+        // Find the lowest Y where the piece can sit (ground or on top of another piece)
         let maxY = groundLevel;
 
         gameState.pieces.forEach((other) => {
           if (other.element === piece) return;
 
-          const otherRect = other.element.getBoundingClientRect();
-          const otherLeft = parseInt(other.element.style.left);
-          const otherTop = parseInt(other.element.style.top);
+          const otherLeft = isNaN(parseInt(other.element.style.left))
+            ? 0
+            : parseInt(other.element.style.left || "0");
+          const otherTop = isNaN(parseInt(other.element.style.top))
+            ? 0
+            : parseInt(other.element.style.top || "0");
           const otherWidth = other.width;
           const otherHeight = other.height;
 
-          // Check horizontal overlap - more precise collision detection
+          // Check horizontal overlap (relative to build area)
           const horizontalOverlap =
             pieceLeft + pieceWidth > otherLeft &&
             pieceLeft < otherLeft + otherWidth;
 
-          const verticalOverlap =
-            pieceTop + pieceHeight > otherTop &&
-            pieceTop < otherTop + otherHeight;
-
-          // If we're above the other piece and overlapping horizontally
-          if (horizontalOverlap && pieceTop < otherTop) {
+          // If we're below the other piece and overlapping horizontally
+          if (
+            horizontalOverlap &&
+            pieceTop >= otherTop - pieceHeight &&
+            pieceTop < otherTop
+          ) {
             const possibleY = otherTop - pieceHeight;
             if (possibleY < maxY) {
               maxY = possibleY;
@@ -804,7 +841,9 @@
         });
 
         // Animate falling
-        const currentTop = parseInt(piece.style.top);
+        const currentTop = isNaN(parseInt(piece.style.top))
+          ? 0
+          : parseInt(piece.style.top || "0");
         if (currentTop < maxY) {
           piece.classList.add("falling");
           piece.style.top = maxY + "px";
@@ -902,7 +941,11 @@
       function updateStats() {
         document.getElementById("pieceCount").textContent =
           gameState.pieces.length;
-        updateBalanceStatus(gameState.pieces.length > 0);
+        if (gameState.pieces.length === 0) {
+          updateBalanceStatus(null);
+        } else {
+          checkBalance();
+        }
       }
 
       function updateBalanceStatus(isBalanced) {
@@ -921,9 +964,17 @@
       document.addEventListener("DOMContentLoaded", function () {
         createStars();
 
-        // Add click listeners to piece selector items
+        // Add click and touch listeners to piece selector items
         document.querySelectorAll(".piece-item").forEach((item) => {
           item.addEventListener("click", createPieceFromSelector);
+          item.addEventListener(
+            "touchstart",
+            function (e) {
+              e.preventDefault();
+              createPieceFromSelector(e);
+            },
+            { passive: false }
+          );
         });
 
         updateStats();
