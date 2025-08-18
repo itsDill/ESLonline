@@ -624,6 +624,22 @@
         piece.dataset.type = type;
         piece.dataset.color = color;
 
+        // Calculate dimensions based on type
+        let width, height;
+        if (type.includes("1x1")) {
+          width = 40;
+          height = 30;
+        } else if (type.includes("2x1")) {
+          width = 80;
+          height = 30;
+        } else if (type.includes("2x2")) {
+          width = 80;
+          height = 30;
+        } else if (type === "minifig") {
+          width = 25;
+          height = 50;
+        }
+
         // Add event listeners
         piece.addEventListener("mousedown", startDrag);
         piece.addEventListener("touchstart", startDrag, { passive: false });
@@ -635,14 +651,8 @@
           y: y,
           type: type,
           color: color,
-          width: type.includes("1x1")
-            ? 40
-            : type.includes("2x1")
-            ? 80
-            : type.includes("2x2")
-            ? 80
-            : 25,
-          height: type === "minifig" ? 50 : 30,
+          width: width,
+          height: height,
         });
 
         updateStats();
@@ -764,6 +774,13 @@
         ) {
           deletePiece(piece);
         } else {
+          // Update piece position in gameState
+          const pieceData = gameState.pieces.find((p) => p.element === piece);
+          if (pieceData) {
+            pieceData.x = parseInt(piece.style.left);
+            pieceData.y = parseInt(piece.style.top);
+          }
+
           // Apply physics
           applyPhysicsToPiece(piece);
           checkPieceBalance(piece);
@@ -796,67 +813,53 @@
         const pieceData = gameState.pieces.find((p) => p.element === piece);
         if (!pieceData) return;
 
-        // Ensure left/top are numbers, default to 0 if not set
-        const pieceLeft = isNaN(parseInt(piece.style.left))
-          ? 0
-          : parseInt(piece.style.left);
-        const pieceTop = isNaN(parseInt(piece.style.top))
-          ? 0
-          : parseInt(piece.style.top);
+        const pieceLeft = parseInt(piece.style.left) || 0;
         const pieceWidth = pieceData.width;
         const pieceHeight = pieceData.height;
-        const groundLevel = buildArea.offsetHeight - pieceHeight - 3; // Account for ground line
 
-        // Find the lowest Y where the piece can sit (ground or on top of another piece)
-        let maxY = groundLevel;
+        // The ground is at the bottom of the build area minus the piece's height and the ground line (3px)
+        const groundLevel = buildArea.offsetHeight - pieceHeight - 3;
+
+        // Find the highest Y where the piece can sit (ground or on top of another piece)
+        let minY = groundLevel;
 
         gameState.pieces.forEach((other) => {
           if (other.element === piece) return;
 
-          const otherLeft = isNaN(parseInt(other.element.style.left))
-            ? 0
-            : parseInt(other.element.style.left || "0");
-          const otherTop = isNaN(parseInt(other.element.style.top))
-            ? 0
-            : parseInt(other.element.style.top || "0");
+          const otherLeft = parseInt(other.element.style.left) || 0;
+          const otherTop = parseInt(other.element.style.top) || 0;
           const otherWidth = other.width;
           const otherHeight = other.height;
 
-          // Check horizontal overlap (relative to build area)
+          // Check horizontal overlap
           const horizontalOverlap =
-            pieceLeft + pieceWidth > otherLeft &&
-            pieceLeft < otherLeft + otherWidth;
+            pieceLeft < otherLeft + otherWidth &&
+            pieceLeft + pieceWidth > otherLeft;
 
-          // If we're below the other piece and overlapping horizontally
-          if (
-            horizontalOverlap &&
-            pieceTop >= otherTop - pieceHeight &&
-            pieceTop < otherTop
-          ) {
-            const possibleY = otherTop - pieceHeight;
-            if (possibleY < maxY) {
-              maxY = possibleY;
-            }
+          // Only consider pieces that are below the current piece
+          if (horizontalOverlap && otherTop >= minY) {
+            minY = otherTop - pieceHeight;
           }
         });
 
-        // Animate falling
-        const currentTop = isNaN(parseInt(piece.style.top))
-          ? 0
-          : parseInt(piece.style.top || "0");
-        if (currentTop < maxY) {
+        // Clamp minY so it never goes below groundLevel
+        minY = Math.min(minY, groundLevel);
+
+        // Animate falling if needed
+        const currentTop = parseInt(piece.style.top) || 0;
+        if (currentTop < minY) {
           piece.classList.add("falling");
-          piece.style.top = maxY + "px";
+          piece.style.top = minY + "px";
           setTimeout(() => {
             piece.classList.remove("falling");
           }, 800);
 
           // Update piece data in gameState
-          pieceData.y = maxY;
-        } else if (currentTop > maxY) {
+          pieceData.y = minY;
+        } else if (currentTop > minY) {
           // Snap to stack if already below
-          piece.style.top = maxY + "px";
-          pieceData.y = maxY;
+          piece.style.top = minY + "px";
+          pieceData.y = minY;
         }
       }
 

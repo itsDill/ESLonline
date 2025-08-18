@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A customizable 3D dice game for decision making and fun"
+    />
+    <title>Custom Dice Game | Decision Maker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #e74c3c;
+        --secondary-color: #c0392b;
+        --accent-color: #f39c12;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --dark-color: #2c3e50;
+        --light-color: #ecf0f1;
+        --text-color: #2c3e50;
+        --text-light: #7f8c8d;
+        --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .game-container {
+        background: white;
+        border-radius: 25px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        max-width: 1200px;
+        width: 100%;
+        transition: var(--transition);
+      }
+
+      .title {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        padding-bottom: 20px;
+      }
+
+      .title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 5px;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        border-radius: 3px;
+      }
+
+      .dice-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        align-items: flex-start;
+      }
+
+      .dice-section {
+        flex: 1;
+        min-width: 350px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .dice-3d-container {
+        perspective: 1000px;
+        margin-bottom: 30px;
+      }
+
+      .dice-3d {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 3s ease-out;
+        margin: 50px;
+      }
+
+      .dice-face {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        background: var(--primary-color);
+        border: 3px solid var(--dark-color);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 10px;
+        word-wrap: break-word;
+        line-height: 1.2;
+      }
+
+      .dice-face.front {
+        transform: rotateY(0deg) translateZ(60px);
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+      }
+
+      .dice-face.back {
+        transform: rotateY(180deg) translateZ(60px);
+        background: linear-gradient(135deg, #3498db, #2980b9);
+      }
+
+      .dice-face.right {
+        transform: rotateY(90deg) translateZ(60px);
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+      }
+
+      .dice-face.left {
+        transform: rotateY(-90deg) translateZ(60px);
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+      }
+
+      .dice-face.top {
+        transform: rotateX(90deg) translateZ(60px);
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+      }
+
+      .dice-face.bottom {
+        transform: rotateX(-90deg) translateZ(60px);
+        background: linear-gradient(135deg, #1abc9c, #16a085);
+      }
+
+      .controls-section {
+        flex: 1;
+        min-width: 350px;
+      }
+
+      .input-group {
+        margin-bottom: 25px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 16px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: var(--transition);
+        font-family: "Poppins", sans-serif;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.2);
+      }
+
+      .options-list {
+        background: var(--light-color);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        max-height: 250px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--light-color);
+      }
+
+      .options-list::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      .options-list::-webkit-scrollbar-track {
+        background: var(--light-color);
+        border-radius: 10px;
+      }
+
+      .options-list::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+      }
+
+      .option-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid #bdc3c7;
+        transition: var(--transition);
+        border-radius: 8px;
+        margin-bottom: 5px;
+      }
+
+      .option-item:hover {
+        background: rgba(255, 255, 255, 0.8);
+        transform: translateX(5px);
+      }
+
+      .option-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .option-text {
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .remove-btn {
+        background: var(--danger-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .remove-btn:hover {
+        background: #c0392b;
+        transform: scale(1.05);
+      }
+
+      .btn {
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .btn:disabled {
+        background: #95a5a6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-secondary:hover {
+        background: var(--light-color);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-danger {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+      }
+
+      .btn-success {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+      }
+
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 25px;
+      }
+
+      .result {
+        text-align: center;
+        margin-top: 30px;
+        padding: 30px;
+        background: linear-gradient(135deg, var(--light-color), white);
+        border-radius: 20px;
+        border: 3px solid var(--primary-color);
+        display: none;
+        width: 100%;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .result::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .result.show {
+        display: block;
+        animation: bounceIn 0.6s ease-out;
+      }
+
+      .result.show::before {
+        left: 100%;
+      }
+
+      .result h3 {
+        color: var(--text-color);
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .result p {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 0;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: var(--text-light);
+      }
+
+      .empty-state svg {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+        fill: #bdc3c7;
+      }
+
+      .dice-info {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: var(--light-color);
+        border-radius: 12px;
+        border-left: 5px solid var(--primary-color);
+      }
+
+      .dice-info p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 14px;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3) translateY(50px);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05) translateY(-10px);
+        }
+        70% {
+          transform: scale(0.95) translateY(5px);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes roll {
+        0% {
+          transform: rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: rotateX(180deg) rotateY(90deg);
+        }
+        50% {
+          transform: rotateX(360deg) rotateY(180deg);
+        }
+        75% {
+          transform: rotateX(540deg) rotateY(270deg);
+        }
+        100% {
+          transform: rotateX(720deg) rotateY(360deg);
+        }
+      }
+
+      .rolling {
+        animation: roll 2s ease-out;
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 25px;
+        }
+
+        .title {
+          font-size: 2.5rem;
+        }
+
+        .dice-3d {
+          width: 100px;
+          height: 100px;
+          margin: 40px;
+        }
+
+        .dice-face {
+          width: 100px;
+          height: 100px;
+          font-size: 14px;
+        }
+
+        .dice-face.front,
+        .dice-face.back {
+          transform: translateZ(50px);
+        }
+
+        .dice-face.right {
+          transform: rotateY(90deg) translateZ(50px);
+        }
+
+        .dice-face.left {
+          transform: rotateY(-90deg) translateZ(50px);
+        }
+
+        .dice-face.top {
+          transform: rotateX(90deg) translateZ(50px);
+        }
+
+        .dice-face.bottom {
+          transform: rotateX(-90deg) translateZ(50px);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .title {
+          font-size: 2rem;
+        }
+
+        .dice-3d {
+          width: 80px;
+          height: 80px;
+          margin: 30px;
+        }
+
+        .dice-face {
+          width: 80px;
+          height: 80px;
+          font-size: 12px;
+        }
+
+        .dice-face.front,
+        .dice-face.back {
+          transform: translateZ(40px);
+        }
+
+        .dice-face.right {
+          transform: rotateY(90deg) translateZ(40px);
+        }
+
+        .dice-face.left {
+          transform: rotateY(-90deg) translateZ(40px);
+        }
+
+        .dice-face.top {
+          transform: rotateX(90deg) translateZ(40px);
+        }
+
+        .dice-face.bottom {
+          transform: rotateX(-90deg) translateZ(40px);
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 class="title">🎲 Custom Dice</h1>
+
+      <div class="dice-container">
+        <div class="dice-section">
+          <div class="dice-info">
+            <p>Add up to 6 options to create your custom dice!</p>
+          </div>
+
+          <div class="dice-3d-container">
+            <div class="dice-3d" id="dice">
+              <div class="dice-face front" id="face1">1</div>
+              <div class="dice-face back" id="face2">2</div>
+              <div class="dice-face right" id="face3">3</div>
+              <div class="dice-face left" id="face4">4</div>
+              <div class="dice-face top" id="face5">5</div>
+              <div class="dice-face bottom" id="face6">6</div>
+            </div>
+          </div>
+
+          <button class="btn" id="rollBtn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+              <rect x="15" y="15" width="6" height="6" rx="1"></rect>
+              <path d="M9 3h6v6"></path>
+              <path d="M15 9v6h6"></path>
+              <path d="M3 15h6v6"></path>
+            </svg>
+            ROLL THE DICE
+          </button>
+
+          <div class="result" id="result">
+            <h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M7 7h10v10"></path>
+                <path d="M7 17 17 7"></path>
+              </svg>
+              You Got!
+            </h3>
+            <p id="resultText"></p>
+          </div>
+        </div>
+
+        <div class="controls-section">
+          <div class="input-group">
+            <label for="optionInput">Add Your Options (Max 6):</label>
+            <input
+              type="text"
+              id="optionInput"
+              placeholder="Enter an option (e.g., Pizza, Movie, Game)"
+              maxlength="15"
+              aria-label="Enter option to add to the dice"
+            />
+            <button class="btn btn-success" id="addOptionBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Option
+            </button>
+          </div>
+
+          <div class="input-group">
+            <label>Your Options: <span id="optionsCount">(0/6)</span></label>
+            <div class="options-list" id="optionsList">
+              <div class="empty-state">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+                  <rect x="15" y="15" width="6" height="6" rx="1"></rect>
+                  <path d="M9 3h6v6"></path>
+                  <path d="M15 9v6h6"></path>
+                  <path d="M3 15h6v6"></path>
+                </svg>
+                <p>No options added yet. Add some options to get started!</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="examplesBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                ></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              Examples
+            </button>
+            <button class="btn btn-danger" id="clearBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                ></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // DOM Elements
+        const dice = document.getElementById("dice");
+        const rollBtn = document.getElementById("rollBtn");
+        const result = document.getElementById("result");
+        const resultText = document.getElementById("resultText");
+        const optionInput = document.getElementById("optionInput");
+        const optionsList = document.getElementById("optionsList");
+        const addOptionBtn = document.getElementById("addOptionBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const examplesBtn = document.getElementById("examplesBtn");
+        const optionsCount = document.getElementById("optionsCount");
+
+        // Game state
+        let options = [];
+        let isRolling = false;
+        let canRoll = false;
+
+        // Dice faces
+        const faces = ["face1", "face2", "face3", "face4", "face5", "face6"];
+
+        // Dice rotations for each face
+        const rotations = [
+          { x: 0, y: 0 }, // front
+          { x: 0, y: 180 }, // back
+          { x: 0, y: 90 }, // right
+          { x: 0, y: -90 }, // left
+          { x: -90, y: 0 }, // top
+          { x: 90, y: 0 }, // bottom
+        ];
+
+        // Initialize the app
+        init();
+
+        function init() {
+          // Set up event listeners
+          addOptionBtn.addEventListener("click", addOption);
+          clearBtn.addEventListener("click", clearAll);
+          examplesBtn.addEventListener("click", addExamples);
+          rollBtn.addEventListener("click", rollDice);
+
+          optionInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              addOption();
+            }
+          });
+
+          // Initialize dice
+          updateDice();
+          updateOptionsDisplay();
+        }
+
+        function addOption() {
+          const option = optionInput.value.trim();
+
+          if (!option) {
+            showAlert("Please enter an option");
+            optionInput.focus();
+            return;
+          }
+
+          if (option.length > 15) {
+            showAlert("Option is too long (max 15 characters)");
+            return;
+          }
+
+          if (options.includes(option)) {
+            showAlert("This option already exists!");
+            optionInput.value = "";
+            optionInput.focus();
+            return;
+          }
+
+          if (options.length >= 6) {
+            showAlert("Maximum 6 options allowed for a dice!");
+            return;
+          }
+
+          options.push(option);
+          optionInput.value = "";
+          optionInput.focus();
+
+          updateOptionsDisplay();
+          updateDice();
+          showAlert("Option added successfully!", "success");
+        }
+
+        function removeOption(index) {
+          options.splice(index, 1);
+          updateOptionsDisplay();
+          updateDice();
+        }
+
+        function updateOptionsDisplay() {
+          optionsCount.textContent = `(${options.length}/6)`;
+
+          if (options.length === 0) {
+            optionsList.innerHTML = `
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+                  <rect x="15" y="15" width="6" height="6" rx="1"></rect>
+                  <path d="M9 3h6v6"></path>
+                  <path d="M15 9v6h6"></path>
+                  <path d="M3 15h6v6"></path>
+                </svg>
+                <p>No options added yet. Add some options to get started!</p>
+              </div>
+            `;
+            return;
+          }
+
+          optionsList.innerHTML = options
+            .map(
+              (option, index) => `
+              <div class="option-item" data-index="${index}">
+                <span class="option-text">${option}</span>
+                <button class="remove-btn" aria-label="Remove ${option}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                  Remove
+                </button>
+              </div>
+            `
+            )
+            .join("");
+
+          // Add event listeners to remove buttons
+          document.querySelectorAll(".remove-btn").forEach((btn, index) => {
+            btn.addEventListener("click", () => removeOption(index));
+          });
+        }
+
+        function updateDice() {
+          // Enable/disable roll button
+          rollBtn.disabled = options.length === 0;
+          canRoll = options.length > 0;
+
+          // Update dice faces
+          for (let i = 0; i < 6; i++) {
+            const face = document.getElementById(faces[i]);
+            if (i < options.length) {
+              face.textContent = options[i];
+            } else {
+              face.textContent = `${i + 1}`;
+            }
+          }
+        }
+
+        function rollDice() {
+          if (isRolling || !canRoll) return;
+
+          isRolling = true;
+          rollBtn.disabled = true;
+          rollBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+            </svg>
+            ROLLING...
+          `;
+
+          result.classList.remove("show");
+
+          // Random number of spins and final face
+          const randomFace = Math.floor(
+            Math.random() * Math.min(options.length, 6)
+          );
+          const baseRotations = 3 + Math.random() * 3; // 3-6 full rotations
+
+          const finalRotation = rotations[randomFace];
+          const totalX = baseRotations * 360 + finalRotation.x;
+          const totalY = baseRotations * 360 + finalRotation.y;
+
+          // Apply rolling animation
+          dice.classList.add("rolling");
+          dice.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
+
+          // Play rolling sound
+          playRollSound();
+
+          setTimeout(() => {
+            dice.classList.remove("rolling");
+
+            // Get the selected option
+            const selectedOption =
+              options[randomFace] || `Face ${randomFace + 1}`;
+
+            // Show result
+            resultText.textContent = selectedOption;
+            result.classList.add("show");
+
+            // Reset button
+            rollBtn.disabled = false;
+            rollBtn.innerHTML = `
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+                <rect x="15" y="15" width="6" height="6" rx="1"></rect>
+                <path d="M9 3h6v6"></path>
+                <path d="M15 9v6h6"></path>
+                <path d="M3 15h6v6"></path>
+              </svg>
+              ROLL THE DICE
+            `;
+
+            isRolling = false;
+
+            // Play result sound
+            playResultSound();
+          }, 2000);
+        }
+
+        function clearAll() {
+          if (options.length === 0) {
+            showAlert("No options to clear!");
+            return;
+          }
+
+          if (confirm("Are you sure you want to clear all options?")) {
+            options = [];
+            updateOptionsDisplay();
+            updateDice();
+            result.classList.remove("show");
+            showAlert("All options cleared!", "success");
+          }
+        }
+
+        function addExamples() {
+          if (options.length > 0) {
+            if (!confirm("This will replace your current options. Continue?")) {
+              return;
+            }
+          }
+
+          const examples = ["Pizza", "Movie", "Game", "Walk", "Read", "Music"];
+          options = [...examples];
+          updateOptionsDisplay();
+          updateDice();
+          showAlert("Example options added!", "success");
+        }
+
+        function showAlert(message, type = "info") {
+          // Create alert element
+          const alert = document.createElement("div");
+          alert.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+          `;
+
+          // Set background color based on type
+          switch (type) {
+            case "success":
+              alert.style.background =
+                "linear-gradient(45deg, #27ae60, #2ecc71)";
+              break;
+            case "error":
+              alert.style.background =
+                "linear-gradient(45deg, #e74c3c, #c0392b)";
+              break;
+            default:
+              alert.style.background =
+                "linear-gradient(45deg, #3498db, #2980b9)";
+          }
+
+          alert.textContent = message;
+          document.body.appendChild(alert);
+
+          // Remove alert after 3 seconds
+          setTimeout(() => {
+            alert.style.animation = "slideOut 0.3s ease-in forwards";
+            setTimeout(() => {
+              document.body.removeChild(alert);
+            }, 300);
+          }, 3000);
+        }
+
+        function playRollSound() {
+          // Create audio context for rolling sound effect
+          try {
+            const audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(
+              100,
+              audioContext.currentTime + 0.5
+            );
+
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.5
+            );
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+          } catch (e) {
+            // Fallback if audio context is not supported
+            console.log("Audio not supported");
+          }
+        }
+
+        function playResultSound() {
+          // Create audio context for result sound effect
+          try {
+            const audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // Play a success chime
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5
+            oscillator.frequency.setValueAtTime(
+              659,
+              audioContext.currentTime + 0.1
+            ); // E5
+            oscillator.frequency.setValueAtTime(
+              784,
+              audioContext.currentTime + 0.2
+            ); // G5
+
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.4
+            );
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.4);
+          } catch (e) {
+            // Fallback if audio context is not supported
+            console.log("Audio not supported");
+          }
+        }
+
+        // Add CSS animations for alerts
+        const style = document.createElement("style");
+        style.textContent = `
+          @keyframes slideIn {
+            from {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateX(0);
+              opacity: 1;
+            }
+          }
+
+          @keyframes slideOut {
+            from {
+              transform: translateX(0);
+              opacity: 1;
+            }
+            to {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Random Generator | Everything Random</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #ff6b6b;
+        --secondary: #4ecdc4;
+        --accent: #45b7d1;
+        --purple: #96ceb4;
+        --orange: #feca57;
+        --pink: #ff9ff3;
+        --dark: #2f3542;
+        --light: #f1f2f6;
+        --white: #ffffff;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--gradient-1);
+        min-height: 100vh;
+        padding: 20px;
+        color: var(--dark);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .title {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease-in-out infinite;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: var(--white);
+        opacity: 0.9;
+        font-weight: 400;
+      }
+
+      .generators-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .generator-card {
+        background: var(--white);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .generator-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--gradient-2);
+      }
+
+      .generator-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: var(--white);
+        background: var(--gradient-3);
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .generator-content {
+        margin-bottom: 25px;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .input-field {
+        flex: 1;
+        padding: 12px 15px;
+        border: 2px solid #e1e8ed;
+        border-radius: 12px;
+        font-size: 14px;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+      }
+
+      .generate-btn {
+        background: var(--gradient-2);
+        color: var(--white);
+        border: none;
+        padding: 15px 25px;
+        border-radius: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        justify-content: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .generate-btn:active {
+        transform: translateY(0);
+      }
+
+      .result-display {
+        background: var(--light);
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        margin-top: 20px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #ddd;
+        transition: all 0.3s ease;
+      }
+
+      .result-display.has-result {
+        border: 2px solid var(--primary);
+        background: linear-gradient(135deg, var(--light), var(--white));
+        animation: resultPop 0.5s ease-out;
+      }
+
+      .result-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        word-break: break-word;
+      }
+
+      .placeholder-text {
+        color: #95a5a6;
+        font-style: italic;
+      }
+
+      .preset-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .preset-btn {
+        background: var(--white);
+        color: var(--dark);
+        border: 2px solid var(--secondary);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .preset-btn:hover {
+        background: var(--secondary);
+        color: var(--white);
+        transform: translateY(-2px);
+      }
+
+      .custom-list-container {
+        max-height: 200px;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        background: var(--light);
+        border-radius: 12px;
+        padding: 15px;
+      }
+
+      .custom-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        background: var(--white);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .custom-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .remove-item-btn {
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .remove-item-btn:hover {
+        background: #e55347;
+        transform: scale(1.1);
+      }
+
+      .copy-btn {
+        background: var(--accent);
+        color: var(--white);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .copy-btn:hover {
+        background: #3a9bc1;
+        transform: scale(1.05);
+      }
+
+      .history-section {
+        background: var(--white);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        margin-top: 30px;
+      }
+
+      .history-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .history-list {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .history-item {
+        padding: 15px;
+        margin-bottom: 10px;
+        background: var(--light);
+        border-radius: 12px;
+        border-left: 5px solid var(--primary);
+        transition: all 0.3s ease;
+      }
+
+      .history-item:hover {
+        background: #e8eaed;
+        transform: translateX(5px);
+      }
+
+      .history-type {
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .history-result {
+        font-size: 16px;
+        color: var(--dark);
+        font-weight: 500;
+        margin-top: 5px;
+      }
+
+      .history-time {
+        font-size: 11px;
+        color: #95a5a6;
+        margin-top: 5px;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      @keyframes resultPop {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .generating {
+        animation: pulse 1s ease-in-out infinite;
+      }
+
+      @media (max-width: 768px) {
+        .title {
+          font-size: 2.5rem;
+        }
+
+        .generators-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .generator-card {
+          padding: 20px;
+        }
+
+        .input-row {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 class="title">🎲 Ultimate Random Generator</h1>
+        <p class="subtitle">
+          Generate anything random - numbers, letters, decisions, and more!
+        </p>
+      </div>
+
+      <div class="generators-grid">
+        <!-- Random Numbers -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">🔢</div>
+            <h3 class="card-title">Random Numbers</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="number"
+                class="input-field"
+                id="numMin"
+                placeholder="Min"
+                value="1"
+              />
+              <input
+                type="number"
+                class="input-field"
+                id="numMax"
+                placeholder="Max"
+                value="100"
+              />
+              <input
+                type="number"
+                class="input-field"
+                id="numCount"
+                placeholder="Count"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <div class="preset-buttons">
+              <button class="preset-btn" onclick="setNumberPreset(1, 6, 1)">
+                Dice (1-6)
+              </button>
+              <button class="preset-btn" onclick="setNumberPreset(1, 10, 1)">
+                Rating (1-10)
+              </button>
+              <button class="preset-btn" onclick="setNumberPreset(1, 100, 5)">
+                Lottery (5 nums)
+              </button>
+              <button class="preset-btn" onclick="setNumberPreset(0, 1, 1)">
+                Coin (0-1)
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateNumbers()">
+            🎯 Generate Numbers
+          </button>
+          <div class="result-display" id="numberResult">
+            <span class="placeholder-text"
+              >Click generate to get random numbers</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Letters -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">🔤</div>
+            <h3 class="card-title">Random Letters</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="number"
+                class="input-field"
+                id="letterCount"
+                placeholder="Count"
+                value="5"
+                min="1"
+                max="50"
+              />
+              <select class="input-field" id="letterType">
+                <option value="uppercase">UPPERCASE</option>
+                <option value="lowercase">lowercase</option>
+                <option value="mixed">Mixed Case</option>
+              </select>
+            </div>
+            <div class="preset-buttons">
+              <button
+                class="preset-btn"
+                onclick="setLetterPreset(1, 'uppercase')"
+              >
+                Single Letter
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setLetterPreset(3, 'uppercase')"
+              >
+                Initials
+              </button>
+              <button class="preset-btn" onclick="setLetterPreset(8, 'mixed')">
+                Password
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setLetterPreset(10, 'lowercase')"
+              >
+                Username
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateLetters()">
+            🔤 Generate Letters
+          </button>
+          <div class="result-display" id="letterResult">
+            <span class="placeholder-text"
+              >Click generate to get random letters</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Questions -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">❓</div>
+            <h3 class="card-title">Random Questions</h3>
+          </div>
+          <div class="generator-content">
+            <div class="preset-buttons">
+              <button
+                class="preset-btn"
+                onclick="setQuestionCategory('icebreaker')"
+              >
+                Ice Breakers
+              </button>
+              <button class="preset-btn" onclick="setQuestionCategory('deep')">
+                Deep Thoughts
+              </button>
+              <button class="preset-btn" onclick="setQuestionCategory('fun')">
+                Fun & Silly
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setQuestionCategory('would-you-rather')"
+              >
+                Would You Rather
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setQuestionCategory('personal')"
+              >
+                Personal
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setQuestionCategory('creative')"
+              >
+                Creative
+              </button>
+            </div>
+            <div class="input-row">
+              <select class="input-field" id="questionCategory">
+                <option value="all">All Categories</option>
+                <option value="icebreaker">Ice Breakers</option>
+                <option value="deep">Deep Thoughts</option>
+                <option value="fun">Fun & Silly</option>
+                <option value="would-you-rather">Would You Rather</option>
+                <option value="personal">Personal</option>
+                <option value="creative">Creative</option>
+              </select>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateQuestion()">
+            💭 Generate Question
+          </button>
+          <div class="result-display" id="questionResult">
+            <span class="placeholder-text"
+              >Click generate to get a random question</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Topics -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">💡</div>
+            <h3 class="card-title">Random Topics</h3>
+          </div>
+          <div class="generator-content">
+            <div class="preset-buttons">
+              <button
+                class="preset-btn"
+                onclick="setTopicCategory('conversation')"
+              >
+                Conversation
+              </button>
+              <button class="preset-btn" onclick="setTopicCategory('debate')">
+                Debate
+              </button>
+              <button class="preset-btn" onclick="setTopicCategory('creative')">
+                Creative Writing
+              </button>
+              <button class="preset-btn" onclick="setTopicCategory('learning')">
+                Learning
+              </button>
+              <button class="preset-btn" onclick="setTopicCategory('hobby')">
+                Hobbies
+              </button>
+            </div>
+            <div class="input-row">
+              <select class="input-field" id="topicCategory">
+                <option value="all">All Topics</option>
+                <option value="conversation">Conversation Starters</option>
+                <option value="debate">Debate Topics</option>
+                <option value="creative">Creative Writing</option>
+                <option value="learning">Learning & Education</option>
+                <option value="hobby">Hobbies & Interests</option>
+              </select>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateTopic()">
+            🚀 Generate Topic
+          </button>
+          <div class="result-display" id="topicResult">
+            <span class="placeholder-text"
+              >Click generate to get a random topic</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Colors -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">🎨</div>
+            <h3 class="card-title">Random Colors</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <select class="input-field" id="colorFormat">
+                <option value="hex">HEX (#FF0000)</option>
+                <option value="rgb">RGB (255, 0, 0)</option>
+                <option value="hsl">HSL (0, 100%, 50%)</option>
+                <option value="name">Color Name</option>
+              </select>
+              <input
+                type="number"
+                class="input-field"
+                id="colorCount"
+                placeholder="Count"
+                value="1"
+                min="1"
+                max="10"
+              />
+            </div>
+            <div class="preset-buttons">
+              <button class="preset-btn" onclick="setColorPreset('pastel')">
+                Pastel Colors
+              </button>
+              <button class="preset-btn" onclick="setColorPreset('vibrant')">
+                Vibrant Colors
+              </button>
+              <button class="preset-btn" onclick="setColorPreset('dark')">
+                Dark Colors
+              </button>
+              <button class="preset-btn" onclick="setColorPreset('rainbow')">
+                Rainbow
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateColors()">
+            🌈 Generate Colors
+          </button>
+          <div class="result-display" id="colorResult">
+            <span class="placeholder-text"
+              >Click generate to get random colors</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Words -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">📝</div>
+            <h3 class="card-title">Random Words</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="number"
+                class="input-field"
+                id="wordCount"
+                placeholder="Count"
+                value="3"
+                min="1"
+                max="20"
+              />
+              <select class="input-field" id="wordType">
+                <option value="common">Common Words</option>
+                <option value="adjectives">Adjectives</option>
+                <option value="nouns">Nouns</option>
+                <option value="verbs">Verbs</option>
+                <option value="animals">Animals</option>
+                <option value="food">Food</option>
+              </select>
+            </div>
+            <div class="preset-buttons">
+              <button
+                class="preset-btn"
+                onclick="setWordPreset(1, 'adjectives')"
+              >
+                Personality Trait
+              </button>
+              <button class="preset-btn" onclick="setWordPreset(2, 'nouns')">
+                Band Name
+              </button>
+              <button class="preset-btn" onclick="setWordPreset(3, 'common')">
+                Story Prompt
+              </button>
+              <button class="preset-btn" onclick="setWordPreset(1, 'animals')">
+                Spirit Animal
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateWords()">
+            📚 Generate Words
+          </button>
+          <div class="result-display" id="wordResult">
+            <span class="placeholder-text"
+              >Click generate to get random words</span
+            >
+          </div>
+        </div>
+
+        <!-- Custom List Generator -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">📋</div>
+            <h3 class="card-title">Custom List</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="text"
+                class="input-field"
+                id="customInput"
+                placeholder="Add your custom option"
+                maxlength="50"
+              />
+              <button class="preset-btn" onclick="addCustomItem()">Add</button>
+            </div>
+            <div class="custom-list-container" id="customList">
+              <div
+                class="placeholder-text"
+                style="text-align: center; padding: 20px"
+              >
+                Add items to create your custom random list!
+              </div>
+            </div>
+            <div class="preset-buttons">
+              <button class="preset-btn" onclick="loadCustomPreset('movies')">
+                Movie Genres
+              </button>
+              <button class="preset-btn" onclick="loadCustomPreset('food')">
+                Food Types
+              </button>
+              <button
+                class="preset-btn"
+                onclick="loadCustomPreset('activities')"
+              >
+                Activities
+              </button>
+              <button
+                class="preset-btn"
+                onclick="loadCustomPreset('countries')"
+              >
+                Countries
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateCustom()">
+            🎯 Pick Random Item
+          </button>
+          <div class="result-display" id="customResult">
+            <span class="placeholder-text">Add items and click generate</span>
+          </div>
+        </div>
+
+        <!-- Random Dates -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">📅</div>
+            <h3 class="card-title">Random Dates</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="date"
+                class="input-field"
+                id="dateStart"
+                value="2024-01-01"
+              />
+              <input
+                type="date"
+                class="input-field"
+                id="dateEnd"
+                value="2025-12-31"
+              />
+            </div>
+            <div class="preset-buttons">
+              <button class="preset-btn" onclick="setDatePreset('thisYear')">
+                This Year
+              </button>
+              <button class="preset-btn" onclick="setDatePreset('nextMonth')">
+                Next Month
+              </button>
+              <button class="preset-btn" onclick="setDatePreset('pastYear')">
+                Past Year
+              </button>
+              <button class="preset-btn" onclick="setDatePreset('future')">
+                Next 5 Years
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generateDate()">
+            📆 Generate Date
+          </button>
+          <div class="result-display" id="dateResult">
+            <span class="placeholder-text"
+              >Click generate to get a random date</span
+            >
+          </div>
+        </div>
+
+        <!-- Random Passwords -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">🔒</div>
+            <h3 class="card-title">Random Passwords</h3>
+          </div>
+          <div class="generator-content">
+            <div class="input-row">
+              <input
+                type="number"
+                class="input-field"
+                id="passwordLength"
+                placeholder="Length"
+                value="12"
+                min="4"
+                max="50"
+              />
+              <select class="input-field" id="passwordType">
+                <option value="mixed">Letters + Numbers</option>
+                <option value="strong">Strong (+ Symbols)</option>
+                <option value="letters">Letters Only</option>
+                <option value="numbers">Numbers Only</option>
+              </select>
+            </div>
+            <div class="preset-buttons">
+              <button
+                class="preset-btn"
+                onclick="setPasswordPreset(8, 'mixed')"
+              >
+                Basic (8)
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setPasswordPreset(12, 'strong')"
+              >
+                Secure (12)
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setPasswordPreset(16, 'strong')"
+              >
+                Ultra Secure (16)
+              </button>
+              <button
+                class="preset-btn"
+                onclick="setPasswordPreset(6, 'numbers')"
+              >
+                PIN
+              </button>
+            </div>
+          </div>
+          <button class="generate-btn" onclick="generatePassword()">
+            🔐 Generate Password
+          </button>
+          <div class="result-display" id="passwordResult">
+            <span class="placeholder-text"
+              >Click generate to get a random password</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- History Section -->
+      <div class="history-section">
+        <h2 class="history-title">🕒 Generation History</h2>
+        <div class="history-list" id="historyList">
+          <div
+            class="placeholder-text"
+            style="text-align: center; padding: 30px"
+          >
+            Your generation history will appear here
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px">
+          <button class="preset-btn" onclick="clearHistory()">
+            Clear History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Game state
+      var customItems = [];
+      var history = [];
+
+      // Data collections
+      const questionCategories = {
+        icebreaker: [
+          "What's the most interesting place you've ever visited?",
+          "If you could have dinner with anyone, who would it be?",
+          "What's your favorite childhood memory?",
+          "What superpower would you choose and why?",
+          "What's the best advice you've ever received?",
+          "If you could time travel, where would you go?",
+          "What's your biggest fear?",
+          "What makes you laugh the most?",
+          "What's your dream job?",
+          "What's one thing you want to learn this year?",
+        ],
+        deep: [
+          "What do you think is the meaning of life?",
+          "How do you define success?",
+          "What would you do if you knew you couldn't fail?",
+          "What's your biggest regret and what did you learn from it?",
+          "How has failure shaped who you are today?",
+          "What legacy do you want to leave behind?",
+          "What's the most important lesson life has taught you?",
+          "How do you find peace in difficult times?",
+          "What does happiness mean to you?",
+          "What's your philosophy on forgiveness?",
+        ],
+        fun: [
+          "If animals could talk, which would be the rudest?",
+          "What's the weirdest food combination you actually enjoy?",
+          "If you were a ghost, how would you haunt people?",
+          "What would be the worst superpower to have?",
+          "If you could only eat one food for the rest of your life, what would it be?",
+          "What's the most useless talent you have?",
+          "If you were ruler of the world, what's the first law you'd make?",
+          "What would your theme song be?",
+          "If you could be any cartoon character, who would you be?",
+          "What's the strangest thing you believed as a child?",
+        ],
+        "would-you-rather": [
+          "Would you rather be able to fly or be invisible?",
+          "Would you rather always be 10 minutes late or 20 minutes early?",
+          "Would you rather have the ability to read minds or predict the future?",
+          "Would you rather live without music or without movies?",
+          "Would you rather be famous or wealthy?",
+          "Would you rather have unlimited money or unlimited time?",
+          "Would you rather always tell the truth or always lie?",
+          "Would you rather live in the past or the future?",
+          "Would you rather be really good at everything or the best at one thing?",
+          "Would you rather never use the internet again or never travel again?",
+        ],
+        personal: [
+          "What's your greatest accomplishment?",
+          "What habit would you most like to break?",
+          "What's your favorite way to spend a weekend?",
+          "What motivates you to get up every morning?",
+          "What's something you're grateful for today?",
+          "What's a skill you'd love to master?",
+          "What's your favorite way to relax?",
+          "What's the best compliment you've ever received?",
+          "What's something that always makes you smile?",
+          "What's your favorite season and why?",
+        ],
+        creative: [
+          "Design a new holiday - what would it celebrate?",
+          "Invent a new color - what would you name it and what does it look like?",
+          "If you could create a new animal, what would it be like?",
+          "Write the first line of a novel set in space.",
+          "If you could build any invention, what would it do?",
+          "Imagine a world where everyone has a superpower. What is yours?",
+          "Describe a new sport that combines two existing ones.",
+          "If you could redesign school, what would you change?",
+          "Create a new ice cream flavor and describe it.",
+          "If you could write a law, what would it be?",
+          "Invent a new emoji and explain when to use it.",
+          "If you could make a movie, what would the plot be?",
+          "Describe a futuristic city.",
+          "If you could create a new language, what would be its first word?",
+          "Imagine a new board game and explain how to play.",
+        ],
+      };
+
+      // Topic categories for random topics
+      const topicCategories = {
+        conversation: [
+          "Favorite travel destination",
+          "Dream job",
+          "Best book you've read",
+          "A memorable childhood story",
+          "A skill you want to learn",
+          "A person who inspires you",
+          "A hobby you enjoy",
+          "A place you'd love to visit",
+          "A movie you recommend",
+          "A food you can't live without",
+        ],
+        debate: [
+          "Is technology making us smarter or lazier?",
+          "Should homework be banned?",
+          "Is social media good or bad for society?",
+          "Should animals be kept in zoos?",
+          "Is climate change reversible?",
+          "Should school uniforms be mandatory?",
+          "Is online learning better than classroom learning?",
+          "Should voting be mandatory?",
+          "Is space exploration worth the cost?",
+          "Should junk food be taxed?",
+        ],
+        creative: [
+          "Write a story about a lost treasure",
+          "Invent a new holiday",
+          "Describe a world with no gravity",
+          "Create a superhero and their powers",
+          "Imagine a city in the clouds",
+          "Design a new board game",
+          "Write a poem about friendship",
+          "Describe a futuristic vehicle",
+          "Invent a new sport",
+          "Create a new animal species",
+        ],
+        learning: [
+          "The most useful thing you've learned",
+          "A subject you find fascinating",
+          "A historical event you want to know more about",
+          "A science experiment to try",
+          "A language you'd like to speak",
+          "A famous inventor and their invention",
+          "A math trick you know",
+          "A country you'd like to study",
+          "A technology you want to understand",
+          "A career you want to explore",
+        ],
+        hobby: [
+          "Painting",
+          "Gardening",
+          "Cooking",
+          "Photography",
+          "Cycling",
+          "Writing",
+          "Playing a musical instrument",
+          "Collecting stamps",
+          "Bird watching",
+          "Knitting",
+        ],
+      };
+
+      // Set default question category
+      let currentQuestionCategory = "all";
+
+      // Set default custom items
+      const defaultCustomItems = [
+        "Apple",
+        "Banana",
+        "Cherry",
+        "Date",
+        "Grape",
+        "Lemon",
+        "Mango",
+        "Orange",
+        "Peach",
+        "Pear",
+        "Pineapple",
+        "Plum",
+        "Raspberry",
+        "Strawberry",
+        "Watermelon",
+      ];
+
+      // Initialize custom items
+      function initCustomItems() {
+        customItems = [...defaultCustomItems];
+        renderCustomList();
+      }
+
+      // Add item to custom list
+      function addCustomItem() {
+        const input = document.getElementById("customInput");
+        const value = input.value.trim();
+        if (value && !customItems.includes(value)) {
+          customItems.push(value);
+          input.value = "";
+          renderCustomList();
+        }
+      }
+
+      // Remove item from custom list
+      function removeCustomItem(item) {
+        customItems = customItems.filter((i) => i !== item);
+        renderCustomList();
+      }
+
+      // Load custom preset
+      function loadCustomPreset(type) {
+        let items = [];
+        switch (type) {
+          case "movies":
+            items = [
+              "Action",
+              "Comedy",
+              "Drama",
+              "Fantasy",
+              "Horror",
+              "Romance",
+              "Sci-Fi",
+              "Thriller",
+            ];
+            break;
+          case "food":
+            items = [
+              "Pizza",
+              "Burger",
+              "Sushi",
+              "Pasta",
+              "Salad",
+              "Tacos",
+              "Steak",
+              "Seafood",
+            ];
+            break;
+          case "activities":
+            items = [
+              "Reading",
+              "Traveling",
+              "Cooking",
+              "Gaming",
+              "Hiking",
+              "Swimming",
+              "Painting",
+              "Dancing",
+            ];
+            break;
+          case "countries":
+            items = [
+              "USA",
+              "Canada",
+              "UK",
+              "Australia",
+              "Germany",
+              "France",
+              "Italy",
+              "Spain",
+            ];
+            break;
+        }
+        customItems = items;
+        renderCustomList();
+      }
+
+      // Render custom list
+      function renderCustomList() {
+        const list = document.getElementById("customList");
+        list.innerHTML = "";
+        if (customItems.length === 0) {
+          list.innerHTML =
+            '<div class="placeholder-text" style="text-align: center; padding: 20px;">Add items to create your custom random list!</div>';
+        } else {
+          customItems.forEach((item) => {
+            const div = document.createElement("div");
+            div.className = "custom-item";
+            div.innerHTML = `
+                        <span>${item}</span>
+                        <button class="remove-item-btn" onclick="removeCustomItem('${item}')">✖️</button>
+                    `;
+            list.appendChild(div);
+          });
+        }
+      }
+
+      // Clear history
+      function clearHistory() {
+        history = [];
+        renderHistory();
+      }
+
+      // Render history
+      function renderHistory() {
+        const list = document.getElementById("historyList");
+        list.innerHTML = "";
+        if (history.length === 0) {
+          list.innerHTML =
+            '<div class="placeholder-text" style="text-align: center; padding: 30px;">Your generation history will appear here</div>';
+        } else {
+          history.forEach((item) => {
+            const div = document.createElement("div");
+            div.className = "history-item";
+            div.innerHTML = `
+                        <div class="history-type">${item.type}</div>
+                        <div class="history-result">${item.result}</div>
+                        <div class="history-time">${new Date(
+                          item.time
+                        ).toLocaleString()}</div>
+                    `;
+            list.appendChild(div);
+          });
+        }
+      }
+
+      // Generate random numbers
+      function generateNumbers() {
+        const min = parseInt(document.getElementById("numMin").value);
+        const max = parseInt(document.getElementById("numMax").value);
+        const count = parseInt(document.getElementById("numCount").value);
+        let result = [];
+        for (let i = 0; i < count; i++) {
+          result.push(Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+        displayResult("numberResult", result.join(", "), "numbers");
+      }
+
+      // Generate random letters
+      function generateLetters() {
+        const count = parseInt(document.getElementById("letterCount").value);
+        const type = document.getElementById("letterType").value;
+        let result = "";
+        const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lowercase = "abcdefghijklmnopqrstuvwxyz";
+        const characters =
+          type === "uppercase"
+            ? uppercase
+            : type === "lowercase"
+            ? lowercase
+            : uppercase + lowercase;
+        for (let i = 0; i < count; i++) {
+          result += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+          );
+        }
+        displayResult("letterResult", result, "letters");
+      }
+
+      // Generate random question
+      function generateQuestion() {
+        const category = document.getElementById("questionCategory").value;
+        let questions = [];
+        if (category === "all") {
+          Object.values(questionCategories).forEach(
+            (q) => (questions = questions.concat(q))
+          );
+        } else {
+          questions = questionCategories[category];
+        }
+        const randomIndex = Math.floor(Math.random() * questions.length);
+        const result = questions[randomIndex];
+        displayResult("questionResult", result, "question");
+      }
+
+      // Generate random topic
+      function generateTopic() {
+        const category = document.getElementById("topicCategory").value;
+        let topics = [];
+        if (category === "all") {
+          Object.values(topicCategories).forEach(
+            (t) => (topics = topics.concat(t))
+          );
+        } else {
+          topics = topicCategories[category];
+        }
+        const randomIndex = Math.floor(Math.random() * topics.length);
+        const result = topics[randomIndex];
+        displayResult("topicResult", result, "topic");
+      }
+
+      // Generate random colors
+      function generateColors() {
+        const count = parseInt(document.getElementById("colorCount").value);
+        const format = document.getElementById("colorFormat").value;
+        let result = [];
+        for (let i = 0; i < count; i++) {
+          let color = "";
+          if (format === "hex") {
+            color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+          } else if (format === "rgb") {
+            color =
+              "rgb(" +
+              Math.floor(Math.random() * 256) +
+              ", " +
+              Math.floor(Math.random() * 256) +
+              ", " +
+              Math.floor(Math.random() * 256) +
+              ")";
+          } else if (format === "hsl") {
+            color = "hsl(" + Math.floor(Math.random() * 360) + ", 100%, 50%)";
+          } else {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            color = letters.charAt(Math.floor(Math.random() * letters.length));
+          }
+          result.push(color);
+        }
+        displayResult("colorResult", result.join(", "), "colors");
+      }
+
+      // Generate random words
+      function generateWords() {
+        const count = parseInt(document.getElementById("wordCount").value);
+        const type = document.getElementById("wordType").value;
+        let words = [];
+        if (type === "common") {
+          words = [
+            "the",
+            "be",
+            "to",
+            "of",
+            "and",
+            "a",
+            "in",
+            "that",
+            "have",
+            "it",
+            "you",
+            "he",
+            "with",
+            "on",
+            "do",
+            "at",
+            "by",
+            "not",
+            "this",
+            "but",
+          ];
+        } else if (type === "adjectives") {
+          words = [
+            "quick",
+            "lazy",
+            "sleepy",
+            "noisy",
+            "hungry",
+            "happy",
+            "sad",
+            "angry",
+            "excited",
+            "bored",
+          ];
+        } else if (type === "nouns") {
+          words = [
+            "dog",
+            "cat",
+            "mouse",
+            "keyboard",
+            "monitor",
+            "chair",
+            "table",
+            "book",
+            "pen",
+            "phone",
+          ];
+        } else if (type === "verbs") {
+          words = [
+            "run",
+            "jump",
+            "swim",
+            "read",
+            "write",
+            "draw",
+            "sing",
+            "dance",
+            "play",
+            "cook",
+          ];
+        } else if (type === "animals") {
+          words = [
+            "lion",
+            "tiger",
+            "bear",
+            "elephant",
+            "giraffe",
+            "zebra",
+            "monkey",
+            "kangaroo",
+            "panda",
+            "fox",
+          ];
+        } else {
+          words = [
+            "pizza",
+            "burger",
+            "sushi",
+            "pasta",
+            "salad",
+            "taco",
+            "steak",
+            "seafood",
+            "cake",
+            "cookie",
+          ];
+        }
+        let result = [];
+        for (let i = 0; i < count; i++) {
+          const randomIndex = Math.floor(Math.random() * words.length);
+          result.push(words[randomIndex]);
+        }
+        displayResult("wordResult", result.join(", "), "words");
+      }
+
+      // Generate random date
+      function generateDate() {
+        const start = new Date(document.getElementById("dateStart").value);
+        const end = new Date(document.getElementById("dateEnd").value);
+        const date = new Date(
+          start.getTime() + Math.random() * (end.getTime() - start.getTime())
+        );
+        const result = date.toISOString().split("T")[0];
+        displayResult("dateResult", result, "date");
+      }
+
+      // Generate random password
+      function generatePassword() {
+        const length = parseInt(
+          document.getElementById("passwordLength").value
+        );
+        const type = document.getElementById("passwordType").value;
+        let charset = "";
+        if (type === "mixed") {
+          charset =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        } else if (type === "strong") {
+          charset =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+        } else if (type === "letters") {
+          charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        } else {
+          charset = "0123456789";
+        }
+        let password = "";
+        for (let i = 0; i < length; i++) {
+          password += charset.charAt(
+            Math.floor(Math.random() * charset.length)
+          );
+        }
+        displayResult("passwordResult", password, "password");
+      }
+
+      // Display result
+      function displayResult(resultId, result, type) {
+        document.getElementById(resultId).classList.add("has-result");
+        document.getElementById(
+          resultId
+        ).innerHTML = `<span class="result-text">${result}</span>`;
+        addToHistory(type, result);
+      }
+
+      // Add to history
+      function addToHistory(type, result) {
+        const now = new Date();
+        history.push({ type, result, time: now });
+        renderHistory();
+      }
+
+      // Initialize
+      initCustomItems();
+    </script>
+  </body>
+</html>
