@@ -525,6 +525,13 @@
         gap: 0.7rem;
       }
 
+      /* Center the heading text in tool-link-box */
+      .tool-link-box span {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+
       .tool-link-box i {
         font-size: 2.2rem;
         margin-bottom: 0.3rem;
@@ -736,9 +743,6 @@
                 <button class="btn btn-secondary" id="startTimer">
                   <i class="fas fa-play"></i> Start
                 </button>
-                <button class="btn btn-secondary" id="pauseTimer">
-                  <i class="fas fa-pause"></i> Pause
-                </button>
                 <button class="btn btn-secondary" id="resetTimer">
                   <i class="fas fa-stop"></i> Reset
                 </button>
@@ -896,21 +900,58 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="tool-links-row">
-            <a href="games/spin.html" class="tool-link-box">
-              <i class="fas fa-sync-alt"></i>
-              <span>Spin the Wheel</span>
-            </a>
-            <a href="dice.html" class="tool-link-box">
-              <i class="fas fa-dice"></i>
-              <span>Custom Dice</span>
-            </a>
-            <a href="random.html" class="tool-link-box">
-              <i class="fas fa-random"></i>
-              <span>Random Generator</span>
-            </a>
-          </div>
+        <!-- Move this OUTSIDE the tools-grid, so it's not inside the grid -->
+        <div class="tool-links-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; justify-items: center; margin-top: 3rem;">
+          <a href="games/spin.html" class="tool-link-box">
+            <i class="fas fa-sync-alt"></i>
+            <span>Spin the Wheel</span>
+          </a>
+          <a href="dice.html" class="tool-link-box">
+            <i class="fas fa-dice"></i>
+            <span>Custom Dice</span>
+          </a>
+          <a href="random.html" class="tool-link-box">
+            <i class="fas fa-random"></i>
+            <span>Random Generator</span>
+          </a>
+          <a href="attendance.html" class="tool-link-box">
+            <i class="fas fa-user-check"></i>
+            <span>Attendance Tracker</span>
+          </a>
+          <a href="poll.html" class="tool-link-box">
+            <i class="fas fa-poll"></i>
+            <span>Quick Poll</span>
+          </a>
+          <a href="flashcards.html" class="tool-link-box">
+            <i class="fas fa-clone"></i>
+            <span>Flashcards</span>
+          </a>
+          <a href="timer.html" class="tool-link-box">
+            <i class="fas fa-stopwatch"></i>
+            <span>Activity Timer</span>
+          </a>
+          <a href="groupmaker.html" class="tool-link-box">
+            <i class="fas fa-users"></i>
+            <span>Group Maker</span>
+          </a>
+          <a href="wordcloud.html" class="tool-link-box">
+            <i class="fas fa-cloud"></i>
+            <span>Word Cloud</span>
+          </a>
+          <a href="randomname.html" class="tool-link-box">
+            <i class="fas fa-user"></i>
+            <span>Random Name Picker</span>
+          </a>
+          <a href="scoreboard.html" class="tool-link-box">
+            <i class="fas fa-trophy"></i>
+            <span>Scoreboard</span>
+          </a>
+          <a href="calendar.html" class="tool-link-box">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Class Calendar</span>
+          </a>
         </div>
       </div>
     </section>
@@ -988,6 +1029,7 @@
       const pauseTimer = document.getElementById("pauseTimer");
       const resetTimer = document.getElementById("resetTimer");
 
+      // Removed pauseTimer reference as it's not needed
       function updateTimerDisplay() {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
@@ -1269,16 +1311,18 @@
         });
       });
 
-      // Add resize handler for canvas
+      // Add resize handler for canvas and preserve drawing
       window.addEventListener("resize", () => {
         const canvas = document.getElementById("whiteboard");
+        const ctx = canvas.getContext("2d");
+        // Save current image
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width;
         canvas.height = rect.height;
+        // Restore image
+        ctx.putImageData(imageData, 0, 0);
       });
-
-      // Initialize on page load
-      updateTimerDisplay();
       updateRewardsChart();
     </script>
   </body>
