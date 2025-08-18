@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ESL Fun Online - Premium resources, test preparation, and interactive materials for English language learners and coding enthusiasts."
+    />
+    <title>ESL Fun Online | Professional English & Coding Resources</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-9G9RD6BHLN");
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/header.css" />
+    <style>
+      :root {
+        --primary-color: #ff6b6b;
+        --secondary-color: #4ecdc4;
+        --accent-color: #45b7d1;
+        --yellow-bright: #ffd93d;
+        --green-fresh: #26de81;
+        --text-primary: #2d3436;
+        --text-secondary: #636e72;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9ff;
+        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+        --gradient-rainbow: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 25%,
+          #f093fb 50%,
+          #f5576c 75%,
+          #4facfe 100%
+        );
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Nunito", sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: var(--bg-primary);
+        padding: 2rem 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .hero {
+        background: var(--gradient-rainbow);
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+        border-radius: 25px;
+        margin-bottom: 3rem;
+      }
+
+      .hero h1 {
+        font-family: "Fredoka One", cursive;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 400;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+
+      .score-display {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .score-item {
+        display: inline-block;
+        margin: 0 1rem;
+        font-family: "Fredoka One", cursive;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+      }
+
+      .alphabet-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .letter-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+        border: 3px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .letter-card:hover {
+        transform: translateY(-10px) rotate(2deg);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+      }
+
+      .letter-card.correct {
+        background: var(--green-fresh);
+        color: white;
+        transform: scale(1.1);
+        animation: success 0.6s ease-in-out;
+      }
+
+      .letter-card.incorrect {
+        background: var(--primary-color);
+        color: white;
+        animation: wiggle 0.5s ease-in-out;
+      }
+
+      .letter-display {
+        font-family: "Fredoka One", cursive;
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .letter-card.correct .letter-display,
+      .letter-card.incorrect .letter-display {
+        color: white;
+      }
+
+      .letter-word {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .letter-card.correct .letter-word,
+      .letter-card.incorrect .letter-word {
+        color: white;
+      }
+
+      .letter-sound {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-style: italic;
+      }
+
+      .letter-card.correct .letter-sound,
+      .letter-card.incorrect .letter-sound {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .game-info {
+        background: var(--bg-secondary);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .target-letter {
+        font-family: "Fredoka One", cursive;
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .feedback {
+        font-family: "Fredoka One", cursive;
+        font-size: 1.5rem;
+        margin: 1rem 0;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .feedback.correct {
+        color: var(--green-fresh);
+      }
+
+      .feedback.incorrect {
+        color: var(--primary-color);
+      }
+
+      .btn {
+        background: var(--yellow-bright);
+        color: var(--text-primary);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+        font-family: "Nunito", sans-serif;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        background: #ffed4e;
+      }
+
+      .btn-secondary {
+        background: var(--secondary-color);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: var(--accent-color);
+      }
+
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(3deg);
+        }
+        75% {
+          transform: rotate(-3deg);
+        }
+      }
+
+      @keyframes success {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .celebration {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        animation: celebration 2s ease-in-out;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      @keyframes celebration {
+        0% {
+          transform: translate(-50%, -50%) scale(0) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+
+        .alphabet-grid {
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 1rem;
+        }
+
+        .letter-card {
+          padding: 1.5rem 0.5rem;
+        }
+
+        .letter-display {
+          font-size: 2.5rem;
+        }
+
+        .score-item {
+          margin: 0 0.5rem;
+          font-size: 1rem;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../eslresources.html" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
+                </a>
+                <a href="vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+                <a href="writingf.html" class="dropdown-item">
+                  <i class="fas fa-pen"></i>
+                  Writing for Success
+                </a>
+                <a href="phonics.html" class="dropdown-item">
+                  <i class="fas fa-microphone"></i>
+                  Phonics Fun
+                </a>
+                <a href="business.html" class="dropdown-item">
+                  <i class="fas fa-briefcase"></i>
+                  Business English
+                </a>
+                <a href="test.html" class="dropdown-item">
+                  <i class="fas fa-graduation-cap"></i>
+                  Test Preparation
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="../codingresources.html" class="nav-link">
+                <i class="fas fa-code"></i>
+                Coding
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="../computerbasics.html" class="dropdown-item">
+                  <i class="fas fa-desktop"></i>
+                  Computer Basics
+                </a>
+                <a href="../htmlcss.html" class="dropdown-item">
+                  <i class="fab fa-html5"></i>
+                  Web Development
+                </a>
+                <a href="../javascript.html" class="dropdown-item">
+                  <i class="fab fa-js"></i>
+                  JavaScript
+                </a>
+                <a href="../python.html" class="dropdown-item">
+                  <i class="fab fa-python"></i>
+                  Python
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="../games.html" class="nav-link">
+                <i class="fas fa-dice"></i>
+                Games
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../tools.html" class="nav-link">
+                <i class="fas fa-tools"></i>
+                Toolkit
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../blog.html" class="nav-link">
+                <i class="fas fa-book-open"></i>
+                Blog
+              </a>
+            </li>
+          </ul>
+
+          <div class="controls">
+            <button
+              class="control-btn theme-toggle"
+              id="themeToggle"
+              aria-label="Toggle dark mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+            <a
+              class="control-btn admin-toggle"
+              id="adminToggle"
+              aria-label="Admin"
+              href="../login.html"
+            >
+              <i class="fas fa-user-shield"></i>
+            </a>
+          </div>
+          <button
+            class="control-btn mobile-toggle"
+            id="mobileToggle"
+            aria-label="Toggle mobile menu"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Hero Section -->
+      <div class="hero">
+        <h1>🎵 Simple Phonics Cards 🎵</h1>
+        <p>Click on the letters to learn phonics!</p>
+      </div>
+
+      <!-- Score Display -->
+      <div class="score-display">
+        <span class="score-item">Score: <span id="score">0</span></span>
+        <span class="score-item">Streak: <span id="streak">0</span></span>
+        <span class="score-item">Level: <span id="level">1</span></span>
+      </div>
+
+      <!-- Game Info -->
+      <div class="game-info">
+        <div class="target-letter" id="targetLetter">
+          Click "Start Game" to begin!
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <button class="btn" onclick="startGame()">🎯 Start Game</button>
+        <button class="btn btn-secondary" onclick="nextLetter()">
+          ➡️ Next Letter
+        </button>
+      </div>
+
+      <!-- Alphabet Grid -->
+      <div class="alphabet-grid" id="alphabetGrid">
+        <!-- Letters will be generated by JavaScript -->
+      </div>
+    </div>
+
+    <script>
+      // Game state
+      let gameState = {
+        score: 0,
+        streak: 0,
+        level: 1,
+        currentTarget: null,
+        gameActive: false,
+      };
+
+      // Alphabet data
+      const alphabetData = {
+        A: { sound: "/æ/", word: "Apple" },
+        B: { sound: "/b/", word: "Ball" },
+        C: { sound: "/k/", word: "Cat" },
+        D: { sound: "/d/", word: "Dog" },
+        E: { sound: "/ɛ/", word: "Egg" },
+        F: { sound: "/f/", word: "Fish" },
+        G: { sound: "/g/", word: "Girl" },
+        H: { sound: "/h/", word: "Hat" },
+        I: { sound: "/ɪ/", word: "Ice" },
+        J: { sound: "/dʒ/", word: "Jump" },
+        K: { sound: "/k/", word: "Key" },
+        L: { sound: "/l/", word: "Lion" },
+        M: { sound: "/m/", word: "Mouse" },
+        N: { sound: "/n/", word: "Nose" },
+        O: { sound: "/ɒ/", word: "Orange" },
+        P: { sound: "/p/", word: "Pig" },
+        Q: { sound: "/kw/", word: "Queen" },
+        R: { sound: "/r/", word: "Red" },
+        S: { sound: "/s/", word: "Sun" },
+        T: { sound: "/t/", word: "Tree" },
+        U: { sound: "/ʌ/", word: "Up" },
+        V: { sound: "/v/", word: "Van" },
+        W: { sound: "/w/", word: "Water" },
+        X: { sound: "/ks/", word: "X-ray" },
+        Y: { sound: "/j/", word: "Yes" },
+        Z: { sound: "/z/", word: "Zebra" },
+      };
+
+      // Initialize the game
+      function initGame() {
+        generateAlphabet();
+        updateScore();
+      }
+
+      // Generate alphabet grid
+      function generateAlphabet() {
+        const grid = document.getElementById("alphabetGrid");
+        grid.innerHTML = "";
+
+        Object.keys(alphabetData).forEach((letter) => {
+          const card = document.createElement("div");
+          card.className = "letter-card";
+          card.onclick = () => selectLetter(letter, card);
+
+          card.innerHTML = `
+                    <div class="letter-display">${letter}</div>
+                    <div class="letter-word">${alphabetData[letter].word}</div>
+                    <div class="letter-sound">${alphabetData[letter].sound}</div>
+                `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      // Start a new game
+      function startGame() {
+        const letters = Object.keys(alphabetData);
+        const randomLetter =
+          letters[Math.floor(Math.random() * letters.length)];
+        gameState.currentTarget = randomLetter;
+        gameState.gameActive = true;
+
+        document.getElementById(
+          "targetLetter"
+        ).textContent = `Find and click: ${randomLetter}`;
+        document.getElementById("feedback").textContent = "";
+
+        // Reset all cards
+        document.querySelectorAll(".letter-card").forEach((card) => {
+          card.classList.remove("correct", "incorrect");
+        });
+      }
+
+      // Next letter
+      function nextLetter() {
+        if (gameState.gameActive) {
+          startGame();
+        }
+      }
+
+      // Select a letter
+      function selectLetter(letter, card) {
+        if (!gameState.gameActive) {
+          // If game not active, just show the letter info
+          showCelebration("✨");
+          return;
+        }
+
+        const feedback = document.getElementById("feedback");
+
+        if (letter === gameState.currentTarget) {
+          // Correct answer
+          card.classList.add("correct");
+          feedback.textContent = "🎉 Correct! Well done!";
+          feedback.className = "feedback correct";
+
+          updateGameScore(10);
+          showCelebration("🎉");
+
+          setTimeout(() => {
+            startGame();
+          }, 1500);
+        } else {
+          // Wrong answer
+          card.classList.add("incorrect");
+          feedback.textContent = `❌ Try again! Look for "${gameState.currentTarget}"`;
+          feedback.className = "feedback incorrect";
+
+          resetStreak();
+
+          setTimeout(() => {
+            card.classList.remove("incorrect");
+          }, 1000);
+        }
+      }
+
+      // Update game score
+      function updateGameScore(points) {
+        gameState.score += points;
+        gameState.streak++;
+
+        // Level up every 100 points
+        const newLevel = Math.floor(gameState.score / 100) + 1;
+        if (newLevel > gameState.level) {
+          gameState.level = newLevel;
+          showCelebration("🏆");
+        }
+
+        updateScore();
+      }
+
+      // Reset streak
+      function resetStreak() {
+        gameState.streak = 0;
+        updateScore();
+      }
+
+      // Update score display
+      function updateScore() {
+        document.getElementById("score").textContent = gameState.score;
+        document.getElementById("streak").textContent = gameState.streak;
+        document.getElementById("level").textContent = gameState.level;
+      }
+
+      // Show celebration animation
+      function showCelebration(emoji) {
+        const celebration = document.createElement("div");
+        celebration.className = "celebration";
+        celebration.textContent = emoji;
+        document.body.appendChild(celebration);
+
+        setTimeout(() => {
+          document.body.removeChild(celebration);
+        }, 2000);
+      }
+
+      // Keyboard support
+      document.addEventListener("keydown", function (e) {
+        const letter = e.key.toUpperCase();
+        if (alphabetData[letter]) {
+          const cards = document.querySelectorAll(".letter-card");
+          const targetCard = Array.from(cards).find(
+            (card) =>
+              card.querySelector(".letter-display").textContent === letter
+          );
+          if (targetCard) {
+            selectLetter(letter, targetCard);
+          }
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener("DOMContentLoaded", initGame);
+    </script>
+  </body>
+</html>
