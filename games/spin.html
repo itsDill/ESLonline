@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A customizable roulette wheel game for decision making and fun"
+    />
+    <title>Custom Roulette Wheel Game | Decision Maker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #6c5ce7;
+        --secondary-color: #a29bfe;
+        --danger-color: #ff7675;
+        --success-color: #00b894;
+        --warning-color: #fdcb6e;
+        --dark-color: #2d3436;
+        --light-color: #f5f6fa;
+        --text-color: #333;
+        --text-light: #636e72;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--secondary-color) 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .game-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 30px;
+        max-width: 1000px;
+        width: 100%;
+        transition: var(--transition);
+      }
+
+      .title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      .title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-radius: 2px;
+      }
+
+      .roulette-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+      }
+
+      .wheel-section {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .wheel-container {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        margin-bottom: 20px;
+      }
+
+      .wheel {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        transition: transform 4s cubic-bezier(0.23, 1, 0.32, 1);
+        border: 10px solid var(--dark-color);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+          inset 0 0 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .segment {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        transform-origin: 100% 100%;
+        border-right: 2px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        clip-path: polygon(0 0, 100% 0, 100% 100%);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .segment:hover {
+        filter: brightness(1.1);
+      }
+
+      .pointer {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 40px solid var(--danger-color);
+        z-index: 10;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      }
+
+      .pointer::after {
+        content: "";
+        position: absolute;
+        top: -35px;
+        left: -10px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .controls-section {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .input-group {
+        margin-bottom: 25px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .input-group input,
+      .input-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: var(--transition);
+        font-family: "Poppins", sans-serif;
+      }
+
+      .input-group input:focus,
+      .input-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .options-list {
+        background: var(--light-color);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        max-height: 200px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--light-color);
+      }
+
+      .options-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .options-list::-webkit-scrollbar-track {
+        background: var(--light-color);
+        border-radius: 10px;
+      }
+
+      .options-list::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+      }
+
+      .option-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #ddd;
+        transition: var(--transition);
+      }
+
+      .option-item:hover {
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .option-item:last-child {
+        border-bottom: none;
+      }
+
+      .remove-btn {
+        background: var(--danger-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .remove-btn:hover {
+        background: #e17070;
+        transform: translateY(-1px);
+      }
+
+      .remove-btn svg {
+        width: 12px;
+        height: 12px;
+        fill: currentColor;
+      }
+
+      .btn {
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin: 5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        box-shadow: none;
+      }
+
+      .btn-secondary:hover {
+        background: var(--light-color);
+        box-shadow: none;
+      }
+
+      .btn-danger {
+        background: var(--danger-color);
+        box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+      }
+
+      .btn-danger:hover {
+        box-shadow: 0 8px 25px rgba(255, 118, 117, 0.4);
+      }
+
+      .btn-success {
+        background: var(--success-color);
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+      }
+
+      .btn-success:hover {
+        box-shadow: 0 8px 25px rgba(0, 184, 148, 0.4);
+      }
+
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .result {
+        text-align: center;
+        margin-top: 20px;
+        padding: 25px;
+        background: var(--light-color);
+        border-radius: 15px;
+        border-left: 5px solid var(--primary-color);
+        display: none;
+        width: 100%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .result.show {
+        display: block;
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .result h3 {
+        color: var(--text-color);
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .result p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 0;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: var(--primary-color);
+        opacity: 0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-light);
+      }
+
+      .empty-state svg {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+        fill: #ddd;
+      }
+
+      .wheel-center {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        border: 5px solid var(--dark-color);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--dark-color);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 20px;
+        }
+
+        .title {
+          font-size: 2rem;
+        }
+
+        .wheel-container {
+          width: 280px;
+          height: 280px;
+        }
+
+        .btn {
+          padding: 10px 20px;
+          font-size: 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .title {
+          font-size: 1.8rem;
+        }
+
+        .wheel-container {
+          width: 250px;
+          height: 250px;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 class="title">🎡 Custom Wheel</h1>
+
+      <div class="roulette-container">
+        <div class="wheel-section">
+          <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+              <!-- Segments will be generated here -->
+            </div>
+            <div class="wheel-center">SPIN</div>
+          </div>
+
+          <button class="btn" id="spinBtn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              ></path>
+              <path d="M3.27 6.96L12 12.01l8.73-5.05"></path>
+              <path d="M12 22.08V12"></path>
+            </svg>
+            SPIN THE WHEEL
+          </button>
+
+          <div class="result" id="result">
+            <h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                ></path>
+              </svg>
+              Winner!
+            </h3>
+            <p id="resultText"></p>
+          </div>
+        </div>
+
+        <div class="controls-section">
+          <div class="input-group">
+            <label for="optionInput">Add Your Options:</label>
+            <input
+              type="text"
+              id="optionInput"
+              placeholder="Enter an option (e.g., Pizza, Burger, Tacos)"
+              maxlength="25"
+              aria-label="Enter option to add to the wheel"
+            />
+            <button class="btn btn-success" id="addOptionBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Option
+            </button>
+          </div>
+
+          <div class="input-group">
+            <label>Your Options: <span id="optionsCount">(0)</span></label>
+            <div class="options-list" id="optionsList">
+              <div class="empty-state">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>No options added yet. Add some options to get started!</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-secondary" id="examplesBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                ></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              Examples
+            </button>
+            <button class="btn btn-danger" id="clearBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                ></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // DOM Elements
+        const wheel = document.getElementById("wheel");
+        const spinBtn = document.getElementById("spinBtn");
+        const result = document.getElementById("result");
+        const resultText = document.getElementById("resultText");
+        const optionInput = document.getElementById("optionInput");
+        const optionsList = document.getElementById("optionsList");
+        const addOptionBtn = document.getElementById("addOptionBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const examplesBtn = document.getElementById("examplesBtn");
+        const optionsCount = document.getElementById("optionsCount");
+
+        // Game state
+        let options = [];
+        let isSpinning = false;
+        let canSpin = false;
+
+        // Color palette for segments
+        const colors = [
+          "#FF6B6B",
+          "#4ECDC4",
+          "#45B7D1",
+          "#96CEB4",
+          "#FFEAA7",
+          "#DDA0DD",
+          "#98D8C8",
+          "#F7DC6F",
+          "#BB8FCE",
+          "#85C1E9",
+          "#F8C471",
+          "#82E0AA",
+          "#F1948A",
+          "#D2B4DE",
+          "#74B9FF",
+          "#55E6C1",
+          "#FD7272",
+          "#9AECDB",
+          "#81ECEC",
+          "#FEA47F",
+        ];
+
+        // Initialize the app
+        init();
+
+        function init() {
+          // Load saved options from localStorage if available
+          const savedOptions = localStorage.getItem("rouletteOptions");
+          if (savedOptions) {
+            options = JSON.parse(savedOptions);
+            updateOptionsDisplay();
+            updateWheel();
+          }
+
+          // Set up event listeners
+          addOptionBtn.addEventListener("click", addOption);
+          clearBtn.addEventListener("click", clearAll);
+          examplesBtn.addEventListener("click", addExamples);
+          spinBtn.addEventListener("click", spin);
+
+          optionInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              addOption();
+            }
+          });
+
+          // Disable spin button initially if no options
+          spinBtn.disabled = options.length < 2;
+        }
+
+        function addOption() {
+          const option = optionInput.value.trim();
+
+          if (!option) {
+            showAlert("Please enter an option");
+            optionInput.focus();
+            return;
+          }
+
+          if (option.length > 25) {
+            showAlert("Option is too long (max 25 characters)");
+            return;
+          }
+
+          if (options.includes(option)) {
+            showAlert("This option already exists!");
+            optionInput.value = "";
+            optionInput.focus();
+            return;
+          }
+
+          options.push(option);
+          optionInput.value = "";
+          optionInput.focus();
+
+          // Save to localStorage
+          localStorage.setItem("rouletteOptions", JSON.stringify(options));
+
+          updateOptionsDisplay();
+          updateWheel();
+          showAlert("Option added successfully!", "success");
+        }
+
+        function removeOption(index) {
+          options.splice(index, 1);
+
+          // Save to localStorage
+          localStorage.setItem("rouletteOptions", JSON.stringify(options));
+
+          updateOptionsDisplay();
+          updateWheel();
+        }
+
+        function updateOptionsDisplay() {
+          optionsCount.textContent = `(${options.length})`;
+
+          if (options.length === 0) {
+            optionsList.innerHTML = `
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>No options added yet. Add some options to get started!</p>
+              </div>
+            `;
+            return;
+          }
+
+          optionsList.innerHTML = options
+            .map(
+              (option, index) => `
+              <div class="option-item" data-index="${index}">
+                <span>${option}</span>
+                <button class="remove-btn" aria-label="Remove ${option}">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                  Remove
+                </button>
+              </div>
+            `
+            )
+            .join("");
+
+          // Add event listeners to remove buttons
+          document.querySelectorAll(".remove-btn").forEach((btn, index) => {
+            btn.addEventListener("click", () => removeOption(index));
+          });
+        }
+
+        function updateWheel() {
+          // Enable/disable spin button based on options count
+          spinBtn.disabled = options.length < 2;
+          canSpin = options.length >= 2;
+
+          if (options.length === 0) {
+            wheel.innerHTML = `
+              <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-style: italic;">
+                Add options to see the wheel
+              </div>
+            `;
+            return;
+          }
+
+          const segmentAngle = 360 / options.length;
+
+          wheel.innerHTML = options
+            .map((option, index) => {
+              const rotation = index * segmentAngle;
+              const color = colors[index % colors.length];
+              const textRotation = segmentAngle / 2;
+
+              return `
+                <div class="segment" style="
+                  transform: rotate(${rotation}deg);
+                  background: ${color};
+                " data-option="${option}">
+                  <span style="transform: rotate(${textRotation}deg); transform-origin: center;">
+                    ${option}
+                  </span>
+                </div>
+              `;
+            })
+            .join("");
+        }
+
+        function spin() {
+          if (isSpinning || !canSpin) return;
+
+          isSpinning = true;
+          spinBtn.disabled = true;
+          spinBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+            </svg>
+            SPINNING...
+          `;
+
+          result.classList.remove("show");
+
+          const spins = 5 + Math.random() * 5; // 5-10 full rotations
+          const finalAngle = Math.random() * 360;
+          const totalRotation = spins * 360 + finalAngle;
+
+          wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+          // Add spinning animation to center
+          const center = document.querySelector(".wheel-center");
+          center.style.animation = "spin 0.5s linear infinite";
+
+          // Play sound
+          playSpinSound();
+
+          setTimeout(() => {
+            // Calculate result
+            const segmentAngle = 360 / options.length;
+            const normalizedAngle = (360 - (totalRotation % 360)) % 360;
+            const segmentIndex = Math.floor(normalizedAngle / segmentAngle);
+            const selectedOption = options[segmentIndex];
+
+            // Display result
+            resultText.textContent = selectedOption;
+            result.classList.add("show");
+
+            // Reset button
+            spinBtn.disabled = false;
+            spinBtn.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <path d="M3.27 6.96L12 12.01l8.73-5.05"></path>
+                <path d="M12 22.08V12"></path>
+              </svg>
+              SPIN AGAIN
+            `;
+
+            isSpinning = false;
+
+            // Stop center animation
+            center.style.animation = "";
+
+            // Create confetti effect
+            createConfetti();
+
+            // Play win sound
+            playWinSound();
+          }, 4000);
+        }
+
+        function clearAll() {
+          if (isSpinning) return;
+
+          if (options.length === 0) {
+            showAlert("There are no options to clear");
+            return;
+          }
+
+          if (!confirm("Are you sure you want to clear all options?")) {
+            return;
+          }
+
+          options = [];
+          localStorage.removeItem("rouletteOptions");
+          updateOptionsDisplay();
+          updateWheel();
+          result.classList.remove("show");
+          showAlert("All options cleared", "success");
+        }
+
+        function addExamples() {
+          if (isSpinning) return;
+
+          const examples = [
+            "Pizza",
+            "Burger",
+            "Tacos",
+            "Sushi",
+            "Pasta",
+            "Salad",
+            "Steak",
+            "Ramen",
+            "Curry",
+            "Dumplings",
+          ];
+
+          // Filter out examples that already exist
+          const newExamples = examples.filter((ex) => !options.includes(ex));
+
+          if (newExamples.length === 0) {
+            showAlert("All example options already exist");
+            return;
+          }
+
+          options = [...options, ...newExamples];
+          localStorage.setItem("rouletteOptions", JSON.stringify(options));
+          updateOptionsDisplay();
+          updateWheel();
+          showAlert(`${newExamples.length} example options added`, "success");
+        }
+
+        function showAlert(message, type = "error") {
+          // Remove any existing alerts
+          const existingAlert = document.querySelector(".alert-message");
+          if (existingAlert) {
+            existingAlert.remove();
+          }
+
+          const alert = document.createElement("div");
+          alert.className = `alert-message ${type}`;
+          alert.textContent = message;
+          alert.style.position = "fixed";
+          alert.style.bottom = "20px";
+          alert.style.left = "50%";
+          alert.style.transform = "translateX(-50%)";
+          alert.style.padding = "12px 24px";
+          alert.style.borderRadius = "8px";
+          alert.style.color = "white";
+          alert.style.backgroundColor =
+            type === "success" ? "#00b894" : "#ff7675";
+          alert.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+          alert.style.zIndex = "1000";
+          alert.style.animation = "fadeInUp 0.3s ease-out";
+          alert.style.display = "flex";
+          alert.style.alignItems = "center";
+          alert.style.gap = "8px";
+
+          // Add icon based on type
+          const icon = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg"
+          );
+          icon.setAttribute("width", "18");
+          icon.setAttribute("height", "18");
+          icon.setAttribute("viewBox", "0 0 24 24");
+          icon.setAttribute("fill", "none");
+          icon.setAttribute("stroke", "currentColor");
+          icon.setAttribute("stroke-width", "2");
+          icon.setAttribute("stroke-linecap", "round");
+          icon.setAttribute("stroke-linejoin", "round");
+
+          const iconPath = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+          );
+          if (type === "success") {
+            iconPath.setAttribute("d", "M22 11.08V12a10 10 0 1 1-5.93-9.14");
+            const checkPath = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "polyline"
+            );
+            checkPath.setAttribute("points", "22 4 12 14.01 9 11.01");
+            icon.appendChild(iconPath);
+            icon.appendChild(checkPath);
+          } else {
+            iconPath.setAttribute(
+              "d",
+              "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            );
+            const line1 = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line"
+            );
+            line1.setAttribute("x1", "12");
+            line1.setAttribute("y1", "9");
+            line1.setAttribute("x2", "12");
+            line1.setAttribute("y2", "13");
+            const line2 = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line"
+            );
+            line2.setAttribute("x1", "12");
+            line2.setAttribute("y1", "17");
+            line2.setAttribute("x2", "12.01");
+            line2.setAttribute("y2", "17");
+            icon.appendChild(iconPath);
+            icon.appendChild(line1);
+            icon.appendChild(line2);
+          }
+
+          alert.prepend(icon);
+          document.body.appendChild(alert);
+
+          // Remove after 3 seconds
+          setTimeout(() => {
+            alert.style.animation = "fadeInUp 0.3s ease-out reverse";
+            setTimeout(() => alert.remove(), 300);
+          }, 3000);
+        }
+
+        function createConfetti() {
+          const colors = [
+            "#6c5ce7",
+            "#a29bfe",
+            "#00b894",
+            "#fdcb6e",
+            "#ff7675",
+          ];
+
+          for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.top = -10 + "px";
+            confetti.style.backgroundColor =
+              colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = Math.random() * 10 + 5 + "px";
+            confetti.style.height = Math.random() * 10 + 5 + "px";
+            confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+            document.body.appendChild(confetti);
+
+            const animationDuration = Math.random() * 3 + 2;
+
+            confetti.animate(
+              [
+                {
+                  top: "-10px",
+                  opacity: 1,
+                  transform: `rotate(0deg) translateX(0)`,
+                },
+                {
+                  top: "100vh",
+                  opacity: 0,
+                  transform: `rotate(${Math.random() * 360}deg) translateX(${
+                    Math.random() > 0.5
+                      ? Math.random() * 100
+                      : Math.random() * -100
+                  }px)`,
+                },
+              ],
+              {
+                duration: animationDuration * 1000,
+                easing: "cubic-bezier(0.1, 0.8, 0.3, 1)",
+              }
+            );
+
+            setTimeout(() => confetti.remove(), animationDuration * 1000);
+          }
+        }
+
+        function playSpinSound() {
+          // Create a simple oscillator for spin sound
+          try {
+            const audioCtx = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = "sine";
+            oscillator.frequency.setValueAtTime(100, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(
+              20,
+              audioCtx.currentTime + 3.8
+            );
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioCtx.currentTime + 3.8
+            );
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 4);
+          } catch (e) {
+            console.log("Audio not supported");
+          }
+        }
+
+        function playWinSound() {
+          // Create a simple oscillator for win sound
+          try {
+            const audioCtx = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = "triangle";
+            oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            oscillator.frequency.setValueAtTime(
+              659.25,
+              audioCtx.currentTime + 0.1
+            ); // E5
+            oscillator.frequency.setValueAtTime(
+              783.99,
+              audioCtx.currentTime + 0.2
+            ); // G5
+
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioCtx.currentTime + 0.5
+            );
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.5);
+          } catch (e) {
+            console.log("Audio not supported");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
