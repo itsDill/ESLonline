@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive ESL Clock Learning Tool</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .header {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: white;
+        z-index: 1000;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        margin-bottom: 5px;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .container {
+        display: flex;
+        gap: 30px;
+        align-items: flex-start;
+        max-width: 1400px;
+        width: 100%;
+        padding: 20px;
+        margin-top: 100px;
+      }
+
+      .clock-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .time-display {
+        font-size: 3rem;
+        font-weight: 200;
+        color: #2c3e50;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        min-width: 280px;
+        text-align: center;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .time-display:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .clock {
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #ffffff 60%, #f8f9fa 100%);
+        border: 10px solid #34495e;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+          inset 0 2px 4px rgba(255, 255, 255, 0.8),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+      }
+
+      .clock:hover {
+        transform: scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25),
+          inset 0 2px 4px rgba(255, 255, 255, 0.8),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .clock.rainbow {
+        border: 8px solid;
+        border-image: linear-gradient(
+            45deg,
+            red,
+            orange,
+            yellow,
+            green,
+            blue,
+            indigo,
+            violet
+          )
+          1;
+        border-radius: 50%;
+      }
+
+      .clock.neon {
+        box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
+      }
+
+      .clock.bouncy {
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-20px);
+        }
+        60% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .number {
+        position: absolute;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #2c3e50;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+      }
+
+      .number.fun {
+        color: #e74c3c;
+        text-shadow: 2px 2px 0 #f39c12;
+      }
+
+      .number.emoji::after {
+        content: attr(data-emoji);
+        margin-left: 5px;
+      }
+
+      .center-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 16px;
+        height: 16px;
+        background: #e74c3c;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        transition: all 0.3s ease;
+      }
+
+      .hand {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom center;
+        border-radius: 50px;
+        cursor: grab;
+        transition: all 0.1s ease;
+      }
+
+      .hand:active {
+        cursor: grabbing;
+      }
+
+      .hour-hand {
+        width: 6px;
+        height: 70px;
+        background: #2c3e50;
+        margin-left: -3px;
+        z-index: 3;
+      }
+
+      .minute-hand {
+        width: 4px;
+        height: 90px;
+        background: #34495e;
+        margin-left: -2px;
+        z-index: 2;
+      }
+
+      .second-hand {
+        width: 2px;
+        height: 100px;
+        background: #e74c3c;
+        margin-left: -1px;
+        z-index: 4;
+      }
+
+      .hand.rainbow {
+        background: linear-gradient(
+          to top,
+          red,
+          orange,
+          yellow,
+          green,
+          blue,
+          indigo,
+          violet
+        );
+      }
+
+      .hand.glowing {
+        box-shadow: 0 0 10px currentColor;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+        width: 280px;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .control-group h3 {
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+      }
+
+      .control-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn.active {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        transform: scale(1.05);
+      }
+
+      .color-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .color-btn:hover {
+        transform: scale(1.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .floating-emoji {
+        position: fixed;
+        font-size: 2rem;
+        pointer-events: none;
+        z-index: 1000;
+        animation: float 3s ease-out forwards;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-200px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .time-quiz {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 20px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .quiz-question {
+        font-size: 1.3rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+
+      .quiz-input {
+        padding: 12px 16px;
+        border: 2px solid #3498db;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        width: 180px;
+        text-align: center;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .quiz-input:focus {
+        outline: none;
+        border-color: #2980b9;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      .quiz-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .difficulty-selector {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px;
+        border-radius: 15px;
+        margin-top: 15px;
+      }
+
+      .difficulty-selector h4 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .difficulty-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .difficulty-btn {
+        padding: 6px 12px;
+        border: 2px solid #3498db;
+        background: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .difficulty-btn.active {
+        background: #3498db;
+        color: white;
+      }
+
+      .stats-panel {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px;
+        border-radius: 15px;
+        margin-top: 15px;
+        text-align: center;
+      }
+
+      .stats-panel h4 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-item {
+        padding: 8px;
+        background: rgba(52, 152, 219, 0.1);
+        border-radius: 8px;
+        font-size: 0.9rem;
+      }
+
+      .quiz-result {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .correct {
+        color: #27ae60;
+      }
+      .incorrect {
+        color: #e74c3c;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .container {
+          flex-direction: column;
+          margin-top: 80px;
+          gap: 20px;
+        }
+
+        .time-display {
+          font-size: 2.5rem;
+          padding: 15px 20px;
+          min-width: auto;
+        }
+
+        .clock {
+          width: 280px;
+          height: 280px;
+        }
+
+        .controls {
+          width: 100%;
+          max-width: 400px;
+          padding: 15px;
+        }
+
+        .control-buttons {
+          justify-content: center;
+        }
+
+        .quiz-controls {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .quiz-input {
+          margin-right: 0;
+          margin-bottom: 10px;
+          width: 200px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 1.5rem;
+        }
+
+        .header p {
+          font-size: 1rem;
+        }
+
+        .time-display {
+          font-size: 2rem;
+        }
+
+        .clock {
+          width: 250px;
+          height: 250px;
+        }
+
+        .control-group h3 {
+          font-size: 1rem;
+        }
+
+        .btn {
+          font-size: 0.8rem;
+          padding: 6px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🕐 Interactive Clock Learning</h1>
+      <p>Learn to tell time in English with our fun, interactive clock!</p>
+    </div>
+
+    <div class="container">
+      <div class="clock-section">
+        <div class="time-display" id="timeDisplay">12:00:00</div>
+        <div class="clock" id="clock">
+          <div class="center-dot" id="centerDot"></div>
+          <div class="hand hour-hand" id="hourHand"></div>
+          <div class="hand minute-hand" id="minuteHand"></div>
+          <div class="hand second-hand" id="secondHand"></div>
+        </div>
+        <div class="time-quiz">
+          <div class="quiz-question" id="quizQuestion">What time is it?</div>
+          <div class="quiz-controls">
+            <input
+              type="text"
+              class="quiz-input"
+              id="quizInput"
+              placeholder="e.g., 3:30"
+            />
+            <button class="btn" onclick="checkAnswer()">Check!</button>
+          </div>
+          <div class="quiz-result" id="quizResult"></div>
+
+          <div class="difficulty-selector">
+            <h4>🎯 Difficulty Level</h4>
+            <div class="difficulty-buttons">
+              <button
+                class="difficulty-btn active"
+                onclick="setDifficulty('easy', event)"
+              >
+                Easy
+              </button>
+              <button
+                class="difficulty-btn"
+                onclick="setDifficulty('medium', event)"
+              >
+                Medium
+              </button>
+              <button
+                class="difficulty-btn"
+                onclick="setDifficulty('hard', event)"
+              >
+                Hard
+              </button>
+            </div>
+          </div>
+
+          <div class="stats-panel">
+            <h4>📊 Your Progress</h4>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <strong id="correctCount">0</strong><br />Correct
+              </div>
+              <div class="stat-item">
+                <strong id="totalCount">0</strong><br />Total
+              </div>
+              <div class="stat-item">
+                <strong id="accuracy">0%</strong><br />Accuracy
+              </div>
+              <div class="stat-item">
+                <strong id="streak">0</strong><br />Streak
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control-group">
+          <h3>🎨 Clock Style</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="toggleClockStyle('rainbow')">
+              🌈 Rainbow
+            </button>
+            <button class="btn" onclick="toggleClockStyle('neon')">
+              ✨ Neon
+            </button>
+            <button class="btn" onclick="toggleClockStyle('bouncy')">
+              🦘 Bouncy
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>🎯 Numbers</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="toggleNumbers('fun')">
+              🎪 Fun Style
+            </button>
+            <button class="btn" onclick="toggleNumbers('emoji')">
+              😀 Emoji
+            </button>
+            <button class="btn" onclick="toggleNumbers('hidden')">
+              👻 Hide
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>🕐 Clock Hands</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="toggleHandStyle('rainbow')">
+              🌈 Rainbow
+            </button>
+            <button class="btn" onclick="toggleHandStyle('glowing')">
+              💫 Glowing
+            </button>
+            <button class="btn" onclick="randomTime()">🎲 Random Time</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>🎵 Sounds & Fun</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="playTickSound()">🔊 Tick Tock</button>
+            <button class="btn" onclick="celebrateTime()">🎉 Celebrate</button>
+            <button class="btn" onclick="shakeTime()">📳 Shake It</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>🌈 Colors</h3>
+          <div class="control-buttons">
+            <div
+              class="color-btn"
+              style="background: #e74c3c"
+              onclick="changeColor('#e74c3c')"
+            ></div>
+            <div
+              class="color-btn"
+              style="background: #3498db"
+              onclick="changeColor('#3498db')"
+            ></div>
+            <div
+              class="color-btn"
+              style="background: #2ecc71"
+              onclick="changeColor('#2ecc71')"
+            ></div>
+            <div
+              class="color-btn"
+              style="background: #f39c12"
+              onclick="changeColor('#f39c12')"
+            ></div>
+            <div
+              class="color-btn"
+              style="background: #9b59b6"
+              onclick="changeColor('#9b59b6')"
+            ></div>
+            <div
+              class="color-btn"
+              style="background: #1abc9c"
+              onclick="changeColor('#1abc9c')"
+            ></div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>⏰ Quick Times</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="setTime(12, 0)">12:00</button>
+            <button class="btn" onclick="setTime(3, 30)">3:30</button>
+            <button class="btn" onclick="setTime(6, 15)">6:15</button>
+            <button class="btn" onclick="setTime(9, 45)">9:45</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>📚 Learning Mode</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="startQuiz()">🎯 Quiz Mode</button>
+            <button class="btn" onclick="showTimeInWords()">
+              📝 Time in Words
+            </button>
+            <button class="btn" onclick="realTime()">⏰ Real Time</button>
+            <button class="btn" onclick="resetStats()">🔄 Reset Stats</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>🎓 Practice Sets</h3>
+          <div class="control-buttons">
+            <button class="btn" onclick="practiceOClock()">
+              🕐 O'Clock Times
+            </button>
+            <button class="btn" onclick="practiceHalfPast()">
+              🕕 Half Past
+            </button>
+            <button class="btn" onclick="practiceQuarters()">
+              🕒 Quarter Times
+            </button>
+            <button class="btn" onclick="practiceMinutes()">
+              🕘 All Minutes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentTime = { hours: 12, minutes: 0, seconds: 0 };
+      let isDragging = false;
+      let dragHand = null;
+      let isRealTime = false;
+      let quizMode = false;
+      let difficulty = "easy";
+      let stats = {
+        correct: 0,
+        total: 0,
+        streak: 0,
+        bestStreak: 0,
+      };
+
+      const clock = document.getElementById("clock");
+      const hourHand = document.getElementById("hourHand");
+      const minuteHand = document.getElementById("minuteHand");
+      const secondHand = document.getElementById("secondHand");
+      const timeDisplay = document.getElementById("timeDisplay");
+
+      // Load stats from localStorage
+      function loadStats() {
+        const savedStats = localStorage.getItem("clockStats");
+        if (savedStats) {
+          stats = { ...stats, ...JSON.parse(savedStats) };
+          updateStatsDisplay();
+        }
+      }
+
+      // Save stats to localStorage
+      function saveStats() {
+        localStorage.setItem("clockStats", JSON.stringify(stats));
+      }
+
+      // Update stats display
+      function updateStatsDisplay() {
+        document.getElementById("correctCount").textContent = stats.correct;
+        document.getElementById("totalCount").textContent = stats.total;
+        document.getElementById("accuracy").textContent =
+          stats.total > 0
+            ? Math.round((stats.correct / stats.total) * 100) + "%"
+            : "0%";
+        document.getElementById("streak").textContent = stats.streak;
+      }
+
+      // Create clock numbers
+      function createNumbers() {
+        for (let i = 1; i <= 12; i++) {
+          const number = document.createElement("div");
+          number.className = "number";
+          number.textContent = i;
+          number.id = `number${i}`;
+
+          const angle = (i - 3) * 30; // Start from 3 o'clock position
+          const x = 50 + 40 * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + 40 * Math.sin((angle * Math.PI) / 180);
+
+          number.style.left = x + "%";
+          number.style.top = y + "%";
+          clock.appendChild(number);
+        }
+      }
+
+      // Update clock hands
+      function updateClock() {
+        const hourAngle =
+          (currentTime.hours % 12) * 30 + currentTime.minutes * 0.5;
+        const minuteAngle = currentTime.minutes * 6 + currentTime.seconds * 0.1;
+        const secondAngle = currentTime.seconds * 6;
+
+        hourHand.style.transform = `rotate(${hourAngle}deg)`;
+        minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+        secondHand.style.transform = `rotate(${secondAngle}deg)`;
+
+        const timeString = `${currentTime.hours
+          .toString()
+          .padStart(2, "0")}:${currentTime.minutes
+          .toString()
+          .padStart(2, "0")}:${currentTime.seconds
+          .toString()
+          .padStart(2, "0")}`;
+        timeDisplay.textContent = timeString;
+      }
+
+      // Dragging functionality
+      function makeDraggable() {
+        [hourHand, minuteHand].forEach((hand) => {
+          hand.addEventListener("mousedown", startDrag);
+          hand.addEventListener("touchstart", startDrag);
+        });
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("touchmove", drag);
+        document.addEventListener("mouseup", endDrag);
+        document.addEventListener("touchend", endDrag);
+      }
+
+      function startDrag(e) {
+        e.preventDefault();
+        isDragging = true;
+        dragHand = e.target;
+        dragHand.style.cursor = "grabbing";
+      }
+
+      function drag(e) {
+        if (!isDragging || !dragHand) return;
+
+        const rect = clock.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+        const x = clientX - centerX;
+        const y = clientY - centerY;
+
+        let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+        if (angle < 0) angle += 360;
+
+        if (dragHand === hourHand) {
+          currentTime.hours = Math.round(angle / 30) % 12;
+          if (currentTime.hours === 0) currentTime.hours = 12;
+        } else if (dragHand === minuteHand) {
+          currentTime.minutes = Math.round(angle / 6) % 60;
+        }
+
+        updateClock();
+      }
+
+      function endDrag() {
+        if (dragHand) {
+          dragHand.style.cursor = "grab";
+        }
+        isDragging = false;
+        dragHand = null;
+      }
+
+      // Style functions
+      function toggleClockStyle(style) {
+        clock.classList.toggle(style);
+      }
+
+      function toggleNumbers(style) {
+        const numbers = document.querySelectorAll(".number");
+        numbers.forEach((num) => {
+          if (style === "hidden") {
+            num.style.opacity = num.style.opacity === "0" ? "1" : "0";
+          } else if (style === "emoji") {
+            const emojis = [
+              "🕐",
+              "🕑",
+              "🕒",
+              "🕓",
+              "🕔",
+              "🕕",
+              "🕖",
+              "🕗",
+              "🕘",
+              "🕙",
+              "🕚",
+              "🕛",
+            ];
+            num.classList.toggle("emoji");
+            if (num.classList.contains("emoji")) {
+              const numValue = parseInt(num.textContent);
+              num.setAttribute("data-emoji", emojis[numValue - 1]);
+            }
+          } else {
+            num.classList.toggle(style);
+          }
+        });
+      }
+
+      function toggleHandStyle(style) {
+        [hourHand, minuteHand, secondHand].forEach((hand) => {
+          hand.classList.toggle(style);
+        });
+      }
+
+      function changeColor(color) {
+        document.documentElement.style.setProperty("--accent-color", color);
+        hourHand.style.background = color;
+        document.getElementById("centerDot").style.background = color;
+      }
+
+      // Enhanced random time generator based on difficulty
+      function randomTime() {
+        switch (difficulty) {
+          case "easy":
+            // Only o'clock, half past, quarter past, quarter to
+            const easyTimes = [
+              [1, 0],
+              [2, 0],
+              [3, 0],
+              [4, 0],
+              [5, 0],
+              [6, 0],
+              [7, 0],
+              [8, 0],
+              [9, 0],
+              [10, 0],
+              [11, 0],
+              [12, 0],
+              [1, 30],
+              [2, 30],
+              [3, 30],
+              [4, 30],
+              [5, 30],
+              [6, 30],
+              [7, 30],
+              [8, 30],
+              [9, 30],
+              [10, 30],
+              [11, 30],
+              [12, 30],
+              [1, 15],
+              [2, 15],
+              [3, 15],
+              [6, 15],
+              [9, 15],
+              [12, 15],
+              [3, 45],
+              [6, 45],
+              [9, 45],
+              [12, 45],
+            ];
+            const easyTime =
+              easyTimes[Math.floor(Math.random() * easyTimes.length)];
+            currentTime.hours = easyTime[0];
+            currentTime.minutes = easyTime[1];
+            break;
+          case "medium":
+            // 5-minute intervals
+            currentTime.hours = Math.floor(Math.random() * 12) + 1;
+            currentTime.minutes = Math.floor(Math.random() * 12) * 5;
+            break;
+          case "hard":
+            // Any time
+            currentTime.hours = Math.floor(Math.random() * 12) + 1;
+            currentTime.minutes = Math.floor(Math.random() * 60);
+            break;
+        }
+        currentTime.seconds = 0;
+        updateClock();
+        createFloatingEmoji("🎲");
+      }
+
+      // Set difficulty level
+      function setDifficulty(level, e) {
+        difficulty = level;
+        document
+          .querySelectorAll(".difficulty-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        if (e && e.target) {
+          e.target.classList.add("active");
+        }
+
+        // Update quiz question based on difficulty
+        const questionTexts = {
+          easy: "What time is it? (Try: 3:00, 6:30, 9:15, 12:45)",
+          medium: "What time is it? (Try: 2:25, 7:40, 11:55)",
+          hard: "What time is it? (Try: 4:23, 8:07, 10:42)",
+        };
+
+        if (quizMode) {
+          document.getElementById("quizQuestion").textContent =
+            questionTexts[level];
+        }
+      }
+
+      function setTime(hours, minutes) {
+        currentTime.hours = hours;
+        currentTime.minutes = minutes;
+        currentTime.seconds = 0;
+        updateClock();
+      }
+
+      function playTickSound() {
+        // Create tick sound using Web Audio API
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        oscillator.type = "square";
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioContext.currentTime + 0.1
+        );
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+
+      function celebrateTime() {
+        const emojis = ["🎉", "🎊", "🌟", "✨", "🎈", "🥳"];
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            createFloatingEmoji(
+              emojis[Math.floor(Math.random() * emojis.length)]
+            );
+          }, i * 100);
+        }
+
+        clock.style.animation = "bounce 0.5s ease";
+        setTimeout(() => {
+          clock.style.animation = "";
+        }, 500);
+      }
+
+      function shakeTime() {
+        clock.style.animation = "shake 0.5s ease";
+        setTimeout(() => {
+          clock.style.animation = "";
+        }, 500);
+        randomTime();
+      }
+
+      function createFloatingEmoji(emoji) {
+        const floatingEmoji = document.createElement("div");
+        floatingEmoji.className = "floating-emoji";
+        floatingEmoji.textContent = emoji;
+        floatingEmoji.style.left = Math.random() * window.innerWidth + "px";
+        floatingEmoji.style.top = window.innerHeight + "px";
+        document.body.appendChild(floatingEmoji);
+
+        setTimeout(() => {
+          floatingEmoji.remove();
+        }, 3000);
+      }
+      function startQuiz(e) {
+        quizMode = !quizMode;
+        const btn = e && e.target ? e.target : null;
+        if (quizMode && btn) {
+          btn.textContent = "🎯 Stop Quiz";
+          btn.classList.add("active");
+          generateQuizQuestion();
+        } else if (btn) {
+          btn.textContent = "🎯 Quiz Mode";
+          btn.classList.remove("active");
+          document.getElementById("quizResult").textContent = "";
+          document.getElementById("quizQuestion").textContent =
+            "What time is it?";
+        }
+      }
+
+      function generateQuizQuestion() {
+        if (!quizMode) return;
+        randomTime();
+        const questionTexts = {
+          easy: "What time is it? (Example: 3:00, 6:30, 9:15, 12:45)",
+          medium: "What time is it? (Example: 2:25, 7:40, 11:55)",
+          hard: "What time is it? (Example: 4:23, 8:07, 10:42)",
+        };
+        document.getElementById("quizQuestion").textContent =
+          questionTexts[difficulty];
+        document.getElementById("quizInput").value = "";
+        document.getElementById("quizResult").textContent = "";
+      }
+
+      function checkAnswer() {
+        const userAnswer = document.getElementById("quizInput").value.trim();
+        const correctHour = currentTime.hours;
+        const correctMinute = currentTime.minutes;
+        const correctAnswer = `${correctHour}:${correctMinute
+          .toString()
+          .padStart(2, "0")}`;
+        const altAnswer = `${correctHour}:${correctMinute}`;
+        const resultDiv = document.getElementById("quizResult");
+
+        stats.total++;
+
+        if (userAnswer === correctAnswer || userAnswer === altAnswer) {
+          stats.correct++;
+          stats.streak++;
+          if (stats.streak > stats.bestStreak) {
+            stats.bestStreak = stats.streak;
+          }
+
+          resultDiv.textContent = `🎉 Correct! Great job! ${
+            stats.streak > 1 ? `Streak: ${stats.streak}` : ""
+          }`;
+          resultDiv.className = "quiz-result correct";
+          celebrateTime();
+
+          if (quizMode) {
+            setTimeout(generateQuizQuestion, 2000);
+          }
+        } else {
+          stats.streak = 0;
+          resultDiv.textContent = `❌ Try again! The correct time is ${correctAnswer}`;
+          resultDiv.className = "quiz-result incorrect";
+        }
+
+        updateStatsDisplay();
+        saveStats();
+      }
+
+      function showTimeInWords() {
+        const hours = currentTime.hours;
+        function showTimeInWords() {
+          const hours = currentTime.hours;
+          const minutes = currentTime.minutes;
+          let timeInWords = "";
+
+          const hourWords = [
+            "",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+          ];
+
+          if (minutes === 0) {
+            timeInWords = `${hourWords[hours]} o'clock`;
+          } else if (minutes === 15) {
+            timeInWords = `quarter past ${hourWords[hours]}`;
+          } else if (minutes === 30) {
+            timeInWords = `half past ${hourWords[hours]}`;
+          } else if (minutes === 45) {
+            const nextHour = hours === 12 ? 1 : hours + 1;
+            timeInWords = `quarter to ${hourWords[nextHour]}`;
+          } else if (minutes < 30) {
+            timeInWords = `${minutes} minutes past ${hourWords[hours]}`;
+          } else {
+            const nextHour = hours === 12 ? 1 : hours + 1;
+            timeInWords = `${60 - minutes} minutes to ${hourWords[nextHour]}`;
+          }
+
+          alert(`The time in words: ${timeInWords}`);
+        }
+
+        function realTime(e) {
+          isRealTime = !isRealTime;
+          const btn = e && e.target ? e.target : null;
+          if (isRealTime && btn) {
+            btn.textContent = "⏰ Stop Real Time";
+            btn.classList.add("active");
+            updateRealTime();
+          } else if (btn) {
+            btn.textContent = "⏰ Real Time";
+            btn.classList.remove("active");
+          }
+        }
+        if (!isRealTime) return;
+        const now = new Date();
+        currentTime.hours = now.getHours() % 12 || 12;
+        currentTime.minutes = now.getMinutes();
+        currentTime.seconds = now.getSeconds();
+        updateClock();
+        setTimeout(updateRealTime, 1000);
+      }
+
+      // Reset statistics
+      function resetStats() {
+        if (
+          confirm("Are you sure you want to reset your progress statistics?")
+        ) {
+          stats = { correct: 0, total: 0, streak: 0, bestStreak: 0 };
+          updateStatsDisplay();
+          saveStats();
+          createFloatingEmoji("🔄");
+        }
+      }
+
+      // Practice specific time types
+      function practiceOClock() {
+        const hours = Math.floor(Math.random() * 12) + 1;
+        setTime(hours, 0);
+        createFloatingEmoji("🕐");
+      }
+
+      function practiceHalfPast() {
+        const hours = Math.floor(Math.random() * 12) + 1;
+        setTime(hours, 30);
+        createFloatingEmoji("🕕");
+      }
+
+      function practiceQuarters() {
+        const hours = Math.floor(Math.random() * 12) + 1;
+        const minutes = Math.random() < 0.5 ? 15 : 45;
+        setTime(hours, minutes);
+        createFloatingEmoji("🕒");
+      }
+
+      function practiceMinutes() {
+        randomTime();
+        createFloatingEmoji("🕘");
+      }
+
+      // Add shake animation
+      const shakeKeyframes = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                20%, 40%, 60%, 80% { transform: translateX(10px); }
+            }
+        `;
+      const style = document.createElement("style");
+      style.textContent = shakeKeyframes;
+      document.head.appendChild(style);
+
+      // Initialize everything
+      loadStats();
+      createNumbers();
+      updateClock();
+      makeDraggable();
+
+      // Allow Enter key in quiz input
+      document
+        .getElementById("quizInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            checkAnswer();
+          }
+        });
+
+      // Add some initial fun
+      setTimeout(() => {
+        createFloatingEmoji("🕐");
+      }, 1000);
+
+      // Auto-save stats periodically
+      setInterval(saveStats, 30000); // Save every 30 seconds
+    </script>
+  </body>
+</html>
