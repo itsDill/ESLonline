@@ -717,6 +717,128 @@
       .sound-toggle:hover {
         transform: scale(1.1);
       }
+
+      /* Hint System */
+      .hint-overlay {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary-color);
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+        z-index: 100;
+        opacity: 0;
+        animation: hintFade 3s ease-in-out;
+      }
+
+      @keyframes hintFade {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(5px);
+        }
+        20%,
+        80% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Combo indicator */
+      .combo-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        z-index: 1500;
+        animation: comboShow 2s ease-out forwards;
+        pointer-events: none;
+      }
+
+      @keyframes comboShow {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0) rotate(180deg);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+      }
+
+      /* Enhanced card hover effects */
+      .card.enhanced-hover {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .card.enhanced-hover:hover {
+        transform: translateY(-12px) scale(1.05) rotateX(10deg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Particle effects */
+      .particle {
+        position: absolute;
+        pointer-events: none;
+        border-radius: 50%;
+        animation: particleFloat 1s ease-out forwards;
+      }
+
+      @keyframes particleFloat {
+        0% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0) rotate(360deg) translateY(-50px);
+        }
+      }
+
+      /* Achievement notification */
+      .achievement-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: #1f2937;
+        padding: 1rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 2000;
+        animation: achievementSlide 4s ease-out forwards;
+        max-width: 300px;
+      }
+
+      @keyframes achievementSlide {
+        0% {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        10%,
+        90% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+      }
     </style>
   </head>
   <body>
@@ -728,6 +850,10 @@
             <i class="fas fa-plus"></i>
             New Game
           </button>
+          <button class="control-btn secondary" onclick="showSettings()">
+            <i class="fas fa-cog"></i>
+            Settings
+          </button>
           <button class="control-btn secondary" onclick="showRules()">
             <i class="fas fa-question-circle"></i>
             Rules
@@ -735,6 +861,10 @@
           <button class="control-btn secondary" onclick="showStats()">
             <i class="fas fa-chart-bar"></i>
             Stats
+          </button>
+          <button class="control-btn secondary" onclick="showAchievements()">
+            <i class="fas fa-trophy"></i>
+            Achievements
           </button>
         </div>
       </div>
@@ -754,6 +884,12 @@
           <div>
             <div>You</div>
             <div id="playerCardCount">7 cards</div>
+            <div
+              id="playerCombo"
+              style="font-size: 0.7rem; color: var(--success-color)"
+            >
+              Combo: 0
+            </div>
           </div>
         </div>
 
@@ -766,6 +902,12 @@
           <div>
             <div>Computer</div>
             <div id="computerCardCount">7 cards</div>
+            <div
+              id="difficultyDisplay"
+              style="font-size: 0.7rem; color: var(--warning-color)"
+            >
+              Beginner
+            </div>
           </div>
         </div>
       </div>
@@ -863,6 +1005,96 @@
       <button class="message-btn" onclick="closeMessage()">Continue</button>
     </div>
 
+    <!-- Settings Modal -->
+    <div class="game-message" id="settingsModal" style="max-width: 500px">
+      <div class="message-title">Game Settings</div>
+      <div style="text-align: left; margin: 1rem 0">
+        <div style="margin-bottom: 1rem">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 600"
+            >Difficulty Level:</label
+          >
+          <select
+            id="difficultySelect"
+            style="
+              width: 100%;
+              padding: 0.5rem;
+              border-radius: 8px;
+              border: 2px solid #e5e7eb;
+            "
+          >
+            <option value="beginner">Beginner - Easy words</option>
+            <option value="intermediate">Intermediate - Medium words</option>
+            <option value="advanced">Advanced - Challenging words</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 1rem">
+          <label style="display: flex; align-items: center; gap: 0.5rem">
+            <input type="checkbox" id="soundToggleCheck" checked />
+            <span>Sound Effects</span>
+          </label>
+        </div>
+        <div style="margin-bottom: 1rem">
+          <label style="display: flex; align-items: center; gap: 0.5rem">
+            <input type="checkbox" id="animationsToggleCheck" checked />
+            <span>Animations</span>
+          </label>
+        </div>
+        <div style="margin-bottom: 1rem">
+          <label style="display: flex; align-items: center; gap: 0.5rem">
+            <input type="checkbox" id="hintsToggleCheck" checked />
+            <span>Show Hints</span>
+          </label>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem">
+        <button class="message-btn" onclick="saveSettings()">Save</button>
+        <button
+          class="message-btn"
+          style="background: #6b7280"
+          onclick="closeSettings()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Achievements Modal -->
+    <div class="game-message" id="achievementsModal" style="max-width: 600px">
+      <div class="message-title">🏆 Achievements</div>
+      <div
+        id="achievementsList"
+        style="
+          text-align: left;
+          margin: 1rem 0;
+          max-height: 300px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Achievements will be populated here -->
+      </div>
+      <button class="message-btn" onclick="closeAchievements()">Close</button>
+    </div>
+
+    <!-- Word Learning Modal -->
+    <div class="game-message" id="wordModal" style="max-width: 400px">
+      <div class="message-title">📚 Learn This Word!</div>
+      <div id="wordContent" style="text-align: center; margin: 1rem 0">
+        <!-- Word content will be populated here -->
+      </div>
+      <div style="display: flex; gap: 0.5rem">
+        <button class="message-btn" onclick="markWordLearned()">
+          I Know This!
+        </button>
+        <button
+          class="message-btn"
+          style="background: #6b7280"
+          onclick="closeWordModal()"
+        >
+          Skip
+        </button>
+      </div>
+    </div>
+
     <script>
       // Game State
       let gameState = {
@@ -880,10 +1112,19 @@
         gameStartTime: null,
         moveCount: 0,
         soundEnabled: true,
+        animationsEnabled: true,
+        showHints: true,
+        learnedWords: new Set(
+          JSON.parse(localStorage.getItem("learnedWords") || "[]")
+        ),
+        cardsPlayed: parseInt(localStorage.getItem("cardsPlayed")) || 0,
+        combo: 0,
+        maxCombo: parseInt(localStorage.getItem("maxCombo")) || 0,
         stats: {
           gamesPlayed: parseInt(localStorage.getItem("gamesPlayed")) || 0,
           gamesWon: parseInt(localStorage.getItem("gamesWon")) || 0,
           totalTime: parseInt(localStorage.getItem("totalTime")) || 0,
+          fastestWin: parseInt(localStorage.getItem("fastestWin")) || Infinity,
         },
       };
 
@@ -959,37 +1200,223 @@
         "wild-draw4": "images/bluecatskip.png",
       };
 
-      // Enhanced vocabulary words
+      // Enhanced vocabulary words with difficulty levels
       const vocabularyWords = {
         red: [
-          { word: "apple", pronunciation: "/ˈæpəl/" },
-          { word: "fire", pronunciation: "/faɪər/" },
-          { word: "rose", pronunciation: "/roʊz/" },
-          { word: "cherry", pronunciation: "/ˈtʃeri/" },
-          { word: "tomato", pronunciation: "/təˈmeɪtoʊ/" },
+          {
+            word: "apple",
+            pronunciation: "/ˈæpəl/",
+            level: "beginner",
+            definition: "a round fruit",
+          },
+          {
+            word: "fire",
+            pronunciation: "/faɪər/",
+            level: "beginner",
+            definition: "hot flames",
+          },
+          {
+            word: "rose",
+            pronunciation: "/roʊz/",
+            level: "beginner",
+            definition: "a beautiful flower",
+          },
+          {
+            word: "cherry",
+            pronunciation: "/ˈtʃeri/",
+            level: "intermediate",
+            definition: "small red fruit",
+          },
+          {
+            word: "tomato",
+            pronunciation: "/təˈmeɪtoʊ/",
+            level: "intermediate",
+            definition: "red vegetable for salads",
+          },
+          {
+            word: "crimson",
+            pronunciation: "/ˈkrɪmzən/",
+            level: "advanced",
+            definition: "deep red color",
+          },
+          {
+            word: "scarlet",
+            pronunciation: "/ˈskɑrlət/",
+            level: "advanced",
+            definition: "bright red color",
+          },
         ],
         blue: [
-          { word: "sky", pronunciation: "/skaɪ/" },
-          { word: "ocean", pronunciation: "/ˈoʊʃən/" },
-          { word: "ice", pronunciation: "/aɪs/" },
-          { word: "whale", pronunciation: "/weɪl/" },
-          { word: "blueberry", pronunciation: "/ˈbluˌberi/" },
+          {
+            word: "sky",
+            pronunciation: "/skaɪ/",
+            level: "beginner",
+            definition: "what we see above us",
+          },
+          {
+            word: "ocean",
+            pronunciation: "/ˈoʊʃən/",
+            level: "beginner",
+            definition: "large body of water",
+          },
+          {
+            word: "ice",
+            pronunciation: "/aɪs/",
+            level: "beginner",
+            definition: "frozen water",
+          },
+          {
+            word: "whale",
+            pronunciation: "/weɪl/",
+            level: "intermediate",
+            definition: "large sea mammal",
+          },
+          {
+            word: "blueberry",
+            pronunciation: "/ˈbluˌberi/",
+            level: "intermediate",
+            definition: "small blue fruit",
+          },
+          {
+            word: "sapphire",
+            pronunciation: "/ˈsæfaɪər/",
+            level: "advanced",
+            definition: "blue precious stone",
+          },
+          {
+            word: "azure",
+            pronunciation: "/ˈæʒər/",
+            level: "advanced",
+            definition: "bright blue color",
+          },
         ],
         green: [
-          { word: "grass", pronunciation: "/ɡræs/" },
-          { word: "tree", pronunciation: "/tri/" },
-          { word: "leaf", pronunciation: "/lif/" },
-          { word: "frog", pronunciation: "/frɔɡ/" },
-          { word: "broccoli", pronunciation: "/ˈbrɑkəli/" },
+          {
+            word: "grass",
+            pronunciation: "/ɡræs/",
+            level: "beginner",
+            definition: "plants in the yard",
+          },
+          {
+            word: "tree",
+            pronunciation: "/tri/",
+            level: "beginner",
+            definition: "tall plant with leaves",
+          },
+          {
+            word: "leaf",
+            pronunciation: "/lif/",
+            level: "beginner",
+            definition: "part of a plant",
+          },
+          {
+            word: "frog",
+            pronunciation: "/frɔɡ/",
+            level: "intermediate",
+            definition: "jumping amphibian",
+          },
+          {
+            word: "broccoli",
+            pronunciation: "/ˈbrɑkəli/",
+            level: "intermediate",
+            definition: "green vegetable",
+          },
+          {
+            word: "emerald",
+            pronunciation: "/ˈemərəld/",
+            level: "advanced",
+            definition: "green precious stone",
+          },
+          {
+            word: "verdant",
+            pronunciation: "/ˈvɜrdənt/",
+            level: "advanced",
+            definition: "green and lush",
+          },
         ],
         yellow: [
-          { word: "sun", pronunciation: "/sʌn/" },
-          { word: "banana", pronunciation: "/bəˈnænə/" },
-          { word: "gold", pronunciation: "/ɡoʊld/" },
-          { word: "star", pronunciation: "/stɑr/" },
-          { word: "lemon", pronunciation: "/ˈlemən/" },
+          {
+            word: "sun",
+            pronunciation: "/sʌn/",
+            level: "beginner",
+            definition: "star that gives us light",
+          },
+          {
+            word: "banana",
+            pronunciation: "/bəˈnænə/",
+            level: "beginner",
+            definition: "yellow curved fruit",
+          },
+          {
+            word: "gold",
+            pronunciation: "/ɡoʊld/",
+            level: "beginner",
+            definition: "valuable metal",
+          },
+          {
+            word: "star",
+            pronunciation: "/stɑr/",
+            level: "intermediate",
+            definition: "bright light in the sky",
+          },
+          {
+            word: "lemon",
+            pronunciation: "/ˈlemən/",
+            level: "intermediate",
+            definition: "sour yellow fruit",
+          },
+          {
+            word: "amber",
+            pronunciation: "/ˈæmbər/",
+            level: "advanced",
+            definition: "yellowish fossil resin",
+          },
+          {
+            word: "canary",
+            pronunciation: "/kəˈneri/",
+            level: "advanced",
+            definition: "small yellow bird",
+          },
         ],
       };
+
+      // Difficulty levels
+      let difficultyLevel = localStorage.getItem("unodifficulty") || "beginner";
+
+      // Achievement system
+      const achievements = {
+        firstWin: {
+          name: "First Victory",
+          description: "Win your first game",
+          unlocked: false,
+        },
+        fastWin: {
+          name: "Speed Demon",
+          description: "Win in under 2 minutes",
+          unlocked: false,
+        },
+        unoMaster: {
+          name: "UNO Master",
+          description: "Win 10 games",
+          unlocked: false,
+        },
+        vocabularyExpert: {
+          name: "Word Wizard",
+          description: "Learn 50 new words",
+          unlocked: false,
+        },
+        cardShark: {
+          name: "Card Shark",
+          description: "Play 100 cards",
+          unlocked: false,
+        },
+      };
+
+      // Load achievements
+      Object.keys(achievements).forEach((key) => {
+        achievements[key].unlocked =
+          localStorage.getItem(`achievement_${key}`) === "true";
+      });
 
       // Initialize game
       function initGame() {
@@ -1109,6 +1536,11 @@
         const cardDiv = document.createElement("div");
         cardDiv.className = "card";
 
+        // Add enhanced hover effects if animations are enabled
+        if (gameState.animationsEnabled) {
+          cardDiv.classList.add("enhanced-hover");
+        }
+
         if (!isPlayer) {
           // Computer card (face down)
           cardDiv.classList.add("card-back");
@@ -1132,11 +1564,15 @@
           content.className = "card-content";
 
           if (card.type === "number") {
+            const vocabWord = getVocabularyWord(card.color);
+            const isLearned = gameState.learnedWords.has(vocabWord);
             content.innerHTML = `
                         <div class="card-number">${card.value}</div>
-                        <div class="card-vocabulary">${getVocabularyWord(
-                          card.color
-                        )}</div>
+                        <div class="card-vocabulary" style="color: ${
+                          isLearned ? "#10b981" : "inherit"
+                        };">
+                          ${vocabWord}${isLearned ? " ✓" : ""}
+                        </div>
                     `;
           } else if (card.type === "action") {
             const actionIcons = {
@@ -1171,20 +1607,80 @@
           if (isCardPlayable(card)) {
             cardDiv.classList.add("playable");
             cardDiv.onclick = () => playCard(index);
+
+            // Add tooltip for card hints
+            if (gameState.showHints) {
+              cardDiv.title = `Click to play this ${card.color} ${card.value}`;
+            }
           }
         }
 
         return cardDiv;
       }
 
-      // Get random vocabulary word for color
+      // Get random vocabulary word for color based on difficulty
       function getVocabularyWord(color) {
         if (vocabularyWords[color]) {
-          const words = vocabularyWords[color];
+          const words = vocabularyWords[color].filter(
+            (word) =>
+              word.level === difficultyLevel || difficultyLevel === "beginner"
+          );
+          if (words.length === 0) return "";
           const randomWord = words[Math.floor(Math.random() * words.length)];
           return randomWord.word;
         }
         return "";
+      }
+
+      // Get word details for learning
+      function getWordDetails(word) {
+        for (const color in vocabularyWords) {
+          const found = vocabularyWords[color].find((w) => w.word === word);
+          if (found) return found;
+        }
+        return null;
+      }
+
+      // Show word learning modal
+      function showWordLearning(word) {
+        if (!gameState.showHints || gameState.learnedWords.has(word)) return;
+
+        const wordDetails = getWordDetails(word);
+        if (!wordDetails) return;
+
+        const wordContent = document.getElementById("wordContent");
+        wordContent.innerHTML = `
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">${wordDetails.word}</div>
+          <div style="color: var(--primary-color); margin-bottom: 0.5rem;">${wordDetails.pronunciation}</div>
+          <div style="color: var(--text-secondary); margin-bottom: 1rem;">${wordDetails.definition}</div>
+          <div style="font-size: 0.8rem; color: var(--warning-color);">Level: ${wordDetails.level}</div>
+        `;
+
+        gameState.currentLearningWord = word;
+        document.getElementById("wordModal").classList.add("show");
+      }
+
+      // Mark word as learned
+      function markWordLearned() {
+        if (gameState.currentLearningWord) {
+          gameState.learnedWords.add(gameState.currentLearningWord);
+          localStorage.setItem(
+            "learnedWords",
+            JSON.stringify([...gameState.learnedWords])
+          );
+
+          // Check vocabulary expert achievement
+          if (gameState.learnedWords.size >= 50) {
+            unlockAchievement("vocabularyExpert");
+          }
+        }
+        closeWordModal();
+      }
+
+      // Close word modal
+      function closeWordModal() {
+        document.getElementById("wordModal").classList.remove("show");
+        gameState.currentLearningWord = null;
       }
 
       // Check if card is playable
@@ -1209,6 +1705,37 @@
         // Remove card from player hand
         gameState.playerHand.splice(cardIndex, 1);
         gameState.moveCount++;
+        gameState.cardsPlayed++;
+
+        // Update combo
+        gameState.combo++;
+        if (gameState.combo > gameState.maxCombo) {
+          gameState.maxCombo = gameState.combo;
+          localStorage.setItem("maxCombo", gameState.maxCombo.toString());
+        }
+
+        // Show combo effect
+        if (gameState.combo > 1) {
+          showComboEffect(gameState.combo);
+        }
+
+        // Create card play particles
+        if (gameState.animationsEnabled) {
+          createParticles(
+            document.querySelector(
+              `#playerHand .card:nth-child(${cardIndex + 1})`
+            )
+          );
+        }
+
+        // Check for vocabulary learning
+        if (card.type === "number") {
+          const word = getVocabularyWord(card.color);
+          if (word && Math.random() < 0.3) {
+            // 30% chance to show word learning
+            setTimeout(() => showWordLearning(word), 500);
+          }
+        }
 
         // Handle wild cards
         if (card.type === "wild") {
@@ -1219,6 +1746,11 @@
         // Play the card
         executeCardPlay(card);
         playSound("cardPlay");
+
+        // Check card shark achievement
+        if (gameState.cardsPlayed >= 100) {
+          unlockAchievement("cardShark");
+        }
       }
 
       // Execute card play
@@ -1294,13 +1826,21 @@
         executeCardPlay(card);
       }
 
-      // Computer turn
+      // Computer turn with improved AI
       function computerTurn() {
         if (gameState.gameOver) return;
 
         gameState.computerThinking = true;
         updateDisplay();
         updateTurnIndicator();
+
+        // Smart AI delay based on difficulty
+        const thinkingTime =
+          difficultyLevel === "beginner"
+            ? 800
+            : difficultyLevel === "intermediate"
+            ? 1200
+            : 1800;
 
         setTimeout(() => {
           const playableCards = gameState.computerHand.filter(
@@ -1311,8 +1851,24 @@
           );
 
           if (playableCards.length > 0) {
-            // Play a card
-            const cardToPlay = playableCards[0];
+            // Improved AI strategy based on difficulty
+            let cardToPlay;
+
+            if (difficultyLevel === "advanced") {
+              // Advanced: Strategic play
+              cardToPlay =
+                getBestComputerCard(playableCards) || playableCards[0];
+            } else if (difficultyLevel === "intermediate") {
+              // Intermediate: Somewhat strategic
+              cardToPlay =
+                playableCards.find((card) => card.type === "action") ||
+                playableCards[0];
+            } else {
+              // Beginner: Random play
+              cardToPlay =
+                playableCards[Math.floor(Math.random() * playableCards.length)];
+            }
+
             const cardIndex = gameState.computerHand.indexOf(cardToPlay);
             gameState.computerHand.splice(cardIndex, 1);
 
@@ -1371,9 +1927,40 @@
 
           gameState.computerThinking = false;
           gameState.playerTurn = true;
+          gameState.combo = 0; // Reset combo when turn switches
           updateDisplay();
           checkForPlayableCards();
-        }, 1500);
+
+          // Show hints if enabled
+          if (gameState.showHints) {
+            showPlayHints();
+          }
+        }, thinkingTime);
+      }
+
+      // Get best computer card (advanced AI)
+      function getBestComputerCard(playableCards) {
+        // Priority: Action cards > Wild cards > High numbers > Low numbers
+        const actionCards = playableCards.filter(
+          (card) => card.type === "action"
+        );
+        if (actionCards.length > 0) return actionCards[0];
+
+        const wildCards = playableCards.filter((card) => card.type === "wild");
+        if (wildCards.length > 0 && gameState.computerHand.length > 3)
+          return wildCards[0];
+
+        // Play highest number card
+        const numberCards = playableCards.filter(
+          (card) => card.type === "number"
+        );
+        if (numberCards.length > 0) {
+          return numberCards.reduce((max, card) =>
+            card.value > max.value ? card : max
+          );
+        }
+
+        return playableCards[0];
       }
 
       // Handle computer action cards
@@ -1523,6 +2110,11 @@
         document.getElementById(
           "deckCount"
         ).textContent = `Cards: ${gameState.deck.length}`;
+        document.getElementById(
+          "playerCombo"
+        ).textContent = `Combo: ${gameState.combo}`;
+        document.getElementById("difficultyDisplay").textContent =
+          difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1);
         updateTurnIndicator();
       }
 
@@ -1573,18 +2165,48 @@
         gameState.gameOver = true;
         gameState.stats.gamesPlayed++;
 
+        const gameTime = Date.now() - gameState.gameStartTime;
+
         if (playerWon) {
           gameState.stats.gamesWon++;
-          showMessage("Congratulations!", "You won the game! 🎉");
+
+          // Check for fast win achievement
+          if (gameTime < 120000) {
+            // 2 minutes
+            unlockAchievement("fastWin");
+          }
+
+          // Update fastest win
+          if (gameTime < gameState.stats.fastestWin) {
+            gameState.stats.fastestWin = gameTime;
+            localStorage.setItem("fastestWin", gameTime.toString());
+          }
+
+          // Check for first win achievement
+          if (gameState.stats.gamesWon === 1) {
+            unlockAchievement("firstWin");
+          }
+
+          // Check for UNO master achievement
+          if (gameState.stats.gamesWon >= 10) {
+            unlockAchievement("unoMaster");
+          }
+
+          showMessage(
+            "🎉 Congratulations!",
+            `You won in ${Math.round(gameTime / 1000)}s with ${
+              gameState.moveCount
+            } moves!`
+          );
           playSound("win");
         } else {
-          showMessage("Game Over", "Computer wins this time. Try again! 🤖");
+          showMessage("😞 Game Over", "Computer wins this time. Try again! 🤖");
           playSound("lose");
         }
 
         // Update statistics
-        const gameTime = Date.now() - gameState.gameStartTime;
         gameState.stats.totalTime += gameTime;
+        localStorage.setItem("cardsPlayed", gameState.cardsPlayed.toString());
         saveStats();
         updateDisplay();
       }
@@ -1644,7 +2266,7 @@
         }, 1000);
       }
 
-      // Sound effects
+      // Enhanced sound effects
       function playSound(type) {
         if (!gameState.soundEnabled) return;
 
@@ -1658,37 +2280,111 @@
         gainNode.connect(audioContext.destination);
 
         gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(
-          0.01,
-          audioContext.currentTime + 0.3
-        );
 
         switch (type) {
           case "cardPlay":
             oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.2
+            );
             break;
           case "draw":
             oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.3
+            );
             break;
           case "uno":
+            // Create a more exciting UNO sound
             oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(
+              1320,
+              audioContext.currentTime + 0.2
+            );
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.4
+            );
             break;
           case "win":
-            oscillator.frequency.setValueAtTime(660, audioContext.currentTime);
+            // Victory fanfare
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(
+              880,
+              audioContext.currentTime + 0.2
+            );
+            oscillator.frequency.linearRampToValueAtTime(
+              660,
+              audioContext.currentTime + 0.4
+            );
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.6
+            );
             break;
           case "lose":
             oscillator.frequency.setValueAtTime(165, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(
+              110,
+              audioContext.currentTime + 0.3
+            );
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.5
+            );
             break;
           case "skip":
             oscillator.frequency.setValueAtTime(330, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(
+              440,
+              audioContext.currentTime + 0.1
+            );
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.2
+            );
             break;
           case "reverse":
             oscillator.frequency.setValueAtTime(550, audioContext.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(
+              330,
+              audioContext.currentTime + 0.15
+            );
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.25
+            );
+            break;
+          case "achievement":
+            // Special achievement sound
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5
+            oscillator.frequency.linearRampToValueAtTime(
+              659,
+              audioContext.currentTime + 0.1
+            ); // E5
+            oscillator.frequency.linearRampToValueAtTime(
+              784,
+              audioContext.currentTime + 0.2
+            ); // G5
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.5
+            );
             break;
         }
 
+        const duration =
+          type === "win"
+            ? 0.6
+            : type === "achievement"
+            ? 0.5
+            : type === "uno"
+            ? 0.4
+            : 0.3;
         oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.3);
+        oscillator.stop(audioContext.currentTime + duration);
       }
 
       // Toggle sound
@@ -1754,8 +2450,196 @@
         localStorage.setItem("totalTime", gameState.stats.totalTime.toString());
       }
 
+      // Show combo effect
+      function showComboEffect(combo) {
+        const comboDiv = document.createElement("div");
+        comboDiv.className = "combo-indicator";
+        comboDiv.innerHTML = `🔥 ${combo}x COMBO! 🔥`;
+        document.body.appendChild(comboDiv);
+
+        setTimeout(() => {
+          document.body.removeChild(comboDiv);
+        }, 2000);
+      }
+
+      // Create particle effects
+      function createParticles(element) {
+        if (!element) return;
+
+        const rect = element.getBoundingClientRect();
+        const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#f9ca24"];
+
+        for (let i = 0; i < 8; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.position = "fixed";
+          particle.style.left = rect.left + rect.width / 2 + "px";
+          particle.style.top = rect.top + rect.height / 2 + "px";
+          particle.style.width = "8px";
+          particle.style.height = "8px";
+          particle.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          particle.style.transform = `translate(${
+            Math.random() * 100 - 50
+          }px, ${Math.random() * 100 - 50}px)`;
+
+          document.body.appendChild(particle);
+
+          setTimeout(() => {
+            if (particle.parentNode) {
+              document.body.removeChild(particle);
+            }
+          }, 1000);
+        }
+      }
+
+      // Show play hints
+      function showPlayHints() {
+        if (!gameState.showHints || !gameState.playerTurn) return;
+
+        const playableCards = document.querySelectorAll(".card.playable");
+        if (playableCards.length === 0) {
+          // Show draw hint
+          const drawBtn = document.getElementById("drawBtn");
+          showHint(drawBtn, "No playable cards! Draw one.");
+        } else if (playableCards.length === 1) {
+          showHint(playableCards[0], "Only one card to play!");
+        }
+      }
+
+      // Show hint
+      function showHint(element, text) {
+        const hint = document.createElement("div");
+        hint.className = "hint-overlay";
+        hint.textContent = text;
+        element.style.position = "relative";
+        element.appendChild(hint);
+
+        setTimeout(() => {
+          if (hint.parentNode) {
+            element.removeChild(hint);
+          }
+        }, 3000);
+      }
+
+      // Achievement system
+      function unlockAchievement(key) {
+        if (achievements[key].unlocked) return;
+
+        achievements[key].unlocked = true;
+        localStorage.setItem(`achievement_${key}`, "true");
+        showAchievementNotification(achievements[key]);
+      }
+
+      // Show achievement notification
+      function showAchievementNotification(achievement) {
+        const notification = document.createElement("div");
+        notification.className = "achievement-notification";
+        notification.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-trophy" style="font-size: 1.5rem;"></i>
+            <div>
+              <div style="font-weight: bold;">Achievement Unlocked!</div>
+              <div style="font-size: 0.9rem;">${achievement.name}</div>
+              <div style="font-size: 0.8rem; opacity: 0.8;">${achievement.description}</div>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 4000);
+
+        playSound("achievement");
+      }
+
+      // Settings functions
+      function showSettings() {
+        document.getElementById("difficultySelect").value = difficultyLevel;
+        document.getElementById("soundToggleCheck").checked =
+          gameState.soundEnabled;
+        document.getElementById("animationsToggleCheck").checked =
+          gameState.animationsEnabled;
+        document.getElementById("hintsToggleCheck").checked =
+          gameState.showHints;
+        document.getElementById("settingsModal").classList.add("show");
+      }
+
+      function saveSettings() {
+        difficultyLevel = document.getElementById("difficultySelect").value;
+        gameState.soundEnabled =
+          document.getElementById("soundToggleCheck").checked;
+        gameState.animationsEnabled = document.getElementById(
+          "animationsToggleCheck"
+        ).checked;
+        gameState.showHints =
+          document.getElementById("hintsToggleCheck").checked;
+
+        localStorage.setItem("unodifficulty", difficultyLevel);
+        localStorage.setItem("unosound", gameState.soundEnabled.toString());
+        localStorage.setItem(
+          "unoanimations",
+          gameState.animationsEnabled.toString()
+        );
+        localStorage.setItem("unohints", gameState.showHints.toString());
+
+        closeSettings();
+        updateDisplay();
+      }
+
+      function closeSettings() {
+        document.getElementById("settingsModal").classList.remove("show");
+      }
+
+      // Achievements functions
+      function showAchievements() {
+        const achievementsList = document.getElementById("achievementsList");
+        achievementsList.innerHTML = "";
+
+        Object.entries(achievements).forEach(([key, achievement]) => {
+          const achievementDiv = document.createElement("div");
+          achievementDiv.style.cssText =
+            "display: flex; align-items: center; gap: 1rem; padding: 0.8rem; margin-bottom: 0.5rem; background: rgba(79, 70, 229, 0.1); border-radius: 10px;";
+
+          const icon = achievement.unlocked ? "🏆" : "🔒";
+          const opacity = achievement.unlocked ? "1" : "0.5";
+
+          achievementDiv.innerHTML = `
+            <div style="font-size: 1.5rem; opacity: ${opacity};">${icon}</div>
+            <div style="opacity: ${opacity};">
+              <div style="font-weight: bold; margin-bottom: 0.2rem;">${achievement.name}</div>
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">${achievement.description}</div>
+            </div>
+          `;
+
+          achievementsList.appendChild(achievementDiv);
+        });
+
+        document.getElementById("achievementsModal").classList.add("show");
+      }
+
+      function closeAchievements() {
+        document.getElementById("achievementsModal").classList.remove("show");
+      }
+
       // Initialize game when page loads
       window.addEventListener("load", () => {
+        // Load saved settings
+        gameState.soundEnabled = localStorage.getItem("unosound") !== "false";
+        gameState.animationsEnabled =
+          localStorage.getItem("unoanimations") !== "false";
+        gameState.showHints = localStorage.getItem("unohints") !== "false";
+
+        // Update sound toggle icon
+        const icon = document.querySelector("#soundToggle i");
+        icon.className = gameState.soundEnabled
+          ? "fas fa-volume-up"
+          : "fas fa-volume-mute";
+
         initGame();
       });
 
