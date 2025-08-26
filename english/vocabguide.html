@@ -521,109 +521,6 @@
         border: 0;
       }
 
-      /* Responsive Design */
-      @media (max-width: 768px) {
-        .mobile-toggle {
-          display: flex;
-        }
-
-        .nav-links {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background: var(--bg-primary);
-          border: 1px solid var(--border-color);
-          border-top: none;
-          flex-direction: column;
-          align-items: stretch;
-          padding: 1rem;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(-10px);
-          transition: all 0.3s ease;
-        }
-
-        .nav-links.active {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-        }
-
-        .nav-item {
-          width: 100%;
-        }
-
-        .nav-link {
-          justify-content: space-between;
-          width: 100%;
-        }
-
-        .dropdown {
-          position: static;
-          opacity: 1;
-          visibility: visible;
-          transform: none;
-          box-shadow: none;
-          border: none;
-          background: var(--bg-secondary);
-          margin-top: 0.5rem;
-          border-radius: 8px;
-        }
-
-        .search-container {
-          margin-top: 60px;
-          padding: 1.5rem 0;
-        }
-
-        .search-box {
-          margin: 0 1rem;
-        }
-
-        .modal-content {
-          margin: 1rem;
-          padding: 1.5rem;
-        }
-
-        .challenge-word h2 {
-          font-size: 2rem;
-        }
-
-        .section {
-          padding: 3rem 0;
-        }
-
-        .section-title {
-          font-size: 2rem;
-        }
-
-        .learning-path,
-        .vocab-tools,
-        .category-grid,
-        .stats-container {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .container {
-          padding: 0 1rem;
-        }
-
-        .hero-title {
-          font-size: 2rem;
-        }
-
-        .hero-subtitle {
-          font-size: 1rem;
-        }
-
-        .word-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.5rem;
-        }
-      }
 
       /* Dark mode enhancements */
       .dark-mode .search-box input {
@@ -702,75 +599,7 @@
         background: var(--primary-color);
       }
 
-      /* Keyboard shortcuts styles */
-      .shortcuts-list {
-        display: grid;
-        gap: 0.75rem;
-      }
-
-      .shortcut-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem;
-        background: var(--bg-tertiary);
-        border-radius: 8px;
-        color: var(--text-primary);
-      }
-
-      kbd {
-        background: var(--bg-primary);
-        border: 2px solid var(--border-color);
-        border-radius: 4px;
-        padding: 0.25rem 0.5rem;
-        font-family: monospace;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        box-shadow: 0 2px 0 var(--border-color);
-      }
-
-      /* Animation enhancements */
-      .level-card,
-      .vocab-tool,
-      .category-card,
-      .word-result {
-        animation: fadeInUp 0.6s ease forwards;
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      .level-card:nth-child(1) {
-        animation-delay: 0.1s;
-      }
-      .level-card:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .level-card:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-
-      .vocab-tool:nth-child(1) {
-        animation-delay: 0.1s;
-      }
-      .vocab-tool:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .vocab-tool:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-      .vocab-tool:nth-child(4) {
-        animation-delay: 0.4s;
-      }
-
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Smooth transitions for interactive elements */
+      /* Interactive elements */
       .quiz-option,
       .flashcard,
       .category-card {
@@ -1279,6 +1108,8 @@
             <button class="control-btn mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
               <i class="fas fa-bars"></i>
             </button>
+          </nav>
+      </div>
     </header>
 
     <!-- Hero Section -->
@@ -2191,96 +2022,6 @@
           backToTop.classList.remove("show");
         }
       });
-
-      // Enhanced keyboard navigation
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && document.activeElement.id === "wordSearch") {
-          e.preventDefault();
-          searchWords();
-        }
-
-        if (e.key === "Escape") {
-          closeDailyChallenge();
-        }
-
-        // Spacebar to flip flashcard
-        if (e.key === " " && !e.target.matches("input, textarea, button")) {
-          e.preventDefault();
-          flipCard();
-        }
-
-        // Arrow keys for quiz navigation
-        if (e.key === "ArrowRight" && !e.target.matches("input, textarea")) {
-          e.preventDefault();
-          const nextBtn = document.getElementById("nextQuizBtn");
-          if (nextBtn && !nextBtn.disabled) {
-            nextQuestion();
-          }
-        }
-
-        // Number keys for quiz options (1-4)
-        if (
-          ["1", "2", "3", "4"].includes(e.key) &&
-          !e.target.matches("input, textarea")
-        ) {
-          e.preventDefault();
-          const optionIndex = parseInt(e.key) - 1;
-          const options = document.querySelectorAll(".quiz-option");
-          if (options[optionIndex]) {
-            options[optionIndex].click();
-          }
-        }
-
-        // 'n' for next flashcard
-        if (e.key === "n" && !e.target.matches("input, textarea")) {
-          e.preventDefault();
-          nextCard();
-        }
-
-        // 'k' to mark flashcard as known
-        if (e.key === "k" && !e.target.matches("input, textarea")) {
-          e.preventDefault();
-          markKnown();
-        }
-      });
-
-      // Add keyboard shortcuts help
-      function showKeyboardShortcuts() {
-        const modal = document.createElement("div");
-        modal.className = "daily-challenge-modal";
-        modal.innerHTML = `
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3>⌨️ Keyboard Shortcuts</h3>
-              <button onclick="this.closest('.daily-challenge-modal').remove()" class="close-btn">&times;</button>
-            </div>
-            <div class="shortcuts-list">
-              <div class="shortcut-item"><kbd>Space</kbd> - Flip flashcard</div>
-              <div class="shortcut-item"><kbd>N</kbd> - Next flashcard</div>
-              <div class="shortcut-item"><kbd>K</kbd> - Mark word as known</div>
-              <div class="shortcut-item"><kbd>1-4</kbd> - Select quiz option</div>
-              <div class="shortcut-item"><kbd>→</kbd> - Next quiz question</div>
-              <div class="shortcut-item"><kbd>Enter</kbd> - Search words</div>
-              <div class="shortcut-item"><kbd>Esc</kbd> - Close modals</div>
-            </div>
-          </div>
-        `;
-
-        document.body.appendChild(modal);
-      }
-
-      // Add shortcuts info to the page
-      function addShortcutsButton() {
-        const shortcutsBtn = document.createElement("button");
-        shortcutsBtn.innerHTML = '<i class="fas fa-keyboard"></i>';
-        shortcutsBtn.className = "control-btn";
-        shortcutsBtn.onclick = showKeyboardShortcuts;
-        shortcutsBtn.title = "Keyboard Shortcuts";
-        shortcutsBtn.setAttribute("aria-label", "Show keyboard shortcuts");
-
-        const controls = document.querySelector(".controls");
-        controls.insertBefore(shortcutsBtn, controls.firstChild);
-      }
 
       // Initialize everything when DOM loads
       document.addEventListener("DOMContentLoaded", function () {
