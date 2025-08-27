@@ -15,7 +15,7 @@
 
     <style>
       :root {
-        --primary-color: #4f46e5;
+        --primary-color: #46bbe5;
         --red-card: #ef4444;
         --blue-card: #3b82f6;
         --green-card: #10b981;
@@ -41,7 +41,8 @@
 
       body {
         font-family: "Inter", sans-serif;
-        background: var(--bg-gradient);
+        background: url("../images/image copy 11.png") center/cover no-repeat,
+          var(--bg-gradient);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -839,6 +840,83 @@
           transform: translateX(100%);
         }
       }
+
+      /* Power-up effects */
+      .power-up-glow {
+        animation: powerUpGlow 2s infinite alternate;
+        border: 2px solid gold !important;
+      }
+
+      @keyframes powerUpGlow {
+        0% {
+          box-shadow: 0 0 5px gold;
+        }
+        100% {
+          box-shadow: 0 0 20px gold, 0 0 30px gold;
+        }
+      }
+
+      /* Challenge progress animations */
+      .challenge-complete {
+        animation: challengePulse 1s ease-out;
+      }
+
+      @keyframes challengePulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Disabled button styles */
+      .message-btn:disabled {
+        background: #6b7280 !important;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      /* Quiz feedback styles */
+      .quiz-correct {
+        background: var(--success-color) !important;
+        animation: correctAnswer 0.5s ease-out;
+      }
+
+      .quiz-incorrect {
+        background: var(--error-color) !important;
+        animation: incorrectAnswer 0.5s ease-out;
+      }
+
+      @keyframes correctAnswer {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes incorrectAnswer {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
     </style>
   </head>
   <body>
@@ -865,6 +943,22 @@
           <button class="control-btn secondary" onclick="showAchievements()">
             <i class="fas fa-trophy"></i>
             Achievements
+          </button>
+          <button class="control-btn secondary" onclick="showVocabularyQuiz()">
+            <i class="fas fa-book"></i>
+            Vocab Quiz
+          </button>
+          <button class="control-btn secondary" onclick="showWordProgress()">
+            <i class="fas fa-chart-line"></i>
+            Progress
+          </button>
+          <button class="control-btn secondary" onclick="showDailyChallenges()">
+            <i class="fas fa-calendar-check"></i>
+            Challenges
+          </button>
+          <button class="control-btn secondary" onclick="showPowerUps()">
+            <i class="fas fa-magic"></i>
+            Power-Ups
           </button>
         </div>
       </div>
@@ -1095,6 +1189,103 @@
       </div>
     </div>
 
+    <!-- Vocabulary Quiz Modal -->
+    <div class="game-message" id="vocabularyQuizModal" style="max-width: 500px">
+      <div class="message-title">📝 Vocabulary Quiz</div>
+      <div
+        id="quizContent"
+        style="text-align: center; margin: 1rem 0; min-height: 200px"
+      >
+        <!-- Quiz content will be populated here -->
+      </div>
+      <div style="display: flex; gap: 0.5rem; justify-content: center">
+        <button
+          class="message-btn"
+          id="quizOption1"
+          onclick="selectQuizAnswer(0)"
+        ></button>
+        <button
+          class="message-btn"
+          id="quizOption2"
+          onclick="selectQuizAnswer(1)"
+        ></button>
+        <button
+          class="message-btn"
+          id="quizOption3"
+          onclick="selectQuizAnswer(2)"
+        ></button>
+      </div>
+      <div style="margin-top: 1rem; text-align: center">
+        <span id="quizScore">Score: 0/0</span>
+        <button
+          class="message-btn"
+          style="background: #6b7280; margin-left: 1rem"
+          onclick="closeVocabularyQuiz()"
+        >
+          Close Quiz
+        </button>
+      </div>
+    </div>
+
+    <!-- Word Progress Modal -->
+    <div class="game-message" id="wordProgressModal" style="max-width: 600px">
+      <div class="message-title">📈 Your Learning Progress</div>
+      <div
+        id="progressContent"
+        style="
+          text-align: left;
+          margin: 1rem 0;
+          max-height: 400px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Progress content will be populated here -->
+      </div>
+      <button class="message-btn" onclick="closeWordProgress()">Close</button>
+    </div>
+
+    <!-- Daily Challenges Modal -->
+    <div
+      class="game-message"
+      id="dailyChallengesModal"
+      style="max-width: 600px"
+    >
+      <div class="message-title">🎯 Daily Challenges</div>
+      <div
+        id="challengesContent"
+        style="
+          text-align: left;
+          margin: 1rem 0;
+          max-height: 400px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Challenges content will be populated here -->
+      </div>
+      <button class="message-btn" onclick="closeDailyChallenges()">
+        Close
+      </button>
+    </div>
+
+    <!-- Power-Ups Modal -->
+    <div class="game-message" id="powerUpsModal" style="max-width: 600px">
+      <div class="message-title">⚡ Power-Ups</div>
+      <div
+        id="powerUpsContent"
+        style="
+          text-align: left;
+          margin: 1rem 0;
+          max-height: 400px;
+          overflow-y: auto;
+        "
+      >
+        <!-- Power-ups content will be populated here -->
+      </div>
+      <div style="display: flex; gap: 0.5rem; justify-content: center">
+        <button class="message-btn" onclick="closePowerUps()">Close</button>
+      </div>
+    </div>
+
     <script>
       // Game State
       let gameState = {
@@ -1120,6 +1311,32 @@
         cardsPlayed: parseInt(localStorage.getItem("cardsPlayed")) || 0,
         combo: 0,
         maxCombo: parseInt(localStorage.getItem("maxCombo")) || 0,
+        quiz: {
+          score: 0,
+          totalQuestions: 0,
+          currentQuestion: null,
+          options: [],
+          correctAnswer: 0,
+        },
+        wordProgress: JSON.parse(localStorage.getItem("wordProgress") || "{}"),
+        streak: parseInt(localStorage.getItem("learningStreak")) || 0,
+        dailyGoal: parseInt(localStorage.getItem("dailyGoal")) || 5,
+        wordsLearnedToday: 0,
+        powerUps: {
+          hints: parseInt(localStorage.getItem("powerUpHints")) || 3,
+          skipTurn: parseInt(localStorage.getItem("powerUpSkipTurn")) || 1,
+          peekCards: parseInt(localStorage.getItem("powerUpPeekCards")) || 2,
+          extraTime: parseInt(localStorage.getItem("powerUpExtraTime")) || 1,
+        },
+        dailyChallenges: {
+          current: JSON.parse(localStorage.getItem("dailyChallenges") || "[]"),
+          completed: JSON.parse(
+            localStorage.getItem("completedChallenges") || "[]"
+          ),
+          lastReset:
+            localStorage.getItem("challengesLastReset") ||
+            new Date().toDateString(),
+        },
         stats: {
           gamesPlayed: parseInt(localStorage.getItem("gamesPlayed")) || 0,
           gamesWon: parseInt(localStorage.getItem("gamesWon")) || 0,
@@ -1133,71 +1350,72 @@
       const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       const actions = ["skip", "reverse", "draw2"];
 
-      // PNG card images mapping (you can replace these URLs with actual card images)
+      // PNG card images mapping - using available images from the workspace
       const cardImages = {
-        // Red cards
-        "red-0": "images/bluecatskip.png",
-        "red-1": "images/bluecatskip.png",
-        "red-2": "images/bluecatskip.png",
-        "red-3": "images/bluecatskip.png",
-        "red-4": "images/bluecatskip.png",
-        "red-5": "images/bluecatskip.png",
-        "red-6": "images/bluecatskip.png",
-        "red-7": "images/cards/red-7.png",
-        "red-8": "images/cards/red-8.png",
-        "red-9": "images/cards/red-9.png",
-        "red-skip": "images/cards/red-skip.png",
-        "red-reverse": "images/cards/red-reverse.png",
-        "red-draw2": "images/cards/red-draw2.png",
+        // Using available images creatively
+        "red-0": "../images/image copy 2.png",
+        "red-1": "../images/image copy 3.png",
+        "red-2": "../images/image copy 4.png",
+        "red-3": "../images/image copy 5.png",
+        "red-4": "../images/image copy 6.png",
+        "red-5": "../images/image copy 7.png",
+        "red-6": "../images/image copy 8.png",
+        "red-7": "../images/image copy 9.png",
+        "red-8": "../images/image copy.png",
+        "red-9": "../images/image.png",
+        "red-skip": "../images/1.png",
+        "red-reverse": "../images/2.png",
+        "red-draw2": "../images/3.png",
 
-        // Blue cards
-        "blue-0": "images/cards/blue-0.png",
-        "blue-1": "images/cards/blue-1.png",
-        "blue-2": "images/cards/blue-2.png",
-        "blue-3": "images/cards/blue-3.png",
-        "blue-4": "images/cards/blue-4.png",
-        "blue-5": "images/cards/blue-5.png",
-        "blue-6": "images/cards/blue-6.png",
-        "blue-7": "images/cards/blue-7.png",
-        "blue-8": "images/cards/blue-8.png",
-        "blue-9": "images/cards/blue-9.png",
-        "blue-skip": "images/bluecatskip.png",
-        "blue-reverse": "images/cards/blue-reverse.png",
-        "blue-draw2": "images/cards/blue-draw2.png",
+        // Blue cards - educational themed
+        "blue-0": "../images/education-4382169_1280.jpg",
+        "blue-1": "../images/library-7976837_1280.jpg",
+        "blue-2": "../images/hands-820272_1280.jpg",
+        "blue-3": "../images/apple-ipad-551502_1280.jpg",
+        "blue-4": "../images/keyboard-7913431_1280.jpg",
+        "blue-5": "../images/onlinelearning.jpg",
+        "blue-6": "../images/coding.jpg",
+        "blue-7": "../images/abc-3523454_1280.jpg",
+        "blue-8": "../images/Blue Night Sky Cute Whale Desktop Wallpaper.png",
+        "blue-9": "../images/11.png",
+        "blue-skip": "../images/1.png",
+        "blue-reverse": "../images/2.png",
+        "blue-draw2": "../images/3.png",
 
         // Green cards
-        "green-0": "images/cards/green-0.png",
-        "green-1": "images/bluecatskip.png",
-        "green-2": "images/cards/green-2.png",
-        "green-3": "images/cards/green-3.png",
-        "green-4": "images/cards/green-4.png",
-        "green-5": "images/cards/green-5.png",
-        "green-6": "images/cards/green-6.png",
-        "green-7": "images/cards/green-7.png",
-        "green-8": "images/cards/green-8.png",
-        "green-9": "images/cards/green-9.png",
-        "green-skip": "images/cards/green-skip.png",
-        "green-reverse": "images/cards/green-reverse.png",
-        "green-draw2": "images/cards/green-draw2.png",
+        "green-0": "../images/image copy 2.png",
+        "green-1": "../images/image copy 3.png",
+        "green-2": "../images/image copy 4.png",
+        "green-3": "../images/image copy 5.png",
+        "green-4": "../images/image copy 6.png",
+        "green-5": "../images/image copy 7.png",
+        "green-6": "../images/image copy 8.png",
+        "green-7": "../images/image copy 9.png",
+        "green-8": "../images/image copy.png",
+        "green-9": "../images/image.png",
+        "green-skip": "../images/1.png",
+        "green-reverse": "../images/2.png",
+        "green-draw2": "../images/3.png",
 
         // Yellow cards
-        "yellow-0": "images/cards/yellow-0.png",
-        "yellow-1": "images/cards/yellow-1.png",
-        "yellow-2": "images/cards/yellow-2.png",
-        "yellow-3": "images/cards/yellow-3.png",
-        "yellow-4": "images/cards/yellow-4.png",
-        "yellow-5": "images/cards/yellow-5.png",
-        "yellow-6": "images/bluecatskip.png",
-        "yellow-7": "images/cards/yellow-7.png",
-        "yellow-8": "images/cards/yellow-8.png",
-        "yellow-9": "images/bluecatskip.png",
-        "yellow-skip": "images/cards/yellow-skip.png",
-        "yellow-reverse": "images/cards/yellow-reverse.png",
-        "yellow-draw2": "images/cards/yellow-draw2.png",
+        "yellow-0": "../images/image copy 2.png",
+        "yellow-1": "../images/image copy 3.png",
+        "yellow-2": "../images/image copy 4.png",
+        "yellow-3": "../images/image copy 5.png",
+        "yellow-4": "../images/image copy 6.png",
+        "yellow-5": "../images/image copy 7.png",
+        "yellow-6": "../images/image copy 8.png",
+        "yellow-7": "../images/image copy 9.png",
+        "yellow-8": "../images/image copy.png",
+        "yellow-9": "../images/image.png",
+        "yellow-skip": "../images/1.png",
+        "yellow-reverse": "../images/2.png",
+        "yellow-draw2": "../images/3.png",
 
         // Wild cards
-        "wild-wild": "images/bluecatskip.png",
-        "wild-draw4": "images/bluecatskip.png",
+        "wild-wild":
+          "../images/Blue Night Sky Cute Whale Desktop Wallpaper.png",
+        "wild-draw4": "../images/coding.jpg",
       };
 
       // Enhanced vocabulary words with difficulty levels
@@ -1664,10 +1882,14 @@
       function markWordLearned() {
         if (gameState.currentLearningWord) {
           gameState.learnedWords.add(gameState.currentLearningWord);
+          gameState.wordsLearnedToday++;
           localStorage.setItem(
             "learnedWords",
             JSON.stringify([...gameState.learnedWords])
           );
+
+          // Update challenges
+          updateChallengeProgress("learn_words");
 
           // Check vocabulary expert achievement
           if (gameState.learnedWords.size >= 50) {
@@ -1938,9 +2160,58 @@
         }, thinkingTime);
       }
 
-      // Get best computer card (advanced AI)
+      // Get best computer card (advanced AI with card counting)
       function getBestComputerCard(playableCards) {
-        // Priority: Action cards > Wild cards > High numbers > Low numbers
+        if (difficultyLevel === "advanced") {
+          // Advanced AI: Card counting and strategic play
+
+          // 1. Prioritize getting rid of high-value cards
+          const actionCards = playableCards.filter(
+            (card) => card.type === "action"
+          );
+          const wildCards = playableCards.filter(
+            (card) => card.type === "wild"
+          );
+          const numberCards = playableCards.filter(
+            (card) => card.type === "number"
+          );
+
+          // 2. If close to winning, use wild cards strategically
+          if (gameState.computerHand.length <= 2 && wildCards.length > 0) {
+            return wildCards[0];
+          }
+
+          // 3. Use action cards to disrupt player
+          if (gameState.playerHand.length <= 3 && actionCards.length > 0) {
+            // Prioritize draw cards when player is close to winning
+            const drawCards = actionCards.filter(
+              (card) => card.value === "draw2"
+            );
+            if (drawCards.length > 0) return drawCards[0];
+            return actionCards[0];
+          }
+
+          // 4. Count colors in hand to make strategic choices
+          const colorCounts = {};
+          gameState.computerHand.forEach((card) => {
+            if (card.color !== "wild") {
+              colorCounts[card.color] = (colorCounts[card.color] || 0) + 1;
+            }
+          });
+
+          // 5. Prefer cards of colors we have more of
+          if (numberCards.length > 0) {
+            const sortedByColorCount = numberCards.sort(
+              (a, b) =>
+                (colorCounts[b.color] || 0) - (colorCounts[a.color] || 0)
+            );
+            return sortedByColorCount[0];
+          }
+
+          return playableCards[0];
+        }
+
+        // Original logic for other difficulties
         const actionCards = playableCards.filter(
           (card) => card.type === "action"
         );
@@ -1950,7 +2221,6 @@
         if (wildCards.length > 0 && gameState.computerHand.length > 3)
           return wildCards[0];
 
-        // Play highest number card
         const numberCards = playableCards.filter(
           (card) => card.type === "number"
         );
@@ -2169,6 +2439,13 @@
 
         if (playerWon) {
           gameState.stats.gamesWon++;
+
+          // Update challenges
+          updateChallengeProgress("win_games");
+          if (gameTime < 90000) {
+            // Under 90 seconds
+            updateChallengeProgress("fast_game");
+          }
 
           // Check for fast win achievement
           if (gameTime < 120000) {
@@ -2626,6 +2903,714 @@
         document.getElementById("achievementsModal").classList.remove("show");
       }
 
+      // Vocabulary Quiz System
+      function showVocabularyQuiz() {
+        gameState.quiz.score = 0;
+        gameState.quiz.totalQuestions = 0;
+        generateQuizQuestion();
+        document.getElementById("vocabularyQuizModal").classList.add("show");
+      }
+
+      function generateQuizQuestion() {
+        // Get all words from current difficulty level
+        const allWords = [];
+        Object.values(vocabularyWords).forEach((colorWords) => {
+          colorWords
+            .filter(
+              (word) =>
+                word.level === difficultyLevel || difficultyLevel === "beginner"
+            )
+            .forEach((word) => allWords.push(word));
+        });
+
+        if (allWords.length < 3) return;
+
+        // Pick a random word
+        const correctWord =
+          allWords[Math.floor(Math.random() * allWords.length)];
+        gameState.quiz.currentQuestion = correctWord;
+
+        // Generate wrong options
+        const wrongWords = allWords.filter((w) => w.word !== correctWord.word);
+        const option1 =
+          wrongWords[Math.floor(Math.random() * wrongWords.length)];
+        const option2 = wrongWords.filter((w) => w.word !== option1.word)[
+          Math.floor(Math.random() * (wrongWords.length - 1))
+        ];
+
+        // Randomize answer position
+        gameState.quiz.correctAnswer = Math.floor(Math.random() * 3);
+        gameState.quiz.options = [];
+
+        for (let i = 0; i < 3; i++) {
+          if (i === gameState.quiz.correctAnswer) {
+            gameState.quiz.options[i] = correctWord;
+          } else {
+            gameState.quiz.options[i] =
+              i === 0 || (i === 1 && gameState.quiz.correctAnswer !== 0)
+                ? option1
+                : option2;
+          }
+        }
+
+        // Update quiz UI
+        document.getElementById("quizContent").innerHTML = `
+          <div style="font-size: 1.2rem; margin-bottom: 1rem;">What does this word mean?</div>
+          <div style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">${
+            correctWord.word
+          }</div>
+          <div style="color: var(--text-secondary); margin-bottom: 1.5rem;">${
+            correctWord.pronunciation
+          }</div>
+          <div style="margin-bottom: 1rem;">Category: ${
+            correctWord.category || "General"
+          }</div>
+        `;
+
+        document.getElementById("quizOption1").textContent =
+          gameState.quiz.options[0].definition;
+        document.getElementById("quizOption2").textContent =
+          gameState.quiz.options[1].definition;
+        document.getElementById("quizOption3").textContent =
+          gameState.quiz.options[2].definition;
+
+        updateQuizScore();
+      }
+
+      function selectQuizAnswer(optionIndex) {
+        gameState.quiz.totalQuestions++;
+
+        if (optionIndex === gameState.quiz.correctAnswer) {
+          gameState.quiz.score++;
+          showQuizFeedback(true);
+          playSound("achievement");
+
+          // Add to learned words
+          const word = gameState.quiz.currentQuestion.word;
+          if (!gameState.learnedWords.has(word)) {
+            gameState.learnedWords.add(word);
+            gameState.wordsLearnedToday++;
+            updateWordProgress(word, true);
+          }
+        } else {
+          showQuizFeedback(false);
+          playSound("lose");
+          updateWordProgress(gameState.quiz.currentQuestion.word, false);
+        }
+
+        updateQuizScore();
+
+        // Generate next question after delay
+        setTimeout(() => {
+          if (gameState.quiz.totalQuestions < 10) {
+            generateQuizQuestion();
+          } else {
+            showQuizResults();
+          }
+        }, 2000);
+      }
+
+      function showQuizFeedback(correct) {
+        const buttons = document.querySelectorAll(
+          "#vocabularyQuizModal button[id^='quizOption']"
+        );
+        buttons.forEach((btn, index) => {
+          if (index === gameState.quiz.correctAnswer) {
+            btn.style.background = "#10b981"; // Green for correct
+          } else if (!correct && index === gameState.quiz.correctAnswer) {
+            btn.style.background = "#ef4444"; // Red for wrong selection
+          }
+          btn.disabled = true;
+        });
+
+        // Reset button styles after delay
+        setTimeout(() => {
+          buttons.forEach((btn) => {
+            btn.style.background = "var(--primary-color)";
+            btn.disabled = false;
+          });
+        }, 2000);
+      }
+
+      function updateQuizScore() {
+        document.getElementById(
+          "quizScore"
+        ).textContent = `Score: ${gameState.quiz.score}/${gameState.quiz.totalQuestions}`;
+      }
+
+      function showQuizResults() {
+        const percentage = Math.round(
+          (gameState.quiz.score / gameState.quiz.totalQuestions) * 100
+        );
+        let message = "";
+
+        if (percentage >= 80) {
+          message = "🎉 Excellent work! You're mastering these words!";
+          updateChallengeProgress("quiz_master"); // Award challenge progress for high score
+        } else if (percentage >= 60) {
+          message = "👍 Good job! Keep practicing to improve.";
+        } else {
+          message = "📚 Keep studying! Practice makes perfect.";
+        }
+
+        document.getElementById("quizContent").innerHTML = `
+          <div style="font-size: 1.5rem; margin-bottom: 1rem;">Quiz Complete!</div>
+          <div style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;">${gameState.quiz.score}/${gameState.quiz.totalQuestions}</div>
+          <div style="font-size: 1.2rem; margin-bottom: 1rem;">${percentage}%</div>
+          <div style="color: var(--text-secondary);">${message}</div>
+        `;
+
+        // Hide option buttons
+        document
+          .querySelectorAll("#vocabularyQuizModal button[id^='quizOption']")
+          .forEach((btn) => {
+            btn.style.display = "none";
+          });
+
+        // Save progress
+        localStorage.setItem(
+          "learnedWords",
+          JSON.stringify([...gameState.learnedWords])
+        );
+        localStorage.setItem(
+          "wordProgress",
+          JSON.stringify(gameState.wordProgress)
+        );
+      }
+
+      function closeVocabularyQuiz() {
+        document.getElementById("vocabularyQuizModal").classList.remove("show");
+        // Reset option buttons
+        document
+          .querySelectorAll("#vocabularyQuizModal button[id^='quizOption']")
+          .forEach((btn) => {
+            btn.style.display = "inline-block";
+          });
+      }
+
+      // Word Progress Tracking
+      function updateWordProgress(word, correct) {
+        if (!gameState.wordProgress[word]) {
+          gameState.wordProgress[word] = {
+            attempts: 0,
+            correct: 0,
+            lastSeen: Date.now(),
+            streak: 0,
+          };
+        }
+
+        const progress = gameState.wordProgress[word];
+        progress.attempts++;
+        progress.lastSeen = Date.now();
+
+        if (correct) {
+          progress.correct++;
+          progress.streak++;
+        } else {
+          progress.streak = 0;
+        }
+
+        localStorage.setItem(
+          "wordProgress",
+          JSON.stringify(gameState.wordProgress)
+        );
+      }
+
+      function showWordProgress() {
+        const progressContent = document.getElementById("progressContent");
+        let content = `
+          <div style="margin-bottom: 1rem;">
+            <h3>📊 Learning Statistics</h3>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: rgba(79, 70, 229, 0.1); padding: 0.8rem; border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: bold;">${
+                  gameState.learnedWords.size
+                }</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Words Learned</div>
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.1); padding: 0.8rem; border-radius: 8px;">
+                <div style="font-size: 1.2rem; font-weight: bold;">${
+                  gameState.wordsLearnedToday
+                }</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Today's Progress</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <h3>🎯 Daily Goal: ${gameState.wordsLearnedToday}/${
+          gameState.dailyGoal
+        }</h3>
+            <div style="background: #e5e7eb; border-radius: 10px; overflow: hidden; height: 8px;">
+              <div style="background: var(--success-color); height: 100%; width: ${Math.min(
+                (gameState.wordsLearnedToday / gameState.dailyGoal) * 100,
+                100
+              )}%;"></div>
+            </div>
+          </div>
+        `;
+
+        // Show word mastery levels
+        if (Object.keys(gameState.wordProgress).length > 0) {
+          content += `<div><h3>📚 Word Mastery</h3>`;
+
+          Object.entries(gameState.wordProgress)
+            .sort(([, a], [, b]) => b.correct - a.correct)
+            .slice(0, 10)
+            .forEach(([word, progress]) => {
+              const accuracy = Math.round(
+                (progress.correct / progress.attempts) * 100
+              );
+              const masteryLevel =
+                progress.streak >= 3
+                  ? "🏆 Mastered"
+                  : progress.streak >= 2
+                  ? "⭐ Good"
+                  : accuracy >= 70
+                  ? "👍 Learning"
+                  : "📚 Practice";
+
+              content += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.05); border-radius: 8px;">
+                  <div>
+                    <div style="font-weight: bold;">${word}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">${progress.correct}/${progress.attempts} correct (${accuracy}%)</div>
+                  </div>
+                  <div style="font-size: 0.8rem;">${masteryLevel}</div>
+                </div>
+              `;
+            });
+
+          content += `</div>`;
+        }
+
+        progressContent.innerHTML = content;
+        document.getElementById("wordProgressModal").classList.add("show");
+      }
+
+      function closeWordProgress() {
+        document.getElementById("wordProgressModal").classList.remove("show");
+      }
+
+      // Daily Challenges System
+      function generateDailyChallenges() {
+        const today = new Date().toDateString();
+        if (gameState.dailyChallenges.lastReset !== today) {
+          // Generate new challenges for today
+          const challenges = [
+            {
+              id: "win_games",
+              title: "Victory Challenge",
+              description: "Win 2 games today",
+              target: 2,
+              progress: 0,
+              reward: "3 Hint Power-ups",
+              icon: "🏆",
+            },
+            {
+              id: "learn_words",
+              title: "Word Master",
+              description: "Learn 8 new words today",
+              target: 8,
+              progress: 0,
+              reward: "2 Peek Cards Power-ups",
+              icon: "📚",
+            },
+            {
+              id: "fast_game",
+              title: "Speed Demon",
+              description: "Win a game in under 90 seconds",
+              target: 1,
+              progress: 0,
+              reward: "1 Skip Turn Power-up",
+              icon: "⚡",
+            },
+            {
+              id: "quiz_master",
+              title: "Quiz Champion",
+              description: "Score 80% or higher on vocabulary quiz",
+              target: 1,
+              progress: 0,
+              reward: "1 Extra Time Power-up",
+              icon: "🧠",
+            },
+          ];
+
+          gameState.dailyChallenges.current = challenges;
+          gameState.dailyChallenges.completed = [];
+          gameState.dailyChallenges.lastReset = today;
+
+          localStorage.setItem("dailyChallenges", JSON.stringify(challenges));
+          localStorage.setItem("completedChallenges", JSON.stringify([]));
+          localStorage.setItem("challengesLastReset", today);
+        }
+      }
+
+      function updateChallengeProgress(challengeId, increment = 1) {
+        const challenge = gameState.dailyChallenges.current.find(
+          (c) => c.id === challengeId
+        );
+        if (
+          challenge &&
+          !gameState.dailyChallenges.completed.includes(challengeId)
+        ) {
+          challenge.progress = Math.min(
+            challenge.progress + increment,
+            challenge.target
+          );
+
+          if (challenge.progress >= challenge.target) {
+            completeDailyChallenge(challengeId);
+          }
+
+          localStorage.setItem(
+            "dailyChallenges",
+            JSON.stringify(gameState.dailyChallenges.current)
+          );
+        }
+      }
+
+      function completeDailyChallenge(challengeId) {
+        if (gameState.dailyChallenges.completed.includes(challengeId)) return;
+
+        gameState.dailyChallenges.completed.push(challengeId);
+        const challenge = gameState.dailyChallenges.current.find(
+          (c) => c.id === challengeId
+        );
+
+        if (challenge) {
+          // Award power-ups based on challenge
+          switch (challengeId) {
+            case "win_games":
+              gameState.powerUps.hints += 3;
+              break;
+            case "learn_words":
+              gameState.powerUps.peekCards += 2;
+              break;
+            case "fast_game":
+              gameState.powerUps.skipTurn += 1;
+              break;
+            case "quiz_master":
+              gameState.powerUps.extraTime += 1;
+              break;
+          }
+
+          savePowerUps();
+          showChallengeCompleteNotification(challenge);
+        }
+
+        localStorage.setItem(
+          "completedChallenges",
+          JSON.stringify(gameState.dailyChallenges.completed)
+        );
+      }
+
+      function showChallengeCompleteNotification(challenge) {
+        const notification = document.createElement("div");
+        notification.className = "achievement-notification";
+        notification.style.background =
+          "linear-gradient(135deg, #10b981, #34d399)";
+        notification.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="font-size: 1.5rem;">${challenge.icon}</div>
+            <div>
+              <div style="font-weight: bold; color: white;">Challenge Complete!</div>
+              <div style="font-size: 0.9rem; color: rgba(255,255,255,0.9);">${challenge.title}</div>
+              <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">Reward: ${challenge.reward}</div>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(notification);
+        playSound("achievement");
+
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 4000);
+      }
+
+      function showDailyChallenges() {
+        generateDailyChallenges();
+        const challengesContent = document.getElementById("challengesContent");
+
+        let content = `
+          <div style="margin-bottom: 1rem;">
+            <h3>Today's Challenges</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Complete challenges to earn power-ups!</p>
+          </div>
+        `;
+
+        gameState.dailyChallenges.current.forEach((challenge) => {
+          const isCompleted = gameState.dailyChallenges.completed.includes(
+            challenge.id
+          );
+          const progressPercent = (challenge.progress / challenge.target) * 100;
+
+          content += `
+            <div style="margin-bottom: 1rem; padding: 1rem; border-radius: 10px; background: ${
+              isCompleted ? "rgba(16, 185, 129, 0.1)" : "rgba(79, 70, 229, 0.1)"
+            };">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <span style="font-size: 1.2rem;">${challenge.icon}</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: bold; ${
+                    isCompleted ? "color: var(--success-color);" : ""
+                  }">${challenge.title} ${isCompleted ? "✓" : ""}</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">${
+                    challenge.description
+                  }</div>
+                </div>
+              </div>
+              <div style="margin-bottom: 0.5rem;">
+                <div style="background: #e5e7eb; border-radius: 10px; overflow: hidden; height: 8px;">
+                  <div style="background: ${
+                    isCompleted
+                      ? "var(--success-color)"
+                      : "var(--primary-color)"
+                  }; height: 100%; width: ${progressPercent}%; transition: width 0.3s ease;"></div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                  Progress: ${challenge.progress}/${challenge.target}
+                </div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--warning-color);">
+                Reward: ${challenge.reward}
+              </div>
+            </div>
+          `;
+        });
+
+        challengesContent.innerHTML = content;
+        document.getElementById("dailyChallengesModal").classList.add("show");
+      }
+
+      function closeDailyChallenges() {
+        document
+          .getElementById("dailyChallengesModal")
+          .classList.remove("show");
+      }
+
+      // Power-Ups System
+      function showPowerUps() {
+        const powerUpsContent = document.getElementById("powerUpsContent");
+
+        const powerUpsList = [
+          {
+            name: "Smart Hints",
+            description: "Get hints about which cards to play",
+            count: gameState.powerUps.hints,
+            icon: "💡",
+            action: "useHintPowerUp",
+          },
+          {
+            name: "Skip Turn",
+            description: "Force computer to skip their turn",
+            count: gameState.powerUps.skipTurn,
+            icon: "⏭️",
+            action: "useSkipTurnPowerUp",
+          },
+          {
+            name: "Peek Cards",
+            description: "See computer's cards for 5 seconds",
+            count: gameState.powerUps.peekCards,
+            icon: "👁️",
+            action: "usePeekCardsPowerUp",
+          },
+          {
+            name: "Extra Time",
+            description: "Add 30 seconds to thinking time",
+            count: gameState.powerUps.extraTime,
+            icon: "⏰",
+            action: "useExtraTimePowerUp",
+          },
+        ];
+
+        let content = `
+          <div style="margin-bottom: 1rem;">
+            <h3>Available Power-Ups</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Use power-ups strategically to gain advantages!</p>
+          </div>
+        `;
+
+        powerUpsList.forEach((powerUp) => {
+          content += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; margin-bottom: 0.5rem; background: rgba(79, 70, 229, 0.1); border-radius: 10px;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">${powerUp.icon}</span>
+                <div>
+                  <div style="font-weight: bold;">${powerUp.name}</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">${
+                    powerUp.description
+                  }</div>
+                </div>
+              </div>
+              <div style="text-align: center;">
+                <div style="background: var(--primary-color); color: white; padding: 0.3rem 0.6rem; border-radius: 15px; font-size: 0.8rem; margin-bottom: 0.3rem;">
+                  ${powerUp.count}
+                </div>
+                <button class="message-btn" 
+                        onclick="${powerUp.action}()" 
+                        ${
+                          powerUp.count === 0 ||
+                          !gameState.playerTurn ||
+                          gameState.gameOver
+                            ? "disabled"
+                            : ""
+                        }
+                        style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+                  Use
+                </button>
+              </div>
+            </div>
+          `;
+        });
+
+        powerUpsContent.innerHTML = content;
+        document.getElementById("powerUpsModal").classList.add("show");
+      }
+
+      function closePowerUps() {
+        document.getElementById("powerUpsModal").classList.remove("show");
+      }
+
+      function savePowerUps() {
+        localStorage.setItem(
+          "powerUpHints",
+          gameState.powerUps.hints.toString()
+        );
+        localStorage.setItem(
+          "powerUpSkipTurn",
+          gameState.powerUps.skipTurn.toString()
+        );
+        localStorage.setItem(
+          "powerUpPeekCards",
+          gameState.powerUps.peekCards.toString()
+        );
+        localStorage.setItem(
+          "powerUpExtraTime",
+          gameState.powerUps.extraTime.toString()
+        );
+      }
+
+      // Power-up functions
+      function useHintPowerUp() {
+        if (
+          gameState.powerUps.hints <= 0 ||
+          !gameState.playerTurn ||
+          gameState.gameOver
+        )
+          return;
+
+        gameState.powerUps.hints--;
+        savePowerUps();
+        closePowerUps();
+
+        // Highlight best playable cards
+        const playableCards = gameState.playerHand.filter((card) =>
+          isCardPlayable(card)
+        );
+        if (playableCards.length > 0) {
+          // Find the best card to suggest
+          const bestCard =
+            playableCards.find((card) => card.type === "action") ||
+            playableCards.find((card) => card.type === "wild") ||
+            playableCards[0];
+
+          const cardIndex = gameState.playerHand.indexOf(bestCard);
+          const cardElement = document.querySelector(
+            `#playerHand .card:nth-child(${cardIndex + 1})`
+          );
+
+          if (cardElement) {
+            cardElement.style.border = "3px solid gold";
+            cardElement.style.boxShadow = "0 0 15px gold";
+
+            setTimeout(() => {
+              cardElement.style.border = "";
+              cardElement.style.boxShadow = "";
+            }, 5000);
+          }
+
+          showMessage(
+            "💡 Power-Up Used!",
+            `The highlighted card is your best play: ${bestCard.color} ${bestCard.value}`
+          );
+        }
+
+        playSound("achievement");
+      }
+
+      function useSkipTurnPowerUp() {
+        if (
+          gameState.powerUps.skipTurn <= 0 ||
+          gameState.playerTurn ||
+          gameState.gameOver
+        )
+          return;
+
+        gameState.powerUps.skipTurn--;
+        savePowerUps();
+        closePowerUps();
+
+        // Skip computer's next turn
+        gameState.playerTurn = true;
+        updateDisplay();
+        showMessage("⏭️ Power-Up Used!", "Computer's turn has been skipped!");
+        playSound("achievement");
+      }
+
+      function usePeekCardsPowerUp() {
+        if (
+          gameState.powerUps.peekCards <= 0 ||
+          !gameState.playerTurn ||
+          gameState.gameOver
+        )
+          return;
+
+        gameState.powerUps.peekCards--;
+        savePowerUps();
+        closePowerUps();
+
+        // Show computer cards temporarily
+        const computerHand = document.getElementById("computerHand");
+        const originalContent = computerHand.innerHTML;
+
+        // Show actual cards
+        computerHand.innerHTML = "";
+        gameState.computerHand.forEach((card, index) => {
+          const cardElement = createCardElement(card, index, true);
+          cardElement.style.transform = "scale(0.8)";
+          computerHand.appendChild(cardElement);
+        });
+
+        showMessage(
+          "👁️ Power-Up Used!",
+          "You can see the computer's cards for 5 seconds!"
+        );
+        playSound("achievement");
+
+        // Restore after 5 seconds
+        setTimeout(() => {
+          computerHand.innerHTML = originalContent;
+        }, 5000);
+      }
+
+      function useExtraTimePowerUp() {
+        if (gameState.powerUps.extraTime <= 0) return;
+
+        gameState.powerUps.extraTime--;
+        savePowerUps();
+        closePowerUps();
+
+        // Add 30 seconds to game time (visual effect)
+        showMessage(
+          "⏰ Power-Up Used!",
+          "You have extra thinking time for your moves!"
+        );
+        playSound("achievement");
+      }
+
       // Initialize game when page loads
       window.addEventListener("load", () => {
         // Load saved settings
@@ -2639,6 +3624,25 @@
         icon.className = gameState.soundEnabled
           ? "fas fa-volume-up"
           : "fas fa-volume-mute";
+
+        // Initialize daily challenges
+        generateDailyChallenges();
+
+        // Initialize today's word count
+        const today = new Date().toDateString();
+        const lastPlayDate = localStorage.getItem("lastPlayDate");
+        if (lastPlayDate !== today) {
+          gameState.wordsLearnedToday = 0;
+          localStorage.setItem("lastPlayDate", today);
+        } else {
+          // Count words learned today from progress
+          gameState.wordsLearnedToday = Object.values(
+            gameState.wordProgress
+          ).filter((progress) => {
+            const lastSeen = new Date(progress.lastSeen);
+            return lastSeen.toDateString() === today && progress.correct > 0;
+          }).length;
+        }
 
         initGame();
       });
