@@ -66,13 +66,10 @@
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-
-
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-9G9RD6BHLN");
     </script>
 
@@ -420,6 +417,22 @@
         line-height: 1.3;
       }
 
+      .post-title-link {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .post-title-link:hover {
+        color: var(--primary-color);
+      }
+
+      .post-title-link:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
       .post-excerpt {
         color: var(--text-secondary);
         margin-bottom: 1.5rem;
@@ -579,12 +592,29 @@
         font-weight: 500;
         transition: all 0.3s ease;
         box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.9rem;
       }
 
-      .page-link:hover,
+      .page-link:hover:not(:disabled),
       .page-link.active {
         background: var(--primary-color);
         color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .page-link:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .page-link:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
       }
 
       /* Footer */
@@ -703,10 +733,121 @@
           padding: 1rem 0;
         }
       }
+
+      /* Screen reader only text */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* Focus management for better accessibility */
+      .category-tab:focus,
+      .search-input:focus,
+      .sort-select:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .category-tab {
+          border-width: 3px;
+        }
+        
+        .blog-post {
+          border: 2px solid var(--border-color);
+        }
+      }
+
+      /* Error message styles */
+      .error-message {
+        background: var(--error-color);
+        color: white;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+        font-weight: 500;
+        text-align: center;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Loading states */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+        cursor: wait;
+      }
+
+      /* Enhanced hover states */
+      .category-tab:hover:not(.active) {
+        background: var(--primary-light);
+        transform: translateY(-1px);
+      }
+
+      /* Skip link for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: var(--primary-color);
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        border-radius: 4px;
+        z-index: 10000;
+        transition: top 0.3s ease;
+      }
+
+      .skip-link:focus {
+        top: 6px;
+      }
+
+      /* Performance optimization for animations */
+      .blog-post,
+      .category-tab,
+      .back-to-top {
+        will-change: transform;
+      }
+
+      .blog-post.visible {
+        will-change: auto;
+      }
     </style>
   </head>
 
   <body>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
         <!-- Header & Navigation -->
     <header>
       <div class="container">
@@ -829,8 +970,14 @@
     </header>
 
     <!-- Blog Hero -->
-    <section class="hero">
-      <img src="../images/11.png" alt="" class="hero-bg" />
+    <section class="hero" role="banner">
+      <img 
+        src="../images/11.png" 
+        alt="ESL and Coding learning environment with books and computer" 
+        class="hero-bg"
+        loading="eager"
+        decoding="async"
+      />
       <div class="hero-content">
         <h1 class="hero-title">ESL & Coding Blog</h1>
         <p class="hero-subtitle">
@@ -841,31 +988,31 @@
     </section>
 
     <!-- Category Filter -->
-    <section class="category-filter">
+    <section class="category-filter" role="navigation" aria-label="Blog category filters">
       <div class="container">
-        <div class="category-tabs">
-          <div class="category-tab active" data-category="all">
-            <i class="fas fa-th-large"></i>
+        <div class="category-tabs" role="tablist" aria-label="Filter posts by category">
+          <button class="category-tab active" data-category="all" role="tab" aria-selected="true" aria-controls="posts-panel" id="tab-all">
+            <i class="fas fa-th-large" aria-hidden="true"></i>
             All Posts
-          </div>
-          <div class="category-tab" data-category="esl-learners">
-            <i class="fas fa-user-graduate"></i>
+          </button>
+          <button class="category-tab" data-category="esl-learners" role="tab" aria-selected="false" aria-controls="posts-panel" id="tab-esl-learners">
+            <i class="fas fa-user-graduate" aria-hidden="true"></i>
             ESL Learners
-          </div>
-          <div class="category-tab" data-category="esl-teachers">
-            <i class="fas fa-chalkboard-teacher"></i>
+          </button>
+          <button class="category-tab" data-category="esl-teachers" role="tab" aria-selected="false" aria-controls="posts-panel" id="tab-esl-teachers">
+            <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
             ESL Teachers
-          </div>
-          <div class="category-tab" data-category="esl-lessons">
-            <i class="fas fa-book-reader"></i>
+          </button>
+          <button class="category-tab" data-category="esl-lessons" role="tab" aria-selected="false" aria-controls="posts-panel" id="tab-esl-lessons">
+            <i class="fas fa-book-reader" aria-hidden="true"></i>
             ESL Lessons
-          </div>
-          <div class="category-tab" data-category="coding-corner">
-            <i class="fas fa-code"></i>
+          </button>
+          <button class="category-tab" data-category="coding-corner" role="tab" aria-selected="false" aria-controls="posts-panel" id="tab-coding-corner">
+            <i class="fas fa-code" aria-hidden="true"></i>
             Coding Corner
-          </div>
+          </button>
         </div>
-        <div class="filter-info">
+        <div class="filter-info" aria-live="polite" aria-atomic="true">
           Showing <span class="active-filter">All Posts</span>
           <span class="post-count">(12 articles)</span>
         </div>
@@ -873,28 +1020,34 @@
     </section>
 
     <!-- Search and Sort Controls -->
-    <section class="content-controls">
+    <section class="content-controls" role="search" aria-label="Search and sort blog posts">
       <div class="container">
         <div class="controls-wrapper">
           <div class="search-container">
-            <form class="search-form">
-              <i class="fas fa-search search-icon"></i>
+            <form class="search-form" role="search">
+              <i class="fas fa-search search-icon" aria-hidden="true"></i>
+              <label for="searchInput" class="sr-only">Search articles</label>
               <input
-                type="text"
+                type="search"
                 class="search-input"
                 placeholder="Search articles..."
                 id="searchInput"
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="search-help"
               />
+              <div id="search-help" class="sr-only">Enter keywords to search through article titles and content</div>
             </form>
           </div>
           <div class="sort-controls">
-            <span class="sort-label">Sort by:</span>
-            <select class="sort-select" id="sortSelect">
+            <label for="sortSelect" class="sort-label">Sort by:</label>
+            <select class="sort-select" id="sortSelect" aria-describedby="sort-help">
               <option value="date-desc">Newest First</option>
               <option value="date-asc">Oldest First</option>
               <option value="title-asc">Title A-Z</option>
               <option value="title-desc">Title Z-A</option>
             </select>
+            <div id="sort-help" class="sr-only">Choose how to sort the blog posts</div>
           </div>
         </div>
       </div>
@@ -903,8 +1056,8 @@
     <!-- Blog Content -->
     <div class="container">
       <div class="blog-container">
-        <main class="main-content">
-          <div class="posts-container" id="postsContainer">
+        <main class="main-content" role="main" id="main-content">
+          <div class="posts-container" id="postsContainer" role="tabpanel" aria-labelledby="tab-all">
             <!-- ESL Learners Posts -->
             <article
               class="blog-post"
@@ -914,17 +1067,19 @@
             >
               <img
                 src="images/image copy 6.png"
-                alt="English Learning"
+                alt="Students practicing English conversation with study materials and books"
                 class="post-image"
+                loading="lazy"
+                decoding="async"
               />
               <div class="post-content">
                 <div class="post-meta">
                   <span class="post-category">ESL Learners</span>
-                  <span><i class="fas fa-calendar-alt"></i> June 15, 2025</span>
-                  <span><i class="fas fa-user"></i> Sarah Chen</span>
+                  <time datetime="2025-06-15"><i class="fas fa-calendar-alt" aria-hidden="true"></i> June 15, 2025</time>
+                  <span><i class="fas fa-user" aria-hidden="true"></i> Sarah Chen</span>
                 </div>
                 <h2 class="post-title">
-                  Easy Conversation Tools & Tricks for Adult English Learners
+                  <a href="blog1.html" class="post-title-link">Easy Conversation Tools & Tricks for Adult English Learners</a>
                 </h2>
                 <p class="post-excerpt">
                   Discover practical conversation strategies that will boost
@@ -933,12 +1088,12 @@
                   flowing naturally in both casual and professional settings.
                 </p>
                 <div class="post-footer">
-                  <a href="blog1.html" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
+                  <a href="blog1.html" class="read-more" aria-label="Read full article: Easy Conversation Tools & Tricks for Adult English Learners">
+                    Read More <i class="fas fa-arrow-right" aria-hidden="true"></i>
                   </a>
-                  <div class="post-stats">
-                    <span><i class="fas fa-eye"></i> 1.2k</span>
-                    <span><i class="fas fa-heart"></i> 84</span>
+                  <div class="post-stats" aria-label="Article statistics">
+                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 1.2k</span>
+                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 84</span>
                   </div>
                 </div>
               </div>
@@ -1492,16 +1647,16 @@
           </div>
 
           <!-- Pagination -->
-          <nav class="pagination" id="pagination">
-            <a href="#" class="page-link" id="prevPage">
-              <i class="fas fa-chevron-left"></i>
-            </a>
-            <a href="#" class="page-link active">1</a>
-            <a href="#" class="page-link">2</a>
-            <a href="#" class="page-link">3</a>
-            <a href="#" class="page-link" id="nextPage">
-              <i class="fas fa-chevron-right"></i>
-            </a>
+          <nav class="pagination" id="pagination" aria-label="Blog posts pagination">
+            <button class="page-link" id="prevPage" aria-label="Go to previous page" disabled>
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button class="page-link active" aria-label="Current page, page 1" aria-current="page">1</button>
+            <button class="page-link" aria-label="Go to page 2">2</button>
+            <button class="page-link" aria-label="Go to page 3">3</button>
+            <button class="page-link" id="nextPage" aria-label="Go to next page">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
           </nav>
         </main>
 
@@ -1633,104 +1788,271 @@
     </a>
 
     <script>
-      // Blog functionality
-      document.addEventListener("DOMContentLoaded", function () {
-        const categoryTabs = document.querySelectorAll(".category-tab");
-        const blogPosts = document.querySelectorAll(".blog-post");
-        const searchInput = document.getElementById("searchInput");
-        const sortSelect = document.getElementById("sortSelect");
-        const postsContainer = document.getElementById("postsContainer");
-        const noPostsMessage = document.getElementById("noPosts");
-        const activeFilter = document.querySelector(".active-filter");
-        const postCount = document.querySelector(".post-count");
-        const backToTop = document.getElementById("backToTop");
+      // Enhanced Blog functionality with performance optimizations and accessibility
+      (function() {
+        'use strict';
+        
+        // Configuration
+        const CONFIG = {
+          ANIMATION_DURATION: 300,
+          DEBOUNCE_DELAY: 300,
+          POSTS_PER_PAGE: 6,
+          INTERSECTION_THRESHOLD: 0.1,
+        };
 
-        let allPosts = Array.from(blogPosts);
-        let currentCategory = "all";
+        // DOM elements cache
+        const elements = {
+          categoryTabs: null,
+          blogPosts: null,
+          searchInput: null,
+          sortSelect: null,
+          postsContainer: null,
+          noPostsMessage: null,
+          activeFilter: null,
+          postCount: null,
+          backToTop: null,
+          postsPanel: null
+        };
 
-        // Initialize
-        updatePostCount();
-        setupIntersectionObserver();
+        // State management
+        let state = {
+          currentCategory: "all",
+          allPosts: [],
+          filteredPosts: [],
+          currentPage: 1,
+          isLoading: false
+        };
 
-        // Category filtering
-        categoryTabs.forEach((tab) => {
-          tab.addEventListener("click", function () {
-            // Update active tab
-            categoryTabs.forEach((t) => t.classList.remove("active"));
-            this.classList.add("active");
+        // Initialize when DOM is ready
+        document.addEventListener("DOMContentLoaded", initializeBlog);
 
-            currentCategory = this.dataset.category;
-            activeFilter.textContent = this.textContent.trim();
+        function initializeBlog() {
+          try {
+            cacheElements();
+            validateElements();
+            setupEventListeners();
+            initializeState();
+            setupIntersectionObserver();
+            setupKeyboardNavigation();
+            announceToScreenReader("Blog loaded successfully");
+          } catch (error) {
+            console.error("Failed to initialize blog:", error);
+            showErrorMessage("Failed to load blog content. Please refresh the page.");
+          }
+        }
+
+        function cacheElements() {
+          elements.categoryTabs = document.querySelectorAll(".category-tab");
+          elements.blogPosts = document.querySelectorAll(".blog-post");
+          elements.searchInput = document.getElementById("searchInput");
+          elements.sortSelect = document.getElementById("sortSelect");
+          elements.postsContainer = document.getElementById("postsContainer");
+          elements.noPostsMessage = document.getElementById("noPosts");
+          elements.activeFilter = document.querySelector(".active-filter");
+          elements.postCount = document.querySelector(".post-count");
+          elements.backToTop = document.getElementById("backToTop");
+          elements.postsPanel = document.getElementById("posts-panel");
+        }
+
+        function validateElements() {
+          const requiredElements = ['categoryTabs', 'blogPosts', 'searchInput', 'sortSelect'];
+          const missingElements = requiredElements.filter(key => !elements[key] || elements[key].length === 0);
+          
+          if (missingElements.length > 0) {
+            throw new Error(`Missing required elements: ${missingElements.join(', ')}`);
+          }
+        }
+
+        function initializeState() {
+          state.allPosts = Array.from(elements.blogPosts);
+          state.filteredPosts = [...state.allPosts];
+          updatePostCount();
+        }
+
+        function setupEventListeners() {
+          // Category filtering with improved accessibility
+          elements.categoryTabs.forEach((tab, index) => {
+            tab.addEventListener("click", handleCategoryClick);
+            tab.addEventListener("keydown", (e) => handleTabKeydown(e, index));
+          });
+
+          // Search with debouncing
+          elements.searchInput.addEventListener("input", debounce(handleSearchInput, CONFIG.DEBOUNCE_DELAY));
+          elements.searchInput.addEventListener("keydown", handleSearchKeydown);
+
+          // Sort functionality
+          elements.sortSelect.addEventListener("change", handleSortChange);
+
+          // Back to top with throttling
+          window.addEventListener("scroll", throttle(handleScroll, 100));
+          elements.backToTop?.addEventListener("click", handleBackToTopClick);
+
+          // Keyboard navigation
+          document.addEventListener("keydown", handleGlobalKeydown);
+        }
+
+        function handleCategoryClick(event) {
+          const clickedTab = event.currentTarget;
+          const category = clickedTab.dataset.category;
+          
+          if (state.isLoading || category === state.currentCategory) return;
+
+          state.isLoading = true;
+          
+          try {
+            // Update ARIA states
+            elements.categoryTabs.forEach(tab => {
+              tab.classList.remove("active");
+              tab.setAttribute("aria-selected", "false");
+            });
+
+            clickedTab.classList.add("active");
+            clickedTab.setAttribute("aria-selected", "true");
+
+            // Update panel label
+            if (elements.postsPanel) {
+              elements.postsPanel.setAttribute("aria-labelledby", clickedTab.id);
+            }
+
+            state.currentCategory = category;
+            
+            if (elements.activeFilter) {
+              elements.activeFilter.textContent = clickedTab.textContent.trim();
+            }
 
             filterPosts();
-          });
-        });
-
-        // Search functionality
-        searchInput.addEventListener("input", function () {
-          filterPosts();
-        });
-
-        // Sort functionality
-        sortSelect.addEventListener("change", function () {
-          sortPosts();
-        });
-
-        // Back to top functionality
-        window.addEventListener("scroll", function () {
-          if (window.pageYOffset > 300) {
-            backToTop.classList.add("show");
-          } else {
-            backToTop.classList.remove("show");
+            announceToScreenReader(`Switched to ${clickedTab.textContent.trim()} category`);
+          } catch (error) {
+            console.error("Error handling category click:", error);
+          } finally {
+            state.isLoading = false;
           }
-        });
+        }
 
-        backToTop.addEventListener("click", function (e) {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
+        function handleTabKeydown(event, index) {
+          const tabs = Array.from(elements.categoryTabs);
+          let targetIndex = index;
 
-        function filterPosts() {
-          const searchTerm = searchInput.value.toLowerCase();
+          switch (event.key) {
+            case "ArrowRight":
+            case "ArrowDown":
+              event.preventDefault();
+              targetIndex = (index + 1) % tabs.length;
+              break;
+            case "ArrowLeft":
+            case "ArrowUp":
+              event.preventDefault();
+              targetIndex = (index - 1 + tabs.length) % tabs.length;
+              break;
+            case "Home":
+              event.preventDefault();
+              targetIndex = 0;
+              break;
+            case "End":
+              event.preventDefault();
+              targetIndex = tabs.length - 1;
+              break;
+            case "Enter":
+            case " ":
+              event.preventDefault();
+              handleCategoryClick(event);
+              return;
+          }
+
+          if (targetIndex !== index) {
+            tabs[targetIndex].focus();
+          }
+        }
+
+        function handleSearchInput(event) {
+          const searchTerm = event.target.value.toLowerCase().trim();
+          filterPosts(searchTerm);
+        }
+
+        function handleSearchKeydown(event) {
+          if (event.key === "Escape") {
+            event.target.value = "";
+            filterPosts("");
+            announceToScreenReader("Search cleared");
+          }
+        }
+
+        function handleSortChange() {
+          sortPosts();
+          announceToScreenReader("Posts sorted");
+        }
+
+        function handleScroll() {
+          const scrolled = window.pageYOffset > 300;
+          
+          if (elements.backToTop) {
+            elements.backToTop.classList.toggle("show", scrolled);
+          }
+        }
+
+        function handleBackToTopClick(event) {
+          event.preventDefault();
+          window.scrollTo({ 
+            top: 0, 
+            behavior: supportsSmoothScrolling() ? "smooth" : "auto"
+          });
+          announceToScreenReader("Scrolled to top");
+        }
+
+        function handleGlobalKeydown(event) {
+          // Quick search with Ctrl/Cmd + F
+          if ((event.ctrlKey || event.metaKey) && event.key === "f" && elements.searchInput) {
+            event.preventDefault();
+            elements.searchInput.focus();
+          }
+        }
+
+        function filterPosts(searchTerm = "") {
+          if (!elements.blogPosts) return;
+
           let visibleCount = 0;
+          const currentSearchTerm = searchTerm || elements.searchInput.value.toLowerCase().trim();
 
-          blogPosts.forEach((post) => {
+          elements.blogPosts.forEach((post, index) => {
             const category = post.dataset.category;
             const title = post.dataset.title.toLowerCase();
-            const excerpt = post
-              .querySelector(".post-excerpt")
-              .textContent.toLowerCase();
+            const excerpt = post.querySelector(".post-excerpt")?.textContent.toLowerCase() || "";
 
-            const matchesCategory =
-              currentCategory === "all" || category === currentCategory;
-            const matchesSearch =
-              searchTerm === "" ||
-              title.includes(searchTerm) ||
-              excerpt.includes(searchTerm);
+            const matchesCategory = state.currentCategory === "all" || category === state.currentCategory;
+            const matchesSearch = !currentSearchTerm || 
+              title.includes(currentSearchTerm) || 
+              excerpt.includes(currentSearchTerm);
 
-            if (matchesCategory && matchesSearch) {
-              post.classList.remove("hidden");
-              post.classList.add("visible");
-              visibleCount++;
-            } else {
-              post.classList.add("hidden");
-              post.classList.remove("visible");
-            }
+            const shouldShow = matchesCategory && matchesSearch;
+
+            // Use requestAnimationFrame for smooth animations
+            requestAnimationFrame(() => {
+              if (shouldShow) {
+                post.classList.remove("hidden");
+                post.classList.add("visible");
+                post.style.animationDelay = `${index * 50}ms`;
+              } else {
+                post.classList.add("hidden");
+                post.classList.remove("visible");
+              }
+            });
+
+            if (shouldShow) visibleCount++;
           });
 
-          // Show/hide no posts message
-          if (visibleCount === 0) {
-            noPostsMessage.style.display = "block";
-          } else {
-            noPostsMessage.style.display = "none";
-          }
-
+          // Update UI state
+          updateNoPostsMessage(visibleCount === 0);
           updatePostCount(visibleCount);
+          state.filteredPosts = Array.from(elements.blogPosts).filter(post => 
+            !post.classList.contains("hidden")
+          );
         }
 
         function sortPosts() {
-          const sortValue = sortSelect.value;
-          const posts = Array.from(blogPosts);
+          if (!elements.sortSelect || !elements.postsContainer) return;
+
+          const sortValue = elements.sortSelect.value;
+          const posts = Array.from(elements.blogPosts);
 
           posts.sort((a, b) => {
             switch (sortValue) {
@@ -1747,32 +2069,45 @@
             }
           });
 
-          // Reorder DOM elements
-          posts.forEach((post) => {
-            postsContainer.appendChild(post);
-          });
+          // Batch DOM updates
+          const fragment = document.createDocumentFragment();
+          posts.forEach(post => fragment.appendChild(post));
+          elements.postsContainer.appendChild(fragment);
         }
 
         function updatePostCount(count = null) {
+          if (!elements.postCount) return;
+
           if (count === null) {
-            count =
-              currentCategory === "all"
-                ? blogPosts.length
-                : document.querySelectorAll(
-                    `[data-category="${currentCategory}"]`
-                  ).length;
+            count = state.currentCategory === "all" 
+              ? elements.blogPosts.length 
+              : document.querySelectorAll(`[data-category="${state.currentCategory}"]`).length;
           }
-          postCount.textContent = `(${count} article${count !== 1 ? "s" : ""})`;
+          
+          elements.postCount.textContent = `(${count} article${count !== 1 ? "s" : ""})`;
+        }
+
+        function updateNoPostsMessage(show) {
+          if (elements.noPostsMessage) {
+            elements.noPostsMessage.style.display = show ? "block" : "none";
+            
+            if (show) {
+              elements.noPostsMessage.setAttribute("role", "status");
+              elements.noPostsMessage.setAttribute("aria-live", "polite");
+            }
+          }
         }
 
         function setupIntersectionObserver() {
+          if (!window.IntersectionObserver) return;
+
           const options = {
-            threshold: 0.1,
+            threshold: CONFIG.INTERSECTION_THRESHOLD,
             rootMargin: "0px 0px -50px 0px",
           };
 
           const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
+            entries.forEach(entry => {
               if (entry.isIntersecting) {
                 entry.target.style.opacity = "1";
                 entry.target.style.transform = "translateY(0)";
@@ -1780,50 +2115,92 @@
             });
           }, options);
 
-          blogPosts.forEach((post) => {
-            observer.observe(post);
+          elements.blogPosts.forEach(post => observer.observe(post));
+        }
+
+        function setupKeyboardNavigation() {
+          // Enhanced keyboard navigation for sidebar links
+          const sidebarCategoryLinks = document.querySelectorAll(".category-link");
+          
+          sidebarCategoryLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+              e.preventDefault();
+              const category = this.dataset.category;
+              const correspondingTab = document.querySelector(
+                `.category-tab[data-category="${category}"]`
+              );
+              
+              if (correspondingTab) {
+                correspondingTab.focus();
+                correspondingTab.click();
+              }
+            });
           });
         }
 
-        // Sidebar category links
-        const sidebarCategoryLinks =
-          document.querySelectorAll(".category-link");
-        sidebarCategoryLinks.forEach((link) => {
-          link.addEventListener("click", function (e) {
-            e.preventDefault();
-            const category = this.dataset.category;
+        // Utility functions
+        function debounce(func, wait) {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        }
 
-            // Find and click the corresponding tab
-            const correspondingTab = document.querySelector(
-              `.category-tab[data-category="${category}"]`
-            );
-            if (correspondingTab) {
-              correspondingTab.click();
+        function throttle(func, limit) {
+          let inThrottle;
+          return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+              func.apply(context, args);
+              inThrottle = true;
+              setTimeout(() => inThrottle = false, limit);
             }
-          });
-        });
-
-        // Theme toggle functionality (if header.css includes it)
-        const themeToggle = document.getElementById("themeToggle");
-        if (themeToggle) {
-          themeToggle.addEventListener("click", function () {
-            document.body.classList.toggle("dark-mode");
-            const isDark = document.body.classList.contains("dark-mode");
-            this.innerHTML = isDark
-              ? '<i class="fas fa-sun"></i>'
-              : '<i class="fas fa-moon"></i>';
-          });
+          }
         }
 
-        // Mobile menu toggle (if header.css includes it)
-        const mobileToggle = document.getElementById("mobileToggle");
-        const navLinks = document.getElementById("navLinks");
-        if (mobileToggle && navLinks) {
-          mobileToggle.addEventListener("click", function () {
-            navLinks.classList.toggle("active");
-          });
+        function announceToScreenReader(message) {
+          const announcement = document.createElement('div');
+          announcement.setAttribute('aria-live', 'polite');
+          announcement.setAttribute('aria-atomic', 'true');
+          announcement.className = 'sr-only';
+          announcement.textContent = message;
+          
+          document.body.appendChild(announcement);
+          
+          setTimeout(() => {
+            document.body.removeChild(announcement);
+          }, 1000);
         }
-      });
+
+        function supportsSmoothScrolling() {
+          return 'scrollBehavior' in document.documentElement.style;
+        }
+
+        function showErrorMessage(message) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'error-message';
+          errorDiv.textContent = message;
+          errorDiv.setAttribute('role', 'alert');
+          
+          const container = document.querySelector('.container');
+          if (container) {
+            container.insertBefore(errorDiv, container.firstChild);
+            
+            setTimeout(() => {
+              if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+              }
+            }, 5000);
+          }
+        }
+
+      })();
     </script>
 
     <style>
@@ -1893,110 +2270,110 @@
     </style>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
       <div class="container">
         <div class="footer-content">
-          <div class="footer-section">
+          <section class="footer-section">
             <h3>ESL Fun Online</h3>
             <p>
               Your go-to platform for premium English learning resources,
               interactive coding tutorials, and comprehensive test preparation
               materials. Join us to enhance your skills and achieve your goals.
             </p>
-          </div>
+          </section>
 
-          <div class="footer-section">
+          <section class="footer-section">
             <h3>English Learning</h3>
             <ul>
               <li>
                 <a href="../english/grammar.html">
-                  <i class="fas fa-spell-check"></i> Grammar Guide
+                  <i class="fas fa-spell-check" aria-hidden="true"></i> Grammar Guide
                 </a>
               </li>
               <li>
                 <a href="../english/vocabguide.html">
-                  <i class="fas fa-book-open"></i> Vocabulary Builder
+                  <i class="fas fa-book-open" aria-hidden="true"></i> Vocabulary Builder
                 </a>
               </li>
               <li>
                 <a href="../english/ielts.html">
-                  <i class="fas fa-certificate"></i> IELTS Preparation
+                  <i class="fas fa-certificate" aria-hidden="true"></i> IELTS Preparation
                 </a>
               </li>
               <li>
                 <a href="../english/toeic.html">
-                  <i class="fas fa-briefcase"></i> TOEIC Preparation
+                  <i class="fas fa-briefcase" aria-hidden="true"></i> TOEIC Preparation
                 </a>
               </li>
               <li>
                 <a href="../english/eiken.html">
-                  <i class="fas fa-graduation-cap"></i> EIKEN Preparation
+                  <i class="fas fa-graduation-cap" aria-hidden="true"></i> EIKEN Preparation
                 </a>
               </li>
             </ul>
-          </div>
+          </section>
 
-          <div class="footer-section">
+          <section class="footer-section">
             <h3>Programming</h3>
             <ul>
               <li>
                 <a href="../coding/computerbasics.html">
-                  <i class="fas fa-desktop"></i> Computer Basics
+                  <i class="fas fa-desktop" aria-hidden="true"></i> Computer Basics
                 </a>
               </li>
               <li>
                 <a href="../coding/ai.html">
-                  <i class="fas fa-robot"></i> AI Basics
+                  <i class="fas fa-robot" aria-hidden="true"></i> AI Basics
                 </a>
               </li>
               <li>
                 <a href="../coding/codingresources.html">
-                  <i class="fas fa-code"></i> Coding Basics
+                  <i class="fas fa-code" aria-hidden="true"></i> Coding Basics
                 </a>
               </li>
               <li>
                 <a href="../games/games.html">
-                  <i class="fas fa-gamepad"></i> Coding Games
+                  <i class="fas fa-gamepad" aria-hidden="true"></i> Coding Games
                 </a>
               </li>
               <li>
                 <a href="../tools/tools.html">
-                  <i class="fas fa-tools"></i> Developer Tools
+                  <i class="fas fa-tools" aria-hidden="true"></i> Developer Tools
                 </a>
               </li>
             </ul>
-          </div>
+          </section>
 
-          <div class="footer-section">
+          <section class="footer-section">
             <h3>Resources</h3>
             <ul>
               <li>
                 <a href="../blog/blog.html">
-                  <i class="fas fa-blog"></i> Learning Blog
+                  <i class="fas fa-blog" aria-hidden="true"></i> Learning Blog
                 </a>
               </li>
               <li>
                 <a href="../tools/tools.html">
-                  <i class="fas fa-toolbox"></i> Study Tools
+                  <i class="fas fa-toolbox" aria-hidden="true"></i> Study Tools
                 </a>
               </li>
               <li>
                 <a href="../games/games.html">
-                  <i class="fas fa-dice"></i> Educational Games
+                  <i class="fas fa-dice" aria-hidden="true"></i> Educational Games
                 </a>
               </li>
               <li>
                 <a href="../questions.html">
-                  <i class="fas fa-question-circle"></i> Help Center
+                  <i class="fas fa-question-circle" aria-hidden="true"></i> Help Center
                 </a>
               </li>
               <li>
                 <a href="../contact.html">
-                  <i class="fas fa-envelope"></i> Contact
+                  <i class="fas fa-envelope" aria-hidden="true"></i> Contact
                 </a>
               </li>
             </ul>
-          </div>
+          </section>
         </div>
 
         <div class="footer-bottom">

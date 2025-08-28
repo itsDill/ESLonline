@@ -287,6 +287,9 @@ const Auth = {
 
 const ThemeManager = {
   init() {
+    // Prevent initialization if navigation.js already initialized theme management
+    if (window.eslNavigationInitialized) return;
+
     this.body = document.body;
     this.themeToggle = Utils.$("#themeToggle");
     this.allThemeToggles = Utils.$$("[id*='themeToggle'], .theme-toggle");
@@ -424,6 +427,9 @@ const ThemeManager = {
 
 const Navigation = {
   init() {
+    // Prevent initialization if navigation.js already initialized navigation
+    if (window.eslNavigationInitialized) return;
+
     this.mobileToggle = Utils.$("#mobileToggle");
     this.navLinks = Utils.$("#navLinks");
     this.header = Utils.$("header");

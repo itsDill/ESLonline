@@ -1,0 +1,160 @@
+/* ==============================================
+   CSS CLEANUP & CONSISTENCY FIXES
+   ESL Fun Online - Additional fixes for consistency
+   ============================================== */
+
+/* Ensure consistent box-sizing across all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll on all devices */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Consistent focus styles for accessibility */
+.using-keyboard *:focus {
+  outline: 2px solid var(--primary-color, #46bbe5);
+  outline-offset: 2px;
+}
+
+/* Remove default focus styles when not using keyboard */
+*:focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Ensure all interactive elements have proper cursor */
+button,
+[role="button"],
+.btn,
+.control-btn,
+.mobile-toggle,
+.theme-toggle,
+a {
+  cursor: pointer;
+}
+
+/* Disabled state for all interactive elements */
+button:disabled,
+.btn:disabled,
+[role="button"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Consistent transition for theme changes */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Prevent transition on page load */
+.loaded * {
+  transition: none;
+}
+
+/* Re-enable transitions after page load */
+.loaded.transitions-enabled * {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Ensure proper text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fix for iOS Safari button appearance */
+button,
+input[type="button"],
+input[type="submit"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Consistent form element styling */
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Ensure consistent spacing for grid layouts */
+.grid,
+.tools-grid,
+.resources-grid,
+.footer-content {
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .grid,
+  .tools-grid,
+  .resources-grid,
+  .footer-content {
+    gap: 2rem;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .no-print,
+  .theme-toggle,
+  .mobile-toggle,
+  header nav,
+  .back-to-top {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-secondary: #000000;
+  }
+
+  .dark-mode {
+    --border-color: #ffffff;
+    --text-secondary: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Force hardware acceleration for better performance */
+.hero,
+header,
+.nav-links,
+.dropdown,
+.back-to-top {
+  transform: translateZ(0);
+  will-change: transform;
+}
