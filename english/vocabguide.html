@@ -250,6 +250,7 @@
         border-radius: 12px;
         padding: 1.5rem;
         transition: all 0.3s ease;
+        margin-bottom: 1rem;
       }
 
       .word-result:hover {
@@ -281,13 +282,25 @@
         font-size: 1.1rem;
         color: var(--text-primary);
         margin-bottom: 0.5rem;
+        line-height: 1.4;
       }
 
       .word-example {
         font-size: 1rem;
         color: var(--text-secondary);
         font-style: italic;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        background: rgba(79, 70, 229, 0.05);
+        border-radius: 6px;
+        border-left: 3px solid var(--primary-color);
+      }
+
+      .word-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
       }
 
       .word-category {
@@ -298,6 +311,18 @@
         border-radius: 12px;
         font-size: 0.85rem;
         font-weight: 500;
+        text-transform: capitalize;
+      }
+
+      .word-level {
+        display: inline-block;
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success-color);
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: capitalize;
       }
 
       .no-results {
@@ -497,6 +522,58 @@
         font-size: 0.8rem;
         color: var(--text-light);
         text-align: center;
+      }
+
+      .flashcard-progress {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+
+      .level-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .level-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--border-color);
+        background: transparent;
+        color: var(--text-primary);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: capitalize;
+      }
+
+      .level-btn:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .level-btn.active {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+        color: white;
+      }
+
+      /* Search enhancements */
+      .search-container {
+        background: var(--bg-secondary);
+        padding: 2rem 0;
+        margin-top: 0;
+      }
+
+      mark {
+        background: rgba(255, 235, 59, 0.3);
+        padding: 0.1em;
+        border-radius: 2px;
       }
 
       /* Accessibility improvements */
@@ -1213,6 +1290,14 @@
             </div>
 
             <div style="text-align: center">
+              <button
+                class="btn btn-small"
+                onclick="previousCard()"
+                style="margin-right: 0.5rem"
+              >
+                <i class="fas fa-backward"></i>
+                Previous
+              </button>
               <button class="btn btn-small" onclick="nextCard()">
                 <i class="fas fa-forward"></i>
                 Next Card
@@ -1224,6 +1309,18 @@
               >
                 <i class="fas fa-check"></i>
                 Know This
+              </button>
+            </div>
+
+            <!-- Study Mode Toggle -->
+            <div style="text-align: center; margin-top: 1rem">
+              <button
+                class="btn btn-secondary btn-small"
+                onclick="toggleStudyMode()"
+                id="studyModeBtn"
+              >
+                <i class="fas fa-random"></i>
+                Switch to Random Mode
               </button>
             </div>
           </div>
@@ -1484,34 +1581,139 @@
 
       let vocabData = {};
       let allWords = [];
+      let currentLevel = "beginner";
+      let currentLevelWords = [];
+      let currentFlashcardIndex = 0;
       let quizQuestions = [];
       let currentQuizIndex = 0;
       let selectedOption = null;
-
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("vocab/vocab.json")
-          .then((res) => res.json())
-          .then((data) => {
-            vocabData = data;
-            // Flatten all words from beginner and all categories
-            allWords = [
-              ...(vocabData.beginner || []),
-              ...Object.values(vocabData.categories || {}).flat(),
-            ];
-            buildQuizQuestions();
-            updateQuiz();
-            updateFlashcard();
-          });
-      });
+      let flashcardMode = "study"; // 'study' or 'test'
 
       function updateFlashcard() {
-        if (!allWords.length) return;
-        const word = allWords[Math.floor(Math.random() * allWords.length)];
+        if (!currentLevelWords.length) return;
+
+        const word = currentLevelWords[currentFlashcardIndex];
+        if (!word) return;
+
+        // Update flashcard content
         document.querySelector(".flashcard-word").textContent = word.word;
         document.querySelector(".flashcard-pronunciation").textContent =
           word.pronunciation || "";
         document.querySelector(".flashcard-definition").textContent =
           word.definition;
+
+        // Reset card to front
+        document.getElementById("flashcard").classList.remove("flipped");
+
+        // Update progress indicator
+        updateFlashcardProgress();
+      }
+
+      function updateFlashcardProgress() {
+        const progressText = `${currentFlashcardIndex + 1} / ${
+          currentLevelWords.length
+        }`;
+        let progressElement = document.querySelector(".flashcard-progress");
+        if (!progressElement) {
+          progressElement = document.createElement("div");
+          progressElement.className = "flashcard-progress";
+          progressElement.style.cssText = `
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+          `;
+          document
+            .querySelector(".flashcard-container")
+            .parentNode.insertBefore(
+              progressElement,
+              document.querySelector(".flashcard-container")
+            );
+        }
+        progressElement.textContent = `Card ${progressText} - ${
+          currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)
+        } Level`;
+      }
+
+      function nextCard() {
+        currentFlashcardIndex =
+          (currentFlashcardIndex + 1) % currentLevelWords.length;
+        updateFlashcard();
+      }
+
+      function previousCard() {
+        currentFlashcardIndex =
+          currentFlashcardIndex === 0
+            ? currentLevelWords.length - 1
+            : currentFlashcardIndex - 1;
+        updateFlashcard();
+      }
+
+      function switchLevel(level) {
+        if (!vocabData[level]) return;
+
+        currentLevel = level;
+        currentLevelWords = vocabData[level] || [];
+        currentFlashcardIndex = 0;
+
+        // Update level indicator
+        updateLevelIndicator();
+        updateFlashcard();
+
+        // Rebuild quiz for new level
+        buildQuizQuestions();
+        updateQuiz();
+      }
+
+      function updateLevelIndicator() {
+        let indicator = document.querySelector(".level-indicator");
+        if (!indicator) {
+          indicator = document.createElement("div");
+          indicator.className = "level-indicator";
+          indicator.style.cssText = `
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+          `;
+
+          const toolHeader = document.querySelector(".vocab-tool .tool-header");
+          toolHeader.parentNode.insertBefore(indicator, toolHeader.nextSibling);
+        }
+
+        const levels = ["beginner", "intermediate", "advanced"];
+        indicator.innerHTML = levels
+          .map(
+            (level) => `
+          <button 
+            class="level-btn ${level === currentLevel ? "active" : ""}" 
+            onclick="switchLevel('${level}')"
+            style="
+              padding: 0.5rem 1rem;
+              border: 2px solid ${
+                level === currentLevel
+                  ? "var(--primary-color)"
+                  : "var(--border-color)"
+              };
+              background: ${
+                level === currentLevel ? "var(--primary-color)" : "transparent"
+              };
+              color: ${
+                level === currentLevel ? "white" : "var(--text-primary)"
+              };
+              border-radius: 20px;
+              font-size: 0.8rem;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              text-transform: capitalize;
+            "
+          >
+            ${level}
+          </button>
+        `
+          )
+          .join("");
       }
 
       function selectOption(element, isCorrect) {
@@ -1591,12 +1793,61 @@
 
       // Enhanced flashcard functionality
       function markKnown() {
-        const currentWord = document
-          .querySelector(".flashcard-word")
-          .textContent.toLowerCase();
+        if (!currentLevelWords[currentFlashcardIndex]) return;
+
+        const currentWord =
+          currentLevelWords[currentFlashcardIndex].word.toLowerCase();
         updateWordProgress(currentWord, true);
         showNotification("Word marked as known! 👍", "success");
-        nextCard();
+
+        // Remove word from current study set (optional)
+        const shouldRemove = confirm(
+          "Remove this word from your current study set?"
+        );
+        if (shouldRemove) {
+          currentLevelWords.splice(currentFlashcardIndex, 1);
+          if (currentFlashcardIndex >= currentLevelWords.length) {
+            currentFlashcardIndex = 0;
+          }
+          if (currentLevelWords.length === 0) {
+            showNotification(
+              "Congratulations! You've completed this level! 🎉",
+              "success"
+            );
+            return;
+          }
+        } else {
+          nextCard();
+        }
+        updateFlashcard();
+      }
+
+      function toggleStudyMode() {
+        flashcardMode = flashcardMode === "study" ? "random" : "study";
+        const btn = document.getElementById("studyModeBtn");
+
+        if (flashcardMode === "random") {
+          btn.innerHTML =
+            '<i class="fas fa-list"></i> Switch to Sequential Mode';
+          // Shuffle current level words
+          currentLevelWords = shuffleArray([...vocabData[currentLevel]]);
+        } else {
+          btn.innerHTML = '<i class="fas fa-random"></i> Switch to Random Mode';
+          // Reset to original order
+          currentLevelWords = [...vocabData[currentLevel]];
+        }
+
+        currentFlashcardIndex = 0;
+        updateFlashcard();
+      }
+
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
       }
 
       // Word of the Day
@@ -1610,6 +1861,17 @@
         const wordIndex = dayOfYear % allWords.length;
         const word = allWords[wordIndex];
 
+        displayWordOfDay(word);
+      }
+
+      function getNewWordOfDay() {
+        if (!allWords.length) return;
+        const randomWord =
+          allWords[Math.floor(Math.random() * allWords.length)];
+        displayWordOfDay(randomWord);
+      }
+
+      function displayWordOfDay(word) {
         const container = document.getElementById("wordOfDay");
         container.innerHTML = `
           <div class="word-of-day-content">
@@ -1623,47 +1885,220 @@
                 ? `<div class="word-of-day-example">Example: ${word.example}</div>`
                 : ""
             }
-            <div class="word-of-day-category">${
-              word.category || "General"
-            }</div>
-          </div>
-        `;
-      }
-
-      function getNewWordOfDay() {
-        if (!allWords.length) return;
-        const randomWord =
-          allWords[Math.floor(Math.random() * allWords.length)];
-
-        const container = document.getElementById("wordOfDay");
-        container.innerHTML = `
-          <div class="word-of-day-content">
-            <div class="word-of-day-word">${randomWord.word}</div>
-            <div class="word-of-day-pronunciation">${
-              randomWord.pronunciation || ""
-            }</div>
-            <div class="word-of-day-definition">${randomWord.definition}</div>
-            ${
-              randomWord.example
-                ? `<div class="word-of-day-example">Example: ${randomWord.example}</div>`
-                : ""
-            }
-            <div class="word-of-day-category">${
-              randomWord.category || "General"
-            }</div>
+            <div class="word-meta" style="justify-content: center; margin-top: 1rem;">
+              <div class="word-level">${word.level || "Unknown"} level</div>
+              <div class="word-category">${word.category || "General"}</div>
+            </div>
           </div>
         `;
       }
 
       // Update statistics display
       function updateStatsDisplay() {
-        document.getElementById("wordsLearnedCount").textContent =
-          stats.wordsLearned;
+        const totalWords = allWords.length;
+        const knownWords = Object.keys(studyProgress).filter((word) => {
+          const progress = studyProgress[word];
+          return progress.correct >= 3 && progress.reviews >= 5;
+        }).length;
+
+        document.getElementById("wordsLearnedCount").textContent = knownWords;
         document.getElementById("quizzesCompletedCount").textContent =
-          stats.quizzesCompleted;
-        document.getElementById("studyStreakCount").textContent = stats.streak;
-        document.getElementById("totalWordsCount").textContent =
-          allWords.length;
+          stats.quizzesCompleted || 0;
+        document.getElementById("studyStreakCount").textContent =
+          stats.streak || 0;
+        document.getElementById("totalWordsCount").textContent = totalWords;
+
+        // Update progress percentage
+        const progressPercentage =
+          totalWords > 0 ? Math.round((knownWords / totalWords) * 100) : 0;
+
+        // Add or update progress bar
+        let progressContainer = document.querySelector(".overall-progress");
+        if (!progressContainer) {
+          progressContainer = document.createElement("div");
+          progressContainer.className = "overall-progress";
+          progressContainer.style.cssText = `
+            margin: 2rem 0;
+            text-align: center;
+          `;
+          document
+            .querySelector(".stats-container")
+            .appendChild(progressContainer);
+        }
+
+        progressContainer.innerHTML = `
+          <div style="margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">
+            Overall Progress: ${progressPercentage}%
+          </div>
+          <div style="
+            width: 100%;
+            height: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 300px;
+          ">
+            <div style="
+              width: ${progressPercentage}%;
+              height: 100%;
+              background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+              border-radius: 6px;
+              transition: width 0.5s ease;
+            "></div>
+          </div>
+        `;
+      }
+
+      // Add study session tracking
+      function startStudySession() {
+        const sessionStart = Date.now();
+        localStorage.setItem("currentSessionStart", sessionStart.toString());
+      }
+
+      function endStudySession() {
+        const sessionStart = parseInt(
+          localStorage.getItem("currentSessionStart") || "0"
+        );
+        if (sessionStart) {
+          const sessionDuration = Date.now() - sessionStart;
+          const totalStudyTime = parseInt(
+            localStorage.getItem("totalStudyTime") || "0"
+          );
+          localStorage.setItem(
+            "totalStudyTime",
+            (totalStudyTime + sessionDuration).toString()
+          );
+          localStorage.removeItem("currentSessionStart");
+        }
+      }
+
+      // Track study time
+      window.addEventListener("beforeunload", endStudySession);
+      window.addEventListener("focus", startStudySession);
+      startStudySession();
+
+      // Add achievement system
+      function checkAchievements() {
+        const achievements = JSON.parse(
+          localStorage.getItem("vocabAchievements") || "[]"
+        );
+        const newAchievements = [];
+
+        const knownWords = Object.keys(studyProgress).filter((word) => {
+          const progress = studyProgress[word];
+          return progress.correct >= 3 && progress.reviews >= 5;
+        }).length;
+
+        // Achievement milestones
+        const milestones = [
+          {
+            id: "first_word",
+            name: "First Steps",
+            description: "Learned your first word!",
+            requirement: 1,
+          },
+          {
+            id: "ten_words",
+            name: "Getting Started",
+            description: "Learned 10 words!",
+            requirement: 10,
+          },
+          {
+            id: "fifty_words",
+            name: "Word Collector",
+            description: "Learned 50 words!",
+            requirement: 50,
+          },
+          {
+            id: "hundred_words",
+            name: "Vocabulary Builder",
+            description: "Learned 100 words!",
+            requirement: 100,
+          },
+          {
+            id: "streak_7",
+            name: "Week Warrior",
+            description: "7-day study streak!",
+            requirement: 7,
+            type: "streak",
+          },
+          {
+            id: "streak_30",
+            name: "Month Master",
+            description: "30-day study streak!",
+            requirement: 30,
+            type: "streak",
+          },
+        ];
+
+        milestones.forEach((milestone) => {
+          if (!achievements.includes(milestone.id)) {
+            const currentValue =
+              milestone.type === "streak" ? stats.streak || 0 : knownWords;
+            if (currentValue >= milestone.requirement) {
+              achievements.push(milestone.id);
+              newAchievements.push(milestone);
+            }
+          }
+        });
+
+        localStorage.setItem("vocabAchievements", JSON.stringify(achievements));
+
+        // Show new achievements
+        newAchievements.forEach((achievement) => {
+          setTimeout(() => {
+            showAchievement(achievement);
+          }, 1000);
+        });
+      }
+
+      function showAchievement(achievement) {
+        const modal = document.createElement("div");
+        modal.className = "achievement-modal";
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10000;
+          backdrop-filter: blur(5px);
+        `;
+
+        modal.innerHTML = `
+          <div style="
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+          ">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Achievement Unlocked!</h3>
+            <h4 style="margin-bottom: 0.5rem;">${achievement.name}</h4>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">${achievement.description}</p>
+            <button onclick="this.closest('.achievement-modal').remove()" class="btn">
+              Awesome!
+            </button>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Auto-close after 5 seconds
+        setTimeout(() => {
+          if (document.body.contains(modal)) {
+            modal.remove();
+          }
+        }, 5000);
       }
 
       // Learning Path Selection
@@ -1722,25 +2157,28 @@
 
       // Build quiz questions from vocab data
       function buildQuizQuestions() {
-        if (!allWords.length) return;
+        const sourceWords =
+          currentLevelWords.length > 0 ? currentLevelWords : allWords;
+        if (!sourceWords.length) return;
 
         quizQuestions = [];
         const usedWords = new Set();
+        const maxQuestions = Math.min(10, sourceWords.length);
 
-        for (let i = 0; i < Math.min(15, allWords.length); i++) {
+        for (let i = 0; i < maxQuestions; i++) {
           let word;
           do {
-            word = allWords[Math.floor(Math.random() * allWords.length)];
+            word = sourceWords[Math.floor(Math.random() * sourceWords.length)];
           } while (
             usedWords.has(word.word) &&
-            usedWords.size < allWords.length
+            usedWords.size < sourceWords.length
           );
 
           usedWords.add(word.word);
 
-          // Create wrong options
+          // Create wrong options from the same level or similar words
           const wrongOptions = [];
-          const otherWords = allWords.filter((w) => w.word !== word.word);
+          const otherWords = sourceWords.filter((w) => w.word !== word.word);
 
           while (
             wrongOptions.length < 3 &&
@@ -1768,6 +2206,8 @@
             word: word.word,
           });
         }
+
+        currentQuizIndex = 0;
       }
 
       // Search functionality
@@ -1775,13 +2215,15 @@
         const searchContainer = document.createElement("div");
         searchContainer.className = "search-container";
         searchContainer.innerHTML = `
-          <div class="search-box">
-            <input type="text" id="wordSearch" placeholder="Search for words..." />
-            <button onclick="searchWords()">
-              <i class="fas fa-search"></i>
-            </button>
+          <div class="container">
+            <div class="search-box">
+              <input type="text" id="wordSearch" placeholder="Search for words..." />
+              <button onclick="searchWords()">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
           </div>
-          <div id="searchResults" class="search-results"></div>
         `;
 
         const heroSection = document.querySelector(".hero");
@@ -1789,6 +2231,26 @@
           searchContainer,
           heroSection.nextSibling
         );
+
+        // Add enter key support
+        document
+          .getElementById("wordSearch")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              searchWords();
+            }
+          });
+
+        // Add real-time search
+        document
+          .getElementById("wordSearch")
+          .addEventListener("input", function () {
+            if (this.value.length >= 2) {
+              searchWords();
+            } else if (this.value.length === 0) {
+              document.getElementById("searchResults").innerHTML = "";
+            }
+          });
       }
 
       function searchWords() {
@@ -1807,42 +2269,133 @@
           (word) =>
             word.word.toLowerCase().includes(searchTerm) ||
             word.definition.toLowerCase().includes(searchTerm) ||
-            (word.category && word.category.toLowerCase().includes(searchTerm))
+            (word.category &&
+              word.category.toLowerCase().includes(searchTerm)) ||
+            (word.example && word.example.toLowerCase().includes(searchTerm))
         );
 
         if (matches.length === 0) {
-          resultsDiv.innerHTML =
-            '<p class="no-results">No words found matching your search.</p>';
+          resultsDiv.innerHTML = `
+            <div class="container">
+              <p class="no-results">No words found matching "${searchTerm}".</p>
+            </div>
+          `;
           return;
         }
 
+        // Sort matches by relevance (exact word matches first)
+        matches.sort((a, b) => {
+          const aExactMatch = a.word.toLowerCase() === searchTerm;
+          const bExactMatch = b.word.toLowerCase() === searchTerm;
+          if (aExactMatch && !bExactMatch) return -1;
+          if (!aExactMatch && bExactMatch) return 1;
+
+          const aStartsWith = a.word.toLowerCase().startsWith(searchTerm);
+          const bStartsWith = b.word.toLowerCase().startsWith(searchTerm);
+          if (aStartsWith && !bStartsWith) return -1;
+          if (!aStartsWith && bStartsWith) return 1;
+
+          return a.word.localeCompare(b.word);
+        });
+
         resultsDiv.innerHTML = `
-          <h3>Search Results (${matches.length} words found)</h3>
-          <div class="word-list">
-            ${matches
-              .slice(0, 10)
-              .map(
-                (word) => `
-              <div class="word-result">
-                <div class="word-header">
-                  <span class="word-title">${word.word}</span>
-                  <span class="word-pronunciation">${
-                    word.pronunciation || ""
-                  }</span>
+          <div class="container">
+            <h3>Search Results (${matches.length} words found)</h3>
+            <div class="word-list">
+              ${matches
+                .slice(0, 20) // Limit to 20 results
+                .map(
+                  (word) => `
+                <div class="word-result">
+                  <div class="word-header">
+                    <span class="word-title">${highlightSearchTerm(
+                      word.word,
+                      searchTerm
+                    )}</span>
+                    <span class="word-pronunciation">${
+                      word.pronunciation || ""
+                    }</span>
+                  </div>
+                  <div class="word-definition">${highlightSearchTerm(
+                    word.definition,
+                    searchTerm
+                  )}</div>
+                  ${
+                    word.example
+                      ? `<div class="word-example">Example: ${highlightSearchTerm(
+                          word.example,
+                          searchTerm
+                        )}</div>`
+                      : ""
+                  }
+                  <div class="word-meta">
+                    <span class="word-category">${
+                      word.category || "General"
+                    }</span>
+                    <span class="word-level">${
+                      word.level || "Unknown"
+                    } level</span>
+                    <button onclick="addToFlashcards('${
+                      word.word
+                    }')" class="btn btn-small" style="margin-left: 1rem; padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                      <i class="fas fa-plus"></i> Add to Study
+                    </button>
+                  </div>
                 </div>
-                <div class="word-definition">${word.definition}</div>
-                ${
-                  word.example
-                    ? `<div class="word-example">Example: ${word.example}</div>`
-                    : ""
-                }
-                <div class="word-category">${word.category || "General"}</div>
-              </div>
-            `
-              )
-              .join("")}
+              `
+                )
+                .join("")}
+            </div>
+            ${
+              matches.length > 20
+                ? `<p style="text-align: center; color: var(--text-secondary); margin-top: 1rem;">Showing first 20 results. Refine your search for more specific results.</p>`
+                : ""
+            }
           </div>
         `;
+      }
+
+      function highlightSearchTerm(text, searchTerm) {
+        if (!searchTerm) return text;
+        const regex = new RegExp(`(${searchTerm})`, "gi");
+        return text.replace(
+          regex,
+          '<mark style="background: rgba(255, 235, 59, 0.3); padding: 0.1em;">$1</mark>'
+        );
+      }
+
+      function addToFlashcards(wordText) {
+        const word = allWords.find(
+          (w) => w.word.toLowerCase() === wordText.toLowerCase()
+        );
+        if (!word) return;
+
+        // Switch to the word's level if different
+        if (word.level && word.level !== currentLevel) {
+          switchLevel(word.level);
+        }
+
+        // Find and navigate to the word
+        const wordIndex = currentLevelWords.findIndex(
+          (w) => w.word.toLowerCase() === wordText.toLowerCase()
+        );
+        if (wordIndex !== -1) {
+          currentFlashcardIndex = wordIndex;
+          updateFlashcard();
+
+          // Scroll to flashcard section
+          document
+            .querySelector(".vocab-tool .tool-icon i.fa-clone")
+            .closest(".vocab-tool")
+            .scrollIntoView({
+              behavior: "smooth",
+            });
+
+          showNotification(
+            `Now studying "${word.word}" in ${word.level} level!`,
+            "success"
+          );
+        }
       }
 
       // Spaced repetition system
@@ -1871,11 +2424,16 @@
         if (correct) {
           progress.correct++;
           progress.interval = Math.min(progress.interval * 2, 30); // Max 30 days
+
+          // Update stats
+          updateStats();
         } else {
           progress.interval = Math.max(1, Math.floor(progress.interval / 2));
         }
 
         saveProgress();
+        updateStatsDisplay();
+        checkAchievements();
       }
 
       // Enhanced word association
@@ -1997,16 +2555,19 @@
 
       function updateStats() {
         const today = new Date().toDateString();
+
         if (stats.lastStudyDate === today) {
-          // Already studied today
-        } else if (
-          stats.lastStudyDate === new Date(Date.now() - 86400000).toDateString()
-        ) {
-          // Studied yesterday, continue streak
-          stats.streak++;
+          // Already studied today, no streak change
+          return;
         } else {
-          // Streak broken
-          stats.streak = 1;
+          const yesterday = new Date(Date.now() - 86400000).toDateString();
+          if (stats.lastStudyDate === yesterday) {
+            // Studied yesterday, continue streak
+            stats.streak++;
+          } else {
+            // Streak broken or first time
+            stats.streak = 1;
+          }
         }
 
         stats.lastStudyDate = today;
@@ -2026,27 +2587,40 @@
 
       // Initialize everything when DOM loads
       document.addEventListener("DOMContentLoaded", function () {
-        fetch("../vocab/vocab.json")
-          .then((res) => res.json())
+        // Try loading from different paths
+        Promise.all([
+          fetch("../vocab/vocab.json").catch(() => null),
+          fetch("vocab/vocab.json").catch(() => null),
+        ])
+          .then((responses) => {
+            // Find the first successful response
+            const validResponse = responses.find(
+              (response) => response && response.ok
+            );
+            if (!validResponse) {
+              throw new Error("Could not load vocabulary data from any path");
+            }
+            return validResponse.json();
+          })
           .then((data) => {
             vocabData = data;
-            // Flatten all words from all levels and categories
+            // Flatten all words from all levels
             allWords = [
               ...(vocabData.beginner || []),
               ...(vocabData.intermediate || []),
               ...(vocabData.advanced || []),
             ];
+            currentLevelWords = vocabData.beginner || [];
 
             buildQuizQuestions();
             updateQuiz();
             updateFlashcard();
             updateWordOfDay();
+            updateLevelIndicator();
             initializeSearch();
             initializeDailyChallenge();
             updateStatsDisplay();
-
-            // Add shortcuts button
-            addShortcutsButton();
+            addKeyboardShortcuts();
 
             // Show loading complete message
             showNotification("Vocabulary loaded successfully! 📚", "success");
@@ -2059,6 +2633,115 @@
             );
           });
       });
+
+      // Keyboard navigation for flashcards
+      document.addEventListener("keydown", function (e) {
+        // Only work when no input is focused
+        if (
+          document.activeElement.tagName === "INPUT" ||
+          document.activeElement.tagName === "TEXTAREA"
+        ) {
+          return;
+        }
+
+        switch (e.key) {
+          case " ": // Spacebar to flip
+          case "Enter":
+            e.preventDefault();
+            flipCard();
+            break;
+          case "ArrowRight":
+          case "n": // 'n' for next
+            e.preventDefault();
+            nextCard();
+            break;
+          case "ArrowLeft":
+          case "p": // 'p' for previous
+            e.preventDefault();
+            previousCard();
+            break;
+          case "k": // 'k' for known
+            e.preventDefault();
+            markKnown();
+            break;
+          case "1":
+            e.preventDefault();
+            switchLevel("beginner");
+            break;
+          case "2":
+            e.preventDefault();
+            switchLevel("intermediate");
+            break;
+          case "3":
+            e.preventDefault();
+            switchLevel("advanced");
+            break;
+        }
+      });
+
+      // Add keyboard shortcuts info
+      function addKeyboardShortcuts() {
+        const shortcutsInfo = document.createElement("div");
+        shortcutsInfo.className = "keyboard-shortcuts";
+        shortcutsInfo.style.cssText = `
+          position: fixed;
+          bottom: 120px;
+          right: 2rem;
+          background: var(--bg-primary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 1rem;
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          max-width: 200px;
+          opacity: 0;
+          transform: translateX(220px);
+          transition: all 0.3s ease;
+          z-index: 1000;
+          box-shadow: var(--shadow-md);
+        `;
+
+        shortcutsInfo.innerHTML = `
+          <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">Keyboard Shortcuts</div>
+          <div><kbd style="background: var(--bg-tertiary); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.7em;">Space/Enter</kbd> - Flip card</div>
+          <div><kbd style="background: var(--bg-tertiary); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.7em;">→/N</kbd> - Next card</div>
+          <div><kbd style="background: var(--bg-tertiary); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.7em;">←/P</kbd> - Previous card</div>
+          <div><kbd style="background: var(--bg-tertiary); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.7em;">K</kbd> - Mark as known</div>
+          <div><kbd style="background: var(--bg-tertiary); padding: 0.2em 0.4em; border-radius: 3px; font-size: 0.7em;">1,2,3</kbd> - Switch levels</div>
+        `;
+
+        document.body.appendChild(shortcutsInfo);
+
+        // Toggle visibility
+        const toggleBtn = document.createElement("button");
+        toggleBtn.style.cssText = `
+          position: fixed;
+          bottom: 120px;
+          right: 2rem;
+          width: 40px;
+          height: 40px;
+          background: var(--primary-color);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 0.9rem;
+          z-index: 1001;
+          transition: all 0.3s ease;
+          box-shadow: var(--shadow-md);
+        `;
+        toggleBtn.innerHTML = '<i class="fas fa-keyboard"></i>';
+        toggleBtn.title = "Show/Hide Keyboard Shortcuts";
+        toggleBtn.onclick = () => {
+          const isVisible = shortcutsInfo.style.opacity === "1";
+          shortcutsInfo.style.opacity = isVisible ? "0" : "1";
+          shortcutsInfo.style.transform = isVisible
+            ? "translateX(220px)"
+            : "translateX(0)";
+        };
+
+        document.body.appendChild(toggleBtn);
+      }
 
       // Performance optimization: lazy loading for large word lists
       function lazyLoadWords(container, words, startIndex = 0, batchSize = 20) {
