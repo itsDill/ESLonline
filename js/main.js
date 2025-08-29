@@ -288,7 +288,10 @@ const Auth = {
 const ThemeManager = {
   init() {
     // Prevent initialization if navigation.js already initialized theme management
-    if (window.eslNavigationInitialized) return;
+    if (window.eslThemeInitialized) return;
+
+    // Mark as initialized
+    window.eslThemeInitialized = true;
 
     this.body = document.body;
     this.themeToggle = Utils.$("#themeToggle");
@@ -296,6 +299,8 @@ const ThemeManager = {
 
     this.loadSavedTheme();
     this.bindEvents();
+
+    console.log("Theme manager initialized successfully by main.js");
   },
 
   loadSavedTheme() {
@@ -397,13 +402,22 @@ const ThemeManager = {
   },
 
   bindEvents() {
-    // Bind all theme toggle buttons on the page
+    // Clean up existing listeners first to prevent conflicts
     this.allThemeToggles.forEach((toggle) => {
-      toggle.addEventListener("click", (e) => {
+      // Clone element to remove existing listeners
+      const newToggle = toggle.cloneNode(true);
+      toggle.parentNode.replaceChild(newToggle, toggle);
+
+      // Add new listener
+      newToggle.addEventListener("click", (e) => {
         e.preventDefault();
         this.toggleTheme();
       });
     });
+
+    // Update the reference to new toggles
+    this.allThemeToggles = Utils.$$("[id*='themeToggle'], .theme-toggle");
+    this.themeToggle = Utils.$("#themeToggle");
 
     // Listen for theme changes from other tabs/windows
     window.addEventListener("storage", (e) => {
@@ -430,18 +444,42 @@ const Navigation = {
     // Prevent initialization if navigation.js already initialized navigation
     if (window.eslNavigationInitialized) return;
 
+    // Mark as initialized to prevent conflicts
+    window.eslNavigationInitialized = true;
+
     this.mobileToggle = Utils.$("#mobileToggle");
     this.navLinks = Utils.$("#navLinks");
     this.header = Utils.$("header");
 
-    if (!this.mobileToggle || !this.navLinks) return;
+    if (!this.mobileToggle || !this.navLinks) {
+      console.warn("Navigation elements not found, skipping navigation init");
+      return;
+    }
 
     this.mobileIcon = this.mobileToggle.querySelector("i");
     this.isOpen = false;
     this.lastScroll = 0;
 
+    // Remove any existing event listeners to prevent conflicts
+    this.cleanupExistingListeners();
+
     this.bindEvents();
     this.initScrollEffects();
+
+    console.log("Navigation initialized successfully by main.js");
+  },
+
+  cleanupExistingListeners() {
+    // Clone elements to remove all existing event listeners
+    if (this.mobileToggle) {
+      const newMobileToggle = this.mobileToggle.cloneNode(true);
+      this.mobileToggle.parentNode.replaceChild(
+        newMobileToggle,
+        this.mobileToggle
+      );
+      this.mobileToggle = newMobileToggle;
+      this.mobileIcon = this.mobileToggle.querySelector("i");
+    }
   },
 
   bindEvents() {
@@ -525,6 +563,16 @@ const Navigation = {
       }
     });
 
+    // Handle window resize - close mobile menu when switching to desktop
+    window.addEventListener(
+      "resize",
+      Utils.debounce(() => {
+        if (window.innerWidth > 768 && this.isOpen) {
+          this.closeMobileMenu();
+        }
+      }, 200)
+    );
+
     // Smooth scrolling for anchor links
     this.initSmoothScrolling();
 
@@ -558,12 +606,19 @@ const Navigation = {
     document.body.style.overflow = "";
 
     // Close all open dropdowns when closing mobile menu
-    const openDropdowns = Utils.$$(".nav-item.mobile-dropdown-open");
+    const openDropdowns = Utils.$$(
+      ".nav-item.mobile-dropdown-open, .nav-item.mobile-open"
+    );
     openDropdowns.forEach((item) => {
-      item.classList.remove("mobile-dropdown-open");
+      item.classList.remove("mobile-dropdown-open", "mobile-open");
       const dropdown = item.querySelector(".dropdown");
       if (dropdown) {
         dropdown.style.maxHeight = "0";
+      }
+      // Reset chevron rotation
+      const chevron = item.querySelector(".fa-chevron-down");
+      if (chevron) {
+        chevron.style.transform = "rotate(0deg)";
       }
     });
   },
@@ -632,26 +687,62 @@ const Navigation = {
         link.addEventListener("click", (e) => {
           if (window.innerWidth <= 768) {
             e.preventDefault();
-            e.stopPropagation(); // Prevent event bubbling
+            e.stopPropagation();
 
-            const isActive = item.classList.contains("mobile-dropdown-open");
+            const isActive =
+              item.classList.contains("mobile-dropdown-open") ||
+              item.classList.contains("mobile-open");
 
             // Close all other dropdowns
             dropdownItems.forEach((otherItem) => {
               if (otherItem !== item) {
-                otherItem.classList.remove("mobile-dropdown-open");
+                otherItem.classList.remove(
+                  "mobile-dropdown-open",
+                  "mobile-open"
+                );
                 const otherDropdown = otherItem.querySelector(".dropdown");
                 if (otherDropdown) {
                   otherDropdown.style.maxHeight = "0";
+                }
+                // Reset other chevrons
+                const otherChevron =
+                  otherItem.querySelector(".fa-chevron-down");
+                if (otherChevron) {
+                  otherChevron.style.transform = "rotate(0deg)";
                 }
               }
             });
 
             // Toggle current dropdown
-            item.classList.toggle("mobile-dropdown-open", !isActive);
-            dropdown.style.maxHeight = isActive
-              ? "0"
-              : dropdown.scrollHeight + "px";
+            const newState = !isActive;
+            item.classList.toggle("mobile-dropdown-open", newState);
+            item.classList.toggle("mobile-open", newState);
+
+            dropdown.style.maxHeight = newState
+              ? dropdown.scrollHeight + "px"
+              : "0";
+
+            // Rotate chevron
+            const chevron = link.querySelector(".fa-chevron-down");
+            if (chevron) {
+              chevron.style.transform = newState
+                ? "rotate(180deg)"
+                : "rotate(0deg)";
+            }
+          }
+        });
+
+        // Add touch support for better mobile experience
+        link.addEventListener("touchend", (e) => {
+          if (
+            window.innerWidth <= 768 &&
+            link.querySelector(".fa-chevron-down")
+          ) {
+            e.preventDefault();
+            // Trigger click after a small delay to prevent double-triggering
+            setTimeout(() => {
+              link.click();
+            }, 50);
           }
         });
       }
@@ -662,6 +753,19 @@ const Navigation = {
           if (window.innerWidth <= 768) {
             e.stopPropagation();
           }
+        });
+
+        // But still allow dropdown item clicks to work
+        const dropdownLinks = dropdown.querySelectorAll("a");
+        dropdownLinks.forEach((dropdownLink) => {
+          dropdownLink.addEventListener("click", (e) => {
+            // Allow navigation but close mobile menu after a delay
+            if (window.innerWidth <= 768) {
+              setTimeout(() => {
+                this.closeMobileMenu();
+              }, 100);
+            }
+          });
         });
       }
     });
@@ -808,9 +912,13 @@ const ESLApp = {
 
   start() {
     try {
-      // Initialize core systems
-      ThemeManager.init();
-      Navigation.init();
+      // Initialize core systems only if they haven't been initialized by other scripts
+      if (!window.eslNavigationInitialized) {
+        ThemeManager.init();
+        Navigation.init();
+        console.log("ESL Navigation and Theme initialized by main.js");
+      }
+
       Performance.init();
       ErrorHandler.init();
 

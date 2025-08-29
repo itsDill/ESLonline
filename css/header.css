@@ -1086,22 +1086,60 @@ footer > .container {
     padding: 0 1rem;
   }
 
-  /* Mobile toggle - make sure it's always visible on narrow screens */
+  /* ==============================================
+   MOBILE NAVIGATION CONSISTENCY FIXES
+   Force mobile navigation to work on all pages
+   ============================================== */
+
   @media (max-width: 768px) {
-    .mobile-toggle {
+    /* FORCE mobile toggle visibility on ALL pages */
+    .mobile-toggle,
+    #mobileToggle,
+    .control-btn.mobile-toggle {
       display: flex !important;
-      order: 3;
-      z-index: 1002;
-      background: var(--primary-light);
-      border-color: var(--primary-color);
+      visibility: visible !important;
+      opacity: 1 !important;
+      order: 3 !important;
+      z-index: 1002 !important;
+      background: transparent !important;
+      border: 2px solid transparent !important;
+      position: relative !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      padding: 0.5rem !important;
+      border-radius: var(--border-radius) !important;
+    }
+
+    .mobile-toggle:hover,
+    .mobile-toggle:focus,
+    .mobile-toggle:active,
+    #mobileToggle:hover,
+    #mobileToggle:focus,
+    #mobileToggle:active {
+      background: var(--primary-light) !important;
+      border-color: var(--primary-color) !important;
+    }
+
+    /* FORCE mobile navigation layout */
+    .navbar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      height: var(--header-height-mobile) !important;
+      padding: 0 1rem !important;
+      position: relative !important;
     }
 
     .controls {
-      order: 2;
-      gap: 0.5rem;
+      order: 2 !important;
+      gap: 0.5rem !important;
+      display: flex !important;
+      align-items: center !important;
     }
 
-    .nav-links {
+    /* FORCE mobile navigation menu behavior */
+    .nav-links,
+    #navLinks {
       position: fixed !important;
       top: var(--header-height-mobile) !important;
       left: 0 !important;
@@ -1115,42 +1153,73 @@ footer > .container {
       gap: 0 !important;
       opacity: 0 !important;
       visibility: hidden !important;
-      transform: translateY(-10px) !important;
-      transition: all var(--transition-normal) !important;
+      transform: translateY(-20px) !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
       max-height: 0 !important;
       overflow: hidden !important;
       box-shadow: var(--shadow-xl) !important;
       backdrop-filter: blur(20px) !important;
       z-index: 1001 !important;
+      border-radius: 0 0 16px 16px !important;
+      list-style: none !important;
+      margin: 0 !important;
     }
 
-    .nav-links.active {
+    /* ACTIVE state - mobile menu open */
+    .nav-links.active,
+    #navLinks.active {
       opacity: 1 !important;
       visibility: visible !important;
       transform: translateY(0) !important;
-      max-height: calc(100vh - var(--header-height-mobile)) !important;
+      max-height: calc(100vh - var(--header-height-mobile) - 20px) !important;
       overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
     }
 
+    /* FORCE nav item layout */
     .nav-item {
-      width: 100%;
-      margin-bottom: 0.5rem;
+      width: 100% !important;
+      margin-bottom: 0.75rem !important;
+      position: relative !important;
     }
 
+    .nav-item:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    /* FORCE nav link styling */
     .nav-link {
-      justify-content: space-between;
-      padding: 1rem;
-      border-radius: var(--border-radius);
-      background: var(--bg-secondary);
-      margin-bottom: 0;
-      width: 100%;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 1rem 1.25rem !important;
+      border-radius: var(--border-radius-lg) !important;
+      background: var(--bg-secondary) !important;
+      margin-bottom: 0 !important;
+      width: 100% !important;
+      font-size: 1rem !important;
+      font-weight: var(--font-weight-medium) !important;
+      border: 2px solid transparent !important;
+      transition: all 0.2s ease !important;
+      color: var(--text-primary) !important;
+      text-decoration: none !important;
+      gap: 0.5rem !important;
     }
 
+    .nav-link:hover,
+    .nav-link:focus {
+      background: var(--primary-light) !important;
+      border-color: var(--primary-color) !important;
+      color: var(--primary-color) !important;
+      transform: none !important;
+    }
+
+    /* Remove desktop hover effects */
     .nav-link::before {
-      display: none;
+      display: none !important;
     }
 
-    /* Mobile dropdown */
+    /* FORCE mobile dropdown styles */
     .dropdown {
       position: static !important;
       opacity: 1 !important;
@@ -1160,24 +1229,32 @@ footer > .container {
       border: none !important;
       background: var(--bg-tertiary) !important;
       border-radius: var(--border-radius) !important;
-      margin-top: 0.5rem !important;
+      margin-top: 0.75rem !important;
       max-height: 0 !important;
       overflow: hidden !important;
-      transition: max-height 0.2s ease !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      width: 100% !important;
+      min-width: unset !important;
+      left: unset !important;
+      right: unset !important;
     }
 
-    .dropdown::before {
+    .dropdown::before,
+    .dropdown::after {
       display: none !important;
     }
 
-    /* Show dropdown when mobile-open class is added */
+    /* Show dropdown when mobile classes are added */
+    .nav-item.mobile-dropdown-open .dropdown,
     .nav-item.mobile-open .dropdown {
-      max-height: 300px !important;
-      padding: 0.5rem 0 !important;
+      max-height: 400px !important;
+      padding: 0.75rem 0 !important;
       border: 1px solid var(--border-color) !important;
+      border-radius: var(--border-radius) !important;
+      background: var(--bg-tertiary) !important;
     }
 
-    /* Remove ALL hover behavior on mobile */
+    /* DISABLE hover behavior completely on mobile */
     .nav-item:hover .dropdown,
     .nav-item:focus-within .dropdown {
       max-height: 0 !important;
@@ -1185,42 +1262,82 @@ footer > .container {
       border: none !important;
     }
 
-    /* But FORCE mobile-open behavior to override hover */
+    /* ENSURE mobile-open state always works */
+    .nav-item.mobile-dropdown-open .dropdown,
     .nav-item.mobile-open .dropdown {
-      max-height: 300px !important;
-      padding: 0.5rem 0 !important;
+      max-height: 400px !important;
+      padding: 0.75rem 0 !important;
       border: 1px solid var(--border-color) !important;
     }
 
-    /* Improved mobile dropdown items - no animations */
+    /* FORCE dropdown item styling */
     .dropdown-item {
-      padding: 0.75rem 1rem;
-      font-size: 0.875rem;
-      border-radius: var(--border-radius);
-      margin: 0.25rem 0.5rem;
-      background: var(--bg-primary);
-      border: 1px solid transparent;
-      transition: none !important;
+      padding: 1rem 1.25rem !important;
+      font-size: 0.95rem !important;
+      border-radius: var(--border-radius) !important;
+      margin: 0.25rem 0.75rem !important;
+      background: var(--bg-primary) !important;
+      border: 1px solid transparent !important;
+      transition: all 0.2s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.75rem !important;
+      color: var(--text-secondary) !important;
+      text-decoration: none !important;
     }
 
-    .dropdown-item:hover {
+    .dropdown-item:hover,
+    .dropdown-item:focus {
       transform: none !important;
-      background: var(--primary-light);
-      border-color: var(--primary-color);
-      color: var(--primary-color);
+      background: var(--primary-light) !important;
+      border-color: var(--primary-color) !important;
+      color: var(--primary-color) !important;
     }
 
-    /* Mobile nav link states - no animations */
+    /* Parent nav link state when dropdown is open */
+    .nav-item.mobile-dropdown-open > .nav-link,
     .nav-item.mobile-open > .nav-link {
       background: var(--primary-light) !important;
       color: var(--primary-color) !important;
-      border-left: 3px solid var(--primary-color);
-      transition: none !important;
+      border-color: var(--primary-color) !important;
+      border-left: 4px solid var(--primary-color) !important;
     }
 
-    /* Remove transform animations from chevrons on mobile */
+    /* Chevron rotation for mobile dropdowns */
+    .nav-item.mobile-dropdown-open .fa-chevron-down,
+    .nav-item.mobile-open .fa-chevron-down {
+      transform: rotate(180deg) !important;
+    }
+
+    /* Ensure smooth transitions for chevrons */
     .nav-link .fa-chevron-down {
-      transition: none !important;
+      transition: transform 0.3s ease !important;
+    }
+
+    /* Body scroll lock when mobile menu is open */
+    body.mobile-menu-open {
+      overflow: hidden !important;
+      position: fixed !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Ensure header stays on top */
+    header {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+    }
+
+    /* Force proper container padding */
+    .container {
+      padding: 0 1rem !important;
+      margin: 0 auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
   }
 
@@ -1294,42 +1411,50 @@ footer > .container {
     }
 
     .newsletter-content {
-      gap: 1rem;
-      padding: 0;
+      flex-direction: column;
+      text-align: center;
+      gap: 1.25rem;
     }
 
     .newsletter-text h3 {
       font-size: 1.1rem;
+      margin-bottom: 0.5rem;
     }
 
     .newsletter-text p {
       font-size: 0.9rem;
       margin-bottom: 0;
+      line-height: 1.5;
     }
 
     .newsletter-form {
       flex-direction: column;
       width: 100%;
       align-items: stretch;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     .newsletter-form input {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      border-radius: var(--border-radius-lg);
+      min-width: unset;
     }
 
     .btn-newsletter {
       justify-content: center;
       width: 100%;
-      padding: 0.75rem 1.5rem;
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      border-radius: var(--border-radius-lg);
     }
 
     /* Simplified main footer content */
     .footer-content {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
-      margin: 1.5rem 0 1rem;
+      gap: 2rem;
+      margin: 2rem 0 1.5rem;
       padding: 0;
       text-align: center;
     }
@@ -1339,18 +1464,22 @@ footer > .container {
     }
 
     .footer-brand {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .brand-header {
       justify-content: center;
-      gap: 0.75rem;
+      gap: 1rem;
       margin-bottom: 1rem;
     }
 
+    .footer-brand h3 {
+      font-size: 1.2rem;
+    }
+
     .footer-brand p {
-      font-size: 0.85rem;
-      line-height: 1.5;
+      font-size: 0.9rem;
+      line-height: 1.6;
       margin-bottom: 1rem;
       max-width: 90%;
       margin-left: auto;
@@ -1359,104 +1488,158 @@ footer > .container {
 
     .footer-section h3 {
       justify-content: center;
-      font-size: 1rem;
-      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
     }
 
-    /* Simplified footer links - single column */
+    .footer-section h3::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Better footer navigation layout */
     .footer-section ul {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
       align-items: center;
+      max-width: 300px;
+      margin: 0 auto;
     }
 
     .footer-section ul li {
       width: 100%;
-      max-width: 250px;
+      margin-bottom: 0;
     }
 
     .footer-section ul li a {
-      justify-content: center;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.85rem;
-      border-radius: 8px;
-      text-align: center;
+      justify-content: flex-start;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
+      border-radius: var(--border-radius-lg);
+      text-align: left;
       width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid transparent;
     }
 
     .footer-section ul li a:hover {
-      transform: none;
-      background: rgba(70, 187, 229, 0.1);
-      border-left: none;
-      border-bottom: 2px solid var(--primary-color);
+      transform: translateY(-2px);
+      background: var(--primary-light);
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 12px rgba(70, 187, 229, 0.3);
     }
 
-    /* Simplified footer bottom */
+    .footer-section ul li a i {
+      width: 24px;
+      height: 24px;
+      font-size: 1rem;
+    }
+
+    /* Enhanced footer bottom layout */
     .footer-bottom {
-      padding: 1rem 0;
-      margin: 0;
-      width: 100%;
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.5rem;
+      padding: 2rem 0 1.5rem;
+      border-top: 1px solid #374151;
+      margin-top: 1rem;
+    }
+
+    .footer-bottom-left {
+      order: 1;
     }
 
     .footer-bottom-left p {
-      font-size: 0.85rem;
-      line-height: 1.4;
+      font-size: 0.9rem;
+      line-height: 1.5;
       margin: 0;
     }
 
     .footer-bottom-left .footer-subtitle {
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .footer-bottom-center {
+      order: 2;
     }
 
     .footer-links {
       display: flex;
-      flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
-      margin: 0.75rem 0;
+      gap: 1.25rem;
+      margin: 0;
     }
 
     .footer-links a {
-      font-size: 0.8rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+      border-radius: var(--border-radius);
       background: rgba(255, 255, 255, 0.05);
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-color);
+    }
+
+    .footer-bottom-right {
+      order: 3;
     }
 
     .footer-badges {
       flex-direction: row;
       justify-content: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
+      gap: 1rem;
+      margin: 0;
     }
 
     .badge {
-      font-size: 0.75rem;
-      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius-lg);
     }
 
+    /* Improved back to top button */
     .back-to-top {
       bottom: 1.5rem;
       right: 1.5rem;
-      width: 48px;
-      height: 48px;
-      font-size: 1rem;
+      width: 52px;
+      height: 52px;
+      font-size: 1.1rem;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(70, 187, 229, 0.4);
     }
 
-    /* Simplified social links */
+    .back-to-top:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(70, 187, 229, 0.5);
+    }
+
+    /* Enhanced social links */
     .social-links {
       justify-content: center;
-      gap: 0.75rem;
-      margin: 1rem 0;
+      gap: 1rem;
+      margin: 1.5rem 0 1rem;
+      flex-wrap: wrap;
     }
 
     .social-links a {
-      width: 40px;
-      height: 40px;
-      font-size: 1.1rem;
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-links a:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 16px rgba(70, 187, 229, 0.4);
     }
   }
 
