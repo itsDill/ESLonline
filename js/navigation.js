@@ -83,11 +83,25 @@ if (!window.eslNavigationInitialized) {
                   if (otherItem !== item) {
                     otherItem.classList.remove("mobile-open");
                     otherItem.classList.remove("desktop-open");
+                    // Also rotate chevron back
+                    const otherChevron =
+                      otherItem.querySelector(".fa-chevron-down");
+                    if (otherChevron) {
+                      otherChevron.style.transform = "rotate(0deg)";
+                    }
                   }
                 });
 
                 // Toggle current dropdown
                 item.classList.toggle("mobile-open", !isCurrentlyOpen);
+
+                // Rotate chevron to indicate state
+                const chevron = link.querySelector(".fa-chevron-down");
+                if (chevron) {
+                  chevron.style.transform = !isCurrentlyOpen
+                    ? "rotate(180deg)"
+                    : "rotate(0deg)";
+                }
               } else {
                 // Desktop behavior: toggle current, close others
                 const isCurrentlyOpen = item.classList.contains("desktop-open");
@@ -97,11 +111,25 @@ if (!window.eslNavigationInitialized) {
                   if (otherItem !== item) {
                     otherItem.classList.remove("desktop-open");
                     otherItem.classList.remove("mobile-open");
+                    // Also rotate chevron back
+                    const otherChevron =
+                      otherItem.querySelector(".fa-chevron-down");
+                    if (otherChevron) {
+                      otherChevron.style.transform = "rotate(0deg)";
+                    }
                   }
                 });
 
                 // Toggle current dropdown
                 item.classList.toggle("desktop-open", !isCurrentlyOpen);
+
+                // Rotate chevron to indicate state
+                const chevron = link.querySelector(".fa-chevron-down");
+                if (chevron) {
+                  chevron.style.transform = !isCurrentlyOpen
+                    ? "rotate(180deg)"
+                    : "rotate(0deg)";
+                }
               }
             }
           });
@@ -145,9 +173,13 @@ if (!window.eslNavigationInitialized) {
             mobileIcon.className = "fas fa-bars";
           }
 
-          // Close all mobile dropdowns
+          // Close all mobile dropdowns and reset chevrons
           navItems.forEach((item) => {
             item.classList.remove("mobile-open");
+            const chevron = item.querySelector(".fa-chevron-down");
+            if (chevron) {
+              chevron.style.transform = "rotate(0deg)";
+            }
           });
         }
       });
@@ -162,9 +194,13 @@ if (!window.eslNavigationInitialized) {
             mobileIcon.className = "fas fa-bars";
           }
 
-          // Close all mobile dropdowns
+          // Close all mobile dropdowns and reset chevrons
           navItems.forEach((item) => {
             item.classList.remove("mobile-open");
+            const chevron = item.querySelector(".fa-chevron-down");
+            if (chevron) {
+              chevron.style.transform = "rotate(0deg)";
+            }
           });
         }
       });
@@ -220,9 +256,14 @@ window.ESLUtils = window.ESLUtils || {
     const icon = mobileToggle?.querySelector("i");
     if (icon) icon.className = "fas fa-bars";
 
-    // Close all dropdowns
+    // Close all dropdowns and reset chevrons
     document.querySelectorAll(".nav-item").forEach((item) => {
       item.classList.remove("mobile-open");
+      item.classList.remove("desktop-open");
+      const chevron = item.querySelector(".fa-chevron-down");
+      if (chevron) {
+        chevron.style.transform = "rotate(0deg)";
+      }
     });
   },
 
