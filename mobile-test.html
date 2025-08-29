@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Navigation Test - ESL Fun Online</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/header.css" />
+    <style>
+      body {
+        margin: 0;
+        padding-top: 80px;
+        font-family: Arial, sans-serif;
+      }
+      .test-content {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .debug-info {
+        position: fixed;
+        top: 90px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        z-index: 9999;
+      }
+      /* Force mobile styles for testing */
+      @media (max-width: 768px) {
+        .mobile-toggle {
+          background: red !important;
+          border: 2px solid blue !important;
+        }
+        .nav-links {
+          background: yellow !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Debug Info -->
+    <div class="debug-info" id="debugInfo">
+      Screen: <span id="screenSize"></span><br />
+      Menu: <span id="menuState">closed</span><br />
+      Toggle visible: <span id="toggleVisible">no</span>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="index.html" class="logo-container">
+            <img
+              src="images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="english/grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
+                </a>
+                <a href="english/vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-code"></i>
+                Coding
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="coding/computerbasics.html" class="dropdown-item">
+                  <i class="fas fa-desktop"></i>
+                  Computer Basics
+                </a>
+                <a href="coding/ai.html" class="dropdown-item">
+                  <i class="fas fa-robot"></i>
+                  AI Basics
+                </a>
+              </div>
+            </li>
+          </ul>
+
+          <div class="controls">
+            <button class="control-btn theme-toggle" id="themeToggle">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+
+          <button class="control-btn mobile-toggle" id="mobileToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="test-content">
+      <h1>Mobile Navigation Test</h1>
+      <p>This page is for testing mobile navigation functionality.</p>
+      <p>
+        Try clicking the mobile menu button (hamburger icon) in the top right.
+      </p>
+      <p>
+        Then try clicking on "English" or "Coding" to test dropdown
+        functionality.
+      </p>
+
+      <h2>Expected Behavior:</h2>
+      <ul>
+        <li>Mobile menu button should be visible on screens ≤768px wide</li>
+        <li>Clicking it should open/close the mobile menu</li>
+        <li>Menu icon should change from bars to X when open</li>
+        <li>Dropdown items should expand/collapse when clicked</li>
+        <li>Chevron arrows should rotate when dropdowns open/close</li>
+      </ul>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script>
+      // Debug script
+      function updateDebugInfo() {
+        const screenSize = document.getElementById("screenSize");
+        const menuState = document.getElementById("menuState");
+        const toggleVisible = document.getElementById("toggleVisible");
+
+        screenSize.textContent = window.innerWidth + "x" + window.innerHeight;
+
+        const navLinks = document.getElementById("navLinks");
+        menuState.textContent = navLinks.classList.contains("active")
+          ? "open"
+          : "closed";
+
+        const mobileToggle = document.getElementById("mobileToggle");
+        const computedStyle = window.getComputedStyle(mobileToggle);
+        toggleVisible.textContent =
+          computedStyle.display !== "none" ? "yes" : "no";
+      }
+
+      setInterval(updateDebugInfo, 500);
+      window.addEventListener("resize", updateDebugInfo);
+      updateDebugInfo();
+    </script>
+  </body>
+</html>

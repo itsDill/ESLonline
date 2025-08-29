@@ -35,7 +35,7 @@ if (!window.eslNavigationInitialized) {
       });
     }
 
-    // Enhanced mobile menu functionality
+    // Mobile menu functionality
     const mobileToggle = document.getElementById("mobileToggle");
     const navLinks = document.getElementById("navLinks");
     const navItems = document.querySelectorAll(".nav-item");
@@ -43,170 +43,129 @@ if (!window.eslNavigationInitialized) {
     if (mobileToggle && navLinks) {
       const mobileIcon = mobileToggle.querySelector("i");
 
-      // Toggle mobile menu
-      mobileToggle.addEventListener("click", (e) => {
+      // Mobile menu toggle
+      mobileToggle.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
         const isOpen = navLinks.classList.contains("active");
-        navLinks.classList.toggle("active", !isOpen);
 
-        if (mobileIcon) {
-          mobileIcon.className = isOpen ? "fas fa-bars" : "fas fa-times";
+        // Toggle menu state
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
         }
-
-        // Prevent body scroll when menu is open
-        body.style.overflow = isOpen ? "auto" : "hidden";
       });
 
-      // Handle dropdown toggles (both mobile and desktop)
+      // Functions to handle menu state
+      function openMenu() {
+        navLinks.classList.add("active");
+        if (mobileIcon) mobileIcon.className = "fas fa-times";
+        body.style.overflow = "hidden";
+      }
+
+      function closeMenu() {
+        navLinks.classList.remove("active");
+        if (mobileIcon) mobileIcon.className = "fas fa-bars";
+        body.style.overflow = "auto";
+        // Close all dropdowns when closing menu
+        navItems.forEach(resetDropdown);
+      }
+
+      // Dropdown functionality for mobile
       navItems.forEach((item) => {
         const link = item.querySelector(".nav-link");
         const dropdown = item.querySelector(".dropdown");
+        const chevron = link?.querySelector(".fa-chevron-down");
 
-        if (link && dropdown) {
-          // Handle click events for dropdown toggle
-          link.addEventListener("click", (e) => {
-            // Check if this is a dropdown link (has chevron icon)
-            const hasDropdown = link.querySelector(".fa-chevron-down");
+        if (link && dropdown && chevron) {
+          // Handle dropdown toggle
+          link.addEventListener("click", function (e) {
+            // Only handle dropdown links (with chevron)
+            if (!chevron) return;
 
-            if (hasDropdown) {
-              e.preventDefault();
-              e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
 
-              if (window.innerWidth <= 768) {
-                // Mobile behavior: toggle current, close others
-                const isCurrentlyOpen = item.classList.contains("mobile-open");
+            const isMobile = window.innerWidth <= 768;
 
-                // Close other dropdowns
-                navItems.forEach((otherItem) => {
-                  if (otherItem !== item) {
-                    otherItem.classList.remove("mobile-open");
-                    otherItem.classList.remove("desktop-open");
-                    // Also rotate chevron back
-                    const otherChevron =
-                      otherItem.querySelector(".fa-chevron-down");
-                    if (otherChevron) {
-                      otherChevron.style.transform = "rotate(0deg)";
-                    }
-                  }
-                });
-
-                // Toggle current dropdown
-                item.classList.toggle("mobile-open", !isCurrentlyOpen);
-
-                // Rotate chevron to indicate state
-                const chevron = link.querySelector(".fa-chevron-down");
-                if (chevron) {
-                  chevron.style.transform = !isCurrentlyOpen
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)";
-                }
-              } else {
-                // Desktop behavior: toggle current, close others
-                const isCurrentlyOpen = item.classList.contains("desktop-open");
-
-                // Close other dropdowns
-                navItems.forEach((otherItem) => {
-                  if (otherItem !== item) {
-                    otherItem.classList.remove("desktop-open");
-                    otherItem.classList.remove("mobile-open");
-                    // Also rotate chevron back
-                    const otherChevron =
-                      otherItem.querySelector(".fa-chevron-down");
-                    if (otherChevron) {
-                      otherChevron.style.transform = "rotate(0deg)";
-                    }
-                  }
-                });
-
-                // Toggle current dropdown
-                item.classList.toggle("desktop-open", !isCurrentlyOpen);
-
-                // Rotate chevron to indicate state
-                const chevron = link.querySelector(".fa-chevron-down");
-                if (chevron) {
-                  chevron.style.transform = !isCurrentlyOpen
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)";
-                }
-              }
+            if (isMobile) {
+              toggleMobileDropdown(item, chevron);
+            } else {
+              toggleDesktopDropdown(item, chevron);
             }
           });
-
-          // For desktop: also handle mouse enter/leave for hover behavior
-          if (window.innerWidth > 768) {
-            let hoverTimeout;
-
-            item.addEventListener("mouseenter", () => {
-              clearTimeout(hoverTimeout);
-              // Don't auto-open if already manually toggled
-              if (!item.classList.contains("desktop-open")) {
-                item.classList.add("desktop-hover");
-              }
-            });
-
-            item.addEventListener("mouseleave", () => {
-              item.classList.remove("desktop-hover");
-              // Close after delay unless manually opened
-              hoverTimeout = setTimeout(() => {
-                if (!item.classList.contains("desktop-open")) {
-                  item.classList.remove("desktop-hover");
-                }
-              }, 100);
-            });
-          }
         }
       });
 
-      // Close menu when clicking outside
-      document.addEventListener("click", (e) => {
-        if (
-          !mobileToggle.contains(e.target) &&
-          !navLinks.contains(e.target) &&
-          navLinks.classList.contains("active")
-        ) {
-          navLinks.classList.remove("active");
-          body.style.overflow = "auto";
+      // Mobile dropdown toggle function
+      function toggleMobileDropdown(item, chevron) {
+        const isOpen = item.classList.contains("mobile-open");
 
-          if (mobileIcon) {
-            mobileIcon.className = "fas fa-bars";
+        // Close all other dropdowns
+        navItems.forEach((otherItem) => {
+          if (otherItem !== item) {
+            resetDropdown(otherItem);
           }
+        });
 
-          // Close all mobile dropdowns and reset chevrons
-          navItems.forEach((item) => {
-            item.classList.remove("mobile-open");
-            const chevron = item.querySelector(".fa-chevron-down");
-            if (chevron) {
-              chevron.style.transform = "rotate(0deg)";
-            }
-          });
+        // Toggle current dropdown
+        if (isOpen) {
+          resetDropdown(item);
+        } else {
+          item.classList.add("mobile-open");
+          chevron.style.transform = "rotate(180deg)";
+        }
+      }
+
+      // Desktop dropdown toggle function
+      function toggleDesktopDropdown(item, chevron) {
+        const isOpen = item.classList.contains("desktop-open");
+
+        // Close all other dropdowns
+        navItems.forEach((otherItem) => {
+          if (otherItem !== item) {
+            resetDropdown(otherItem);
+          }
+        });
+
+        // Toggle current dropdown
+        if (isOpen) {
+          resetDropdown(item);
+        } else {
+          item.classList.add("desktop-open");
+          chevron.style.transform = "rotate(180deg)";
+        }
+      }
+
+      // Reset dropdown to closed state
+      function resetDropdown(item) {
+        item.classList.remove("mobile-open", "desktop-open");
+        const chevron = item.querySelector(".fa-chevron-down");
+        if (chevron) {
+          chevron.style.transform = "rotate(0deg)";
+        }
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (e) {
+        if (!mobileToggle.contains(e.target) && !navLinks.contains(e.target)) {
+          if (navLinks.classList.contains("active")) {
+            closeMenu();
+          }
         }
       });
 
       // Handle window resize
-      window.addEventListener("resize", () => {
+      window.addEventListener("resize", function () {
         if (window.innerWidth > 768) {
-          navLinks.classList.remove("active");
-          body.style.overflow = "auto";
-
-          if (mobileIcon) {
-            mobileIcon.className = "fas fa-bars";
-          }
-
-          // Close all mobile dropdowns and reset chevrons
-          navItems.forEach((item) => {
-            item.classList.remove("mobile-open");
-            const chevron = item.querySelector(".fa-chevron-down");
-            if (chevron) {
-              chevron.style.transform = "rotate(0deg)";
-            }
-          });
+          closeMenu();
         }
       });
     }
 
-    // Enhanced scroll behavior for header
+    // Scroll behavior for header
     let lastScrollY = window.scrollY;
     const header = document.querySelector("header");
 
@@ -220,7 +179,6 @@ if (!window.eslNavigationInitialized) {
           header.classList.remove("scrolled");
         }
 
-        // Auto-hide on scroll down, show on scroll up
         if (currentScrollY > lastScrollY && currentScrollY > 200) {
           header.classList.add("hidden");
         } else {
@@ -230,6 +188,8 @@ if (!window.eslNavigationInitialized) {
         lastScrollY = currentScrollY;
       });
     }
+
+    console.log("🎉 ESL Navigation initialized successfully!");
   });
 }
 
@@ -256,10 +216,8 @@ window.ESLUtils = window.ESLUtils || {
     const icon = mobileToggle?.querySelector("i");
     if (icon) icon.className = "fas fa-bars";
 
-    // Close all dropdowns and reset chevrons
     document.querySelectorAll(".nav-item").forEach((item) => {
-      item.classList.remove("mobile-open");
-      item.classList.remove("desktop-open");
+      item.classList.remove("mobile-open", "desktop-open");
       const chevron = item.querySelector(".fa-chevron-down");
       if (chevron) {
         chevron.style.transform = "rotate(0deg)";
