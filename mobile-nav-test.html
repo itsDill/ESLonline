@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Navigation Test - ESL Fun Online</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-button {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px 5px;
+      }
+      .test-button:hover {
+        background: #4338ca;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .status.success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #10b981;
+      }
+      .status.error {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
+      }
+      .status.warning {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #f59e0b;
+      }
+      .test-results {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 5px;
+      }
+      .page-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .page-link {
+        display: block;
+        padding: 10px 15px;
+        background: #e5e7eb;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        transition: all 0.2s ease;
+      }
+      .page-link:hover {
+        background: #d1d5db;
+        transform: translateY(-1px);
+      }
+      .page-link.fixed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🔧 Mobile Navigation Test Center</h1>
+      <p>
+        This tool helps diagnose and test mobile navigation across all pages.
+      </p>
+
+      <div class="test-section">
+        <h2>📱 Navigation Status Check</h2>
+        <button class="test-button" onclick="runDiagnostics()">
+          Run Diagnostics
+        </button>
+        <button class="test-button" onclick="simulateMobileView()">
+          Simulate Mobile View
+        </button>
+        <button class="test-button" onclick="testAllPages()">
+          Test All Pages
+        </button>
+
+        <div id="diagnostics-result" class="test-results" style="display: none">
+          <h3>Diagnostic Results:</h3>
+          <div id="diagnostic-content"></div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>🌐 Quick Page Tests</h2>
+        <p>Click any page link to test mobile navigation:</p>
+        <div class="page-links">
+          <a href="index.html" class="page-link fixed">Home (Fixed)</a>
+          <a href="english/test.html" class="page-link fixed"
+            >Test Prep (Fixed)</a
+          >
+          <a href="english/ielts.html" class="page-link fixed">IELTS (Fixed)</a>
+          <a href="english/vocabguide.html" class="page-link fixed"
+            >Vocabulary (Fixed)</a
+          >
+          <a href="english/writingf.html" class="page-link fixed"
+            >Writing (Fixed)</a
+          >
+          <a href="lessons.html" class="page-link fixed">Lessons (Fixed)</a>
+          <a href="games/games.html" class="page-link">Games</a>
+          <a href="english/grammar.html" class="page-link">Grammar</a>
+          <a href="english/business.html" class="page-link">Business</a>
+          <a href="tools/tools.html" class="page-link">Tools</a>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>📋 Mobile Test Checklist</h2>
+        <ul>
+          <li>✅ Mobile toggle button is visible on mobile screens</li>
+          <li>✅ Clicking mobile toggle opens/closes menu</li>
+          <li>✅ Navigation menu appears below header when open</li>
+          <li>✅ Dropdown menus work correctly on mobile</li>
+          <li>✅ Menu closes when clicking outside</li>
+          <li>✅ Body scroll is locked when menu is open</li>
+          <li>✅ Menu icon changes from bars to X when open</li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h2>🐛 Common Issues & Solutions</h2>
+        <div class="status warning">
+          <strong>Issue:</strong> Mobile toggle not visible <br /><strong
+            >Solution:</strong
+          >
+          Check if navigation.js or main.js is loaded
+        </div>
+        <div class="status warning">
+          <strong>Issue:</strong> Menu doesn't open on click <br /><strong
+            >Solution:</strong
+          >
+          Check for JavaScript errors in console
+        </div>
+        <div class="status warning">
+          <strong>Issue:</strong> Dropdown menus don't work <br /><strong
+            >Solution:</strong
+          >
+          Ensure proper CSS classes are applied
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function runDiagnostics() {
+        const results = document.getElementById("diagnostics-result");
+        const content = document.getElementById("diagnostic-content");
+
+        const tests = [
+          {
+            name: "Mobile Toggle Element",
+            test: () =>
+              !!document.getElementById("mobileToggle") ||
+              !!document.querySelector(".mobile-toggle"),
+            fix: 'Add mobile toggle button with ID "mobileToggle"',
+          },
+          {
+            name: "Navigation Menu Element",
+            test: () =>
+              !!document.getElementById("navLinks") ||
+              !!document.querySelector(".nav-links"),
+            fix: 'Add navigation menu with ID "navLinks"',
+          },
+          {
+            name: "Navigation JavaScript Loaded",
+            test: () =>
+              !!document.querySelector('script[src*="navigation.js"]') ||
+              !!document.querySelector('script[src*="main.js"]'),
+            fix: "Add script tag for navigation.js before closing body tag",
+          },
+          {
+            name: "Header CSS Loaded",
+            test: () => !!document.querySelector('link[href*="header.css"]'),
+            fix: "Add link tag for header.css stylesheet",
+          },
+          {
+            name: "Mobile Viewport Meta Tag",
+            test: () => !!document.querySelector('meta[name="viewport"]'),
+            fix: "Add viewport meta tag for mobile responsiveness",
+          },
+          {
+            name: "Mobile Navigation Functions",
+            test: () =>
+              typeof window.ESLUtils !== "undefined" ||
+              typeof window.eslNavigationInitialized !== "undefined",
+            fix: "Ensure navigation.js initializes properly",
+          },
+        ];
+
+        let html = "";
+        let allPassed = true;
+
+        tests.forEach((test) => {
+          const passed = test.test();
+          if (!passed) allPassed = false;
+
+          html += `
+                    <div class="status ${passed ? "success" : "error"}">
+                        ${passed ? "✅" : "❌"} ${test.name}: ${
+            passed ? "PASS" : "FAIL"
+          }
+                        ${
+                          !passed
+                            ? `<br><small><strong>Fix:</strong> ${test.fix}</small>`
+                            : ""
+                        }
+                    </div>
+                `;
+        });
+
+        if (allPassed) {
+          html +=
+            '<div class="status success">🎉 All tests passed! Mobile navigation should work correctly.</div>';
+        }
+
+        content.innerHTML = html;
+        results.style.display = "block";
+      }
+
+      function simulateMobileView() {
+        const currentWidth = window.innerWidth;
+        if (currentWidth > 768) {
+          alert(
+            "To test mobile view:\n1. Open browser developer tools (F12)\n2. Click the mobile device icon\n3. Select a mobile device\n4. Refresh the page\n5. Test the mobile menu"
+          );
+        } else {
+          alert(
+            "You are already in mobile view! Test the navigation menu by clicking the menu icon in the header."
+          );
+        }
+      }
+
+      function testAllPages() {
+        const pages = [
+          "index.html",
+          "english/test.html",
+          "english/ielts.html",
+          "english/vocabguide.html",
+          "english/writingf.html",
+          "lessons.html",
+          "games/games.html",
+          "english/grammar.html",
+          "english/business.html",
+          "tools/tools.html",
+        ];
+
+        alert(
+          `Testing ${pages.length} pages...\n\nThis will open multiple tabs. Check each one for:\n- Mobile toggle visibility\n- Menu functionality\n- Dropdown behavior\n\nReady to proceed?`
+        );
+
+        pages.forEach((page, index) => {
+          setTimeout(() => {
+            window.open(page, "_blank");
+          }, index * 500); // Stagger opening tabs
+        });
+      }
+
+      // Auto-run diagnostics on load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Wait a moment for everything to load
+        setTimeout(runDiagnostics, 1000);
+      });
+    </script>
+  </body>
+</html>
