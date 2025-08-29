@@ -96,6 +96,18 @@ if (!window.eslNavigationInitialized) {
               toggleDesktopDropdown(item, chevron);
             }
           });
+
+          // Add touch event for better mobile support
+          if (chevron) {
+            link.addEventListener("touchend", function (e) {
+              const isMobile = window.innerWidth <= 768;
+              if (isMobile) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMobileDropdown(item, chevron);
+              }
+            });
+          }
         }
       });
 
@@ -103,7 +115,7 @@ if (!window.eslNavigationInitialized) {
       function toggleMobileDropdown(item, chevron) {
         const isOpen = item.classList.contains("mobile-open");
 
-        // Close all other dropdowns
+        // Close all other dropdowns first
         navItems.forEach((otherItem) => {
           if (otherItem !== item) {
             resetDropdown(otherItem);
@@ -189,7 +201,7 @@ if (!window.eslNavigationInitialized) {
       });
     }
 
-    console.log("🎉 ESL Navigation initialized successfully!");
+    console.log("ESL Navigation initialized successfully!");
   });
 }
 
