@@ -79,6 +79,7 @@
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/cleanup.css" />
 
     <style>
       /* Critical above-the-fold styles only */
@@ -218,7 +219,9 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
       <canvas class="hero-network" id="networkCanvas"></canvas>
-      <div class="hero-interactive" id="heroInteractive"></div>
+      <div class="hero-interactive" id="heroInteractive">
+        <!-- Floating interactive icons will be added by JavaScript -->
+      </div>
       <div class="container">
         <div class="hero-content">
           <h1 class="animated-title" id="heroTitle">ESL Fun Online</h1>
@@ -329,12 +332,12 @@
           <div class="dual-option-card fade-in-up">
             <h3>Learning Path</h3>
             <div class="dual-options">
-              <a class="option" href="../english/conversation.html">
+              <a class="option" href="../english/vocabguide.html">
                 <div class="option-icon">
                   <i class="fas fa-user-graduate"></i>
                 </div>
-                <h4>Conversation</h4>
-                <p>Beginner-friendly conversations filled with practical vocabulary and phrases.</p>
+                <h4>Vocabulary</h4>
+                <p>Beginner-friendly vocabulary building exercises filled with practical words and phrases.</p>
               </a>
               <a class="option" href="../english/business.html">
                 <div class="option-icon">
@@ -520,12 +523,20 @@
     
     <!-- Page-specific initialization script -->
     <script>
+      console.log("Index page script loading...");
+      
       // Initialize network canvas and page-specific features
       document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM loaded, initializing features...");
+        
         // Initialize animated title
         function initAnimatedTitle() {
+          console.log("Initializing animated title...");
           const title = document.getElementById("heroTitle");
-          if (!title) return;
+          if (!title) {
+            console.warn("Hero title element not found");
+            return;
+          }
           
           const text = "ESL Fun Online";
           title.innerHTML = "";
@@ -553,20 +564,93 @@
 
             title.appendChild(span);
           });
+          console.log("Animated title initialized with", text.length, "letters");
+        }
+
+        // Initialize floating icons
+        function initFloatingIcons() {
+          console.log("Initializing floating icons...");
+          const heroInteractive = document.getElementById("heroInteractive");
+          if (!heroInteractive) {
+            console.warn("Hero interactive element not found");
+            return;
+          }
+          
+          const icons = [
+            { emoji: '⭐', top: '20%', left: '15%', delay: '0s' },
+            { emoji: '🚀', top: '30%', right: '20%', delay: '1s' },
+            { emoji: '💡', bottom: '25%', left: '10%', delay: '2s' },
+            { emoji: '🎯', bottom: '35%', right: '15%', delay: '0.5s' },
+            { emoji: '📚', top: '60%', left: '25%', delay: '1.5s' },
+            { emoji: '🌟', top: '45%', right: '30%', delay: '2.5s' }
+          ];
+          
+          icons.forEach((iconData, index) => {
+            const icon = document.createElement('div');
+            icon.className = 'floating-icon';
+            icon.textContent = iconData.emoji;
+            icon.style.animationDelay = iconData.delay;
+            
+            // Position the icon
+            if (iconData.top) icon.style.top = iconData.top;
+            if (iconData.bottom) icon.style.bottom = iconData.bottom;
+            if (iconData.left) icon.style.left = iconData.left;
+            if (iconData.right) icon.style.right = iconData.right;
+            
+            // Add click interaction
+            icon.addEventListener('click', (e) => {
+              console.log('Floating icon clicked:', iconData.emoji);
+              e.target.style.animation = 'none';
+              e.target.style.transform = 'scale(2) rotate(360deg)';
+              
+              setTimeout(() => {
+                e.target.style.animation = '';
+                e.target.style.transform = '';
+              }, 300);
+              
+              // Create particles around the clicked icon
+              if (window.createParticlesAt) {
+                const rect = e.target.getBoundingClientRect();
+                window.createParticlesAt(rect.left + rect.width/2, rect.top + rect.height/2);
+              }
+            });
+            
+            heroInteractive.appendChild(icon);
+          });
+          
+          console.log("Added", icons.length, "floating icons");
         }
 
         // Initialize network canvas
         function initNetworkCanvas() {
+          console.log("Initializing network canvas...");
           const canvas = document.getElementById("networkCanvas");
-          if (!canvas) return;
+          if (!canvas) {
+            console.warn("Network canvas element not found");
+            return;
+          }
           
           const ctx = canvas.getContext("2d");
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+          if (!ctx) {
+            console.error("Could not get canvas context");
+            return;
+          }
+          
+          // Set canvas size
+          function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            console.log(`Canvas resized to: ${canvas.width}x${canvas.height}`);
+          }
+          
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
 
           const particles = [];
-          const particleCount = Math.min(60, Math.floor(canvas.width / 20));
-          let mouse = { x: null, y: null, radius: 100 };
+          const particleCount = Math.min(80, Math.floor(canvas.width / 25));
+          let mouse = { x: null, y: null, radius: 150 };
+          
+          console.log(`Creating ${particleCount} particles`);
 
           class Particle {
             constructor() {
@@ -575,27 +659,36 @@
               this.vx = (Math.random() - 0.5) * 0.8;
               this.vy = (Math.random() - 0.5) * 0.8;
               this.radius = Math.random() * 2 + 1.5;
+              this.opacity = Math.random() * 0.4 + 0.6;
             }
 
             update() {
-              if (mouse.x && mouse.y) {
+              if (mouse.x !== null && mouse.y !== null) {
                 const dx = mouse.x - this.x;
                 const dy = mouse.y - this.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < mouse.radius) {
                   const force = (mouse.radius - distance) / mouse.radius;
-                  this.vx += (dx / distance) * force * 0.01;
-                  this.vy += (dy / distance) * force * 0.01;
+                  this.vx += (dx / distance) * force * 0.015;
+                  this.vy += (dy / distance) * force * 0.015;
                 }
               }
               
               this.x += this.vx;
               this.y += this.vy;
               
-              if (this.x <= 0 || this.x >= canvas.width) this.vx *= -0.8;
-              if (this.y <= 0 || this.y >= canvas.height) this.vy *= -0.8;
+              // Bounce off walls with energy loss
+              if (this.x <= 0 || this.x >= canvas.width) {
+                this.vx *= -0.8;
+                this.x = Math.max(0, Math.min(canvas.width, this.x));
+              }
+              if (this.y <= 0 || this.y >= canvas.height) {
+                this.vy *= -0.8;
+                this.y = Math.max(0, Math.min(canvas.height, this.y));
+              }
               
+              // Apply friction
               this.vx *= 0.998;
               this.vy *= 0.998;
             }
@@ -603,7 +696,13 @@
             draw() {
               ctx.beginPath();
               ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+              ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+              ctx.fill();
+              
+              // Add glow effect
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, this.radius + 1, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(135, 206, 235, ${this.opacity * 0.3})`;
               ctx.fill();
             }
           }
@@ -618,65 +717,143 @@
             const rect = canvas.getBoundingClientRect();
             mouse.x = e.clientX - rect.left;
             mouse.y = e.clientY - rect.top;
+            
+            // Add trail effect
+            if (Math.random() < 0.1) {
+              const trailParticle = new Particle();
+              trailParticle.x = mouse.x + (Math.random() - 0.5) * 10;
+              trailParticle.y = mouse.y + (Math.random() - 0.5) * 10;
+              trailParticle.vx = (Math.random() - 0.5) * 2;
+              trailParticle.vy = (Math.random() - 0.5) * 2;
+              trailParticle.opacity = 0.8;
+              trailParticle.radius = Math.random() * 1.5 + 0.5;
+              particles.push(trailParticle);
+            }
           });
 
           canvas.addEventListener("mouseleave", () => {
             mouse.x = null;
             mouse.y = null;
           });
+          
+          // Click to add particles
+          canvas.addEventListener("click", (e) => {
+            if (mouse.x !== null && mouse.y !== null) {
+              console.log("Canvas clicked, adding particles");
+              for (let i = 0; i < 8; i++) {
+                const particle = new Particle();
+                particle.x = mouse.x + (Math.random() - 0.5) * 30;
+                particle.y = mouse.y + (Math.random() - 0.5) * 30;
+                particle.vx = (Math.random() - 0.5) * 4;
+                particle.vy = (Math.random() - 0.5) * 4;
+                particle.opacity = 1;
+                particles.push(particle);
+              }
+            }
+          });
+
+          // Expose function to create particles at specific position
+          window.createParticlesAt = function(x, y) {
+            const rect = canvas.getBoundingClientRect();
+            const canvasX = x - rect.left;
+            const canvasY = y - rect.top;
+            
+            for (let i = 0; i < 12; i++) {
+              const particle = new Particle();
+              particle.x = canvasX;
+              particle.y = canvasY;
+              const angle = (i / 12) * Math.PI * 2;
+              particle.vx = Math.cos(angle) * 3;
+              particle.vy = Math.sin(angle) * 3;
+              particle.opacity = 1;
+              particles.push(particle);
+            }
+          };
 
           // Animation loop
+          let frameCount = 0;
           function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            particles.forEach(particle => particle.update());
+            // Update particles
+            particles.forEach((particle, index) => {
+              particle.update();
+              
+              // Remove excess particles gradually
+              if (particles.length > particleCount * 2 && 
+                  Math.abs(particle.vx) < 0.01 && Math.abs(particle.vy) < 0.01 &&
+                  frameCount % 60 === 0) {
+                particles.splice(index, 1);
+              }
+            });
 
-            // Draw connections
-            particles.forEach((a, i) => {
-              particles.slice(i + 1).forEach(b => {
-                const distance = Math.hypot(a.x - b.x, a.y - b.y);
+            // Draw connections between nearby particles
+            for (let i = 0; i < particles.length - 1; i++) {
+              for (let j = i + 1; j < particles.length; j++) {
+                const a = particles[i];
+                const b = particles[j];
+                const distance = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+                
                 if (distance < 120) {
                   const opacity = (1 - distance / 120) * 0.6;
                   ctx.beginPath();
                   ctx.moveTo(a.x, a.y);
                   ctx.lineTo(b.x, b.y);
-                  ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                  ctx.strokeStyle = `rgba(135, 206, 235, ${opacity})`;
                   ctx.lineWidth = 1;
                   ctx.stroke();
                 }
-              });
-            });
+              }
+            }
 
             particles.forEach(particle => particle.draw());
+            
+            frameCount++;
             requestAnimationFrame(animate);
           }
 
           animate();
-
-          // Responsive canvas
-          window.addEventListener("resize", () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-          });
+          console.log("Network canvas animation started");
         }
 
-        // Initialize features
-        initAnimatedTitle();
-        initNetworkCanvas();
-        
         // Initialize scroll indicator
-        const scrollIndicator = document.querySelector('.scroll-indicator');
-        if (scrollIndicator) {
-          scrollIndicator.addEventListener('click', () => {
-            const target = document.getElementById('resources');
-            if (target) {
-              target.scrollIntoView({ behavior: 'smooth' });
-            }
-          });
+        function initScrollIndicator() {
+          const scrollIndicator = document.querySelector('.scroll-indicator');
+          if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', () => {
+              console.log("Scroll indicator clicked");
+              const target = document.getElementById('resources');
+              if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+              }
+            });
+          }
+        }
+
+        // Initialize all features
+        try {
+          initAnimatedTitle();
+          initFloatingIcons();
+          initNetworkCanvas();
+          initScrollIndicator();
+          
+          // Mark page as loaded
+          document.body.style.opacity = '1';
+          document.body.classList.add('loaded');
+          
+          console.log("All hero features initialized successfully");
+        } catch (error) {
+          console.error("Error initializing hero features:", error);
         }
         
-        // Restart title animation every 15 seconds
-        setInterval(initAnimatedTitle, 15000);
+        // Restart title animation periodically
+        setInterval(() => {
+          try {
+            initAnimatedTitle();
+          } catch (error) {
+            console.error("Error restarting title animation:", error);
+          }
+        }, 20000);
       });
     </script>
   </body>

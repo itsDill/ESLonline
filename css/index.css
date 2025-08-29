@@ -120,7 +120,12 @@
   width: 100%;
   height: 100%;
   z-index: 2;
-  cursor: pointer;
+  cursor: crosshair;
+  transition: opacity var(--transition-normal);
+}
+
+.hero-network:hover {
+  opacity: 0.9;
 }
 
 .hero-content {
@@ -234,28 +239,44 @@
 
 .floating-icon {
   position: absolute;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: rgba(255, 255, 255, 0.7);
   animation: float var(--network-animation-duration) ease-in-out infinite;
   pointer-events: auto;
   cursor: pointer;
   transition: all var(--transition-normal);
   z-index: 4;
+  user-select: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
 .floating-icon:hover {
-  color: white;
-  transform: scale(1.5);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  color: #ffd700;
+  transform: scale(1.8) rotate(15deg);
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 50px rgba(255, 215, 0, 0.5);
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+  animation-play-state: paused;
+}
+
+.floating-icon:active {
+  transform: scale(2.2) rotate(360deg);
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-15px) rotate(5deg) scale(1.05);
   }
   50% {
-    transform: translateY(-20px) rotate(5deg);
+    transform: translateY(-20px) rotate(-3deg) scale(1.1);
+  }
+  75% {
+    transform: translateY(-10px) rotate(7deg) scale(1.02);
   }
 }
 

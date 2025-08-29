@@ -452,10 +452,29 @@ const Navigation = {
       this.toggleMobileMenu();
     });
 
-    // Close mobile menu on link click
+    // Close mobile menu on specific link clicks (not dropdowns)
     this.navLinks.addEventListener("click", (e) => {
-      if (e.target.closest(".nav-link") && window.innerWidth <= 768) {
-        this.closeMobileMenu();
+      const clickedElement = e.target.closest(".nav-link");
+      const clickedDropdown = e.target.closest(".dropdown");
+      const hasDropdown =
+        clickedElement && clickedElement.querySelector(".fa-chevron-down");
+
+      // Only close menu if:
+      // - It's a regular nav link (no dropdown)
+      // - Or it's a dropdown item link
+      if (
+        window.innerWidth <= 768 &&
+        clickedElement &&
+        (!hasDropdown || clickedDropdown)
+      ) {
+        // If it's a dropdown item, close the menu
+        if (clickedDropdown) {
+          this.closeMobileMenu();
+        }
+        // If it's a regular nav link without dropdown, close the menu
+        else if (!hasDropdown) {
+          this.closeMobileMenu();
+        }
       }
     });
 
@@ -489,6 +508,7 @@ const Navigation = {
     this.isOpen = !this.isOpen;
 
     this.navLinks.classList.toggle("active", this.isOpen);
+    document.body.classList.toggle("mobile-menu-open", this.isOpen);
 
     if (this.mobileIcon) {
       this.mobileIcon.className = this.isOpen ? "fas fa-times" : "fas fa-bars";
@@ -501,12 +521,23 @@ const Navigation = {
   closeMobileMenu() {
     this.isOpen = false;
     this.navLinks.classList.remove("active");
+    document.body.classList.remove("mobile-menu-open");
 
     if (this.mobileIcon) {
       this.mobileIcon.className = "fas fa-bars";
     }
 
     document.body.style.overflow = "";
+
+    // Close all open dropdowns when closing mobile menu
+    const openDropdowns = Utils.$$(".nav-item.mobile-dropdown-open");
+    openDropdowns.forEach((item) => {
+      item.classList.remove("mobile-dropdown-open");
+      const dropdown = item.querySelector(".dropdown");
+      if (dropdown) {
+        dropdown.style.maxHeight = "0";
+      }
+    });
   },
 
   initScrollEffects() {
@@ -573,13 +604,14 @@ const Navigation = {
         link.addEventListener("click", (e) => {
           if (window.innerWidth <= 768) {
             e.preventDefault();
+            e.stopPropagation(); // Prevent event bubbling
 
-            const isActive = item.classList.contains("active");
+            const isActive = item.classList.contains("mobile-dropdown-open");
 
             // Close all other dropdowns
             dropdownItems.forEach((otherItem) => {
               if (otherItem !== item) {
-                otherItem.classList.remove("active");
+                otherItem.classList.remove("mobile-dropdown-open");
                 const otherDropdown = otherItem.querySelector(".dropdown");
                 if (otherDropdown) {
                   otherDropdown.style.maxHeight = "0";
@@ -588,10 +620,19 @@ const Navigation = {
             });
 
             // Toggle current dropdown
-            item.classList.toggle("active", !isActive);
+            item.classList.toggle("mobile-dropdown-open", !isActive);
             dropdown.style.maxHeight = isActive
               ? "0"
               : dropdown.scrollHeight + "px";
+          }
+        });
+      }
+
+      // Prevent dropdown clicks from closing mobile menu
+      if (dropdown) {
+        dropdown.addEventListener("click", (e) => {
+          if (window.innerWidth <= 768) {
+            e.stopPropagation();
           }
         });
       }
