@@ -59,27 +59,75 @@ if (!window.eslNavigationInitialized) {
         body.style.overflow = isOpen ? "auto" : "hidden";
       });
 
-      // Handle mobile dropdown toggles
+      // Handle dropdown toggles (both mobile and desktop)
       navItems.forEach((item) => {
         const link = item.querySelector(".nav-link");
         const dropdown = item.querySelector(".dropdown");
 
         if (link && dropdown) {
+          // Handle click events for dropdown toggle
           link.addEventListener("click", (e) => {
-            if (window.innerWidth <= 768) {
+            // Check if this is a dropdown link (has chevron icon)
+            const hasDropdown = link.querySelector(".fa-chevron-down");
+
+            if (hasDropdown) {
               e.preventDefault();
+              e.stopPropagation();
 
-              // Close other dropdowns
-              navItems.forEach((otherItem) => {
-                if (otherItem !== item) {
-                  otherItem.classList.remove("mobile-open");
-                }
-              });
+              if (window.innerWidth <= 768) {
+                // Mobile behavior: toggle current, close others
+                const isCurrentlyOpen = item.classList.contains("mobile-open");
 
-              // Toggle current dropdown
-              item.classList.toggle("mobile-open");
+                // Close other dropdowns
+                navItems.forEach((otherItem) => {
+                  if (otherItem !== item) {
+                    otherItem.classList.remove("mobile-open");
+                    otherItem.classList.remove("desktop-open");
+                  }
+                });
+
+                // Toggle current dropdown
+                item.classList.toggle("mobile-open", !isCurrentlyOpen);
+              } else {
+                // Desktop behavior: toggle current, close others
+                const isCurrentlyOpen = item.classList.contains("desktop-open");
+
+                // Close other dropdowns
+                navItems.forEach((otherItem) => {
+                  if (otherItem !== item) {
+                    otherItem.classList.remove("desktop-open");
+                    otherItem.classList.remove("mobile-open");
+                  }
+                });
+
+                // Toggle current dropdown
+                item.classList.toggle("desktop-open", !isCurrentlyOpen);
+              }
             }
           });
+
+          // For desktop: also handle mouse enter/leave for hover behavior
+          if (window.innerWidth > 768) {
+            let hoverTimeout;
+
+            item.addEventListener("mouseenter", () => {
+              clearTimeout(hoverTimeout);
+              // Don't auto-open if already manually toggled
+              if (!item.classList.contains("desktop-open")) {
+                item.classList.add("desktop-hover");
+              }
+            });
+
+            item.addEventListener("mouseleave", () => {
+              item.classList.remove("desktop-hover");
+              // Close after delay unless manually opened
+              hoverTimeout = setTimeout(() => {
+                if (!item.classList.contains("desktop-open")) {
+                  item.classList.remove("desktop-hover");
+                }
+              }, 100);
+            });
+          }
         }
       });
 

@@ -459,6 +459,34 @@ const Navigation = {
       const hasDropdown =
         clickedElement && clickedElement.querySelector(".fa-chevron-down");
 
+      // Handle dropdown toggle for mobile
+      if (window.innerWidth <= 768 && hasDropdown && !clickedDropdown) {
+        e.preventDefault();
+        const navItem = clickedElement.closest(".nav-item");
+        const dropdown = navItem.querySelector(".dropdown");
+
+        // Close all other dropdowns
+        this.navLinks.querySelectorAll(".nav-item").forEach((item) => {
+          if (item !== navItem) {
+            item.classList.remove("mobile-dropdown-open");
+            const otherDropdown = item.querySelector(".dropdown");
+            if (otherDropdown) {
+              otherDropdown.style.maxHeight = "0";
+            }
+          }
+        });
+
+        // Toggle current dropdown
+        const isOpen = navItem.classList.contains("mobile-dropdown-open");
+        navItem.classList.toggle("mobile-dropdown-open", !isOpen);
+        if (dropdown) {
+          dropdown.style.maxHeight = isOpen
+            ? "0"
+            : dropdown.scrollHeight + "px";
+        }
+        return;
+      }
+
       // Only close menu if:
       // - It's a regular nav link (no dropdown)
       // - Or it's a dropdown item link
