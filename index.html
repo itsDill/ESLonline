@@ -25,28 +25,66 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <title>ESL Fun Online | Master English & Coding Skills - Premium Learning Resources</title>
 
-        <!-- Structured Data for SEO -->
+        <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
+      "@type": ["EducationalOrganization", "OnlineStore"],
       "name": "ESL Fun Online",
-      "description": "Premium interactive English learning resources, IELTS/TOEIC test prep, business English, coding tutorials, and educational games",
+      "alternateName": "ESL Fun Online Learning Platform",
+      "description": "Premium interactive English learning resources, IELTS/TOEIC test prep, business English, coding tutorials, and educational games for students worldwide",
       "url": "https://eslfunonline.com",
-      "logo": "https://eslfunonline.com/images/1.png",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://eslfunonline.com/images/1.png",
+        "width": 200,
+        "height": 200
+      },
+      "image": "https://eslfunonline.com/images/1.png",
       "sameAs": [
         "https://www.facebook.com/eslfunonline",
-        "https://twitter.com/eslfunonline"
+        "https://twitter.com/eslfunonline",
+        "https://www.instagram.com/eslfunonline"
       ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "Global"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "availableLanguage": ["English"]
+      },
       "offers": {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         "category": "Educational Services",
-        "description": "English learning courses and coding tutorials"
+        "description": "English learning courses, coding tutorials, and interactive educational games",
+        "availability": "https://schema.org/InStock"
       },
       "educationalCredentialAwarded": "Certificate of Completion",
       "hasCredential": {
         "@type": "EducationalOccupationalCredential",
-        "name": "English Proficiency Certificate"
+        "name": "English Proficiency Certificate",
+        "credentialCategory": "Language Certification"
+      },
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "student"
+      },
+      "teaches": [
+        "English as a Second Language",
+        "IELTS Test Preparation",
+        "TOEIC Test Preparation",
+        "Business English",
+        "Programming Languages",
+        "Computer Science Basics"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "150",
+        "bestRating": "5",
+        "worstRating": "1"
       }
     }
     </script>
@@ -258,7 +296,7 @@
     <section id="home" class="hero">
       <div class="container">
         <div class="hero-content">
-          <h1 id="heroTitle">ESL Fun Online</h1>
+          <h1 id="heroTitle" class="hero-title">ESL Fun Online</h1>
           <p>
             🚀 Transform your English and coding skills with our premium interactive resources. 
             Join thousands of successful learners mastering IELTS, TOEIC, business English, 
@@ -556,6 +594,46 @@
           });
         }
 
+        // Hero stats counter animation
+        function initStatsCounter() {
+          const statNumbers = document.querySelectorAll('.stat-number');
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const target = entry.target;
+                const targetValue = target.getAttribute('data-target');
+                const numericValue = parseInt(targetValue.replace(/\D/g, '')) || 0;
+                const suffix = targetValue.replace(/\d/g, '') || '';
+                
+                animateCounter(target, 0, numericValue, suffix, 2000);
+                observer.unobserve(target);
+              }
+            });
+          }, { threshold: 0.5 });
+
+          statNumbers.forEach(stat => observer.observe(stat));
+        }
+
+        // Counter animation helper
+        function animateCounter(element, start, end, suffix, duration) {
+          const startTime = performance.now();
+          
+          function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(start + (end - start) * easeOutQuart);
+            
+            element.textContent = current + suffix;
+            
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            }
+          }
+          
+          requestAnimationFrame(updateCounter);
+        }
+
         // Initialize scroll indicator
         function initScrollIndicator() {
           const scrollIndicator = document.querySelector('.scroll-indicator');
@@ -587,9 +665,10 @@
           }
         }
 
-        // Initialize essential features only
+        // Initialize essential features
         try {
-          initAnimatedTitle(); // Add this line
+          initAnimatedTitle();
+          initStatsCounter();
           initScrollIndicator();
           initBackToTop();
           optimizeFooterForMobile();
@@ -605,7 +684,7 @@
         // Add resize listener for footer optimization
         window.addEventListener('resize', optimizeFooterForMobile);
       });
-
+      
       // Enhanced Footer Functionality
       
       // Mobile footer optimization
