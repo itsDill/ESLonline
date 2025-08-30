@@ -112,6 +112,115 @@
         --border-color: #374151;
       }
 
+      /* Mobile Navigation Styles */
+      @media (max-width: 768px) {
+        .nav-links {
+          position: fixed;
+          top: 80px;
+          left: 0;
+          right: 0;
+          background: var(--bg-primary);
+          border-top: 1px solid var(--border-color);
+          box-shadow: var(--shadow-lg);
+          transform: translateY(-100vh);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+          z-index: 9999;
+          max-height: calc(100vh - 80px);
+          overflow-y: auto;
+          flex-direction: column;
+          padding: 0;
+        }
+
+        .nav-links.active {
+          transform: translateY(0);
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .nav-links li {
+          border-bottom: 1px solid var(--border-color);
+          width: 100%;
+        }
+
+        .nav-links li:last-child {
+          border-bottom: none;
+        }
+
+        .nav-link {
+          display: block;
+          padding: 1rem 1.5rem;
+          color: var(--text-primary);
+          text-decoration: none;
+          transition: all 0.3s ease;
+          width: 100%;
+        }
+
+        .nav-link:hover {
+          background: var(--bg-secondary);
+          color: var(--primary-color);
+        }
+
+        /* Mobile dropdown styles */
+        .dropdown {
+          position: static;
+          display: none;
+          background: var(--bg-secondary);
+          box-shadow: none;
+          border-radius: 0;
+          padding: 0;
+        }
+
+        .nav-item.active .dropdown {
+          display: block;
+        }
+
+        .dropdown-item {
+          display: block;
+          padding: 0.75rem 2rem;
+          color: var(--text-secondary);
+          text-decoration: none;
+          border-bottom: 1px solid var(--border-color);
+          transition: all 0.3s ease;
+        }
+
+        .dropdown-item:last-child {
+          border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+          background: var(--bg-tertiary);
+          color: var(--primary-color);
+        }
+
+        /* Mobile toggle button */
+        .mobile-toggle {
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          background: transparent;
+          border: none;
+          color: var(--text-primary);
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .mobile-toggle:hover {
+          color: var(--primary-color);
+        }
+      }
+
+      /* Ensure mobile toggle is hidden on desktop */
+      @media (min-width: 769px) {
+        .mobile-toggle {
+          display: none !important;
+        }
+      }
+
       /* Base Styles */
       * {
         margin: 0;
@@ -1122,10 +1231,6 @@
                 <a href="../english/writingf.html" class="dropdown-item">
                   <i class="fas fa-pen"></i>
                   Writing for Success
-                </a>
-                <a href="../english/phonics.html" class="dropdown-item">
-                  <i class="fas fa-microphone"></i>
-                  Phonics Fun
                 </a>
                 <a href="../english/business.html" class="dropdown-item">
                   <i class="fas fa-briefcase"></i>
@@ -2390,6 +2495,113 @@
         });
       });
     </script>
+    
     <script src="../js/navigation.js"></script>
+    
+    <!-- Enhanced Mobile Navigation JavaScript -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileToggle && navLinks) {
+          mobileToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            navLinks.classList.toggle('active');
+            
+            // Toggle hamburger icon
+            const icon = mobileToggle.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+              icon.className = 'fas fa-times';
+            } else {
+              icon.className = 'fas fa-bars';
+            }
+          });
+          
+          // Close mobile menu when clicking outside
+          document.addEventListener('click', function(e) {
+            if (!mobileToggle.contains(e.target) && !navLinks.contains(e.target)) {
+              navLinks.classList.remove('active');
+              const icon = mobileToggle.querySelector('i');
+              icon.className = 'fas fa-bars';
+            }
+          });
+          
+          // Close mobile menu when clicking on a link
+          navLinks.addEventListener('click', function(e) {
+            if (e.target.classList.contains('nav-link')) {
+              navLinks.classList.remove('active');
+              const icon = mobileToggle.querySelector('i');
+              icon.className = 'fas fa-bars';
+            }
+          });
+        }
+
+        // Enhanced Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.classList.toggle('dark-mode', savedTheme === 'dark');
+        updateThemeIcon();
+
+        if (themeToggle) {
+          themeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon();
+          });
+        }
+
+        function updateThemeIcon() {
+          if (!themeToggle) return;
+          const icon = themeToggle.querySelector('i');
+          if (body.classList.contains('dark-mode')) {
+            icon.className = 'fas fa-sun';
+            themeToggle.setAttribute('aria-label', 'Switch to light mode');
+          } else {
+            icon.className = 'fas fa-moon';
+            themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+          }
+        }
+
+        // Dropdown functionality
+        const dropdowns = document.querySelectorAll('.nav-item');
+        dropdowns.forEach(dropdown => {
+          const navLink = dropdown.querySelector('.nav-link');
+          const dropdownMenu = dropdown.querySelector('.dropdown');
+          
+          if (navLink && dropdownMenu) {
+            navLink.addEventListener('click', function(e) {
+              e.preventDefault();
+              
+              // Close other dropdowns
+              dropdowns.forEach(otherDropdown => {
+                if (otherDropdown !== dropdown) {
+                  otherDropdown.classList.remove('active');
+                }
+              });
+              
+              // Toggle current dropdown
+              dropdown.classList.toggle('active');
+            });
+          }
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.nav-item')) {
+            dropdowns.forEach(dropdown => {
+              dropdown.classList.remove('active');
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
