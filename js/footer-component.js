@@ -494,15 +494,15 @@ const FooterComponent = {
   // Insert footer into the page if it doesn't exist
   insertFooter() {
     const existingFooter = document.querySelector("footer");
-    const footerPlaceholder = document.querySelector("#footer-placeholder");
+    const footerPlaceholder = document.querySelector("#footer-component");
 
-    if (!existingFooter && !footerPlaceholder) {
+    if (footerPlaceholder && !existingFooter) {
+      // Replace placeholder with actual footer
+      footerPlaceholder.outerHTML = this.generateFooterHTML();
+    } else if (!existingFooter && !footerPlaceholder) {
       // Insert footer before the closing body tag
       const footerHTML = this.generateFooterHTML();
       document.body.insertAdjacentHTML("beforeend", footerHTML);
-    } else if (footerPlaceholder) {
-      // Replace placeholder with actual footer
-      footerPlaceholder.outerHTML = this.generateFooterHTML();
     }
   },
 

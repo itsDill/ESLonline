@@ -82,15 +82,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/mobile-footer.css" />
 
     <style>
-      /* CSS Variables for Design System */
+      /* CSS Variables aligned with main design system */
       :root {
         --primary-color: #46bbe5;
         --primary-hover: #05425c;
-        --secondary-color: #f59e0b;
-        --accent-color: #10b981;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
         --text-primary: #1f2937;
         --text-secondary: #6b7280;
         --text-light: #9ca3af;
@@ -331,24 +332,34 @@
         cursor: pointer;
       }
 
-      /* Blog Content */
+      /* Blog Layout - Desktop */
       .blog-container {
         display: grid;
         grid-template-columns: 1fr 300px;
         gap: 3rem;
         padding: 3rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
       }
 
       .main-content {
         display: flex;
         flex-direction: column;
         gap: 2rem;
+        min-width: 0; /* Prevent grid blowout */
+        order: 1;
       }
 
       .sidebar {
         display: flex;
         flex-direction: column;
         gap: 2rem;
+        position: sticky;
+        top: calc(var(--header-height, 80px) + 2rem);
+        height: fit-content;
+        order: 2;
+        align-self: start;
       }
 
       /* Blog Posts */
@@ -618,18 +629,6 @@
         outline-offset: 2px;
       }
 
-      /* Footer */
-      footer {
-        background: var(--bg-secondary);
-        padding: 3rem 0 1rem;
-        border-top: 1px solid var(--border-color);
-      }
-
-      .footer-content {
-        text-align: center;
-        color: var(--text-secondary);
-      }
-
       /* Back to Top */
       .back-to-top {
         position: fixed;
@@ -639,8 +638,9 @@
         height: 50px;
         background: var(--primary-color);
         color: white;
+        border: none;
         border-radius: 50%;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         text-decoration: none;
@@ -649,26 +649,117 @@
         transition: all 0.3s ease;
         box-shadow: var(--shadow-lg);
         z-index: 1000;
+        cursor: pointer;
+        font-size: 1.2rem;
       }
 
       .back-to-top.show {
         opacity: 1;
         visibility: visible;
+        display: flex;
       }
 
       .back-to-top:hover {
         transform: translateY(-3px);
         box-shadow: var(--shadow-xl);
+        background: var(--primary-hover);
       }
 
       /* Responsive Styles */
-      @media (max-width: 1024px) {
+      @media (max-width: 768px) {
         .blog-container {
           grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .main-content {
+          order: 2;
         }
 
         .sidebar {
-          order: -1;
+          order: 1;
+          position: static;
+          margin-top: 0;
+          gap: 1.5rem;
+        }
+
+        /* Mobile Navigation Fixes */
+        .mobile-toggle {
+          display: flex !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+
+        .nav-links {
+          position: fixed !important;
+          top: 70px !important;
+          left: 0 !important;
+          right: 0 !important;
+          background: var(--bg-primary) !important;
+          border: 1px solid var(--border-color) !important;
+          border-top: none !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          padding: 1rem !important;
+          gap: 0 !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          transform: translateY(-20px) !important;
+          transition: all 0.3s ease !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+          box-shadow: var(--shadow-xl) !important;
+          z-index: 1001 !important;
+          border-radius: 0 0 16px 16px !important;
+        }
+
+        .nav-links.active {
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: translateY(0) !important;
+          max-height: calc(100vh - 70px) !important;
+          overflow-y: auto !important;
+        }
+
+        .nav-item {
+          width: 100% !important;
+          margin-bottom: 0.75rem !important;
+        }
+
+        .nav-link {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          padding: 1rem 1.25rem !important;
+          border-radius: 8px !important;
+          background: var(--bg-secondary) !important;
+          width: 100% !important;
+          font-size: 1rem !important;
+          border: 2px solid transparent !important;
+        }
+
+        .nav-link:hover {
+          background: var(--primary-light) !important;
+          border-color: var(--primary-color) !important;
+          color: var(--primary-color) !important;
+        }
+
+        .dropdown {
+          position: static !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+          box-shadow: none !important;
+          border: none !important;
+          background: var(--bg-tertiary) !important;
+          margin-top: 0.75rem !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+          transition: max-height 0.3s ease !important;
+        }
+
+        body.mobile-menu-open {
+          overflow: hidden !important;
         }
       }
 
@@ -909,8 +1000,7 @@
                 <i class="fas fa-chevron-down"></i>
               </a>
               <div class="dropdown">
-                <div class="dropdown">
-                  <a href="../coding/computerbasics.html" class="dropdown-item">
+                <a href="../coding/computerbasics.html" class="dropdown-item">
                   <i class="fas fa-desktop"></i>
                   Computer Basics
                 </a>
@@ -968,6 +1058,8 @@
             <button class="control-btn mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
               <i class="fas fa-bars"></i>
             </button>
+        </nav>
+      </div>
     </header>
 
     <!-- Blog Hero -->
@@ -1059,16 +1151,16 @@
       <div class="blog-container">
         <main class="main-content" role="main" id="main-content">
           <div class="posts-container" id="postsContainer" role="tabpanel" aria-labelledby="tab-all">
-            <!-- ESL Learners Posts -->
+            <!-- ESL Learners Category -->
             <article
               class="blog-post"
               data-category="esl-learners"
-              data-date="2025-06-15"
-              data-title="Easy Conversation Tools"
+              data-date="2024-12-12"
+              data-title="Building Conversation Confidence"
             >
               <img
-                src="images/image copy 6.png"
-                alt="Students practicing English conversation with study materials and books"
+                src="../images/hands-820272_1280.jpg"
+                alt="Students practicing conversation skills with confidence building exercises"
                 class="post-image"
                 loading="lazy"
                 decoding="async"
@@ -1076,182 +1168,145 @@
               <div class="post-content">
                 <div class="post-meta">
                   <span class="post-category">ESL Learners</span>
-                  <time datetime="2025-06-15"><i class="fas fa-calendar-alt" aria-hidden="true"></i> June 15, 2025</time>
-                  <span><i class="fas fa-user" aria-hidden="true"></i> Sarah Chen</span>
+                  <time datetime="2024-12-12"><i class="fas fa-calendar-alt" aria-hidden="true"></i> December 12, 2024</time>
+                  <span><i class="fas fa-user" aria-hidden="true"></i> Sarah Johnson, ESL Coach</span>
                 </div>
                 <h2 class="post-title">
-                  <a href="blog/blog1.html" class="post-title-link">Easy Conversation Tools & Tricks for Adult English Learners</a>
+                  <a href="esl-learners-conversation-confidence.html" class="post-title-link">Building Conversation Confidence: Your Complete Guide to Speaking English Naturally</a>
                 </h2>
                 <p class="post-excerpt">
-                  Discover practical conversation strategies that will boost
-                  your confidence in English speaking. Learn useful phrases,
-                  conversation starters, and techniques to keep discussions
-                  flowing naturally in both casual and professional settings.
+                  Transform your English speaking skills with proven confidence-building techniques, interactive conversation starters, and practical exercises. This comprehensive guide includes downloadable resources, progress tracking, and real-world practice scenarios to help you speak English naturally and confidently.
                 </p>
                 <div class="post-footer">
-                  <a href="blog1.html" class="read-more" aria-label="Read full article: Easy Conversation Tools & Tricks for Adult English Learners">
+                  <a href="esl-learners-conversation-confidence.html" class="read-more" aria-label="Read full article: Building Conversation Confidence">
                     Read More <i class="fas fa-arrow-right" aria-hidden="true"></i>
                   </a>
                   <div class="post-stats" aria-label="Article statistics">
-                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 1.2k</span>
-                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 84</span>
+                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 2.8k</span>
+                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 187</span>
+                    <span><i class="fas fa-comment" aria-hidden="true"></i> <span class="sr-only">Comments:</span> 45</span>
                   </div>
                 </div>
               </div>
             </article>
 
+            <!-- ESL Teachers Category -->
             <article
               class="blog-post"
-              data-category="esl-learners"
-              data-date="2025-06-15"
-              data-title="Easy Conversation Tools"
+              data-category="esl-teachers"
+              data-date="2024-12-12"
+              data-title="Modern Classroom Management Strategies"
             >
               <img
-                src="images/image copy 7.png"
-                alt="English Learning"
+                src="../images/education-4382169_1280.jpg"
+                alt="Modern ESL classroom with engaged students and innovative teaching methods"
                 class="post-image"
+                loading="lazy"
+                decoding="async"
               />
               <div class="post-content">
                 <div class="post-meta">
-                  <span class="post-category">ESL Learners</span>
-                  <span><i class="fas fa-calendar-alt"></i> June 15, 2025</span>
-                  <span><i class="fas fa-user"></i> Sarah Chen</span>
+                  <span class="post-category">ESL Teachers</span>
+                  <time datetime="2024-12-12"><i class="fas fa-calendar-alt" aria-hidden="true"></i> December 12, 2024</time>
+                  <span><i class="fas fa-user" aria-hidden="true"></i> Dr. Michael Rodriguez, Education Specialist</span>
                 </div>
                 <h2 class="post-title">
-                  Easy Grammar Tools & Tricks for Teens
+                  <a href="esl-teachers-classroom-management.html" class="post-title-link">Modern Classroom Management: Innovative Strategies for ESL Teachers</a>
                 </h2>
                 <p class="post-excerpt">
-                  Explore engaging grammar tools and techniques tailored for
-                  teenage English learners. Discover fun phrases, relatable
-                  conversation starters, and interactive activities that make
-                  practicing English enjoyable and effective.
+                  Revolutionize your teaching approach with cutting-edge classroom management techniques designed specifically for ESL environments. Features interactive activity generators, student grouping strategies, behavior management tools, and comprehensive resources for creating an engaging and productive learning atmosphere.
                 </p>
                 <div class="post-footer">
-                  <a href="blog/blog4.html" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
+                  <a href="esl-teachers-classroom-management.html" class="read-more" aria-label="Read full article: Modern Classroom Management">
+                    Read More <i class="fas fa-arrow-right" aria-hidden="true"></i>
                   </a>
-                  <div class="post-stats">
-                    <span><i class="fas fa-eye"></i> 1.2k</span>
-                    <span><i class="fas fa-heart"></i> 84</span>
+                  <div class="post-stats" aria-label="Article statistics">
+                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 3.2k</span>
+                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 298</span>
+                    <span><i class="fas fa-comment" aria-hidden="true"></i> <span class="sr-only">Comments:</span> 67</span>
                   </div>
                 </div>
               </div>
             </article>
 
+            <!-- ESL Lessons Category -->
             <article
               class="blog-post"
-              data-category="esl-learners"
-              data-date="2025-06-15"
-              data-title="Easy Conversation Tools"
+              data-category="esl-lessons"
+              data-date="2024-12-12"
+              data-title="Creative Lesson Planning Ideas"
             >
               <img
-                src="images/image copy 8.png"
-                alt="English Learning"
+                src="../images/library-7976837_1280.jpg"
+                alt="Creative ESL lesson planning with innovative teaching materials and activities"
                 class="post-image"
+                loading="lazy"
+                decoding="async"
               />
               <div class="post-content">
                 <div class="post-meta">
-                  <span class="post-category">ESL Learners</span>
-                  <span><i class="fas fa-calendar-alt"></i> June 15, 2025</span>
-                  <span><i class="fas fa-user"></i> Sarah Chen</span>
-                </div>
-                <h2 class="post-title">Quirky Conversation Starters</h2>
-                <p class="post-excerpt">
-                  Discover a collection of quirky and fun conversation starters
-                  designed specifically for ESL learners. These prompts will
-                  help break the ice and encourage lively discussions in the
-                  classroom or language exchange settings.
-                </p>
-                <div class="post-footer">
-                  <a href="blog/blog3.html" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
-                  </a>
-                  <div class="post-stats">
-                    <span><i class="fas fa-eye"></i> 1.2k</span>
-                    <span><i class="fas fa-heart"></i> 84</span>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <!-- ESL Learners Posts -->
-            <article
-              class="blog-post"
-              data-category="esl-learners"
-              data-date="2025-06-12"
-              data-title="IELTS Speaking Strategies"
-            >
-              <img
-                src="images/education-4382169_1280.jpg"
-                alt="IELTS Preparation"
-                class="post-image"
-              />
-              <div class="post-content">
-                <div class="post-meta">
-                  <span class="post-category">ESL Learners</span>
-                  <span><i class="fas fa-calendar-alt"></i> June 12, 2025</span>
-                  <span><i class="fas fa-user"></i> IELTS Expert</span>
+                  <span class="post-category">ESL Lessons</span>
+                  <time datetime="2024-12-12"><i class="fas fa-calendar-alt" aria-hidden="true"></i> December 12, 2024</time>
+                  <span><i class="fas fa-user" aria-hidden="true"></i> Emma Thompson, Curriculum Designer</span>
                 </div>
                 <h2 class="post-title">
-                  Phrasal verbs and Idioms
+                  <a href="esl-lessons-creative-ideas.html" class="post-title-link">Creative Lesson Planning: Innovative Ideas That Transform ESL Learning</a>
                 </h2>
                 <p class="post-excerpt">
-                  Explore the fascinating world of phrasal verbs and idioms in
-                  English. This post provides practical examples and tips for
-                  mastering these expressions, which are essential for fluency
-                  and comprehension.
+                  Discover game-changing lesson planning strategies with our interactive activity generator, emergency lesson creator, and comprehensive teaching toolkit. Transform your ESL lessons with creative ideas, engaging activities, and proven methodologies that make learning memorable and effective for students of all levels.
                 </p>
                 <div class="post-footer">
-                  <a href="blog/blog3.html" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
+                  <a href="esl-lessons-creative-ideas.html" class="read-more" aria-label="Read full article: Creative Lesson Planning">
+                    Read More <i class="fas fa-arrow-right" aria-hidden="true"></i>
                   </a>
-                  <div class="post-stats">
-                    <span><i class="fas fa-eye"></i> 2.1k</span>
-                    <span><i class="fas fa-heart"></i> 156</span>
+                  <div class="post-stats" aria-label="Article statistics">
+                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 4.1k</span>
+                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 356</span>
+                    <span><i class="fas fa-comment" aria-hidden="true"></i> <span class="sr-only">Comments:</span> 89</span>
                   </div>
                 </div>
               </div>
             </article>
 
-                      <article
-            class="blog-post"
-            data-category="esl-learners"
-            data-date="2025-06-12"
-            data-title="IELTS Speaking Strategies"
-          >
-            <img
-              src="images/education-4382169_1280.jpg"
-              alt="IELTS Preparation"
-              class="post-image"
-            />
-            <div class="post-content">
-              <div class="post-meta">
-                <span class="post-category">ESL Learners</span>
-                <span><i class="fas fa-calendar-alt"></i> June 12, 2025</span
-                <span><i class="fas fa-user"></i> IELTS Expert</span>
-              </div>
-              <h2 class="post-title">
-                Conversation advanced
-              </h2>
-              <p class="post-excerpt">
-                Take your English conversation skills to the next level with
-                advanced techniques and strategies. This post covers complex
-                topics, idiomatic expressions, and tips for engaging in deep
-                discussions.
-              </p>
-              <div class="post-footer">
-                <a href="blog2.html.html" class="read-more">
-                  Read More <i class="fas fa-arrow-right"></i>
-                </a>
-                <div class="post-stats">
-                  <span><i class="fas fa-eye"></i> 2.1k</span>
-                  <span><i class="fas fa-heart"></i> 156</span>
+            <!-- Coding Corner Category -->
+            <article
+              class="blog-post"
+              data-category="coding-corner"
+              data-date="2024-12-12"
+              data-title="Web Development Fundamentals"
+            >
+              <img
+                src="../images/coding.jpg"
+                alt="Web development fundamentals with HTML, CSS, and JavaScript code examples"
+                class="post-image"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="post-content">
+                <div class="post-meta">
+                  <span class="post-category">Coding Corner</span>
+                  <time datetime="2024-12-12"><i class="fas fa-calendar-alt" aria-hidden="true"></i> December 12, 2024</time>
+                  <span><i class="fas fa-user" aria-hidden="true"></i> Alex Chen, Full-Stack Developer</span>
+                </div>
+                <h2 class="post-title">
+                  <a href="coding-web-development-fundamentals.html" class="post-title-link">Web Development Fundamentals for Beginners</a>
+                </h2>
+                <p class="post-excerpt">
+                  Master the holy trinity of web development: HTML, CSS, and JavaScript. This comprehensive guide features interactive code generators, hands-on projects, and a complete roadmap to becoming a web developer. Perfect for absolute beginners who want to build their first website and understand how the web works.
+                </p>
+                <div class="post-footer">
+                  <a href="coding-web-development-fundamentals.html" class="read-more" aria-label="Read full article: Web Development Fundamentals">
+                    Read More <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                  </a>
+                  <div class="post-stats" aria-label="Article statistics">
+                    <span><i class="fas fa-eye" aria-hidden="true"></i> <span class="sr-only">Views:</span> 5.7k</span>
+                    <span><i class="fas fa-heart" aria-hidden="true"></i> <span class="sr-only">Likes:</span> 423</span>
+                    <span><i class="fas fa-comment" aria-hidden="true"></i> <span class="sr-only">Comments:</span> 112</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
-
-            <!-- ESL Teachers Posts -->
+            </article>
+          </div>
             <article
               class="blog-post"
               data-category="esl-teachers"
@@ -1298,9 +1353,11 @@
               data-title="Weekend Activities Lesson"
             >
               <img
-                src="images/onlinelearning.jpg"
+                src="../images/education-4382169_1280.jpg"
                 alt="ESL Lesson"
                 class="post-image"
+                loading="lazy"
+                decoding="async"
               />
               <div class="post-content">
                 <div class="post-meta">
@@ -1316,7 +1373,7 @@
                   levels.
                 </p>
                 <div class="post-footer">
-                  <a href="blogesl1.html" class="read-more">
+                  <a href="#" class="read-more" data-post="weekend-activities">
                     Read More <i class="fas fa-arrow-right"></i>
                   </a>
                   <div class="post-stats">
@@ -1472,7 +1529,7 @@
                   complaints, and follow-ups.
                 </p>
                 <div class="post-footer">
-                  <a href="blog/busemail.html" class="read-more">
+                  <a href="#" class="read-more" data-post="business-emails">
                     Read More <i class="fas fa-arrow-right"></i>
                   </a>
                   <div class="post-stats">
@@ -1598,44 +1655,6 @@
               </div>
             </article>
 
-            <!-- ESL Lessons Posts -->
-            <article
-              class="blog-post"
-              data-category="esl-lessons"
-              data-date="2025-06-03"
-              data-title="Cultural Exchange Lessons"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                alt="Cultural Exchange"
-                class="post-image"
-              />
-              <div class="post-content">
-                <div class="post-meta">
-                  <span class="post-category">ESL Lessons</span>
-                  <span><i class="fas fa-calendar-alt"></i> June 3, 2025</span>
-                  <span><i class="fas fa-user"></i> Culture Connect</span>
-                </div>
-                <h2 class="post-title">
-                  Cultural Exchange Activities for ESL Classrooms
-                </h2>
-                <p class="post-excerpt">
-                  Foster cultural understanding and language practice with these
-                  engaging cultural exchange activities. Help students share
-                  their backgrounds while learning about others in meaningful
-                  ways.
-                </p>
-                <div class="post-footer">
-                  <a href="#" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
-                  </a>
-                  <div class="post-stats">
-                    <span><i class="fas fa-eye"></i> 1.4k</span>
-                    <span><i class="fas fa-heart"></i> 98</span>
-                  </div>
-                </div>
-              </div>
-            </article>
           </div>
 
           <!-- No Posts Message (hidden by default) -->
@@ -1649,13 +1668,13 @@
 
           <!-- Pagination -->
           <nav class="pagination" id="pagination" aria-label="Blog posts pagination">
-            <button class="page-link" id="prevPage" aria-label="Go to previous page" disabled>
+            <button class="page-link" id="prevPage" aria-label="Go to previous page" onclick="changePage(-1)" disabled>
               <i class="fas fa-chevron-left" aria-hidden="true"></i>
             </button>
-            <button class="page-link active" aria-label="Current page, page 1" aria-current="page">1</button>
-            <button class="page-link" aria-label="Go to page 2">2</button>
-            <button class="page-link" aria-label="Go to page 3">3</button>
-            <button class="page-link" id="nextPage" aria-label="Go to next page">
+            <button class="page-link active" aria-label="Current page, page 1" aria-current="page" onclick="goToPage(1)">1</button>
+            <button class="page-link" aria-label="Go to page 2" onclick="goToPage(2)">2</button>
+            <button class="page-link" aria-label="Go to page 3" onclick="goToPage(3)">3</button>
+            <button class="page-link" id="nextPage" aria-label="Go to next page" onclick="changePage(1)">
               <i class="fas fa-chevron-right" aria-hidden="true"></i>
             </button>
           </nav>
@@ -1670,7 +1689,7 @@
               <li class="category-item">
                 <a href="#" class="category-link" data-category="esl-learners">
                   <span><i class="fas fa-user-graduate"></i> ESL Learners</span>
-                  <span class="category-count">4</span>
+                  <span class="category-count">2</span>
                 </a>
               </li>
               <li class="category-item">
@@ -1679,7 +1698,7 @@
                     ><i class="fas fa-chalkboard-teacher"></i> ESL
                     Teachers</span
                   >
-                  <span class="category-count">3</span>
+                  <span class="category-count">4</span>
                 </a>
               </li>
               <li class="category-item">
@@ -1691,7 +1710,7 @@
               <li class="category-item">
                 <a href="#" class="category-link" data-category="coding-corner">
                   <span><i class="fas fa-code"></i> Coding Corner</span>
-                  <span class="category-count">3</span>
+                  <span class="category-count">4</span>
                 </a>
               </li>
             </ul>
@@ -1722,47 +1741,62 @@
             <div class="recent-posts">
               <article class="recent-post">
                 <img
-                  src="images/library-7976837_1280.jpg"
-                  alt=""
+                  src="../images/hands-820272_1280.jpg"
+                  alt="Conversation confidence building"
                   class="recent-post-thumb"
                 />
                 <div class="recent-post-content">
                   <h4 class="recent-post-title">
-                    Easy Conversation Tools & Tricks
+                    Building Conversation Confidence
                   </h4>
                   <div class="recent-post-meta">
                     <span
-                      ><i class="fas fa-calendar-alt"></i> June 15, 2025</span
+                      ><i class="fas fa-calendar-alt"></i> December 12, 2024</span
                     >
                   </div>
                 </div>
               </article>
               <article class="recent-post">
                 <img
-                  src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                  alt=""
+                  src="../images/education-4382169_1280.jpg"
+                  alt="Modern classroom management"
                   class="recent-post-thumb"
                 />
                 <div class="recent-post-content">
-                  <h4 class="recent-post-title">JavaScript Fundamentals</h4>
+                  <h4 class="recent-post-title">Modern Classroom Management</h4>
                   <div class="recent-post-meta">
                     <span
-                      ><i class="fas fa-calendar-alt"></i> June 14, 2025</span
+                      ><i class="fas fa-calendar-alt"></i> December 12, 2024</span
                     >
                   </div>
                 </div>
               </article>
               <article class="recent-post">
                 <img
-                  src="images/education-4382169_1280.jpg"
-                  alt=""
+                  src="../images/library-7976837_1280.jpg"
+                  alt="Creative lesson planning"
                   class="recent-post-thumb"
                 />
                 <div class="recent-post-content">
-                  <h4 class="recent-post-title">IELTS Speaking Strategies</h4>
+                  <h4 class="recent-post-title">Creative Lesson Planning</h4>
                   <div class="recent-post-meta">
                     <span
-                      ><i class="fas fa-calendar-alt"></i> June 12, 2025</span
+                      ><i class="fas fa-calendar-alt"></i> December 12, 2024</span
+                    >
+                  </div>
+                </div>
+              </article>
+              <article class="recent-post">
+                <img
+                  src="../images/coding.jpg"
+                  alt="Web development fundamentals"
+                  class="recent-post-thumb"
+                />
+                <div class="recent-post-content">
+                  <h4 class="recent-post-title">Web Development Fundamentals</h4>
+                  <div class="recent-post-meta">
+                    <span
+                      ><i class="fas fa-calendar-alt"></i> December 12, 2024</span
                     >
                   </div>
                 </div>
@@ -1772,98 +1806,6 @@
         </aside>
       </div>
     </div>
-
-        <!-- Enhanced Professional Footer -->
-    <footer>
-      <!-- Newsletter Section -->
-      <div class="footer-newsletter">
-        <div class="container">
-          <div class="newsletter-content">
-            <div class="newsletter-text">
-              <h3><i class="fas fa-paper-plane"></i> Stay Updated</h3>
-              <p>Get learning tips delivered to your inbox</p>
-            </div>
-            <div class="newsletter-form">
-              <input type="email" placeholder="Enter email" id="newsletterEmail">
-              <button type="button" class="btn-newsletter" onclick="subscribeNewsletter()">
-                <i class="fas fa-arrow-right"></i>
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="footer-content">
-          <!-- Brand Section -->
-          <div class="footer-section footer-brand">
-            <div class="brand-header">
-              <img src="images/1.png" alt="ESL Fun Online" class="footer-logo">
-              <h3>ESL Fun Online</h3>
-            </div>
-            <p>
-              Transform your English and coding skills with our premium interactive resources.
-            </p>
-          </div>
-
-          <!-- English Learning Section -->
-          <div class="footer-section">
-            <h3><i class="fas fa-graduation-cap"></i> English</h3>
-            <ul>
-              <li><a href="english/grammar.html"><i class="fas fa-spell-check"></i><span>Grammar</span></a></li>
-              <li><a href="english/vocabguide.html"><i class="fas fa-book-open"></i><span>Vocabulary</span></a></li>
-              <li><a href="english/business.html"><i class="fas fa-handshake"></i><span>Business</span></a></li>
-            </ul>
-          </div>
-
-          <!-- Programming Section -->
-          <div class="footer-section">
-            <h3><i class="fas fa-code"></i> Coding</h3>
-            <ul>
-              <li><a href="coding/computerbasics.html"><i class="fas fa-desktop"></i><span>Basics</span></a></li>
-              <li><a href="coding/ai.html"><i class="fas fa-robot"></i><span>AI</span></a></li>
-              <li><a href="coding/codingresources.html"><i class="fas fa-terminal"></i><span>Resources</span></a></li>
-            </ul>
-          </div>
-
-          <!-- Quick Links Section -->
-          <div class="footer-section">
-            <h3><i class="fas fa-link"></i> Quick Links</h3>
-            <ul>
-              <li><a href="lessons.html"><i class="fas fa-chalkboard-teacher"></i><span>Lessons</span></a></li>
-              <li><a href="games/games.html"><i class="fas fa-gamepad"></i><span>Games</span></a></li>
-              <li><a href="tools/tools.html"><i class="fas fa-tools"></i><span>Tools</span></a></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Footer Bottom -->
-        <div class="footer-bottom">
-          <div class="footer-bottom-center">
-            <div class="footer-links">
-              <a href="privacy.html"><i class="fas fa-shield-alt"></i>Privacy</a>
-              <a href="terms.html"><i class="fas fa-file-contract"></i>Terms</a>
-              <a href="cookies.html"><i class="fas fa-cookie-bite"></i>Cookies</a>
-            </div>
-          </div>
-          
-          <div class="footer-bottom-left">
-            <p>&copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.</p>
-            <p class="footer-subtitle">Empowering learners worldwide</p>
-          </div>
-
-          <div class="footer-bottom-right">
-            <div class="footer-badges">
-              <div class="badge"><i class="fas fa-award"></i><span>Certified</span></div>
-              <div class="badge"><i class="fas fa-lock"></i><span>Secure</span></div>
-            </div>
-          </div>
-
-    <!-- Back to Top Button -->
-    <a href="#" class="back-to-top" id="backToTop">
-      <i class="fas fa-chevron-up"></i>
-    </a>
 
     <script>
       // Enhanced Blog functionality with performance optimizations and accessibility
@@ -1907,11 +1849,11 @@
         function initializeBlog() {
           try {
             cacheElements();
-            validateElements();
             setupEventListeners();
             initializeState();
             setupIntersectionObserver();
-            setupKeyboardNavigation();
+            createBackToTopButton();
+            setupSidebarCategoryLinks();
             announceToScreenReader("Blog loaded successfully");
           } catch (error) {
             console.error("Failed to initialize blog:", error);
@@ -1928,42 +1870,60 @@
           elements.noPostsMessage = document.getElementById("noPosts");
           elements.activeFilter = document.querySelector(".active-filter");
           elements.postCount = document.querySelector(".post-count");
-          elements.backToTop = document.getElementById("backToTop");
-          elements.postsPanel = document.getElementById("posts-panel");
-        }
-
-        function validateElements() {
-          const requiredElements = ['categoryTabs', 'blogPosts', 'searchInput', 'sortSelect'];
-          const missingElements = requiredElements.filter(key => !elements[key] || elements[key].length === 0);
-          
-          if (missingElements.length > 0) {
-            throw new Error(`Missing required elements: ${missingElements.join(', ')}`);
-          }
+          elements.backToTop = document.querySelector(".back-to-top");
+          elements.postsPanel = elements.postsContainer;
         }
 
         function initializeState() {
           state.allPosts = Array.from(elements.blogPosts);
           state.filteredPosts = [...state.allPosts];
           updatePostCount();
+          
+          // Show all posts initially with animation
+          elements.blogPosts.forEach((post, index) => {
+            setTimeout(() => {
+              post.classList.add("visible");
+            }, index * 100);
+          });
+        }
+
+        function createBackToTopButton() {
+          if (!elements.backToTop) {
+            const button = document.createElement('button');
+            button.className = 'back-to-top';
+            button.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            button.setAttribute('aria-label', 'Back to top');
+            button.style.display = 'none';
+            document.body.appendChild(button);
+            elements.backToTop = button;
+          }
         }
 
         function setupEventListeners() {
           // Category filtering with improved accessibility
-          elements.categoryTabs.forEach((tab, index) => {
-            tab.addEventListener("click", handleCategoryClick);
-            tab.addEventListener("keydown", (e) => handleTabKeydown(e, index));
-          });
+          if (elements.categoryTabs.length > 0) {
+            elements.categoryTabs.forEach((tab, index) => {
+              tab.addEventListener("click", handleCategoryClick);
+              tab.addEventListener("keydown", (e) => handleTabKeydown(e, index));
+            });
+          }
 
           // Search with debouncing
-          elements.searchInput.addEventListener("input", debounce(handleSearchInput, CONFIG.DEBOUNCE_DELAY));
-          elements.searchInput.addEventListener("keydown", handleSearchKeydown);
+          if (elements.searchInput) {
+            elements.searchInput.addEventListener("input", debounce(handleSearchInput, CONFIG.DEBOUNCE_DELAY));
+            elements.searchInput.addEventListener("keydown", handleSearchKeydown);
+          }
 
           // Sort functionality
-          elements.sortSelect.addEventListener("change", handleSortChange);
+          if (elements.sortSelect) {
+            elements.sortSelect.addEventListener("change", handleSortChange);
+          }
 
           // Back to top with throttling
           window.addEventListener("scroll", throttle(handleScroll, 100));
-          elements.backToTop?.addEventListener("click", handleBackToTopClick);
+          if (elements.backToTop) {
+            elements.backToTop.addEventListener("click", handleBackToTopClick);
+          }
 
           // Keyboard navigation
           document.addEventListener("keydown", handleGlobalKeydown);
@@ -1986,11 +1946,6 @@
 
             clickedTab.classList.add("active");
             clickedTab.setAttribute("aria-selected", "true");
-
-            // Update panel label
-            if (elements.postsPanel) {
-              elements.postsPanel.setAttribute("aria-labelledby", clickedTab.id);
-            }
 
             state.currentCategory = category;
             
@@ -2064,7 +2019,17 @@
           const scrolled = window.pageYOffset > 300;
           
           if (elements.backToTop) {
-            elements.backToTop.classList.toggle("show", scrolled);
+            if (scrolled) {
+              elements.backToTop.style.display = 'flex';
+              elements.backToTop.classList.add("show");
+            } else {
+              elements.backToTop.classList.remove("show");
+              setTimeout(() => {
+                if (!elements.backToTop.classList.contains("show")) {
+                  elements.backToTop.style.display = 'none';
+                }
+              }, 300);
+            }
           }
         }
 
@@ -2072,16 +2037,20 @@
           event.preventDefault();
           window.scrollTo({ 
             top: 0, 
-            behavior: supportsSmoothScrolling() ? "smooth" : "auto"
+            behavior: 'smooth'
           });
           announceToScreenReader("Scrolled to top");
         }
 
         function handleGlobalKeydown(event) {
-          // Quick search with Ctrl/Cmd + F
-          if ((event.ctrlKey || event.metaKey) && event.key === "f" && elements.searchInput) {
-            event.preventDefault();
-            elements.searchInput.focus();
+          // Only keep essential keyboard functionality
+          if (event.key === "Escape") {
+            // Close any open modals or reset search
+            if (elements.searchInput && elements.searchInput.value) {
+              elements.searchInput.value = "";
+              filterPosts("");
+              announceToScreenReader("Search cleared");
+            }
           }
         }
 
@@ -2089,12 +2058,12 @@
           if (!elements.blogPosts) return;
 
           let visibleCount = 0;
-          const currentSearchTerm = searchTerm || elements.searchInput.value.toLowerCase().trim();
+          const currentSearchTerm = searchTerm || (elements.searchInput ? elements.searchInput.value.toLowerCase().trim() : "");
 
           elements.blogPosts.forEach((post, index) => {
             const category = post.dataset.category;
-            const title = post.dataset.title.toLowerCase();
-            const excerpt = post.querySelector(".post-excerpt")?.textContent.toLowerCase() || "";
+            const title = (post.dataset.title || "").toLowerCase();
+            const excerpt = (post.querySelector(".post-excerpt")?.textContent || "").toLowerCase();
 
             const matchesCategory = state.currentCategory === "all" || category === state.currentCategory;
             const matchesSearch = !currentSearchTerm || 
@@ -2108,10 +2077,12 @@
               if (shouldShow) {
                 post.classList.remove("hidden");
                 post.classList.add("visible");
+                post.style.display = "block";
                 post.style.animationDelay = `${index * 50}ms`;
               } else {
                 post.classList.add("hidden");
                 post.classList.remove("visible");
+                post.style.display = "none";
               }
             });
 
@@ -2139,9 +2110,9 @@
               case "date-asc":
                 return new Date(a.dataset.date) - new Date(b.dataset.date);
               case "title-asc":
-                return a.dataset.title.localeCompare(b.dataset.title);
+                return (a.dataset.title || "").localeCompare(b.dataset.title || "");
               case "title-desc":
-                return b.dataset.title.localeCompare(a.dataset.title);
+                return (b.dataset.title || "").localeCompare(a.dataset.title || "");
               default:
                 return 0;
             }
@@ -2196,8 +2167,8 @@
           elements.blogPosts.forEach(post => observer.observe(post));
         }
 
-        function setupKeyboardNavigation() {
-          // Enhanced keyboard navigation for sidebar links
+        function setupSidebarCategoryLinks() {
+          // Simple sidebar category link integration
           const sidebarCategoryLinks = document.querySelectorAll(".category-link");
           
           sidebarCategoryLinks.forEach(link => {
@@ -2209,7 +2180,6 @@
               );
               
               if (correspondingTab) {
-                correspondingTab.focus();
                 correspondingTab.click();
               }
             });
@@ -2252,7 +2222,9 @@
           document.body.appendChild(announcement);
           
           setTimeout(() => {
-            document.body.removeChild(announcement);
+            if (announcement.parentNode) {
+              document.body.removeChild(announcement);
+            }
           }, 1000);
         }
 
@@ -2347,125 +2319,265 @@
       }
     </style>
 
-    <!-- Footer -->
-    <footer role="contentinfo">
-      <div class="container">
-        <div class="footer-content">
-          <section class="footer-section">
-            <h3>ESL Fun Online</h3>
-            <p>
-              Your go-to platform for premium English learning resources,
-              interactive coding tutorials, and comprehensive test preparation
-              materials. Join us to enhance your skills and achieve your goals.
-            </p>
-          </section>
-
-          <section class="footer-section">
-            <h3>English Learning</h3>
-            <ul>
-              <li>
-                <a href="../english/grammar.html">
-                  <i class="fas fa-spell-check" aria-hidden="true"></i> Grammar Guide
-                </a>
-              </li>
-              <li>
-                <a href="../english/vocabguide.html">
-                  <i class="fas fa-book-open" aria-hidden="true"></i> Vocabulary Builder
-                </a>
-              </li>
-              <li>
-                <a href="../english/ielts.html">
-                  <i class="fas fa-certificate" aria-hidden="true"></i> IELTS Preparation
-                </a>
-              </li>
-              <li>
-                <a href="../english/toeic.html">
-                  <i class="fas fa-briefcase" aria-hidden="true"></i> TOEIC Preparation
-                </a>
-              </li>
-              <li>
-                <a href="../english/eiken.html">
-                  <i class="fas fa-graduation-cap" aria-hidden="true"></i> EIKEN Preparation
-                </a>
-              </li>
-            </ul>
-          </section>
-
-          <section class="footer-section">
-            <h3>Programming</h3>
-            <ul>
-              <li>
-                <a href="../coding/computerbasics.html">
-                  <i class="fas fa-desktop" aria-hidden="true"></i> Computer Basics
-                </a>
-              </li>
-              <li>
-                <a href="../coding/ai.html">
-                  <i class="fas fa-robot" aria-hidden="true"></i> AI Basics
-                </a>
-              </li>
-              <li>
-                <a href="../coding/codingresources.html">
-                  <i class="fas fa-code" aria-hidden="true"></i> Coding Basics
-                </a>
-              </li>
-              <li>
-                <a href="../games/games.html">
-                  <i class="fas fa-gamepad" aria-hidden="true"></i> Coding Games
-                </a>
-              </li>
-              <li>
-                <a href="../tools/tools.html">
-                  <i class="fas fa-tools" aria-hidden="true"></i> Developer Tools
-                </a>
-              </li>
-            </ul>
-          </section>
-
-          <section class="footer-section">
-            <h3>Resources</h3>
-            <ul>
-              <li>
-                <a href="../blog/blog.html">
-                  <i class="fas fa-blog" aria-hidden="true"></i> Learning Blog
-                </a>
-              </li>
-              <li>
-                <a href="../tools/tools.html">
-                  <i class="fas fa-toolbox" aria-hidden="true"></i> Study Tools
-                </a>
-              </li>
-              <li>
-                <a href="../games/games.html">
-                  <i class="fas fa-dice" aria-hidden="true"></i> Educational Games
-                </a>
-              </li>
-              <li>
-                <a href="../questions.html">
-                  <i class="fas fa-question-circle" aria-hidden="true"></i> Help Center
-                </a>
-              </li>
-              <li>
-                <a href="../contact.html">
-                  <i class="fas fa-envelope" aria-hidden="true"></i> Contact
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
-
-        <div class="footer-bottom">
-          <p>&copy; 2025 ESL Fun Online. All rights reserved.</p>
-          <div class="footer-links">
-            <a href="../privacy.html">Privacy Policy</a>
-            <a href="../terms.html">Terms of Service</a>
-            <a href="../cookies.html">Cookie Policy</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer Component -->
+    <div id="footer-component"></div>
 
     <!-- Main JavaScript -->
     <script src="../js/main.js"></script>
+    <script src="../js/footer-component.js"></script>
+    <script src="../js/blog-enhancements.js"></script>
+
+    <!-- Additional blog-specific functionality -->
+    <script>
+      // Blog-specific initialization to ensure everything works
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize mobile navigation if main.js didn't handle it
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileToggle && navLinks && !window.eslNavigationInitialized) {
+          let isMenuOpen = false;
+          
+          mobileToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            isMenuOpen = !isMenuOpen;
+            
+            navLinks.classList.toggle('active', isMenuOpen);
+            document.body.classList.toggle('mobile-menu-open', isMenuOpen);
+            
+            const icon = mobileToggle.querySelector('i');
+            if (icon) {
+              icon.className = isMenuOpen ? 'fas fa-times' : 'fas fa-bars';
+            }
+            
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+          });
+          
+          // Close menu when clicking outside
+          document.addEventListener('click', function(e) {
+            if (isMenuOpen && !mobileToggle.contains(e.target) && !navLinks.contains(e.target)) {
+              isMenuOpen = false;
+              navLinks.classList.remove('active');
+              document.body.classList.remove('mobile-menu-open');
+              document.body.style.overflow = '';
+              
+              const icon = mobileToggle.querySelector('i');
+              if (icon) {
+                icon.className = 'fas fa-bars';
+              }
+            }
+          });
+          
+          // Close menu with Escape key
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMenuOpen) {
+              isMenuOpen = false;
+              navLinks.classList.remove('active');
+              document.body.classList.remove('mobile-menu-open');
+              document.body.style.overflow = '';
+              
+              const icon = mobileToggle.querySelector('i');
+              if (icon) {
+                icon.className = 'fas fa-bars';
+              }
+              
+              mobileToggle.focus();
+            }
+          });
+          
+          window.eslNavigationInitialized = true;
+        }
+        
+        // Initialize theme toggle if main.js didn't handle it
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle && !window.eslThemeInitialized) {
+          const body = document.body;
+          
+          // Load saved theme
+          const savedTheme = localStorage.getItem('esl-theme') || 'light';
+          if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (icon) {
+              icon.className = 'fas fa-sun';
+            }
+          }
+          
+          themeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const isDark = body.classList.contains('dark-mode');
+            body.classList.toggle('dark-mode');
+            
+            const icon = themeToggle.querySelector('i');
+            if (icon) {
+              icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+            }
+            
+            // Save theme preference
+            localStorage.setItem('esl-theme', isDark ? 'light' : 'dark');
+          });
+          
+          window.eslThemeInitialized = true;
+        }
+        
+        // Fix broken links and ensure functionality
+        const allReadMoreLinks = document.querySelectorAll('.read-more');
+        allReadMoreLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' || !link.getAttribute('href')) {
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
+              // For demo purposes, show a message about the article
+              const postTitle = this.closest('.blog-post').querySelector('.post-title').textContent;
+              alert(`Article "${postTitle}" would open here. This is a demo page.`);
+            });
+          }
+        });
+        
+        // Fix broken image sources
+        const brokenImages = document.querySelectorAll('img[src*="images/onlinelearning.jpg"]');
+        brokenImages.forEach(img => {
+          img.src = '../images/education-4382169_1280.jpg';
+        });
+        
+        // Initialize sidebar category links
+        const sidebarCategoryLinks = document.querySelectorAll('.sidebar .category-link');
+        sidebarCategoryLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const category = this.dataset.category;
+            const correspondingTab = document.querySelector(`.category-tab[data-category="${category}"]`);
+            if (correspondingTab) {
+              correspondingTab.click();
+            }
+          });
+        });
+        
+        // Initialize tag filtering
+        const tags = document.querySelectorAll('.tag');
+        tags.forEach(tag => {
+          tag.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tagText = this.textContent.toLowerCase();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+              searchInput.value = tagText;
+              searchInput.dispatchEvent(new Event('input'));
+            }
+          });
+        });
+        
+        console.log('Blog page fully initialized');
+      });
+      
+      // Pagination functionality
+      let currentPage = 1;
+      const postsPerPage = 6;
+      
+      function changePage(direction) {
+        const totalPosts = document.querySelectorAll('.blog-post:not(.hidden)').length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+        
+        currentPage += direction;
+        
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        updatePagination();
+        showPostsForPage(currentPage);
+      }
+      
+      function goToPage(page) {
+        currentPage = page;
+        updatePagination();
+        showPostsForPage(currentPage);
+      }
+      
+      function updatePagination() {
+        const totalPosts = document.querySelectorAll('.blog-post:not(.hidden)').length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+        
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const pageButtons = document.querySelectorAll('.page-link:not(#prevPage):not(#nextPage)');
+        
+        if (prevBtn) prevBtn.disabled = currentPage === 1;
+        if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+        
+        pageButtons.forEach((btn, index) => {
+          const pageNum = index + 1;
+          btn.classList.toggle('active', pageNum === currentPage);
+          btn.setAttribute('aria-current', pageNum === currentPage ? 'page' : 'false');
+        });
+      }
+      
+      function showPostsForPage(page) {
+        const visiblePosts = Array.from(document.querySelectorAll('.blog-post:not(.hidden)'));
+        const startIndex = (page - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        
+        visiblePosts.forEach((post, index) => {
+          if (index >= startIndex && index < endIndex) {
+            post.style.display = 'block';
+          } else {
+            post.style.display = 'none';
+          }
+        });
+        
+        // Scroll to top of posts
+        const postsContainer = document.getElementById('postsContainer');
+        if (postsContainer) {
+          postsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+      
+      // Newsletter subscription functionality
+      function subscribeNewsletter() {
+        const emailInput = document.getElementById('newsletterEmail');
+        if (!emailInput) return;
+        
+        const email = emailInput.value.trim();
+        
+        if (!email) {
+          alert('Please enter your email address');
+          return;
+        }
+        
+        if (!isValidEmail(email)) {
+          alert('Please enter a valid email address');
+          return;
+        }
+        
+        // Simulate subscription
+        const btn = document.querySelector('.btn-newsletter');
+        if (btn) {
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+          btn.disabled = true;
+          
+          setTimeout(() => {
+            alert('Thank you for subscribing! Check your email for confirmation.');
+            emailInput.value = '';
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }, 2000);
+        }
+      }
+      
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+      
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    </script>
   </body>
 </html>
