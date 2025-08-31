@@ -258,11 +258,11 @@
         overflow-y: auto;
       }
 
-      /* Card Styles - Enhanced for PNG support */
+      /* Card Styles - Improved for better readability */
       .card {
-        width: 70px;
-        height: 105px;
-        border-radius: 10px;
+        width: 90px;
+        height: 135px;
+        border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -271,17 +271,40 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: var(--card-shadow);
         position: relative;
-        font-weight: 700;
-        font-size: 0.75rem;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        font-weight: 800;
+        font-size: 1rem;
+        border: 3px solid rgba(255, 255, 255, 0.4);
         user-select: none;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Corner numbers for better readability */
+      .card::after {
+        content: attr(data-value);
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: 0.8rem;
+        font-weight: 900;
+        opacity: 0.9;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      .card::before {
+        content: attr(data-value);
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        font-size: 0.8rem;
+        font-weight: 900;
+        opacity: 0.9;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        transform: rotate(180deg);
       }
 
       .card:hover {
-        transform: translateY(-8px) scale(1.03);
+        transform: translateY(-8px) scale(1.05);
         box-shadow: var(--card-hover-shadow);
         z-index: 10;
       }
@@ -297,35 +320,77 @@
           box-shadow: var(--card-shadow);
         }
         to {
-          box-shadow: 0 0 15px #ffd700, var(--card-shadow);
+          box-shadow: 0 0 20px #ffd700, var(--card-shadow);
         }
       }
 
       .card.red {
-        background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+        background: linear-gradient(135deg, #e53e3e, #ff6b6b);
+        border-color: #c53030;
+        box-shadow: 0 8px 25px rgba(229, 62, 62, 0.3);
       }
       .card.blue {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        background: linear-gradient(135deg, #3182ce, #4299e1);
+        border-color: #2b77cb;
+        box-shadow: 0 8px 25px rgba(49, 130, 206, 0.3);
       }
       .card.green {
-        background: linear-gradient(135deg, #a8e6cf, #88d8a3);
+        background: linear-gradient(135deg, #38a169, #48bb78);
+        border-color: #2f855a;
+        box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
       }
       .card.yellow {
-        background: linear-gradient(135deg, #ffe66d, #ff6b6b);
+        background: linear-gradient(135deg, #d69e2e, #ecc94b);
+        border-color: #b7791f;
+        color: #1a202c;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 25px rgba(214, 158, 46, 0.3);
       }
       .card.wild {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #2d3748, #4a5568);
+        border: 3px solid #a0aec0;
         color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(45, 55, 72, 0.4);
       }
 
-      /* Card with PNG image */
-      .card.has-image {
-        background-blend-mode: overlay;
-        background-size: cover !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        /* For debugging: */
-        border: 2px solid red;
+      .card.wild::after,
+      .card.wild::before {
+        z-index: 3;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 2px 4px;
+        border-radius: 3px;
+      }
+
+      .card.wild .card-content {
+        z-index: 2 !important;
+      }
+
+      .card.wild .wild-bg {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          from 0deg,
+          #e53e3e 0deg 90deg,
+          #3182ce 90deg 180deg,
+          #38a169 180deg 270deg,
+          #d69e2e 270deg 360deg
+        );
+        animation: wildRotate 4s linear infinite;
+        z-index: 1;
+      }
+
+      @keyframes wildRotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       .card-back {
@@ -340,21 +405,26 @@
       }
 
       .card-number {
-        font-size: 1.2rem;
-        font-weight: 800;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        margin-bottom: 0.2rem;
       }
 
       .card-icon {
-        font-size: 0.8rem;
-        margin-top: 0.2rem;
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
       }
 
       .card-vocabulary {
-        font-size: 0.6rem;
-        font-weight: 600;
+        font-size: 0.75rem;
+        font-weight: 700;
         text-align: center;
-        margin-top: 0.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        margin-top: 0.2rem;
       }
 
       /* Deck and Draw Pile */
@@ -631,15 +701,22 @@
         }
 
         .card {
-          width: 55px;
-          height: 82px;
-          font-size: 0.7rem;
+          width: 70px;
+          height: 105px;
+          font-size: 0.8rem;
         }
 
         .card-number {
+          font-size: 1.4rem;
+        }
+
+        .card-icon {
           font-size: 1rem;
         }
 
+        .card-vocabulary {
+          font-size: 0.65rem;
+        }
         .game-status {
           flex-direction: column;
           gap: 0.5rem;
@@ -1345,78 +1422,10 @@
         },
       };
 
-      // Enhanced Card definitions with PNG support
+      // Enhanced Card definitions - Clean color-based design
       const colors = ["red", "blue", "green", "yellow"];
       const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       const actions = ["skip", "reverse", "draw2"];
-
-      // PNG card images mapping - using available images from the workspace
-      const cardImages = {
-        // Using available images creatively
-        "red-0": "../images/image copy 2.png",
-        "red-1": "../images/image copy 3.png",
-        "red-2": "../images/image copy 4.png",
-        "red-3": "../images/image copy 5.png",
-        "red-4": "../images/image copy 6.png",
-        "red-5": "../images/image copy 7.png",
-        "red-6": "../images/image copy 8.png",
-        "red-7": "../images/image copy 9.png",
-        "red-8": "../images/image copy.png",
-        "red-9": "../images/image.png",
-        "red-skip": "../images/1.png",
-        "red-reverse": "../images/2.png",
-        "red-draw2": "../images/3.png",
-
-        // Blue cards - educational themed
-        "blue-0": "../images/education-4382169_1280.jpg",
-        "blue-1": "../images/library-7976837_1280.jpg",
-        "blue-2": "../images/hands-820272_1280.jpg",
-        "blue-3": "../images/apple-ipad-551502_1280.jpg",
-        "blue-4": "../images/keyboard-7913431_1280.jpg",
-        "blue-5": "../images/onlinelearning.jpg",
-        "blue-6": "../images/coding.jpg",
-        "blue-7": "../images/abc-3523454_1280.jpg",
-        "blue-8": "../images/Blue Night Sky Cute Whale Desktop Wallpaper.png",
-        "blue-9": "../images/11.png",
-        "blue-skip": "../images/1.png",
-        "blue-reverse": "../images/2.png",
-        "blue-draw2": "../images/3.png",
-
-        // Green cards
-        "green-0": "../images/image copy 2.png",
-        "green-1": "../images/image copy 3.png",
-        "green-2": "../images/image copy 4.png",
-        "green-3": "../images/image copy 5.png",
-        "green-4": "../images/image copy 6.png",
-        "green-5": "../images/image copy 7.png",
-        "green-6": "../images/image copy 8.png",
-        "green-7": "../images/image copy 9.png",
-        "green-8": "../images/image copy.png",
-        "green-9": "../images/image.png",
-        "green-skip": "../images/1.png",
-        "green-reverse": "../images/2.png",
-        "green-draw2": "../images/3.png",
-
-        // Yellow cards
-        "yellow-0": "../images/image copy 2.png",
-        "yellow-1": "../images/image copy 3.png",
-        "yellow-2": "../images/image copy 4.png",
-        "yellow-3": "../images/image copy 5.png",
-        "yellow-4": "../images/image copy 6.png",
-        "yellow-5": "../images/image copy 7.png",
-        "yellow-6": "../images/image copy 8.png",
-        "yellow-7": "../images/image copy 9.png",
-        "yellow-8": "../images/image copy.png",
-        "yellow-9": "../images/image.png",
-        "yellow-skip": "../images/1.png",
-        "yellow-reverse": "../images/2.png",
-        "yellow-draw2": "../images/3.png",
-
-        // Wild cards
-        "wild-wild":
-          "../images/Blue Night Sky Cute Whale Desktop Wallpaper.png",
-        "wild-draw4": "../images/coding.jpg",
-      };
 
       // Enhanced vocabulary words with difficulty levels
       const vocabularyWords = {
@@ -1770,16 +1779,27 @@
           // Player card (face up)
           cardDiv.classList.add(card.color);
 
-          // Check if card has an image
-          const imageKey = `${card.color}-${card.value}`;
-          if (cardImages[imageKey]) {
-            cardDiv.style.backgroundImage = `url(${cardImages[imageKey]})`;
-            cardDiv.classList.add("has-image");
+          // Add data attribute for corner display
+          if (card.type === "number") {
+            cardDiv.setAttribute("data-value", card.value);
+          } else if (card.type === "action") {
+            const actionSymbols = { skip: "⊘", reverse: "↻", draw2: "+2" };
+            cardDiv.setAttribute(
+              "data-value",
+              actionSymbols[card.value] || card.value
+            );
+          } else if (card.type === "wild") {
+            cardDiv.setAttribute(
+              "data-value",
+              card.value === "wild" ? "W" : "+4"
+            );
           }
 
           // Add card content
           const content = document.createElement("div");
           content.className = "card-content";
+          content.style.cssText =
+            "display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;";
 
           if (card.type === "number") {
             const vocabWord = getVocabularyWord(card.color);
@@ -1787,7 +1807,7 @@
             content.innerHTML = `
                         <div class="card-number">${card.value}</div>
                         <div class="card-vocabulary" style="color: ${
-                          isLearned ? "#10b981" : "inherit"
+                          card.color === "yellow" ? "#1a202c" : "white"
                         };">
                           ${vocabWord}${isLearned ? " ✓" : ""}
                         </div>
@@ -1809,12 +1829,18 @@
               wild: "fa-palette",
               draw4: "fa-plus-circle",
             };
+
+            // Add animated background for wild cards
+            const wildBg = document.createElement("div");
+            wildBg.className = "wild-bg";
+            cardDiv.appendChild(wildBg);
+
             content.innerHTML = `
                         <div class="card-icon"><i class="fas ${
                           wildIcons[card.value]
                         }"></i></div>
                         <div class="card-vocabulary">${
-                          card.value === "wild" ? "WILD" : "+4"
+                          card.value === "wild" ? "WILD" : "DRAW 4"
                         }</div>
                     `;
           }
@@ -2312,21 +2338,32 @@
         if (card) {
           currentCardElement.className = `card current-card ${card.color}`;
 
-          // Check if card has an image
-          const imageKey = `${card.color}-${card.value}`;
-          if (cardImages[imageKey]) {
-            currentCardElement.style.backgroundImage = `url(${cardImages[imageKey]})`;
-            currentCardElement.classList.add("has-image");
+          // Add data attribute for corner display
+          if (card.type === "number") {
+            currentCardElement.setAttribute("data-value", card.value);
+          } else if (card.type === "action") {
+            const actionSymbols = { skip: "⊘", reverse: "↻", draw2: "+2" };
+            currentCardElement.setAttribute(
+              "data-value",
+              actionSymbols[card.value] || card.value
+            );
+          } else if (card.type === "wild") {
+            currentCardElement.setAttribute(
+              "data-value",
+              card.value === "wild" ? "W" : "+4"
+            );
           }
 
           let content = "";
+          const textColor = card.color === "yellow" ? "#1a202c" : "white";
+
           if (card.type === "number") {
             content = `
-                        <div class="card-content">
+                        <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;">
                             <div class="card-number">${card.value}</div>
-                            <div class="card-vocabulary">${getVocabularyWord(
-                              card.color
-                            )}</div>
+                            <div class="card-vocabulary" style="color: ${textColor};">${getVocabularyWord(
+              card.color
+            )}</div>
                         </div>
                     `;
           } else if (card.type === "action") {
@@ -2336,11 +2373,11 @@
               draw2: "fa-plus-square",
             };
             content = `
-                        <div class="card-content">
+                        <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;">
                             <div class="card-icon"><i class="fas ${
                               actionIcons[card.value]
                             }"></i></div>
-                            <div class="card-vocabulary">${card.value.toUpperCase()}</div>
+                            <div class="card-vocabulary" style="color: ${textColor};">${card.value.toUpperCase()}</div>
                         </div>
                     `;
           } else if (card.type === "wild") {
@@ -2349,12 +2386,13 @@
               draw4: "fa-plus-circle",
             };
             content = `
-                        <div class="card-content">
+                        <div class="wild-bg"></div>
+                        <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;">
                             <div class="card-icon"><i class="fas ${
                               wildIcons[card.value]
                             }"></i></div>
                             <div class="card-vocabulary">${
-                              card.value === "wild" ? "WILD" : "+4"
+                              card.value === "wild" ? "WILD" : "DRAW 4"
                             }</div>
                         </div>
                     `;

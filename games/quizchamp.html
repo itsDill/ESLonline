@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Champion - ESL Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes bounce {
+        0%,
+        20%,
+        53%,
+        80%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+        40%,
+        43% {
+          transform: translate3d(0, -30px, 0);
+        }
+        70% {
+          transform: translate3d(0, -15px, 0);
+        }
+      }
+      .animate-bounce {
+        animation: bounce 1s infinite;
+      }
+      .bg-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900"
+  >
+    <div id="gameContainer"></div>
+
+    <script>
+      class QuizChampion {
+        constructor() {
+          this.gameState = "menu"; // menu, playing, gameOver
+          this.currentQuestion = 0;
+          this.score = 0;
+          this.timeLeft = 15;
+          this.selectedAnswer = null;
+          this.showResult = false;
+          this.streak = 0;
+          this.powerUpActive = false;
+          this.lives = 3;
+          this.timer = null;
+
+          this.questions = [
+            {
+              question: "What is the largest planet in our solar system?",
+              options: ["Earth", "Jupiter", "Saturn", "Neptune"],
+              correct: 1,
+              category: "Science",
+            },
+            {
+              question:
+                "Which programming language is known as the 'language of the web'?",
+              options: ["Python", "Java", "JavaScript", "C++"],
+              correct: 2,
+              category: "Technology",
+            },
+            {
+              question: "In which year did the Titanic sink?",
+              options: ["1910", "1911", "1912", "1913"],
+              correct: 2,
+              category: "History",
+            },
+            {
+              question: "What is the capital of Australia?",
+              options: ["Sydney", "Melbourne", "Canberra", "Perth"],
+              correct: 2,
+              category: "Geography",
+            },
+            {
+              question: "Which element has the chemical symbol 'Au'?",
+              options: ["Silver", "Gold", "Aluminum", "Argon"],
+              correct: 1,
+              category: "Science",
+            },
+            {
+              question: "Who painted the Mona Lisa?",
+              options: [
+                "Van Gogh",
+                "Picasso",
+                "Leonardo da Vinci",
+                "Michelangelo",
+              ],
+              correct: 2,
+              category: "Art",
+            },
+            {
+              question: "What is the fastest land animal?",
+              options: ["Lion", "Cheetah", "Leopard", "Gazelle"],
+              correct: 1,
+              category: "Nature",
+            },
+            {
+              question: "Which planet is closest to the Sun?",
+              options: ["Venus", "Mercury", "Mars", "Earth"],
+              correct: 1,
+              category: "Science",
+            },
+          ];
+
+          this.container = document.getElementById("gameContainer");
+          this.render();
+        }
+
+        startTimer() {
+          this.timer = setInterval(() => {
+            if (
+              this.gameState === "playing" &&
+              this.timeLeft > 0 &&
+              !this.showResult
+            ) {
+              this.timeLeft--;
+              this.render();
+              if (this.timeLeft === 0) {
+                this.handleTimeUp();
+              }
+            }
+          }, 1000);
+        }
+
+        stopTimer() {
+          if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }
+
+        startGame() {
+          this.gameState = "playing";
+          this.currentQuestion = 0;
+          this.score = 0;
+          this.timeLeft = 15;
+          this.selectedAnswer = null;
+          this.showResult = false;
+          this.streak = 0;
+          this.powerUpActive = false;
+          this.lives = 3;
+          this.render();
+          this.startTimer();
+        }
+
+        handleAnswerSelect(answerIndex) {
+          if (this.showResult) return;
+
+          this.selectedAnswer = answerIndex;
+          this.showResult = true;
+
+          const isCorrect =
+            answerIndex === this.questions[this.currentQuestion].correct;
+
+          if (isCorrect) {
+            const basePoints = this.powerUpActive ? 200 : 100;
+            const bonusPoints = Math.max(0, this.timeLeft * 5);
+            const streakBonus = this.streak >= 3 ? 50 : 0;
+            this.score += basePoints + bonusPoints + streakBonus;
+            this.streak++;
+          } else {
+            this.streak = 0;
+            this.lives--;
+          }
+
+          this.render();
+
+          setTimeout(() => {
+            if (
+              this.currentQuestion + 1 < this.questions.length &&
+              (isCorrect || this.lives > 0)
+            ) {
+              this.nextQuestion();
+            } else {
+              this.endGame();
+            }
+          }, 2000);
+        }
+
+        handleTimeUp() {
+          this.showResult = true;
+          this.streak = 0;
+          this.lives--;
+          this.render();
+
+          setTimeout(() => {
+            if (
+              this.currentQuestion + 1 < this.questions.length &&
+              this.lives > 0
+            ) {
+              this.nextQuestion();
+            } else {
+              this.endGame();
+            }
+          }, 2000);
+        }
+
+        nextQuestion() {
+          this.currentQuestion++;
+          this.timeLeft = 15;
+          this.selectedAnswer = null;
+          this.showResult = false;
+          this.powerUpActive = false;
+          this.render();
+        }
+
+        endGame() {
+          this.gameState = "gameOver";
+          this.stopTimer();
+          this.render();
+        }
+
+        usePowerUp() {
+          if (!this.powerUpActive && this.streak >= 2) {
+            this.powerUpActive = true;
+            this.timeLeft = Math.min(this.timeLeft + 10, 25);
+            this.render();
+          }
+        }
+
+        getScoreRating() {
+          const percentage = (this.score / (this.questions.length * 100)) * 100;
+          if (percentage >= 90)
+            return { rating: "LEGENDARY!", color: "text-yellow-400" };
+          if (percentage >= 75)
+            return { rating: "AMAZING!", color: "text-green-400" };
+          if (percentage >= 60)
+            return { rating: "GREAT!", color: "text-blue-400" };
+          if (percentage >= 45)
+            return { rating: "GOOD!", color: "text-purple-400" };
+          return { rating: "NICE TRY!", color: "text-red-400" };
+        }
+
+        renderMenu() {
+          return `
+                    <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
+                        <div class="text-center space-y-8">
+                            <div class="relative">
+                                <h1 class="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 drop-shadow-2xl animate-bounce">
+                                    QUIZ CHAMPION
+                                </h1>
+                                <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 rounded-lg blur opacity-20"></div>
+                            </div>
+                            
+                            <p class="text-2xl text-white/80 max-w-md mx-auto leading-relaxed">
+                                Test your knowledge across multiple categories in this high-energy quiz challenge!
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div class="text-white/60 space-y-2">
+                                    <p>🎯 Answer quickly for bonus points</p>
+                                    <p>⚡ Build streaks for power-ups</p>
+                                    <p>💎 3 lives to prove your knowledge</p>
+                                </div>
+                            </div>
+                            
+                            <button
+                                onclick="game.startGame()"
+                                class="px-12 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-2xl font-bold rounded-full hover:from-pink-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-2xl"
+                            >
+                                START GAME
+                            </button>
+                        </div>
+                    </div>
+                `;
+        }
+
+        renderGameOver() {
+          const { rating, color } = this.getScoreRating();
+          return `
+                    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
+                        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full text-center space-y-6 border border-white/20">
+                            <h2 class="${color} text-4xl font-black animate-bounce">
+                                GAME OVER!
+                            </h2>
+                            
+                            <div class="${color} text-6xl font-black">
+                                ${rating}
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="text-3xl font-bold text-white">
+                                    Final Score: <span class="text-yellow-400">${
+                                      this.score
+                                    }</span>
+                                </div>
+                                <div class="text-white/80">
+                                    Questions: ${this.currentQuestion + 1}/${
+            this.questions.length
+          }
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <button
+                                    onclick="game.startGame()"
+                                    class="w-full px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white text-xl font-bold rounded-full hover:from-green-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300"
+                                >
+                                    PLAY AGAIN
+                                </button>
+                                <button
+                                    onclick="game.gameState='menu'; game.render();"
+                                    class="w-full px-6 py-3 bg-white/20 text-white text-lg font-semibold rounded-full hover:bg-white/30 transition-all duration-300"
+                                >
+                                    Main Menu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }
+
+        renderGame() {
+          const question = this.questions[this.currentQuestion];
+          const livesHtml = Array.from(
+            { length: this.lives },
+            () => '<span class="text-red-500 text-xl">❤️</span>'
+          ).join("");
+
+          let optionsHtml = "";
+          question.options.forEach((option, index) => {
+            let buttonClass =
+              "p-4 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 ";
+
+            if (this.showResult) {
+              if (index === question.correct) {
+                buttonClass += "bg-green-500 text-white";
+              } else if (
+                index === this.selectedAnswer &&
+                index !== question.correct
+              ) {
+                buttonClass += "bg-red-500 text-white";
+              } else {
+                buttonClass += "bg-white/20 text-white/60";
+              }
+            } else {
+              buttonClass +=
+                this.selectedAnswer === index
+                  ? "bg-blue-500 text-white"
+                  : "bg-white/20 text-white hover:bg-white/30";
+            }
+
+            optionsHtml += `
+                        <button
+                            onclick="game.handleAnswerSelect(${index})"
+                            class="${buttonClass}"
+                            ${this.showResult ? "disabled" : ""}
+                        >
+                            ${option}
+                        </button>
+                    `;
+          });
+
+          let resultHtml = "";
+          if (this.showResult) {
+            if (this.selectedAnswer === question.correct) {
+              resultHtml = `
+                            <div class="text-green-400 text-2xl font-bold animate-bounce">
+                                ✅ CORRECT! +${
+                                  this.powerUpActive ? 200 : 100
+                                } points
+                                ${
+                                  this.timeLeft > 0
+                                    ? `+${this.timeLeft * 5} time bonus!`
+                                    : ""
+                                }
+                                ${this.streak >= 3 ? " +50 streak bonus!" : ""}
+                            </div>
+                        `;
+            } else if (this.selectedAnswer !== null) {
+              resultHtml = `
+                            <div class="text-red-400 text-2xl font-bold">
+                                ❌ INCORRECT!
+                            </div>
+                        `;
+            } else {
+              resultHtml = `
+                            <div class="text-yellow-400 text-2xl font-bold">
+                                ⏰ TIME'S UP!
+                            </div>
+                        `;
+            }
+          }
+
+          const powerUpButton =
+            this.streak >= 2 && !this.powerUpActive
+              ? `
+                    <button
+                        onclick="game.usePowerUp()"
+                        class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 rounded-full text-sm font-bold hover:scale-105 transform transition-all"
+                    >
+                        ⚡ POWER UP
+                    </button>
+                `
+              : "";
+
+          return `
+                    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
+                        <div class="max-w-4xl mx-auto space-y-6">
+                            <!-- Header -->
+                            <div class="flex justify-between items-center bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-white font-bold">
+                                        Score: <span class="text-yellow-400 text-xl">${
+                                          this.score
+                                        }</span>
+                                    </div>
+                                    <div class="text-white font-bold">
+                                        Lives: ${livesHtml}
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-white font-bold">
+                                        Streak: <span class="text-green-400">${
+                                          this.streak
+                                        }</span>
+                                    </div>
+                                    <div class="text-2xl font-bold px-4 py-2 rounded-full ${
+                                      this.timeLeft <= 5
+                                        ? "bg-red-500"
+                                        : "bg-blue-500"
+                                    } text-white">
+                                        ${this.timeLeft}s
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question Card -->
+                            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+                                <div class="text-center space-y-6">
+                                    <div class="flex justify-between items-center">
+                                        <span class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                                            ${question.category}
+                                        </span>
+                                        <span class="text-white/60 font-semibold">
+                                            Question ${
+                                              this.currentQuestion + 1
+                                            }/${this.questions.length}
+                                        </span>
+                                        ${powerUpButton}
+                                    </div>
+                                    
+                                    <h3 class="text-3xl font-bold text-white leading-relaxed">
+                                        ${question.question}
+                                    </h3>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        ${optionsHtml}
+                                    </div>
+                                    
+                                    ${resultHtml}
+                                </div>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="bg-white/20 rounded-full h-3">
+                                <div
+                                    class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500"
+                                    style="width: ${
+                                      ((this.currentQuestion + 1) /
+                                        this.questions.length) *
+                                      100
+                                    }%"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }
+
+        render() {
+          if (this.gameState === "menu") {
+            this.container.innerHTML = this.renderMenu();
+          } else if (this.gameState === "gameOver") {
+            this.container.innerHTML = this.renderGameOver();
+          } else {
+            this.container.innerHTML = this.renderGame();
+          }
+        }
+      }
+
+      // Initialize game when page loads
+      let game;
+      document.addEventListener("DOMContentLoaded", () => {
+        game = new QuizChampion();
+      });
+    </script>
+  </body>
+</html>
