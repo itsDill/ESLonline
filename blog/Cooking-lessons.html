@@ -2014,26 +2014,24 @@
       };
 
       // Travel Audio feedback system with accent variations
-       accent for: ${expression}`);
-
+      function playVocabAudio(expression, accent = "US") {
         // Add visual feedback for accessibility
         const cards = document.querySelectorAll(
-          `.vocab-card[onclick*="${expression}"]`
+          `.vocab-card[aria-label*="${expression}"]`
         );
         cards.forEach((card) => {
           card.style.transform = "scale(1.05)";
           card.style.boxShadow = "0 8px 25px rgba(0,0,0,0.2)";
-
           setTimeout(() => {
             card.style.transform = "";
             card.style.boxShadow = "";
           }, 300);
         });
-
+      
         // Track progress
         state.vocabProgress.add(expression);
         updateVocabProgress();
-
+      
         // Text-to-speech with accent simulation
         if ("speechSynthesis" in window) {
           const utterance = new SpeechSynthesisUtterance(
@@ -2044,29 +2042,41 @@
             accent === "UK" ? "en-GB" : accent === "AU" ? "en-AU" : "en-US";
           speechSynthesis.speak(utterance);
         }
-
+      
         showNotification(
           `🌍 Playing in ${accent} accent: "${expression.replace(/_/g, " ")}"`,
           "info"
         );
       }
-
+      
       // Accent comparison feature
-      "
-                </div>
-                <div style="margin-top: var(--space-4); padding: var(--space-3); background: var(--primary-light); border-radius: var(--radius); font-size: 0.9rem;">
-                    <strong>💡 Listen for:</strong> Accent differences, unique expressions, and cultural references!
-                </div>
+      function playTravelScenario(scenario) {
+        const scenarios = {
+          airport_us:
+            "Attention passengers, flight 123 to New York is now boarding at gate 7.",
+          hotel_uk:
+            "Good afternoon! Welcome to the Grand London Hotel. May I have your booking reference?",
+          backpack_au:
+            "G'day mate! I spent my gap year backpacking through the Outback.",
+          travel_ca:
+            "Eh, remember to check your passport before heading to the airport, okay?",
+        };
+      
+        const transcript = `
+          <div>
+            <strong>Transcript:</strong>
+            <div style="margin-top: var(--space-2); font-size: 1rem;">
+              ${scenarios[scenario] || "No transcript available."}
             </div>
-          `;
-
-          document.getElementById("audio-transcript").innerHTML = transcript;
-          document.getElementById("audio-transcript").style.display = "block";
-        }
-      }
-
-      ;
-
+          </div>
+          <div style="margin-top: var(--space-4); padding: var(--space-3); background: var(--primary-light); border-radius: var(--radius); font-size: 0.9rem;">
+            <strong>💡 Listen for:</strong> Accent differences, unique expressions, and cultural references!
+          </div>
+        `;
+      
+        document.getElementById("audio-transcript").innerHTML = transcript;
+        document.getElementById("audio-transcript").style.display = "block";
+      
         const text = scenarios[scenario];
         if (text && "speechSynthesis" in window) {
           const utterance = new SpeechSynthesisUtterance(text);
@@ -2224,22 +2234,22 @@
       // Reset answers function
       function resetAnswers() {
         const inputs = document.querySelectorAll(
-          '#answers-result ~ * input[type="text"]'
-        );
-        inputs.forEach((input) => {
-          input.value = "";
-          input.style.borderColor = "";
-          input.style.background = "";
-        });
-        document.getElementById("answers-result").innerHTML = "";
-      }
-
       // Enhanced audio recipe playback
-      
-
-          const text =
-            "First, boil one pound of spaghetti in salted water until tender, about 10 minutes. Next, mix the cooked pasta with tomato sauce in a large bowl. Then, sprinkle mozzarella cheese generously over the mixture. After that, put everything into a greased baking dish. Finally, bake in a 350 degree Fahrenheit oven for 25 minutes until cheese is golden.";
+      function playRecipeAudio() {
+        const text =
+          "First, boil one pound of spaghetti in salted water until tender, about 10 minutes. Next, mix the cooked pasta with tomato sauce in a large bowl. Then, sprinkle mozzarella cheese generously over the mixture. After that, put everything into a greased baking dish. Finally, bake in a 350 degree Fahrenheit oven for 25 minutes until cheese is golden.";
+        if ("speechSynthesis" in window) {
           const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.8;
+          utterance.lang = "en-US";
+          speechSynthesis.speak(utterance);
+        } else {
+          showNotification(
+            "Text-to-speech not supported in your browser",
+            "info"
+          );
+        }
+      }
           utterance.rate = 0.8;
           utterance.lang = "en-US";
           speechSynthesis.speak(utterance);
