@@ -107,6 +107,96 @@
       }
 
       /* Mobile Navigation - Uses header.css and navigation.js */
+      
+      /* CRITICAL MOBILE NAVIGATION OVERRIDE - FORCE VISIBLE FOR TESTING */
+      .mobile-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 44px !important;
+        height: 44px !important;
+        background: #e5e7eb !important;
+        border: 2px solid #4f46e5 !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        z-index: 1002 !important;
+        position: relative !important;
+      }
+      
+      .mobile-toggle:hover {
+        background: rgba(79, 70, 229, 0.2) !important;
+      }
+      
+      .mobile-toggle i {
+        font-size: 1.25rem !important;
+        color: #1f2937 !important;
+      }
+      
+      /* FORCE MOBILE MENU STYLES FOR TESTING */
+      @media (max-width: 768px) {        
+        /* Hide desktop nav and show mobile nav */
+        .nav-links {
+          position: fixed !important;
+          top: 70px !important;
+          left: 0 !important;
+          right: 0 !important;
+          background: white !important;
+          border: 1px solid #e5e7eb !important;
+          border-top: none !important;
+          border-radius: 0 0 16px 16px !important;
+          box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          transform: translateY(-20px) !important;
+          transition: all 0.3s ease !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+          z-index: 1001 !important;
+          padding: 1rem !important;
+          flex-direction: column !important;
+          list-style: none !important;
+          margin: 0 !important;
+        }
+        
+        .nav-links.active {
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: translateY(0) !important;
+          max-height: calc(100vh - 70px) !important;
+          overflow-y: auto !important;
+        }
+        
+        .nav-item {
+          width: 100% !important;
+          margin-bottom: 0.75rem !important;
+        }
+        
+        .nav-link {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          padding: 1rem 1.25rem !important;
+          border-radius: 12px !important;
+          background: #f3f4f6 !important;
+          border: 2px solid transparent !important;
+          color: #1f2937 !important;
+          text-decoration: none !important;
+          font-size: 1rem !important;
+          transition: all 0.2s ease !important;
+          width: 100% !important;
+        }
+        
+        .nav-link:hover {
+          background: rgba(79, 70, 229, 0.1) !important;
+          border-color: #4f46e5 !important;
+          color: #4f46e5 !important;
+        }
+        
+        /* Body scroll lock */
+        body.mobile-menu-open {
+          overflow: hidden !important;
+        }
+      }
       @media (max-width: 768px) {
         /* Force mobile toggle to show */
         .mobile-toggle {
@@ -2265,6 +2355,88 @@
     </script>
     
     <!-- Main JavaScript -->
+    <script>
+      // DIRECT MOBILE MENU FIX - Bypass any conflicts
+      (function() {
+        console.log('Direct mobile menu fix starting...');
+        
+        function initMobileMenu() {
+          const mobileToggle = document.getElementById('mobileToggle');
+          const navLinks = document.getElementById('navLinks');
+          
+          console.log('Elements found:', {
+            toggle: !!mobileToggle,
+            links: !!navLinks
+          });
+          
+          if (!mobileToggle || !navLinks) {
+            console.error('Mobile navigation elements not found!');
+            return;
+          }
+          
+          let isOpen = false;
+          
+          // Remove any existing listeners by replacing the element
+          const newToggle = mobileToggle.cloneNode(true);
+          mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+          
+          const toggle = document.getElementById('mobileToggle');
+          const icon = toggle.querySelector('i');
+          
+          function openMenu() {
+            isOpen = true;
+            navLinks.classList.add('active');
+            document.body.classList.add('mobile-menu-open');
+            document.body.style.overflow = 'hidden';
+            if (icon) icon.className = 'fas fa-times';
+            console.log('Menu opened');
+          }
+          
+          function closeMenu() {
+            isOpen = false;
+            navLinks.classList.remove('active');
+            document.body.classList.remove('mobile-menu-open');
+            document.body.style.overflow = '';
+            if (icon) icon.className = 'fas fa-bars';
+            console.log('Menu closed');
+          }
+          
+          toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Toggle clicked, isOpen:', isOpen);
+            
+            if (isOpen) {
+              closeMenu();
+            } else {
+              openMenu();
+            }
+          });
+          
+          // Close menu when clicking outside
+          document.addEventListener('click', function(e) {
+            if (isOpen && !toggle.contains(e.target) && !navLinks.contains(e.target)) {
+              closeMenu();
+            }
+          });
+          
+          // Close menu on window resize to desktop
+          window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && isOpen) {
+              closeMenu();
+            }
+          });
+          
+          console.log('Mobile menu initialized successfully');
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initMobileMenu);
+        } else {
+          initMobileMenu();
+        }
+      })();
+    </script>
     <script src="../js/navigation.js"></script>
     
 </html>
