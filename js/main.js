@@ -287,8 +287,11 @@ const Auth = {
 
 const ThemeManager = {
   init() {
-    // Prevent initialization if navigation.js already initialized theme management
-    if (window.eslThemeInitialized) return;
+    // CRITICAL: Check if navigation.js already initialized theme management
+    if (window.eslThemeInitialized || window.eslNavigationInitialized) {
+      console.log("ThemeManager: Already initialized, skipping main.js init");
+      return;
+    }
 
     // Mark as initialized
     window.eslThemeInitialized = true;
@@ -441,8 +444,13 @@ const ThemeManager = {
 
 const Navigation = {
   init() {
-    // Prevent initialization if navigation.js already initialized navigation
-    if (window.eslNavigationInitialized) return;
+    // CRITICAL: Check if navigation.js already initialized navigation
+    if (window.eslNavigationInitialized) {
+      console.log(
+        "Navigation: Already initialized by navigation.js, skipping main.js init"
+      );
+      return;
+    }
 
     // Mark as initialized to prevent conflicts
     window.eslNavigationInitialized = true;
@@ -912,11 +920,17 @@ const ESLApp = {
 
   start() {
     try {
-      // Initialize core systems only if they haven't been initialized by other scripts
+      console.log("ESL App: Starting initialization...");
+
+      // Initialize core systems only if they haven't been initialized by navigation.js
       if (!window.eslNavigationInitialized) {
+        console.log("ESL App: Initializing theme and navigation from main.js");
         ThemeManager.init();
         Navigation.init();
-        console.log("ESL Navigation and Theme initialized by main.js");
+      } else {
+        console.log(
+          "ESL App: Navigation already initialized by navigation.js, skipping"
+        );
       }
 
       Performance.init();

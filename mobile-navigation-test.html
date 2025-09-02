@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Navigation Diagnostic - ESL Fun Online</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .status {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+      }
+      .status.good {
+        background: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+      }
+      .status.bad {
+        background: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+      }
+      .status.warning {
+        background: #fff3cd;
+        border-color: #ffc107;
+        color: #856404;
+      }
+      button {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #4338ca;
+      }
+      .test-results {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 4px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        padding: 8px;
+        margin: 4px 0;
+        background: #e9ecef;
+        border-radius: 4px;
+      }
+      li.working {
+        background: #d4edda;
+        color: #155724;
+      }
+      li.broken {
+        background: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔧 Mobile Navigation Diagnostic Tool</h1>
+      <p>
+        This tool will help identify which pages have mobile menu issues and
+        provide fixes.
+      </p>
+
+      <div id="diagnosticResults"></div>
+
+      <h2>Quick Tests</h2>
+      <button onclick="runDiagnostic()">🔍 Run Full Diagnostic</button>
+      <button onclick="testCurrentPage()">📱 Test Current Page</button>
+      <button onclick="resetNavigation()">🔄 Reset Navigation</button>
+      <button onclick="showPageList()">📄 Show All Pages</button>
+
+      <div class="test-results" id="testResults" style="display: none">
+        <h3>Test Results</h3>
+        <div id="resultsContent"></div>
+      </div>
+
+      <h2>Common Issues & Solutions</h2>
+      <div class="status warning">
+        <strong>Issue:</strong> Mobile menu doesn't respond to clicks<br />
+        <strong>Solution:</strong> Remove inline JavaScript that conflicts with
+        navigation.js
+      </div>
+
+      <div class="status warning">
+        <strong>Issue:</strong> Multiple scripts trying to control mobile
+        menu<br />
+        <strong>Solution:</strong> Ensure only navigation.js handles mobile menu
+      </div>
+
+      <div class="status good">
+        <strong>Fixed:</strong> Updated navigation.js to be the primary
+        handler<br />
+        <strong>Fixed:</strong> Updated main.js to prevent conflicts<br />
+        <strong>Fixed:</strong> Removed conflicting inline JS from grammar.html
+      </div>
+    </div>
+
+    <script>
+      function runDiagnostic() {
+        const results = document.getElementById("diagnosticResults");
+        const testResults = document.getElementById("testResults");
+        const resultsContent = document.getElementById("resultsContent");
+
+        // Check current page elements
+        const mobileToggle = document.getElementById("mobileToggle");
+        const navLinks = document.getElementById("navLinks");
+        const hasNavigationJS = !!document.querySelector(
+          'script[src*="navigation.js"]'
+        );
+        const hasMainJS = !!document.querySelector('script[src*="main.js"]');
+        const hasMobileFixJS = !!document.querySelector(
+          'script[src*="mobile-fix.js"]'
+        );
+
+        let diagnosticHTML = "<h2>🔍 Diagnostic Results</h2>";
+
+        // Test 1: Essential Elements
+        diagnosticHTML +=
+          '<div class="status ' +
+          (mobileToggle && navLinks ? "good" : "bad") +
+          '">';
+        diagnosticHTML += "<strong>Essential Elements:</strong> ";
+        diagnosticHTML +=
+          mobileToggle && navLinks
+            ? "✅ Found mobile toggle and nav links"
+            : "❌ Missing mobile toggle or nav links";
+        diagnosticHTML += "</div>";
+
+        // Test 2: JavaScript Files
+        diagnosticHTML +=
+          '<div class="status ' + (hasNavigationJS ? "good" : "warning") + '">';
+        diagnosticHTML += "<strong>Navigation JS:</strong> ";
+        diagnosticHTML += hasNavigationJS
+          ? "✅ navigation.js loaded"
+          : "⚠️ navigation.js not found";
+        diagnosticHTML += "</div>";
+
+        // Test 3: Conflicts
+        const hasConflicts =
+          hasMainJS && hasNavigationJS && !window.eslNavigationInitialized;
+        diagnosticHTML +=
+          '<div class="status ' + (hasConflicts ? "warning" : "good") + '">';
+        diagnosticHTML += "<strong>Script Conflicts:</strong> ";
+        diagnosticHTML += hasConflicts
+          ? "⚠️ Potential conflicts detected"
+          : "✅ No conflicts detected";
+        diagnosticHTML += "</div>";
+
+        // Test 4: Window Width
+        const isMobile = window.innerWidth <= 768;
+        diagnosticHTML +=
+          '<div class="status ' + (isMobile ? "good" : "warning") + '">';
+        diagnosticHTML += "<strong>Screen Size:</strong> ";
+        diagnosticHTML +=
+          "Current width: " +
+          window.innerWidth +
+          "px (" +
+          (isMobile ? "Mobile" : "Desktop") +
+          ")";
+        diagnosticHTML += "</div>";
+
+        results.innerHTML = diagnosticHTML;
+        testResults.style.display = "block";
+
+        // Detailed results
+        let detailsHTML = "<h4>Detailed Information:</h4>";
+        detailsHTML += "<ul>";
+        detailsHTML +=
+          "<li>Mobile Toggle Element: " +
+          (mobileToggle ? "✅ Present" : "❌ Missing") +
+          "</li>";
+        detailsHTML +=
+          "<li>Nav Links Element: " +
+          (navLinks ? "✅ Present" : "❌ Missing") +
+          "</li>";
+        detailsHTML +=
+          "<li>navigation.js: " +
+          (hasNavigationJS ? "✅ Loaded" : "❌ Not loaded") +
+          "</li>";
+        detailsHTML +=
+          "<li>main.js: " +
+          (hasMainJS ? "✅ Loaded" : "❌ Not loaded") +
+          "</li>";
+        detailsHTML +=
+          "<li>mobile-fix.js: " +
+          (hasMobileFixJS ? "✅ Loaded" : "❌ Not loaded") +
+          "</li>";
+        detailsHTML +=
+          "<li>ESL Navigation Initialized: " +
+          (window.eslNavigationInitialized ? "✅ Yes" : "❌ No") +
+          "</li>";
+        detailsHTML += "<li>Current URL: " + window.location.pathname + "</li>";
+        detailsHTML += "</ul>";
+
+        resultsContent.innerHTML = detailsHTML;
+      }
+
+      function testCurrentPage() {
+        const mobileToggle = document.getElementById("mobileToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        if (!mobileToggle || !navLinks) {
+          alert(
+            "❌ Essential mobile navigation elements not found on this page!"
+          );
+          return;
+        }
+
+        // Test click functionality
+        let clickWorking = false;
+
+        try {
+          // Simulate click
+          mobileToggle.click();
+
+          setTimeout(() => {
+            const isActive = navLinks.classList.contains("active");
+            clickWorking = isActive;
+
+            // Close menu if it opened
+            if (isActive) {
+              mobileToggle.click();
+            }
+
+            alert(
+              clickWorking
+                ? "✅ Mobile menu is working on this page!"
+                : "❌ Mobile menu click is not working on this page. Check console for errors."
+            );
+          }, 100);
+        } catch (error) {
+          alert("❌ Error testing mobile menu: " + error.message);
+        }
+      }
+
+      function resetNavigation() {
+        // Try to reset using global function
+        if (typeof window.resetMobileNavigation === "function") {
+          window.resetMobileNavigation();
+          alert("✅ Navigation reset attempted using global function");
+        } else if (typeof window.MobileNavigationFix === "object") {
+          window.MobileNavigationFix.init();
+          alert("✅ Mobile navigation fix re-initialized");
+        } else {
+          alert("⚠️ No reset functions available. Try refreshing the page.");
+        }
+      }
+
+      function showPageList() {
+        const pageList = [
+          { url: "/index.html", name: "Home Page" },
+          { url: "/games/games.html", name: "Games Page" },
+          { url: "/english/grammar.html", name: "Grammar Page (Fixed)" },
+          { url: "/english/business.html", name: "Business English" },
+          { url: "/coding/ai.html", name: "AI Basics" },
+          { url: "/blog/blog.html", name: "Blog Page" },
+          { url: "/tools/tools.html", name: "Tools Page" },
+        ];
+
+        let html = "<h3>📄 Pages to Test</h3>";
+        html += "<ul>";
+
+        pageList.forEach((page) => {
+          const isCurrent = window.location.pathname.includes(
+            page.url.replace("/", "")
+          );
+          const status = isCurrent ? " (current)" : "";
+          html +=
+            '<li><a href="' +
+            page.url +
+            '" target="_blank">' +
+            page.name +
+            status +
+            "</a></li>";
+        });
+
+        html += "</ul>";
+        html +=
+          "<p><strong>Instructions:</strong> Open each page in a new tab and test the mobile menu by:</p>";
+        html += "<ol>";
+        html += "<li>Resize browser to mobile width (768px or less)</li>";
+        html += "<li>Click the hamburger menu button (☰)</li>";
+        html += "<li>Verify the menu opens and closes properly</li>";
+        html += "<li>Test dropdown menus within the mobile menu</li>";
+        html += "</ol>";
+
+        document.getElementById("resultsContent").innerHTML = html;
+        document.getElementById("testResults").style.display = "block";
+      }
+
+      // Auto-run diagnostic on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(runDiagnostic, 500);
+      });
+    </script>
+  </body>
+</html>
