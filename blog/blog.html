@@ -2407,69 +2407,6 @@
     <script>
       // Blog-specific initialization to ensure everything works
       document.addEventListener("DOMContentLoaded", function () {
-        // Initialize mobile navigation if main.js didn't handle it
-        const mobileToggle = document.getElementById("mobileToggle");
-        const navLinks = document.getElementById("navLinks");
-
-        if (mobileToggle && navLinks && !window.eslNavigationInitialized) {
-          let isMenuOpen = false;
-
-          mobileToggle.addEventListener("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            isMenuOpen = !isMenuOpen;
-
-            navLinks.classList.toggle("active", isMenuOpen);
-            document.body.classList.toggle("mobile-menu-open", isMenuOpen);
-
-            const icon = mobileToggle.querySelector("i");
-            if (icon) {
-              icon.className = isMenuOpen ? "fas fa-times" : "fas fa-bars";
-            }
-
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = isMenuOpen ? "hidden" : "";
-          });
-
-          // Close menu when clicking outside
-          document.addEventListener("click", function (e) {
-            if (
-              isMenuOpen &&
-              !mobileToggle.contains(e.target) &&
-              !navLinks.contains(e.target)
-            ) {
-              isMenuOpen = false;
-              navLinks.classList.remove("active");
-              document.body.classList.remove("mobile-menu-open");
-              document.body.style.overflow = "";
-
-              const icon = mobileToggle.querySelector("i");
-              if (icon) {
-                icon.className = "fas fa-bars";
-              }
-            }
-          });
-
-          // Close menu with Escape key
-          document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape" && isMenuOpen) {
-              isMenuOpen = false;
-              navLinks.classList.remove("active");
-              document.body.classList.remove("mobile-menu-open");
-              document.body.style.overflow = "";
-
-              const icon = mobileToggle.querySelector("i");
-              if (icon) {
-                icon.className = "fas fa-bars";
-              }
-
-              mobileToggle.focus();
-            }
-          });
-
-          window.eslNavigationInitialized = true;
-        }
 
         // Initialize theme toggle if main.js didn't handle it
         const themeToggle = document.getElementById("themeToggle");
