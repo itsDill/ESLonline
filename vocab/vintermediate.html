@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Learn essential English vocabulary with interactive flashcards for beginners."
+      content="Learn intermediate English vocabulary with interactive flashcards."
     />
-    <title>Beginner Vocabulary | ESL Fun Online</title>
+    <title>Intermediate Vocabulary | ESL Fun Online</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../images/Online.png" />
@@ -25,8 +25,8 @@
     <style>
       /* CSS Variables */
       :root {
-        --primary-color: #46e0e5;
-        --primary-hover: #38a8ca;
+        --primary-color: #e67e22;
+        --primary-hover: #d35400;
         --secondary-color: #f59e0b;
         --accent-color: #10b981;
         --text-primary: #1f2937;
@@ -43,8 +43,8 @@
           0 4px 6px -4px rgb(0 0 0 / 0.1);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
-        --gradient-primary: linear-gradient(135deg, #66ddea 0%, #4b75a2 100%);
-        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-primary: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        --gradient-secondary: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
         --success-color: #10b981;
         --warning-color: #f59e0b;
         --error-color: #ef4444;
@@ -531,10 +531,10 @@
     <header>
       <div class="container">
         <nav class="navbar">
-          <a href="/index.html" class="logo-container">
+          <a href="../index.html" class="logo-container">
             <span class="logo-text">ESL Fun Online</span>
           </a>
-          <a href="/vocabguide.html" class="control-btn secondary">
+          <a href="../english/vocabguide.html" class="control-btn secondary">
             <i class="fas fa-arrow-left"></i>
             Back to Vocabulary
           </a>
@@ -544,12 +544,12 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <img src="../images/11.png" alt="" class="hero-bg" />
+      <img src="../images/2.png" alt="" class="hero-bg" />
       <div class="hero-content">
-        <h1 class="hero-title">Beginner Vocabulary Flashcards</h1>
+        <h1 class="hero-title">Intermediate Vocabulary Flashcards</h1>
         <p class="hero-subtitle">
-          Practice essential English words with interactive flashcards and build
-          your foundation for success!
+          Expand your English vocabulary with intermediate-level words and
+          expressions for better communication!
         </p>
       </div>
     </section>
@@ -735,7 +735,7 @@
 
     <script>
       // Sample vocabulary data (in production, this would be loaded from vocab-data.json)
-      let vocabularyData = { beginner: [] };
+      let vocabularyData = { intermediate: [] };
       let cards = [];
       let currentCardIndex = 0;
       let studiedCards = new Set();
@@ -757,7 +757,7 @@
           .then((response) => response.json())
           .then((data) => {
             vocabularyData = data;
-            cards = [...(vocabularyData.beginner || [])];
+            cards = [...(vocabularyData.intermediate || [])];
             loadCard();
             updateProgress();
             updateStats();
@@ -776,8 +776,13 @@
         document.getElementById("flashcardWord").textContent = card.word;
         document.getElementById("flashcardPronunciation").textContent =
           card.pronunciation;
-        document.getElementById("flashcardCategory").textContent =
-          card.category;
+
+        // Handle category (could be array or string)
+        const category = Array.isArray(card.category)
+          ? card.category.join(", ")
+          : card.category;
+        document.getElementById("flashcardCategory").textContent = category;
+
         document.getElementById("flashcardDefinition").textContent =
           card.definition;
         document.getElementById("flashcardExample").textContent = card.example;
@@ -885,7 +890,7 @@
           correctAnswers.clear();
           currentStreak = 0;
           currentCardIndex = 0;
-          cards = [...vocabularyData.beginner];
+          cards = [...vocabularyData.intermediate];
           loadCard();
           updateProgress();
           updateStats();

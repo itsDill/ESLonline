@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Learn essential English vocabulary with interactive flashcards for beginners."
+      content="Master advanced English vocabulary with interactive flashcards."
     />
-    <title>Beginner Vocabulary | ESL Fun Online</title>
+    <title>Advanced Vocabulary | ESL Fun Online</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../images/Online.png" />
@@ -25,9 +25,9 @@
     <style>
       /* CSS Variables */
       :root {
-        --primary-color: #46bbe5;
-        --primary-hover: #05425c;
-        --secondary-color: #f59e0b;
+        --primary-color: #8e44ad;
+        --primary-hover: #732d91;
+        --secondary-color: #e74c3c;
         --accent-color: #10b981;
         --text-primary: #1f2937;
         --text-secondary: #6b7280;
@@ -43,8 +43,8 @@
           0 4px 6px -4px rgb(0 0 0 / 0.1);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
           0 8px 10px -6px rgb(0 0 0 / 0.1);
-        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-primary: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        --gradient-secondary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         --success-color: #10b981;
         --warning-color: #f59e0b;
         --error-color: #ef4444;
@@ -503,7 +503,7 @@
           <a href="../index.html" class="logo-container">
             <span class="logo-text">ESL Fun Online</span>
           </a>
-          <a href="vocabulary.html" class="control-btn secondary">
+          <a href="../english/vocabguide.html" class="control-btn secondary">
             <i class="fas fa-arrow-left"></i>
             Back to Vocabulary
           </a>
@@ -514,10 +514,10 @@
     <!-- Page Header -->
     <section class="page-header">
       <div class="container">
-        <h1 class="page-title">Beginner Vocabulary</h1>
+        <h1 class="page-title">Advanced Vocabulary</h1>
         <p class="page-subtitle">
-          Learn essential English words with interactive flashcards. Perfect for
-          building your foundation vocabulary!
+          Master sophisticated English words and expressions for academic and
+          professional communication!
         </p>
       </div>
     </section>
@@ -657,7 +657,7 @@
 
     <script>
       // Sample vocabulary data (in production, this would be loaded from vocab-data.json)
-      let vocabularyData = { beginner: [] };
+      let vocabularyData = { advanced: [] };
       let cards = [];
       let currentCardIndex = 0;
       let studiedCards = new Set();
@@ -672,7 +672,7 @@
           .then((response) => response.json())
           .then((data) => {
             vocabularyData = data;
-            cards = [...(vocabularyData.beginner || [])];
+            cards = [...(vocabularyData.advanced || [])];
             loadCard();
             updateProgress();
             updateStats();
@@ -690,9 +690,16 @@
 
         document.getElementById("flashcardWord").textContent = card.word;
         document.getElementById("flashcardPronunciation").textContent =
-          card.pronunciation;
-        document.getElementById("flashcardCategory").textContent =
-          card.category;
+          card.pronunciation || "";
+
+        // Handle categories (array or string)
+        const categories = Array.isArray(card.categories)
+          ? card.categories.join(", ")
+          : Array.isArray(card.category)
+          ? card.category.join(", ")
+          : card.category || "";
+        document.getElementById("flashcardCategory").textContent = categories;
+
         document.getElementById("flashcardDefinition").textContent =
           card.definition;
         document.getElementById("flashcardExample").textContent = card.example;
@@ -774,7 +781,7 @@
         if (studyMode) {
           button.textContent = "Normal Mode";
           showNotification(
-            "Study mode activated - cards will auto-flip after 3 seconds",
+            "Study mode activated - cards will auto-flip after 4 seconds",
             "info"
           );
           autoFlipTimeout();
@@ -790,7 +797,7 @@
             if (studyMode && !isFlipped) {
               flipCard();
             }
-          }, 3000);
+          }, 4000);
         }
       }
 
@@ -800,7 +807,7 @@
           correctAnswers.clear();
           currentStreak = 0;
           currentCardIndex = 0;
-          cards = [...vocabularyData.beginner];
+          cards = [...vocabularyData.advanced];
           loadCard();
           updateProgress();
           updateStats();
@@ -810,7 +817,7 @@
 
       // Study options
       function startQuizMode() {
-        showNotification("Quiz mode coming soon!", "info");
+        showNotification("Advanced quiz mode coming soon!", "info");
       }
 
       function startTypingPractice() {
@@ -821,7 +828,7 @@
         if ("speechSynthesis" in window) {
           const card = cards[currentCardIndex];
           const utterance = new SpeechSynthesisUtterance(card.word);
-          utterance.rate = 0.8;
+          utterance.rate = 0.6;
           speechSynthesis.speak(utterance);
           showNotification("Listen to the pronunciation", "info");
         } else {
@@ -836,23 +843,33 @@
         let listHTML =
           '<div style="max-height: 400px; overflow-y: auto; text-align: left;">';
         cards.forEach((card, index) => {
+          const categories = Array.isArray(card.categories)
+            ? card.categories.join(", ")
+            : Array.isArray(card.category)
+            ? card.category.join(", ")
+            : card.category || "";
           listHTML += `
             <div style="padding: 10px; border-bottom: 1px solid var(--border-color); cursor: pointer;" 
                  onclick="goToCard(${index}); closeModal();">
-              <strong>${card.word}</strong> ${card.pronunciation}<br>
-              <small style="color: var(--text-secondary);">${card.definition}</small>
+              <strong>${card.word}</strong> ${
+            card.pronunciation || ""
+          } <span style="color: var(--primary-color); font-size: 0.8rem;">[${categories}]</span><br>
+              <small style="color: var(--text-secondary);">${
+                card.definition
+              }</small>
             </div>
           `;
         });
         listHTML += "</div>";
 
-        showModal("Word List", listHTML);
+        showModal("Advanced Word List", listHTML);
       }
 
       function goToCard(index) {
         currentCardIndex = index;
         loadCard();
         updateProgress();
+        closeModal();
       }
 
       // Theme toggle
@@ -880,6 +897,8 @@
 
       // Keyboard navigation
       function handleKeyPress(event) {
+        if (event.target.tagName === "INPUT") return;
+
         switch (event.key) {
           case "ArrowLeft":
             event.preventDefault();
@@ -935,7 +954,9 @@
         setTimeout(() => {
           notification.style.animation = "slideOut 0.3s ease";
           setTimeout(() => {
-            document.body.removeChild(notification);
+            if (document.body.contains(notification)) {
+              document.body.removeChild(notification);
+            }
           }, 300);
         }, 3000);
       }
