@@ -98,11 +98,691 @@
       rel="stylesheet"
     />
 
+    <!-- Add these missing CSS files before your existing stylesheets -->
+    <style>
+      /* Missing Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* CSS Variables - Add missing ones */
+      :root {
+        /* Layout */
+        --header-height: 80px;
+        --header-height-mobile: 70px;
+
+        /* Spacing */
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --space-12: 3rem;
+        --space-16: 4rem;
+        --space-20: 5rem;
+
+        /* Colors */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --border-color: #e2e8f0;
+        --border-light: #f1f5f9;
+
+        /* Dark mode colors */
+        --bg-primary-dark: #1a202c;
+        --bg-secondary-dark: #2d3748;
+        --text-primary-dark: #f7fafc;
+        --text-secondary-dark: #a0aec0;
+        --border-color-dark: #4a5568;
+
+        /* Typography */
+        --font-family-base: "Inter", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, sans-serif;
+        --font-family-brand: "Poppins", sans-serif;
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
+        --font-weight-extrabold: 800;
+
+        /* Radius */
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-full: 9999px;
+
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+        /* Transitions */
+        --transition-fast: 150ms ease;
+        --transition-normal: 250ms ease;
+        --transition-slow: 350ms ease;
+
+        /* Status Colors */
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+        --info-color: #3b82f6;
+
+        /* AI-themed colors */
+        --ai-primary: #6366f1;
+        --ai-secondary: #f59e0b;
+        --ai-accent: #10b981;
+        --ai-gradient: linear-gradient(
+          135deg,
+          #6366f1 0%,
+          #8b5cf6 50%,
+          #ec4899 100%
+        );
+        --brain-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --neural-gradient: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        --future-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+      }
+
+      /* Dark mode */
+      [data-theme="dark"] {
+        --bg-primary: var(--bg-primary-dark);
+        --bg-secondary: var(--bg-secondary-dark);
+        --text-primary: var(--text-primary-dark);
+        --text-secondary: var(--text-secondary-dark);
+        --border-color: var(--border-color-dark);
+      }
+
+      /* Base Typography */
+      body {
+        font-family: var(--font-family-base);
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: var(--bg-primary);
+        transition: background-color var(--transition-normal),
+          color var(--transition-normal);
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--space-6);
+      }
+
+      /* Grid System */
+      .grid {
+        display: grid;
+        gap: var(--space-8);
+      }
+
+      .grid-responsive {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      }
+
+      @media (max-width: 768px) {
+        .grid-responsive {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Section Styling */
+      .section {
+        padding: var(--space-16) 0;
+      }
+
+      .section-title {
+        font-family: var(--font-family-brand);
+        font-size: 2.5rem;
+        font-weight: var(--font-weight-bold);
+        text-align: center;
+        margin-bottom: var(--space-6);
+        color: var(--text-primary);
+      }
+
+      .section-subtitle {
+        text-align: center;
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-12);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Button Styles */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-6);
+        border-radius: var(--radius-lg);
+        font-weight: var(--font-weight-medium);
+        text-decoration: none;
+        transition: all var(--transition-normal);
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: var(--ai-primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #4f46e5;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--ai-primary);
+        border: 2px solid var(--ai-primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--ai-primary);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Text Utilities */
+      .text-lg {
+        font-size: 1.125rem;
+      }
+
+      .text-secondary {
+        color: var(--text-secondary);
+      }
+
+      /* Animation */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+      }
+
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Skip Link */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: var(--ai-primary);
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        z-index: 1000;
+      }
+
+      .skip-link:focus {
+        top: 6px;
+      }
+
+      /* Main Content */
+      .main-content {
+        min-height: 60vh;
+        padding-top: var(--space-8);
+      }
+
+      /* Fix for missing image in hero */
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.1) 0%,
+          rgba(139, 92, 246, 0.1) 50%,
+          rgba(236, 72, 153, 0.1) 100%
+        );
+        opacity: 0.8;
+        animation: float 20s ease-in-out infinite;
+      }
+
+      /* Mobile responsive improvements */
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 var(--space-4);
+        }
+
+        .section {
+          padding: var(--space-12) 0;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+          max-width: 280px;
+        }
+      }
+
+      /* AI-specific styling that extends the main design system */
+      :root {
+        /* AI-themed colors */
+        --ai-primary: #6366f1;
+        --ai-secondary: #f59e0b;
+        --ai-accent: #10b981;
+        --ai-gradient: linear-gradient(
+          135deg,
+          #6366f1 0%,
+          #8b5cf6 50%,
+          #ec4899 100%
+        );
+        --brain-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --neural-gradient: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        --future-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+      }
+
+      .hero {
+        background: var(--ai-gradient);
+        color: white;
+        text-align: center;
+        padding: calc(var(--header-height) + 2rem) 0 4rem;
+        position: relative;
+        overflow: hidden;
+        min-height: 60vh;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("images/Blue Night Sky Cute Whale Desktop Wallpaper.png");
+        opacity: 0.3;
+        animation: float 20s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 var(--space-4);
+      }
+
+      .hero-title {
+        font-family: var(--font-family-brand);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: var(--font-weight-extrabold);
+        margin-bottom: var(--space-6);
+        line-height: 1.1;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* AI-themed cards */
+      .ai-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-8);
+        text-decoration: none;
+        color: inherit;
+        transition: all var(--transition-normal);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .ai-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--ai-gradient);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform var(--transition-normal);
+      }
+
+      .ai-card:hover,
+      .ai-card:focus {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--ai-primary);
+        outline: none;
+      }
+
+      .ai-card:hover::before,
+      .ai-card:focus::before {
+        transform: scaleX(1);
+      }
+
+      .ai-card-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-6);
+        margin-bottom: var(--space-6);
+      }
+
+      .ai-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: white;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .ai-icon.brain {
+        background: var(--brain-gradient);
+      }
+      .ai-icon.neural {
+        background: var(--neural-gradient);
+      }
+      .ai-icon.future {
+        background: var(--future-gradient);
+      }
+      .ai-icon.learning {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #059669 100%
+        );
+      }
+      .ai-icon.ethics {
+        background: linear-gradient(
+          135deg,
+          var(--warning-color) 0%,
+          #d97706 100%
+        );
+      }
+      .ai-icon.tools {
+        background: linear-gradient(135deg, var(--info-color) 0%, #1e40af 100%);
+      }
+
+      .ai-card-info h3 {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-semibold);
+        margin-bottom: var(--space-2);
+        color: var(--text-primary);
+      }
+
+      .ai-card-level {
+        display: inline-block;
+        padding: var(--space-1) var(--space-3);
+        background: var(--ai-secondary);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: var(--font-weight-semibold);
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .ai-card-description {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-6);
+        line-height: 1.7;
+        flex-grow: 1;
+      }
+
+      .ai-card-features {
+        list-style: none;
+        margin-bottom: var(--space-6);
+      }
+
+      .ai-card-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-3);
+        margin-bottom: var(--space-3);
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .ai-card-features li i {
+        color: var(--ai-accent);
+        width: 18px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .ai-card-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: var(--space-6);
+        border-top: 1px solid var(--border-light);
+        margin-top: auto;
+      }
+
+      .cta-text {
+        color: var(--ai-primary);
+        font-weight: var(--font-weight-semibold);
+        font-size: 0.95rem;
+      }
+
+      .cta-arrow {
+        color: var(--ai-primary);
+        transition: transform var(--transition-normal);
+      }
+
+      .ai-card:hover .cta-arrow {
+        transform: translateX(5px);
+      }
+
+      /* Intro section */
+      .intro-section {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-xl);
+        padding: var(--space-16) var(--space-8);
+        text-align: center;
+        margin-bottom: var(--space-20);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .intro-section::before {
+        content: "🤖";
+        position: absolute;
+        top: var(--space-8);
+        right: var(--space-8);
+        font-size: 3rem;
+        opacity: 0.1;
+        animation: bounce 2s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* FAQ Section */
+      .faq-item {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--space-4);
+        overflow: hidden;
+      }
+
+      .faq-question {
+        width: 100%;
+        background: none;
+        border: none;
+        padding: var(--space-6);
+        text-align: left;
+        font-size: 1.1rem;
+        font-weight: var(--font-weight-medium);
+        color: var(--text-primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all var(--transition-normal);
+      }
+
+      .faq-question:hover {
+        background: var(--bg-secondary);
+      }
+
+      .faq-question i {
+        color: var(--ai-primary);
+        transition: transform var(--transition-normal);
+      }
+
+      .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+      }
+
+      .faq-answer {
+        padding: 0 var(--space-6);
+        max-height: 0;
+        overflow: hidden;
+        transition: all var(--transition-normal);
+      }
+
+      .faq-item.active .faq-answer {
+        max-height: 300px;
+        padding: 0 var(--space-6) var(--space-6);
+      }
+
+      .faq-answer p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        background: var(--ai-gradient);
+        color: white;
+        text-align: center;
+        padding: var(--space-16) var(--space-8);
+        border-radius: var(--radius-xl);
+        margin: var(--space-16) 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .cta-title {
+        font-size: 2.5rem;
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--space-4);
+        line-height: 1.2;
+      }
+
+      .cta-subtitle {
+        font-size: 1.125rem;
+        margin-bottom: var(--space-8);
+        opacity: 0.9;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: var(--space-4);
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* Mobile responsive */
+      @media (max-width: 768px) {
+        .hero {
+          padding: calc(var(--header-height-mobile) + var(--space-8)) 0
+            var(--space-12);
+        }
+
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .cta-title {
+          font-size: 2rem;
+        }
+
+        .ai-card-header {
+          flex-direction: column;
+          text-align: center;
+          gap: var(--space-4);
+        }
+
+        .faq-question {
+          font-size: 1rem;
+        }
+
+        .intro-section::before {
+          font-size: 2rem;
+          top: var(--space-4);
+          right: var(--space-4);
+        }
+      }
+    </style>
+
+    <!-- Keep your existing stylesheets -->
     <link rel="stylesheet" href="../css/header.css" />
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/layout-fixes.css" />
     <link rel="stylesheet" href="../css/mobile-footer.css" />
 
+    <!-- Your existing AI-specific styles -->
     <style>
       /* AI-specific styling that extends the main design system */
       :root {
@@ -1065,7 +1745,7 @@
       </div>
     </main>
 
-        <!-- Enhanced Professional Footer -->
+    <!-- Enhanced Professional Footer -->
     <footer>
       <!-- Newsletter Section -->
       <div class="footer-newsletter">
@@ -1076,8 +1756,16 @@
               <p>Get learning tips delivered to your inbox</p>
             </div>
             <div class="newsletter-form">
-              <input type="email" placeholder="Enter email" id="newsletterEmail">
-              <button type="button" class="btn-newsletter" onclick="subscribeNewsletter()">
+              <input
+                type="email"
+                placeholder="Enter email"
+                id="newsletterEmail"
+              />
+              <button
+                type="button"
+                class="btn-newsletter"
+                onclick="subscribeNewsletter()"
+              >
                 <i class="fas fa-arrow-right"></i>
                 Subscribe
               </button>
@@ -1091,11 +1779,16 @@
           <!-- Brand Section -->
           <div class="footer-section footer-brand">
             <div class="brand-header">
-              <img src="images/1.png" alt="ESL Fun Online" class="footer-logo">
+              <img
+                src="images/1.png"
+                alt="ESL Fun Online"
+                class="footer-logo"
+              />
               <h3>ESL Fun Online</h3>
             </div>
             <p>
-              Transform your English and coding skills with our premium interactive resources.
+              Transform your English and coding skills with our premium
+              interactive resources.
             </p>
           </div>
 
@@ -1103,9 +1796,21 @@
           <div class="footer-section">
             <h3><i class="fas fa-graduation-cap"></i> English</h3>
             <ul>
-              <li><a href="english/grammar.html"><i class="fas fa-spell-check"></i><span>Grammar</span></a></li>
-              <li><a href="english/vocabguide.html"><i class="fas fa-book-open"></i><span>Vocabulary</span></a></li>
-              <li><a href="english/business.html"><i class="fas fa-handshake"></i><span>Business</span></a></li>
+              <li>
+                <a href="english/grammar.html"
+                  ><i class="fas fa-spell-check"></i><span>Grammar</span></a
+                >
+              </li>
+              <li>
+                <a href="english/vocabguide.html"
+                  ><i class="fas fa-book-open"></i><span>Vocabulary</span></a
+                >
+              </li>
+              <li>
+                <a href="english/business.html"
+                  ><i class="fas fa-handshake"></i><span>Business</span></a
+                >
+              </li>
             </ul>
           </div>
 
@@ -1113,9 +1818,21 @@
           <div class="footer-section">
             <h3><i class="fas fa-code"></i> Coding</h3>
             <ul>
-              <li><a href="coding/computerbasics.html"><i class="fas fa-desktop"></i><span>Basics</span></a></li>
-              <li><a href="coding/ai.html"><i class="fas fa-robot"></i><span>AI</span></a></li>
-              <li><a href="coding/codingresources.html"><i class="fas fa-terminal"></i><span>Resources</span></a></li>
+              <li>
+                <a href="coding/computerbasics.html"
+                  ><i class="fas fa-desktop"></i><span>Basics</span></a
+                >
+              </li>
+              <li>
+                <a href="coding/ai.html"
+                  ><i class="fas fa-robot"></i><span>AI</span></a
+                >
+              </li>
+              <li>
+                <a href="coding/codingresources.html"
+                  ><i class="fas fa-terminal"></i><span>Resources</span></a
+                >
+              </li>
             </ul>
           </div>
 
@@ -1123,9 +1840,22 @@
           <div class="footer-section">
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
-              <li><a href="lessons.html"><i class="fas fa-chalkboard-teacher"></i><span>Lessons</span></a></li>
-              <li><a href="games/games.html"><i class="fas fa-gamepad"></i><span>Games</span></a></li>
-              <li><a href="tools/tools.html"><i class="fas fa-tools"></i><span>Tools</span></a></li>
+              <li>
+                <a href="lessons.html"
+                  ><i class="fas fa-chalkboard-teacher"></i
+                  ><span>Lessons</span></a
+                >
+              </li>
+              <li>
+                <a href="games/games.html"
+                  ><i class="fas fa-gamepad"></i><span>Games</span></a
+                >
+              </li>
+              <li>
+                <a href="tools/tools.html"
+                  ><i class="fas fa-tools"></i><span>Tools</span></a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -1134,47 +1864,73 @@
         <div class="footer-bottom">
           <div class="footer-bottom-center">
             <div class="footer-links">
-              <a href="privacy.html"><i class="fas fa-shield-alt"></i>Privacy</a>
+              <a href="privacy.html"
+                ><i class="fas fa-shield-alt"></i>Privacy</a
+              >
               <a href="terms.html"><i class="fas fa-file-contract"></i>Terms</a>
-              <a href="cookies.html"><i class="fas fa-cookie-bite"></i>Cookies</a>
+              <a href="cookies.html"
+                ><i class="fas fa-cookie-bite"></i>Cookies</a
+              >
             </div>
           </div>
-          
+
           <div class="footer-bottom-left">
-            <p>&copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.</p>
+            <p>
+              &copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.
+            </p>
             <p class="footer-subtitle">Empowering learners worldwide</p>
           </div>
 
           <div class="footer-bottom-right">
             <div class="footer-badges">
-              <div class="badge"><i class="fas fa-award"></i><span>Certified</span></div>
-              <div class="badge"><i class="fas fa-lock"></i><span>Secure</span></div>
+              <div class="badge">
+                <i class="fas fa-award"></i><span>Certified</span>
+              </div>
+              <div class="badge">
+                <i class="fas fa-lock"></i><span>Secure</span>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="../js/navigation.js"></script>
     <script src="../js/footer-component.js"></script>
 
+    <!-- Add this script for animations -->
     <script>
-      // FAQ functionality
+      // Animation on scroll
       document.addEventListener("DOMContentLoaded", function () {
-        const faqItems = document.querySelectorAll(".faq-item");
+        const animateElements = document.querySelectorAll(".animate-on-scroll");
 
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        animateElements.forEach((element) => {
+          observer.observe(element);
+        });
+
+        // FAQ functionality
+        const faqItems = document.querySelectorAll(".faq-item");
         faqItems.forEach((item) => {
           const question = item.querySelector(".faq-question");
-
           question.addEventListener("click", () => {
             const isActive = item.classList.contains("active");
-
-            // Close all other FAQ items
             faqItems.forEach((otherItem) => {
               if (otherItem !== item) {
                 otherItem.classList.remove("active");
               }
             });
-
-            // Toggle current item
             item.classList.toggle("active", !isActive);
           });
         });

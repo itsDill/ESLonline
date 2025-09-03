@@ -80,9 +80,12 @@
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/layout-fixes.css" />
     <link rel="stylesheet" href="../css/mobile-footer.css" />
+    <link rel="stylesheet" href="../css/style.css" />
 
     <style>
-      /* CSS Variables for Kid-Friendly Design System */
+      /* =========================
+         Kid-Friendly Design System
+         ========================= */
       :root {
         --primary-color: #ff6b6b;
         --primary-hover: #ff5252;
@@ -93,7 +96,7 @@
         --text-primary: #2d3748;
         --text-secondary: #4a5568;
         --text-light: #718096;
-        --bg-primary: #ffffff;
+        --bg-primary: #fff;
         --bg-secondary: #f7fafc;
         --bg-tertiary: #edf2f7;
         --border-color: #e2e8f0;
@@ -102,11 +105,7 @@
         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
         --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
-        --gradient-secondary: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
         --gradient-hero: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
-        --gradient-fun: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #ff7675 100%);
-        --gradient-tech: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-        /* Computer-specific fun colors */
         --monitor-color: #74b9ff;
         --keyboard-color: #00b894;
         --mouse-color: #e17055;
@@ -114,20 +113,21 @@
         --internet-color: #fd79a8;
       }
 
-      /* Dark Mode Variables */
+      /* Dark Mode */
       .dark-mode {
         --text-primary: #f9fafb;
         --text-secondary: #d1d5db;
-        --text-light: #9ca3af;
         --bg-primary: #111827;
         --bg-secondary: #1f2937;
-        --bg-tertiary: #374151;
         --border-color: #374151;
       }
 
-      * {
-        margin: 0;
-        padding: 0;
+      /* ================
+         Base Styles
+         ================ */
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
 
@@ -136,32 +136,29 @@
       }
 
       body {
-        font-family: "Poppins", -apple-system, BlinkMacSystemFont,
-          "Helvetica Neue", Arial, sans-serif;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
         line-height: 1.6;
         color: var(--text-primary);
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 4%, #4facfe 8%, #00f2fe 12%, #43e97b 16%, #38f9d7 20%, #ff6b6b 24%, #4ecdc4 28%, #45b7d1 32%, #96ceb4 36%, #ffeaa7 40%, #fab1a0 44%, #ff7675 48%, #a29bfe 52%, #6c5ce7 56%, #74b9ff 60%, #0984e3 64%, #00b894 68%, #00cec9 72%, #e17055 76%, #e84393 80%, #fd79a8 84%, #fdcb6e 88%, #f39c12 92%, #d63031 96%, #74b9ff 100%);
+        background: linear-gradient(135deg, #f093fb 0%, #ff6b6b 24%, #4ecdc4 28%, #45b7d1 32%, #96ceb4 36%, #ffeaa7 40%, #a29bfe 52%, #6c5ce7 56%, #74b9ff 60%, #00b894 68%, #e17055 76%, #fd79a8 84%, #fdcb6e 88%, #d63031 96%, #74b9ff 100%);
         background-size: 400% 400%;
         animation: gradientShift 15s ease infinite;
-        transition: all 0.3s ease;
+        transition: background 0.3s;
         position: relative;
-        padding-top: 80px; /* Account for fixed header */
+        padding-top: 80px;
       }
 
       @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
+        0%, 100% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
       }
 
       body::before {
         content: '';
         position: fixed;
-        top: 0;
-        left: 0;
+        inset: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(255,255,255,0.85);
         pointer-events: none;
         z-index: -1;
       }
@@ -172,23 +169,34 @@
         padding: 0 1.5rem;
       }
 
-      /* Skip to Content Link */
+      /* =================
+         Accessibility
+         ================= */
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      /* =================
+         Skip Link
+         ================= */
       .skip-link {
         position: absolute;
         top: -40px;
         left: 0;
         background: var(--primary-color);
-        color: white;
+        color: #fff;
         padding: 8px;
         z-index: 100;
         transition: top 0.3s;
       }
+      .skip-link:focus { top: 0; }
 
-      .skip-link:focus {
-        top: 0;
-      }
-
-      /* Hero Section */
+      /* =================
+         Hero Section
+         ================= */
       .hero {
         position: relative;
         min-height: 400px;
@@ -196,10 +204,8 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        background: none;
         overflow: hidden;
       }
-
       .hero-bg {
         position: absolute;
         inset: 0;
@@ -210,57 +216,41 @@
         pointer-events: none;
         opacity: 0.92;
       }
-
       .hero-content {
         position: relative;
         z-index: 1;
         max-width: 700px;
         margin: 0 auto;
-        padding: 3rem 1.5rem 2rem 1.5rem;
+        padding: 3rem 1.5rem 2rem;
         color: #fff;
-        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+        text-shadow: 0 2px 16px rgba(0,0,0,0.25);
       }
-
       .hero-title {
-        font-family: "Poppins", sans-serif;
         font-size: clamp(2.2rem, 5vw, 3.2rem);
         font-weight: 700;
         margin-bottom: 1rem;
         letter-spacing: 0.01em;
       }
-
       .hero-subtitle {
         font-size: 1.25rem;
         font-weight: 400;
-        opacity: 0.95;
-        margin-bottom: 0;
         max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0 auto;
         color: #f3f4f6;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.18);
       }
 
-      /* Main Content */
-      .main-content {
-        padding: 4rem 0;
-      }
-
-      .section {
-        margin-bottom: 4rem;
-      }
-
+      /* =================
+         Section Titles
+         ================= */
       .section-title {
-        font-family: "Poppins", sans-serif;
-        font-size: 2.25rem;
+        font-size: clamp(1.7rem, 4vw, 2.25rem);
         font-weight: 700;
         text-align: center;
         margin-bottom: 1rem;
         color: var(--text-primary);
-        line-height: 1.2;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
       }
-
       .section-subtitle {
         text-align: center;
         color: var(--text-secondary);
@@ -270,682 +260,180 @@
         line-height: 1.6;
       }
 
-      /* Resource Cards Grid */
-      .resources-grid {
+      /* =================
+         Card Grids
+         ================= */
+      .resources-grid,
+      .safety-cards,
+      .path-grid,
+      .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 2rem;
-        margin-bottom: 3rem;
       }
+      .resources-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+      .safety-cards,
+      .path-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 
-      .resource-card {
+      /* =================
+         Resource Cards
+         ================= */
+      .resource-card,
+      .activity-card,
+      .path-card,
+      .safety-card {
         background: var(--bg-primary);
-        border: 1px solid var(--border-color);
         border-radius: 16px;
         padding: 2rem;
-        text-decoration: none;
-        color: inherit;
-        transition: all 0.3s ease;
         box-shadow: var(--shadow-sm);
+        transition: transform 0.3s, box-shadow 0.3s;
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        color: inherit;
+        text-decoration: none;
       }
-
-      .resource-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        background: var(--gradient-primary);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
-      }
-
       .resource-card:hover,
-      .resource-card:focus {
+      .resource-card:focus,
+      .activity-card:hover,
+      .activity-card:focus,
+      .path-card:hover,
+      .path-card:focus,
+      .safety-card:hover,
+      .safety-card:focus {
         transform: translateY(-8px);
         box-shadow: var(--shadow-xl);
-        border-color: var(--primary-color);
         outline: none;
-      }
-
-      .resource-card:hover::before,
-      .resource-card:focus::before {
-        transform: scaleX(1);
-      }
-
-      .resource-header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .resource-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: white;
-        flex-shrink: 0;
-      }
-
-      .resource-icon.python {
-        background: linear-gradient(
-          135deg,
-          var(--python-color) 0%,
-          #ffd43b 100%
-        );
-      }
-
-      .resource-icon.javascript {
-        background: linear-gradient(135deg, var(--js-color) 0%, #f0db4f 100%);
-        color: #333;
-      }
-
-      .resource-icon.html-css {
-        background: linear-gradient(
-          135deg,
-          var(--html-color) 0%,
-          var(--css-color) 100%
-        );
-      }
-
-      .resource-icon.fundamentals {
-        background: var(--gradient-primary);
-      }
-
-      .resource-info h3 {
-        font-size: 1.375rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--text-primary);
-        font-family: "Poppins", sans-serif;
-      }
-
-      .resource-level {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        background: var(--secondary-color);
-        color: white;
-        font-size: 0.75rem;
-        font-weight: 600;
-        border-radius: 12px;
-      }
-
-      .resource-description {
-        color: var(--text-secondary);
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-        flex-grow: 1;
-      }
-
-      .resource-features {
-        list-style: none;
-        margin-bottom: 1.5rem;
-      }
-
-      .resource-features li {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-      }
-
-      .resource-features li i {
-        color: var(--secondary-color);
-        width: 16px;
-        flex-shrink: 0;
-      }
-
-      .resource-cta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border-color);
-      }
-
-      .cta-text {
-        color: var(--primary-color);
-        font-weight: 600;
-        font-size: 0.9rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-
-      .cta-arrow {
-        color: var(--primary-color);
-        transition: transform 0.3s ease;
-      }
-
-      .resource-card:hover .cta-arrow,
-      .resource-card:focus .cta-arrow {
-        transform: translateX(5px);
       }
 
       /* Fun Kid-Friendly Card Styles */
       .fun-card {
-        background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+        background: linear-gradient(145deg, #fff 0%, #f8f9ff 100%);
         border: 3px solid transparent;
         border-image: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) 1;
         border-radius: 20px !important;
-        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.15);
+        box-shadow: 0 8px 25px rgba(255,107,107,0.15);
         cursor: default;
       }
-
       .fun-card:hover {
         transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 15px 35px rgba(255, 107, 107, 0.25);
+        box-shadow: 0 15px 35px rgba(255,107,107,0.25);
         border-image: linear-gradient(45deg, #45b7d1, #ff6b6b, #4ecdc4) 1;
       }
 
-      /* Custom Icon Styles */
-      .computer-icon { background: linear-gradient(135deg, var(--monitor-color) 0%, var(--accent-color) 100%); }
-      .laptop-icon { background: linear-gradient(135deg, var(--keyboard-color) 0%, var(--secondary-color) 100%); }
-      .helper-icon { background: linear-gradient(135deg, var(--primary-color) 0%, var(--warning-color) 100%); }
-      .internet-icon { background: linear-gradient(135deg, var(--internet-color) 0%, var(--cpu-color) 100%); }
-      .brain-icon { background: linear-gradient(135deg, var(--cpu-color) 0%, var(--internet-color) 100%); }
-      .eyes-icon { background: linear-gradient(135deg, var(--monitor-color) 0%, var(--accent-color) 100%); }
-      .hands-icon { background: linear-gradient(135deg, var(--keyboard-color) 0%, var(--mouse-color) 100%); }
-      .memory-icon { background: linear-gradient(135deg, var(--warning-color) 0%, var(--primary-color) 100%); }
-      .learning-icon { background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); }
-      .games-icon { background: linear-gradient(135deg, #00cec9 0%, #55efc4 100%); }
-      .creative-icon { background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%); }
-      .communication-icon { background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); }
+      /* =================
+         Custom Icon Styles
+         ================= */
+      .resource-icon,
+      .path-icon,
+      .safety-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        color: #fff;
+        width: 60px;
+        height: 60px;
+        margin-right: 1rem;
+        flex-shrink: 0;
+      }
+      .computer-icon { background: linear-gradient(135deg, var(--monitor-color), var(--accent-color)); }
+      .laptop-icon { background: linear-gradient(135deg, var(--keyboard-color), var(--secondary-color)); }
+      .helper-icon { background: linear-gradient(135deg, var(--primary-color), var(--warning-color)); }
+      .internet-icon { background: linear-gradient(135deg, var(--internet-color), var(--cpu-color)); }
+      .brain-icon { background: linear-gradient(135deg, var(--cpu-color), var(--internet-color)); }
+      .eyes-icon { background: linear-gradient(135deg, var(--monitor-color), var(--accent-color)); }
+      .hands-icon { background: linear-gradient(135deg, var(--keyboard-color), var(--mouse-color)); }
+      .memory-icon { background: linear-gradient(135deg, var(--warning-color), var(--primary-color)); }
+      .learning-icon { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+      .games-icon { background: linear-gradient(135deg, #00cec9, #55efc4); }
+      .creative-icon { background: linear-gradient(135deg, #fd79a8, #fdcb6e); }
+      .communication-icon { background: linear-gradient(135deg, #74b9ff, #0984e3); }
 
-      /* Fun Level Tags */
-      .fun-level { 
-        background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
-        color: white;
+      /* =================
+         Level Tags
+         ================= */
+      .fun-level,
+      .brain-level,
+      .eyes-level,
+      .hands-level,
+      .memory-level,
+      .learning-level,
+      .games-level,
+      .creative-level,
+      .communication-level {
         font-weight: 700;
         font-size: 0.8rem;
         padding: 0.3rem 0.8rem;
         border-radius: 15px;
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-      }
-      .brain-level { background: linear-gradient(135deg, var(--cpu-color) 0%, var(--internet-color) 100%); }
-      .eyes-level { background: linear-gradient(135deg, var(--monitor-color) 0%, var(--accent-color) 100%); }
-      .hands-level { background: linear-gradient(135deg, var(--keyboard-color) 0%, var(--mouse-color) 100%); }
-      .memory-level { background: linear-gradient(135deg, var(--warning-color) 0%, var(--primary-color) 100%); }
-      .learning-level { background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); }
-      .games-level { background: linear-gradient(135deg, #00cec9 0%, #55efc4 100%); }
-      .creative-level { background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%); }
-      .communication-level { background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); }
-
-      /* Activity Cards */
-      .activity-card {
-        background: linear-gradient(145deg, #ffffff 0%, #f0f7ff 100%);
-        border: 3px solid transparent;
-        border-radius: 20px;
-        cursor: default;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 2px 8px rgba(255,107,107,0.3);
+        color: #fff;
+        background: var(--gradient-primary);
       }
 
-      .learning-card { 
-        border-image: linear-gradient(45deg, #6c5ce7, #a29bfe) 1;
-        box-shadow: 0 8px 25px rgba(108, 92, 231, 0.15);
-      }
-      .learning-card:hover { box-shadow: 0 15px 35px rgba(108, 92, 231, 0.25); }
-
-      .games-card { 
-        border-image: linear-gradient(45deg, #00cec9, #55efc4) 1;
-        box-shadow: 0 8px 25px rgba(0, 206, 201, 0.15);
-      }
-      .games-card:hover { box-shadow: 0 15px 35px rgba(0, 206, 201, 0.25); }
-
-      .creative-card { 
-        border-image: linear-gradient(45deg, #fd79a8, #fdcb6e) 1;
-        box-shadow: 0 8px 25px rgba(253, 121, 168, 0.15);
-      }
-      .creative-card:hover { box-shadow: 0 15px 35px rgba(253, 121, 168, 0.25); }
-
-      .communication-card { 
-        border-image: linear-gradient(45deg, #74b9ff, #0984e3) 1;
-        box-shadow: 0 8px 25px rgba(116, 185, 255, 0.15);
-      }
-      .communication-card:hover { box-shadow: 0 15px 35px rgba(116, 185, 255, 0.25); }
-
-      /* Safety Section Styles */
+      /* =================
+         Safety Section
+         ================= */
       .safety-section {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        color: #fff;
         padding: 4rem 2rem;
         border-radius: 25px;
         margin: 4rem 0;
-        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 20px 40px rgba(102,126,234,0.3);
       }
-
-      .safety-section .section-title {
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      .safety-section .section-subtitle {
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      .safety-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin-top: 3rem;
-      }
-
+      .safety-section .section-title { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);}
+      .safety-section .section-subtitle { color: rgba(255,255,255,0.9); }
       .safety-card {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        border-radius: 15px;
-        padding: 2rem;
-        text-align: center;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.2);
         backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
+        text-align: center;
       }
-
       .safety-card:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        background: rgba(255,255,255,0.2);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       }
 
-      .safety-icon {
-        width: 70px;
-        height: 70px;
-        margin: 0 auto 1rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.8rem;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-      }
-
-      .safety-card h3 {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        font-family: "Poppins", sans-serif;
-      }
-
-      .safety-card p {
-        font-size: 1rem;
-        line-height: 1.5;
-        opacity: 0.9;
-      }
-
-      /* Advertisement Styles */
-      .ad-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: 2px solid var(--primary-color);
-        border-radius: 16px;
-        padding: 2rem;
-        text-align: center;
-        margin: 3rem 0;
-        position: relative;
-        overflow: hidden;
-        color: white;
-      }
-
-      .ad-banner::before {
-        content: "SPONSORED";
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        background: var(--accent-color);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        border-radius: 4px;
-      }
-
-      .ad-banner h3 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-
-      .ad-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: white;
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        margin-top: 1rem;
-      }
-
-      .ad-btn:hover,
-      .ad-btn:focus {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-        outline: none;
-      }
-
-      /* Learning Path Section */
-      .learning-path {
-        background: var(--bg-secondary);
-        padding: 4rem 0;
-        border-radius: 24px;
-        margin: 4rem 0;
-      }
-
-      .path-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-      }
-
-      .path-card {
-        background: var(--bg-primary);
-        border-radius: 16px;
-        padding: 2rem;
-        text-align: center;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: inherit;
-        position: relative;
-      }
-
-      .path-card:hover,
-      .path-card:focus {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-lg);
-        outline: none;
-      }
-
-      .path-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1rem;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        color: white;
-        font-weight: bold;
-      }
-
-      .path-icon.frontend {
-        background: linear-gradient(
-          135deg,
-          var(--html-color) 0%,
-          var(--css-color) 50%,
-          var(--js-color) 100%
-        );
-      }
-
-      .path-icon.backend {
-        background: linear-gradient(
-          135deg,
-          var(--python-color) 0%,
-          #2e7d32 100%
-        );
-      }
-
-      .path-icon.fullstack {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      }
-
-      /* Stats Section */
-      .stats-section {
-        text-align: center;
-        padding: 3rem 0;
-        background: var(--gradient-code);
-        color: white;
-        border-radius: 16px;
-        margin: 3rem 0;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-      }
-
-      .stat-item {
-        text-align: center;
-      }
-
-      .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-
-      .stat-label {
-        font-size: 0.9rem;
-        opacity: 0.9;
-      }
-
-      /* CTA Section */
-      .cta-section {
-        background: var(--gradient-hero);
-        color: white;
-        text-align: center;
-        padding: 4rem 2rem;
-        border-radius: 16px;
-        margin: 4rem 0;
-      }
-
-      .cta-section h2 {
-        font-size: 2.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-        font-family: "Poppins", sans-serif;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      .cta-section p {
-        font-size: 1.125rem;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .cta-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 2rem;
-        background: white;
-        color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 600;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        box-shadow: var(--shadow-lg);
-      }
-
-      .btn:hover,
-      .btn:focus {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-xl);
-        outline: none;
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: white;
-        border: 2px solid white;
-      }
-
-      .btn-secondary:hover,
-      .btn-secondary:focus {
-        background: white;
-        color: var(--primary-color);
-      }
-
-      /* Loading Animation */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      .loading {
-        opacity: 0;
-      }
-
-      .loaded {
-        animation: fadeIn 0.5s ease-in forwards;
-      }
-
-      /* Mobile Responsive */
+      /* =================
+         Responsive Styles
+         ================= */
       @media (max-width: 768px) {
-        body {
-          padding-top: 70px; /* Mobile header height */
-        }
-
-        .resources-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .path-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .stats-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .cta-buttons {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .btn {
-          width: 100%;
-          max-width: 300px;
-          justify-content: center;
-        }
-
-        .container {
-          padding: 0 1rem;
-        }
-
-        .section-title {
-          font-size: 2rem;
-        }
-
-        .safety-cards {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* Animation Classes */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .fade-in-up {
-        animation: fadeInUp 0.8s ease-out forwards;
-      }
-
-      .animate-on-scroll {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
-      }
-
-      .animate-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* Focus styles for accessibility */
-      a:focus,
-      button:focus,
-      input:focus,
-      select:focus,
-      textarea:focus {
-        outline: 2px solid var(--primary-color);
-        outline-offset: 2px;
-      }
-
-      /* Print styles */
-      @media print {
-        header,
-        footer,
-        .ad-banner,
-        .cta-section,
-        .controls {
-          display: none !important;
-        }
-
-        body {
-          background: white !important;
-          color: black !important;
-          font-size: 12pt;
-        }
-
-        .container {
-          max-width: 100%;
-          padding: 0;
-        }
-
-        .resource-card,
-        .path-card {
-          break-inside: avoid;
-          page-break-inside: avoid;
-          border: 1px solid #ddd !important;
-          box-shadow: none !important;
-          margin-bottom: 1rem;
-        }
-
+        body { padding-top: 70px; }
+        .container { padding: 0 1rem; }
         .resources-grid,
-        .path-grid {
-          display: block;
-        }
+        .path-grid,
+        .safety-cards,
+        .stats-grid { grid-template-columns: 1fr; }
+        .section-title { font-size: 2rem; }
+        .cta-buttons { flex-direction: column; align-items: center; }
+        .btn { width: 100%; max-width: 300px; justify-content: center; }
+      }
 
-        a {
-          text-decoration: none !important;
-          color: black !important;
-        }
+      /* =================
+         Animations
+         ================= */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px);}
+        to { opacity: 1; transform: translateY(0);}
+      }
+      .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+      .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.6s;}
+      .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
 
-        .resource-cta,
-        .cta-arrow {
-          display: none !important;
-        }
+      /* =================
+         Print Styles
+         ================= */
+      @media print {
+        header, footer, .ad-banner, .cta-section, .controls { display: none !important; }
+        body { background: #fff !important; color: #000 !important; font-size: 12pt;}
+        .container { max-width: 100%; padding: 0;}
+        .resource-card, .path-card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; margin-bottom: 1rem;}
+        .resources-grid, .path-grid { display: block;}
+        a { text-decoration: none !important; color: #000 !important;}
+        .resource-cta, .cta-arrow { display: none !important;}
       }
     </style>
   </head>
@@ -1073,7 +561,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <img src="../images/apple-ipad-551502_1280.jpg" alt="" class="hero-bg" />
+      <img src="../images/hero-english.png" alt="" class="hero-bg" />
       <div class="hero-content">
         <h1 class="hero-title">🖥️ Amazing World of Computers! 🌟</h1>
         <p class="hero-subtitle">
