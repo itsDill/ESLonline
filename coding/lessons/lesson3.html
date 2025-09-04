@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teaching Computers to Choose - Fun Coding for Kids</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 1s ease-out;
+      }
+
+      .header h1 {
+        font-size: 3.5em;
+        color: #fff;
+        text-shadow: 3px 3px 0px #4a5568;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.4em;
+        color: #e2e8f0;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 1s ease-out 0.3s both;
+      }
+
+      .lesson-section {
+        margin-bottom: 40px;
+      }
+
+      .lesson-section h2 {
+        font-size: 2.2em;
+        color: #4a5568;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+      }
+
+      .lesson-section h2::before {
+        content: "🤔";
+        margin-right: 15px;
+        font-size: 1.2em;
+      }
+
+      .analogy-box {
+        background: linear-gradient(135deg, #ff9a8b 0%, #a8e6cf 100%);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        border-left: 5px solid #ff6b6b;
+      }
+
+      .analogy-box h3 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+        color: #2d3748;
+      }
+
+      .decision-tree {
+        background: #f7fafc;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        border: 3px solid #4299e1;
+        position: relative;
+      }
+
+      .decision-node {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin: 20px auto;
+        max-width: 300px;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .decision-node:hover {
+        transform: scale(1.05);
+      }
+
+      .decision-node.question {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .decision-node.outcome {
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        font-size: 1.2em;
+      }
+
+      .decision-arrows {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+      }
+
+      .arrow {
+        font-size: 2em;
+        color: #4299e1;
+      }
+
+      .interactive-demo {
+        background: #f7fafc;
+        border: 3px dashed #4299e1;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .demo-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        margin: 10px;
+      }
+
+      .demo-button:hover {
+        transform: scale(1.05);
+      }
+
+      .demo-button.yes {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      }
+
+      .demo-button.no {
+        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      }
+
+      .code-example {
+        background: #2d3748;
+        color: #68d391;
+        padding: 20px;
+        border-radius: 10px;
+        font-family: "Courier New", monospace;
+        margin: 20px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .code-example::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          #ff6b6b,
+          #4ecdc4,
+          #45b7d1,
+          #96ceb4,
+          #feca57
+        );
+      }
+
+      .conditional-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .conditional-card {
+        background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 100%);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        border: 2px solid #81c784;
+      }
+
+      .conditional-card:hover {
+        transform: scale(1.02);
+      }
+
+      .conditional-card h3 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+        color: #2e7d32;
+      }
+
+      .weather-demo {
+        background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 30px 0;
+        text-align: center;
+      }
+
+      .weather-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .weather-option {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid transparent;
+        border-radius: 15px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .weather-option:hover {
+        border-color: white;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .weather-option.selected {
+        border-color: #feca57;
+        background: rgba(254, 202, 87, 0.3);
+      }
+
+      .result-display {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        font-size: 1.3em;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .flowchart {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .flowchart-step {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #4299e1;
+      }
+
+      .step-number {
+        background: #4299e1;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-weight: bold;
+      }
+
+      .affiliate-section {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        margin: 30px 0;
+        animation: slideInRight 1s ease-out 0.6s both;
+      }
+
+      .affiliate-section h2 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .course-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .course-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .course-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+      }
+
+      .course-card p {
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .cta-button {
+        background: white;
+        color: #f5576c;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .cta-button:hover {
+        background: #f7fafc;
+        transform: scale(1.05);
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .progress-bar {
+        background: #e2e8f0;
+        height: 10px;
+        border-radius: 5px;
+        margin: 20px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        height: 100%;
+        width: 0%;
+        border-radius: 5px;
+        transition: width 2s ease-out;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2.5em;
+        }
+
+        .main-content {
+          padding: 20px;
+        }
+
+        .weather-options {
+          grid-template-columns: 1fr;
+        }
+
+        .decision-arrows {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Teaching Computers to Choose! 🤔</h1>
+        <p>Learn how to help computers make smart decisions!</p>
+      </div>
+
+      <div class="main-content">
+        <div class="lesson-section">
+          <h2>What Are Computer Decisions?</h2>
+
+          <div class="analogy-box">
+            <h3>🚦 Think of Traffic Lights!</h3>
+            <p>
+              Just like traffic lights help cars decide when to go or stop, we
+              can teach computers to make choices! We give them rules: "IF the
+              light is green, THEN go. IF the light is red, THEN stop."
+              Computers follow these IF-THEN rules to make smart decisions!
+            </p>
+          </div>
+
+          <p style="font-size: 1.2em; line-height: 1.6">
+            Computers can't think like humans, but we can teach them to make
+            choices by giving them <strong>conditions</strong> to check. If
+            something is true, they do one thing. If it's false, they do
+            something else! 🎯
+          </p>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Decision Trees in Action!</h2>
+
+          <div class="decision-tree">
+            <div class="decision-node question">🌡️ Is it cold outside?</div>
+
+            <div class="decision-arrows">
+              <span class="arrow">👍 YES ↓</span>
+              <span class="arrow">👎 NO ↓</span>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+              "
+            >
+              <div class="decision-node outcome">🧥 Wear a jacket!</div>
+              <div class="decision-node outcome">👕 Wear a t-shirt!</div>
+            </div>
+          </div>
+
+          <div class="code-example">
+            <div style="color: #fbd38d; margin-bottom: 10px">
+              🤖 How Computer Thinks:
+            </div>
+            <div style="color: #68d391">IF</div>
+            temperature < 60 degrees:<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;wear_jacket =
+            <span style="color: #90cdf4">true</span><br />
+            <div style="color: #68d391">ELSE</div>
+            :<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;wear_jacket =
+            <span style="color: #f687b3">false</span>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Interactive Weather Decision Maker</h2>
+
+          <div class="weather-demo">
+            <h3>🌤️ Help the Computer Choose What to Wear!</h3>
+            <p>
+              Click on different weather conditions and see how the computer
+              decides what to recommend!
+            </p>
+
+            <div class="weather-options">
+              <div
+                class="weather-option"
+                onclick="makeWeatherDecision('sunny', '☀️', 'Sunny & Warm')"
+              >
+                <div style="font-size: 3em">☀️</div>
+                <div>Sunny & Warm</div>
+              </div>
+              <div
+                class="weather-option"
+                onclick="makeWeatherDecision('rainy', '🌧️', 'Rainy')"
+              >
+                <div style="font-size: 3em">🌧️</div>
+                <div>Rainy</div>
+              </div>
+              <div
+                class="weather-option"
+                onclick="makeWeatherDecision('snowy', '❄️', 'Snowy & Cold')"
+              >
+                <div style="font-size: 3em">❄️</div>
+                <div>Snowy & Cold</div>
+              </div>
+              <div
+                class="weather-option"
+                onclick="makeWeatherDecision('windy', '💨', 'Windy')"
+              >
+                <div style="font-size: 3em">💨</div>
+                <div>Windy</div>
+              </div>
+            </div>
+
+            <div class="result-display" id="weatherResult">
+              Click a weather condition above to see the computer's decision! 👆
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Types of Computer Decisions</h2>
+
+          <div class="conditional-types">
+            <div class="conditional-card">
+              <h3>✅ Simple IF</h3>
+              <p><strong>"IF this is true, THEN do something"</strong></p>
+              <div
+                class="code-example"
+                style="background: #4a5568; margin-top: 15px"
+              >
+                IF it's your birthday:<br />
+                &nbsp;&nbsp;sing "Happy Birthday"
+              </div>
+            </div>
+
+            <div class="conditional-card">
+              <h3>🔄 IF-ELSE</h3>
+              <p><strong>"IF this is true, do X. OTHERWISE, do Y"</strong></p>
+              <div
+                class="code-example"
+                style="background: #4a5568; margin-top: 15px"
+              >
+                IF you have homework:<br />
+                &nbsp;&nbsp;do homework first<br />
+                ELSE:<br />
+                &nbsp;&nbsp;play games
+              </div>
+            </div>
+
+            <div class="conditional-card">
+              <h3>🎯 IF-ELSE IF</h3>
+              <p><strong>"Check multiple conditions in order"</strong></p>
+              <div
+                class="code-example"
+                style="background: #4a5568; margin-top: 15px"
+              >
+                IF score >= 90:<br />
+                &nbsp;&nbsp;grade = "A"<br />
+                ELSE IF score >= 80:<br />
+                &nbsp;&nbsp;grade = "B"<br />
+                ELSE:<br />
+                &nbsp;&nbsp;grade = "C"
+              </div>
+            </div>
+
+            <div class="conditional-card">
+              <h3>🤝 AND & OR</h3>
+              <p><strong>"Check multiple things at once"</strong></p>
+              <div
+                class="code-example"
+                style="background: #4a5568; margin-top: 15px"
+              >
+                IF it's weekend AND sunny:<br />
+                &nbsp;&nbsp;go to the park<br />
+                <br />
+                IF hungry OR thirsty:<br />
+                &nbsp;&nbsp;go to kitchen
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Try Making Your Own Decision!</h2>
+
+          <div class="interactive-demo">
+            <h3>🎮 Pet Decision Maker</h3>
+            <p>Help someone choose what pet to get based on their situation!</p>
+
+            <div style="margin: 20px 0">
+              <p style="font-size: 1.2em; margin-bottom: 15px">
+                Do you have a big yard?
+              </p>
+              <button
+                class="demo-button yes"
+                onclick="petDecision('yard', true)"
+              >
+                Yes, I have a big yard! 🏡
+              </button>
+              <button
+                class="demo-button no"
+                onclick="petDecision('yard', false)"
+              >
+                No, I live in an apartment 🏢
+              </button>
+            </div>
+
+            <div
+              id="petQuestionArea"
+              style="margin-top: 30px; min-height: 100px"
+            ></div>
+            <div
+              id="petResult"
+              style="margin-top: 20px; font-size: 1.3em; font-weight: bold"
+            ></div>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>How Computers Make Decisions: Step by Step</h2>
+
+          <div class="flowchart">
+            <h3 style="text-align: center; margin-bottom: 25px; color: #4a5568">
+              🔍 The Decision-Making Process
+            </h3>
+
+            <div class="flowchart-step">
+              <div class="step-number">1</div>
+              <div>
+                <strong>Check the Condition:</strong> Computer looks at the IF
+                statement and checks if it's true or false
+              </div>
+            </div>
+
+            <div class="flowchart-step">
+              <div class="step-number">2</div>
+              <div>
+                <strong>Compare Values:</strong> It compares numbers, text, or
+                other data using rules like "greater than" or "equal to"
+              </div>
+            </div>
+
+            <div class="flowchart-step">
+              <div class="step-number">3</div>
+              <div>
+                <strong>Choose Path:</strong> If true, it follows one path. If
+                false, it follows the ELSE path
+              </div>
+            </div>
+
+            <div class="flowchart-step">
+              <div class="step-number">4</div>
+              <div>
+                <strong>Take Action:</strong> Computer runs the code in that
+                path - might display text, play sound, or calculate something
+              </div>
+            </div>
+
+            <div class="flowchart-step">
+              <div class="step-number">5</div>
+              <div>
+                <strong>Continue:</strong> After making the decision, computer
+                moves on to the next instruction in the program
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Real-World Examples</h2>
+
+          <div
+            style="
+              background: #e6fffa;
+              border-radius: 15px;
+              padding: 30px;
+              margin: 20px 0;
+              border-left: 5px solid #38b2ac;
+            "
+          >
+            <h3 style="color: #2c7a7b; font-size: 1.8em; margin-bottom: 15px">
+              🌟 Decisions Are Everywhere!
+            </h3>
+            <ul style="list-style: none; font-size: 1.1em; line-height: 2">
+              <li>
+                🎮 <strong>Video Games:</strong> IF player touches enemy, THEN
+                lose a life
+              </li>
+              <li>
+                📱 <strong>Phone Apps:</strong> IF password is correct, THEN
+                unlock phone
+              </li>
+              <li>
+                🏠 <strong>Smart Homes:</strong> IF it gets dark, THEN turn on
+                lights
+              </li>
+              <li>
+                🚗 <strong>GPS Navigation:</strong> IF there's traffic, THEN
+                find another route
+              </li>
+              <li>
+                🎬 <strong>Netflix:</strong> IF you liked action movies, THEN
+                suggest more action
+              </li>
+              <li>
+                🛒 <strong>Online Shopping:</strong> IF item is in stock, THEN
+                show "Buy Now" button
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lesson-section">
+          <h2>Your Decision-Making Journey!</h2>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+          </div>
+          <p style="text-align: center; margin-top: 10px">
+            Lesson 3 Complete! 🎉
+          </p>
+        </div>
+      </div>
+
+      <div class="affiliate-section">
+        <h2>
+          🚀 Ready to Master Decision-Making in Code? Explore These Courses!
+        </h2>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px">
+          Take your conditional logic skills to the next level with these
+          amazing courses! 🧠
+        </p>
+
+        <div class="course-grid">
+          <div class="course-card">
+            <h3>🧠 Logic Masters</h3>
+            <p>
+              Master IF-ELSE statements, boolean logic, and complex decision
+              trees. Build smart programs that think!
+            </p>
+            <button class="cta-button" onclick="window.open('#', '_blank')">
+              Master Logic →
+            </button>
+          </div>
+
+          <div class="course-card">
+            <h3>🎮 Game Decision AI</h3>
+            <p>
+              Create intelligent game characters that make decisions! Learn AI
+              basics through fun game development.
+            </p>
+            <button class="cta-button" onclick="window.open('#', '_blank')">
+              Build Game AI →
+            </button>
+          </div>
+
+          <div class="course-card">
+            <h3>🤖 Smart Chatbots</h3>
+            <p>
+              Build chatbots that can have conversations and make decisions
+              based on what users say!
+            </p>
+            <button class="cta-button" onclick="window.open('#', '_blank')">
+              Create Chatbots →
+            </button>
+          </div>
+
+          <div class="course-card">
+            <h3>🔍 Algorithm Detective</h3>
+            <p>
+              Solve coding puzzles and mysteries using conditional logic and
+              decision-making algorithms!
+            </p>
+            <button class="cta-button" onclick="window.open('#', '_blank')">
+              Solve Puzzles →
+            </button>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 30px; opacity: 0.9">
+          💫 Use code <strong>SMARTCHOICES</strong> for 30% off any logic and
+          decision-making course!
+        </p>
+      </div>
+
+      <div
+        style="
+          background: white;
+          border-radius: 20px;
+          padding: 30px;
+          text-align: center;
+          margin-top: 30px;
+        "
+      >
+        <h2 style="color: #4a5568; margin-bottom: 20px">🎯 What's Next?</h2>
+        <p style="font-size: 1.2em; margin-bottom: 20px">
+          Ready for Lesson 4? Let's learn about loops - how to make computers
+          repeat tasks efficiently!
+        </p>
+        <button
+          class="demo-button"
+          style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%)"
+        >
+          Continue to Lesson 4: Loops & Repetition! 🔄
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let petDecisionState = {};
+
+      function makeWeatherDecision(weather, emoji, description) {
+        // Clear previous selections
+        document.querySelectorAll(".weather-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // Select current option
+        event.target.closest(".weather-option").classList.add("selected");
+
+        const resultDiv = document.getElementById("weatherResult");
+        let recommendation = "";
+
+        // Decision logic
+        if (weather === "sunny") {
+          recommendation = `${emoji} It's ${description}!<br>🕶️ Wear sunglasses and light clothes!`;
+        } else if (weather === "rainy") {
+          recommendation = `${emoji} It's ${description}!<br>🌂 Bring an umbrella and wear a raincoat!`;
+        } else if (weather === "snowy") {
+          recommendation = `${emoji} It's ${description}!<br>🧥 Wear a warm coat, gloves, and boots!`;
+        } else if (weather === "windy") {
+          recommendation = `${emoji} It's ${description}!<br>🧢 Wear a hat and a light jacket!`;
+        }
+
+        // Animate the result
+        resultDiv.style.opacity = "0";
+        setTimeout(() => {
+          resultDiv.innerHTML = recommendation;
+          resultDiv.style.opacity = "1";
+          resultDiv.style.transition = "opacity 0.5s ease";
+
+          // Add celebration
+          setTimeout(() => {
+            resultDiv.innerHTML +=
+              "<br><br>🎉 The computer made a smart choice! 🎉";
+          }, 1500);
+        }, 300);
+
+        showMessage("Computer checked the condition and made a decision! 🤖");
+      }
+
+      function petDecision(question, answer) {
+        const questionArea = document.getElementById("petQuestionArea");
+        const resultArea = document.getElementById("petResult");
+
+        petDecisionState[question] = answer;
+
+        if (question === "yard") {
+          if (answer) {
+            questionArea.innerHTML = `
+                        <p style="font-size: 1.2em; margin-bottom: 15px;">Great! Do you like active pets?</p>
+                        <button class="demo-button yes" onclick="petDecision('active', true)">Yes, I love active pets! 🏃‍♂️</button>
+                        <button class="demo-button no" onclick="petDecision('active', false)">No, I prefer calm pets 😌</button>
+                    `;
+          } else {
+            questionArea.innerHTML = `
+                        <p style="font-size: 1.2em; margin-bottom: 15px;">No problem! Do you want a cuddly pet?</p>
+                        <button class="demo-button yes" onclick="petDecision('cuddly', true)">Yes, I love cuddles! 🤗</button>
+                        <button class="demo-button no" onclick="petDecision('cuddly', false)">No, something independent 🐱</button>
+                    `;
+          }
+          resultArea.innerHTML = "";
+        } else if (question === "active") {
+          let recommendation = "";
+          if (petDecisionState.yard && answer) {
+            recommendation =
+              "🐕 Perfect! A dog would be great for you! They love big yards and being active!";
+          } else if (petDecisionState.yard && !answer) {
+            recommendation =
+              "🐰 A rabbit might be perfect! They enjoy yards but are more gentle and calm.";
+          }
+
+          questionArea.innerHTML = "";
+          resultArea.innerHTML =
+            recommendation + "<br><br>🎉 Decision made using IF-ELSE logic! 🎉";
+          showMessage(
+            "The computer used multiple conditions to make this choice! 🧠"
+          );
+        } else if (question === "cuddly") {
+          let recommendation = "";
+          if (!petDecisionState.yard && answer) {
+            recommendation =
+              "🐱 A cat would be perfect! They love cuddles and do great in apartments!";
+          } else if (!petDecisionState.yard && !answer) {
+            recommendation =
+              "🐠 How about a fish? They're independent and perfect for apartments!";
+          }
+
+          questionArea.innerHTML = "";
+          resultArea.innerHTML =
+            recommendation + "<br><br>🎉 Decision made using IF-ELSE logic! 🎉";
+          showMessage(
+            "The computer used multiple conditions to make this choice! 🧠"
+          );
+        }
+      }
+
+      function showMessage(message) {
+        // Create a temporary message bubble
+        const messageDiv = document.createElement("div");
+        messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideInRight 0.5s ease-out;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            `;
+        messageDiv.textContent = message;
+        document.body.appendChild(messageDiv);
+
+        // Remove message after 3 seconds
+        setTimeout(() => {
+          messageDiv.style.animation = "slideInRight 0.5s ease-out reverse";
+          setTimeout(() => {
+            document.body.removeChild(messageDiv);
+          }, 500);
+        }, 3000);
+      }
+
+      // Animate progress bar on page load
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("progress").style.width = "75%";
+        }, 1000);
+
+        // Add some interactive hover effects
+        document.querySelectorAll(".decision-node").forEach((node) => {
+          node.addEventListener("click", () => {
+            showMessage("That's how computers follow decision paths! 🛤️");
+          });
+        });
+      });
+
+      // Reset pet decision when starting over
+      function resetPetDecision() {
+        petDecisionState = {};
+        document.getElementById("petQuestionArea").innerHTML = "";
+        document.getElementById("petResult").innerHTML = "";
+        showMessage("Let's start the pet decision tree again! 🔄");
+      }
+
+      // Add keyboard interaction
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          showMessage(
+            "Great! You're learning how computers respond to inputs! ⌨️"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
