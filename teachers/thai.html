@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thai Language Flashcards - Learn Thai Vocabulary</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #667eea;
+        --primary-dark: #5a67d8;
+        --secondary: #764ba2;
+        --accent: #ff6b6b;
+        --accent-light: #feca57;
+        --light: #f8f9fa;
+        --dark: #343a40;
+        --success: #28a745;
+        --danger: #dc3545;
+        --warning: #ffc107;
+        --info: #17a2b8;
+        --gray: #6c757d;
+        --border-radius: 15px;
+        --box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        min-height: 100vh;
+        padding-bottom: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      /* Header & Navigation */
+      header {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        transition: var(--transition);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        padding: 5rem 2rem;
+        background: linear-gradient(
+          135deg,
+          var(--accent) 0%,
+          var(--accent-light) 50%,
+          var(--primary) 100%
+        );
+        color: white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='20' cy='20' r='2' fill='rgba(255,255,255,0.1)'/><circle cx='80' cy='40' r='1' fill='rgba(255,255,255,0.1)'/><circle cx='40' cy='80' r='1.5' fill='rgba(255,255,255,0.1)'/></svg>");
+        animation: float 20s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      /* Mode selector */
+      .mode-selector {
+        display: flex;
+        justify-content: center;
+        margin: 2rem 0;
+        background: white;
+        border-radius: 50px;
+        padding: 0.5rem;
+        box-shadow: var(--box-shadow);
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .mode-btn {
+        flex: 1;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        background: transparent;
+        color: var(--gray);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .mode-btn.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      /* Enhanced flashcard design */
+      .flashcard {
+        perspective: 1000px;
+        width: 100%;
+        max-width: 420px;
+        height: 300px;
+        margin: 1.5rem 0;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+      }
+
+      .flashcard-front,
+      .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+        border: 3px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .flashcard-front {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 50%,
+          #8b5fbf 100%
+        );
+        color: white;
+        position: relative;
+      }
+
+      .flashcard-front::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at 30% 20%,
+          rgba(255, 255, 255, 0.2) 0%,
+          transparent 50%
+        );
+        border-radius: 20px;
+      }
+
+      .flashcard-back {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        color: var(--dark);
+        transform: rotateY(180deg);
+        border: 3px solid var(--accent-light);
+      }
+
+      .difficulty-indicator {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* Enhanced progress section */
+      .progress-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--box-shadow);
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .progress-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        border-radius: var(--border-radius);
+        text-align: center;
+        transition: var(--transition);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .stat-label {
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+      }
+
+      .progress-bar {
+        height: 10px;
+        background: var(--light);
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        border-radius: 5px;
+        width: 65%;
+        transition: width 0.5s ease;
+      }
+
+      /* Flashcard Carousel */
+      #flashcard-carousel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--box-shadow);
+      }
+
+      .flashcard-progress {
+        font-size: 1.2rem;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+
+      /* Flashcards */
+      .flashcard {
+        perspective: 1000px;
+        width: 100%;
+        max-width: 400px;
+        height: 280px;
+        margin: 1rem 0;
+        cursor: pointer;
+      }
+
+      .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+      }
+
+      .flashcard-front,
+      .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .flashcard-front {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+      }
+
+      .flashcard-back {
+        background: linear-gradient(135deg, #fff 60%, var(--accent-light) 100%);
+        color: var(--dark);
+        transform: rotateY(180deg);
+      }
+
+      .flashcard:hover .flashcard-front,
+      .flashcard:hover .flashcard-back {
+        box-shadow: 0 16px 48px rgba(102, 126, 234, 0.25);
+      }
+
+      .thai-text {
+        font-size: 2.5rem;
+        color: inherit;
+        font-weight: 700;
+        margin: 0.5rem 0;
+        text-align: center;
+      }
+
+      .phonetic {
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .flashcard-back .phonetic {
+        color: var(--gray);
+      }
+
+      .answer {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--primary);
+        text-align: center;
+        margin: 1rem 0;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .action-buttons button {
+        min-width: 120px;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        color: white;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease;
+      }
+
+      .slide-in-up {
+        animation: slideInUp 0.5s ease;
+      }
+
+      /* Enhanced responsive design */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .nav-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .progress-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .flashcard {
+          max-width: 320px;
+          height: 240px;
+        }
+
+        .thai-text {
+          font-size: 2rem;
+        }
+
+        .answer {
+          font-size: 1.4rem;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .action-buttons button {
+          width: 100%;
+          max-width: 200px;
+        }
+
+        /* Mode selector */
+        .mode-selector {
+          flex-direction: column;
+          border-radius: var(--border-radius);
+          padding: 1rem;
+        }
+
+        .mode-btn {
+          margin-bottom: 0.5rem;
+          border-radius: var(--border-radius);
+        }
+
+        .settings-panel {
+          width: 100%;
+          right: -100%;
+          border-radius: 0;
+        }
+
+        .settings-toggle {
+          right: 10px;
+        }
+
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Loading animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav-container">
+        <div class="logo">
+          <i class="fas fa-dragon"></i>
+          <span>Thai Mastery</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#">Practice</a>
+          <a href="#">Progress</a>
+          <a href="#">Resources</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="hero">
+        <h1>🇹🇭 Thai Flashcards</h1>
+        <p>
+          Flip through interactive Thai flashcards to master vocabulary,
+          grammar, and sentences. Mark cards you know or need more practice!
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" onclick="startFlashcards()">
+            <i class="fas fa-fire"></i> Start Flashcards
+          </button>
+          <button class="btn btn-outline">
+            <i class="fas fa-chart-line"></i> Track Progress
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="mode-selector">
+        <button class="mode-btn active" onclick="switchMode('flashcards')">
+          <i class="fas fa-layer-group"></i>
+          Flashcards
+        </button>
+        <button class="mode-btn" onclick="switchMode('quiz')">
+          <i class="fas fa-question-circle"></i>
+          Quiz
+        </button>
+        <button class="mode-btn" onclick="switchMode('study')">
+          <i class="fas fa-book-open"></i>
+          Study
+        </button>
+      </div>
+
+      <!-- User Progress Section -->
+      <section class="progress-section">
+        <div class="progress-header">
+          <h2>Your Learning Progress</h2>
+          <button class="btn btn-primary btn-sm" onclick="updateProgress()">
+            <i class="fas fa-sync-alt"></i> Update
+          </button>
+        </div>
+
+        <div class="progress-stats">
+          <div class="stat-card">
+            <div class="stat-number" id="words-mastered">42</div>
+            <div class="stat-label">Words Mastered</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="cards-practiced">15</div>
+            <div class="stat-label">Cards Practiced</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="accuracy">87%</div>
+            <div class="stat-label">Accuracy</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="progress-header">
+            <span>Overall Progress</span>
+            <span id="overall-progress">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Enhanced Flashcard Section -->
+      <section id="flashcard-mode">
+        <div id="flashcard-carousel">
+          <div class="flashcard-progress">
+            <span id="flashcard-current">1</span> /
+            <span id="flashcard-total">15</span>
+            <div class="difficulty-indicator" id="difficulty-indicator">
+              Beginner
+            </div>
+          </div>
+
+          <div class="study-stats">
+            <div class="study-stat">
+              <div class="study-stat-number" id="session-correct">0</div>
+              <div class="study-stat-label">Correct</div>
+            </div>
+            <div class="study-stat">
+              <div class="study-stat-number" id="session-incorrect">0</div>
+              <div class="study-stat-label">Needs Practice</div>
+            </div>
+            <div class="study-stat">
+              <div class="study-stat-number" id="session-streak">0</div>
+              <div class="study-stat-label">Streak</div>
+            </div>
+          </div>
+
+          <div class="flashcard" onclick="flipCard(this)">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">
+                <div class="thai-text" id="flashcard-thai">สวัสดี</div>
+                <div class="phonetic" id="flashcard-phonetic">sà-wàt-dii</div>
+                <p>
+                  <small
+                    ><i class="fas fa-hand-pointer"></i> Click to flip</small
+                  >
+                </p>
+              </div>
+              <div class="flashcard-back">
+                <div class="answer" id="flashcard-answer">Hello/Goodbye</div>
+                <div class="phonetic" id="flashcard-phonetic-back">
+                  sà-wàt-dii
+                </div>
+                <p>
+                  <small><i class="fas fa-undo"></i> Click to flip back</small>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn btn-danger btn-sm" onclick="markCard(false)">
+              <i class="fas fa-times"></i> Hard
+            </button>
+            <button class="btn btn-warning btn-sm" onclick="markCard('medium')">
+              <i class="fas fa-minus"></i> Good
+            </button>
+            <button class="btn btn-success btn-sm" onclick="markCard(true)">
+              <i class="fas fa-check"></i> Easy
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quiz Mode -->
+      <section id="quiz-mode" class="quiz-mode">
+        <div class="quiz-header">
+          <h2><i class="fas fa-brain"></i> Thai Vocabulary Quiz</h2>
+          <div class="quiz-progress">
+            Question <span id="quiz-current">1</span> of
+            <span id="quiz-total">5</span>
+          </div>
+        </div>
+
+        <div class="quiz-question">
+          <div class="question" id="quiz-question">
+            What does this word mean?
+          </div>
+          <div class="thai-text" id="quiz-thai">สวัสดี</div>
+          <div class="phonetic" id="quiz-phonetic">sà-wàt-dii</div>
+        </div>
+
+        <div class="quiz-options" id="quiz-options">
+          <!-- Options will be generated dynamically -->
+        </div>
+
+        <div class="action-buttons">
+          <button
+            class="btn btn-primary"
+            id="quiz-submit"
+            onclick="submitQuizAnswer()"
+          >
+            <i class="fas fa-check"></i> Submit Answer
+          </button>
+          <button
+            class="btn btn-primary"
+            id="quiz-next"
+            onclick="nextQuizQuestion()"
+            style="display: none"
+          >
+            <i class="fas fa-arrow-right"></i> Next Question
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Settings Panel -->
+    <button class="settings-toggle" onclick="toggleSettings()">
+      <i class="fas fa-cog"></i>
+    </button>
+
+    <div class="settings-panel" id="settings-panel">
+      <h3><i class="fas fa-sliders-h"></i> Settings</h3>
+      <div style="margin-top: 1rem">
+        <label for="auto-advance">Auto-advance cards</label>
+        <input type="checkbox" id="auto-advance" checked />
+      </div>
+      <div style="margin-top: 1rem">
+        <label for="show-phonetics">Show phonetics</label>
+        <input type="checkbox" id="show-phonetics" checked />
+      </div>
+      <div style="margin-top: 1rem">
+        <label for="difficulty-level">Difficulty Level</label>
+        <select id="difficulty-level" onchange="changeDifficulty()">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      <button
+        class="btn btn-primary btn-sm"
+        style="margin-top: 1rem; width: 100%"
+        onclick="resetProgress()"
+      >
+        <i class="fas fa-refresh"></i> Reset Progress
+      </button>
+    </div>
+
+    <footer>
+      <p>Made with ❤️ for Thai language learners | © 2023 Thai Mastery</p>
+    </footer>
+
+    <script>
+      // Enhanced flashcard data with difficulty levels
+      const flashcardData = {
+        beginner: [
+          { thai: "สวัสดี", phonetic: "sà-wàt-dii", answer: "Hello/Goodbye" },
+          { thai: "ขอบคุณ", phonetic: "kòp-kun", answer: "Thank you" },
+          { thai: "น้ำ", phonetic: "náam", answer: "Water" },
+          { thai: "ข้าว", phonetic: "kâao", answer: "Rice/Food" },
+          { thai: "ใช่", phonetic: "châi", answer: "Yes" },
+        ],
+        intermediate: [
+          { thai: "คนไทย", phonetic: "kon tai", answer: "Thai person" },
+          { thai: "ร้อน", phonetic: "róon", answer: "Hot" },
+          { thai: "เย็น", phonetic: "yen", answer: "Cold" },
+          { thai: "อร่อย", phonetic: "à-ròoi", answer: "Delicious" },
+          { thai: "บ้าน", phonetic: "bâan", answer: "House/Home" },
+        ],
+        advanced: [
+          { thai: "การศึกษา", phonetic: "gaan-sʉ̀k-sǎa", answer: "Education" },
+          { thai: "เศรษฐกิจ", phonetic: "sèet-tà-gìt", answer: "Economy" },
+          { thai: "วัฒนธรรม", phonetic: "wát-tá-ná-tam", answer: "Culture" },
+          {
+            thai: "ประชาธิปไตย",
+            phonetic: "bprà-chaa-típ-bpai",
+            answer: "Democracy",
+          },
+          {
+            thai: "เทคโนโลยี",
+            phonetic: "ték-noo-loo-yii",
+            answer: "Technology",
+          },
+        ],
+      };
+
+      let currentDifficulty = "beginner";
+      let flashcards = flashcardData[currentDifficulty];
+      let flashcardIndex = 0;
+      let sessionStats = { correct: 0, incorrect: 0, streak: 0 };
+      let currentMode = "flashcards";
+
+      // Enhanced functions
+      function switchMode(mode) {
+        document
+          .querySelectorAll(".mode-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        document.getElementById("flashcard-mode").style.display =
+          mode === "flashcards" ? "block" : "none";
+        document.getElementById("quiz-mode").style.display =
+          mode === "quiz" ? "block" : "none";
+
+        currentMode = mode;
+
+        if (mode === "quiz") {
+          initQuiz();
+        }
+      }
+
+      function markCard(difficulty) {
+        const isCorrect = difficulty === true || difficulty === "medium";
+
+        if (isCorrect) {
+          sessionStats.correct++;
+          sessionStats.streak++;
+          showFeedback(
+            difficulty === true ? "Easy! Well done!" : "Good job!",
+            "success"
+          );
+        } else {
+          sessionStats.incorrect++;
+          sessionStats.streak = 0;
+          showFeedback("Marked for more practice!", "warning");
+        }
+
+        updateSessionStats();
+        updateProgressStats();
+
+        if (document.getElementById("auto-advance").checked) {
+          setTimeout(() => nextFlashcard(), 1000);
+        }
+      }
+
+      function updateSessionStats() {
+        document.getElementById("session-correct").textContent =
+          sessionStats.correct;
+        document.getElementById("session-incorrect").textContent =
+          sessionStats.incorrect;
+        document.getElementById("session-streak").textContent =
+          sessionStats.streak;
+      }
+
+      function changeDifficulty() {
+        currentDifficulty = document.getElementById("difficulty-level").value;
+        flashcards = flashcardData[currentDifficulty];
+        flashcardIndex = 0;
+        updateFlashcard();
+        document.getElementById("difficulty-indicator").textContent =
+          currentDifficulty.charAt(0).toUpperCase() +
+          currentDifficulty.slice(1);
+      }
+
+      function toggleSettings() {
+        document.getElementById("settings-panel").classList.toggle("open");
+      }
+
+      function resetProgress() {
+        sessionStats = { correct: 0, incorrect: 0, streak: 0 };
+        updateSessionStats();
+        showFeedback("Progress reset!", "info");
+      }
+
+      // Quiz functionality
+      let currentQuizIndex = 0;
+      let quizQuestions = [];
+
+      function initQuiz() {
+        quizQuestions = [...flashcards]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 5);
+        currentQuizIndex = 0;
+        loadQuizQuestion();
+      }
+
+      function loadQuizQuestion() {
+        const question = quizQuestions[currentQuizIndex];
+        document.getElementById("quiz-current").textContent =
+          currentQuizIndex + 1;
+        document.getElementById("quiz-total").textContent =
+          quizQuestions.length;
+        document.getElementById("quiz-thai").textContent = question.thai;
+        document.getElementById("quiz-phonetic").textContent =
+          question.phonetic;
+
+        // Generate options
+        const options = [question.answer];
+        const otherAnswers = flashcards
+          .filter((card) => card.answer !== question.answer)
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3)
+          .map((card) => card.answer);
+
+        options.push(...otherAnswers);
+        options.sort(() => Math.random() - 0.5);
+
+        const optionsContainer = document.getElementById("quiz-options");
+        optionsContainer.innerHTML = "";
+
+        options.forEach((option) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "quiz-option";
+          optionDiv.textContent = option;
+          optionDiv.onclick = () => selectQuizOption(optionDiv);
+          optionsContainer.appendChild(optionDiv);
+        });
+
+        document.getElementById("quiz-submit").style.display = "inline-flex";
+        document.getElementById("quiz-next").style.display = "none";
+      }
+
+      function selectQuizOption(element) {
+        document
+          .querySelectorAll(".quiz-option")
+          .forEach((opt) => opt.classList.remove("selected"));
+        element.classList.add("selected");
+      }
+
+      function submitQuizAnswer() {
+        const selected = document.querySelector(".quiz-option.selected");
+        if (!selected) return;
+
+        const correctAnswer = quizQuestions[currentQuizIndex].answer;
+        const isCorrect = selected.textContent === correctAnswer;
+
+        document.querySelectorAll(".quiz-option").forEach((opt) => {
+          if (opt.textContent === correctAnswer) {
+            opt.classList.add("correct");
+          } else if (opt.classList.contains("selected") && !isCorrect) {
+            opt.classList.add("incorrect");
+          }
+        });
+
+        showFeedback(
+          isCorrect ? "Correct!" : "Try again next time!",
+          isCorrect ? "success" : "danger"
+        );
+
+        document.getElementById("quiz-submit").style.display = "none";
+        document.getElementById("quiz-next").style.display = "inline-flex";
+      }
+
+      function nextQuizQuestion() {
+        currentQuizIndex++;
+        if (currentQuizIndex < quizQuestions.length) {
+          loadQuizQuestion();
+        } else {
+          showFeedback("Quiz completed!", "success");
+          switchMode("flashcards");
+        }
+      }
+
+      // Enhanced initialization
+      document.addEventListener("DOMContentLoaded", function () {
+        updateFlashcard();
+        updateProgressStats();
+        updateSessionStats();
+        changeDifficulty();
+
+        // Add keyboard shortcuts help
+        const hints = document.createElement("div");
+        hints.innerHTML = `
+          <small style="color: var(--gray); text-align: center; display: block; margin-top: 1rem;">
+            <i class="fas fa-keyboard"></i> Shortcuts: 
+            <strong>Space</strong> = Flip | 
+            <strong>1,2,3</strong> = Mark difficulty | 
+            <strong>→</strong> = Next | 
+            <strong>S</strong> = Settings
+          </small>
+        `;
+        document.getElementById("flashcard-carousel").appendChild(hints);
+      });
+
+      // Enhanced keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        if (event.code === "Space") {
+          event.preventDefault();
+          flipCard(document.querySelector(".flashcard"));
+        } else if (event.code === "ArrowRight") {
+          event.preventDefault();
+          nextFlashcard();
+        } else if (event.code === "Digit1") {
+          event.preventDefault();
+          markCard(false);
+        } else if (event.code === "Digit2") {
+          event.preventDefault();
+          markCard("medium");
+        } else if (event.code === "Digit3") {
+          event.preventDefault();
+          markCard(true);
+        } else if (event.code === "KeyS") {
+          event.preventDefault();
+          toggleSettings();
+        }
+      });
+
+      // Keep existing functions but enhance them
+      function updateFlashcard() {
+        const card = flashcards[flashcardIndex];
+        document.getElementById("flashcard-thai").textContent = card.thai;
+        document.getElementById("flashcard-phonetic").textContent =
+          card.phonetic;
+        document.getElementById("flashcard-phonetic-back").textContent =
+          card.phonetic;
+        document.getElementById("flashcard-answer").textContent = card.answer;
+        document.getElementById("flashcard-current").textContent =
+          flashcardIndex + 1;
+        document.getElementById("flashcard-total").textContent =
+          flashcards.length;
+
+        document.querySelector(".flashcard").classList.remove("flipped");
+        document.querySelector("#flashcard-carousel").classList.add("fade-in");
+
+        // Hide phonetics if setting is disabled
+        const showPhonetics = document.getElementById("show-phonetics").checked;
+        document.getElementById("flashcard-phonetic").style.display =
+          showPhonetics ? "block" : "none";
+        document.getElementById("flashcard-phonetic-back").style.display =
+          showPhonetics ? "block" : "none";
+      }
+
+      function nextFlashcard() {
+        flashcardIndex = (flashcardIndex + 1) % flashcards.length;
+        updateFlashcard();
+      }
+
+      function startFlashcards() {
+        document.getElementById("flashcard-carousel").scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+
+      function flipCard(card) {
+        card.classList.toggle("flipped");
+      }
+
+      function updateProgressStats() {
+        document.getElementById("words-mastered").textContent = knownCards;
+        document.getElementById("cards-practiced").textContent =
+          knownCards + practiceCards;
+
+        if (knownCards + practiceCards > 0) {
+          const accuracy = Math.round(
+            (knownCards / (knownCards + practiceCards)) * 100
+          );
+          document.getElementById("accuracy").textContent = accuracy + "%";
+
+          const overallProgress = Math.round(
+            ((knownCards + practiceCards) / flashcards.length) * 100
+          );
+          document.getElementById("overall-progress").textContent =
+            overallProgress + "%";
+          document.getElementById("progress-fill").style.width =
+            overallProgress + "%";
+        }
+      }
+
+      function updateProgress() {
+        showFeedback("Progress updated!", "info");
+        updateProgressStats();
+      }
+
+      function showFeedback(message, type) {
+        // Create temporary feedback element
+        const feedback = document.createElement("div");
+        feedback.textContent = message;
+        feedback.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 1rem 1.5rem;
+          border-radius: 8px;
+          color: white;
+          font-weight: 600;
+          z-index: 1000;
+          animation: slideInUp 0.3s ease;
+        `;
+
+        if (type === "success") {
+          feedback.style.background = "var(--success)";
+        } else if (type === "warning") {
+          feedback.style.background = "var(--warning)";
+        } else if (type === "info") {
+          feedback.style.background = "var(--info)";
+        }
+
+        document.body.appendChild(feedback);
+
+        // Remove after 2 seconds
+        setTimeout(() => {
+          feedback.remove();
+        }, 2000);
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        if (event.code === "Space") {
+          event.preventDefault();
+          flipCard(document.querySelector(".flashcard"));
+        } else if (event.code === "ArrowRight") {
+          event.preventDefault();
+          nextFlashcard();
+        } else if (event.code === "KeyY") {
+          event.preventDefault();
+          markPractice(true);
+        } else if (event.code === "KeyN") {
+          event.preventDefault();
+          markPractice(false);
+        }
+      });
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        updateFlashcard();
+        updateProgressStats();
+
+        // Add keyboard hints
+        const hints = document.createElement("div");
+        hints.innerHTML = `
+          <small style="color: var(--gray); text-align: center; display: block; margin-top: 1rem;">
+            <i class="fas fa-keyboard"></i> Keyboard shortcuts: 
+            <strong>Space</strong> = Flip | 
+            <strong>→</strong> = Next | 
+            <strong>Y</strong> = Know it | 
+            <strong>N</strong> = Need practice
+          </small>
+        `;
+        document.getElementById("flashcard-carousel").appendChild(hints);
+      });
+    </script>
+  </body>
+</html>
