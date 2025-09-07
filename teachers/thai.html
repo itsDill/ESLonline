@@ -117,6 +117,95 @@
         overflow: hidden;
       }
 
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+        opacity: 0.95;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 1.8rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        min-width: 140px;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, var(--success), #20c997);
+        color: white;
+      }
+
+      .btn-warning {
+        background: linear-gradient(135deg, var(--warning), #f39c12);
+        color: white;
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, var(--danger), #e74c3c);
+        color: white;
+      }
+
+      .btn-sm {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        min-width: 100px;
+      }
+
       .hero::before {
         content: "";
         position: absolute;
@@ -265,6 +354,9 @@
         padding: 1.5rem;
         margin-bottom: 2rem;
         box-shadow: var(--box-shadow);
+        opacity: 0;
+        animation: slideInUp 0.6s ease forwards;
+        animation-delay: 0.2s;
       }
 
       .progress-header {
@@ -272,6 +364,13 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
+      }
+
+      .progress-header h2 {
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
       .progress-stats {
@@ -285,8 +384,27 @@
         background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);
         border: 1px solid rgba(102, 126, 234, 0.1);
         border-radius: var(--border-radius);
+        padding: 1.5rem;
         text-align: center;
         transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
       }
 
       .stat-card:hover {
@@ -294,32 +412,74 @@
         box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
       }
 
+      .stat-card:hover::before {
+        left: 100%;
+      }
+
       .stat-number {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 700;
         color: var(--primary);
+        margin-bottom: 0.5rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       .stat-label {
         color: var(--gray);
         font-size: 0.9rem;
-        margin-top: 0.5rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .progress-bar {
-        height: 10px;
+        height: 12px;
         background: var(--light);
-        border-radius: 5px;
+        border-radius: 6px;
         overflow: hidden;
         margin: 1rem 0;
+        position: relative;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .progress-fill {
         height: 100%;
-        background: linear-gradient(90deg, var(--accent), var(--accent-light));
-        border-radius: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--accent),
+          var(--accent-light),
+          var(--primary)
+        );
+        border-radius: 6px;
         width: 65%;
-        transition: width 0.5s ease;
+        transition: width 0.8s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
       }
 
       /* Flashcard Carousel */
@@ -332,6 +492,24 @@
         border-radius: var(--border-radius);
         padding: 2rem;
         box-shadow: var(--box-shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      #flashcard-carousel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          rgba(102, 126, 234, 0.02) 0%,
+          rgba(118, 75, 162, 0.02) 50%,
+          rgba(255, 107, 107, 0.02) 100%
+        );
+        pointer-events: none;
       }
 
       .flashcard-progress {
@@ -339,6 +517,49 @@
         color: var(--primary);
         font-weight: 600;
         margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .study-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .study-stat {
+        text-align: center;
+        background: linear-gradient(135deg, var(--light), white);
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        min-width: 80px;
+        transition: var(--transition);
+      }
+
+      .study-stat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+      }
+
+      .study-stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.3rem;
+      }
+
+      .study-stat-label {
+        font-size: 0.8rem;
+        color: var(--gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
       }
 
       /* Flashcards */
@@ -433,6 +654,309 @@
 
       .action-buttons button {
         min-width: 120px;
+      }
+
+      /* Quiz Mode Enhancements */
+      .quiz-mode {
+        display: none;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--box-shadow);
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quiz-mode::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          rgba(255, 107, 107, 0.02) 0%,
+          rgba(254, 202, 87, 0.02) 50%,
+          rgba(102, 126, 234, 0.02) 100%
+        );
+        pointer-events: none;
+      }
+
+      .quiz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .quiz-header h2 {
+        color: var(--primary);
+        margin: 0;
+      }
+
+      .quiz-progress {
+        background: var(--light);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .quiz-question {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--light), white);
+        border-radius: var(--border-radius);
+        border: 2px solid rgba(102, 126, 234, 0.1);
+        position: relative;
+        z-index: 1;
+      }
+
+      .quiz-question .question {
+        font-size: 1.3rem;
+        color: var(--dark);
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .quiz-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .quiz-option {
+        padding: 1.2rem;
+        background: linear-gradient(135deg, white, var(--light));
+        border: 2px solid rgba(102, 126, 234, 0.1);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quiz-option::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.3s ease;
+      }
+
+      .quiz-option:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+      }
+
+      .quiz-option:hover::before {
+        left: 100%;
+      }
+
+      .quiz-option.selected {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        border-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .quiz-option.correct {
+        background: linear-gradient(135deg, var(--success), #20c997);
+        color: white;
+        border-color: var(--success);
+        animation: pulse-success 0.6s ease;
+      }
+
+      .quiz-option.incorrect {
+        background: linear-gradient(135deg, var(--danger), #e74c3c);
+        color: white;
+        border-color: var(--danger);
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes pulse-success {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      /* Settings Panel Enhancement */
+      .settings-toggle {
+        position: fixed;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+
+      .settings-toggle:hover {
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .settings-panel {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100vh;
+        background: linear-gradient(135deg, white 0%, #f8f9ff 100%);
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 999;
+        padding: 2rem;
+        overflow-y: auto;
+        border-left: 3px solid var(--primary);
+      }
+
+      .settings-panel.open {
+        right: 0;
+      }
+
+      .settings-panel h3 {
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.4rem;
+      }
+
+      .settings-panel label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .settings-panel input,
+      .settings-panel select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+      }
+
+      .settings-panel input:focus,
+      .settings-panel select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .settings-panel input[type="checkbox"] {
+        width: auto;
+        margin-right: 0.5rem;
+        transform: scale(1.2);
+      }
+
+      /* Dark mode toggle */
+      .dark-mode-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--light);
+        border-radius: var(--border-radius);
+        margin: 1rem 0;
+        border: 2px solid rgba(102, 126, 234, 0.1);
+      }
+
+      /* Audio controls */
+      .audio-controls {
+        background: var(--light);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin: 1rem 0;
+        border: 2px solid rgba(102, 126, 234, 0.1);
+      }
+
+      .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .volume-slider {
+        flex: 1;
+        height: 4px;
+        background: rgba(102, 126, 234, 0.2);
+        border-radius: 2px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: var(--primary);
+        border-radius: 50%;
+        cursor: pointer;
       }
 
       /* Footer */
@@ -563,6 +1087,76 @@
       @keyframes spin {
         to {
           transform: rotate(360deg);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        60%,
+        100% {
+          transform: translate(-50%, -50%) translateY(0);
+        }
+        40% {
+          transform: translate(-50%, -50%) translateY(-30px);
+        }
+        80% {
+          transform: translate(-50%, -50%) translateY(-15px);
+        }
+      }
+
+      /* Notification styles */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        color: white;
+        font-weight: 600;
+        z-index: 2000;
+        animation: slideInRight 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: 300px;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* Theme enhancements */
+      .theme-dark {
+        filter: invert(1) hue-rotate(180deg);
+      }
+
+      .theme-dark img,
+      .theme-dark video {
+        filter: invert(1) hue-rotate(180deg);
+      }
+
+      /* Print styles */
+      @media print {
+        .settings-toggle,
+        .settings-panel,
+        .action-buttons,
+        .mode-selector,
+        .hero-buttons {
+          display: none !important;
+        }
+
+        .flashcard {
+          box-shadow: none !important;
+          border: 2px solid #333 !important;
         }
       }
     </style>
@@ -756,35 +1350,88 @@
       </section>
     </div>
 
-    <!-- Settings Panel -->
+    <!-- Enhanced Settings Panel -->
     <button class="settings-toggle" onclick="toggleSettings()">
       <i class="fas fa-cog"></i>
     </button>
 
     <div class="settings-panel" id="settings-panel">
-      <h3><i class="fas fa-sliders-h"></i> Settings</h3>
-      <div style="margin-top: 1rem">
+      <h3><i class="fas fa-sliders-h"></i> Learning Settings</h3>
+
+      <div class="dark-mode-toggle">
         <label for="auto-advance">Auto-advance cards</label>
         <input type="checkbox" id="auto-advance" checked />
       </div>
-      <div style="margin-top: 1rem">
+
+      <div class="dark-mode-toggle">
         <label for="show-phonetics">Show phonetics</label>
         <input type="checkbox" id="show-phonetics" checked />
       </div>
+
       <div style="margin-top: 1rem">
         <label for="difficulty-level">Difficulty Level</label>
         <select id="difficulty-level" onchange="changeDifficulty()">
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
+          <option value="beginner">Beginner (Basic words)</option>
+          <option value="intermediate">
+            Intermediate (Daily conversation)
+          </option>
+          <option value="advanced">Advanced (Complex concepts)</option>
         </select>
       </div>
+
+      <div class="audio-controls">
+        <h4><i class="fas fa-volume-up"></i> Audio Settings</h4>
+        <div class="dark-mode-toggle">
+          <label for="audio-enabled">Thai pronunciation</label>
+          <input
+            type="checkbox"
+            id="audio-enabled"
+            checked
+            onchange="toggleAudio()"
+          />
+        </div>
+        <div class="volume-control">
+          <i class="fas fa-volume-down"></i>
+          <input
+            type="range"
+            class="volume-slider"
+            id="volume-slider"
+            min="0"
+            max="1"
+            step="0.1"
+            value="0.8"
+            onchange="adjustVolume()"
+          />
+          <i class="fas fa-volume-up"></i>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem">
+        <h4><i class="fas fa-chart-line"></i> Study Analytics</h4>
+        <div class="stat-card">
+          <div class="stat-number" id="session-duration">0:00</div>
+          <div class="stat-label">Session Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="streak-record">0</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+      </div>
+
       <button
-        class="btn btn-primary btn-sm"
+        class="btn btn-warning btn-sm"
         style="margin-top: 1rem; width: 100%"
+        onclick="exportProgress()"
+      >
+        <i class="fas fa-download"></i> Export Progress
+      </button>
+
+      <button
+        class="btn btn-danger btn-sm"
+        style="margin-top: 0.5rem; width: 100%"
         onclick="resetProgress()"
       >
-        <i class="fas fa-refresh"></i> Reset Progress
+        <i class="fas fa-refresh"></i> Reset All Progress
       </button>
     </div>
 
@@ -793,35 +1440,344 @@
     </footer>
 
     <script>
-      // Enhanced flashcard data with difficulty levels
+      // Enhanced flashcard data with difficulty levels and audio
       const flashcardData = {
         beginner: [
-          { thai: "สวัสดี", phonetic: "sà-wàt-dii", answer: "Hello/Goodbye" },
-          { thai: "ขอบคุณ", phonetic: "kòp-kun", answer: "Thank you" },
-          { thai: "น้ำ", phonetic: "náam", answer: "Water" },
-          { thai: "ข้าว", phonetic: "kâao", answer: "Rice/Food" },
-          { thai: "ใช่", phonetic: "châi", answer: "Yes" },
+          {
+            thai: "สวัสดี",
+            phonetic: "sà-wàt-dii",
+            answer: "Hello/Goodbye",
+            category: "greetings",
+          },
+          {
+            thai: "ขอบคุณ",
+            phonetic: "kòp-kun",
+            answer: "Thank you",
+            category: "greetings",
+          },
+          {
+            thai: "ขอโทษ",
+            phonetic: "kǒr-tôot",
+            answer: "Sorry/Excuse me",
+            category: "greetings",
+          },
+          {
+            thai: "ไม่เป็นไร",
+            phonetic: "mâi bpen rai",
+            answer: "It's okay/No problem",
+            category: "greetings",
+          },
+          { thai: "น้ำ", phonetic: "náam", answer: "Water", category: "food" },
+          {
+            thai: "ข้าว",
+            phonetic: "kâao",
+            answer: "Rice/Food",
+            category: "food",
+          },
+          { thai: "กิน", phonetic: "gin", answer: "To eat", category: "food" },
+          {
+            thai: "ดื่ม",
+            phonetic: "dùum",
+            answer: "To drink",
+            category: "food",
+          },
+          { thai: "ใช่", phonetic: "châi", answer: "Yes", category: "basic" },
+          { thai: "ไม่", phonetic: "mâi", answer: "No", category: "basic" },
+          {
+            thai: "บ้าน",
+            phonetic: "bâan",
+            answer: "House/Home",
+            category: "places",
+          },
+          { thai: "คน", phonetic: "kon", answer: "Person", category: "people" },
+          {
+            thai: "เงิน",
+            phonetic: "ngən",
+            answer: "Money",
+            category: "basic",
+          },
+          {
+            thai: "เวลา",
+            phonetic: "wee-laa",
+            answer: "Time",
+            category: "basic",
+          },
+          {
+            thai: "ดี",
+            phonetic: "dii",
+            answer: "Good",
+            category: "adjectives",
+          },
+          {
+            thai: "ไม่ดี",
+            phonetic: "mâi dii",
+            answer: "Bad/Not good",
+            category: "adjectives",
+          },
+          {
+            thai: "ใหญ่",
+            phonetic: "yài",
+            answer: "Big",
+            category: "adjectives",
+          },
+          {
+            thai: "เล็ก",
+            phonetic: "lék",
+            answer: "Small",
+            category: "adjectives",
+          },
+          { thai: "มา", phonetic: "maa", answer: "To come", category: "verbs" },
+          { thai: "ไป", phonetic: "bpai", answer: "To go", category: "verbs" },
         ],
         intermediate: [
-          { thai: "คนไทย", phonetic: "kon tai", answer: "Thai person" },
-          { thai: "ร้อน", phonetic: "róon", answer: "Hot" },
-          { thai: "เย็น", phonetic: "yen", answer: "Cold" },
-          { thai: "อร่อย", phonetic: "à-ròoi", answer: "Delicious" },
-          { thai: "บ้าน", phonetic: "bâan", answer: "House/Home" },
+          {
+            thai: "คนไทย",
+            phonetic: "kon tai",
+            answer: "Thai person",
+            category: "people",
+          },
+          {
+            thai: "ร้อน",
+            phonetic: "róon",
+            answer: "Hot",
+            category: "weather",
+          },
+          {
+            thai: "เย็น",
+            phonetic: "yen",
+            answer: "Cold",
+            category: "weather",
+          },
+          {
+            thai: "ฝน",
+            phonetic: "fǒn",
+            answer: "Rain",
+            category: "weather",
+          },
+          {
+            thai: "แดด",
+            phonetic: "dàet",
+            answer: "Sun/Sunshine",
+            category: "weather",
+          },
+          {
+            thai: "อร่อย",
+            phonetic: "à-ròoi",
+            answer: "Delicious",
+            category: "food",
+          },
+          {
+            thai: "เผ็ด",
+            phonetic: "pèt",
+            answer: "Spicy",
+            category: "food",
+          },
+          {
+            thai: "หวาน",
+            phonetic: "wǎan",
+            answer: "Sweet",
+            category: "food",
+          },
+          {
+            thai: "เปรี้ยว",
+            phonetic: "bprîao",
+            answer: "Sour",
+            category: "food",
+          },
+          {
+            thai: "ตลาด",
+            phonetic: "dtà-làat",
+            answer: "Market",
+            category: "places",
+          },
+          {
+            thai: "โรงเรียน",
+            phonetic: "roong-rian",
+            answer: "School",
+            category: "places",
+          },
+          {
+            thai: "โรงพยาบาล",
+            phonetic: "roong-pá-yaa-baan",
+            answer: "Hospital",
+            category: "places",
+          },
+          {
+            thai: "ธนาคาร",
+            phonetic: "tá-naa-kaan",
+            answer: "Bank",
+            category: "places",
+          },
+          { thai: "หมอ", phonetic: "mǒr", answer: "Doctor", category: "jobs" },
+          {
+            thai: "ครู",
+            phonetic: "kruu",
+            answer: "Teacher",
+            category: "jobs",
+          },
+          {
+            thai: "ตำรวจ",
+            phonetic: "dtam-rùat",
+            answer: "Police",
+            category: "jobs",
+          },
+          {
+            thai: "นักเรียน",
+            phonetic: "nák-rian",
+            answer: "Student",
+            category: "people",
+          },
+          {
+            thai: "ครอบครัว",
+            phonetic: "krɔ̂ɔp-kruaa",
+            answer: "Family",
+            category: "people",
+          },
+          {
+            thai: "เพื่อน",
+            phonetic: "pɯ̂an",
+            answer: "Friend",
+            category: "people",
+          },
+          {
+            thai: "รถยนต์",
+            phonetic: "rót-yon",
+            answer: "Car",
+            category: "transport",
+          },
+          {
+            thai: "รถไฟ",
+            phonetic: "rót-fai",
+            answer: "Train",
+            category: "transport",
+          },
+          {
+            thai: "เครื่องบิน",
+            phonetic: "krɯ̂aŋ-bin",
+            answer: "Airplane",
+            category: "transport",
+          },
         ],
         advanced: [
-          { thai: "การศึกษา", phonetic: "gaan-sʉ̀k-sǎa", answer: "Education" },
-          { thai: "เศรษฐกิจ", phonetic: "sèet-tà-gìt", answer: "Economy" },
-          { thai: "วัฒนธรรม", phonetic: "wát-tá-ná-tam", answer: "Culture" },
+          {
+            thai: "การศึกษา",
+            phonetic: "gaan-sʉ̀k-sǎa",
+            answer: "Education",
+            category: "concepts",
+          },
+          {
+            thai: "เศรษฐกิจ",
+            phonetic: "sèet-tà-gìt",
+            answer: "Economy",
+            category: "concepts",
+          },
+          {
+            thai: "วัฒนธรรม",
+            phonetic: "wát-tá-ná-tam",
+            answer: "Culture",
+            category: "concepts",
+          },
           {
             thai: "ประชาธิปไตย",
             phonetic: "bprà-chaa-típ-bpai",
             answer: "Democracy",
+            category: "politics",
           },
           {
             thai: "เทคโนโลยี",
             phonetic: "ték-noo-loo-yii",
             answer: "Technology",
+            category: "concepts",
+          },
+          {
+            thai: "สิ่งแวดล้อม",
+            phonetic: "sìng-wàet-lóm",
+            answer: "Environment",
+            category: "concepts",
+          },
+          {
+            thai: "การพัฒนา",
+            phonetic: "gaan-pát-tá-naa",
+            answer: "Development",
+            category: "concepts",
+          },
+          {
+            thai: "ความยุติธรรม",
+            phonetic: "kwaam-yút-dtì-tam",
+            answer: "Justice",
+            category: "concepts",
+          },
+          {
+            thai: "การเมือง",
+            phonetic: "gaan-mɯaŋ",
+            answer: "Politics",
+            category: "politics",
+          },
+          {
+            thai: "สังคม",
+            phonetic: "sǎŋ-kom",
+            answer: "Society",
+            category: "concepts",
+          },
+          {
+            thai: "ประวัติศาสตร์",
+            phonetic: "bprà-wàt-sàat",
+            answer: "History",
+            category: "academics",
+          },
+          {
+            thai: "ภูมิศาสตร์",
+            phonetic: "puum-sàat",
+            answer: "Geography",
+            category: "academics",
+          },
+          {
+            thai: "วิทยาศาสตร์",
+            phonetic: "wít-tá-yaa-sàat",
+            answer: "Science",
+            category: "academics",
+          },
+          {
+            thai: "คณิตศาสตร์",
+            phonetic: "ká-nít-sàat",
+            answer: "Mathematics",
+            category: "academics",
+          },
+          {
+            thai: "ปรัชญา",
+            phonetic: "bpràt-yaa",
+            answer: "Philosophy",
+            category: "academics",
+          },
+          {
+            thai: "จิตวิทยา",
+            phonetic: "jìt-wít-tá-yaa",
+            answer: "Psychology",
+            category: "academics",
+          },
+          {
+            thai: "นิติศาสตร์",
+            phonetic: "ní-dtì-sàat",
+            answer: "Law",
+            category: "academics",
+          },
+          {
+            thai: "แพทยศาสตร์",
+            phonetic: "pâet-tá-yá-sàat",
+            answer: "Medicine",
+            category: "academics",
+          },
+          {
+            thai: "วิศวกรรมศาสตร์",
+            phonetic: "wí-sà-wá-gam-sàat",
+            answer: "Engineering",
+            category: "academics",
+          },
+          {
+            thai: "บริหารธุรกิจ",
+            phonetic: "bɔɔ-rí-hǎan-tú-rá-gìt",
+            answer: "Business Administration",
+            category: "academics",
           },
         ],
       };
@@ -829,8 +1785,108 @@
       let currentDifficulty = "beginner";
       let flashcards = flashcardData[currentDifficulty];
       let flashcardIndex = 0;
-      let sessionStats = { correct: 0, incorrect: 0, streak: 0 };
+      let sessionStats = {
+        correct: 0,
+        incorrect: 0,
+        streak: 0,
+        totalTime: 0,
+        startTime: Date.now(),
+        cardTimes: [],
+      };
       let currentMode = "flashcards";
+      let userProgress = JSON.parse(
+        localStorage.getItem("thaiFlashcardProgress")
+      ) || {
+        wordsLearned: [],
+        totalCardsStudied: 0,
+        streakRecord: 0,
+        studySessions: 0,
+      };
+
+      // Audio functionality
+      let audioEnabled = true;
+      let speechSynthesis = window.speechSynthesis;
+      let voiceVolume = 0.8;
+
+      function speakThai(text) {
+        if (!audioEnabled || !speechSynthesis) return;
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "th-TH";
+        utterance.volume = voiceVolume;
+        utterance.rate = 0.8;
+        utterance.pitch = 1;
+
+        speechSynthesis.speak(utterance);
+      }
+
+      // Enhanced analytics and progress tracking
+      function updateProgressAnalytics() {
+        const totalCards = Object.values(flashcardData).flat().length;
+        const learnedPercentage = Math.round(
+          (userProgress.wordsLearned.length / totalCards) * 100
+        );
+
+        // Update streak record
+        if (sessionStats.streak > userProgress.streakRecord) {
+          userProgress.streakRecord = sessionStats.streak;
+        }
+
+        // Save progress
+        localStorage.setItem(
+          "thaiFlashcardProgress",
+          JSON.stringify(userProgress)
+        );
+
+        // Update UI with enhanced stats
+        updateProgressDisplay();
+      }
+
+      function updateProgressDisplay() {
+        document.getElementById("words-mastered").textContent =
+          userProgress.wordsLearned.length;
+        document.getElementById("cards-practiced").textContent =
+          userProgress.totalCardsStudied;
+
+        if (userProgress.totalCardsStudied > 0) {
+          const accuracy = Math.round(
+            (userProgress.wordsLearned.length /
+              userProgress.totalCardsStudied) *
+              100
+          );
+          document.getElementById("accuracy").textContent = accuracy + "%";
+        }
+
+        const totalCards = Object.values(flashcardData).flat().length;
+        const overallProgress = Math.round(
+          (userProgress.wordsLearned.length / totalCards) * 100
+        );
+        document.getElementById("overall-progress").textContent =
+          overallProgress + "%";
+        document.getElementById("progress-fill").style.width =
+          overallProgress + "%";
+      }
+
+      // Performance tracking
+      function trackCardPerformance(cardId, timeSpent, wasCorrect) {
+        const performanceData = {
+          cardId,
+          timeSpent,
+          wasCorrect,
+          timestamp: Date.now(),
+          difficulty: currentDifficulty,
+        };
+
+        sessionStats.cardTimes.push(performanceData);
+
+        // Update user progress
+        if (wasCorrect && !userProgress.wordsLearned.includes(cardId)) {
+          userProgress.wordsLearned.push(cardId);
+        }
+
+        userProgress.totalCardsStudied++;
+        updateProgressAnalytics();
+      }
 
       // Enhanced functions
       function switchMode(mode) {
@@ -852,27 +1908,61 @@
       }
 
       function markCard(difficulty) {
+        const cardStartTime = sessionStats.cardStartTime || Date.now();
+        const timeSpent = Date.now() - cardStartTime;
+        const currentCard = flashcards[flashcardIndex];
+        const cardId = `${currentDifficulty}-${flashcardIndex}`;
+
         const isCorrect = difficulty === true || difficulty === "medium";
 
         if (isCorrect) {
           sessionStats.correct++;
           sessionStats.streak++;
           showFeedback(
-            difficulty === true ? "Easy! Well done!" : "Good job!",
+            difficulty === true ? "🎉 Easy! Well done!" : "👍 Good job!",
             "success"
           );
+
+          // Add celebration effect for streaks
+          if (sessionStats.streak > 0 && sessionStats.streak % 5 === 0) {
+            showFeedback(
+              `🔥 ${sessionStats.streak} streak! Amazing!`,
+              "success"
+            );
+            celebrateStreak();
+          }
         } else {
           sessionStats.incorrect++;
           sessionStats.streak = 0;
-          showFeedback("Marked for more practice!", "warning");
+          showFeedback("📚 Marked for more practice!", "warning");
         }
 
+        // Track performance
+        trackCardPerformance(cardId, timeSpent, isCorrect);
         updateSessionStats();
         updateProgressStats();
 
         if (document.getElementById("auto-advance").checked) {
           setTimeout(() => nextFlashcard(), 1000);
         }
+      }
+
+      function celebrateStreak() {
+        // Add confetti or celebration animation
+        const celebration = document.createElement("div");
+        celebration.innerHTML = "🎉";
+        celebration.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 3rem;
+          z-index: 2000;
+          animation: bounce 0.6s ease;
+          pointer-events: none;
+        `;
+        document.body.appendChild(celebration);
+        setTimeout(() => celebration.remove(), 600);
       }
 
       function updateSessionStats() {
@@ -882,6 +1972,20 @@
           sessionStats.incorrect;
         document.getElementById("session-streak").textContent =
           sessionStats.streak;
+
+        // Update session time
+        const sessionTime = Math.floor(
+          (Date.now() - sessionStats.startTime) / 1000
+        );
+        const minutes = Math.floor(sessionTime / 60);
+        const seconds = sessionTime % 60;
+        document.getElementById(
+          "session-duration"
+        ).textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+        // Update streak record
+        document.getElementById("streak-record").textContent =
+          userProgress.streakRecord;
       }
 
       function changeDifficulty() {
@@ -892,16 +1996,75 @@
         document.getElementById("difficulty-indicator").textContent =
           currentDifficulty.charAt(0).toUpperCase() +
           currentDifficulty.slice(1);
+
+        showFeedback(`Switched to ${currentDifficulty} level!`, "info");
       }
 
       function toggleSettings() {
         document.getElementById("settings-panel").classList.toggle("open");
       }
 
+      function toggleAudio() {
+        audioEnabled = document.getElementById("audio-enabled").checked;
+        showFeedback(
+          audioEnabled ? "Audio enabled 🔊" : "Audio disabled 🔇",
+          "info"
+        );
+      }
+
+      function adjustVolume() {
+        voiceVolume = document.getElementById("volume-slider").value;
+      }
+
+      function exportProgress() {
+        const exportData = {
+          progress: userProgress,
+          sessionStats: sessionStats,
+          exportDate: new Date().toISOString(),
+          version: "1.0",
+        };
+
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataUri =
+          "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+        const exportFileDefaultName = `thai-flashcard-progress-${new Date()
+          .toISOString()
+          .slice(0, 10)}.json`;
+
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", exportFileDefaultName);
+        linkElement.click();
+
+        showFeedback("Progress exported! 📄", "success");
+      }
+
       function resetProgress() {
-        sessionStats = { correct: 0, incorrect: 0, streak: 0 };
-        updateSessionStats();
-        showFeedback("Progress reset!", "info");
+        if (
+          confirm(
+            "Are you sure you want to reset all progress? This cannot be undone."
+          )
+        ) {
+          localStorage.removeItem("thaiFlashcardProgress");
+          userProgress = {
+            wordsLearned: [],
+            totalCardsStudied: 0,
+            streakRecord: 0,
+            studySessions: 0,
+          };
+          sessionStats = {
+            correct: 0,
+            incorrect: 0,
+            streak: 0,
+            totalTime: 0,
+            startTime: Date.now(),
+            cardTimes: [],
+          };
+          updateSessionStats();
+          updateProgressDisplay();
+          showFeedback("Progress reset! 🔄", "info");
+        }
       }
 
       // Quiz functionality
@@ -995,10 +2158,17 @@
 
       // Enhanced initialization
       document.addEventListener("DOMContentLoaded", function () {
-        updateFlashcard();
-        updateProgressStats();
+        // Initialize progress from localStorage
+        updateProgressDisplay();
         updateSessionStats();
+        updateFlashcard();
         changeDifficulty();
+
+        // Load user preferences
+        loadUserPreferences();
+
+        // Set up session timer
+        setInterval(updateSessionStats, 1000);
 
         // Add keyboard shortcuts help
         const hints = document.createElement("div");
@@ -1008,20 +2178,92 @@
             <strong>Space</strong> = Flip | 
             <strong>1,2,3</strong> = Mark difficulty | 
             <strong>→</strong> = Next | 
-            <strong>S</strong> = Settings
+            <strong>S</strong> = Settings |
+            <strong>P</strong> = Play audio
           </small>
         `;
         document.getElementById("flashcard-carousel").appendChild(hints);
+
+        // Show welcome message for new users
+        if (userProgress.studySessions === 0) {
+          setTimeout(() => {
+            showFeedback(
+              "Welcome to Thai Flashcards! 🇹🇭 Start your learning journey!",
+              "success"
+            );
+          }, 1000);
+        }
+
+        // Add smooth scrolling
+        document.documentElement.style.scrollBehavior = "smooth";
       });
+
+      function loadUserPreferences() {
+        const preferences =
+          JSON.parse(localStorage.getItem("thaiFlashcardPreferences")) || {};
+
+        if (preferences.audioEnabled !== undefined) {
+          audioEnabled = preferences.audioEnabled;
+          document.getElementById("audio-enabled").checked = audioEnabled;
+        }
+
+        if (preferences.volume !== undefined) {
+          voiceVolume = preferences.volume;
+          document.getElementById("volume-slider").value = voiceVolume;
+        }
+
+        if (preferences.autoAdvance !== undefined) {
+          document.getElementById("auto-advance").checked =
+            preferences.autoAdvance;
+        }
+
+        if (preferences.showPhonetics !== undefined) {
+          document.getElementById("show-phonetics").checked =
+            preferences.showPhonetics;
+        }
+
+        if (preferences.difficulty !== undefined) {
+          currentDifficulty = preferences.difficulty;
+          document.getElementById("difficulty-level").value = currentDifficulty;
+        }
+      }
+
+      function saveUserPreferences() {
+        const preferences = {
+          audioEnabled: document.getElementById("audio-enabled").checked,
+          volume: document.getElementById("volume-slider").value,
+          autoAdvance: document.getElementById("auto-advance").checked,
+          showPhonetics: document.getElementById("show-phonetics").checked,
+          difficulty: document.getElementById("difficulty-level").value,
+        };
+
+        localStorage.setItem(
+          "thaiFlashcardPreferences",
+          JSON.stringify(preferences)
+        );
+      }
 
       // Enhanced keyboard navigation
       document.addEventListener("keydown", function (event) {
+        // Prevent shortcuts when typing in inputs
+        if (
+          event.target.tagName === "INPUT" ||
+          event.target.tagName === "SELECT"
+        ) {
+          return;
+        }
+
         if (event.code === "Space") {
           event.preventDefault();
           flipCard(document.querySelector(".flashcard"));
-        } else if (event.code === "ArrowRight") {
+        } else if (event.code === "ArrowRight" || event.code === "ArrowDown") {
           event.preventDefault();
           nextFlashcard();
+        } else if (event.code === "ArrowLeft" || event.code === "ArrowUp") {
+          event.preventDefault();
+          flashcardIndex =
+            (flashcardIndex - 1 + flashcards.length) % flashcards.length;
+          updateFlashcard();
         } else if (event.code === "Digit1") {
           event.preventDefault();
           markCard(false);
@@ -1034,10 +2276,69 @@
         } else if (event.code === "KeyS") {
           event.preventDefault();
           toggleSettings();
+        } else if (event.code === "KeyP") {
+          event.preventDefault();
+          const currentCard = flashcards[flashcardIndex];
+          speakThai(currentCard.thai);
+        } else if (event.code === "Escape") {
+          document.getElementById("settings-panel").classList.remove("open");
         }
       });
 
-      // Keep existing functions but enhance them
+      // Enhanced feedback system
+      function showFeedback(message, type, duration = 2000) {
+        // Remove existing notifications
+        document.querySelectorAll(".notification").forEach((n) => n.remove());
+
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+
+        let icon = "";
+        let bgColor = "";
+
+        switch (type) {
+          case "success":
+            icon = '<i class="fas fa-check-circle"></i>';
+            bgColor = "linear-gradient(135deg, var(--success), #20c997)";
+            break;
+          case "warning":
+            icon = '<i class="fas fa-exclamation-triangle"></i>';
+            bgColor = "linear-gradient(135deg, var(--warning), #f39c12)";
+            break;
+          case "danger":
+            icon = '<i class="fas fa-times-circle"></i>';
+            bgColor = "linear-gradient(135deg, var(--danger), #e74c3c)";
+            break;
+          case "info":
+            icon = '<i class="fas fa-info-circle"></i>';
+            bgColor = "linear-gradient(135deg, var(--info), #138496)";
+            break;
+        }
+
+        notification.innerHTML = `${icon}<span>${message}</span>`;
+        notification.style.background = bgColor;
+
+        document.body.appendChild(notification);
+
+        // Auto-remove notification
+        setTimeout(() => {
+          notification.style.animation = "slideInRight 0.3s ease reverse";
+          setTimeout(() => notification.remove(), 300);
+        }, duration);
+
+        // Save preferences when settings change
+        saveUserPreferences();
+      }
+
+      // Add service worker for offline functionality (if needed)
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          // Uncomment to enable offline functionality
+          // navigator.serviceWorker.register('/sw.js');
+        });
+      }
+
+      // Enhanced flashcard functions
       function updateFlashcard() {
         const card = flashcards[flashcardIndex];
         document.getElementById("flashcard-thai").textContent = card.thai;
@@ -1051,6 +2352,7 @@
         document.getElementById("flashcard-total").textContent =
           flashcards.length;
 
+        // Reset card state
         document.querySelector(".flashcard").classList.remove("flipped");
         document.querySelector("#flashcard-carousel").classList.add("fade-in");
 
@@ -1060,116 +2362,71 @@
           showPhonetics ? "block" : "none";
         document.getElementById("flashcard-phonetic-back").style.display =
           showPhonetics ? "block" : "none";
+
+        // Track card start time for performance analytics
+        sessionStats.cardStartTime = Date.now();
+
+        // Auto-play pronunciation if enabled
+        if (audioEnabled) {
+          setTimeout(() => speakThai(card.thai), 500);
+        }
+
+        // Add category indicator
+        if (card.category) {
+          const categoryElement = document.getElementById(
+            "difficulty-indicator"
+          );
+          categoryElement.textContent = `${currentDifficulty} • ${card.category}`;
+        }
       }
 
       function nextFlashcard() {
         flashcardIndex = (flashcardIndex + 1) % flashcards.length;
         updateFlashcard();
+
+        // Add visual transition effect
+        const carousel = document.getElementById("flashcard-carousel");
+        carousel.style.transform = "translateX(-10px)";
+        setTimeout(() => {
+          carousel.style.transform = "translateX(0)";
+        }, 100);
+      }
+
+      function flipCard(card) {
+        card.classList.toggle("flipped");
+
+        // Play audio when flipped to answer side
+        if (card.classList.contains("flipped") && audioEnabled) {
+          const currentCard = flashcards[flashcardIndex];
+          setTimeout(() => speakThai(currentCard.thai), 200);
+        }
+
+        // Add haptic feedback on mobile
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
       }
 
       function startFlashcards() {
         document.getElementById("flashcard-carousel").scrollIntoView({
           behavior: "smooth",
         });
-      }
 
-      function flipCard(card) {
-        card.classList.toggle("flipped");
+        // Start session timer
+        sessionStats.startTime = Date.now();
+        userProgress.studySessions++;
+
+        showFeedback("Study session started! 📚", "success");
       }
 
       function updateProgressStats() {
-        document.getElementById("words-mastered").textContent = knownCards;
-        document.getElementById("cards-practiced").textContent =
-          knownCards + practiceCards;
-
-        if (knownCards + practiceCards > 0) {
-          const accuracy = Math.round(
-            (knownCards / (knownCards + practiceCards)) * 100
-          );
-          document.getElementById("accuracy").textContent = accuracy + "%";
-
-          const overallProgress = Math.round(
-            ((knownCards + practiceCards) / flashcards.length) * 100
-          );
-          document.getElementById("overall-progress").textContent =
-            overallProgress + "%";
-          document.getElementById("progress-fill").style.width =
-            overallProgress + "%";
-        }
+        updateProgressDisplay();
       }
 
       function updateProgress() {
-        showFeedback("Progress updated!", "info");
-        updateProgressStats();
+        showFeedback("Progress updated! 📊", "info");
+        updateProgressDisplay();
       }
-
-      function showFeedback(message, type) {
-        // Create temporary feedback element
-        const feedback = document.createElement("div");
-        feedback.textContent = message;
-        feedback.style.cssText = `
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          padding: 1rem 1.5rem;
-          border-radius: 8px;
-          color: white;
-          font-weight: 600;
-          z-index: 1000;
-          animation: slideInUp 0.3s ease;
-        `;
-
-        if (type === "success") {
-          feedback.style.background = "var(--success)";
-        } else if (type === "warning") {
-          feedback.style.background = "var(--warning)";
-        } else if (type === "info") {
-          feedback.style.background = "var(--info)";
-        }
-
-        document.body.appendChild(feedback);
-
-        // Remove after 2 seconds
-        setTimeout(() => {
-          feedback.remove();
-        }, 2000);
-      }
-
-      // Keyboard navigation
-      document.addEventListener("keydown", function (event) {
-        if (event.code === "Space") {
-          event.preventDefault();
-          flipCard(document.querySelector(".flashcard"));
-        } else if (event.code === "ArrowRight") {
-          event.preventDefault();
-          nextFlashcard();
-        } else if (event.code === "KeyY") {
-          event.preventDefault();
-          markPractice(true);
-        } else if (event.code === "KeyN") {
-          event.preventDefault();
-          markPractice(false);
-        }
-      });
-
-      // Initialize on page load
-      document.addEventListener("DOMContentLoaded", function () {
-        updateFlashcard();
-        updateProgressStats();
-
-        // Add keyboard hints
-        const hints = document.createElement("div");
-        hints.innerHTML = `
-          <small style="color: var(--gray); text-align: center; display: block; margin-top: 1rem;">
-            <i class="fas fa-keyboard"></i> Keyboard shortcuts: 
-            <strong>Space</strong> = Flip | 
-            <strong>→</strong> = Next | 
-            <strong>Y</strong> = Know it | 
-            <strong>N</strong> = Need practice
-          </small>
-        `;
-        document.getElementById("flashcard-carousel").appendChild(hints);
-      });
     </script>
   </body>
 </html>
