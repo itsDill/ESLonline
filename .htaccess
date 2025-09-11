@@ -49,15 +49,18 @@ ErrorDocument 500 /500.html
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Remove trailing slashes for consistency
+# Handle trailing slashes consistently
 RewriteEngine On
+
+# Remove trailing slashes from files (not directories)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} /+$
 RewriteRule ^(.*)/ /$1 [R=301,L]
 
-# Add trailing slash to directories
+# Add trailing slash to directories (but not to files)
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteCond %{REQUEST_URI} !/$
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,4}$
 RewriteRule ^(.*)$ $1/ [R=301,L]
 
 # Prevent access to sensitive files
