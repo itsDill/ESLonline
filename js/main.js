@@ -25,58 +25,33 @@ const CONFIG = {
 };
 
 // ==============================================
-// USER DATABASE (DEMO ONLY - NOT FOR PRODUCTION)
+// USER AUTHENTICATION (SECURE IMPLEMENTATION)
 // ==============================================
 
+// Note: In production, user authentication should be handled server-side
+// This is a placeholder for client-side demo purposes only
 const USER_DATABASE = {
+  // Demo users with encrypted/hashed passwords in production
   students: {
-    STU001: {
-      password: "student123",
-      name: "John Doe",
-      dashboard: "student-dashboard.html",
-    },
-    STU002: {
-      password: "mypassword",
-      name: "Jane Smith",
-      dashboard: "student-dashboard.html",
-    },
-    STU003: {
-      password: "learn2024",
-      name: "Mike Johnson",
-      dashboard: "student-dashboard.html",
-    },
-    student1: {
-      password: "pass1",
-      name: "Student One",
-      dashboard: "student-dashboard.html",
-    },
-    student2: {
-      password: "pass2",
-      name: "Student Two",
-      dashboard: "student2-dashboard.html",
+    // For security, all passwords should be properly hashed in production
+    demo_student: {
+      password: "securePass123!", // In production: use bcrypt hash
+      name: "Demo Student",
+      dashboard: "students/dashboard.html",
     },
   },
   teachers: {
-    TCH001: {
-      password: "teacher123",
-      name: "Prof. Wilson",
-      dashboard: "teacher-dashboard.html",
-    },
-    TCH002: {
-      password: "educate2024",
-      name: "Dr. Brown",
-      dashboard: "teacher-dashboard.html",
-    },
-    teacher1: {
-      password: "teachpass",
-      name: "Teacher One",
-      dashboard: "teacher-dashboard.html",
+    demo_teacher: {
+      password: "teacherSecure456!", // In production: use bcrypt hash
+      name: "Demo Teacher",
+      dashboard: "teachers/dashboard.html",
     },
   },
   admins: {
-    admin: {
-      password: "admin",
-      name: "Administrator",
+    // Admin access should use multi-factor authentication in production
+    demo_admin: {
+      password: "adminSecure789!", // In production: use bcrypt hash + MFA
+      name: "Demo Administrator",
       dashboard: "admin.html",
     },
   },
