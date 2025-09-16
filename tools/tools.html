@@ -925,69 +925,14 @@
       </div>
     </section>
 
-    <!-- Coding Tools Section -->
+    <!-- Featured Tools Section -->
     <section class="section" style="background: var(--bg-secondary)">
       <div class="container">
-        <h2 class="section-title">More Tools</h2>
+        <h2 class="section-title">Featured Tools</h2>
         <p class="section-description">
-          Essential tools for teaching programming and computer skills
+          Quick access to our most popular teaching and classroom tools
         </p>
 
-        <div class="tools-grid">
-          <!-- Typing Speed Test -->
-          <div class="tool-card">
-            <div class="tool-header">
-              <div class="tool-icon">
-                <i class="fas fa-keyboard"></i>
-              </div>
-              <h3 class="tool-title">Typing Speed Test</h3>
-            </div>
-            <p class="tool-description">
-              Measure typing speed and accuracy. Essential skill for programming
-              and digital literacy.
-            </p>
-
-            <div class="tool-interface">
-              <div class="typing-text" id="typingText">
-                The quick brown fox jumps over the lazy dog. This pangram
-                contains every letter of the alphabet and is perfect for testing
-                typing skills.
-              </div>
-              <textarea
-                id="typingInput"
-                class="typing-input"
-                placeholder="Start typing the text above..."
-                disabled
-              ></textarea>
-
-              <div class="typing-stats">
-                <div class="stat-card">
-                  <div class="stat-value" id="wpmStat">0</div>
-                  <div class="stat-label">WPM</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-value" id="accuracyStat">0%</div>
-                  <div class="stat-label">Accuracy</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-value" id="timeStat">0</div>
-                  <div class="stat-label">Time (s)</div>
-                </div>
-              </div>
-
-              <div style="text-align: center; margin-top: 1rem">
-                <button class="btn" id="startTypingTest">
-                  <i class="fas fa-play"></i> Start Test
-                </button>
-                <button class="btn btn-secondary" id="resetTypingTest">
-                  <i class="fas fa-redo"></i> Reset
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Move this OUTSIDE the tools-grid, so it's not inside the grid -->
         <div
           class="tool-links-row"
           style="
@@ -1010,6 +955,10 @@
             <i class="fas fa-random"></i>
             <span>Random Generator</span>
           </a>
+          <a href="typing-test.html" class="tool-link-box">
+            <i class="fas fa-keyboard"></i>
+            <span>Typing Speed Test</span>
+          </a>
           <a href="time.html" class="tool-link-box">
             <i class="fas fa-user-clock"></i>
             <span>Time</span>
@@ -1022,17 +971,25 @@
             <i class="fas fa-gamepad"></i>
             <span>All Games</span>
           </a>
-          <a href="../games/games.html" class="tool-link-box">
-            <i class="fas fa-gamepad"></i>
+          <a href="thai.html" class="tool-link-box">
+            <i class="fas fa-language"></i>
             <span>Thai Basics Flashcards</span>
           </a>
-          <a href="../games/games.html" class="tool-link-box">
-            <i class="fas fa-gamepad"></i>
+          <a href="flashcards-chinese.html" class="tool-link-box">
+            <i class="fas fa-language"></i>
             <span>Chinese Basics Flashcards</span>
           </a>
-          <a href="../games/games.html" class="tool-link-box">
-            <i class="fas fa-gamepad"></i>
+          <a href="flashcards-japanese.html" class="tool-link-box">
+            <i class="fas fa-language"></i>
             <span>Japanese Basics Flashcards</span>
+          </a>
+          <a href="word-cloud.html" class="tool-link-box">
+            <i class="fas fa-cloud"></i>
+            <span>Word Cloud Generator</span>
+          </a>
+          <a href="presentation-timer.html" class="tool-link-box">
+            <i class="fas fa-stopwatch"></i>
+            <span>Presentation Timer</span>
           </a>
         </div>
       </div>
@@ -1296,115 +1253,7 @@
         }
       });
 
-      // Typing Speed Test
-      let typingStartTime;
-      let typingInterval;
-      let currentTest = false;
 
-      const typingTextElement = document.getElementById("typingText");
-      const typingInput = document.getElementById("typingInput");
-      const startTypingTest = document.getElementById("startTypingTest");
-      const resetTypingTest = document.getElementById("resetTypingTest");
-      const wpmStat = document.getElementById("wpmStat");
-      const accuracyStat = document.getElementById("accuracyStat");
-      const timeStat = document.getElementById("timeStat");
-
-      const sampleTexts = [
-        "The quick brown fox jumps over the lazy dog. This pangram contains every letter of the alphabet and is perfect for testing typing skills.",
-        "Programming is not about typing, it's about thinking. However, good typing skills can significantly improve your coding efficiency and reduce errors.",
-        "Learning to code requires patience, practice, and persistence. Every expert was once a beginner who never gave up on their dreams.",
-        "Technology is best when it brings people together. Good software should be intuitive, accessible, and solve real problems for real people.",
-      ];
-
-      function startTest() {
-        if (currentTest) return;
-
-        // Select random text
-        const randomText =
-          sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
-        typingTextElement.textContent = randomText;
-
-        typingInput.disabled = false;
-        typingInput.focus();
-        typingInput.value = "";
-        currentTest = true;
-        typingStartTime = Date.now();
-
-        startTypingTest.innerHTML =
-          '<i class="fas fa-hourglass-half"></i> Testing...';
-        startTypingTest.disabled = true;
-
-        typingInterval = setInterval(updateTypingStats, 100);
-      }
-
-      function updateTypingStats() {
-        const currentTime = (Date.now() - typingStartTime) / 1000;
-        const typedText = typingInput.value;
-        const originalText = typingTextElement.textContent;
-
-        // Calculate WPM
-        const wordsTyped = typedText.trim().split(" ").length;
-        const wpm = Math.round((wordsTyped / currentTime) * 60);
-
-        // Calculate accuracy
-        let correctChars = 0;
-        for (let i = 0; i < typedText.length; i++) {
-          if (i < originalText.length && typedText[i] === originalText[i]) {
-            correctChars++;
-          }
-        }
-        const accuracy =
-          typedText.length > 0
-            ? Math.round((correctChars / typedText.length) * 100)
-            : 0;
-
-        // Update display
-        wpmStat.textContent = isNaN(wpm) ? 0 : wpm;
-        accuracyStat.textContent = accuracy + "%";
-        timeStat.textContent = Math.round(currentTime);
-
-        // Check if test is complete
-        if (typedText === originalText) {
-          endTest();
-        }
-      }
-
-      function endTest() {
-        currentTest = false;
-        typingInput.disabled = true;
-        startTypingTest.innerHTML = '<i class="fas fa-play"></i> Start Test';
-        startTypingTest.disabled = false;
-        clearInterval(typingInterval);
-
-        // Show completion message
-        setTimeout(() => {
-          alert(
-            `Test completed! Your final stats:\nWPM: ${wpmStat.textContent}\nAccuracy: ${accuracyStat.textContent}\nTime: ${timeStat.textContent}s`
-          );
-        }, 100);
-      }
-
-      function resetTest() {
-        currentTest = false;
-        clearInterval(typingInterval);
-        typingInput.disabled = true;
-        typingInput.value = "";
-        wpmStat.textContent = "0";
-        accuracyStat.textContent = "0%";
-        timeStat.textContent = "0";
-        startTypingTest.innerHTML = '<i class="fas fa-play"></i> Start Test';
-        startTypingTest.disabled = false;
-        typingTextElement.textContent = sampleTexts[0];
-      }
-
-      startTypingTest.addEventListener("click", startTest);
-      resetTypingTest.addEventListener("click", resetTest);
-
-      typingInput.addEventListener("input", () => {
-        if (currentTest) {
-          updateTypingStats();
-        }
-      });
 
       // Smooth scrolling and resize handler are handled by navigation.js
 
