@@ -1535,6 +1535,35 @@
       </div>
     </main>
 
+    <!-- Simple Ad Modal -->
+    <div id="simpleAdModal" class="simple-ad-modal">
+      <div class="simple-ad-overlay"></div>
+      <div class="simple-ad-container">
+        <div class="simple-ad-header">
+          <h3>🎮 Starting Game...</h3>
+          <button class="simple-ad-close" id="simpleAdClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="simple-ad-content">
+          <!-- Google AdSense Ad Unit -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-2456627863532019"
+               data-ad-slot="7654321098"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+        <div class="simple-ad-footer">
+          <p>🎯 Continue to your game in <span id="adCountdown">3</span> seconds</p>
+          <button class="continue-game-btn" id="continueGameBtn" disabled>
+            <i class="fas fa-play"></i>
+            Continue to Game
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       // Game data with additional metadata
       const games = [
@@ -2163,28 +2192,97 @@
 
       // Game actions
       function playGame(link) {
-        // Check if we should show an ad before the game
-        const gameTitle = getGameTitleFromLink(link);
-        if (window.gameAdsManager && shouldShowAdForGame(link)) {
-          GameAdsManager.showAdForGame(link, gameTitle);
-        } else {
-          window.location.href = link;
+        showSimpleAd(link);
+      }
+
+      // Simple ad system
+      let currentGameLink = null;
+      let adCountdownTimer = null;
+
+      function showSimpleAd(gameLink) {
+        currentGameLink = gameLink;
+        const modal = document.getElementById('simpleAdModal');
+        const countdownEl = document.getElementById('adCountdown');
+        const continueBtn = document.getElementById('continueGameBtn');
+        
+        // Show modal
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Load Google Ad
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.log('Ad loading failed, continuing to game');
+        }
+        
+        // Start countdown
+        let countdown = 3;
+        countdownEl.textContent = countdown;
+        continueBtn.disabled = true;
+        
+        adCountdownTimer = setInterval(() => {
+          countdown--;
+          countdownEl.textContent = countdown;
+          
+          if (countdown <= 0) {
+            clearInterval(adCountdownTimer);
+            continueBtn.disabled = false;
+            continueBtn.classList.add('enabled');
+            countdownEl.parentElement.innerHTML = '✅ You can now continue to your game!';
+          }
+        }, 1000);
+      }
+
+      function closeAdAndGoToGame() {
+        const modal = document.getElementById('simpleAdModal');
+        
+        // Clear timer
+        if (adCountdownTimer) {
+          clearInterval(adCountdownTimer);
+          adCountdownTimer = null;
+        }
+        
+        // Hide modal
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        
+        // Go to game
+        if (currentGameLink) {
+          window.location.href = currentGameLink;
         }
       }
 
-      // Helper function to get game title from link
-      function getGameTitleFromLink(link) {
-        const game = games.find(g => g.link === link);
-        return game ? game.title : 'Game';
-      }
-
-      // Check if ad should be shown for this game
-      function shouldShowAdForGame(link) {
-        // Always show ads except for certain conditions
-        const excludeGames = []; // Add any games to exclude
-        const gameFile = link.split('/').pop();
-        return !excludeGames.includes(gameFile);
-      }
+      // Set up event listeners for the simple ad modal
+      document.addEventListener('DOMContentLoaded', function() {
+        const closeBtn = document.getElementById('simpleAdClose');
+        const continueBtn = document.getElementById('continueGameBtn');
+        const modal = document.getElementById('simpleAdModal');
+        
+        // Close button (only works after countdown)
+        closeBtn.addEventListener('click', function() {
+          if (!continueBtn.disabled) {
+            closeAdAndGoToGame();
+          }
+        });
+        
+        // Continue button
+        continueBtn.addEventListener('click', closeAdAndGoToGame);
+        
+        // Close on escape key (only after countdown)
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.style.display === 'flex' && !continueBtn.disabled) {
+            closeAdAndGoToGame();
+          }
+        });
+        
+        // Prevent closing by clicking overlay during countdown
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal && !continueBtn.disabled) {
+            closeAdAndGoToGame();
+          }
+        });
+      });
 
       function showGameInfo(gameId) {
         const game = games.find((g) => g.id == gameId);
@@ -2558,118 +2656,6 @@
     
     <!-- Main JavaScript -->
     <script src="../js/navigation.js"></script>
-    <script src="../js/game-ads.js"></script>
-    <script src="../js/game-analytics.js"></script>
-    
-    <!-- Configure Game Ads -->
-    <script>
-      // Configure the ad system when DOM is ready
-      document.addEventListener('DOMContentLoaded', function() {
-        // Configure ad system based on user preferences and device
-        const adConfig = {
-          adUnitId: 'ca-pub-2456627863532019',
-          adSlotId: '1234567890', // Replace with actual ad slot ID
-          showDelay: 500, // Reduced delay for better UX
-          minDisplayTime: 3000, // 3 seconds minimum
-          maxDisplayTime: 25000, // 25 seconds maximum
-          enabledDevices: ['mobile', 'tablet', 'desktop'],
-          enabledGames: 'all',
-          frequency: 'session' // Show once per session for better UX
-        };
 
-        // Check if user has ad preferences
-        const adPreferences = localStorage.getItem('adPreferences');
-        if (adPreferences) {
-          const preferences = JSON.parse(adPreferences);
-          Object.assign(adConfig, preferences);
-        }
-
-        // Configure the ad manager
-        if (window.GameAdsManager) {
-          GameAdsManager.configure(adConfig);
-        }
-
-        // Add ad settings to user preferences (future feature)
-        window.showAdSettings = function() {
-          const modal = createAdSettingsModal();
-          document.body.appendChild(modal);
-          setTimeout(() => modal.classList.add('show'), 10);
-        };
-      });
-
-      // Create ad settings modal (for user control)
-      function createAdSettingsModal() {
-        const modal = document.createElement('div');
-        modal.className = 'game-modal';
-        modal.innerHTML = `
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3><i class="fas fa-cog"></i> Ad Preferences</h3>
-              <button class="modal-close" onclick="closeModal(this)">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p class="modal-description">
-                Customize your ad experience. Ads help keep our games free to play!
-              </p>
-              <div class="ad-settings">
-                <div class="setting-item">
-                  <label class="setting-label">
-                    <input type="checkbox" id="enableAds" checked> 
-                    Enable advertisements
-                  </label>
-                  <small>Uncheck to disable ads (games will still be free)</small>
-                </div>
-                <div class="setting-item">
-                  <label class="setting-label">
-                    Ad frequency:
-                    <select id="adFrequency">
-                      <option value="always">Every game</option>
-                      <option value="session" selected>Once per session</option>
-                      <option value="daily">Once per day</option>
-                    </select>
-                  </label>
-                </div>
-                <div class="setting-item">
-                  <label class="setting-label">
-                    Minimum wait time:
-                    <select id="waitTime">
-                      <option value="2000">2 seconds</option>
-                      <option value="3000" selected>3 seconds</option>
-                      <option value="5000">5 seconds</option>
-                    </select>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="modal-actions">
-              <button class="btn-modal-play" onclick="saveAdPreferences(); closeModal(this);">
-                <i class="fas fa-save"></i>
-                Save Preferences
-              </button>
-            </div>
-          </div>
-        `;
-        return modal;
-      }
-
-      // Save ad preferences
-      function saveAdPreferences() {
-        const preferences = {
-          enabled: document.getElementById('enableAds').checked,
-          frequency: document.getElementById('adFrequency').value,
-          minDisplayTime: parseInt(document.getElementById('waitTime').value)
-        };
-        
-        localStorage.setItem('adPreferences', JSON.stringify(preferences));
-        showNotification('Ad preferences saved!', 'success');
-        
-        // Reconfigure ad manager
-        if (window.gameAdsManager) {
-          Object.assign(window.gameAdsManager.config, preferences);
-        }
-      }
-    </script>
   </body>
 </html>
