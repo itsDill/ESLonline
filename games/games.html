@@ -111,6 +111,7 @@
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/layout-fixes.css" />
     <link rel="stylesheet" href="../css/mobile-footer.css" />
+    <link rel="stylesheet" href="../css/game-ads.css" />
 
     <style>
       /* CSS Variables for Design System */
@@ -535,101 +536,52 @@
         }
       }
 
-      /* Games Grid */
+      /* Games Grid - Clean and Simple */
       .games-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        padding: 0;
+        margin: 0;
       }
 
+      /* Simple Game Card Styles */
       .game-card {
         background: var(--bg-card);
         border: 1px solid var(--border-light);
-        border-radius: var(--radius-lg);
+        border-radius: 12px;
         overflow: hidden;
-        transition: var(--transition-slow);
+        transition: all 0.3s ease;
         cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        position: relative;
-        transform: translateY(0);
-        opacity: 0;
-        animation: fadeInUp 0.6s ease-out forwards;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        height: 320px;
       }
-
-      .game-card:nth-child(1) { animation-delay: 0.1s; }
-      .game-card:nth-child(2) { animation-delay: 0.2s; }
-      .game-card:nth-child(3) { animation-delay: 0.3s; }
-      .game-card:nth-child(4) { animation-delay: 0.4s; }
-      .game-card:nth-child(5) { animation-delay: 0.5s; }
-      .game-card:nth-child(6) { animation-delay: 0.6s; }
 
       .game-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: var(--shadow-xl);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         border-color: var(--primary-color);
-      }
-
-      .game-card:active {
-        transform: translateY(-4px) scale(1.01);
-      }
-
-      /* Add a favorite button */
-      .favorite-btn {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        background: rgba(0, 0, 0, 0.7);
-        border: none;
-        color: var(--text-inverse);
-        padding: 0.5rem;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: var(--transition);
-        z-index: 3;
-        backdrop-filter: blur(5px);
-      }
-
-      .favorite-btn:hover {
-        background: rgba(0, 0, 0, 0.9);
-        transform: scale(1.1);
-      }
-
-      .favorite-btn.active {
-        color: #ff6b6b;
-      }
-
-      /* Improved loading skeleton */
-      .game-card.loading {
-        background: linear-gradient(
-          90deg,
-          var(--bg-tertiary) 25%,
-          var(--bg-secondary) 50%,
-          var(--bg-tertiary) 75%
-        );
-        background-size: 200px 100%;
-        animation: shimmer 1.5s infinite;
       }
 
       .game-image-container {
         position: relative;
-        height: 160px;
+        height: 180px;
         overflow: hidden;
-        background: linear-gradient(
-          135deg,
-          var(--primary-color) 0%,
-          var(--secondary-color) 100%
-        );
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        flex-shrink: 0;
       }
 
       .game-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: var(--transition);
+        transition: transform 0.3s ease;
       }
 
       .game-card:hover .game-image {
-        transform: scale(1.03);
+        transform: scale(1.05);
       }
 
       .game-fallback-icon {
@@ -637,236 +589,101 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 2.5rem;
-        color: var(--text-inverse);
+        font-size: 3rem;
+        color: white;
         opacity: 0.9;
       }
 
-      /* Device & Category Badges */
-      .game-badges {
+      .favorite-btn {
         position: absolute;
-        top: 0.75rem;
-        left: 0.75rem;
-        right: 0.75rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        z-index: 2;
-      }
-
-      .device-badges {
-        display: flex;
-        gap: 0.375rem;
-      }
-
-      .device-badge {
-        background: rgba(0, 0, 0, 0.7);
-        color: var(--text-inverse);
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.625rem;
-        font-weight: 600;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #666;
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 3;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
-        gap: 0.25rem;
-        backdrop-filter: blur(5px);
+        justify-content: center;
       }
 
-      .difficulty-badge {
-        background: rgba(0, 0, 0, 0.7);
-        color: var(--text-inverse);
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.625rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        backdrop-filter: blur(5px);
-      }
-
-      .difficulty-beginner {
-        border-left: 3px solid var(--success);
-      }
-      .difficulty-intermediate {
-        border-left: 3px solid var(--accent-color);
-      }
-      .difficulty-advanced {
-        border-left: 3px solid var(--warning);
+      .favorite-btn:hover,
+      .favorite-btn.active {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(1.1);
       }
 
       .game-content {
-        padding: 1.25rem;
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
       }
 
       .game-title {
-        font-family: "Poppins", sans-serif;
-        font-size: 1.125rem;
+        font-size: 1.1rem;
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin: 0 0 8px 0;
         color: var(--text-primary);
         line-height: 1.3;
       }
 
       .game-description {
         color: var(--text-secondary);
-        font-size: 0.875rem;
-        margin-bottom: 1rem;
-        line-height: 1.5;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin: 0 0 auto 0;
+        overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         line-clamp: 2;
         -webkit-box-orient: vertical;
-        overflow: hidden;
       }
 
-      /* Game Stats Section */
-      .game-stats {
+      .game-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border-light);
-        gap: 0.5rem;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-light);
       }
 
-      .rating {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-      }
-
-      .rating i {
-        color: #fbbf24;
-        font-size: 0.75rem;
-      }
-
-      .rating-text {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-        margin-left: 0.25rem;
-      }
-
-      .plays, .duration {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-      }
-
-      .plays i, .duration i {
+      .game-skill {
+        background: rgba(70, 187, 229, 0.1);
         color: var(--primary-color);
-        font-size: 0.625rem;
-      }
-
-      /* Featured Badge */
-      .featured-badge {
-        position: absolute;
-        bottom: 0.75rem;
-        left: 0.75rem;
-        background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.625rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        z-index: 2;
-      }
-
-      /* Tags */
-      .game-tags {
-        display: flex;
-        gap: 0.375rem;
-        flex-wrap: wrap;
-      }
-
-      .tag {
-        background: var(--bg-tertiary);
-        color: var(--text-muted);
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.625rem;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
         font-weight: 500;
         text-transform: capitalize;
       }
 
-      .game-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        gap: 1rem;
-      }
-
-      .game-skill {
-        display: flex;
-        align-items: center;
-        gap: 0.375rem;
-        color: var(--text-muted);
-        font-size: 0.75rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .game-actions {
-        display: flex;
-        gap: 0.5rem;
-      }
-
       .btn-play {
-        flex: 1;
         background: var(--primary-color);
-        color: var(--text-inverse);
+        color: white;
         border: none;
-        padding: 0.75rem 1rem;
-        border-radius: var(--radius);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
         font-weight: 500;
         cursor: pointer;
-        transition: var(--transition);
-        text-decoration: none;
-        text-align: center;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
+        gap: 6px;
       }
 
       .btn-play:hover {
         background: var(--primary-hover);
         transform: translateY(-1px);
-        box-shadow: var(--shadow);
-      }
-
-      .btn-info, .btn-share {
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border-light);
-        color: var(--text-secondary);
-        padding: 0.75rem;
-        border-radius: var(--radius);
-        cursor: pointer;
-        transition: var(--transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 44px;
-      }
-
-      .btn-info:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        background: var(--primary-light);
-      }
-
-      .btn-share:hover {
-        border-color: var(--accent-color);
-        color: var(--accent-color);
-        background: rgba(16, 185, 129, 0.1);
       }
 
       /* Notification System */
@@ -1201,10 +1018,11 @@
         margin: 0 auto;
       }
 
-      /* Mobile Responsiveness */
+      /* Mobile Responsiveness - Clean and Simple */
       @media (max-width: 768px) {
         .hero {
-          padding: 6rem 0 3rem;
+          padding: 4rem 0 2rem;
+          margin-top: 70px;
         }
 
         .hero h1 {
@@ -1212,104 +1030,80 @@
         }
 
         .quick-stats {
+          grid-template-columns: repeat(2, 1fr);
           gap: 1rem;
-        }
-
-        .stat {
-          padding: 0.75rem 1rem;
-        }
-
-        .search-controls {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .search-container {
-          max-width: 100%;
-        }
-
-        .filter-buttons {
-          gap: 0.5rem;
-          justify-content: center;
-        }
-
-        .filter-btn {
-          font-size: 0.75rem;
-          padding: 0.5rem 0.75rem;
         }
 
         .games-grid {
           grid-template-columns: 1fr;
-          gap: 1rem;
+          gap: 1.5rem;
         }
 
         .game-image-container {
-          height: 140px;
+          height: 200px;
         }
 
-        .game-stats {
+        .game-content {
+          padding: 1.25rem;
+        }
+
+        .game-title {
+          font-size: 1.1rem;
+        }
+
+        .game-description {
+          font-size: 0.9rem;
+        }
+
+        .search-controls {
           flex-direction: column;
-          gap: 0.5rem;
-          align-items: flex-start;
-        }
-
-        .game-actions {
-          flex-direction: column;
-        }
-
-        .btn-info, .btn-share {
-          flex: 1;
-          justify-content: center;
-        }
-
-        .modal-content {
-          margin: 1rem;
-          max-height: calc(100vh - 2rem);
-        }
-
-        .modal-actions {
-          flex-direction: column;
-        }
-
-        .modal-stats {
-          grid-template-columns: 1fr;
-        }
-
-        .notification {
-          left: 1rem;
-          right: 1rem;
-          max-width: none;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .container {
-          padding: 0 1rem;
-        }
-
-        .quick-filters {
-          padding: 1rem;
+          gap: 1rem;
         }
 
         .filter-buttons {
           justify-content: center;
+          gap: 0.5rem;
         }
 
+        .filter-btn {
+          font-size: 0.8rem;
+          padding: 0.5rem 0.75rem;
+        }
+      }
+
+      /* Tablet Responsiveness */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .games-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+        }
+      }
+
+      /* Desktop */
+      @media (min-width: 1025px) {
+        .games-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+        }
+      }
+
+      /* Small Mobile */
+      @media (max-width: 480px) {
         .hero h1 {
           font-size: 1.75rem;
         }
 
-        .hero p {
-          font-size: 1rem;
-        }
-
         .quick-stats {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, 1fr);
           gap: 0.75rem;
         }
 
-        .stat {
-          text-align: center;
+        .game-image-container {
+          height: 180px;
+        }
+
+        .game-content {
+          padding: 1rem;
         }
       }
 
@@ -1360,6 +1154,12 @@
         }
       }
 
+      /* Touch interactions */
+      .game-card.touch-active {
+        transform: translateY(-4px) scale(0.98);
+        transition: transform 0.1s ease;
+      }
+
       /* Focus styles for better accessibility */
       .filter-btn:focus,
       .btn-play:focus,
@@ -1369,9 +1169,67 @@
       .theme-toggle:focus,
       .search-input:focus,
       .sort-select:focus,
-      .clear-search:focus {
+      .clear-search:focus,
+      .game-card:focus {
         outline: 3px solid var(--primary-color);
         outline-offset: 2px;
+      }
+
+      /* Screen reader only content */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* Ad Settings Modal */
+      .ad-settings {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .setting-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .setting-label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+
+      .setting-label input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary-color);
+      }
+
+      .setting-label select {
+        padding: 0.5rem;
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+
+      .setting-item small {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        margin-left: 2rem;
       }
 
       /* Skip to content link */
@@ -1812,7 +1670,118 @@
         setupEventListeners();
         loadTheme();
         showWelcomeMessage();
+        initializeProgressiveEnhancements();
       });
+
+      // Progressive enhancements for better UX
+      function initializeProgressiveEnhancements() {
+        // Add loading states for better perceived performance
+        setupIntersectionObserver();
+        
+        // Preload critical game resources
+        preloadCriticalResources();
+        
+        // Setup service worker for offline functionality (if needed)
+        registerServiceWorker();
+        
+        // Initialize performance monitoring
+        setupPerformanceMonitoring();
+      }
+
+      // Intersection Observer for lazy loading and animations
+      function setupIntersectionObserver() {
+        if ('IntersectionObserver' in window) {
+          const observerOptions = {
+            root: null,
+            rootMargin: '10px',
+            threshold: 0.1
+          };
+
+          const gameCardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in-up');
+                // Lazy load images if needed
+                const img = entry.target.querySelector('img[data-src]');
+                if (img) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute('data-src');
+                }
+                gameCardObserver.unobserve(entry.target);
+              }
+            });
+          }, observerOptions);
+
+          // Observe all game cards
+          setTimeout(() => {
+            document.querySelectorAll('.game-card').forEach(card => {
+              gameCardObserver.observe(card);
+            });
+          }, 100);
+        }
+      }
+
+      // Preload critical resources
+      function preloadCriticalResources() {
+        const criticalImages = [
+          '../images/image copy 12.png', // UNO
+          '../images/image copy 2.png',  // Quiz Champion
+          '../images/image copy 10.png'  // BalanceMan
+        ];
+
+        criticalImages.forEach(src => {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = src;
+          document.head.appendChild(link);
+        });
+      }
+
+      // Register service worker for offline support
+      function registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js').catch(() => {
+            // Service worker registration failed, continue without offline support
+          });
+        }
+      }
+
+      // Performance monitoring
+      function setupPerformanceMonitoring() {
+        // Monitor Core Web Vitals
+        if ('PerformanceObserver' in window) {
+          try {
+            // Largest Contentful Paint
+            new PerformanceObserver((entryList) => {
+              const entries = entryList.getEntries();
+              const lastEntry = entries[entries.length - 1];
+              console.log('LCP:', lastEntry.startTime);
+            }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+            // First Input Delay
+            new PerformanceObserver((entryList) => {
+              const entries = entryList.getEntries();
+              entries.forEach(entry => {
+                console.log('FID:', entry.processingStart - entry.startTime);
+              });
+            }).observe({ entryTypes: ['first-input'] });
+
+            // Cumulative Layout Shift
+            new PerformanceObserver((entryList) => {
+              let cumulativeScore = 0;
+              entryList.getEntries().forEach(entry => {
+                if (!entry.hadRecentInput) {
+                  cumulativeScore += entry.value;
+                }
+              });
+              console.log('CLS:', cumulativeScore);
+            }).observe({ entryTypes: ['layout-shift'] });
+          } catch (error) {
+            // Performance monitoring failed, continue without it
+          }
+        }
+      }
 
       // Update quick stats with real data
       function updateQuickStats() {
@@ -1898,6 +1867,12 @@
             }
           });
         });
+
+        // Enhanced mobile touch interactions
+        setupMobileTouchInteractions();
+        
+        // Enhanced accessibility features
+        setupAccessibilityFeatures();
 
         // Performance: Intersection Observer for animations
         if ('IntersectionObserver' in window) {
@@ -2065,11 +2040,9 @@
         gamesGrid.innerHTML = gamesToRender
           .map((game, index) => {
             const isFavorite = favorites.includes(game.id);
-            const ratingStars = generateStarRating(game.rating);
-            const featuredBadge = game.featured ? '<span class="featured-badge"><i class="fas fa-star"></i> Featured</span>' : '';
             
             return `
-          <div class="game-card" data-skill="${game.skill}" style="animation-delay: ${index * 0.1}s;" onclick="playGame('${game.link}')">
+          <div class="game-card" data-skill="${game.skill}" onclick="playGame('${game.link}')">
             <div class="game-image-container">
               ${game.image
                 ? `<img src="${game.image}" alt="${game.title}" class="game-image" loading="lazy">`
@@ -2080,68 +2053,17 @@
                       onclick="event.stopPropagation(); toggleFavorite(${game.id})">
                 <i class="fas fa-heart"></i>
               </button>
-
-              <div class="game-badges">
-                <div class="device-badges">
-                  ${game.devices
-                    .slice(0, 2) // Show max 2 device badges
-                    .map(device => `
-                    <span class="device-badge">
-                      <i class="fas fa-${getDeviceIcon(device)}"></i>
-                      ${device}
-                    </span>
-                  `).join("")}
-                  ${game.devices.length > 2 ? `<span class="device-badge">+${game.devices.length - 2}</span>` : ''}
-                </div>
-                <div class="difficulty-badge difficulty-${game.difficulty}">
-                  ${game.difficulty}
-                </div>
-              </div>
-              
-              ${featuredBadge}
             </div>
             
             <div class="game-content">
               <h3 class="game-title">${game.title}</h3>
               <p class="game-description">${game.description}</p>
               
-              <div class="game-stats">
-                <div class="rating">
-                  ${ratingStars}
-                  <span class="rating-text">${game.rating}</span>
-                </div>
-                <div class="plays">
-                  <i class="fas fa-play-circle"></i>
-                  ${formatNumber(game.plays)} plays
-                </div>
-                <div class="duration">
-                  <i class="fas fa-clock"></i>
-                  ${game.duration}
-                </div>
-              </div>
-              
-              <div class="game-meta">
-                <div class="game-skill">
-                  <i class="fas fa-${getSkillIcon(game.skill)}"></i>
-                  ${game.skill}
-                </div>
-                <div class="game-tags">
-                  ${game.tags.slice(0, 2).map(tag => 
-                    `<span class="tag">${tag}</span>`
-                  ).join('')}
-                </div>
-              </div>
-              
-              <div class="game-actions">
-                <a href="${game.link}" class="btn-play" onclick="trackGamePlay(${game.id})">
+              <div class="game-footer">
+                <span class="game-skill">${game.skill}</span>
+                <button class="btn-play" onclick="event.stopPropagation(); playGame('${game.link}');">
                   <i class="fas fa-play"></i>
-                  Play Now
-                </a>
-                <button class="btn-info" onclick="event.stopPropagation(); showGameInfo('${game.id}')">
-                  <i class="fas fa-info"></i>
-                </button>
-                <button class="btn-share" onclick="event.stopPropagation(); shareGame('${game.id}')">
-                  <i class="fas fa-share"></i>
+                  Play
                 </button>
               </div>
             </div>
@@ -2209,6 +2131,11 @@
         if (game) {
           game.plays += 1;
           localStorage.setItem(`game-${gameId}-plays`, game.plays);
+          
+          // Track with analytics
+          if (window.gameAnalytics) {
+            window.gameAnalytics.trackGameLaunch(game.title, 'games_page');
+          }
         }
       }
 
@@ -2236,7 +2163,27 @@
 
       // Game actions
       function playGame(link) {
-        window.location.href = link;
+        // Check if we should show an ad before the game
+        const gameTitle = getGameTitleFromLink(link);
+        if (window.gameAdsManager && shouldShowAdForGame(link)) {
+          GameAdsManager.showAdForGame(link, gameTitle);
+        } else {
+          window.location.href = link;
+        }
+      }
+
+      // Helper function to get game title from link
+      function getGameTitleFromLink(link) {
+        const game = games.find(g => g.link === link);
+        return game ? game.title : 'Game';
+      }
+
+      // Check if ad should be shown for this game
+      function shouldShowAdForGame(link) {
+        // Always show ads except for certain conditions
+        const excludeGames = []; // Add any games to exclude
+        const gameFile = link.split('/').pop();
+        return !excludeGames.includes(gameFile);
       }
 
       function showGameInfo(gameId) {
@@ -2327,10 +2274,10 @@
               </div>
             </div>
             <div class="modal-actions">
-              <a href="${game.link}" class="btn-modal-play">
+              <button class="btn-modal-play" onclick="playGame('${game.link}'); closeModal(this);">
                 <i class="fas fa-play"></i>
                 Play Now
-              </a>
+              </button>
               <button onclick="toggleFavorite(${game.id}); closeModal(this)" 
                       class="btn-modal-favorite ${favorites.includes(game.id) ? 'active' : ''}">
                 <i class="fas fa-heart"></i>
@@ -2400,6 +2347,125 @@
           const icon = themeToggle.querySelector("i");
           icon.className = "fas fa-sun";
         }
+      }
+
+      // Enhanced mobile touch interactions
+      function setupMobileTouchInteractions() {
+        // Add touch feedback for game cards
+        document.addEventListener('touchstart', function(e) {
+          if (e.target.closest('.game-card')) {
+            e.target.closest('.game-card').classList.add('touch-active');
+          }
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+          if (e.target.closest('.game-card')) {
+            e.target.closest('.game-card').classList.remove('touch-active');
+          }
+        }, { passive: true });
+
+        // Prevent double-tap zoom on buttons
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+          const now = (new Date()).getTime();
+          if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+          }
+          lastTouchEnd = now;
+        }, false);
+
+        // Add swipe gestures for mobile navigation
+        let touchStartX = null;
+        let touchStartY = null;
+
+        document.addEventListener('touchstart', function(e) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function(e) {
+          if (!touchStartX || !touchStartY) return;
+
+          const touchEndX = e.touches[0].clientX;
+          const touchEndY = e.touches[0].clientY;
+          const diffX = touchStartX - touchEndX;
+          const diffY = touchStartY - touchEndY;
+
+          // Prevent scrolling when swiping horizontally on filter buttons
+          if (Math.abs(diffX) > Math.abs(diffY) && e.target.closest('.filter-buttons')) {
+            e.preventDefault();
+          }
+        }, { passive: false });
+      }
+
+      // Enhanced accessibility features
+      function setupAccessibilityFeatures() {
+        // Add keyboard navigation for game cards
+        document.querySelectorAll('.game-card').forEach((card, index) => {
+          card.setAttribute('tabindex', '0');
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-label', `Play ${card.querySelector('.game-title')?.textContent || 'game'}`);
+          
+          card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              card.click();
+            }
+          });
+        });
+
+        // Add screen reader announcements for filter changes
+        const announcer = document.createElement('div');
+        announcer.setAttribute('aria-live', 'polite');
+        announcer.setAttribute('aria-atomic', 'true');
+        announcer.className = 'sr-only';
+        document.body.appendChild(announcer);
+
+        // Announce filter changes
+        const originalApplyFilters = applyFiltersAndSearch;
+        window.applyFiltersAndSearch = function() {
+          originalApplyFilters();
+          const gameCount = document.querySelectorAll('.game-card').length;
+          announcer.textContent = `Showing ${gameCount} games`;
+        };
+
+        // Add focus management for modals
+        document.addEventListener('keydown', function(e) {
+          const modal = document.querySelector('.game-modal.show');
+          if (modal && e.key === 'Tab') {
+            const focusableElements = modal.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey && document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            } else if (!e.shiftKey && document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+        });
+
+        // Add skip links for better navigation
+        const skipLink = document.querySelector('.skip-to-content');
+        if (skipLink) {
+          skipLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              target.focus();
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        }
+
+        // Announce page load completion
+        setTimeout(() => {
+          announcer.textContent = `Games page loaded with ${games.length} games available`;
+        }, 1000);
       }
     </script>
 
@@ -2492,5 +2558,118 @@
     
     <!-- Main JavaScript -->
     <script src="../js/navigation.js"></script>
+    <script src="../js/game-ads.js"></script>
+    <script src="../js/game-analytics.js"></script>
+    
+    <!-- Configure Game Ads -->
+    <script>
+      // Configure the ad system when DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        // Configure ad system based on user preferences and device
+        const adConfig = {
+          adUnitId: 'ca-pub-2456627863532019',
+          adSlotId: '1234567890', // Replace with actual ad slot ID
+          showDelay: 500, // Reduced delay for better UX
+          minDisplayTime: 3000, // 3 seconds minimum
+          maxDisplayTime: 25000, // 25 seconds maximum
+          enabledDevices: ['mobile', 'tablet', 'desktop'],
+          enabledGames: 'all',
+          frequency: 'session' // Show once per session for better UX
+        };
+
+        // Check if user has ad preferences
+        const adPreferences = localStorage.getItem('adPreferences');
+        if (adPreferences) {
+          const preferences = JSON.parse(adPreferences);
+          Object.assign(adConfig, preferences);
+        }
+
+        // Configure the ad manager
+        if (window.GameAdsManager) {
+          GameAdsManager.configure(adConfig);
+        }
+
+        // Add ad settings to user preferences (future feature)
+        window.showAdSettings = function() {
+          const modal = createAdSettingsModal();
+          document.body.appendChild(modal);
+          setTimeout(() => modal.classList.add('show'), 10);
+        };
+      });
+
+      // Create ad settings modal (for user control)
+      function createAdSettingsModal() {
+        const modal = document.createElement('div');
+        modal.className = 'game-modal';
+        modal.innerHTML = `
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3><i class="fas fa-cog"></i> Ad Preferences</h3>
+              <button class="modal-close" onclick="closeModal(this)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="modal-description">
+                Customize your ad experience. Ads help keep our games free to play!
+              </p>
+              <div class="ad-settings">
+                <div class="setting-item">
+                  <label class="setting-label">
+                    <input type="checkbox" id="enableAds" checked> 
+                    Enable advertisements
+                  </label>
+                  <small>Uncheck to disable ads (games will still be free)</small>
+                </div>
+                <div class="setting-item">
+                  <label class="setting-label">
+                    Ad frequency:
+                    <select id="adFrequency">
+                      <option value="always">Every game</option>
+                      <option value="session" selected>Once per session</option>
+                      <option value="daily">Once per day</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="setting-item">
+                  <label class="setting-label">
+                    Minimum wait time:
+                    <select id="waitTime">
+                      <option value="2000">2 seconds</option>
+                      <option value="3000" selected>3 seconds</option>
+                      <option value="5000">5 seconds</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button class="btn-modal-play" onclick="saveAdPreferences(); closeModal(this);">
+                <i class="fas fa-save"></i>
+                Save Preferences
+              </button>
+            </div>
+          </div>
+        `;
+        return modal;
+      }
+
+      // Save ad preferences
+      function saveAdPreferences() {
+        const preferences = {
+          enabled: document.getElementById('enableAds').checked,
+          frequency: document.getElementById('adFrequency').value,
+          minDisplayTime: parseInt(document.getElementById('waitTime').value)
+        };
+        
+        localStorage.setItem('adPreferences', JSON.stringify(preferences));
+        showNotification('Ad preferences saved!', 'success');
+        
+        // Reconfigure ad manager
+        if (window.gameAdsManager) {
+          Object.assign(window.gameAdsManager.config, preferences);
+        }
+      }
+    </script>
   </body>
 </html>
