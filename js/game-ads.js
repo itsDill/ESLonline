@@ -8,14 +8,22 @@
 class GameAdsManager {
   constructor() {
     this.config = {
-      adUnitId: "ca-pub-2456627863532019/1234567890", // Replace with actual ad unit
-      adSlotId: "game-interstitial-ad",
-      showDelay: 1000, // Delay before showing ad
+      // Your actual Google AdSense publisher ID
+      publisherId: "ca-pub-2456627863532019",
+
+      // Ad unit IDs for different screen sizes (you'll need to get these from Google AdSense)
+      adUnits: {
+        mobile: "ca-pub-2456627863532019/1234567890", // Replace with mobile ad unit
+        tablet: "ca-pub-2456627863532019/2345678901", // Replace with tablet ad unit
+        desktop: "ca-pub-2456627863532019/3456789012", // Replace with desktop ad unit
+      },
+
+      showDelay: 500, // Reduced delay for better UX
       minDisplayTime: 3000, // Minimum time ad should be visible
-      maxDisplayTime: 30000, // Maximum time before auto-close
+      maxDisplayTime: 25000, // Maximum time before auto-close
       enabledDevices: ["mobile", "tablet", "desktop"],
       enabledGames: "all", // 'all' or array of game names
-      frequency: "always", // 'always', 'session', 'daily'
+      frequency: "session", // Changed to session for better UX
     };
 
     this.state = {
@@ -49,7 +57,7 @@ class GameAdsManager {
 
     const script = document.createElement("script");
     script.async = true;
-    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${this.config.adUnitId}`;
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${this.config.publisherId}`;
     script.crossOrigin = "anonymous";
     script.onload = () => this.initializeAds();
     script.onerror = () => {
@@ -128,22 +136,40 @@ class GameAdsManager {
 
   // Create fallback ad when Google Ads fail
   createFallbackAd() {
+    const deviceType = this.getDeviceType();
+    const gameTitle = this.currentGame?.title || "the game";
+
     const fallbackAd = `
       <div class="fallback-ad">
         <div class="fallback-content">
-          <i class="fas fa-graduation-cap fallback-icon"></i>
-          <h3>Improve Your English Skills!</h3>
-          <p>Check out our other learning resources while you wait</p>
+          <i class="fas fa-rocket fallback-icon"></i>
+          <h3>🎯 Ready to play ${gameTitle}?</h3>
+          <p>While you're here, discover more ways to improve your English!</p>
           <div class="fallback-links">
-            <a href="../english/grammar.html" class="fallback-btn">
-              <i class="fas fa-spell-check"></i> Grammar Guide
+            <a href="../english/grammar.html" class="fallback-btn" target="_blank">
+              <i class="fas fa-spell-check"></i> Grammar Mastery
             </a>
-            <a href="../english/vocabguide.html" class="fallback-btn">
-              <i class="fas fa-book-open"></i> Vocabulary
+            <a href="../english/vocabguide.html" class="fallback-btn" target="_blank">
+              <i class="fas fa-book-open"></i> Vocabulary Builder
             </a>
-            <a href="../blog/blog.html" class="fallback-btn">
-              <i class="fas fa-blog"></i> Learning Tips
-            </a>
+            ${
+              deviceType !== "mobile"
+                ? `
+            <a href="../blog/blog.html" class="fallback-btn" target="_blank">
+              <i class="fas fa-lightbulb"></i> Learning Tips
+            </a>`
+                : ""
+            }
+          </div>
+          <div class="fallback-stats">
+            <div class="stat-item">
+              <i class="fas fa-users"></i>
+              <span>50K+ Learners</span>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-star"></i>
+              <span>4.8★ Rating</span>
+            </div>
           </div>
         </div>
       </div>
@@ -289,21 +315,49 @@ class GameAdsManager {
 
   // Load Google Ad
   loadGoogleAd() {
+    // Clear loading state
+    this.adContainer.innerHTML = "";
+
+    // Get the appropriate ad unit based on device type
+    const deviceType = this.getDeviceType();
+    const adUnitId = this.getAdUnitForDevice(deviceType);
+
+    // Create the ad element
     const adElement = document.createElement("ins");
     adElement.className = "adsbygoogle";
     adElement.style.display = "block";
     adElement.style.width = "100%";
-    adElement.style.height = "280px";
-    adElement.setAttribute("data-ad-client", this.config.adUnitId);
-    adElement.setAttribute("data-ad-slot", this.config.adSlotId);
+    adElement.style.minHeight = this.getMinHeightForDevice(deviceType);
+
+    // Set ad attributes
+    adElement.setAttribute("data-ad-client", this.config.publisherId);
+    adElement.setAttribute("data-ad-slot", this.extractSlotId(adUnitId));
     adElement.setAttribute("data-ad-format", "auto");
     adElement.setAttribute("data-full-width-responsive", "true");
 
-    this.adContainer.innerHTML = "";
+    // For better mobile experience, set specific format
+    if (deviceType === "mobile") {
+      adElement.setAttribute("data-ad-format", "rectangle");
+    }
+
     this.adContainer.appendChild(adElement);
 
     try {
+      // Push to adsbygoogle array to load the ad
       (window.adsbygoogle = window.adsbygoogle || []).push({});
+      console.log(`✅ Google Ad loaded for ${deviceType}`);
+
+      // Set up error handling for ad load failures
+      setTimeout(() => {
+        if (
+          !this.adContainer.querySelector(
+            '.adsbygoogle[data-ad-status="filled"]'
+          )
+        ) {
+          console.warn("Ad may not have loaded properly, showing fallback");
+          this.createFallbackAd();
+        }
+      }, 5000);
     } catch (error) {
       console.warn("Ad loading failed:", error);
       this.createFallbackAd();
@@ -471,6 +525,26 @@ class GameAdsManager {
     if (width <= 768) return "mobile";
     if (width <= 1024) return "tablet";
     return "desktop";
+  }
+
+  // Get the appropriate ad unit for the device type
+  getAdUnitForDevice(deviceType) {
+    return this.config.adUnits[deviceType] || this.config.adUnits.desktop;
+  }
+
+  // Extract slot ID from ad unit (last part after the slash)
+  extractSlotId(adUnit) {
+    return adUnit.split("/").pop();
+  }
+
+  // Get minimum height for ad based on device
+  getMinHeightForDevice(deviceType) {
+    const heights = {
+      mobile: "250px",
+      tablet: "280px",
+      desktop: "320px",
+    };
+    return heights[deviceType] || heights.desktop;
   }
 
   // Play notification sound

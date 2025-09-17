@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Google Ads - ESL Games</title>
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/game-ads.css" />
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        padding: 2rem;
+        background: #f8fafc;
+      }
+      .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .test-button {
+        background: #46bbe5;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 1rem;
+        transition: all 0.3s ease;
+      }
+      .test-button:hover {
+        background: #05425c;
+        transform: translateY(-2px);
+      }
+      .config-section {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+        border-left: 4px solid #46bbe5;
+      }
+      .config-section h3 {
+        margin-top: 0;
+        color: #1e293b;
+      }
+      .config-section code {
+        background: #e2e8f0;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Monaco", monospace;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        border-left: 4px solid #ffc107;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🧪 Google Ads Test Page</h1>
+      <p>
+        Use this page to test your Google Ads integration before implementing on
+        your games.
+      </p>
+
+      <div class="warning">
+        <strong>⚠️ Important:</strong> Replace the placeholder ad unit IDs in
+        the configuration section below with your actual Google AdSense ad
+        units.
+      </div>
+
+      <div class="config-section">
+        <h3>📋 Configuration Required</h3>
+        <p>Before testing, you need to:</p>
+        <ol>
+          <li>
+            Go to your
+            <a href="https://www.adsense.com" target="_blank"
+              >Google AdSense account</a
+            >
+          </li>
+          <li>
+            Create ad units for:
+            <ul>
+              <li>
+                <strong>Mobile:</strong> Recommended size 320x250 or responsive
+              </li>
+              <li>
+                <strong>Tablet:</strong> Recommended size 728x90 or responsive
+              </li>
+              <li>
+                <strong>Desktop:</strong> Recommended size 728x90 or responsive
+              </li>
+            </ul>
+          </li>
+          <li>
+            Copy the ad unit IDs and replace these placeholders in
+            <code>game-ads.js</code>:
+            <ul>
+              <li>Mobile: <code>ca-pub-2456627863532019/1234567890</code></li>
+              <li>Tablet: <code>ca-pub-2456627863532019/2345678901</code></li>
+              <li>Desktop: <code>ca-pub-2456627863532019/3456789012</code></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <h2>🎮 Test Ad Popup</h2>
+      <p>Click the buttons below to test the ad popup for different devices:</p>
+
+      <button class="test-button" onclick="testMobileAd()">
+        📱 Test Mobile Ad
+      </button>
+
+      <button class="test-button" onclick="testTabletAd()">
+        📱 Test Tablet Ad
+      </button>
+
+      <button class="test-button" onclick="testDesktopAd()">
+        🖥️ Test Desktop Ad
+      </button>
+
+      <button class="test-button" onclick="testFallbackAd()">
+        🔄 Test Fallback Ad
+      </button>
+
+      <h2>📊 Test Results</h2>
+      <div id="testResults">
+        <p>Click the test buttons above to see results here.</p>
+      </div>
+
+      <h2>🚀 Next Steps</h2>
+      <p>Once your ads are working properly:</p>
+      <ol>
+        <li>
+          The ads will automatically show when users click "Play" on games
+        </li>
+        <li>Users will see a countdown timer before they can continue</li>
+        <li>
+          If ads fail to load, users will see a fallback with your other content
+        </li>
+        <li>Delete this test file from your live site</li>
+      </ol>
+    </div>
+
+    <!-- Load the ad system -->
+    <script src="../js/game-ads.js"></script>
+
+    <script>
+      // Test functions
+      function testMobileAd() {
+        // Temporarily override device detection
+        const originalGetDeviceType = window.gameAdsManager.getDeviceType;
+        window.gameAdsManager.getDeviceType = () => "mobile";
+
+        window.gameAdsManager.showAdBeforeGame(
+          "uno.html",
+          "UNO Word Challenge (Mobile Test)"
+        );
+        logTestResult("Mobile ad test initiated");
+
+        // Restore original function after test
+        setTimeout(() => {
+          window.gameAdsManager.getDeviceType = originalGetDeviceType;
+        }, 1000);
+      }
+
+      function testTabletAd() {
+        const originalGetDeviceType = window.gameAdsManager.getDeviceType;
+        window.gameAdsManager.getDeviceType = () => "tablet";
+
+        window.gameAdsManager.showAdBeforeGame(
+          "quizchamp.html",
+          "Quiz Champion (Tablet Test)"
+        );
+        logTestResult("Tablet ad test initiated");
+
+        setTimeout(() => {
+          window.gameAdsManager.getDeviceType = originalGetDeviceType;
+        }, 1000);
+      }
+
+      function testDesktopAd() {
+        const originalGetDeviceType = window.gameAdsManager.getDeviceType;
+        window.gameAdsManager.getDeviceType = () => "desktop";
+
+        window.gameAdsManager.showAdBeforeGame(
+          "scramble.html",
+          "Word Scramble (Desktop Test)"
+        );
+        logTestResult("Desktop ad test initiated");
+
+        setTimeout(() => {
+          window.gameAdsManager.getDeviceType = originalGetDeviceType;
+        }, 1000);
+      }
+
+      function testFallbackAd() {
+        // Force fallback by temporarily breaking Google Ads
+        const originalLoadGoogleAd = window.gameAdsManager.loadGoogleAd;
+        window.gameAdsManager.loadGoogleAd = function () {
+          this.createFallbackAd();
+        };
+
+        window.gameAdsManager.showAdBeforeGame(
+          "balanceman.html",
+          "BalanceMan (Fallback Test)"
+        );
+        logTestResult("Fallback ad test initiated");
+
+        // Restore original function
+        setTimeout(() => {
+          window.gameAdsManager.loadGoogleAd = originalLoadGoogleAd;
+        }, 1000);
+      }
+
+      function logTestResult(message) {
+        const results = document.getElementById("testResults");
+        const timestamp = new Date().toLocaleTimeString();
+        results.innerHTML += `<p><strong>[${timestamp}]</strong> ${message}</p>`;
+      }
+
+      // Log when ads manager is ready
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          if (window.gameAdsManager) {
+            logTestResult("✅ Game Ads Manager loaded successfully");
+          } else {
+            logTestResult("❌ Game Ads Manager failed to load");
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
