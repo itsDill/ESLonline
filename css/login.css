@@ -44,52 +44,24 @@ body.loaded .login-card {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-top: 80px; /* Account for fixed header */
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-  background-attachment: fixed;
+  overflow: hidden;
 }
 
-/* Floating particles animation */
-.hero-login::before {
-  content: "";
+/* Hero Background Image */
+.hero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-      circle at 20% 50%,
-      rgba(70, 187, 229, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(59, 130, 246, 0.06) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 80%,
-      rgba(139, 92, 246, 0.05) 0%,
-      transparent 50%
-    );
-  animation: float 6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) scale(1);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-  }
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.92;
 }
 
 /* Login Container */
 .login-container {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   width: 100%;
   max-width: 400px;
   padding: 0 20px;
@@ -491,8 +463,6 @@ body.loaded .login-card {
 @media (max-width: 480px) {
   .hero-login {
     padding: 20px 10px;
-    padding-top: 90px; /* Account for mobile header height (70px) + extra spacing */
-    background-attachment: scroll; /* Better performance on mobile */
   }
 
   .login-container {
@@ -570,7 +540,6 @@ body.loaded .login-card {
 @media (min-width: 481px) and (max-width: 768px) {
   .hero-login {
     padding: 30px 20px;
-    padding-top: 90px; /* Account for header height + extra spacing */
   }
 
   .login-card {
@@ -607,9 +576,8 @@ body.loaded .login-card {
   .hero-login {
     min-height: 100vh;
     padding: 20px;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding-top: 100px; /* Account for header height + extra spacing */
   }
 
   .login-card {
@@ -630,49 +598,22 @@ body.loaded .login-card {
   }
 }
 
-/* Force light mode - override any dark mode preferences */
+/* Dark mode support - maintain readability with PNG background */
 @media (prefers-color-scheme: dark) {
-  .hero-login {
-    background: linear-gradient(
-      135deg,
-      #f8fafc 0%,
-      #e2e8f0 50%,
-      #cbd5e1 100%
-    ) !important;
-  }
-
-  .hero-login::before {
-    background: radial-gradient(
-        circle at 20% 50%,
-        rgba(70, 187, 229, 0.08) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 20%,
-        rgba(59, 130, 246, 0.06) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 40% 80%,
-        rgba(139, 92, 246, 0.05) 0%,
-        transparent 50%
-      ) !important;
-  }
-
   .login-card {
-    background: rgba(255, 255, 255, 0.98) !important;
-    border-color: rgba(226, 232, 240, 0.8) !important;
-    color: var(--login-text-primary) !important;
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(226, 232, 240, 0.8);
+    color: var(--login-text-primary);
   }
 
   .form-input {
-    background: white !important;
-    border-color: var(--login-border-color) !important;
-    color: var(--login-text-primary) !important;
+    background: white;
+    border-color: var(--login-border-color);
+    color: var(--login-text-primary);
   }
 
   .form-input::placeholder {
-    color: var(--login-text-light) !important;
+    color: var(--login-text-light);
   }
 }
 
