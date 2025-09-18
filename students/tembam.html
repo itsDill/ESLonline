@@ -578,6 +578,23 @@
         transform: translateX(-4px);
       }
 
+      /* Teacher Notes Styling */
+      .teacher-notes {
+        margin-bottom: 3rem;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       /* Responsive Design */
       @media (max-width: 768px) {
         .blog-container {
@@ -604,6 +621,11 @@
         .content-section {
           padding: 1.5rem;
         }
+
+        /* Teacher notes responsive */
+        .teacher-notes [style*="grid-template-columns: 1fr 1fr"] {
+          grid-template-columns: 1fr !important;
+        }
       }
     </style>
   </head>
@@ -624,15 +646,200 @@
       <!-- Blog Header -->
       <header class="blog-header">
         <div class="blog-header-content">
-          <h1 class="blog-title">🎭 Advanced English Conversation Mastery</h1>
+          <h1 class="blog-title">
+            👨‍� Teacher's Advanced Conversation Lesson
+          </h1>
           <div class="blog-meta">
             <span><i class="fas fa-calendar-alt"></i> Today's Lesson</span>
-            <span><i class="fas fa-user"></i> Advanced ESL Instructor</span>
+            <span><i class="fas fa-chalkboard-teacher"></i> Teaching Mode</span>
             <span><i class="fas fa-clock"></i> 90 min intensive</span>
-            <span><i class="fas fa-tag"></i> Advanced Conversation</span>
+            <span><i class="fas fa-users"></i> Students: Tem & Bam</span>
+          </div>
+          <div
+            style="
+              margin-top: 1.5rem;
+              display: flex;
+              gap: 1rem;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <button
+              class="try-button"
+              onclick="toggleTeacherNotes()"
+              id="notesToggle"
+            >
+              📝 Show Teaching Notes
+            </button>
+            <button
+              class="try-button secondary"
+              onclick="viewStudentProgress()"
+            >
+              📊 Student Progress
+            </button>
+            <a
+              href="student-review.html"
+              class="try-button"
+              style="text-decoration: none; display: inline-block"
+            >
+              👀 Preview Student View
+            </a>
           </div>
         </div>
       </header>
+
+      <!-- Teacher Notes Section (Initially Hidden) -->
+      <div class="teacher-notes" id="teacherNotes" style="display: none">
+        <div
+          class="lesson-structure"
+          style="
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+          "
+        >
+          <div class="lesson-title" style="color: #92400e">
+            📚 Teaching Notes & Tips
+          </div>
+          <div class="lesson-content" style="color: #b45309">
+            <strong>Pre-Lesson Setup (5 minutes)</strong><br />
+            • Check audio/video quality for both students<br />
+            • Have backup conversation topics ready<br />
+            • Prepare to record new vocabulary on shared screen<br /><br />
+
+            <strong>Student Management Tips</strong><br />
+            • Tem: Encourage more speaking, tends to be shy initially<br />
+            • Bam: Help focus on accuracy, sometimes speaks too quickly<br />
+            • Both: Strong with vocabulary, need work on natural flow<br /><br />
+
+            <strong>Lesson Pacing Guidelines</strong><br />
+            • Warm-up: Keep casual, don't over-correct initially<br />
+            • Vocabulary: Use whiteboard/screen sharing for new words<br />
+            • Practice: Ensure both students get equal speaking time<br />
+            • Wrap-up: Assign 2-3 words for them to use before next lesson<br /><br />
+
+            <strong>Technology Setup</strong><br />
+            • Screen sharing for vocabulary examples<br />
+            • Breakout rooms available if needed for individual practice<br />
+            • Recording lesson for student review (with permission)
+          </div>
+        </div>
+
+        <div
+          class="activity-showcase"
+          style="
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-color: #10b981;
+          "
+        >
+          <div class="showcase-title" style="color: #047857">
+            <i class="fas fa-users"></i> Student Progress Tracking
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 2rem;
+              margin: 1.5rem 0;
+              text-align: left;
+            "
+          >
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                border: 2px solid #10b981;
+              "
+            >
+              <h4
+                style="
+                  color: #047857;
+                  margin-bottom: 1rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="fas fa-user"></i> Tem's Progress
+              </h4>
+              <div style="color: #059669; line-height: 1.6">
+                <strong>Strengths:</strong> Excellent listening, good grammar<br />
+                <strong>Areas to improve:</strong> Speaking confidence,
+                interrupting politely<br />
+                <strong>Last lesson:</strong> Mastered 6/8 phrasal verbs<br />
+                <strong>Today's focus:</strong> Spontaneous conversation, idioms
+              </div>
+              <div style="margin-top: 1rem">
+                <div
+                  style="
+                    background: #f0fdf4;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                  "
+                >
+                  <strong>Vocabulary score:</strong> 85% |
+                  <strong>Fluency:</strong> Improving |
+                  <strong>Confidence:</strong> Building
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                border: 2px solid #3b82f6;
+              "
+            >
+              <h4
+                style="
+                  color: #1d4ed8;
+                  margin-bottom: 1rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="fas fa-user"></i> Bam's Progress
+              </h4>
+              <div style="color: #2563eb; line-height: 1.6">
+                <strong>Strengths:</strong> Natural flow, good pronunciation<br />
+                <strong>Areas to improve:</strong> Grammar accuracy, formal
+                register<br />
+                <strong>Last lesson:</strong> Great with complex conditionals<br />
+                <strong>Today's focus:</strong> Precision in expression,
+                advanced vocab
+              </div>
+              <div style="margin-top: 1rem">
+                <div
+                  style="
+                    background: #eff6ff;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                  "
+                >
+                  <strong>Vocabulary score:</strong> 92% |
+                  <strong>Fluency:</strong> Excellent |
+                  <strong>Accuracy:</strong> Focus area
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 1.5rem">
+            <button class="try-button" onclick="exportProgress()">
+              📋 Export Progress Report
+            </button>
+            <button class="try-button secondary" onclick="scheduleNextLesson()">
+              📅 Schedule Next Lesson
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Article Content -->
       <article class="article-content">
@@ -730,6 +937,39 @@
               </button>
               <button class="try-button" onclick="generateTopic()">
                 🎯 Discussion Topic
+              </button>
+            </div>
+
+            <!-- Teacher-Specific Tools -->
+            <div
+              class="generator-buttons"
+              style="
+                border-top: 2px solid rgba(124, 58, 237, 0.2);
+                padding-top: 1.5rem;
+                margin-top: 1.5rem;
+              "
+            >
+              <div
+                style="
+                  text-align: center;
+                  margin-bottom: 1rem;
+                  color: #581c87;
+                  font-weight: 600;
+                "
+              >
+                👨‍🏫 Teacher Tools
+              </div>
+              <button class="try-button" onclick="generateWarmUp()">
+                ☕ Warm-up Question
+              </button>
+              <button
+                class="try-button secondary"
+                onclick="generateErrorCorrection()"
+              >
+                ✏️ Common Error Focus
+              </button>
+              <button class="try-button" onclick="generateHomework()">
+                📝 Homework Assignment
               </button>
             </div>
             <div class="showcase-result" id="generatorResult">
@@ -1204,6 +1444,107 @@
         document.getElementById(
           "generatorResult"
         ).innerHTML = `<strong>Advanced Discussion Topic:</strong><br><br>"${randomTopic}"<br><br><em>Explore multiple perspectives and develop well-reasoned arguments! 🎯</em>`;
+      }
+
+      // Teacher-specific functions
+      function toggleTeacherNotes() {
+        const notesSection = document.getElementById("teacherNotes");
+        const toggleBtn = document.getElementById("notesToggle");
+
+        if (notesSection.style.display === "none") {
+          notesSection.style.display = "block";
+          toggleBtn.textContent = "📝 Hide Teaching Notes";
+          notesSection.scrollIntoView({ behavior: "smooth" });
+        } else {
+          notesSection.style.display = "none";
+          toggleBtn.textContent = "📝 Show Teaching Notes";
+        }
+      }
+
+      function viewStudentProgress() {
+        const notesSection = document.getElementById("teacherNotes");
+        if (notesSection.style.display === "none") {
+          notesSection.style.display = "block";
+          document.getElementById("notesToggle").textContent =
+            "📝 Hide Teaching Notes";
+        }
+        notesSection.scrollIntoView({ behavior: "smooth" });
+      }
+
+      const warmUpQuestions = [
+        "How was your week? Any interesting conversations in English?",
+        "What's something new you learned recently?",
+        "Tell me about a recent news story that caught your attention.",
+        "What's the weather like today, and how does it affect your mood?",
+        "Did you use any English outside of class this week?",
+        "What's one thing you're looking forward to this month?",
+      ];
+
+      const commonErrors = [
+        {
+          error: "Using 'make' vs 'do'",
+          focus: "Practice: 'do homework' vs 'make a decision'",
+          activity: "Create sentences using both correctly",
+        },
+        {
+          error: "Prepositions with time expressions",
+          focus: "'in the morning', 'on Monday', 'at 3 o'clock'",
+          activity: "Timeline exercise with various time expressions",
+        },
+        {
+          error: "Present Perfect vs Past Simple",
+          focus: "Experience vs specific time in the past",
+          activity: "Life experience sharing with correct tenses",
+        },
+        {
+          error: "Indirect questions",
+          focus: "'Can you tell me where...' vs 'Where is...'",
+          activity: "Polite question formation practice",
+        },
+      ];
+
+      const homeworkTasks = [
+        "Record yourself using 3 idioms from today in natural conversations",
+        "Write a paragraph using 5 phrasal verbs from the lesson",
+        "Watch a business news segment and identify 3 'cutting-edge' developments",
+        "Practice one conversation starter with a native speaker or language partner",
+        "Find examples of today's vocabulary in English media (articles, videos, podcasts)",
+      ];
+
+      function generateWarmUp() {
+        const randomWarmUp =
+          warmUpQuestions[Math.floor(Math.random() * warmUpQuestions.length)];
+        document.getElementById(
+          "generatorResult"
+        ).innerHTML = `<strong>Warm-up Question:</strong><br><br>"${randomWarmUp}"<br><br><em>Great for starting the lesson with casual conversation! ☕</em>`;
+      }
+
+      function generateErrorCorrection() {
+        const randomError =
+          commonErrors[Math.floor(Math.random() * commonErrors.length)];
+        document.getElementById(
+          "generatorResult"
+        ).innerHTML = `<strong>Grammar Focus:</strong><br><br><strong>Common Error:</strong> ${randomError.error}<br><br><strong>Teaching Point:</strong> ${randomError.focus}<br><br><strong>Suggested Activity:</strong> ${randomError.activity}<br><br><em>Perfect for targeted grammar practice! ✏️</em>`;
+      }
+
+      function generateHomework() {
+        const randomHomework =
+          homeworkTasks[Math.floor(Math.random() * homeworkTasks.length)];
+        document.getElementById(
+          "generatorResult"
+        ).innerHTML = `<strong>Homework Assignment:</strong><br><br>"${randomHomework}"<br><br><em>This will reinforce today's lesson content! 📝</em>`;
+      }
+
+      function exportProgress() {
+        alert(
+          "Progress report export feature coming soon! This will generate a detailed PDF report of both students' progress."
+        );
+      }
+
+      function scheduleNextLesson() {
+        alert(
+          "Lesson scheduling feature coming soon! This will integrate with your calendar system."
+        );
       }
     </script>
   </body>
