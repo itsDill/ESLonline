@@ -728,16 +728,78 @@
   }
 }
 
-/* Enhanced Hero Title */
+/* Enhanced Hero Title with Animated Gradient */
 .hero-title {
   font-family: var(--font-family-brand);
   font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
-  color: white;
+
+  /* Animated gradient text */
+  background: linear-gradient(
+    45deg,
+    #ffffff 0%,
+    #46bbe5 25%,
+    #10b981 50%,
+    #f59e0b 75%,
+    #ffffff 100%
+  );
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* Enhanced shadows and effects */
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 2px 8px rgba(70, 187, 229, 0.3));
+
+  /* Animation */
+  animation: gradientShift 6s ease-in-out infinite,
+    titleFloat 4s ease-in-out infinite;
+
+  /* Transform for better performance */
+  transform: translateZ(0);
+  will-change: background-position, transform;
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (background-clip: text) {
+  .hero-title {
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 30px rgba(70, 187, 229, 0.5),
+      0 0 60px rgba(16, 185, 129, 0.3);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes titleFloat {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  25% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  50% {
+    transform: translateY(0px) scale(1.01);
+  }
+  75% {
+    transform: translateY(-3px) scale(1.01);
+  }
 }
 
 .hero-subtitle {
