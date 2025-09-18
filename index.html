@@ -57,10 +57,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="ESL Fun Online">
     
-    <!-- Cache Control for Development -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -285,6 +282,7 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"></noscript>
     
+    <!-- FontAwesome Icons - Multiple fallbacks -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -292,20 +290,22 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- FontAwesome Fallback -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" crossorigin="anonymous">
     
-    <!-- Critical CSS with aggressive cache busting -->
-    <link rel="preload" href="css/header.css?v=1758181381&bust=true" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/main.css?v=1758181381&bust=true" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="stylesheet" href="css/index.css?v=1758181381&bust=true" />
-    <link rel="stylesheet" href="css/layout-fixes.css?v=1758181381&bust=true" />
-    <link rel="stylesheet" href="css/mobile-footer.css?v=1758181381&bust=true" />
-    <link rel="stylesheet" href="css/mobile-contrast-fix.css?v=1758181381&bust=true" />
-    <link rel="stylesheet" href="css/ux-enhancements.css?v=1758181381&bust=true" />
+    <!-- Critical CSS -->
+    <link rel="preload" href="css/header.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/layout-fixes.css" />
+    <link rel="stylesheet" href="css/mobile-footer.css" />
+    <link rel="stylesheet" href="css/mobile-contrast-fix.css" />
+    <link rel="stylesheet" href="css/ux-enhancements.css" />
     
     <!-- Fallback for preloaded CSS -->
     <noscript>
-      <link rel="stylesheet" href="css/header.css?v=1758181381&bust=true" />
-      <link rel="stylesheet" href="css/main.css?v=1758181381&bust=true" />
+      <link rel="stylesheet" href="css/header.css" />
+      <link rel="stylesheet" href="css/main.css" />
     </noscript>
 
     <style>
@@ -383,26 +383,26 @@
         pointer-events: none;
       }
       
-      /* FORCE TITLE STYLES - Direct CSS to test */
-      .hero-title.force-style {
-        background: linear-gradient(45deg, #ffffff 0%, #46bbe5 25%, #10b981 50%, #f59e0b 75%, #ffffff 100%) !important;
-        background-size: 400% 400% !important;
-        background-clip: text !important;
-        -webkit-background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
-        animation: gradientShift 3s ease-in-out infinite !important;
+      /* Clean Title Styles */
+      .hero-title {
+        font-family: var(--font-family-brand);
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        text-align: center;
+        color: #ffffff;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: titleGlow 3s ease-in-out infinite;
       }
       
-      @keyframes gradientShift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-      }
-      
-      /* Force card hover effects - Direct CSS */
-      .resource-card.force-hover:hover {
-        transform: translateY(-8px) scale(1.02) !important;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-        transition: all 0.3s ease !important;
+      @keyframes titleGlow {
+        0%, 100% { 
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 30px rgba(70, 187, 229, 0.3);
+        }
+        50% { 
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(70, 187, 229, 0.6);
+        }
       }
 
       @media (max-width: 768px) {
@@ -1324,209 +1324,44 @@
           }
         }
 
-      // Aggressive cache busting function
-      function bustCache() {
-        const timestamp = Date.now();
-        console.log('🔄 Force clearing cache with timestamp:', timestamp);
-        
-        // Remove all existing stylesheets
-        const existingStyles = document.querySelectorAll('link[rel="stylesheet"], style[data-dynamic]');
-        existingStyles.forEach(style => style.remove());
-        
-        // Force reload with new timestamps
-        const cssFiles = [
-          'css/header.css',
-          'css/main.css',
-          'css/index.css',
-          'css/layout-fixes.css',
-          'css/mobile-footer.css',
-          'css/mobile-contrast-fix.css',
-          'css/ux-enhancements.css'
-        ];
-        
-        cssFiles.forEach((file, index) => {
-          setTimeout(() => {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = `${file}?v=${timestamp}&bust=true&rand=${Math.random()}`;
-            link.onload = () => console.log('✅ Loaded:', file);
-            link.onerror = () => console.error('❌ Failed to load:', file);
-            document.head.appendChild(link);
-          }, index * 50); // Small delay between loads
-        });
-        
-        // Clear any cached computed styles
-        if (window.getComputedStyle && document.body) {
-          document.body.style.display = 'none';
-          document.body.offsetHeight; // Force reflow
-          document.body.style.display = '';
-        }
-      }
-      
-      // Also clear localStorage/sessionStorage cache
-      function clearAllCache() {
-        try {
-          localStorage.clear();
-          sessionStorage.clear();
-          if ('caches' in window) {
-            caches.keys().then(names => {
-              names.forEach(name => caches.delete(name));
-            });
-          }
-          console.log('🧹 Cleared all browser cache');
-        } catch(e) {
-          console.log('⚠️ Could not clear some cache:', e);
-        }
-      }
+
 
       // Check for reduced motion preference
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;        // Initialize enhanced features
-        try {
-          // Clear all cache first (aggressive approach)
-          clearAllCache();
-          bustCache();
-          
-          // Wait a moment for CSS to load before applying enhancements
-          setTimeout(() => {
-            // Apply UX enhancements first
-            if (!prefersReducedMotion) {
-              applyUXEnhancements();
-            }
-          }, 200);
-          
-          initAnimatedTitle();
-          initStatsCounter();
-          initScrollIndicator();
-          initBackToTop();
-          
-          if (!prefersReducedMotion) {
-            initFloatingElements();
-            initActivityFeed();
-            initProgressBars();
-            initTiltEffects();
-          }
-          
-          optimizeFooterForMobile();
-          
-          // Add cache-bust indicator for development
-          const indicator = document.createElement('div');
-          indicator.className = 'cache-bust-indicator';
-          indicator.textContent = 'v1758181381 - FORCE CACHE CLEARED';
-          indicator.style.cssText = `
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: #ff4444;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 9999;
-            opacity: 0.9;
-            animation: pulse 1s infinite;
-          `;
-          document.body.appendChild(indicator);
-          setTimeout(() => indicator.remove(), 5000);
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-          // Mark page as loaded with smooth transition
-          document.body.classList.add('page-loading');
-          setTimeout(() => {
-            document.body.style.opacity = '1';
-            document.body.classList.remove('page-loading');
-            document.body.classList.add('page-loaded');
-            
-            // Log successful load and cache info
-            console.log('🚀 ESL Fun Online FORCE LOADED with cache-busting v1758181381');
-            console.log('📊 CSS Files loaded:', document.querySelectorAll('link[rel="stylesheet"]').length);
-            
-            // Wait for CSS to be applied then check
-            setTimeout(() => {
-              const heroTitle = document.querySelector('.hero-title');
-              if (heroTitle) {
-                console.log('🎨 Hero title found:', heroTitle);
-                console.log('🎨 Computed hero title background:', window.getComputedStyle(heroTitle).background);
-                console.log('🎨 Computed hero title background-image:', window.getComputedStyle(heroTitle).backgroundImage);
-              }
-              
-              // Verify our custom CSS is loaded
-              const testElement = document.createElement('div');
-              testElement.className = 'card-hover-effect';
-              document.body.appendChild(testElement);
-              const hasCustomCSS = window.getComputedStyle(testElement).position === 'relative';
-              document.body.removeChild(testElement);
-              console.log('🔧 Custom UX CSS loaded:', hasCustomCSS ? '✅ Yes' : '❌ No');
-              
-              // Check if title animation styles are applied
-              const testTitle = document.createElement('div');
-              testTitle.className = 'hero-title';
-              document.body.appendChild(testTitle);
-              const titleBg = window.getComputedStyle(testTitle).backgroundImage;
-              document.body.removeChild(testTitle);
-              console.log('✨ Title animation styles loaded:', titleBg !== 'none' ? '✅ Yes' : '❌ No');
-              
-              // Force apply styles if they're not loading
-              if (titleBg === 'none') {
-                console.log('🔧 Forcing title styles manually...');
-                const realTitle = document.querySelector('.hero-title');
-                if (realTitle) {
-                  realTitle.classList.add('force-style');
-                }
-              }
-              
-              // Force apply card hover effects
-              const cards = document.querySelectorAll('.resource-card, .feature-card');
-              cards.forEach(card => {
-                card.classList.add('force-hover');
-              });
-              
-            }, 500);
-          }, prefersReducedMotion ? 50 : 100);
-          
-        } catch (error) {
-          console.error("Error initializing page features:", error);
-          // Fallback: still show the page
-          document.body.style.opacity = '1';
+      // Initialize enhanced features
+      try {
+        // Apply UX enhancements
+        if (!prefersReducedMotion) {
+          setTimeout(() => applyUXEnhancements(), 100);
         }
         
-        // Add resize listener for footer optimization
-        window.addEventListener('resize', optimizeFooterForMobile);
+        initAnimatedTitle();
+        initStatsCounter();
+        initScrollIndicator();
+        initBackToTop();
+        
+        if (!prefersReducedMotion) {
+          initFloatingElements();
+          initActivityFeed();
+          initProgressBars();
+          initTiltEffects();
+        }
+        
+        optimizeFooterForMobile();
 
-        // Development helper: Ctrl+Shift+R for hard refresh
-        document.addEventListener('keydown', function(e) {
-          if (e.ctrlKey && e.shiftKey && e.key === 'R') {
-            e.preventDefault();
-            location.reload(true);
-          }
-        });
+        // Mark page as loaded
+        document.body.style.opacity = '1';
+        document.body.classList.add('page-loaded');
         
-        // Add manual cache clear button for development
-        const clearCacheBtn = document.createElement('button');
-        clearCacheBtn.textContent = '🔄 FORCE CLEAR CACHE';
-        clearCacheBtn.style.cssText = `
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: #ff4444;
-          color: white;
-          border: none;
-          padding: 10px 15px;
-          border-radius: 5px;
-          font-weight: bold;
-          cursor: pointer;
-          z-index: 9999;
-          font-size: 12px;
-        `;
-        clearCacheBtn.onclick = function() {
-          console.log('🔄 Manual cache clear triggered');
-          clearAllCache();
-          bustCache();
-          setTimeout(() => location.reload(true), 1000);
-        };
-        document.body.appendChild(clearCacheBtn);
-        
-        // Remove button after 10 seconds
-        setTimeout(() => clearCacheBtn.remove(), 10000);
+      } catch (error) {
+        console.error("Error initializing page features:", error);
+        // Fallback: still show the page
+        document.body.style.opacity = '1';
+      }
+      
+      // Add resize listener for footer optimization
+      window.addEventListener('resize', optimizeFooterForMobile);
       });
 
         // Enhanced Interactive Features
