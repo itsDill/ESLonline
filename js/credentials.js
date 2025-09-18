@@ -1,22 +1,22 @@
 // Demo user database
 const users = [
   {
-    id: "student1",
-    password: "pass1",
+    id: "Tem",
+    password: "555",
     type: "student",
-    dashboard: "student-dashboard.html",
+    dashboard: "temdashboard.html",
   },
   {
-    id: "student2",
-    password: "pass2",
+    id: "Bam",
+    password: "555",
     type: "student",
-    dashboard: "student2-dashboard.html",
+    dashboard: "tamdashboard.html",
   },
   {
-    id: "teacher1",
-    password: "teachpass",
+    id: "Dill",
+    password: "555",
     type: "teacher",
-    dashboard: "teacher-dashboard.html",
+    dashboard: "students/tembam.html",
   },
   {
     id: "admin",
