@@ -595,16 +595,232 @@
         }
       }
 
-      /* Responsive Design */
+      /* Enhanced Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes progressBar {
+        from {
+          width: 0%;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      .language-card {
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+      }
+
+      .language-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .language-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .language-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .language-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .idiom-card,
+      .phrasal-card {
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+      }
+
+      .idiom-card:nth-child(odd) {
+        animation-delay: 0.1s;
+      }
+      .idiom-card:nth-child(even) {
+        animation-delay: 0.2s;
+      }
+
+      .try-button:hover {
+        animation: pulse 0.3s ease-in-out;
+      }
+
+      /* Progress Indicators */
+      .progress-container {
+        background: #f3f4f6;
+        border-radius: 10px;
+        height: 8px;
+        margin: 1rem 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .progress-bar {
+        background: linear-gradient(90deg, #7c3aed, #3b82f6);
+        height: 100%;
+        border-radius: 10px;
+        animation: progressBar 2s ease-out;
+        position: relative;
+      }
+
+      .progress-bar::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Enhanced Visual Hierarchy */
+      .section-title {
+        text-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
+        position: relative;
+      }
+
+      .section-title::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -15px;
+        width: 4px;
+        height: calc(100% + 20px);
+        background: var(--gradient-advanced);
+        border-radius: 2px;
+        opacity: 0.7;
+      }
+
+      /* Improved Cards */
+      .language-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-advanced);
+        border-radius: 12px 12px 0 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .language-card:hover::before {
+        opacity: 1;
+      }
+
+      /* Interactive Elements Enhancement */
+      .topic-btn {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .topic-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .topic-btn:hover::before {
+        left: 100%;
+      }
+
+      /* Mobile-First Responsive Design */
+      @media (max-width: 480px) {
+        .blog-title {
+          font-size: 1.8rem;
+        }
+
+        .blog-meta {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .topic-selector {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .generator-buttons {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .try-button {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .content-section {
+          padding: 1rem;
+        }
+
+        .section-title {
+          font-size: 1.4rem;
+        }
+
+        .showcase-result {
+          font-size: 1rem;
+          padding: 1rem;
+        }
+      }
+
       @media (max-width: 768px) {
         .blog-container {
           padding: 1rem;
         }
 
-        .generator-buttons,
         .topic-selector {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .generator-buttons {
           flex-direction: column;
           align-items: center;
+          gap: 1rem;
         }
 
         .try-button,
@@ -616,6 +832,7 @@
         .idiom-grid,
         .phrasal-verb-grid {
           grid-template-columns: 1fr;
+          gap: 1rem;
         }
 
         .content-section {
@@ -625,6 +842,43 @@
         /* Teacher notes responsive */
         .teacher-notes [style*="grid-template-columns: 1fr 1fr"] {
           grid-template-columns: 1fr !important;
+        }
+
+        /* Grammar exercise area mobile */
+        #grammarExerciseArea button {
+          width: 100%;
+          margin: 0.25rem 0;
+        }
+
+        /* Hyperbole examples mobile */
+        .hyperbole-examples {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .idiom-grid,
+        .phrasal-verb-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+      }
+
+      /* Print Styles for Teacher Resources */
+      @media print {
+        .teacher-notes,
+        .activity-showcase,
+        .generator-buttons {
+          break-inside: avoid;
+        }
+
+        .blog-header {
+          background: white !important;
+          color: black !important;
+        }
+
+        .try-button,
+        .topic-btn {
+          display: none;
         }
       }
     </style>
@@ -853,6 +1107,102 @@
             native speaker.
           </p>
 
+          <!-- Progress Tracking -->
+          <div
+            style="
+              background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+              border-radius: 12px;
+              padding: 2rem;
+              margin: 2rem 0;
+              border: 2px solid #cbd5e1;
+            "
+          >
+            <h3
+              style="
+                color: #475569;
+                margin-bottom: 1.5rem;
+                text-align: center;
+                font-size: 1.2rem;
+              "
+            >
+              📈 Today's Learning Progress
+            </h3>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+              "
+            >
+              <div style="text-align: center">
+                <div
+                  style="
+                    color: #7c3aed;
+                    font-weight: 600;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  Vocabulary Mastery
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar" style="width: 75%"></div>
+                </div>
+                <small style="color: #64748b">15/20 words practiced</small>
+              </div>
+              <div style="text-align: center">
+                <div
+                  style="
+                    color: #059669;
+                    font-weight: 600;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  Grammar Structures
+                </div>
+                <div class="progress-container">
+                  <div
+                    class="progress-bar"
+                    style="
+                      width: 60%;
+                      background: linear-gradient(90deg, #059669, #10b981);
+                    "
+                  ></div>
+                </div>
+                <small style="color: #64748b">3/5 structures covered</small>
+              </div>
+              <div style="text-align: center">
+                <div
+                  style="
+                    color: #dc2626;
+                    font-weight: 600;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  Speaking Confidence
+                </div>
+                <div class="progress-container">
+                  <div
+                    class="progress-bar"
+                    style="
+                      width: 90%;
+                      background: linear-gradient(90deg, #dc2626, #ef4444);
+                    "
+                  ></div>
+                </div>
+                <small style="color: #64748b">Excellent participation!</small>
+              </div>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem">
+              <button
+                class="try-button"
+                onclick="updateProgress()"
+                style="font-size: 0.9rem; padding: 0.75rem 1.5rem"
+              >
+                🎯 Update My Progress
+              </button>
+            </div>
+          </div>
+
           <div class="lesson-structure">
             <div class="lesson-title">Tonight's Lesson Overview 🎯</div>
             <div class="lesson-content">
@@ -926,6 +1276,51 @@
               >
                 🔬 Science & Innovation
               </button>
+              <button
+                class="topic-btn"
+                onclick="setTopic('environment')"
+                id="environment-btn"
+              >
+                🌍 Environment & Sustainability
+              </button>
+              <button
+                class="topic-btn"
+                onclick="setTopic('psychology')"
+                id="psychology-btn"
+              >
+                🧠 Psychology & Human Behavior
+              </button>
+            </div>
+
+            <!-- Difficulty Level Selector -->
+            <div style="text-align: center; margin: 1rem 0">
+              <span style="color: #581c87; font-weight: 600; margin-right: 1rem"
+                >Difficulty Level:</span
+              >
+              <button
+                class="topic-btn"
+                onclick="setDifficulty('intermediate')"
+                id="intermediate-btn"
+                style="font-size: 0.8rem; padding: 0.5rem 1rem"
+              >
+                📚 Intermediate
+              </button>
+              <button
+                class="topic-btn active"
+                onclick="setDifficulty('advanced')"
+                id="advanced-btn"
+                style="font-size: 0.8rem; padding: 0.5rem 1rem"
+              >
+                🎓 Advanced
+              </button>
+              <button
+                class="topic-btn"
+                onclick="setDifficulty('expert')"
+                id="expert-btn"
+                style="font-size: 0.8rem; padding: 0.5rem 1rem"
+              >
+                👨‍🎓 Expert
+              </button>
             </div>
 
             <div class="generator-buttons">
@@ -970,6 +1365,48 @@
               </button>
               <button class="try-button" onclick="generateHomework()">
                 📝 Homework Assignment
+              </button>
+              <button class="try-button" onclick="generateAssessment()">
+                📊 Quick Assessment
+              </button>
+              <button class="try-button secondary" onclick="generateRolePlay()">
+                🎭 Role-Play Scenario
+              </button>
+              <button class="try-button" onclick="generateDebatePrompt()">
+                💬 Debate Topic
+              </button>
+            </div>
+
+            <!-- Lesson Planning Tools -->
+            <div
+              class="generator-buttons"
+              style="
+                border-top: 2px solid rgba(220, 38, 38, 0.2);
+                padding-top: 1.5rem;
+                margin-top: 1.5rem;
+              "
+            >
+              <div
+                style="
+                  text-align: center;
+                  margin-bottom: 1rem;
+                  color: #dc2626;
+                  font-weight: 600;
+                "
+              >
+                📋 Lesson Planning
+              </div>
+              <button
+                class="try-button secondary"
+                onclick="generateLessonPlan()"
+              >
+                📚 Full Lesson Plan
+              </button>
+              <button class="try-button" onclick="generateTimeActivity()">
+                ⏰ Time-Filler Activity
+              </button>
+              <button class="try-button secondary" onclick="generateReview()">
+                🔄 Review Activity
               </button>
             </div>
             <div class="showcase-result" id="generatorResult">
@@ -1210,33 +1647,413 @@
                 <i class="fas fa-layer-group"></i> Complex Conditional
                 Structures
               </div>
-              <p>
-                Master third and mixed conditionals for sophisticated
-                hypothetical discussions: "Had we implemented the strategy
-                earlier, we would be seeing different results now."
-              </p>
+
+              <div style="margin-bottom: 1.5rem">
+                <h4
+                  style="
+                    color: #0c4a6e;
+                    margin-bottom: 0.75rem;
+                    font-size: 1.1rem;
+                  "
+                >
+                  Third Conditionals (Past Unreal)
+                </h4>
+                <p style="margin-bottom: 0.75rem; line-height: 1.6">
+                  <strong>Structure:</strong> If + past perfect, would have +
+                  past participle<br />
+                  <strong>Use:</strong> Talking about imaginary past situations
+                  and their consequences
+                </p>
+                <div
+                  style="
+                    background-color: #f0f9ff;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #0284c7;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  <strong>Examples:</strong><br />
+                  • "If we had invested in renewable energy earlier, we would
+                  have avoided these current costs."<br />
+                  • "Had the meeting been scheduled differently, more
+                  stakeholders would have attended."<br />
+                  • "She wouldn't have resigned if the company had offered
+                  better work-life balance."
+                </div>
+
+                <h4
+                  style="
+                    color: #0c4a6e;
+                    margin-bottom: 0.75rem;
+                    font-size: 1.1rem;
+                  "
+                >
+                  Mixed Conditionals
+                </h4>
+                <p style="margin-bottom: 0.75rem; line-height: 1.6">
+                  <strong>Structure:</strong> Past condition + present result OR
+                  Present condition + past result<br />
+                  <strong>Use:</strong> Connecting different time periods in
+                  hypothetical situations
+                </p>
+                <div
+                  style="
+                    background-color: #f0f9ff;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #0284c7;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  <strong>Examples:</strong><br />
+                  • "If I had studied medicine, I would be a doctor now." (past
+                  → present)<br />
+                  • "If she were more confident, she would have applied for the
+                  promotion." (present → past)<br />
+                  • "Had we implemented the strategy earlier, we would be seeing
+                  different results now."
+                </div>
+
+                <div
+                  style="
+                    background-color: #fef2f2;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #dc2626;
+                  "
+                >
+                  <strong style="color: #dc2626"
+                    >Common Mistakes to Avoid:</strong
+                  ><br />
+                  ❌ "If I would have known..." ✅ "If I had known..."<br />
+                  ❌ "If I was you..." ✅ "If I were you..."<br />
+                  ❌ "If he will come..." ✅ "If he comes..." / "If he came..."
+                </div>
+              </div>
             </div>
 
             <div class="language-card">
               <div class="card-title">
                 <i class="fas fa-quote-left"></i> Reported Speech Nuances
               </div>
-              <p>
-                Advanced reporting verbs and tense sequences: "The CEO suggested
-                that we reconsider our approach, claiming it would yield better
-                outcomes."
-              </p>
+
+              <div style="margin-bottom: 1.5rem">
+                <h4
+                  style="
+                    color: #0c4a6e;
+                    margin-bottom: 0.75rem;
+                    font-size: 1.1rem;
+                  "
+                >
+                  Advanced Reporting Verbs
+                </h4>
+                <p style="margin-bottom: 0.75rem; line-height: 1.6">
+                  Move beyond "said" to demonstrate sophisticated vocabulary and
+                  precise meaning.
+                </p>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                  "
+                >
+                  <div
+                    style="
+                      background-color: #f0f9ff;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #0c4a6e">Neutral Reporting:</strong
+                    ><br />
+                    • mentioned, stated, explained<br />
+                    • observed, noted, commented<br />
+                    • indicated, pointed out
+                  </div>
+                  <div
+                    style="
+                      background-color: #f0fdf4;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #166534">Positive Reporting:</strong
+                    ><br />
+                    • praised, commended, endorsed<br />
+                    • emphasized, highlighted<br />
+                    • recommended, suggested
+                  </div>
+                  <div
+                    style="
+                      background-color: #fef2f2;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #dc2626">Critical Reporting:</strong
+                    ><br />
+                    • criticized, condemned, disputed<br />
+                    • questioned, challenged<br />
+                    • warned, cautioned, argued
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background-color: #f0f9ff;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #0284c7;
+                    margin-bottom: 1rem;
+                  "
+                >
+                  <strong>Advanced Examples:</strong><br />
+                  • "The CEO <em>emphasized</em> that innovation would be the
+                  key to future success."<br />
+                  • "Critics <em>have argued</em> that the policy lacks
+                  sufficient environmental safeguards."<br />
+                  • "The researcher <em>cautioned</em> against drawing premature
+                  conclusions from the data."<br />
+                  • "She <em>acknowledged</em> having underestimated the
+                  complexity of the project."
+                </div>
+
+                <h4
+                  style="
+                    color: #0c4a6e;
+                    margin-bottom: 0.75rem;
+                    font-size: 1.1rem;
+                  "
+                >
+                  Sophisticated Tense Sequences
+                </h4>
+                <div
+                  style="
+                    background-color: #f0f9ff;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #0284c7;
+                  "
+                >
+                  <strong>Present Perfect → Past Perfect:</strong><br />
+                  Direct: "We have completed the analysis."<br />
+                  Reported: "They announced that they <em>had completed</em> the
+                  analysis."<br /><br />
+
+                  <strong>Future → Conditional:</strong><br />
+                  Direct: "We will launch next quarter."<br />
+                  Reported: "They confirmed they <em>would launch</em> next
+                  quarter."<br /><br />
+
+                  <strong>Modal Verbs Changes:</strong><br />
+                  can → could, may → might, must → had to, should → should (no
+                  change)
+                </div>
+              </div>
             </div>
 
             <div class="language-card">
               <div class="card-title">
                 <i class="fas fa-link"></i> Sophisticated Linking Devices
               </div>
-              <p>
-                Elevate your discourse with: "Nevertheless," "Furthermore,"
-                "Conversely," "Notwithstanding," "In light of," "Given that,"
-                "Albeit," "Insofar as"
-              </p>
+
+              <div style="margin-bottom: 1.5rem">
+                <h4
+                  style="
+                    color: #0c4a6e;
+                    margin-bottom: 0.75rem;
+                    font-size: 1.1rem;
+                  "
+                >
+                  Advanced Discourse Markers
+                </h4>
+                <p style="margin-bottom: 1rem; line-height: 1.6">
+                  Elevate your argumentation and create seamless logical flow
+                  with sophisticated connectors.
+                </p>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                  "
+                >
+                  <div
+                    style="
+                      background-color: #f0f9ff;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #0c4a6e">Adding Information:</strong
+                    ><br />
+                    • <em>Furthermore</em> / <em>Moreover</em><br />
+                    • <em>In addition to this</em><br />
+                    • <em>What's more</em><br />
+                    • <em>Not only... but also</em>
+                  </div>
+
+                  <div
+                    style="
+                      background-color: #fef2f2;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #dc2626">Contrasting Ideas:</strong
+                    ><br />
+                    • <em>Nevertheless</em> / <em>Nonetheless</em><br />
+                    • <em>Conversely</em> / <em>On the contrary</em><br />
+                    • <em>Notwithstanding</em><br />
+                    • <em>Albeit</em> (= although)
+                  </div>
+
+                  <div
+                    style="
+                      background-color: #f0fdf4;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #166534">Cause & Effect:</strong
+                    ><br />
+                    • <em>Consequently</em> / <em>Hence</em><br />
+                    • <em>In light of</em> / <em>Given that</em><br />
+                    • <em>As a result of</em><br />
+                    • <em>Owing to</em> / <em>Due to</em>
+                  </div>
+
+                  <div
+                    style="
+                      background-color: #fefbf2;
+                      padding: 1rem;
+                      border-radius: 8px;
+                    "
+                  >
+                    <strong style="color: #a16207"
+                      >Clarifying & Specifying:</strong
+                    ><br />
+                    • <em>In other words</em> / <em>That is to say</em><br />
+                    • <em>To put it differently</em><br />
+                    • <em>Specifically</em> / <em>In particular</em><br />
+                    • <em>Insofar as</em> (= to the extent that)
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background-color: #f0f9ff;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #0284c7;
+                  "
+                >
+                  <strong>Sophisticated Usage Examples:</strong><br /><br />
+
+                  <div style="margin-bottom: 1rem">
+                    "<em>Notwithstanding</em> the economic challenges, the
+                    company managed to maintain profitability.
+                    <em>Furthermore</em>, they expanded their market share
+                    significantly."
+                  </div>
+
+                  <div style="margin-bottom: 1rem">
+                    "The proposal appears beneficial on the surface.
+                    <em>Nevertheless</em>, we must consider the long-term
+                    implications before proceeding."
+                  </div>
+
+                  <div style="margin-bottom: 1rem">
+                    "<em>In light of</em> recent technological advances,
+                    traditional business models are becoming obsolete.
+                    <em>Consequently</em>, companies must adapt or risk
+                    irrelevance."
+                  </div>
+
+                  <div>
+                    "The strategy was successful, <em>albeit</em> more costly
+                    than initially projected. <em>Conversely</em>, our
+                    competitors struggled to achieve similar results."
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background-color: #fef2f2;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    border-left: 4px solid #dc2626;
+                    margin-top: 1rem;
+                  "
+                >
+                  <strong style="color: #dc2626">Usage Tips:</strong><br />
+                  • Use these sparingly - one sophisticated connector per
+                  paragraph is often enough<br />
+                  • Match the formality level to your context (academic,
+                  business, casual)<br />
+                  • Practice pronouncing them correctly for confident
+                  speaking<br />
+                  • Pay attention to punctuation: most require commas
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="language-card"
+              style="
+                background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+                border-color: #7c3aed;
+              "
+            >
+              <div class="card-title" style="color: #581c87">
+                <i class="fas fa-brain"></i> Grammar Mastery Practice
+              </div>
+              <div style="text-align: center; margin: 1rem 0">
+                <button
+                  class="try-button"
+                  onclick="showGrammarExercise()"
+                  style="margin: 0.5rem"
+                >
+                  🎯 Practice Conditionals
+                </button>
+                <button
+                  class="try-button secondary"
+                  onclick="showReportedSpeechExercise()"
+                  style="margin: 0.5rem"
+                >
+                  💬 Reported Speech Quiz
+                </button>
+                <button
+                  class="try-button"
+                  onclick="showLinkingExercise()"
+                  style="margin: 0.5rem"
+                >
+                  🔗 Linking Practice
+                </button>
+              </div>
+              <div
+                id="grammarExerciseArea"
+                style="
+                  margin-top: 1.5rem;
+                  padding: 1rem;
+                  background: white;
+                  border-radius: 8px;
+                  border: 2px solid #e5e7eb;
+                  min-height: 60px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #6b7280;
+                "
+              >
+                Select a practice exercise above to begin! 🚀
+              </div>
             </div>
           </div>
         </section>
@@ -1290,160 +2107,613 @@
 
     <script>
       let currentTopic = "business";
+      let currentDifficulty = "advanced";
 
       const topicData = {
         business: {
-          questions: [
-            "How do you think artificial intelligence will reshape traditional business models in the next decade?",
-            "What role should corporate social responsibility play in modern business strategy?",
-            "How can companies balance profit maximization with sustainable practices?",
-            "What are the most significant challenges facing global supply chains today?",
-            "How has remote work fundamentally changed organizational culture?",
-          ],
-          words: [
-            "synergistic",
-            "paradigmatic",
-            "optimization",
-            "scalability",
-            "disruption",
-            "monetization",
-            "diversification",
-            "stakeholder",
-            "leverage",
-            "pivot",
-          ],
-          topics: [
-            "The ethics of AI in hiring processes",
-            "Sustainable business practices vs. profitability",
-            "The future of cryptocurrency in global commerce",
-            "Remote work's impact on team dynamics",
-            "Corporate responsibility in climate change",
-          ],
+          intermediate: {
+            questions: [
+              "What makes a good business leader?",
+              "How important is teamwork in the workplace?",
+              "What are the benefits and drawbacks of working from home?",
+              "How do companies advertise their products effectively?",
+              "What skills are most important for career success?",
+            ],
+            words: [
+              "profitable",
+              "competitive",
+              "innovative",
+              "efficient",
+              "strategic",
+              "collaborative",
+              "sustainable",
+              "productive",
+              "entrepreneurship",
+              "investment",
+            ],
+            topics: [
+              "The importance of customer service",
+              "Traditional office vs. remote work",
+              "Small business challenges",
+              "The role of technology in modern business",
+              "Work-life balance in different cultures",
+            ],
+          },
+          advanced: {
+            questions: [
+              "How do you think artificial intelligence will reshape traditional business models in the next decade?",
+              "What role should corporate social responsibility play in modern business strategy?",
+              "How can companies balance profit maximization with sustainable practices?",
+              "What are the most significant challenges facing global supply chains today?",
+              "How has remote work fundamentally changed organizational culture?",
+            ],
+            words: [
+              "synergistic",
+              "paradigmatic",
+              "optimization",
+              "scalability",
+              "disruption",
+              "monetization",
+              "diversification",
+              "stakeholder",
+              "leverage",
+              "pivot",
+            ],
+            topics: [
+              "The ethics of AI in hiring processes",
+              "Sustainable business practices vs. profitability",
+              "The future of cryptocurrency in global commerce",
+              "Remote work's impact on team dynamics",
+              "Corporate responsibility in climate change",
+            ],
+          },
+          expert: {
+            questions: [
+              "How might quantum computing fundamentally alter cryptography-dependent business models, and what strategic pivots should organizations consider?",
+              "In what ways could the convergence of biotechnology and artificial intelligence create unprecedented ethical dilemmas for multinational corporations?",
+              "How should businesses navigate the tension between algorithmic efficiency and human agency in decision-making processes?",
+              "What are the implications of decentralized autonomous organizations (DAOs) for traditional corporate governance structures?",
+              "How might the concept of 'surveillance capitalism' evolve as biometric data becomes increasingly commoditized?",
+            ],
+            words: [
+              "algorithmic governance",
+              "regulatory arbitrage",
+              "fiduciary optimization",
+              "stakeholder capitalism",
+              "asymmetric innovation",
+              "disintermediation",
+              "organizational ambidexterity",
+              "cognitive load theory",
+              "network externalities",
+              "behavioral economics",
+            ],
+            topics: [
+              "The epistemology of data-driven decision making",
+              "Post-capitalist economic models in digital ecosystems",
+              "Neurodiversity as competitive advantage in knowledge work",
+              "The ontology of digital identity in Web3 commerce",
+              "Cognitive bias mitigation in strategic planning",
+            ],
+          },
         },
         philosophy: {
-          questions: [
-            "Can true objectivity exist in human judgment, or are we inevitably subjective?",
-            "What constitutes authentic happiness in modern society?",
-            "How do we balance individual freedom with collective responsibility?",
-            "Is progress always morally justifiable, regardless of its consequences?",
-            "What role should emotion play in ethical decision-making?",
-          ],
-          words: [
-            "existential",
-            "transcendent",
-            "dialectical",
-            "empirical",
-            "metaphysical",
-            "phenomenological",
-            "deterministic",
-            "nihilistic",
-            "pragmatic",
-            "utilitarian",
-          ],
-          topics: [
-            "The nature of consciousness and self-awareness",
-            "Free will versus determinism in human behavior",
-            "The relationship between knowledge and wisdom",
-            "Ethics in an age of technological advancement",
-            "The meaning of justice in diverse societies",
-          ],
+          intermediate: {
+            questions: [
+              "What is the meaning of happiness?",
+              "Is it better to be honest or kind?",
+              "Do we have free will or is everything predetermined?",
+              "What makes a person truly successful?",
+              "Should we judge people by their actions or intentions?",
+            ],
+            words: [
+              "morality",
+              "ethics",
+              "wisdom",
+              "virtue",
+              "justice",
+              "freedom",
+              "responsibility",
+              "consciousness",
+              "existence",
+              "purpose",
+            ],
+            topics: [
+              "The difference between right and wrong",
+              "Personal identity and what makes you 'you'",
+              "The role of emotions in decision-making",
+              "What constitutes a meaningful life",
+              "The balance between individual and community needs",
+            ],
+          },
+          advanced: {
+            questions: [
+              "Can true objectivity exist in human judgment, or are we inevitably subjective?",
+              "What constitutes authentic happiness in modern society?",
+              "How do we balance individual freedom with collective responsibility?",
+              "Is progress always morally justifiable, regardless of its consequences?",
+              "What role should emotion play in ethical decision-making?",
+            ],
+            words: [
+              "existential",
+              "transcendent",
+              "dialectical",
+              "empirical",
+              "metaphysical",
+              "phenomenological",
+              "deterministic",
+              "nihilistic",
+              "pragmatic",
+              "utilitarian",
+            ],
+            topics: [
+              "The nature of consciousness and self-awareness",
+              "Free will versus determinism in human behavior",
+              "The relationship between knowledge and wisdom",
+              "Ethics in an age of technological advancement",
+              "The meaning of justice in diverse societies",
+            ],
+          },
+          expert: {
+            questions: [
+              "How does Heidegger's concept of 'thrownness' (Geworfenheit) relate to contemporary discussions of moral responsibility in an algorithmic age?",
+              "Can Wittgenstein's private language argument be extended to critique the phenomenological tradition's approach to consciousness?",
+              "How might enactivist theories of cognition challenge traditional distinctions between epistemology and ontology?",
+              "In what ways does Levinas's concept of the 'face-to-face' encounter complicate utilitarian approaches to AI ethics?",
+              "How do Buddhist concepts of dependent origination (pratītyasamutpāda) interface with Western discussions of emergent properties in complex systems?",
+            ],
+            words: [
+              "phenomenological reduction",
+              "intersubjective constitution",
+              "ontological difference",
+              "hermeneutical circle",
+              "dialectical materialism",
+              "transcendental idealism",
+              "existential authenticity",
+              "ethical particularity",
+              "epistemic humility",
+              "metaphysical realism",
+            ],
+            topics: [
+              "The hard problem of consciousness in panpsychist frameworks",
+              "Derrida's deconstruction and its epistemological implications",
+              "Modal realism and possible worlds semantics",
+              "The embodied cognition thesis and moral philosophy",
+              "Quantum indeterminacy and libertarian free will",
+            ],
+          },
         },
         culture: {
-          questions: [
-            "How do digital platforms influence cultural identity formation?",
-            "What responsibility do artists have toward social change?",
-            "How can societies preserve tradition while embracing innovation?",
-            "What role does language play in shaping cultural worldview?",
-            "How do global media influence local cultural expressions?",
-          ],
-          words: [
-            "cosmopolitan",
-            "indigenous",
-            "assimilation",
-            "diaspora",
-            "vernacular",
-            "avant-garde",
-            "renaissance",
-            "zeitgeist",
-            "cultural hegemony",
-            "multiculturalism",
-          ],
-          topics: [
-            "Cultural appropriation versus cultural appreciation",
-            "The impact of social media on traditional storytelling",
-            "Preserving endangered languages in a globalized world",
-            "The role of museums in cultural representation",
-            "Food culture and identity in immigrant communities",
-          ],
+          intermediate: {
+            questions: [
+              "How do social media platforms change the way we communicate?",
+              "What traditions from your culture are most important to preserve?",
+              "How do different cultures approach family relationships?",
+              "What role does food play in cultural identity?",
+              "How do holidays and festivals bring communities together?",
+            ],
+            words: [
+              "heritage",
+              "tradition",
+              "customs",
+              "diversity",
+              "community",
+              "identity",
+              "celebration",
+              "values",
+              "beliefs",
+              "integration",
+            ],
+            topics: [
+              "The influence of Western culture around the world",
+              "How immigration changes both immigrants and host countries",
+              "The role of language in preserving culture",
+              "Traditional crafts and skills in the modern world",
+              "Cultural differences in work and business practices",
+            ],
+          },
+          advanced: {
+            questions: [
+              "How do digital platforms influence cultural identity formation?",
+              "What responsibility do artists have toward social change?",
+              "How can societies preserve tradition while embracing innovation?",
+              "What role does language play in shaping cultural worldview?",
+              "How do global media influence local cultural expressions?",
+            ],
+            words: [
+              "cosmopolitan",
+              "indigenous",
+              "assimilation",
+              "diaspora",
+              "vernacular",
+              "avant-garde",
+              "renaissance",
+              "zeitgeist",
+              "cultural hegemony",
+              "multiculturalism",
+            ],
+            topics: [
+              "Cultural appropriation versus cultural appreciation",
+              "The impact of social media on traditional storytelling",
+              "Preserving endangered languages in a globalized world",
+              "The role of museums in cultural representation",
+              "Food culture and identity in immigrant communities",
+            ],
+          },
+          expert: {
+            questions: [
+              "How does Bhabha's concept of 'cultural hybridity' complicate binary notions of authentic versus inauthentic cultural expression?",
+              "In what ways might algorithmic curation of cultural content perpetuate or subvert existing power structures in knowledge production?",
+              "How do postcolonial theories of 'epistemic violence' apply to contemporary debates about cultural preservation versus innovation?",
+              "What are the implications of treating culture as intellectual property within neoliberal frameworks of commodification?",
+              "How might posthumanist theories challenge anthropocentric assumptions in cultural anthropology and ethnographic practice?",
+            ],
+            words: [
+              "epistemic colonialism",
+              "decolonial methodology",
+              "cultural semiotics",
+              "performative identity",
+              "subaltern consciousness",
+              "transnational flows",
+              "cosmopolitan vernacular",
+              "cultural commodification",
+              "ontological pluralism",
+              "intersectional analysis",
+            ],
+            topics: [
+              "Decolonizing museum practices and curatorial epistemologies",
+              "Algorithmic bias in cultural content recommendation systems",
+              "The phenomenology of multicultural identity formation",
+              "Posthuman approaches to traditional ecological knowledge",
+              "Critical race theory and cultural policy formation",
+            ],
+          },
         },
         science: {
-          questions: [
-            "How should we approach the ethical implications of genetic engineering?",
-            "What are the potential consequences of achieving artificial general intelligence?",
-            "How can we balance scientific progress with environmental conservation?",
-            "What role should public opinion play in scientific research funding?",
-            "How do we address the challenge of scientific misinformation in media?",
-          ],
-          words: [
-            "hypothesis",
-            "methodology",
-            "peer-reviewed",
-            "empirical",
-            "quantitative",
-            "paradigm shift",
-            "breakthrough",
-            "innovation",
-            "interdisciplinary",
-            "theoretical",
-          ],
-          topics: [
-            "The ethics of human genetic modification",
-            "Climate change mitigation through technology",
-            "The future of space exploration and colonization",
-            "Artificial intelligence and human creativity",
-            "The role of science in addressing global health crises",
-          ],
+          intermediate: {
+            questions: [
+              "How do vaccines work to protect us from diseases?",
+              "What can individuals do to help protect the environment?",
+              "How has the internet changed the way we access information?",
+              "What are the benefits and risks of genetic modification in food?",
+              "How do scientists ensure their research is reliable and accurate?",
+            ],
+            words: [
+              "research",
+              "experiment",
+              "discovery",
+              "technology",
+              "innovation",
+              "evidence",
+              "analysis",
+              "development",
+              "breakthrough",
+              "advancement",
+            ],
+            topics: [
+              "The importance of scientific literacy for citizens",
+              "How climate change affects daily life",
+              "The role of science in medicine and health",
+              "Space exploration and its benefits for humanity",
+              "The ethics of animal testing in research",
+            ],
+          },
+          advanced: {
+            questions: [
+              "How should we approach the ethical implications of genetic engineering?",
+              "What are the potential consequences of achieving artificial general intelligence?",
+              "How can we balance scientific progress with environmental conservation?",
+              "What role should public opinion play in scientific research funding?",
+              "How do we address the challenge of scientific misinformation in media?",
+            ],
+            words: [
+              "hypothesis",
+              "methodology",
+              "peer-reviewed",
+              "empirical",
+              "quantitative",
+              "paradigm shift",
+              "breakthrough",
+              "innovation",
+              "interdisciplinary",
+              "theoretical",
+            ],
+            topics: [
+              "The ethics of human genetic modification",
+              "Climate change mitigation through technology",
+              "The future of space exploration and colonization",
+              "Artificial intelligence and human creativity",
+              "The role of science in addressing global health crises",
+            ],
+          },
+          expert: {
+            questions: [
+              "How might quantum field theory inform our understanding of consciousness, and what are the epistemological limitations of such interdisciplinary approaches?",
+              "What are the implications of the measurement problem in quantum mechanics for scientific realism versus anti-realist interpretations of scientific theories?",
+              "How do emergent properties in complex adaptive systems challenge reductionist approaches to scientific explanation?",
+              "In what ways might the anthropic principle constrain scientific theorizing about multiverse cosmologies?",
+              "How do issues of underdetermination and theory-ladenness of observation complicate the relationship between empirical evidence and theoretical commitment?",
+            ],
+            words: [
+              "emergentism",
+              "reductionism",
+              "falsifiability",
+              "paradigmatic incommensurability",
+              "epistemic virtues",
+              "scientific realism",
+              "underdetermination",
+              "theory-ladenness",
+              "explanatory adequacy",
+              "ontological commitment",
+            ],
+            topics: [
+              "The philosophy of quantum mechanics and interpretive frameworks",
+              "Emergence and downward causation in biological systems",
+              "The demarcation problem and pseudoscience identification",
+              "Scientific modeling and idealization in theoretical physics",
+              "The role of mathematics in scientific representation",
+            ],
+          },
+        },
+        environment: {
+          intermediate: {
+            questions: [
+              "What simple changes can individuals make to reduce their environmental impact?",
+              "How do renewable energy sources compare to fossil fuels?",
+              "What are the main causes of air and water pollution?",
+              "How does deforestation affect local communities and wildlife?",
+              "What role do governments play in environmental protection?",
+            ],
+            words: [
+              "sustainability",
+              "conservation",
+              "renewable",
+              "pollution",
+              "ecosystem",
+              "biodiversity",
+              "recycling",
+              "emissions",
+              "habitat",
+              "preservation",
+            ],
+            topics: [
+              "The benefits of using public transportation",
+              "How plastic waste affects marine life",
+              "Urban gardening and local food production",
+              "The importance of protecting endangered species",
+              "Green building practices and energy efficiency",
+            ],
+          },
+          advanced: {
+            questions: [
+              "How can carbon pricing mechanisms effectively drive behavioral change while maintaining economic competitiveness?",
+              "What are the ethical implications of geoengineering as a climate change mitigation strategy?",
+              "How do we balance economic development needs in developing countries with global environmental goals?",
+              "What role should nuclear energy play in achieving carbon neutrality targets?",
+              "How can circular economy principles be implemented across complex global supply chains?",
+            ],
+            words: [
+              "decarbonization",
+              "sequestration",
+              "mitigation",
+              "adaptation",
+              "resilience",
+              "stewardship",
+              "regenerative",
+              "externalities",
+              "biodegradable",
+              "anthropogenic",
+            ],
+            topics: [
+              "The intersection of environmental justice and climate policy",
+              "Ecosystem services valuation in economic planning",
+              "The role of technology in environmental monitoring",
+              "Corporate environmental responsibility and greenwashing",
+              "Indigenous knowledge systems in conservation efforts",
+            ],
+          },
+          expert: {
+            questions: [
+              "How do tipping points in Earth system components interact to potentially create cascading regime shifts in the Anthropocene?",
+              "What are the epistemological challenges in attributing specific extreme weather events to anthropogenic climate change?",
+              "How might rights of nature frameworks challenge anthropocentric legal and economic paradigms in environmental governance?",
+              "What are the implications of planetary boundaries theory for reconceptualizing sustainable development goals?",
+              "How do socio-ecological systems theory and complexity science inform adaptive management approaches to conservation?",
+            ],
+            words: [
+              "planetary boundaries",
+              "tipping cascades",
+              "Anthropocene",
+              "socio-ecological systems",
+              "adaptive capacity",
+              "resilience thinking",
+              "regime shifts",
+              "ecological economics",
+              "biogeochemical cycles",
+              "earth system governance",
+            ],
+            topics: [
+              "Post-growth economics and ecological macroeconomics",
+              "The ontology of nature-culture assemblages in conservation",
+              "Degrowth theory and its implications for environmental policy",
+              "Multispecies entanglements and posthuman environmental ethics",
+              "Critical environmental justice and intersectional analysis",
+            ],
+          },
+        },
+        psychology: {
+          intermediate: {
+            questions: [
+              "How do emotions affect our decision-making process?",
+              "What factors contribute to effective teamwork and collaboration?",
+              "How does stress impact both mental and physical health?",
+              "What role does self-confidence play in personal success?",
+              "How do cultural differences influence communication styles?",
+            ],
+            words: [
+              "motivation",
+              "behavior",
+              "personality",
+              "development",
+              "adaptation",
+              "resilience",
+              "perception",
+              "cognition",
+              "empathy",
+              "self-awareness",
+            ],
+            topics: [
+              "The importance of emotional intelligence in relationships",
+              "How childhood experiences shape adult personality",
+              "The psychology of habit formation and change",
+              "Mental health awareness and reducing stigma",
+              "The role of social media in modern relationships",
+            ],
+          },
+          advanced: {
+            questions: [
+              "How do cognitive biases systematically influence professional decision-making processes?",
+              "What are the neurological mechanisms underlying behavioral addiction in the digital age?",
+              "How does unconscious bias perpetuate systemic inequalities in organizational settings?",
+              "What role does collective trauma play in shaping cultural narratives and identity?",
+              "How can principles of behavioral economics be ethically applied to public policy design?",
+            ],
+            words: [
+              "metacognition",
+              "neuroplasticity",
+              "intergenerational trauma",
+              "cognitive dissonance",
+              "psychological safety",
+              "implicit bias",
+              "attachment theory",
+              "social cognition",
+              "emotional regulation",
+              "behavioral economics",
+            ],
+            topics: [
+              "The psychology of misinformation and conspiracy thinking",
+              "Trauma-informed approaches in educational and workplace settings",
+              "The neuroscience of meditation and mindfulness practices",
+              "Psychological factors in climate change denial and activism",
+              "The impact of remote work on team psychology and cohesion",
+            ],
+          },
+          expert: {
+            questions: [
+              "How do embodied cognition theories challenge traditional computational models of mind in understanding psychological phenomena?",
+              "What are the implications of predictive processing frameworks for reconceptualizing psychiatric disorders and therapeutic interventions?",
+              "How might enactivist approaches to psychology inform our understanding of intersubjective meaning-making in therapeutic relationships?",
+              "In what ways do postcolonial critiques of psychology challenge universalist assumptions about mental health and well-being?",
+              "How do complex systems approaches to psychopathology differ from traditional diagnostic categorical models in both theory and practice?",
+            ],
+            words: [
+              "enactivism",
+              "phenomenological psychology",
+              "intersubjectivity",
+              "embodied cognition",
+              "predictive processing",
+              "dynamical systems theory",
+              "ecological psychology",
+              "hermeneutic phenomenology",
+              "dialogical self-theory",
+              "complex adaptive systems",
+            ],
+            topics: [
+              "Decolonizing psychological research methodologies and practices",
+              "The phenomenology of altered states of consciousness",
+              "Critical psychology and the politics of mental health diagnosis",
+              "Posthumanist approaches to developmental psychology",
+              "The role of narrative identity in therapeutic transformation",
+            ],
+          },
         },
       };
 
       function setTopic(topic) {
         currentTopic = topic;
 
-        // Update button states
-        document.querySelectorAll(".topic-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
+        // Update button states - only for topic buttons, not difficulty buttons
+        document
+          .querySelectorAll(".topic-selector .topic-btn")
+          .forEach((btn) => {
+            btn.classList.remove("active");
+          });
         document.getElementById(topic + "-btn").classList.add("active");
 
         // Clear result
         document.getElementById("generatorResult").innerHTML = `Selected: ${
           topic.charAt(0).toUpperCase() + topic.slice(1)
-        } context. Choose a generator! 🎯`;
+        } (${currentDifficulty} level). Choose a generator! 🎯`;
+      }
+
+      function setDifficulty(difficulty) {
+        currentDifficulty = difficulty;
+
+        // Update difficulty button states
+        document
+          .querySelectorAll(
+            "[id$='-btn'][id*='intermediate'], [id$='-btn'][id*='advanced'], [id$='-btn'][id*='expert']"
+          )
+          .forEach((btn) => {
+            btn.classList.remove("active");
+          });
+        document.getElementById(difficulty + "-btn").classList.add("active");
+
+        // Update result display
+        document.getElementById("generatorResult").innerHTML = `Selected: ${
+          currentTopic.charAt(0).toUpperCase() + currentTopic.slice(1)
+        } (${difficulty} level). Choose a generator! 🎯`;
       }
 
       function generateQuestion() {
-        const questions = topicData[currentTopic].questions;
+        const questions = topicData[currentTopic][currentDifficulty].questions;
         const randomQuestion =
           questions[Math.floor(Math.random() * questions.length)];
-        document.getElementById(
-          "generatorResult"
-        ).innerHTML = `<strong>Deep Discussion Question:</strong><br><br>"${randomQuestion}"<br><br><em>Prepare your thoughts and discuss with nuanced perspectives! 💭</em>`;
+
+        const difficultyEmoji = {
+          intermediate: "📚",
+          advanced: "🎓",
+          expert: "👨‍🎓",
+        };
+
+        document.getElementById("generatorResult").innerHTML = `<strong>${
+          difficultyEmoji[currentDifficulty]
+        } ${
+          currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)
+        } Discussion Question:</strong><br><br>"${randomQuestion}"<br><br><em>Prepare your thoughts and discuss with nuanced perspectives! 💭</em>`;
       }
 
       function generateWord() {
-        const words = topicData[currentTopic].words;
+        const words = topicData[currentTopic][currentDifficulty].words;
         const randomWord = words[Math.floor(Math.random() * words.length)];
-        document.getElementById(
-          "generatorResult"
-        ).innerHTML = `<strong>Sophisticated Vocabulary:</strong><br><br><span style="font-size: 1.5em; color: var(--advanced-color); font-weight: 700;">${randomWord}</span><br><br><em>Use this word in your next sophisticated discussion! 📚</em>`;
+
+        const difficultyEmoji = {
+          intermediate: "📚",
+          advanced: "🎓",
+          expert: "👨‍🎓",
+        };
+
+        document.getElementById("generatorResult").innerHTML = `<strong>${
+          difficultyEmoji[currentDifficulty]
+        } ${
+          currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)
+        } Vocabulary:</strong><br><br><span style="font-size: 1.5em; color: var(--advanced-color); font-weight: 700;">${randomWord}</span><br><br><em>Challenge yourself to use this word in context! 📚</em>`;
       }
 
       function generateTopic() {
-        const topics = topicData[currentTopic].topics;
+        const topics = topicData[currentTopic][currentDifficulty].topics;
         const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-        document.getElementById(
-          "generatorResult"
-        ).innerHTML = `<strong>Advanced Discussion Topic:</strong><br><br>"${randomTopic}"<br><br><em>Explore multiple perspectives and develop well-reasoned arguments! 🎯</em>`;
+
+        const difficultyEmoji = {
+          intermediate: "📚",
+          advanced: "🎓",
+          expert: "👨‍🎓",
+        };
+
+        document.getElementById("generatorResult").innerHTML = `<strong>${
+          difficultyEmoji[currentDifficulty]
+        } ${
+          currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)
+        } Discussion Topic:</strong><br><br>"${randomTopic}"<br><br><em>Explore multiple perspectives and develop well-reasoned arguments! 🎯</em>`;
       }
 
       // Teacher-specific functions
@@ -1511,6 +2781,102 @@
         "Find examples of today's vocabulary in English media (articles, videos, podcasts)",
       ];
 
+      const assessmentQuestions = [
+        {
+          question:
+            "Ask students to use 'nevertheless' in a sentence about their career goals",
+          focus: "Linking devices application",
+          rubric:
+            "Correct usage (2pts), Context appropriateness (2pts), Fluency (1pt)",
+        },
+        {
+          question:
+            "Have them create a third conditional about a missed opportunity",
+          focus: "Complex conditionals",
+          rubric: "Grammar accuracy (3pts), Meaning clarity (2pts)",
+        },
+        {
+          question:
+            "Report this statement: 'I believe remote work will become the norm'",
+          focus: "Reported speech with opinions",
+          rubric: "Verb choice (2pts), Tense sequence (2pts), Register (1pt)",
+        },
+      ];
+
+      const rolePlayScenarios = [
+        {
+          scenario: "Business Negotiation",
+          roles: "CEO and Investor discussing startup funding",
+          focus: "Formal register, conditional language, persuasive techniques",
+          vocabulary: "venture capital, market penetration, scalability, ROI",
+        },
+        {
+          scenario: "Academic Conference",
+          roles: "Researcher presenting findings to skeptical peer",
+          focus: "Hedging language, citing sources, defending positions",
+          vocabulary:
+            "empirical evidence, methodology, peer review, hypothesis",
+        },
+        {
+          scenario: "Environmental Summit",
+          roles: "Policy maker and environmental activist",
+          focus: "Complex argumentation, cause-effect relationships",
+          vocabulary:
+            "sustainability, carbon footprint, renewable energy, mitigation",
+        },
+      ];
+
+      const debateTopics = [
+        {
+          topic: "Should AI have legal rights and responsibilities?",
+          positions: "Pro-AI rights vs. Human primacy",
+          vocabulary: "consciousness, sentience, accountability, precedent",
+          structures: "Complex conditionals, reported speech, linking devices",
+        },
+        {
+          topic: "Is economic growth compatible with environmental protection?",
+          positions: "Growth advocate vs. Degrowth supporter",
+          vocabulary:
+            "sustainable development, externalities, circular economy",
+          structures: "Cause-effect language, contrasting ideas, hypotheticals",
+        },
+      ];
+
+      const lessonPlans = [
+        {
+          title: "Advanced Business Communication",
+          duration: "90 minutes",
+          objectives: [
+            "Master formal negotiation language",
+            "Use complex conditionals in proposals",
+            "Apply sophisticated linking devices",
+          ],
+          activities: [
+            "Warm-up: Market trends discussion",
+            "Grammar focus: Third conditionals in business contexts",
+            "Role-play: Merger negotiations",
+            "Wrap-up: Reflection on language used",
+          ],
+          materials: "Whiteboard, business case studies, recording device",
+        },
+      ];
+
+      const timeFillerActivities = [
+        "Quick idiom challenge: Students explain an idiom without using the words in it",
+        "Two-minute impromptu speech on a random advanced topic",
+        "Grammar speed round: Transform sentences using different conditional types",
+        "Vocabulary pictionary with today's sophisticated words",
+        "Pronunciation focus: Practice difficult linking device pronunciations",
+      ];
+
+      const reviewActivities = [
+        "Create a story using all today's phrasal verbs",
+        "Debate using only sophisticated linking devices",
+        "Grammar auction: Bid on correct vs. incorrect sentences",
+        "Vocabulary web: Connect today's words with personal experiences",
+        "Error correction peer review of recorded conversations",
+      ];
+
       function generateWarmUp() {
         const randomWarmUp =
           warmUpQuestions[Math.floor(Math.random() * warmUpQuestions.length)];
@@ -1545,6 +2911,311 @@
         alert(
           "Lesson scheduling feature coming soon! This will integrate with your calendar system."
         );
+      }
+
+      // Grammar Exercise Functions
+      const grammarExercises = {
+        conditionals: [
+          {
+            question:
+              "Complete the third conditional: 'If she ___ (study) harder, she ___ (pass) the exam.'",
+            answer: "had studied, would have passed",
+            explanation:
+              "Third conditional uses 'if + past perfect' and 'would have + past participle' for unreal past situations.",
+          },
+          {
+            question:
+              "Create a mixed conditional: 'If I ___ (be) more organized, I ___ (not lose) my keys yesterday.'",
+            answer: "were, wouldn't have lost",
+            explanation:
+              "Mixed conditional: present hypothetical condition (were) + past result (wouldn't have lost).",
+          },
+          {
+            question:
+              "Transform to inverted conditional: 'If we had known about the problem...'",
+            answer: "Had we known about the problem...",
+            explanation:
+              "Inverted conditionals drop 'if' and invert the subject and auxiliary verb.",
+          },
+        ],
+        reportedSpeech: [
+          {
+            question:
+              "Report this statement using 'emphasized': 'Innovation is crucial for our success!'",
+            answer:
+              "He/She emphasized that innovation was crucial for their success.",
+            explanation:
+              "Use reporting verbs like 'emphasized' and change tenses: present → past, 'our' → 'their'.",
+          },
+          {
+            question:
+              "Report with a complex verb: 'I should have prepared better,' she said regretfully.",
+            answer:
+              "She acknowledged having prepared inadequately / She admitted she should have prepared better.",
+            explanation:
+              "Use sophisticated reporting verbs like 'acknowledged' and gerund forms when possible.",
+          },
+          {
+            question:
+              "Report this question: 'How long have you been working here?'",
+            answer: "He/She asked how long I had been working there.",
+            explanation:
+              "Questions become statements: present perfect → past perfect, 'here' → 'there'.",
+          },
+        ],
+        linking: [
+          {
+            question:
+              "Connect these ideas with sophisticated linking: 'The project was successful. It exceeded budget expectations.'",
+            answer:
+              "The project was successful, albeit it exceeded budget expectations. / The project was successful; nevertheless, it exceeded budget expectations.",
+            explanation:
+              "'Albeit' means 'although' and shows contrast. 'Nevertheless' shows contrast despite the positive outcome.",
+          },
+          {
+            question:
+              "Use a formal linking device: 'The CEO resigned. There were financial irregularities.'",
+            answer:
+              "The CEO resigned in light of financial irregularities. / The CEO resigned, given that there were financial irregularities.",
+            explanation:
+              "'In light of' and 'given that' show causation in formal contexts.",
+          },
+          {
+            question:
+              "Link with addition and contrast: 'The plan is innovative. It's risky. We should proceed carefully.'",
+            answer:
+              "The plan is innovative; furthermore, it's risky. Consequently, we should proceed carefully.",
+            explanation:
+              "Use 'furthermore' for addition and 'consequently' for logical result.",
+          },
+        ],
+      };
+
+      function showGrammarExercise() {
+        const exercises = grammarExercises.conditionals;
+        const randomExercise =
+          exercises[Math.floor(Math.random() * exercises.length)];
+
+        document.getElementById("grammarExerciseArea").innerHTML = `
+          <div style="text-align: left;">
+            <h4 style="color: #7c3aed; margin-bottom: 1rem;">🎯 Conditionals Practice</h4>
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+              <strong>Exercise:</strong> ${randomExercise.question}
+            </div>
+            <button onclick="showAnswer('conditionals', '${randomExercise.answer}', '${randomExercise.explanation}')" 
+                    style="background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+              Show Answer
+            </button>
+            <div id="answerArea" style="margin-top: 1rem;"></div>
+          </div>
+        `;
+      }
+
+      function showReportedSpeechExercise() {
+        const exercises = grammarExercises.reportedSpeech;
+        const randomExercise =
+          exercises[Math.floor(Math.random() * exercises.length)];
+
+        document.getElementById("grammarExerciseArea").innerHTML = `
+          <div style="text-align: left;">
+            <h4 style="color: #dc2626; margin-bottom: 1rem;">💬 Reported Speech Practice</h4>
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+              <strong>Exercise:</strong> ${randomExercise.question}
+            </div>
+            <button onclick="showAnswer('reportedSpeech', '${randomExercise.answer}', '${randomExercise.explanation}')" 
+                    style="background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+              Show Answer
+            </button>
+            <div id="answerArea" style="margin-top: 1rem;"></div>
+          </div>
+        `;
+      }
+
+      function showLinkingExercise() {
+        const exercises = grammarExercises.linking;
+        const randomExercise =
+          exercises[Math.floor(Math.random() * exercises.length)];
+
+        document.getElementById("grammarExerciseArea").innerHTML = `
+          <div style="text-align: left;">
+            <h4 style="color: #7c3aed; margin-bottom: 1rem;">🔗 Linking Devices Practice</h4>
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+              <strong>Exercise:</strong> ${randomExercise.question}
+            </div>
+            <button onclick="showAnswer('linking', '${randomExercise.answer}', '${randomExercise.explanation}')" 
+                    style="background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+              Show Answer
+            </button>
+            <div id="answerArea" style="margin-top: 1rem;"></div>
+          </div>
+        `;
+      }
+
+      function showAnswer(type, answer, explanation) {
+        const colors = {
+          conditionals: "#7c3aed",
+          reportedSpeech: "#dc2626",
+          linking: "#7c3aed",
+        };
+
+        document.getElementById("answerArea").innerHTML = `
+          <div style="background: #f0fdf4; padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
+            <div style="margin-bottom: 0.75rem;">
+              <strong style="color: #166534;">✅ Answer:</strong><br>
+              <span style="color: #047857; font-weight: 500;">${answer}</span>
+            </div>
+            <div>
+              <strong style="color: #166534;">💡 Explanation:</strong><br>
+              <span style="color: #047857;">${explanation}</span>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 1rem;">
+            <button onclick="showGrammarExercise()" style="background: ${colors[type]}; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin: 0.25rem;">
+              🎯 Another Conditionals
+            </button>
+            <button onclick="showReportedSpeechExercise()" style="background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin: 0.25rem;">
+              💬 Reported Speech
+            </button>
+            <button onclick="showLinkingExercise()" style="background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin: 0.25rem;">
+              🔗 Linking Devices
+            </button>
+          </div>
+        `;
+      }
+
+      // Additional Teacher Tool Functions
+      function generateAssessment() {
+        const randomAssessment =
+          assessmentQuestions[
+            Math.floor(Math.random() * assessmentQuestions.length)
+          ];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>📊 Quick Assessment Task:</strong><br><br>
+          <div style="background: #f0f9ff; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+            <strong>Task:</strong> ${randomAssessment.question}<br><br>
+            <strong>Focus:</strong> ${randomAssessment.focus}<br><br>
+            <strong>Rubric:</strong> ${randomAssessment.rubric}
+          </div>
+          <em>Perfect for checking understanding mid-lesson! 📊</em>
+        `;
+      }
+
+      function generateRolePlay() {
+        const randomRole =
+          rolePlayScenarios[
+            Math.floor(Math.random() * rolePlayScenarios.length)
+          ];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>🎭 Role-Play Scenario:</strong><br><br>
+          <div style="background: #fef2f2; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+            <strong>Scenario:</strong> ${randomRole.scenario}<br><br>
+            <strong>Roles:</strong> ${randomRole.roles}<br><br>
+            <strong>Language Focus:</strong> ${randomRole.focus}<br><br>
+            <strong>Key Vocabulary:</strong> ${randomRole.vocabulary}
+          </div>
+          <em>Give students 5 minutes to prepare, then 10-15 minutes to perform! 🎭</em>
+        `;
+      }
+
+      function generateDebatePrompt() {
+        const randomDebate =
+          debateTopics[Math.floor(Math.random() * debateTopics.length)];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>💬 Debate Topic:</strong><br><br>
+          <div style="background: #f0fdf4; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+            <strong>Topic:</strong> ${randomDebate.topic}<br><br>
+            <strong>Positions:</strong> ${randomDebate.positions}<br><br>
+            <strong>Target Vocabulary:</strong> ${randomDebate.vocabulary}<br><br>
+            <strong>Grammar Structures:</strong> ${randomDebate.structures}
+          </div>
+          <em>Assign positions and give 10 minutes preparation time! 💬</em>
+        `;
+      }
+
+      function generateLessonPlan() {
+        const randomPlan =
+          lessonPlans[Math.floor(Math.random() * lessonPlans.length)];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>📚 Lesson Plan Template:</strong><br><br>
+          <div style="background: #faf5ff; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+            <strong>Title:</strong> ${randomPlan.title}<br>
+            <strong>Duration:</strong> ${randomPlan.duration}<br><br>
+            <strong>Objectives:</strong><br>
+            ${randomPlan.objectives
+              .map((obj) => `• ${obj}`)
+              .join("<br>")}<br><br>
+            <strong>Activities:</strong><br>
+            ${randomPlan.activities
+              .map((activity) => `• ${activity}`)
+              .join("<br>")}<br><br>
+            <strong>Materials:</strong> ${randomPlan.materials}
+          </div>
+          <em>Adapt timing and activities based on your students' needs! 📚</em>
+        `;
+      }
+
+      function generateTimeActivity() {
+        const randomActivity =
+          timeFillerActivities[
+            Math.floor(Math.random() * timeFillerActivities.length)
+          ];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>⏰ Time-Filler Activity:</strong><br><br>
+          <div style="background: #fff7ed; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+            ${randomActivity}
+          </div>
+          <em>Perfect for those extra 5-10 minutes at the end of class! ⏰</em>
+        `;
+      }
+
+      function generateReview() {
+        const randomReview =
+          reviewActivities[Math.floor(Math.random() * reviewActivities.length)];
+        document.getElementById("generatorResult").innerHTML = `
+          <strong>🔄 Review Activity:</strong><br><br>
+          <div style="background: #f0f9ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+            ${randomReview}
+          </div>
+          <em>Great for consolidating today's learning! 🔄</em>
+        `;
+      }
+
+      function updateProgress() {
+        // Simulate progress update
+        const progressBars = document.querySelectorAll(".progress-bar");
+        progressBars.forEach((bar, index) => {
+          const currentWidth = parseInt(bar.style.width) || 0;
+          const newWidth = Math.min(
+            100,
+            currentWidth + Math.floor(Math.random() * 20) + 5
+          );
+          bar.style.width = newWidth + "%";
+        });
+
+        // Show feedback message
+        const messages = [
+          "Excellent progress! Keep up the great work! 🌟",
+          "Your vocabulary is expanding beautifully! 📚",
+          "Grammar mastery is improving steadily! 📈",
+          "Speaking confidence is through the roof! 🚀",
+        ];
+
+        const randomMessage =
+          messages[Math.floor(Math.random() * messages.length)];
+
+        // Temporary feedback display
+        const feedback = document.createElement("div");
+        feedback.style.cssText = `
+          position: fixed; top: 20px; right: 20px; background: #10b981; color: white; 
+          padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          z-index: 1000; animation: fadeInUp 0.5s ease-out;
+        `;
+        feedback.textContent = randomMessage;
+        document.body.appendChild(feedback);
+
+        setTimeout(() => {
+          feedback.remove();
+        }, 3000);
       }
     </script>
   </body>

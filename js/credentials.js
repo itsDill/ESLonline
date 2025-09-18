@@ -2,19 +2,19 @@
 const users = [
   {
     id: "Tem",
-    password: "555",
+    password: "5555",
     type: "student",
     dashboard: "students/student-review.html",
   },
   {
     id: "Bam",
-    password: "555",
+    password: "5555",
     type: "student",
     dashboard: "students/student-review.html",
   },
   {
     id: "Dill",
-    password: "555",
+    password: "5555",
     type: "teacher",
     dashboard: "students/tembam.html",
   },
