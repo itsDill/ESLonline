@@ -196,14 +196,34 @@
       }
 
       .student-avatar {
+        position: relative;
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: var(--gradient-primary);
-        display: flex;
+        overflow: hidden;
+        margin: 0 auto 1rem;
+      }
+
+      .student-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .student-avatar img:hover {
+        transform: scale(1.05);
+      }
+
+      .student-avatar span {
+        display: none;
+        width: 100%;
+        height: 100%;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
         font-size: 2rem;
         color: white;
         font-weight: bold;
@@ -1654,7 +1674,32 @@
       <!-- Sidebar Navigation -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-          <div class="student-avatar">T</div>
+          <div class="student-avatar">
+            <img
+              src="../images/image copy 14.png"
+              alt="Tem's Profile Picture"
+              style="
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+              "
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <span
+              style="
+                display: none;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                color: white;
+                font-weight: bold;
+              "
+              >T</span
+            >
+          </div>
           <h2 class="student-name">Tem</h2>
           <span class="student-level">Intermediate Level</span>
         </div>
@@ -1852,7 +1897,7 @@
                     Write down movie or series vocab for next lesson
                   </div>
                   <div class="assignment-due">
-                    Due: Next lesson (Dec 19, 2024)
+                    Due: Next lesson (Sep 25, 2025)
                   </div>
                 </div>
                 <span class="assignment-status pending">Pending</span>
@@ -3502,8 +3547,8 @@
             </h4>
             <p style="margin-bottom: 1rem;">Create a sentence using: <strong>"${randomTopic.word}"</strong> (${randomTopic.type})</p>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-style: italic;">${randomTopic.hint}</p>
-            <textarea 
-              id="sentence-input" 
+            <textarea
+              id="sentence-input"
               placeholder="Write your sentence here..."
               style="width: 100%; height: 120px; padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: inherit; resize: vertical;"
             ></textarea>
@@ -3536,7 +3581,7 @@
 
         if (sentence.toLowerCase().includes(targetWord.toLowerCase())) {
           feedback.innerHTML = `
-            <div style="background: #f0fdf4; color: #059669; padding: 1rem; border-radius: 8px; border-left: 4px solid #059669;">
+            <div style="background: #f0fdf4; color: #059669; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #059669;">
               <strong>Excellent! ✅</strong><br>
               You successfully used "${targetWord}" in your sentence:<br>
               <em>"${sentence}"</em>
@@ -3568,7 +3613,7 @@
 
         if (sentence.toLowerCase().includes(targetPhrase.toLowerCase())) {
           feedback.innerHTML = `
-            <div style="background: #f0fdf4; color: #059669; padding: 1rem; border-radius: 8px; border-left: 4px solid #059669;">
+            <div style="background: #f0fdf4; color: #059669; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #059669;">
               <strong>Great job! ✅</strong><br>
               You correctly used "${targetPhrase}" in your sentence:<br>
               <em>"${sentence}"</em><br>
@@ -3596,17 +3641,19 @@
           { word: "have", meaning: "used with I/you/we/they" },
         ];
 
-        const shuffledMeanings = [...grammarPairs].sort(
-          () => Math.random() - 0.5
-        );
+        // Shuffle meanings for matching
+        const shuffledMeanings = [...grammarPairs]
+          .sort(() => Math.random() - 0.5)
+          .map((pair) => ({ meaning: pair.meaning }));
 
-        practiceArea.innerHTML = `
+        const practiceWords = document.getElementById("practice-area");
+        practiceWords.innerHTML = `
           <div class="quiz-container">
             <h4 style="color: var(--primary-color); margin-bottom: 1rem;">
-              <i class="fas fa-link"></i> Grammar Matching Game
+              <i class="fas fa-link"></i> Grammar Word Matching
             </h4>
-            <p style="margin-bottom: 1.5rem;">Click a word, then click its correct explanation:</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <p style="margin-bottom: 1rem;">Match the words with their correct explanations:</p>
+            <div style="display: flex; justify-content: space-between;">
               <div>
                 <h5 style="margin-bottom: 1rem; color: var(--text-primary);">Words:</h5>
                 ${grammarPairs
@@ -3721,9 +3768,9 @@
             <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color); margin: 1.5rem 0; text-align: center; letter-spacing: 2px;">
               ${scrambledWord.toUpperCase()}
             </div>
-            <input 
-              type="text" 
-              id="spelling-input" 
+            <input
+              type="text"
+              id="spelling-input"
               placeholder="Type the word here..."
               style="width: 100%; padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1.1rem; text-align: center;"
             />
@@ -3754,38 +3801,20 @@
           `;
         } else {
           feedback.innerHTML = `
-            <div style="background: #fef2f2; color: #dc2626; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #dc2626;">
-              <strong>Try again! ❌</strong><br>
-              The correct spelling is: <strong>${correctWord}</strong>
+            <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #d97706;">
+              <strong>Try again! ⚠️</strong><br>
+              That's not quite right. Please try unscrambling the word again!
             </div>
           `;
         }
       }
 
-      function resetPracticeArea() {
-        const practiceArea = document.getElementById("practice-area");
-        practiceArea.classList.remove("active");
-        practiceArea.innerHTML = `
-          <div class="practice-placeholder">
-            <i class="fas fa-play-circle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-            <h4>Choose a Practice Activity</h4>
-            <p style="color: var(--text-secondary);">Select one of the activities above to start practicing!</p>
-          </div>
-        `;
-      }
-
-      // Conversation Practice Functions
+      // Conversation questions for generateNewConversationQuestion
       const conversationQuestions = [
-        "✈️ Tell me about a time when you arrived somewhere. Use 'has' or 'have' in your answer.",
-        "📅 What did you do yesterday? Use past tense words ending in -ed (like booked, finished, studied).",
-        "📚 What are you studying right now? Use present continuous tense (am/is/are + -ing).",
-        "🏠 What were you doing at home last night? Use past continuous tense (was/were + -ing).",
-        "🧮 Practice plural words: How many books, boxes, and children are in your classroom?",
-        "� Use 'has' and 'have' correctly: Tell me what your family has and what your friends have.",
-        "� Practice past tense: What happened when you last traveled? (Use words like arrived, booked, packed)",
+        "💬 Use 'has' and 'have' correctly: Tell me what your family has and what your friends have.",
         "📖 What activities are you doing this week? Use present continuous tense.",
         "⏰ What were you doing yesterday at 3 PM? Use past continuous tense.",
-        "� Name three things you finished yesterday using past tense -ed words.",
+        "📝 Name three things you finished yesterday using past tense -ed words.",
         "👨‍👩‍👧‍👦 Talk about your family using 'has' and 'have' correctly.",
         "🔢 Practice plurals: Tell me about different groups of things (students, boxes, children, etc.)",
       ];
