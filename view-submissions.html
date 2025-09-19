@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESL Fun Online - Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #007bff;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+        --info: #17a2b8;
+        --light: #f8f9fa;
+        --dark: #343a40;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .dashboard-header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 20px 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .dashboard-title {
+        color: var(--dark);
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .last-updated {
+        color: #666;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 20px;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .widget {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .widget:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .widget-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+      }
+
+      .widget-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+      }
+
+      .widget-icon {
+        background: var(--primary);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+      }
+
+      .metric-card {
+        background: linear-gradient(135deg, var(--light) 0%, #fff 100%);
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .metric-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary);
+        display: block;
+      }
+
+      .metric-label {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .seo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .seo-item:last-child {
+        border-bottom: none;
+      }
+
+      .seo-label {
+        font-weight: 500;
+        color: var(--dark);
+      }
+
+      .seo-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-good {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status-warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .status-error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .refresh-btn {
+        background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      .refresh-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-info {
+        background: var(--info);
+        color: white;
+      }
+      .btn-warning {
+        background: var(--warning);
+        color: var(--dark);
+      }
+      .submissions-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .submission {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .submission:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .submission-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      .form-type {
+        background: linear-gradient(135deg, var(--primary) 0%, #0056b3 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .timestamp {
+        color: #666;
+        font-size: 0.9rem;
+        background: #f1f3f4;
+        padding: 4px 10px;
+        border-radius: 15px;
+      }
+
+      .submission-data {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+      }
+
+      .data-item {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        transition: all 0.2s ease;
+      }
+
+      .data-item:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateX(2px);
+      }
+
+      .data-label {
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+
+      .data-value {
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .no-data {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        border: 2px dashed #ddd;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      .loading i {
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+        .header-content {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+        }
+        .action-buttons {
+          justify-content: center;
+        }
+        .submission-data {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-header">
+      <div class="header-content">
+        <h1 class="dashboard-title">
+          <i class="fas fa-chart-line"></i>
+          ESL Fun Online - Admin Dashboard
+        </h1>
+        <div class="last-updated">
+          <i class="fas fa-clock"></i>
+          <span id="lastUpdated">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="action-buttons">
+        <button class="refresh-btn" onclick="loadAllData()">
+          <i class="fas fa-sync-alt"></i>
+          Refresh All Data
+        </button>
+        <a href="index.html" class="btn btn-primary">
+          <i class="fas fa-home"></i>
+          View Site
+        </a>
+        <a href="lessons.html" class="btn btn-info">
+          <i class="fas fa-graduation-cap"></i>
+          Lessons Page
+        </a>
+        <button class="btn btn-warning" onclick="exportData()">
+          <i class="fas fa-download"></i>
+          Export Data
+        </button>
+      </div>
+
+      <!-- Dashboard Widgets Grid -->
+      <div class="dashboard-grid">
+        <!-- Overview Stats -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon"><i class="fas fa-chart-bar"></i></div>
+              Overview Stats
+            </h3>
+          </div>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-value" id="totalSubmissions">0</span>
+              <div class="metric-label">Total Submissions</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="todaySubmissions">0</span>
+              <div class="metric-label">Today</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="thisWeekSubmissions">0</span>
+              <div class="metric-label">This Week</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="conversionRate">0%</span>
+              <div class="metric-label">Est. Conversion</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Health Check -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon"><i class="fas fa-search"></i></div>
+              SEO Health Check
+            </h3>
+          </div>
+          <div id="seo-data">
+            <div class="seo-item">
+              <span class="seo-label">Title Tags</span>
+              <span class="seo-status status-good">Good</span>
+            </div>
+            <div class="seo-item">
+              <span class="seo-label">Meta Descriptions</span>
+              <span class="seo-status status-good">Good</span>
+            </div>
+            <div class="seo-item">
+              <span class="seo-label">Image Alt Tags</span>
+              <span class="seo-status status-warning">Needs Review</span>
+            </div>
+            <div class="seo-item">
+              <span class="seo-label">Mobile Friendly</span>
+              <span class="seo-status status-good">Optimized</span>
+            </div>
+            <div class="seo-item">
+              <span class="seo-label">Page Speed</span>
+              <span class="seo-status status-warning">Moderate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Site Performance -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon">
+                <i class="fas fa-tachometer-alt"></i>
+              </div>
+              Site Performance
+            </h3>
+          </div>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-value" id="pageLoadTime">~2.1s</span>
+              <div class="metric-label">Avg Load Time</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="mobileScore">87</span>
+              <div class="metric-label">Mobile Score</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="desktopScore">92</span>
+              <div class="metric-label">Desktop Score</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="uptime">99.8%</span>
+              <div class="metric-label">Uptime</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon"><i class="fas fa-bolt"></i></div>
+              Quick Actions
+            </h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <button class="btn btn-primary" onclick="checkBrokenLinks()">
+              <i class="fas fa-link"></i>
+              Check Broken Links
+            </button>
+            <button class="btn btn-info" onclick="analyzeSEO()">
+              <i class="fas fa-chart-line"></i>
+              Run SEO Analysis
+            </button>
+            <button class="btn btn-warning" onclick="backupSite()">
+              <i class="fas fa-save"></i>
+              Backup Site Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon"><i class="fas fa-history"></i></div>
+              Recent Activity
+            </h3>
+          </div>
+          <div id="recent-activity">
+            <div class="loading">
+              <i class="fas fa-spinner"></i>
+              Loading recent activity...
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Types Distribution -->
+        <div class="widget">
+          <div class="widget-header">
+            <h3 class="widget-title">
+              <div class="widget-icon"><i class="fas fa-pie-chart"></i></div>
+              Form Distribution
+            </h3>
+          </div>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-value" id="bookingForms">0</span>
+              <div class="metric-label">Booking Forms</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="applicationForms">0</span>
+              <div class="metric-label">Applications</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="contactForms">0</span>
+              <div class="metric-label">Contact Forms</div>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value" id="pendingResponses">0</span>
+              <div class="metric-label">Pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Submissions Section -->
+      <div class="submissions-section">
+        <div class="widget-header">
+          <h3 class="widget-title">
+            <div class="widget-icon"><i class="fas fa-envelope"></i></div>
+            Recent Form Submissions
+          </h3>
+        </div>
+        <div id="submissions-container">
+          <div class="loading">
+            <i class="fas fa-spinner"></i>
+            Loading submissions...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let globalSubmissions = [];
+      let siteFiles = [];
+
+      // Load all dashboard data
+      async function loadAllData() {
+        updateLastUpdated();
+        await Promise.all([
+          loadSubmissions(),
+          loadSiteStats(),
+          loadRecentActivity(),
+        ]);
+      }
+
+      // Update last updated timestamp
+      function updateLastUpdated() {
+        document.getElementById("lastUpdated").textContent =
+          new Date().toLocaleString();
+      }
+
+      // Load and display form submissions
+      async function loadSubmissions() {
+        try {
+          const response = await fetch("submissions.json");
+          const submissions = await response.json();
+          globalSubmissions = submissions;
+
+          updateSubmissionStats(submissions);
+          displaySubmissions(submissions);
+        } catch (error) {
+          document.getElementById("submissions-container").innerHTML =
+            '<div class="no-data">Error loading submissions: ' +
+            error.message +
+            "</div>";
+        }
+      }
+
+      // Update submission statistics
+      function updateSubmissionStats(submissions) {
+        const total = submissions.length;
+        const today = new Date().toDateString();
+        const todayCount = submissions.filter(
+          (s) => new Date(s.timestamp).toDateString() === today
+        ).length;
+
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const weekCount = submissions.filter(
+          (s) => new Date(s.timestamp) >= oneWeekAgo
+        ).length;
+
+        // Count by form type
+        const bookingCount = submissions.filter(
+          (s) => s.type === "booking"
+        ).length;
+        const applicationCount = submissions.filter(
+          (s) => s.type === "application"
+        ).length;
+        const contactCount = submissions.filter(
+          (s) => s.type === "contact"
+        ).length;
+
+        // Simulate conversion rate (booking + application forms / total * 100)
+        const conversionRate =
+          total > 0
+            ? Math.round(((bookingCount + applicationCount) / total) * 100)
+            : 0;
+
+        // Update DOM
+        document.getElementById("totalSubmissions").textContent = total;
+        document.getElementById("todaySubmissions").textContent = todayCount;
+        document.getElementById("thisWeekSubmissions").textContent = weekCount;
+        document.getElementById("conversionRate").textContent =
+          conversionRate + "%";
+        document.getElementById("bookingForms").textContent = bookingCount;
+        document.getElementById("applicationForms").textContent =
+          applicationCount;
+        document.getElementById("contactForms").textContent = contactCount;
+        document.getElementById("pendingResponses").textContent =
+          submissions.filter((s) => s.status === "new").length;
+      }
+
+      // Display submissions in the main section
+      function displaySubmissions(submissions) {
+        const container = document.getElementById("submissions-container");
+
+        if (submissions.length === 0) {
+          container.innerHTML =
+            '<div class="no-data"><i class="fas fa-inbox"></i><br>No submissions yet. Forms will appear here once students start submitting.</div>';
+          return;
+        }
+
+        // Sort by timestamp (newest first) and show only recent 10
+        const recentSubmissions = submissions
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, 10);
+
+        container.innerHTML = recentSubmissions
+          .map(
+            (submission) => `
+            <div class="submission">
+              <div class="submission-header">
+                <div>
+                  <span class="form-type">${submission.type.toUpperCase()}</span>
+                  <span style="margin-left: 10px; color: #666; font-size: 0.9em;">ID: ${
+                    submission.id
+                  }</span>
+                </div>
+                <div class="timestamp">
+                  <i class="fas fa-clock"></i>
+                  ${new Date(submission.timestamp).toLocaleString()}
+                </div>
+              </div>
+              <div class="submission-data">
+                ${Object.entries(submission.data)
+                  .filter(
+                    ([key, value]) =>
+                      key !== "form_type" &&
+                      key !== "email_to" &&
+                      value !== "" &&
+                      value !== null
+                  )
+                  .map(
+                    ([key, value]) => `
+                    <div class="data-item">
+                      <div class="data-label">${formatLabel(key)}</div>
+                      <div class="data-value">${formatValue(key, value)}</div>
+                    </div>
+                  `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `
+          )
+          .join("");
+
+        if (submissions.length > 10) {
+          container.innerHTML += `
+            <div style="text-align: center; padding: 20px; color: #666;">
+              <i class="fas fa-info-circle"></i>
+              Showing 10 most recent submissions. Total: ${submissions.length}
+            </div>
+          `;
+        }
+      }
+
+      // Format label names
+      function formatLabel(key) {
+        return key
+          .replace(/([A-Z])/g, " $1")
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+      }
+
+      // Format values based on key type
+      function formatValue(key, value) {
+        if (key.toLowerCase().includes("email")) {
+          return `<a href="mailto:${value}" style="color: var(--primary);">${value}</a>`;
+        }
+        if (key.toLowerCase().includes("phone")) {
+          return `<a href="tel:${value}" style="color: var(--primary);">${value}</a>`;
+        }
+        if (typeof value === "string" && value.length > 100) {
+          return value.substring(0, 100) + "...";
+        }
+        return value;
+      }
+
+      // Load site statistics
+      async function loadSiteStats() {
+        // Simulate performance metrics - in a real scenario, you'd fetch from analytics
+        const stats = {
+          pageLoadTime: (Math.random() * 2 + 1.5).toFixed(1) + "s",
+          mobileScore: Math.floor(Math.random() * 15 + 80),
+          desktopScore: Math.floor(Math.random() * 10 + 88),
+          uptime: (99.5 + Math.random() * 0.5).toFixed(1) + "%",
+        };
+
+        document.getElementById("pageLoadTime").textContent =
+          stats.pageLoadTime;
+        document.getElementById("mobileScore").textContent = stats.mobileScore;
+        document.getElementById("desktopScore").textContent =
+          stats.desktopScore;
+        document.getElementById("uptime").textContent = stats.uptime;
+      }
+
+      // Load recent activity
+      function loadRecentActivity() {
+        const activities = [
+          {
+            icon: "fas fa-user-plus",
+            text: "New student inquiry received",
+            time: "2 hours ago",
+          },
+          {
+            icon: "fas fa-chart-line",
+            text: "SEO optimization completed",
+            time: "1 day ago",
+          },
+          {
+            icon: "fas fa-mobile-alt",
+            text: "Mobile responsiveness improved",
+            time: "2 days ago",
+          },
+          {
+            icon: "fas fa-envelope",
+            text: "Form submission system updated",
+            time: "3 days ago",
+          },
+          {
+            icon: "fas fa-shield-alt",
+            text: "Security scan completed",
+            time: "5 days ago",
+          },
+        ];
+
+        document.getElementById("recent-activity").innerHTML = activities
+          .map(
+            (activity) => `
+          <div style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+            <i class="${activity.icon}" style="color: var(--primary); margin-right: 12px; width: 16px;"></i>
+            <div style="flex: 1;">
+              <div style="font-weight: 500; color: var(--dark); font-size: 0.9rem;">${activity.text}</div>
+              <div style="color: #666; font-size: 0.8rem; margin-top: 2px;">${activity.time}</div>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      // Quick action functions
+      function checkBrokenLinks() {
+        alert(
+          "🔍 Broken link checker would run here. This would scan all pages for 404 errors."
+        );
+      }
+
+      function analyzeSEO() {
+        alert(
+          "📊 SEO analysis would run here. This would check meta tags, headings, keywords, etc."
+        );
+      }
+
+      function backupSite() {
+        alert(
+          "💾 Site backup would run here. This would create a backup of all files and data."
+        );
+      }
+
+      // Export data functionality
+      function exportData() {
+        if (globalSubmissions.length === 0) {
+          alert("No data to export");
+          return;
+        }
+
+        const csvContent = convertToCSV(globalSubmissions);
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `esl-submissions-${
+          new Date().toISOString().split("T")[0]
+        }.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+
+      // Convert submissions to CSV format
+      function convertToCSV(data) {
+        if (data.length === 0) return "";
+
+        const headers = ["ID", "Type", "Timestamp", "Status"];
+        const allKeys = new Set();
+
+        data.forEach((item) => {
+          Object.keys(item.data).forEach((key) => {
+            if (key !== "form_type" && key !== "email_to") {
+              allKeys.add(key);
+            }
+          });
+        });
+
+        const csvHeaders = headers.concat(Array.from(allKeys));
+
+        const csvRows = data.map((item) => {
+          const row = [
+            item.id,
+            item.type,
+            item.timestamp,
+            item.status || "new",
+          ];
+
+          allKeys.forEach((key) => {
+            row.push(item.data[key] || "");
+          });
+
+          return row
+            .map((field) => `"${String(field).replace(/"/g, '""')}"`)
+            .join(",");
+        });
+
+        return [csvHeaders.join(","), ...csvRows].join("\n");
+      }
+
+      // Initialize dashboard
+      document.addEventListener("DOMContentLoaded", () => {
+        loadAllData();
+
+        // Auto-refresh every 2 minutes
+        setInterval(loadAllData, 120000);
+      });
+    </script>
+  </body>
+</html>

@@ -3740,6 +3740,69 @@
       .submit-booking:hover {
         background: var(--primary-hover);
       }
+
+      /* Mobile Responsive Styles for Booking Modal */
+      @media (max-width: 768px) {
+        .modal-content {
+          padding: 1.5rem;
+          max-width: 95%;
+          width: 95%;
+          margin: 1rem;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+
+        .booking-form {
+          gap: 0.75rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 0.625rem;
+          font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .submit-booking {
+          padding: 0.875rem;
+          font-size: 16px;
+        }
+
+        .close-modal {
+          top: 0.75rem;
+          right: 0.75rem;
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .modal-content {
+          padding: 1rem;
+          max-width: 98%;
+          width: 98%;
+          margin: 0.5rem;
+        }
+
+        .booking-form {
+          gap: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 0.5rem;
+        }
+
+        .submit-booking {
+          padding: 0.75rem;
+          margin-top: 0.75rem;
+        }
+
+        .modal h3 {
+          font-size: 1.25rem;
+          margin-bottom: 0.75rem;
+        }
+      }
     </style>
   </head>
 
@@ -5167,20 +5230,45 @@
       }
 
       // Handle booking form submission
-      function handleBookingSubmit(e) {
+      async function handleBookingSubmit(e) {
         e.preventDefault();
+        
+        const submitBtn = e.target.querySelector('.submit-booking');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
         
         try {
           const formData = new FormData(e.target);
           const bookingData = Object.fromEntries(formData);
-          console.log("Booking inquiry submitted to: dillynvermeulen@gmail.com", bookingData);
           
-          showNotification("Thank you for your inquiry! We will contact you within 24 hours.", "success");
-          closeModalHandler();
-          e.target.reset();
+          // Add form type for identification
+          bookingData.form_type = 'booking';
+          bookingData.email_to = 'dillynvermeulen@gmail.com';
+          
+          const response = await fetch('form-handler.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bookingData)
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            showNotification("Thank you for your inquiry! We will contact you within 24 hours.", "success");
+            closeModalHandler();
+            e.target.reset();
+          } else {
+            throw new Error(result.error || 'Form submission failed');
+          }
         } catch (error) {
           console.error("Error submitting booking:", error);
           showNotification("There was an error submitting your inquiry. Please try again.", "error");
+        } finally {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
         }
       }
 
@@ -6250,11 +6338,20 @@
           applicationData.teacherNationality = teacherNationality.join(', ');
           applicationData.contactMethods = contactMethods.join(', ');
 
-          // Simulate API call with better error handling
-          setTimeout(() => {
-            try {
-              console.log('Trial application data:', applicationData);
-              
+          // Submit application data to JSON file
+          applicationData.form_type = 'application';
+          applicationData.email_to = 'dillynvermeulen@gmail.com';
+          
+          fetch('form-handler.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(applicationData)
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.success) {
               // Hide form and show success message
               document.querySelector('.application-form').style.display = 'none';
               document.getElementById('successMessage').classList.add('show');
@@ -6262,12 +6359,9 @@
               resetLoading();
               
               // Show success notification
-              showNotification('Application submitted successfully! Check your email for confirmation.', 'success');
+              showNotification('Application submitted successfully! We will contact you soon.', 'success');
               
-              // Send form data to email (would be handled by backend)
-              console.log('Lesson application submitted to: dillynvermeulen@gmail.com', applicationData);
-              
-              // Reset form after delay (same as before)
+              // Reset form after delay
               setTimeout(() => {
                 // Reset all form elements
                 e.target.reset();
@@ -6294,12 +6388,15 @@
                 document.querySelector('.application-form').style.display = 'block';
                 document.getElementById('successMessage').classList.remove('show');
               }, 5000);
-            } catch (error) {
-              console.error('Error processing application:', error);
-              resetLoading();
-              showNotification('There was an error submitting your application. Please try again.', 'error');
+            } else {
+              throw new Error(result.error || 'Submission failed');
             }
-          }, 2000);
+          })
+          .catch(error => {
+            console.error('Error submitting application:', error);
+            resetLoading();
+            showNotification('There was an error submitting your application. Please try again.', 'error');
+          });
         } catch (error) {
           console.error('Error collecting form data:', error);
           resetLoading();
