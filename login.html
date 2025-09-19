@@ -308,6 +308,21 @@
 
       // Initialize page
       document.addEventListener("DOMContentLoaded", function () {
+        // Check if user is already authenticated
+        const isAuthenticated =
+          sessionStorage.getItem("studentPortalAuth") ||
+          localStorage.getItem("studentPortalAuth");
+        if (isAuthenticated) {
+          // Get user info to redirect to appropriate dashboard
+          const currentUser = JSON.parse(
+            sessionStorage.getItem("currentUser") || "{}"
+          );
+          if (currentUser.dashboard) {
+            window.location.href = currentUser.dashboard;
+            return;
+          }
+        }
+
         initializePage();
         setupEventListeners();
         hideLoadingOverlay();
@@ -599,9 +614,24 @@
               })
             );
 
+            // Set authentication token for protected pages
+            const authToken = `${
+              result.userId
+            }_${currentUserType}_${Date.now()}`;
+            sessionStorage.setItem("studentPortalAuth", authToken);
+            // Also store in localStorage for "remember me" functionality
+            localStorage.setItem("studentPortalAuth", authToken);
+
+            // Check if user was redirected from a protected page
+            const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
+            const targetUrl = redirectUrl || result.dashboard;
+
+            // Clear the redirect URL
+            sessionStorage.removeItem("redirectAfterLogin");
+
             // Redirect after a brief delay
             setTimeout(() => {
-              window.location.href = result.dashboard;
+              window.location.href = targetUrl;
             }, 1500);
           } else {
             setLoadingState(false);

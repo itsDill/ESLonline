@@ -12,7 +12,15 @@
       content="student portal, learning dashboard, schedule tracker, grades, progress, ESL student, study materials, review games"
     />
     <meta name="author" content="ESL Fun Online" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta
+      name="googlebot"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet" />
     <meta name="language" content="English" />
     <meta property="og:title" content="Student Portal | ESL Fun Online" />
     <meta
@@ -38,12 +46,10 @@
       name="twitter:image"
       content="https://eslfunonline.com/images/education-4382169_1280.jpg"
     />
-    <link
-      rel="canonical"
-      href="https://eslfunonline.com/students/example.html"
-    />
+    <!-- Canonical URL removed for password-protected content -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
     <title>Student Portal | ESL Fun Online</title>
 
     <!-- Structured Data for SEO -->
@@ -67,26 +73,20 @@
       }
     </script>
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-9G9RD6BHLN");
-    </script>
+    <!-- Google Analytics disabled for password-protected page -->
 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      />
+    </noscript>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -843,6 +843,31 @@
         font-weight: 500;
       }
 
+      /* Touch device optimizations */
+      @media (hover: none) {
+        .dashboard-card:hover,
+        .stat-card:hover,
+        .flashcard:hover {
+          transform: none;
+        }
+
+        .nav-link:hover,
+        .game-btn:hover,
+        .practice-btn:hover {
+          background-color: var(--primary-color);
+          color: white;
+        }
+      }
+
+      /* Improved touch targets */
+      .nav-link,
+      .game-btn,
+      .practice-btn,
+      .flashcard {
+        min-height: 44px;
+        min-width: 44px;
+      }
+
       /* Mobile Responsive */
       @media (max-width: 1024px) {
         .sidebar {
@@ -944,6 +969,42 @@
           width: 44px;
           height: 44px;
           font-size: 0.9rem;
+        }
+
+        /* Additional mobile optimizations */
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .flashcard {
+          height: 200px;
+          margin: 0 0.5rem;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          gap: 10px;
+          padding: 0 1rem;
+        }
+
+        .game-btn {
+          width: 100%;
+          padding: 12px 16px;
+          font-size: 0.95rem;
+        }
+
+        .calendar-day {
+          min-height: 40px;
+          padding: 4px;
+        }
+
+        .dashboard-card {
+          padding: 1rem;
+        }
+
+        .main-content {
+          padding: 1rem 0.5rem;
         }
       }
 
@@ -1536,6 +1597,33 @@
   </head>
 
   <body class="loaded">
+    <!-- Client-side Authentication Check -->
+    <script>
+      // Check authentication immediately when page loads
+      (function () {
+        const isAuthenticated =
+          sessionStorage.getItem("studentPortalAuth") ||
+          localStorage.getItem("studentPortalAuth");
+        const currentPath = window.location.pathname;
+
+        // If not authenticated and not already on login page
+        if (!isAuthenticated && !currentPath.includes("login.html")) {
+          // Store the intended destination
+          sessionStorage.setItem("redirectAfterLogin", window.location.href);
+          // Redirect to login page
+          window.location.href = "../login.html";
+          return;
+        }
+
+        // Optional: Add a logout function
+        window.logoutStudent = function () {
+          sessionStorage.removeItem("studentPortalAuth");
+          localStorage.removeItem("studentPortalAuth");
+          window.location.href = "../login.html";
+        };
+      })();
+    </script>
+
     <!-- Skip to Content Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Header & Navigation -->
@@ -1757,6 +1845,17 @@
             >
               <i class="fas fa-moon" id="darkModeIcon"></i>
               Dark Mode
+            </a>
+          </div>
+          <div class="nav-item">
+            <a
+              href="#"
+              class="nav-link"
+              onclick="logoutStudent()"
+              style="color: var(--danger-color)"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
             </a>
           </div>
           <div class="nav-item">
