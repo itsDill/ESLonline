@@ -22,7 +22,7 @@ const users = [
     id: "admin",
     password: "admin",
     type: "admin",
-    dashboard: "admin.html",
+    dashboard: "students/example.html",
   },
 ];
 
