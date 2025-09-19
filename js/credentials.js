@@ -4,7 +4,7 @@ const users = [
     id: "Tem",
     password: "5555",
     type: "student",
-    dashboard: "students/student-review.html",
+    dashboard: "students/example.html",
   },
   {
     id: "Bam",
