@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard - ESL Fun Online</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <style>
+      .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      .welcome-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+      .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-2px);
+      }
+      .logout-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#" class="logout-btn" onclick="handleLogout()">Logout</a>
+
+    <div class="dashboard">
+      <div class="welcome-card">
+        <h1>🎓 Welcome to Your Student Dashboard!</h1>
+        <p>
+          Great job logging in! Your personalized learning experience awaits.
+        </p>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <h2>📚 My Lessons</h2>
+          <p>Access your assigned English lessons and track your progress.</p>
+          <a href="../lessons.html" class="btn">View Lessons</a>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>🎮 Learning Games</h2>
+          <p>Practice English through fun, interactive games.</p>
+          <a href="../games/games.html" class="btn">Play Games</a>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>📊 My Progress</h2>
+          <p>Track your learning achievements and milestones.</p>
+          <a href="#" class="btn">View Progress</a>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>📝 Assignments</h2>
+          <p>Complete your homework and practice exercises.</p>
+          <a href="#" class="btn">View Assignments</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function handleLogout() {
+        if (confirm("Are you sure you want to logout?")) {
+          sessionStorage.removeItem("studentPortalAuth");
+          sessionStorage.removeItem("currentUser");
+          localStorage.removeItem("studentPortalAuth");
+          window.location.href = "../login.html";
+        }
+      }
+
+      // Check if user is authenticated
+      window.addEventListener("load", function () {
+        const isAuth =
+          sessionStorage.getItem("studentPortalAuth") ||
+          localStorage.getItem("studentPortalAuth");
+        if (!isAuth) {
+          alert("Please login to access this page.");
+          window.location.href = "../login.html";
+        }
+      });
+    </script>
+  </body>
+</html>
