@@ -756,7 +756,10 @@
       }
 
       .luggage-item,
-      .country-flag {
+      .country-flag,
+      .obstacle,
+      .power-up,
+      .travel-bonus {
         position: absolute;
         font-size: 2rem;
         transition: all 0.3s ease;
@@ -817,6 +820,83 @@
         bottom: 80px;
         left: 50%;
         transform: translateX(-50%);
+      }
+
+      /* Game obstacles and power-ups */
+      .obstacle:nth-child(8) {
+        top: 50%;
+        left: 25%;
+        transform: translate(-50%, -50%);
+      }
+      .obstacle:nth-child(9) {
+        top: 50%;
+        right: 25%;
+        transform: translate(50%, -50%);
+      }
+
+      .power-up:nth-child(10) {
+        top: 40%;
+        left: 10%;
+      }
+      .power-up:nth-child(11) {
+        bottom: 40%;
+        right: 10%;
+      }
+
+      .travel-bonus:nth-child(12) {
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .obstacle {
+        animation: obstacleShake 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
+      }
+
+      .power-up {
+        animation: powerUpGlow 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5));
+      }
+
+      .travel-bonus {
+        animation: bonusFloat 2.5s ease-in-out infinite;
+        filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.4));
+      }
+
+      @keyframes obstacleShake {
+        0%,
+        100% {
+          transform: translateX(0px);
+        }
+        25% {
+          transform: translateX(-2px);
+        }
+        75% {
+          transform: translateX(2px);
+        }
+      }
+
+      @keyframes powerUpGlow {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.15);
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes bonusFloat {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0px);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-10px);
+        }
       }
 
       .robot-controls {
@@ -903,6 +983,92 @@
         }
       }
 
+      /* Difficulty Selector */
+      .difficulty-selector {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        backdrop-filter: blur(10px);
+      }
+
+      .difficulty-selector h4 {
+        margin-bottom: 15px;
+        color: var(--travel-accent);
+      }
+
+      .difficulty-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .difficulty-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .difficulty-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .difficulty-btn.active {
+        background: var(--travel-accent);
+        border-color: var(--travel-accent);
+        box-shadow: 0 0 20px rgba(243, 156, 18, 0.4);
+      }
+
+      /* Game states */
+      .robot.powered-up {
+        animation: robotPowerUp 0.5s ease-in-out;
+        filter: drop-shadow(0 0 15px rgba(255, 255, 0, 0.8));
+      }
+
+      .robot.damaged {
+        animation: robotDamage 0.5s ease-in-out;
+        filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
+      }
+
+      @keyframes robotPowerUp {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.3);
+        }
+      }
+
+      @keyframes robotDamage {
+        0%,
+        100% {
+          transform: translate(-50%, -50%);
+        }
+        25% {
+          transform: translate(-50%, -50%) translateX(-5px);
+        }
+        75% {
+          transform: translate(-50%, -50%) translateX(5px);
+        }
+      }
+
+      .used {
+        opacity: 0.2;
+        transform: scale(0.6);
+        pointer-events: none;
+        filter: grayscale(100%);
+      }
+
       /* Responsive Design */
       @media (max-width: 768px) {
         .lesson-title {
@@ -927,6 +1093,16 @@
         .horizontal-controls {
           flex-wrap: wrap;
           justify-content: center;
+        }
+
+        .difficulty-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .robot-stats {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
         }
 
         .vocab-grid {
@@ -990,6 +1166,25 @@
         }
         75% {
           transform: translateX(5px);
+        }
+      }
+
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(-10px);
+        }
+        20% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+        80% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(-10px);
         }
       }
 
@@ -1553,28 +1748,47 @@
           <div class="game-info">
             <div class="robot-stats">
               <div class="stat-item">
-                <span class="stat-label">🧳 Luggage Collected:</span>
+                <span class="stat-label">🧳 Luggage:</span>
                 <span class="stat-value" id="luggageCount">0</span>
               </div>
               <div class="stat-item">
-                <span class="stat-label">🌍 Countries Visited:</span>
+                <span class="stat-label">🌍 Countries:</span>
                 <span class="stat-value" id="countriesVisited">0</span>
               </div>
               <div class="stat-item">
                 <span class="stat-label">⚡ Energy:</span>
                 <span class="stat-value" id="robotEnergy">100</span>
               </div>
+              <div class="stat-item">
+                <span class="stat-label">🎯 Score:</span>
+                <span class="stat-value" id="robotScore">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">⏱️ Time:</span>
+                <span class="stat-value" id="gameTimer">0:00</span>
+              </div>
             </div>
           </div>
 
           <div class="robot-game-board" id="gameBoard">
             <div class="robot" id="travelRobot">🤖</div>
-            <div class="luggage-item" data-country="France">🧳</div>
-            <div class="luggage-item" data-country="Japan">🧳</div>
-            <div class="luggage-item" data-country="USA">🧳</div>
+            <div class="luggage-item" data-country="France" data-points="10">
+              🧳
+            </div>
+            <div class="luggage-item" data-country="Japan" data-points="15">
+              🧳
+            </div>
+            <div class="luggage-item" data-country="USA" data-points="20">
+              🧳
+            </div>
             <div class="country-flag" data-country="France">🇫🇷</div>
             <div class="country-flag" data-country="Japan">🇯🇵</div>
             <div class="country-flag" data-country="USA">🇺🇸</div>
+            <div class="obstacle" data-type="mountain">⛰️</div>
+            <div class="obstacle" data-type="ocean">🌊</div>
+            <div class="power-up" data-type="energy">⚡</div>
+            <div class="power-up" data-type="speed">💨</div>
+            <div class="travel-bonus" data-type="plane">✈️</div>
           </div>
 
           <div class="robot-controls">
@@ -1609,9 +1823,33 @@
             <button class="control-btn" onclick="startRobotGame()">
               <i class="fas fa-play"></i> Start Game
             </button>
+            <button class="control-btn" onclick="pauseRobotGame()">
+              <i class="fas fa-pause"></i> Pause
+            </button>
             <button class="control-btn" onclick="resetRobotGame()">
               <i class="fas fa-refresh"></i> Reset
             </button>
+            <button class="control-btn" onclick="showRobotHelp()">
+              <i class="fas fa-question-circle"></i> Help
+            </button>
+          </div>
+
+          <div class="difficulty-selector">
+            <h4>🎮 Difficulty Level:</h4>
+            <div class="difficulty-buttons">
+              <button
+                class="difficulty-btn active"
+                onclick="setDifficulty('easy')"
+              >
+                😊 Easy
+              </button>
+              <button class="difficulty-btn" onclick="setDifficulty('medium')">
+                😐 Medium
+              </button>
+              <button class="difficulty-btn" onclick="setDifficulty('hard')">
+                😤 Hard
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1979,8 +2217,15 @@
       let luggageCollected = 0;
       let countriesVisited = 0;
       let robotEnergy = 100;
+      let robotScore = 0;
       let currentMissionIndex = 0;
       let gameStarted = false;
+      let gamePaused = false;
+      let gameTimer = 0;
+      let gameTimerInterval;
+      let difficulty = "easy";
+      let speedBoostActive = false;
+      let energyBoostActive = false;
 
       const missions = [
         {
@@ -2004,13 +2249,26 @@
       ];
 
       function startRobotGame() {
-        gameStarted = true;
-        resetRobotGame();
+        if (!gameStarted) {
+          gameStarted = true;
+          gamePaused = false;
+          resetRobotGame();
+          startGameTimer();
+          alert(
+            "🤖 Welcome to Travel Robot Challenge!\n\n" +
+              "🎯 Controls:\n" +
+              "• Arrow keys or buttons to move\n" +
+              "• Space or Collect button to collect items\n" +
+              "• Avoid obstacles ⛰️🌊 (-10 energy)\n" +
+              "• Collect power-ups ⚡💨✈️ (+energy/speed)\n" +
+              "• Get luggage from each country!\n\n" +
+              "Good luck, robot commander! 🚀"
+          );
+        } else if (gamePaused) {
+          pauseRobotGame();
+        }
         updateRobotStats();
         updateMission();
-        alert(
-          "🤖 Welcome to Travel Robot Challenge! Use the arrow buttons to move your robot and collect luggage from each country!"
-        );
       }
 
       function resetRobotGame() {
@@ -2034,6 +2292,73 @@
         updateMission();
       }
 
+      function pauseRobotGame() {
+        gamePaused = !gamePaused;
+        if (gamePaused) {
+          clearInterval(gameTimerInterval);
+          alert("⏸️ Game Paused! Click Start to continue.");
+        } else {
+          startGameTimer();
+          alert("▶️ Game Resumed!");
+        }
+      }
+
+      function startGameTimer() {
+        gameTimerInterval = setInterval(() => {
+          gameTimer++;
+          updateRobotStats();
+        }, 1000);
+      }
+
+      function setDifficulty(level) {
+        difficulty = level;
+        document.querySelectorAll(".difficulty-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        // Adjust game parameters based on difficulty
+        switch (level) {
+          case "easy":
+            robotEnergy = 150;
+            break;
+          case "medium":
+            robotEnergy = 100;
+            break;
+          case "hard":
+            robotEnergy = 75;
+            break;
+        }
+
+        if (gameStarted) {
+          updateRobotStats();
+        }
+      }
+
+      function showRobotHelp() {
+        alert(
+          "🤖 ROBOT GAME HELP 🤖\n\n" +
+            "🎯 OBJECTIVE:\n" +
+            "• Collect luggage from France 🇫🇷, Japan 🇯🇵, and USA 🇺🇸\n" +
+            "• Navigate to each country's flag to collect luggage\n\n" +
+            "🎮 CONTROLS:\n" +
+            "• Arrow Keys: Move robot\n" +
+            "• Space/Collect Button: Collect items\n\n" +
+            "🔧 GAME ELEMENTS:\n" +
+            "• ⛰️🌊 Obstacles: Avoid these! (-10 energy)\n" +
+            "• ⚡ Energy Boost: Restores 25 energy\n" +
+            "• 💨 Speed Boost: Temporary faster movement\n" +
+            "• ✈️ Travel Bonus: Extra points and energy\n\n" +
+            "🏆 SCORING:\n" +
+            "• France: 10 points\n" +
+            "• Japan: 15 points\n" +
+            "• USA: 20 points\n" +
+            "• Bonus items: 5-15 points\n\n" +
+            "⚡ Keep your energy above 0 to keep playing!\n" +
+            "🏁 Complete all missions to win!"
+        );
+      }
+
       function moveRobot(direction) {
         if (!gameStarted || robotEnergy <= 0) {
           alert("Please start the game first or recharge your robot!");
@@ -2045,42 +2370,202 @@
         const boardRect = gameBoard.getBoundingClientRect();
 
         const moveDistance = 30; // pixels
+        let newX = robotPosition.x;
+        let newY = robotPosition.y;
 
+        // Calculate new position
         switch (direction) {
           case "up":
             if (robotPosition.y > 15) {
-              robotPosition.y -= moveDistance;
-              robot.style.top = robotPosition.y + "%";
-            }
+              newY = robotPosition.y - moveDistance;
+            } else return;
             break;
           case "down":
             if (robotPosition.y < 85) {
-              robotPosition.y += moveDistance;
-              robot.style.top = robotPosition.y + "%";
-            }
+              newY = robotPosition.y + moveDistance;
+            } else return;
             break;
           case "left":
             if (robotPosition.x > 15) {
-              robotPosition.x -= moveDistance;
-              robot.style.left = robotPosition.x + "%";
-            }
+              newX = robotPosition.x - moveDistance;
+            } else return;
             break;
           case "right":
             if (robotPosition.x < 85) {
-              robotPosition.x += moveDistance;
-              robot.style.left = robotPosition.x + "%";
-            }
+              newX = robotPosition.x + moveDistance;
+            } else return;
             break;
         }
 
-        robotEnergy -= 2;
+        // Check for collisions with obstacles
+        const obstacles = document.querySelectorAll(".robot-obstacle");
+        let collision = false;
+
+        obstacles.forEach((obstacle) => {
+          const obstacleRect = obstacle.getBoundingClientRect();
+          const gameRect = document
+            .getElementById("robotGame")
+            .getBoundingClientRect();
+
+          const obstacleX =
+            ((obstacleRect.left - gameRect.left) / gameRect.width) * 100;
+          const obstacleY =
+            ((obstacleRect.top - gameRect.top) / gameRect.height) * 100;
+
+          // Check if robot would collide with obstacle (within 15% distance)
+          if (
+            Math.abs(newX - obstacleX) < 15 &&
+            Math.abs(newY - obstacleY) < 15
+          ) {
+            collision = true;
+
+            // Add shake animation to obstacle
+            obstacle.classList.add("obstacle-shake");
+            setTimeout(() => obstacle.classList.remove("obstacle-shake"), 600);
+
+            // Reduce energy more for hitting obstacle
+            robotEnergy -= 5;
+            robotScore -= 10;
+
+            // Show collision feedback
+            showGameMessage("Ouch! Avoided obstacle!", "warning");
+          }
+        });
+
+        if (!collision) {
+          // Update position if no collision
+          robotPosition.x = newX;
+          robotPosition.y = newY;
+          robot.style.left = robotPosition.x + "%";
+          robot.style.top = robotPosition.y + "%";
+
+          // Check for power-up collection
+          const powerUps = document.querySelectorAll(".robot-powerup");
+          powerUps.forEach((powerUp) => {
+            const powerUpRect = powerUp.getBoundingClientRect();
+            const gameRect = document
+              .getElementById("robotGame")
+              .getBoundingClientRect();
+
+            const powerUpX =
+              ((powerUpRect.left - gameRect.left) / gameRect.width) * 100;
+            const powerUpY =
+              ((powerUpRect.top - gameRect.top) / gameRect.height) * 100;
+
+            // Check if robot collected power-up (within 10% distance)
+            if (
+              Math.abs(robotPosition.x - powerUpX) < 10 &&
+              Math.abs(robotPosition.y - powerUpY) < 10
+            ) {
+              collectPowerUp(powerUp);
+            }
+          });
+
+          // Check for travel bonus collection
+          const bonus = document.querySelector(".robot-travel-bonus");
+          if (bonus) {
+            const bonusRect = bonus.getBoundingClientRect();
+            const gameRect = document
+              .getElementById("robotGame")
+              .getBoundingClientRect();
+
+            const bonusX =
+              ((bonusRect.left - gameRect.left) / gameRect.width) * 100;
+            const bonusY =
+              ((bonusRect.top - gameRect.top) / gameRect.height) * 100;
+
+            if (
+              Math.abs(robotPosition.x - bonusX) < 10 &&
+              Math.abs(robotPosition.y - bonusY) < 10
+            ) {
+              collectTravelBonus();
+            }
+          }
+
+          robotEnergy -= 2;
+          robotScore += 1; // Points for successful movement
+        }
+
         updateRobotStats();
 
         // Add robot animation
-        robot.classList.add("robot-success");
+        robot.classList.add(collision ? "robot-error" : "robot-success");
         setTimeout(() => {
-          robot.classList.remove("robot-success");
+          robot.classList.remove("robot-error", "robot-success");
         }, 300);
+      }
+
+      function collectPowerUp(powerUp) {
+        const powerUpType = powerUp.textContent;
+
+        switch (powerUpType) {
+          case "⚡": // Energy boost
+            robotEnergy = Math.min(100, robotEnergy + 20);
+            robotScore += 15;
+            showGameMessage("Energy boost! +20 energy", "success");
+            break;
+          case "💨": // Speed boost (visual effect)
+            robotScore += 10;
+            showGameMessage("Speed boost! +10 points", "success");
+            break;
+          case "✈️": // Flight bonus
+            robotScore += 25;
+            showGameMessage("Flight bonus! +25 points", "success");
+            break;
+        }
+
+        // Remove power-up with animation
+        powerUp.style.transform = "scale(2)";
+        powerUp.style.opacity = "0";
+        setTimeout(() => powerUp.remove(), 300);
+
+        updateRobotStats();
+      }
+
+      function collectTravelBonus() {
+        const bonus = document.querySelector(".robot-travel-bonus");
+        if (bonus) {
+          robotScore += 50;
+          robotEnergy = Math.min(100, robotEnergy + 30);
+          showGameMessage("Travel Bonus! +50 points, +30 energy!", "success");
+
+          // Remove bonus with celebration
+          bonus.style.transform = "scale(3) rotate(360deg)";
+          bonus.style.opacity = "0";
+          setTimeout(() => bonus.remove(), 500);
+
+          updateRobotStats();
+        }
+      }
+
+      function showGameMessage(message, type) {
+        const gameArea = document.getElementById("robotGame");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `game-message game-message-${type}`;
+        messageDiv.textContent = message;
+        messageDiv.style.cssText = `
+          position: absolute;
+          top: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: ${
+            type === "success"
+              ? "#4CAF50"
+              : type === "warning"
+              ? "#FF9800"
+              : "#f44336"
+          };
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: bold;
+          z-index: 1000;
+          animation: fadeInOut 2s forwards;
+        `;
+
+        gameArea.appendChild(messageDiv);
+        setTimeout(() => messageDiv.remove(), 2000);
       }
 
       function collectItem() {
@@ -2154,6 +2639,44 @@
         document.getElementById("countriesVisited").textContent =
           countriesVisited;
         document.getElementById("robotEnergy").textContent = robotEnergy;
+
+        // Update new stats if elements exist
+        const scoreElement = document.getElementById("robotScore");
+        if (scoreElement) {
+          scoreElement.textContent = robotScore;
+        }
+
+        const timerElement = document.getElementById("gameTimer");
+        if (timerElement && gameStartTime) {
+          const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+          const minutes = Math.floor(elapsed / 60);
+          const seconds = elapsed % 60;
+          timerElement.textContent = `${minutes}:${seconds
+            .toString()
+            .padStart(2, "0")}`;
+        }
+
+        // Check if energy is low
+        if (robotEnergy <= 10) {
+          const energyElement = document.getElementById("robotEnergy");
+          energyElement.style.color = "#f44336";
+          energyElement.style.animation = "pulse 1s infinite";
+        } else {
+          const energyElement = document.getElementById("robotEnergy");
+          energyElement.style.color = "";
+          energyElement.style.animation = "";
+        }
+
+        // Game over check
+        if (robotEnergy <= 0) {
+          gameStarted = false;
+          showGameMessage("Game Over! Robot ran out of energy!", "warning");
+          setTimeout(() => {
+            if (confirm("Game Over! Would you like to restart?")) {
+              startRobotGame();
+            }
+          }, 1000);
+        }
       }
 
       function updateMission() {
