@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Who Wants to Be a Fluent English Speaker?</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+        min-height: 100vh;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      .game-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .title-screen {
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 215, 0, 0.2),
+          rgba(255, 140, 0, 0.1)
+        );
+        border-radius: 20px;
+        padding: 3rem;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .main-title {
+        font-size: 3rem;
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          filter: brightness(1);
+        }
+        to {
+          filter: brightness(1.2);
+        }
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        color: #87ceeb;
+        margin-bottom: 2rem;
+        font-style: italic;
+      }
+
+      .instructions {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: left;
+        line-height: 1.8;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .instructions h3 {
+        color: #ffd700;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+      }
+
+      .level-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .level-card {
+        background: rgba(255, 215, 0, 0.1);
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .level-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+      }
+
+      .level-number {
+        font-size: 1.2rem;
+        color: #ffd700;
+        font-weight: bold;
+      }
+
+      .level-reward {
+        font-size: 0.9rem;
+        color: #87ceeb;
+      }
+
+      .start-btn {
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        color: #1a1a2e;
+        border: none;
+        padding: 20px 50px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+      }
+
+      .start-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+      }
+
+      .game-screen {
+        display: none;
+        text-align: center;
+      }
+
+      .question-counter {
+        font-size: 1.5rem;
+        color: #87ceeb;
+        margin-bottom: 1rem;
+      }
+
+      .current-reward {
+        font-size: 2rem;
+        color: #ffd700;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .question-box {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 2px solid rgba(135, 206, 235, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .question-text {
+        font-size: 1.4rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        color: #e6e6fa;
+      }
+
+      .question-type {
+        font-size: 0.9rem;
+        color: #87ceeb;
+        font-style: italic;
+        margin-bottom: 1.5rem;
+      }
+
+      .answers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .answer-btn {
+        background: rgba(30, 144, 255, 0.2);
+        border: 2px solid #1e90ff;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        text-align: left;
+      }
+
+      .answer-btn:hover {
+        background: rgba(30, 144, 255, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
+      }
+
+      .answer-btn.selected {
+        background: rgba(255, 215, 0, 0.3);
+        border-color: #ffd700;
+        color: #ffd700;
+      }
+
+      .answer-btn.correct {
+        background: rgba(34, 139, 34, 0.4);
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+
+      .answer-btn.wrong {
+        background: rgba(220, 20, 60, 0.4);
+        border-color: #ef4444;
+        color: #ef4444;
+      }
+
+      .lifelines {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 2rem 0;
+      }
+
+      .lifeline-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid #87ceeb;
+        color: #87ceeb;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .lifeline-btn:hover:not(.used) {
+        background: rgba(135, 206, 235, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .lifeline-btn.used {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .confirm-btn {
+        background: linear-gradient(45deg, #22c55e, #16a34a);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 2rem 10px;
+        transition: all 0.3s ease;
+      }
+
+      .confirm-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+      }
+
+      .back-btn {
+        background: linear-gradient(45deg, #6b7280, #4b5563);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1rem;
+        border-radius: 20px;
+        cursor: pointer;
+        margin: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .difficulty-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        min-width: 100px;
+      }
+
+      .difficulty-btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .difficulty-btn.selected {
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        color: #1a1a2e;
+        border-color: #ffd700;
+        font-weight: bold;
+      }
+
+      .stats-screen {
+        display: none;
+        text-align: center;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .stats-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 2px solid rgba(135, 206, 235, 0.3);
+      }
+
+      .stats-card h4 {
+        color: #87ceeb;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+
+      .stats-number {
+        font-size: 2rem;
+        color: #ffd700;
+        font-weight: bold;
+        margin: 0.5rem 0;
+      }
+
+      .achievement-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .achievement-item {
+        background: rgba(255, 215, 0, 0.1);
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .achievement-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .results-screen {
+        display: none;
+        text-align: center;
+      }
+
+      .final-score {
+        font-size: 3rem;
+        color: #ffd700;
+        margin: 2rem 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .achievement {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 215, 0, 0.2),
+          rgba(255, 140, 0, 0.1)
+        );
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+      }
+
+      .progress-bar {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        height: 20px;
+        margin: 1rem 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        height: 100%;
+        transition: width 0.5s ease;
+      }
+
+      /* Enhanced mobile responsiveness */
+      @media (max-width: 768px) {
+        .main-title {
+          font-size: 2rem;
+          line-height: 1.2;
+        }
+
+        .subtitle {
+          font-size: 1.2rem;
+        }
+
+        .game-container {
+          padding: 10px;
+        }
+
+        .title-screen {
+          padding: 2rem 1rem;
+        }
+
+        .instructions {
+          padding: 1.5rem;
+          margin: 1rem 0;
+        }
+
+        .answers-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .answer-btn {
+          padding: 18px 15px;
+          font-size: 1rem;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          text-align: left;
+          /* Better touch targets */
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .answer-btn:active {
+          transform: scale(0.98);
+        }
+
+        .lifelines {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .lifeline-btn {
+          min-width: 90px;
+          padding: 12px 15px;
+          font-size: 0.85rem;
+          /* Better touch targets */
+          touch-action: manipulation;
+        }
+
+        .question-text {
+          font-size: 1.2rem;
+          line-height: 1.5;
+        }
+
+        .question-box {
+          padding: 1.5rem;
+          margin: 1rem 0;
+        }
+
+        .current-reward {
+          font-size: 1.5rem;
+        }
+
+        .start-btn,
+        .confirm-btn {
+          padding: 15px 30px;
+          font-size: 1.2rem;
+          /* Better touch targets */
+          min-height: 50px;
+          touch-action: manipulation;
+        }
+
+        .level-grid {
+          grid-template-columns: 1fr;
+          gap: 0.8rem;
+        }
+
+        .final-score {
+          font-size: 2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-title {
+          font-size: 1.8rem;
+        }
+
+        .game-container {
+          padding: 5px;
+        }
+
+        .title-screen {
+          padding: 1.5rem 0.5rem;
+        }
+
+        .question-text {
+          font-size: 1.1rem;
+        }
+
+        .answer-btn {
+          padding: 16px 12px;
+          font-size: 0.95rem;
+          min-height: 55px;
+        }
+
+        .instructions {
+          padding: 1rem;
+        }
+
+        .instructions h3 {
+          font-size: 1.2rem;
+        }
+      }
+
+      /* Touch device optimizations */
+      @media (hover: none) and (pointer: coarse) {
+        .answer-btn:hover {
+          background: rgba(30, 144, 255, 0.2);
+          transform: none;
+          box-shadow: none;
+        }
+
+        .start-btn:hover,
+        .confirm-btn:hover {
+          transform: none;
+        }
+
+        .lifeline-btn:hover:not(.used) {
+          background: rgba(255, 255, 255, 0.1);
+          transform: none;
+        }
+      }
+
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .answer-btn {
+          border-width: 3px;
+        }
+
+        .answer-btn:focus {
+          outline: 3px solid #ffd700;
+          outline-offset: 2px;
+        }
+      }
+
+      /* Reduced motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        .progress-fill {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Title Screen -->
+      <div id="title-screen" class="title-screen">
+        <h1 class="main-title">
+          🎓 Who Wants to Be a<br />Fluent English Speaker?
+        </h1>
+        <p class="subtitle">
+          Test your English skills and climb the fluency ladder!
+        </p>
+
+        <div class="instructions">
+          <h3>📚 How to Play</h3>
+          <p>
+            Answer 15 multiple-choice questions about English grammar,
+            vocabulary, pronunciation, and culture. Each correct answer brings
+            you closer to fluency!
+          </p>
+
+          <h3>🎯 Question Categories</h3>
+          <ul style="list-style: none; padding: 0">
+            <li>📖 <strong>Vocabulary</strong> - Word meanings and usage</li>
+            <li>✏️ <strong>Grammar</strong> - Sentence structure and rules</li>
+            <li>
+              🗣️ <strong>Pronunciation</strong> - Sounds and stress patterns
+            </li>
+            <li>
+              🌍 <strong>Culture</strong> - English-speaking countries and
+              customs
+            </li>
+            <li>💬 <strong>Idioms</strong> - Common expressions and phrases</li>
+          </ul>
+
+          <h3>🆘 Lifelines (Use Once Each)</h3>
+          <ul style="list-style: none; padding: 0">
+            <li>🎯 <strong>50/50</strong> - Remove two wrong answers</li>
+            <li>💡 <strong>Hint</strong> - Get a helpful clue</li>
+            <li>🔄 <strong>Skip</strong> - Move to the next question</li>
+          </ul>
+
+          <h3>🏆 Fluency Levels</h3>
+          <div class="level-grid">
+            <div class="level-card">
+              <div class="level-number">Questions 1-5</div>
+              <div class="level-reward">Beginner Level</div>
+            </div>
+            <div class="level-card">
+              <div class="level-number">Questions 6-10</div>
+              <div class="level-reward">Intermediate Level</div>
+            </div>
+            <div class="level-card">
+              <div class="level-number">Questions 11-15</div>
+              <div class="level-reward">Advanced Level</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin: 2rem 0">
+          <h3 style="color: #ffd700; margin-bottom: 1rem">
+            🎯 Choose Your Difficulty
+          </h3>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 1rem;
+              flex-wrap: wrap;
+            "
+          >
+            <button
+              class="difficulty-btn"
+              onclick="setDifficulty('beginner')"
+              id="diff-beginner"
+            >
+              🟢 Beginner
+            </button>
+            <button
+              class="difficulty-btn selected"
+              onclick="setDifficulty('mixed')"
+              id="diff-mixed"
+            >
+              🟡 Mixed (Default)
+            </button>
+            <button
+              class="difficulty-btn"
+              onclick="setDifficulty('advanced')"
+              id="diff-advanced"
+            >
+              🔴 Advanced
+            </button>
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startGame()">
+          🚀 Start Your Journey!
+        </button>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="back-btn" onclick="showStats()">📊 Statistics</button>
+          <button class="back-btn" onclick="toggleSound()" id="sound-toggle">
+            🔊 Sound: ON
+          </button>
+        </div>
+      </div>
+
+      <!-- Game Screen -->
+      <div id="game-screen" class="game-screen">
+        <div class="question-counter" id="question-counter">
+          Question 1 of 15
+        </div>
+        <div class="current-reward" id="current-level">Beginner Level</div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            id="progress-fill"
+            style="width: 6.67%"
+          ></div>
+        </div>
+
+        <div class="question-box">
+          <div class="question-type" id="question-type"></div>
+          <div class="question-text" id="question-text"></div>
+        </div>
+
+        <div class="lifelines">
+          <button
+            class="lifeline-btn"
+            id="fifty-fifty"
+            onclick="useFiftyFifty()"
+          >
+            🎯 50/50
+          </button>
+          <button class="lifeline-btn" id="hint" onclick="useHint()">
+            💡 Hint
+          </button>
+          <button class="lifeline-btn" id="skip" onclick="useSkip()">
+            🔄 Skip
+          </button>
+        </div>
+
+        <div class="answers-grid" id="answers-grid"></div>
+
+        <button
+          class="confirm-btn"
+          id="confirm-btn"
+          onclick="confirmAnswer()"
+          style="display: none"
+        >
+          Confirm Answer
+        </button>
+        <button class="back-btn" onclick="showTitleScreen()">
+          Back to Menu
+        </button>
+
+        <div
+          id="hint-box"
+          style="
+            display: none;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #ffd700;
+          "
+        ></div>
+      </div>
+
+      <!-- Results Screen -->
+      <div id="results-screen" class="results-screen">
+        <h1 class="main-title">🎊 Congratulations!</h1>
+        <div class="final-score" id="final-score"></div>
+        <div class="achievement" id="achievement"></div>
+        <button class="start-btn" onclick="startGame()">🔄 Play Again</button>
+        <button class="back-btn" onclick="showTitleScreen()">
+          Back to Menu
+        </button>
+      </div>
+
+      <!-- Statistics Screen -->
+      <div id="stats-screen" class="stats-screen">
+        <h1 class="main-title">📊 Your Statistics</h1>
+
+        <div class="stats-grid" id="stats-grid">
+          <!-- Stats will be populated by JavaScript -->
+        </div>
+
+        <div class="achievement" style="margin-top: 2rem">
+          <h3 style="color: #ffd700; margin-bottom: 1rem">🏆 Achievements</h3>
+          <div class="achievement-list" id="achievement-list">
+            <!-- Achievements will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem">
+          <button class="start-btn" onclick="startGame()">🎮 Play Game</button>
+          <button class="back-btn" onclick="showTitleScreen()">
+            Back to Menu
+          </button>
+          <button
+            class="back-btn"
+            onclick="resetStats()"
+            style="background: linear-gradient(45deg, #ef4444, #dc2626)"
+          >
+            🗑️ Reset Stats
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let gameState = {
+        currentQuestion: 0,
+        score: 0,
+        selectedAnswer: null,
+        lifelines: {
+          fiftyFifty: false,
+          hint: false,
+          skip: false,
+        },
+      };
+
+      // Sound effects using Web Audio API
+      class SoundEffects {
+        constructor() {
+          this.audioContext = null;
+          this.sounds = {};
+          this.enabled = true;
+          this.initAudioContext();
+        }
+
+        initAudioContext() {
+          try {
+            this.audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            this.createSounds();
+          } catch (error) {
+            console.log("Web Audio API not supported");
+            this.enabled = false;
+          }
+        }
+
+        createSounds() {
+          // Create different sound effects
+          this.sounds = {
+            select: this.createTone(800, 0.1, "sine"),
+            correct: this.createMelody([523, 659, 784], 0.3),
+            incorrect: this.createTone(200, 0.5, "square"),
+            lifeline: this.createTone(1000, 0.2, "triangle"),
+            gameStart: this.createMelody([392, 523, 659], 0.4),
+            levelUp: this.createMelody([523, 659, 784, 1047], 0.5),
+          };
+        }
+
+        createTone(frequency, duration, type = "sine") {
+          return () => {
+            if (!this.enabled || !this.audioContext) return;
+
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+
+            oscillator.frequency.setValueAtTime(
+              frequency,
+              this.audioContext.currentTime
+            );
+            oscillator.type = type;
+
+            gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              this.audioContext.currentTime + duration
+            );
+
+            oscillator.start(this.audioContext.currentTime);
+            oscillator.stop(this.audioContext.currentTime + duration);
+          };
+        }
+
+        createMelody(frequencies, totalDuration) {
+          return () => {
+            if (!this.enabled || !this.audioContext) return;
+
+            const noteDuration = totalDuration / frequencies.length;
+            frequencies.forEach((freq, index) => {
+              setTimeout(() => {
+                this.createTone(freq, noteDuration, "sine")();
+              }, index * noteDuration * 1000);
+            });
+          };
+        }
+
+        play(soundName) {
+          if (this.enabled && this.sounds[soundName]) {
+            // Resume audio context if suspended (required by some browsers)
+            if (this.audioContext.state === "suspended") {
+              this.audioContext.resume();
+            }
+            this.sounds[soundName]();
+          }
+        }
+
+        toggle() {
+          this.enabled = !this.enabled;
+          return this.enabled;
+        }
+      }
+
+      const soundFX = new SoundEffects();
+
+      // Score persistence and statistics
+      class ScoreManager {
+        constructor() {
+          this.storageKey = "englishGameStats";
+          this.loadStats();
+        }
+
+        loadStats() {
+          try {
+            const saved = localStorage.getItem(this.storageKey);
+            this.stats = saved
+              ? JSON.parse(saved)
+              : {
+                  highScore: 0,
+                  totalGames: 0,
+                  totalCorrect: 0,
+                  bestStreak: 0,
+                  averageScore: 0,
+                  achievements: [],
+                };
+          } catch (error) {
+            console.log("Error loading stats:", error);
+            this.stats = {
+              highScore: 0,
+              totalGames: 0,
+              totalCorrect: 0,
+              bestStreak: 0,
+              averageScore: 0,
+              achievements: [],
+            };
+          }
+        }
+
+        saveStats() {
+          try {
+            localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
+          } catch (error) {
+            console.log("Error saving stats:", error);
+          }
+        }
+
+        recordGame(score, totalQuestions) {
+          this.stats.totalGames++;
+          this.stats.totalCorrect += score;
+
+          if (score > this.stats.highScore) {
+            this.stats.highScore = score;
+          }
+
+          this.stats.averageScore =
+            Math.round(
+              (this.stats.totalCorrect / this.stats.totalGames) * 100
+            ) / 100;
+
+          // Check for achievements
+          this.checkAchievements(score, totalQuestions);
+
+          this.saveStats();
+        }
+
+        checkAchievements(score, totalQuestions) {
+          const percentage = (score / totalQuestions) * 100;
+          const newAchievements = [];
+
+          if (
+            percentage === 100 &&
+            !this.stats.achievements.includes("perfect")
+          ) {
+            newAchievements.push({
+              id: "perfect",
+              name: "Perfect Score!",
+              description: "Got all questions correct in a single game",
+              icon: "🏆",
+            });
+            this.stats.achievements.push("perfect");
+          }
+
+          if (
+            this.stats.totalGames === 1 &&
+            !this.stats.achievements.includes("firstGame")
+          ) {
+            newAchievements.push({
+              id: "firstGame",
+              name: "First Steps",
+              description: "Completed your first game",
+              icon: "🎯",
+            });
+            this.stats.achievements.push("firstGame");
+          }
+
+          if (
+            this.stats.totalGames >= 10 &&
+            !this.stats.achievements.includes("dedicated")
+          ) {
+            newAchievements.push({
+              id: "dedicated",
+              name: "Dedicated Learner",
+              description: "Played 10 games",
+              icon: "📚",
+            });
+            this.stats.achievements.push("dedicated");
+          }
+
+          if (
+            percentage >= 80 &&
+            !this.stats.achievements.includes("highAchiever")
+          ) {
+            newAchievements.push({
+              id: "highAchiever",
+              name: "High Achiever",
+              description: "Scored 80% or higher",
+              icon: "⭐",
+            });
+            this.stats.achievements.push("highAchiever");
+          }
+
+          return newAchievements;
+        }
+
+        getStats() {
+          return { ...this.stats };
+        }
+
+        resetStats() {
+          this.stats = {
+            highScore: 0,
+            totalGames: 0,
+            totalCorrect: 0,
+            bestStreak: 0,
+            averageScore: 0,
+            achievements: [],
+          };
+          this.saveStats();
+        }
+      }
+
+      const scoreManager = new ScoreManager();
+
+      let gameDifficulty = "mixed"; // Default difficulty
+
+      const allQuestions = [
+        // Beginner Level Questions (Easy)
+        {
+          type: "Vocabulary",
+          question: "What does the word 'enormous' mean?",
+          answers: [
+            "A) Very small",
+            "B) Very large",
+            "C) Very fast",
+            "D) Very slow",
+          ],
+          correct: 1,
+          hint: "Think about elephants - they are...",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "Which sentence is correct?",
+          answers: [
+            "A) She don't like pizza",
+            "B) She doesn't like pizza",
+            "C) She not like pizza",
+            "D) She no like pizza",
+          ],
+          correct: 1,
+          hint: "Remember: 'She' is third person singular, so use 'doesn't'",
+          difficulty: "beginner",
+        },
+        {
+          type: "Vocabulary",
+          question: "What is the opposite of 'happy'?",
+          answers: ["A) Glad", "B) Joyful", "C) Sad", "D) Excited"],
+          correct: 2,
+          hint: "When you're not happy, you feel...",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "Complete: 'I _____ to school every day.'",
+          answers: ["A) goes", "B) go", "C) going", "D) went"],
+          correct: 1,
+          hint: "Use the base form of the verb with 'I'",
+          difficulty: "beginner",
+        },
+        {
+          type: "Pronunciation",
+          question: "Which word rhymes with 'cat'?",
+          answers: ["A) Cut", "B) Bat", "C) Coat", "D) Cute"],
+          correct: 1,
+          hint: "Think about the '-at' sound ending",
+          difficulty: "beginner",
+        },
+        {
+          type: "Vocabulary",
+          question: "What do you call the meal you eat in the morning?",
+          answers: ["A) Lunch", "B) Dinner", "C) Breakfast", "D) Snack"],
+          correct: 2,
+          hint: "You 'break' your 'fast' after sleeping",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "Choose the correct article: '_____ apple is red.'",
+          answers: ["A) A", "B) An", "C) The", "D) No article needed"],
+          correct: 1,
+          hint: "Use 'an' before vowel sounds",
+          difficulty: "beginner",
+        },
+        {
+          type: "Vocabulary",
+          question: "What color do you get when you mix red and yellow?",
+          answers: ["A) Purple", "B) Green", "C) Orange", "D) Blue"],
+          correct: 2,
+          hint: "Think about the color of a pumpkin",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "What is the plural of 'child'?",
+          answers: ["A) Childs", "B) Childrens", "C) Children", "D) Childses"],
+          correct: 2,
+          hint: "This is an irregular plural form",
+          difficulty: "beginner",
+        },
+        {
+          type: "Vocabulary",
+          question: "Where do you go to buy medicine?",
+          answers: ["A) Library", "B) Pharmacy", "C) Bakery", "D) Bank"],
+          correct: 1,
+          hint: "This place is also called a 'drug store'",
+          difficulty: "beginner",
+        },
+
+        // Intermediate Level Questions
+        {
+          type: "Idioms",
+          question: "What does 'break a leg' mean?",
+          answers: [
+            "A) To hurt yourself",
+            "B) Good luck",
+            "C) To run fast",
+            "D) To dance badly",
+          ],
+          correct: 1,
+          hint: "This is said to actors before a performance",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Grammar",
+          question: "Which is the correct past tense of 'bring'?",
+          answers: ["A) Brang", "B) Bringed", "C) Brought", "D) Brung"],
+          correct: 2,
+          hint: "This is an irregular verb - it doesn't follow normal rules",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Vocabulary",
+          question: "What is a 'sibling'?",
+          answers: [
+            "A) A parent",
+            "B) A friend",
+            "C) A brother or sister",
+            "D) A cousin",
+          ],
+          correct: 2,
+          hint: "These people share the same parents as you",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Culture",
+          question: "In which country would you pay with 'pounds'?",
+          answers: [
+            "A) Australia",
+            "B) Canada",
+            "C) United Kingdom",
+            "D) Ireland",
+          ],
+          correct: 2,
+          hint: "Think of Big Ben and the Queen's English",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Grammar",
+          question:
+            "Choose the correct form: 'If I _____ rich, I would travel the world.'",
+          answers: ["A) am", "B) was", "C) were", "D) be"],
+          correct: 2,
+          hint: "This is a hypothetical situation (unreal conditional)",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Idioms",
+          question: "What does 'it's raining cats and dogs' mean?",
+          answers: [
+            "A) Animals are falling",
+            "B) It's raining very hard",
+            "C) It's a light rain",
+            "D) The weather is nice",
+          ],
+          correct: 1,
+          hint: "This describes very heavy rain",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Vocabulary",
+          question: "What does 'procrastinate' mean?",
+          answers: [
+            "A) To work quickly",
+            "B) To delay doing something",
+            "C) To finish early",
+            "D) To work together",
+          ],
+          correct: 1,
+          hint: "Students often do this with homework",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Grammar",
+          question: "Which sentence uses the present perfect correctly?",
+          answers: [
+            "A) I have went there",
+            "B) I have gone there",
+            "C) I has gone there",
+            "D) I gone there",
+          ],
+          correct: 1,
+          hint: "Use 'have/has' + past participle",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Culture",
+          question: "What is a 'fender bender'?",
+          answers: [
+            "A) A guitar part",
+            "B) A minor car accident",
+            "C) A cooking tool",
+            "D) A type of dance",
+          ],
+          correct: 1,
+          hint: "This involves cars but isn't serious",
+          difficulty: "intermediate",
+        },
+        {
+          type: "Pronunciation",
+          question: "Which word has the stress on the second syllable?",
+          answers: [
+            "A) PHOtograph",
+            "B) phoTOgraphy",
+            "C) photoGRAPHic",
+            "D) PHOto",
+          ],
+          correct: 1,
+          hint: "Listen for the emphasized part",
+          difficulty: "intermediate",
+        },
+
+        // Advanced Level Questions
+        {
+          type: "Vocabulary",
+          question: "What does 'ubiquitous' mean?",
+          answers: [
+            "A) Rare and special",
+            "B) Present everywhere",
+            "C) Very expensive",
+            "D) Extremely old",
+          ],
+          correct: 1,
+          hint: "Think about smartphones in modern life",
+          difficulty: "advanced",
+        },
+        {
+          type: "Idioms",
+          question: "What does 'bite the bullet' mean?",
+          answers: [
+            "A) To eat quickly",
+            "B) To face a difficult situation",
+            "C) To make a mistake",
+            "D) To speak loudly",
+          ],
+          correct: 1,
+          hint: "Sometimes you have to do something unpleasant but necessary",
+          difficulty: "advanced",
+        },
+        {
+          type: "Grammar",
+          question: "Which sentence uses the subjunctive mood correctly?",
+          answers: [
+            "A) I wish I was taller",
+            "B) I wish I were taller",
+            "C) I wish I am taller",
+            "D) I wish I will be taller",
+          ],
+          correct: 1,
+          hint: "The subjunctive uses 'were' for hypothetical wishes",
+          difficulty: "advanced",
+        },
+        {
+          type: "Pronunciation",
+          question: "Which word has a silent 'b'?",
+          answers: ["A) About", "B) Lamb", "C) Bobby", "D) Globe"],
+          correct: 1,
+          hint: "This word ends with 'mb' but you don't hear the 'b'",
+          difficulty: "advanced",
+        },
+        {
+          type: "Culture",
+          question: "What does 'Thanksgiving' celebrate in American culture?",
+          answers: [
+            "A) Independence from Britain",
+            "B) The harvest and gratitude",
+            "C) The end of winter",
+            "D) Religious freedom",
+          ],
+          correct: 1,
+          hint: "Think about pilgrims, turkey, and being thankful",
+          difficulty: "advanced",
+        },
+        {
+          type: "Vocabulary",
+          question: "What does 'serendipity' mean?",
+          answers: [
+            "A) A planned discovery",
+            "B) A pleasant surprise",
+            "C) A difficult situation",
+            "D) A boring routine",
+          ],
+          correct: 1,
+          hint: "When you find something wonderful by accident",
+          difficulty: "advanced",
+        },
+        {
+          type: "Grammar",
+          question: "Choose the correct form: 'The data _____ inconclusive.'",
+          answers: ["A) is", "B) are", "C) was", "D) were"],
+          correct: 1,
+          hint: "'Data' can be singular or plural, but in formal English...",
+          difficulty: "advanced",
+        },
+        {
+          type: "Idioms",
+          question: "What does 'burn the midnight oil' mean?",
+          answers: [
+            "A) To waste energy",
+            "B) To work late into the night",
+            "C) To cook dinner",
+            "D) To have a party",
+          ],
+          correct: 1,
+          hint: "Students do this before exams",
+          difficulty: "advanced",
+        },
+        {
+          type: "Vocabulary",
+          question: "What is an 'epiphany'?",
+          answers: [
+            "A) A religious holiday",
+            "B) A sudden realization",
+            "C) A type of flower",
+            "D) A musical instrument",
+          ],
+          correct: 1,
+          hint: "That 'aha!' moment when you understand something",
+          difficulty: "advanced",
+        },
+        {
+          type: "Culture",
+          question: "What does 'mind the gap' refer to in British culture?",
+          answers: [
+            "A) A TV show",
+            "B) A warning on the London Underground",
+            "C) A type of food",
+            "D) A shopping center",
+          ],
+          correct: 1,
+          hint: "You hear this on the London subway system",
+          difficulty: "advanced",
+        },
+      ];
+
+      let questions = [];
+
+      function startGame() {
+        gameState = {
+          currentQuestion: 0,
+          score: 0,
+          selectedAnswer: null,
+          lifelines: { fiftyFifty: false, hint: false, skip: false },
+        };
+
+        // Select and shuffle questions for variety
+        questions = selectQuestions();
+
+        // Play game start sound
+        soundFX.play("gameStart");
+
+        document.getElementById("title-screen").style.display = "none";
+        document.getElementById("results-screen").style.display = "none";
+        document.getElementById("game-screen").style.display = "block";
+
+        // Reset lifeline buttons
+        document.getElementById("fifty-fifty").classList.remove("used");
+        document.getElementById("hint").classList.remove("used");
+        document.getElementById("skip").classList.remove("used");
+        document.getElementById("hint-box").style.display = "none";
+
+        displayQuestion();
+      }
+
+      function selectQuestions() {
+        let selectedQuestions = [];
+
+        if (gameDifficulty === "beginner") {
+          // All beginner questions
+          const beginnerQuestions = allQuestions.filter(
+            (q) => q.difficulty === "beginner"
+          );
+          selectedQuestions = shuffleArray(beginnerQuestions).slice(0, 15);
+        } else if (gameDifficulty === "advanced") {
+          // All advanced questions
+          const advancedQuestions = allQuestions.filter(
+            (q) => q.difficulty === "advanced"
+          );
+          selectedQuestions = shuffleArray(advancedQuestions).slice(0, 15);
+        } else {
+          // Mixed difficulty (default)
+          const beginnerQuestions = allQuestions.filter(
+            (q) => q.difficulty === "beginner"
+          );
+          const intermediateQuestions = allQuestions.filter(
+            (q) => q.difficulty === "intermediate"
+          );
+          const advancedQuestions = allQuestions.filter(
+            (q) => q.difficulty === "advanced"
+          );
+
+          const shuffledBeginner = shuffleArray(beginnerQuestions);
+          const shuffledIntermediate = shuffleArray(intermediateQuestions);
+          const shuffledAdvanced = shuffleArray(advancedQuestions);
+
+          selectedQuestions = [
+            ...shuffledBeginner.slice(0, 5),
+            ...shuffledIntermediate.slice(0, 5),
+            ...shuffledAdvanced.slice(0, 5),
+          ];
+        }
+
+        // Shuffle answers for each question to prevent pattern memorization
+        return selectedQuestions.map((question) => {
+          const correctAnswer = question.answers[question.correct];
+          const shuffledAnswers = shuffleArray([...question.answers]);
+          const newCorrectIndex = shuffledAnswers.indexOf(correctAnswer);
+
+          return {
+            ...question,
+            answers: shuffledAnswers,
+            correct: newCorrectIndex,
+          };
+        });
+      }
+
+      function setDifficulty(difficulty) {
+        gameDifficulty = difficulty;
+
+        // Update UI
+        document.querySelectorAll(".difficulty-btn").forEach((btn) => {
+          btn.classList.remove("selected");
+        });
+        document.getElementById(`diff-${difficulty}`).classList.add("selected");
+      }
+
+      function showStats() {
+        const stats = scoreManager.getStats();
+
+        document.getElementById("title-screen").style.display = "none";
+        document.getElementById("game-screen").style.display = "none";
+        document.getElementById("results-screen").style.display = "none";
+        document.getElementById("stats-screen").style.display = "block";
+
+        // Populate stats
+        const statsGrid = document.getElementById("stats-grid");
+        statsGrid.innerHTML = `
+                <div class="stats-card">
+                    <h4>🏆 High Score</h4>
+                    <div class="stats-number">${stats.highScore}/15</div>
+                    <p>${Math.round((stats.highScore / 15) * 100)}% Accuracy</p>
+                </div>
+                <div class="stats-card">
+                    <h4>🎮 Games Played</h4>
+                    <div class="stats-number">${stats.totalGames}</div>
+                    <p>Keep practicing!</p>
+                </div>
+                <div class="stats-card">
+                    <h4>📈 Average Score</h4>
+                    <div class="stats-number">${stats.averageScore}</div>
+                    <p>Out of 15 questions</p>
+                </div>
+                <div class="stats-card">
+                    <h4>✅ Total Correct</h4>
+                    <div class="stats-number">${stats.totalCorrect}</div>
+                    <p>Answers across all games</p>
+                </div>
+            `;
+
+        // Populate achievements
+        const achievementList = document.getElementById("achievement-list");
+        if (stats.achievements.length === 0) {
+          achievementList.innerHTML =
+            '<p style="color: #87CEEB; grid-column: 1 / -1;">No achievements yet. Play some games to unlock them!</p>';
+        } else {
+          const achievementData = {
+            firstGame: {
+              name: "First Steps",
+              icon: "🎯",
+              description: "Completed your first game",
+            },
+            perfect: {
+              name: "Perfect Score!",
+              icon: "🏆",
+              description: "Got all questions correct",
+            },
+            dedicated: {
+              name: "Dedicated Learner",
+              icon: "📚",
+              description: "Played 10 games",
+            },
+            highAchiever: {
+              name: "High Achiever",
+              icon: "⭐",
+              description: "Scored 80% or higher",
+            },
+          };
+
+          achievementList.innerHTML = stats.achievements
+            .map((achId) => {
+              const ach = achievementData[achId];
+              return `
+                        <div class="achievement-item">
+                            <div class="achievement-icon">${ach.icon}</div>
+                            <strong>${ach.name}</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">${ach.description}</p>
+                        </div>
+                    `;
+            })
+            .join("");
+        }
+      }
+
+      function resetStats() {
+        if (
+          confirm(
+            "Are you sure you want to reset all your statistics? This cannot be undone."
+          )
+        ) {
+          scoreManager.resetStats();
+          showStats(); // Refresh the stats display
+        }
+      }
+
+      function displayQuestion() {
+        const question = questions[gameState.currentQuestion];
+
+        document.getElementById("question-counter").textContent = `Question ${
+          gameState.currentQuestion + 1
+        } of 15`;
+        document.getElementById("question-type").textContent = question.type;
+        document.getElementById("question-text").textContent =
+          question.question;
+
+        // Update level display
+        let level = "Beginner Level";
+        if (gameState.currentQuestion >= 10) level = "Advanced Level";
+        else if (gameState.currentQuestion >= 5) level = "Intermediate Level";
+        document.getElementById("current-level").textContent = level;
+
+        // Update progress bar
+        const progress = ((gameState.currentQuestion + 1) / 15) * 100;
+        document.getElementById("progress-fill").style.width = progress + "%";
+
+        // Display answers
+        const answersGrid = document.getElementById("answers-grid");
+        answersGrid.innerHTML = "";
+
+        question.answers.forEach((answer, index) => {
+          const button = document.createElement("button");
+          button.className = "answer-btn";
+          button.textContent = answer;
+          button.onclick = () => selectAnswer(index);
+          answersGrid.appendChild(button);
+        });
+
+        gameState.selectedAnswer = null;
+        document.getElementById("confirm-btn").style.display = "none";
+        document.getElementById("hint-box").style.display = "none";
+      }
+
+      function selectAnswer(index) {
+        // Play select sound
+        soundFX.play("select");
+
+        // Remove previous selection
+        document.querySelectorAll(".answer-btn").forEach((btn) => {
+          btn.classList.remove("selected");
+        });
+
+        // Select new answer
+        document
+          .querySelectorAll(".answer-btn")
+          [index].classList.add("selected");
+        gameState.selectedAnswer = index;
+        document.getElementById("confirm-btn").style.display = "inline-block";
+      }
+
+      function confirmAnswer() {
+        if (gameState.selectedAnswer === null) return;
+
+        const question = questions[gameState.currentQuestion];
+        const buttons = document.querySelectorAll(".answer-btn");
+
+        // Show correct answer
+        buttons[question.correct].classList.add("correct");
+
+        // Show wrong answer if incorrect and play appropriate sound
+        if (gameState.selectedAnswer !== question.correct) {
+          buttons[gameState.selectedAnswer].classList.add("wrong");
+          soundFX.play("incorrect");
+        } else {
+          gameState.score++;
+          soundFX.play("correct");
+
+          // Play level up sound at milestones
+          if (
+            gameState.currentQuestion === 4 ||
+            gameState.currentQuestion === 9
+          ) {
+            setTimeout(() => soundFX.play("levelUp"), 800);
+          }
+        }
+
+        // Disable all buttons
+        buttons.forEach((btn) => (btn.onclick = null));
+        document.getElementById("confirm-btn").style.display = "none";
+
+        // Move to next question after delay
+        setTimeout(() => {
+          gameState.currentQuestion++;
+          if (gameState.currentQuestion >= questions.length) {
+            endGame();
+          } else {
+            displayQuestion();
+          }
+        }, 2000);
+      }
+
+      function useFiftyFifty() {
+        if (gameState.lifelines.fiftyFifty) return;
+
+        soundFX.play("lifeline");
+        gameState.lifelines.fiftyFifty = true;
+        document.getElementById("fifty-fifty").classList.add("used");
+
+        const question = questions[gameState.currentQuestion];
+        const buttons = document.querySelectorAll(".answer-btn");
+
+        let removed = 0;
+        for (let i = 0; i < buttons.length && removed < 2; i++) {
+          if (i !== question.correct) {
+            buttons[i].style.opacity = "0.3";
+            buttons[i].onclick = null;
+            removed++;
+          }
+        }
+      }
+
+      function useHint() {
+        if (gameState.lifelines.hint) return;
+
+        soundFX.play("lifeline");
+        gameState.lifelines.hint = true;
+        document.getElementById("hint").classList.add("used");
+
+        const question = questions[gameState.currentQuestion];
+        const hintBox = document.getElementById("hint-box");
+        hintBox.textContent = `💡 Hint: ${question.hint}`;
+        hintBox.style.display = "block";
+      }
+
+      function useSkip() {
+        if (gameState.lifelines.skip) return;
+
+        soundFX.play("lifeline");
+        gameState.lifelines.skip = true;
+        document.getElementById("skip").classList.add("used");
+
+        gameState.currentQuestion++;
+        if (gameState.currentQuestion >= questions.length) {
+          endGame();
+        } else {
+          displayQuestion();
+        }
+      }
+
+      function toggleSound() {
+        const isEnabled = soundFX.toggle();
+        const button = document.getElementById("sound-toggle");
+        button.textContent = isEnabled ? "🔊 Sound: ON" : "🔇 Sound: OFF";
+      }
+
+      function endGame() {
+        document.getElementById("game-screen").style.display = "none";
+        document.getElementById("results-screen").style.display = "block";
+
+        const percentage = Math.round(
+          (gameState.score / questions.length) * 100
+        );
+
+        // Record the game results
+        const newAchievements = scoreManager.recordGame(
+          gameState.score,
+          questions.length
+        );
+        const stats = scoreManager.getStats();
+
+        document.getElementById(
+          "final-score"
+        ).textContent = `${gameState.score}/${questions.length} Correct (${percentage}%)`;
+
+        let achievement = "";
+        if (percentage >= 90) {
+          achievement = `<h3>🌟 FLUENT SPEAKER! 🌟</h3>
+                              <p>Outstanding! You have excellent English skills. You're ready for advanced conversations and native-level content!</p>`;
+        } else if (percentage >= 75) {
+          achievement = `<h3>🎓 ADVANCED LEARNER! 🎓</h3>
+                              <p>Great job! You have strong English skills. Keep practicing with challenging materials!</p>`;
+        } else if (percentage >= 60) {
+          achievement = `<h3>📚 INTERMEDIATE LEVEL! 📚</h3>
+                              <p>Well done! You have good English fundamentals. Focus on expanding vocabulary and idioms!</p>`;
+        } else if (percentage >= 40) {
+          achievement = `<h3>🌱 BEGINNER PLUS! 🌱</h3>
+                              <p>Good progress! Keep studying grammar basics and common vocabulary!</p>`;
+        } else {
+          achievement = `<h3>📖 BEGINNER LEVEL! 📖</h3>
+                              <p>Don't worry - everyone starts somewhere! Focus on basic grammar and everyday vocabulary!</p>`;
+        }
+
+        // Add new achievements
+        if (newAchievements.length > 0) {
+          achievement +=
+            '<div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid rgba(255,215,0,0.3);">';
+          achievement +=
+            '<h4 style="color: #FFD700; margin-bottom: 1rem;">🎉 New Achievements Unlocked! 🎉</h4>';
+          newAchievements.forEach((ach) => {
+            achievement += `<div style="background: rgba(255,215,0,0.1); padding: 0.5rem; margin: 0.5rem 0; border-radius: 8px;">
+                                      ${ach.icon} <strong>${ach.name}</strong><br>
+                                      <small>${ach.description}</small>
+                                   </div>`;
+          });
+          achievement += "</div>";
+        }
+
+        // Add statistics
+        achievement += `<div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid rgba(135,206,235,0.3);">
+                             <h4 style="color: #87CEEB; margin-bottom: 1rem;">📊 Your Statistics</h4>
+                             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; text-align: left;">
+                               <div><strong>High Score:</strong> ${stats.highScore}/${questions.length}</div>
+                               <div><strong>Total Games:</strong> ${stats.totalGames}</div>
+                               <div><strong>Average Score:</strong> ${stats.averageScore}</div>
+                               <div><strong>Achievements:</strong> ${stats.achievements.length}</div>
+                             </div>
+                           </div>`;
+
+        document.getElementById("achievement").innerHTML = achievement;
+      }
+
+      function showTitleScreen() {
+        document.getElementById("title-screen").style.display = "block";
+        document.getElementById("game-screen").style.display = "none";
+        document.getElementById("results-screen").style.display = "none";
+        document.getElementById("stats-screen").style.display = "none";
+      }
+
+      // Shuffle array function for randomization
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+
+      // Add keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        if (document.getElementById("game-screen").style.display === "block") {
+          const buttons = document.querySelectorAll(
+            '.answer-btn:not([style*="opacity: 0.3"])'
+          );
+
+          if (event.key >= "1" && event.key <= "4") {
+            const index = parseInt(event.key) - 1;
+            if (buttons[index]) {
+              selectAnswer(
+                Array.from(document.querySelectorAll(".answer-btn")).indexOf(
+                  buttons[index]
+                )
+              );
+            }
+          } else if (
+            event.key === "Enter" &&
+            gameState.selectedAnswer !== null
+          ) {
+            confirmAnswer();
+          }
+        }
+      });
+
+      // Initialize game on page load
+      window.addEventListener("load", function () {
+        showTitleScreen();
+      });
+    </script>
+  </body>
+</html>

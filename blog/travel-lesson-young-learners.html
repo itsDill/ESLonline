@@ -653,39 +653,13 @@
         z-index: 1;
       }
 
-      /* Robotics Game */
-      .robotics-game-container {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      /* Memory Matching Game */
+      .memory-game-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 20px;
         padding: 30px;
         color: white;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .robotics-game-container::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(52, 152, 219, 0.1) 0%,
-          transparent 70%
-        );
-        animation: roboticsPulse 4s ease-in-out infinite;
-      }
-
-      @keyframes roboticsPulse {
-        0%,
-        100% {
-          transform: scale(1) rotate(0deg);
-        }
-        50% {
-          transform: scale(1.1) rotate(180deg);
-        }
+        text-align: center;
       }
 
       .game-info {
@@ -696,11 +670,11 @@
         backdrop-filter: blur(10px);
       }
 
-      .robot-stats {
+      .memory-stats {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        gap: 40px;
         flex-wrap: wrap;
-        gap: 15px;
       }
 
       .stat-item {
@@ -722,351 +696,81 @@
         color: var(--travel-accent);
       }
 
-      .robot-game-board {
-        width: 400px;
-        height: 300px;
-        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-        border-radius: 15px;
+      .memory-game-board {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        max-width: 400px;
         margin: 20px auto;
-        position: relative;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        overflow: hidden;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
       }
 
-      .robot {
-        position: absolute;
-        font-size: 2.5rem;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: all 0.3s ease;
-        z-index: 10;
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-        animation: robotFloat 2s ease-in-out infinite;
-      }
-
-      @keyframes robotFloat {
-        0%,
-        100% {
-          transform: translate(-50%, -50%) translateY(0px);
-        }
-        50% {
-          transform: translate(-50%, -50%) translateY(-5px);
-        }
-      }
-
-      .luggage-item,
-      .country-flag,
-      .obstacle,
-      .power-up,
-      .travel-bonus {
-        position: absolute;
-        font-size: 2rem;
-        transition: all 0.3s ease;
+      .memory-card {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 2rem;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
-      .luggage-item {
-        animation: luggageBounce 1.5s ease-in-out infinite;
+      .memory-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
       }
 
-      .country-flag {
-        animation: flagWave 2s ease-in-out infinite;
+      .memory-card.flipped {
+        background: linear-gradient(
+          135deg,
+          var(--travel-primary) 0%,
+          var(--travel-info) 100%
+        );
+        color: white;
+        transform: rotateY(180deg);
       }
 
-      @keyframes luggageBounce {
-        0%,
-        100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-8px);
-        }
+      .memory-card.matched {
+        background: linear-gradient(
+          135deg,
+          var(--travel-success) 0%,
+          var(--travel-teal) 100%
+        );
+        color: white;
+        animation: matchedCard 0.6s ease-in-out;
       }
 
-      @keyframes flagWave {
-        0%,
-        100% {
+      .memory-card.hidden {
+        background: linear-gradient(135deg, #ddd 0%, #bbb 100%);
+        color: transparent;
+      }
+
+      @keyframes matchedCard {
+        0% {
           transform: scale(1);
         }
         50% {
           transform: scale(1.1);
         }
-      }
-
-      .luggage-item:nth-child(2) {
-        top: 20px;
-        left: 20px;
-      }
-      .luggage-item:nth-child(3) {
-        top: 20px;
-        right: 20px;
-      }
-      .luggage-item:nth-child(4) {
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .country-flag:nth-child(5) {
-        top: 80px;
-        left: 20px;
-      }
-      .country-flag:nth-child(6) {
-        top: 80px;
-        right: 20px;
-      }
-      .country-flag:nth-child(7) {
-        bottom: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      /* Game obstacles and power-ups */
-      .obstacle:nth-child(8) {
-        top: 50%;
-        left: 25%;
-        transform: translate(-50%, -50%);
-      }
-      .obstacle:nth-child(9) {
-        top: 50%;
-        right: 25%;
-        transform: translate(50%, -50%);
-      }
-
-      .power-up:nth-child(10) {
-        top: 40%;
-        left: 10%;
-      }
-      .power-up:nth-child(11) {
-        bottom: 40%;
-        right: 10%;
-      }
-
-      .travel-bonus:nth-child(12) {
-        top: 15%;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-      .obstacle {
-        animation: obstacleShake 3s ease-in-out infinite;
-        filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
-      }
-
-      .power-up {
-        animation: powerUpGlow 2s ease-in-out infinite;
-        filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5));
-      }
-
-      .travel-bonus {
-        animation: bonusFloat 2.5s ease-in-out infinite;
-        filter: drop-shadow(0 0 12px rgba(0, 255, 255, 0.4));
-      }
-
-      @keyframes obstacleShake {
-        0%,
-        100% {
-          transform: translateX(0px);
-        }
-        25% {
-          transform: translateX(-2px);
-        }
-        75% {
-          transform: translateX(2px);
-        }
-      }
-
-      @keyframes powerUpGlow {
-        0%,
         100% {
           transform: scale(1);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(1.15);
-          opacity: 0.8;
         }
       }
 
-      @keyframes bonusFloat {
-        0%,
-        100% {
-          transform: translateX(-50%) translateY(0px);
-        }
-        50% {
-          transform: translateX(-50%) translateY(-10px);
-        }
-      }
-
-      .robot-controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        margin: 20px 0;
-      }
-
-      .horizontal-controls {
+      .memory-controls {
         display: flex;
         gap: 15px;
-      }
-
-      .robot-btn {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        padding: 12px 20px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
         justify-content: center;
-      }
-
-      .robot-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .collect-btn {
-        background: linear-gradient(
-          135deg,
-          var(--travel-accent) 0%,
-          var(--travel-warning) 100%
-        );
-        border-color: var(--travel-accent);
-        width: auto;
-        border-radius: 25px;
-        padding: 12px 25px;
-      }
-
-      .robot-mission {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        padding: 20px;
         margin: 20px 0;
-        text-align: center;
-        backdrop-filter: blur(10px);
-      }
-
-      .robot-mission h4 {
-        margin-bottom: 10px;
-        color: var(--travel-accent);
-      }
-
-      .collected {
-        opacity: 0.3;
-        transform: scale(0.8);
-        pointer-events: none;
-      }
-
-      .robot-success {
-        animation: robotSuccess 0.6s ease-in-out;
-      }
-
-      @keyframes robotSuccess {
-        0% {
-          transform: translate(-50%, -50%) scale(1);
-        }
-        50% {
-          transform: translate(-50%, -50%) scale(1.2);
-        }
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-        }
-      }
-
-      /* Difficulty Selector */
-      .difficulty-selector {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px 0;
-        text-align: center;
-        backdrop-filter: blur(10px);
-      }
-
-      .difficulty-selector h4 {
-        margin-bottom: 15px;
-        color: var(--travel-accent);
-      }
-
-      .difficulty-buttons {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
         flex-wrap: wrap;
-      }
-
-      .difficulty-btn {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-      }
-
-      .difficulty-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-      }
-
-      .difficulty-btn.active {
-        background: var(--travel-accent);
-        border-color: var(--travel-accent);
-        box-shadow: 0 0 20px rgba(243, 156, 18, 0.4);
-      }
-
-      /* Game states */
-      .robot.powered-up {
-        animation: robotPowerUp 0.5s ease-in-out;
-        filter: drop-shadow(0 0 15px rgba(255, 255, 0, 0.8));
-      }
-
-      .robot.damaged {
-        animation: robotDamage 0.5s ease-in-out;
-        filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
-      }
-
-      @keyframes robotPowerUp {
-        0%,
-        100% {
-          transform: translate(-50%, -50%) scale(1);
-        }
-        50% {
-          transform: translate(-50%, -50%) scale(1.3);
-        }
-      }
-
-      @keyframes robotDamage {
-        0%,
-        100% {
-          transform: translate(-50%, -50%);
-        }
-        25% {
-          transform: translate(-50%, -50%) translateX(-5px);
-        }
-        75% {
-          transform: translate(-50%, -50%) translateX(5px);
-        }
-      }
-
-      .used {
-        opacity: 0.2;
-        transform: scale(0.6);
-        pointer-events: none;
-        filter: grayscale(100%);
       }
 
       /* Responsive Design */
@@ -1080,29 +784,19 @@
           grid-template-columns: 1fr;
         }
 
-        .robot-game-board {
-          width: 100%;
-          max-width: 350px;
-          height: 250px;
+        .memory-game-board {
+          grid-template-columns: repeat(3, 1fr);
+          max-width: 300px;
         }
 
-        .robot-stats {
-          justify-content: center;
+        .memory-card {
+          width: 70px;
+          height: 70px;
+          font-size: 1.5rem;
         }
 
-        .horizontal-controls {
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-
-        .difficulty-buttons {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .robot-stats {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
+        .memory-stats {
+          gap: 20px;
         }
 
         .vocab-grid {
@@ -1620,17 +1314,12 @@
               placeholder="Enter the missing word..."
             />
             <button class="guess-btn" onclick="checkSentenceGuess()">
-              Guess!
+              Check Answer
             </button>
           </div>
 
-          <div class="score-display">
-            Score: <span id="gameScore">0</span> | Question:
-            <span id="gameRound">1</span>
-          </div>
-
           <button class="guess-btn" onclick="nextSentence()">
-            Next Question
+            Next Sentence
           </button>
         </div>
       </div>
@@ -1733,123 +1422,42 @@
         </div>
       </div>
 
-      <!-- Robotics Travel Game -->
+      <!-- Memory Matching Game -->
       <div class="lesson-section">
         <h2 class="section-title">
-          <span class="section-icon">🤖</span>
-          Travel Robot Challenge
+          <span class="section-icon">�</span>
+          Travel Memory Match
         </h2>
         <p>
-          Help the travel robot collect luggage and navigate through different
-          countries!
+          Test your memory by matching travel words with their pictures! Click
+          on two cards to find matching pairs.
         </p>
 
-        <div class="robotics-game-container">
+        <div class="memory-game-container">
           <div class="game-info">
-            <div class="robot-stats">
+            <div class="memory-stats">
               <div class="stat-item">
-                <span class="stat-label">🧳 Luggage:</span>
-                <span class="stat-value" id="luggageCount">0</span>
+                <span class="stat-label">🎯 Matches:</span>
+                <span class="stat-value" id="matchesFound">0</span>
               </div>
               <div class="stat-item">
-                <span class="stat-label">🌍 Countries:</span>
-                <span class="stat-value" id="countriesVisited">0</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">⚡ Energy:</span>
-                <span class="stat-value" id="robotEnergy">100</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">🎯 Score:</span>
-                <span class="stat-value" id="robotScore">0</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">⏱️ Time:</span>
-                <span class="stat-value" id="gameTimer">0:00</span>
+                <span class="stat-label">🔄 Tries:</span>
+                <span class="stat-value" id="attemptCount">0</span>
               </div>
             </div>
           </div>
 
-          <div class="robot-game-board" id="gameBoard">
-            <div class="robot" id="travelRobot">🤖</div>
-            <div class="luggage-item" data-country="France" data-points="10">
-              🧳
-            </div>
-            <div class="luggage-item" data-country="Japan" data-points="15">
-              🧳
-            </div>
-            <div class="luggage-item" data-country="USA" data-points="20">
-              🧳
-            </div>
-            <div class="country-flag" data-country="France">🇫🇷</div>
-            <div class="country-flag" data-country="Japan">🇯🇵</div>
-            <div class="country-flag" data-country="USA">🇺🇸</div>
-            <div class="obstacle" data-type="mountain">⛰️</div>
-            <div class="obstacle" data-type="ocean">🌊</div>
-            <div class="power-up" data-type="energy">⚡</div>
-            <div class="power-up" data-type="speed">💨</div>
-            <div class="travel-bonus" data-type="plane">✈️</div>
+          <div class="memory-game-board" id="memoryGameBoard">
+            <!-- Memory cards will be generated by JavaScript -->
           </div>
 
-          <div class="robot-controls">
-            <button class="robot-btn" onclick="moveRobot('up')">
-              <i class="fas fa-arrow-up"></i> Up
+          <div class="memory-controls">
+            <button class="control-btn" onclick="startMemoryGame()">
+              <i class="fas fa-play"></i> New Game
             </button>
-            <div class="horizontal-controls">
-              <button class="robot-btn" onclick="moveRobot('left')">
-                <i class="fas fa-arrow-left"></i> Left
-              </button>
-              <button class="robot-btn" onclick="moveRobot('down')">
-                <i class="fas fa-arrow-down"></i> Down
-              </button>
-              <button class="robot-btn" onclick="moveRobot('right')">
-                <i class="fas fa-arrow-right"></i> Right
-              </button>
-            </div>
-            <button class="robot-btn collect-btn" onclick="collectItem()">
-              <i class="fas fa-hand-paper"></i> Collect
+            <button class="control-btn" onclick="showMemoryHelp()">
+              <i class="fas fa-question-circle"></i> How to Play
             </button>
-          </div>
-
-          <div class="robot-mission">
-            <h4>🎯 Current Mission:</h4>
-            <p id="currentMission">
-              Collect the luggage from France! Move your robot to the French
-              flag 🇫🇷
-            </p>
-          </div>
-
-          <div class="game-controls">
-            <button class="control-btn" onclick="startRobotGame()">
-              <i class="fas fa-play"></i> Start Game
-            </button>
-            <button class="control-btn" onclick="pauseRobotGame()">
-              <i class="fas fa-pause"></i> Pause
-            </button>
-            <button class="control-btn" onclick="resetRobotGame()">
-              <i class="fas fa-refresh"></i> Reset
-            </button>
-            <button class="control-btn" onclick="showRobotHelp()">
-              <i class="fas fa-question-circle"></i> Help
-            </button>
-          </div>
-
-          <div class="difficulty-selector">
-            <h4>🎮 Difficulty Level:</h4>
-            <div class="difficulty-buttons">
-              <button
-                class="difficulty-btn active"
-                onclick="setDifficulty('easy')"
-              >
-                😊 Easy
-              </button>
-              <button class="difficulty-btn" onclick="setDifficulty('medium')">
-                😐 Medium
-              </button>
-              <button class="difficulty-btn" onclick="setDifficulty('hard')">
-                😤 Hard
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -1944,8 +1552,6 @@
       ];
 
       let currentSentenceIndex = 0;
-      let gameScore = 0;
-      let gameRound = 1;
 
       function checkSentenceGuess() {
         const guess = document
@@ -1957,7 +1563,6 @@
         const input = document.getElementById("sentenceGuess");
 
         if (guess === correctAnswer) {
-          gameScore += 10;
           input.classList.add("success");
           alert("🎉 Correct! Great job!");
           setTimeout(() => {
@@ -1971,21 +1576,17 @@
             input.classList.remove("error");
           }, 1000);
         }
-
-        document.getElementById("gameScore").textContent = gameScore;
       }
 
       function nextSentence() {
         currentSentenceIndex =
           (currentSentenceIndex + 1) % travelSentences.length;
-        gameRound++;
 
         const sentenceData = travelSentences[currentSentenceIndex];
         document.getElementById("sentenceDisplay").textContent =
           sentenceData.sentence;
         document.getElementById("sentenceHint").textContent = sentenceData.hint;
         document.getElementById("sentenceGuess").value = "";
-        document.getElementById("gameRound").textContent = gameRound;
       }
 
       // Word Generator
@@ -2212,481 +1813,148 @@
       // Initialize timer display
       updateTimerDisplay();
 
-      // Robotics Game Logic
-      let robotPosition = { x: 50, y: 50 }; // Starting position (center)
-      let luggageCollected = 0;
-      let countriesVisited = 0;
-      let robotEnergy = 100;
-      let robotScore = 0;
-      let currentMissionIndex = 0;
-      let gameStarted = false;
-      let gamePaused = false;
-      let gameTimer = 0;
-      let gameTimerInterval;
-      let difficulty = "easy";
-      let speedBoostActive = false;
-      let energyBoostActive = false;
+      // Memory Matching Game Logic
+      let memoryCards = [];
+      let flippedCards = [];
+      let matchesFound = 0;
+      let attemptCount = 0;
+      let gameActive = false;
 
-      const missions = [
-        {
-          country: "France",
-          flag: "🇫🇷",
-          description:
-            "Collect the luggage from France! Move your robot to the French flag 🇫🇷",
-        },
-        {
-          country: "Japan",
-          flag: "🇯🇵",
-          description:
-            "Next mission: Travel to Japan and collect luggage! Find the Japanese flag 🇯🇵",
-        },
-        {
-          country: "USA",
-          flag: "🇺🇸",
-          description:
-            "Final mission: Visit the USA and collect the last luggage! Look for the American flag 🇺🇸",
-        },
+      const memoryPairs = [
+        { emoji: "✈️", word: "Airplane" },
+        { emoji: "🧳", word: "Suitcase" },
+        { emoji: "📔", word: "Passport" },
+        { emoji: "🏨", word: "Hotel" },
+        { emoji: "�", word: "Ticket" },
+        { emoji: "📸", word: "Camera" },
+        { emoji: "�️", word: "Map" },
+        { emoji: "🎁", word: "Souvenir" },
       ];
 
-      function startRobotGame() {
-        if (!gameStarted) {
-          gameStarted = true;
-          gamePaused = false;
-          resetRobotGame();
-          startGameTimer();
-          alert(
-            "🤖 Welcome to Travel Robot Challenge!\n\n" +
-              "🎯 Controls:\n" +
-              "• Arrow keys or buttons to move\n" +
-              "• Space or Collect button to collect items\n" +
-              "• Avoid obstacles ⛰️🌊 (-10 energy)\n" +
-              "• Collect power-ups ⚡💨✈️ (+energy/speed)\n" +
-              "• Get luggage from each country!\n\n" +
-              "Good luck, robot commander! 🚀"
-          );
-        } else if (gamePaused) {
-          pauseRobotGame();
-        }
-        updateRobotStats();
-        updateMission();
-      }
+      function startMemoryGame() {
+        matchesFound = 0;
+        attemptCount = 0;
+        flippedCards = [];
+        gameActive = true;
 
-      function resetRobotGame() {
-        robotPosition = { x: 50, y: 50 };
-        luggageCollected = 0;
-        countriesVisited = 0;
-        robotEnergy = 100;
-        currentMissionIndex = 0;
-
-        // Reset visual elements
-        const robot = document.getElementById("travelRobot");
-        robot.style.left = "50%";
-        robot.style.top = "50%";
-
-        // Reset luggage items
-        document.querySelectorAll(".luggage-item").forEach((item) => {
-          item.classList.remove("collected");
-        });
-
-        updateRobotStats();
-        updateMission();
-      }
-
-      function pauseRobotGame() {
-        gamePaused = !gamePaused;
-        if (gamePaused) {
-          clearInterval(gameTimerInterval);
-          alert("⏸️ Game Paused! Click Start to continue.");
-        } else {
-          startGameTimer();
-          alert("▶️ Game Resumed!");
-        }
-      }
-
-      function startGameTimer() {
-        gameTimerInterval = setInterval(() => {
-          gameTimer++;
-          updateRobotStats();
-        }, 1000);
-      }
-
-      function setDifficulty(level) {
-        difficulty = level;
-        document.querySelectorAll(".difficulty-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        event.target.classList.add("active");
-
-        // Adjust game parameters based on difficulty
-        switch (level) {
-          case "easy":
-            robotEnergy = 150;
-            break;
-          case "medium":
-            robotEnergy = 100;
-            break;
-          case "hard":
-            robotEnergy = 75;
-            break;
-        }
-
-        if (gameStarted) {
-          updateRobotStats();
-        }
-      }
-
-      function showRobotHelp() {
-        alert(
-          "🤖 ROBOT GAME HELP 🤖\n\n" +
-            "🎯 OBJECTIVE:\n" +
-            "• Collect luggage from France 🇫🇷, Japan 🇯🇵, and USA 🇺🇸\n" +
-            "• Navigate to each country's flag to collect luggage\n\n" +
-            "🎮 CONTROLS:\n" +
-            "• Arrow Keys: Move robot\n" +
-            "• Space/Collect Button: Collect items\n\n" +
-            "🔧 GAME ELEMENTS:\n" +
-            "• ⛰️🌊 Obstacles: Avoid these! (-10 energy)\n" +
-            "• ⚡ Energy Boost: Restores 25 energy\n" +
-            "• 💨 Speed Boost: Temporary faster movement\n" +
-            "• ✈️ Travel Bonus: Extra points and energy\n\n" +
-            "🏆 SCORING:\n" +
-            "• France: 10 points\n" +
-            "• Japan: 15 points\n" +
-            "• USA: 20 points\n" +
-            "• Bonus items: 5-15 points\n\n" +
-            "⚡ Keep your energy above 0 to keep playing!\n" +
-            "🏁 Complete all missions to win!"
-        );
-      }
-
-      function moveRobot(direction) {
-        if (!gameStarted || robotEnergy <= 0) {
-          alert("Please start the game first or recharge your robot!");
-          return;
-        }
-
-        const robot = document.getElementById("travelRobot");
-        const gameBoard = document.getElementById("gameBoard");
-        const boardRect = gameBoard.getBoundingClientRect();
-
-        const moveDistance = 30; // pixels
-        let newX = robotPosition.x;
-        let newY = robotPosition.y;
-
-        // Calculate new position
-        switch (direction) {
-          case "up":
-            if (robotPosition.y > 15) {
-              newY = robotPosition.y - moveDistance;
-            } else return;
-            break;
-          case "down":
-            if (robotPosition.y < 85) {
-              newY = robotPosition.y + moveDistance;
-            } else return;
-            break;
-          case "left":
-            if (robotPosition.x > 15) {
-              newX = robotPosition.x - moveDistance;
-            } else return;
-            break;
-          case "right":
-            if (robotPosition.x < 85) {
-              newX = robotPosition.x + moveDistance;
-            } else return;
-            break;
-        }
-
-        // Check for collisions with obstacles
-        const obstacles = document.querySelectorAll(".robot-obstacle");
-        let collision = false;
-
-        obstacles.forEach((obstacle) => {
-          const obstacleRect = obstacle.getBoundingClientRect();
-          const gameRect = document
-            .getElementById("robotGame")
-            .getBoundingClientRect();
-
-          const obstacleX =
-            ((obstacleRect.left - gameRect.left) / gameRect.width) * 100;
-          const obstacleY =
-            ((obstacleRect.top - gameRect.top) / gameRect.height) * 100;
-
-          // Check if robot would collide with obstacle (within 15% distance)
-          if (
-            Math.abs(newX - obstacleX) < 15 &&
-            Math.abs(newY - obstacleY) < 15
-          ) {
-            collision = true;
-
-            // Add shake animation to obstacle
-            obstacle.classList.add("obstacle-shake");
-            setTimeout(() => obstacle.classList.remove("obstacle-shake"), 600);
-
-            // Reduce energy more for hitting obstacle
-            robotEnergy -= 5;
-            robotScore -= 10;
-
-            // Show collision feedback
-            showGameMessage("Ouch! Avoided obstacle!", "warning");
-          }
-        });
-
-        if (!collision) {
-          // Update position if no collision
-          robotPosition.x = newX;
-          robotPosition.y = newY;
-          robot.style.left = robotPosition.x + "%";
-          robot.style.top = robotPosition.y + "%";
-
-          // Check for power-up collection
-          const powerUps = document.querySelectorAll(".robot-powerup");
-          powerUps.forEach((powerUp) => {
-            const powerUpRect = powerUp.getBoundingClientRect();
-            const gameRect = document
-              .getElementById("robotGame")
-              .getBoundingClientRect();
-
-            const powerUpX =
-              ((powerUpRect.left - gameRect.left) / gameRect.width) * 100;
-            const powerUpY =
-              ((powerUpRect.top - gameRect.top) / gameRect.height) * 100;
-
-            // Check if robot collected power-up (within 10% distance)
-            if (
-              Math.abs(robotPosition.x - powerUpX) < 10 &&
-              Math.abs(robotPosition.y - powerUpY) < 10
-            ) {
-              collectPowerUp(powerUp);
-            }
+        // Create cards array with pairs
+        memoryCards = [];
+        memoryPairs.forEach((pair) => {
+          memoryCards.push({
+            type: "emoji",
+            content: pair.emoji,
+            id: pair.word,
           });
+          memoryCards.push({ type: "word", content: pair.word, id: pair.word });
+        });
 
-          // Check for travel bonus collection
-          const bonus = document.querySelector(".robot-travel-bonus");
-          if (bonus) {
-            const bonusRect = bonus.getBoundingClientRect();
-            const gameRect = document
-              .getElementById("robotGame")
-              .getBoundingClientRect();
-
-            const bonusX =
-              ((bonusRect.left - gameRect.left) / gameRect.width) * 100;
-            const bonusY =
-              ((bonusRect.top - gameRect.top) / gameRect.height) * 100;
-
-            if (
-              Math.abs(robotPosition.x - bonusX) < 10 &&
-              Math.abs(robotPosition.y - bonusY) < 10
-            ) {
-              collectTravelBonus();
-            }
-          }
-
-          robotEnergy -= 2;
-          robotScore += 1; // Points for successful movement
+        // Shuffle cards
+        for (let i = memoryCards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [memoryCards[i], memoryCards[j]] = [memoryCards[j], memoryCards[i]];
         }
 
-        updateRobotStats();
+        // Create game board
+        const gameBoard = document.getElementById("memoryGameBoard");
+        gameBoard.innerHTML = "";
 
-        // Add robot animation
-        robot.classList.add(collision ? "robot-error" : "robot-success");
-        setTimeout(() => {
-          robot.classList.remove("robot-error", "robot-success");
-        }, 300);
+        memoryCards.forEach((card, index) => {
+          const cardElement = document.createElement("div");
+          cardElement.className = "memory-card hidden";
+          cardElement.dataset.index = index;
+          cardElement.dataset.id = card.id;
+          cardElement.innerHTML = "?";
+          cardElement.addEventListener("click", () => flipCard(index));
+          gameBoard.appendChild(cardElement);
+        });
+
+        updateMemoryStats();
       }
 
-      function collectPowerUp(powerUp) {
-        const powerUpType = powerUp.textContent;
+      function flipCard(index) {
+        if (!gameActive || flippedCards.length >= 2) return;
 
-        switch (powerUpType) {
-          case "⚡": // Energy boost
-            robotEnergy = Math.min(100, robotEnergy + 20);
-            robotScore += 15;
-            showGameMessage("Energy boost! +20 energy", "success");
-            break;
-          case "💨": // Speed boost (visual effect)
-            robotScore += 10;
-            showGameMessage("Speed boost! +10 points", "success");
-            break;
-          case "✈️": // Flight bonus
-            robotScore += 25;
-            showGameMessage("Flight bonus! +25 points", "success");
-            break;
-        }
-
-        // Remove power-up with animation
-        powerUp.style.transform = "scale(2)";
-        powerUp.style.opacity = "0";
-        setTimeout(() => powerUp.remove(), 300);
-
-        updateRobotStats();
-      }
-
-      function collectTravelBonus() {
-        const bonus = document.querySelector(".robot-travel-bonus");
-        if (bonus) {
-          robotScore += 50;
-          robotEnergy = Math.min(100, robotEnergy + 30);
-          showGameMessage("Travel Bonus! +50 points, +30 energy!", "success");
-
-          // Remove bonus with celebration
-          bonus.style.transform = "scale(3) rotate(360deg)";
-          bonus.style.opacity = "0";
-          setTimeout(() => bonus.remove(), 500);
-
-          updateRobotStats();
-        }
-      }
-
-      function showGameMessage(message, type) {
-        const gameArea = document.getElementById("robotGame");
-        const messageDiv = document.createElement("div");
-        messageDiv.className = `game-message game-message-${type}`;
-        messageDiv.textContent = message;
-        messageDiv.style.cssText = `
-          position: absolute;
-          top: 10px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: ${
-            type === "success"
-              ? "#4CAF50"
-              : type === "warning"
-              ? "#FF9800"
-              : "#f44336"
-          };
-          color: white;
-          padding: 8px 16px;
-          border-radius: 20px;
-          font-size: 14px;
-          font-weight: bold;
-          z-index: 1000;
-          animation: fadeInOut 2s forwards;
-        `;
-
-        gameArea.appendChild(messageDiv);
-        setTimeout(() => messageDiv.remove(), 2000);
-      }
-
-      function collectItem() {
-        if (!gameStarted) {
-          alert("Please start the game first!");
+        const cardElement = document.querySelector(`[data-index="${index}"]`);
+        if (
+          cardElement.classList.contains("flipped") ||
+          cardElement.classList.contains("matched")
+        ) {
           return;
         }
 
-        const currentMission = missions[currentMissionIndex];
-        const robot = document.getElementById("travelRobot");
-        const flags = document.querySelectorAll(".country-flag");
-        const luggage = document.querySelectorAll(".luggage-item");
+        // Flip the card
+        cardElement.classList.remove("hidden");
+        cardElement.classList.add("flipped");
+        cardElement.innerHTML = memoryCards[index].content;
+        flippedCards.push(index);
 
-        // Check if robot is near the correct flag
-        let nearCorrectFlag = false;
-        flags.forEach((flag, index) => {
-          const flagCountry = flag.getAttribute("data-country");
-          if (flagCountry === currentMission.country) {
-            const flagRect = flag.getBoundingClientRect();
-            const robotRect = robot.getBoundingClientRect();
+        if (flippedCards.length === 2) {
+          attemptCount++;
+          updateMemoryStats();
 
-            const distance = Math.sqrt(
-              Math.pow(flagRect.left - robotRect.left, 2) +
-                Math.pow(flagRect.top - robotRect.top, 2)
-            );
-
-            if (distance < 100) {
-              // Close enough
-              nearCorrectFlag = true;
-
-              // Collect luggage
-              luggage.forEach((item) => {
-                if (
-                  item.getAttribute("data-country") ===
-                    currentMission.country &&
-                  !item.classList.contains("collected")
-                ) {
-                  item.classList.add("collected");
-                  luggageCollected++;
-                  countriesVisited++;
-
-                  alert(
-                    `🎉 Great job! You collected luggage from ${currentMission.country}! ${currentMission.flag}`
-                  );
-
-                  currentMissionIndex++;
-                  if (currentMissionIndex < missions.length) {
-                    updateMission();
-                  } else {
-                    alert(
-                      "🏆 Congratulations! You completed all missions! Your robot has successfully traveled the world!"
-                    );
-                  }
-                }
-              });
-            }
-          }
-        });
-
-        if (!nearCorrectFlag) {
-          alert(
-            `🤖 Move closer to the ${currentMission.country} flag ${currentMission.flag} to collect luggage!`
-          );
-        }
-
-        updateRobotStats();
-      }
-
-      function updateRobotStats() {
-        document.getElementById("luggageCount").textContent = luggageCollected;
-        document.getElementById("countriesVisited").textContent =
-          countriesVisited;
-        document.getElementById("robotEnergy").textContent = robotEnergy;
-
-        // Update new stats if elements exist
-        const scoreElement = document.getElementById("robotScore");
-        if (scoreElement) {
-          scoreElement.textContent = robotScore;
-        }
-
-        const timerElement = document.getElementById("gameTimer");
-        if (timerElement && gameStartTime) {
-          const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
-          const minutes = Math.floor(elapsed / 60);
-          const seconds = elapsed % 60;
-          timerElement.textContent = `${minutes}:${seconds
-            .toString()
-            .padStart(2, "0")}`;
-        }
-
-        // Check if energy is low
-        if (robotEnergy <= 10) {
-          const energyElement = document.getElementById("robotEnergy");
-          energyElement.style.color = "#f44336";
-          energyElement.style.animation = "pulse 1s infinite";
-        } else {
-          const energyElement = document.getElementById("robotEnergy");
-          energyElement.style.color = "";
-          energyElement.style.animation = "";
-        }
-
-        // Game over check
-        if (robotEnergy <= 0) {
-          gameStarted = false;
-          showGameMessage("Game Over! Robot ran out of energy!", "warning");
           setTimeout(() => {
-            if (confirm("Game Over! Would you like to restart?")) {
-              startRobotGame();
-            }
+            checkForMatch();
           }, 1000);
         }
       }
 
-      function updateMission() {
-        if (currentMissionIndex < missions.length) {
-          document.getElementById("currentMission").textContent =
-            missions[currentMissionIndex].description;
+      function checkForMatch() {
+        const [firstIndex, secondIndex] = flippedCards;
+        const firstCard = document.querySelector(
+          `[data-index="${firstIndex}"]`
+        );
+        const secondCard = document.querySelector(
+          `[data-index="${secondIndex}"]`
+        );
+
+        if (memoryCards[firstIndex].id === memoryCards[secondIndex].id) {
+          // Match found!
+          firstCard.classList.add("matched");
+          secondCard.classList.add("matched");
+          matchesFound++;
+          updateMemoryStats();
+
+          if (matchesFound === memoryPairs.length) {
+            setTimeout(() => {
+              alert(
+                `🎉 Congratulations! You found all matches in ${attemptCount} tries!`
+              );
+            }, 500);
+          }
         } else {
-          document.getElementById("currentMission").textContent =
-            "🎉 All missions completed! You are a master travel robot operator!";
+          // No match - flip back
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          firstCard.classList.add("hidden");
+          secondCard.classList.add("hidden");
+          firstCard.innerHTML = "?";
+          secondCard.innerHTML = "?";
         }
+
+        flippedCards = [];
+      }
+
+      function updateMemoryStats() {
+        document.getElementById("matchesFound").textContent = matchesFound;
+        document.getElementById("attemptCount").textContent = attemptCount;
+      }
+
+      function showMemoryHelp() {
+        alert(
+          "🧠 MEMORY GAME HELP 🧠\n\n" +
+            "🎯 OBJECTIVE:\n" +
+            "• Match travel emojis with their English words\n" +
+            "• Find all 8 pairs to win the game\n\n" +
+            "🎮 HOW TO PLAY:\n" +
+            "• Click on cards to flip them over\n" +
+            "• Try to remember where each card is\n" +
+            "• Match emojis with their word pairs\n" +
+            "• Complete the game in as few tries as possible!\n\n" +
+            "🏆 SCORING:\n" +
+            "• Fewer tries = better score!\n" +
+            "• Challenge yourself to improve!\n\n" +
+            "Good luck! 🍀"
+        );
       }
 
       // Keyboard shortcuts
@@ -2703,32 +1971,6 @@
         if (e.ctrlKey && e.key === "q") {
           e.preventDefault();
           generateQuestion();
-        }
-
-        // Robot game controls
-        if (gameStarted) {
-          switch (e.key) {
-            case "ArrowUp":
-              e.preventDefault();
-              moveRobot("up");
-              break;
-            case "ArrowDown":
-              e.preventDefault();
-              moveRobot("down");
-              break;
-            case "ArrowLeft":
-              e.preventDefault();
-              moveRobot("left");
-              break;
-            case "ArrowRight":
-              e.preventDefault();
-              moveRobot("right");
-              break;
-            case " ":
-              e.preventDefault();
-              collectItem();
-              break;
-          }
         }
       });
 

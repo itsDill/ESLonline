@@ -1,501 +1,1731 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
-      crossorigin="anonymous"
-    ></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Champion - ESL Online</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../css/game-ads.css" />
+    <title>ESL Team Countdown Championship</title>
     <style>
-      @keyframes bounce {
-        0%,
-        20%,
-        53%,
-        80%,
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1e3c72 0%,
+          #2a5298 50%,
+          #667eea 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      .game-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        max-width: 900px;
+        width: 95%;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+      }
+
+      .team-setup-screen {
+        display: block;
+      }
+
+      .team-vs-display {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 2rem 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .team-box {
+        flex: 1;
+        padding: 1rem;
+        margin: 0 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .team-box.active {
+        border-color: #ffd700;
+        background: rgba(255, 215, 0, 0.1);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      }
+
+      .team-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+      }
+
+      .team-score {
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+      }
+
+      .vs-text {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ff6b6b;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        animation: pulse 2s infinite;
+      }
+
+      .round-info {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .setup-form {
+        display: grid;
+        gap: 1.5rem;
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: left;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #ffd700;
+      }
+
+      .form-input {
+        padding: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1rem;
+      }
+
+      .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #ffd700;
+      }
+
+      .math-challenge-screen {
+        display: none;
+      }
+
+      .math-problem {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #ffd700;
+        margin: 2rem 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .number-tiles {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+      }
+
+      .number-tile {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        min-width: 60px;
+        text-align: center;
+      }
+
+      .celebration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #ffd700;
+        animation: confetti-fall 3s linear forwards;
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
         100% {
-          transform: translate3d(0, 0, 0);
-        }
-        40%,
-        43% {
-          transform: translate3d(0, -30px, 0);
-        }
-        70% {
-          transform: translate3d(0, -15px, 0);
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
         }
       }
-      .animate-bounce {
-        animation: bounce 1s infinite;
+
+      .timer-critical {
+        animation: timer-pulse 0.5s infinite;
+        color: #ff4444 !important;
       }
-      .bg-gradient {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+      @keyframes timer-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .skip-btn {
+        background: linear-gradient(45deg, #ff9800, #f57c00);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+      }
+
+      .skip-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .instructions {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: left;
+        line-height: 1.8;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .instructions h2 {
+        color: #ffd700;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      }
+
+      .instructions h3 {
+        color: #87ceeb;
+        margin: 1.5rem 0 0.8rem 0;
+        font-size: 1.3rem;
+      }
+
+      .instructions ul {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .instructions li {
+        margin-bottom: 0.5rem;
+      }
+
+      .example-box {
+        background: rgba(255, 215, 0, 0.2);
+        border-left: 4px solid #ffd700;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 5px;
+      }
+
+      .difficulty-levels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .difficulty-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .difficulty-card:hover {
+        border-color: #ffd700;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .difficulty-card h4 {
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+      }
+
+      .start-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      .start-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+      }
+
+      .start-btn:active {
+        transform: translateY(0);
+      }
+
+      .tips {
+        background: rgba(135, 206, 235, 0.2);
+        border-left: 4px solid #87ceeb;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 5px;
+      }
+
+      .highlight {
+        color: #ffd700;
+        font-weight: bold;
+      }
+
+      .game-screen {
+        display: none;
+      }
+
+      .letters-display {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #ffd700;
+        margin: 2rem 0;
+        letter-spacing: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .timer {
+        font-size: 4rem;
+        color: #ff6b6b;
+        margin: 1rem 0;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .word-input {
+        padding: 15px;
+        font-size: 1.2rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-align: center;
+        width: 300px;
+        margin: 1rem;
+      }
+
+      .word-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .submit-btn,
+      .back-btn {
+        background: linear-gradient(45deg, #4caf50, #45a049);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn {
+        background: linear-gradient(45deg, #757575, #616161);
+      }
+
+      .submit-btn:hover,
+      .back-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .word-list {
+        max-height: 200px;
+        overflow-y: auto;
+        margin: 1rem 0;
+        text-align: left;
+      }
+
+      .word-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border-left: 3px solid #4caf50;
+      }
+
+      .score {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+        color: #ffd700;
       }
     </style>
-      <link rel="canonical" href="https://eslfunonline.com/games/quizchamp.html" />\n  </head>
-  <body
-    class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900"
-  >
-    <div id="gameContainer"></div>
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Team Setup Screen -->
+      <div id="team-setup-screen" class="team-setup-screen">
+        <h1>⚔️ ESL Team Countdown Championship</h1>
+
+        <div class="instructions">
+          <h2>🏆 Team Battle Setup</h2>
+          <p>
+            Get ready for the ultimate collaborative word-finding showdown! Both
+            teams will work together simultaneously in each round, then compete
+            to see who found more words!
+          </p>
+
+          <div class="setup-form">
+            <div class="form-group">
+              <label for="team1-name">Team 1 Name:</label>
+              <input
+                type="text"
+                id="team1-name"
+                class="form-input"
+                placeholder="Enter Team 1 name"
+                maxlength="20"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="team2-name">Team 2 Name:</label>
+              <input
+                type="text"
+                id="team2-name"
+                class="form-input"
+                placeholder="Enter Team 2 name"
+                maxlength="20"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="num-rounds">Number of Rounds:</label>
+              <select id="num-rounds" class="form-input">
+                <option value="3">3 Rounds (Quick Match)</option>
+                <option value="5" selected>5 Rounds (Standard)</option>
+                <option value="7">7 Rounds (Championship)</option>
+                <option value="10">10 Rounds (Epic Battle)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="letter-type">Letter Generation:</label>
+              <select id="letter-type" class="form-input">
+                <option value="random" selected>Random Letters</option>
+                <option value="vowel-heavy">
+                  More Vowels (4 vowels, 5 consonants)
+                </option>
+                <option value="consonant-heavy">
+                  More Consonants (2 vowels, 7 consonants)
+                </option>
+                <option value="balanced">
+                  Balanced (3 vowels, 6 consonants)
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Game Options:</label>
+              <div class="checkbox-group">
+                <input type="checkbox" id="include-math" checked />
+                <label for="include-math">Include Math Challenges</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="extended-time" />
+                <label for="extended-time"
+                  >Extended Time (45 seconds instead of 30)</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startTeamGame()">
+          🚀 Start Championship!
+        </button>
+        <button class="back-btn" onclick="showInstructions()">
+          📖 View Rules
+        </button>
+      </div>
+
+      <!-- Instructions Screen -->
+      <div id="instructions-screen" style="display: none">
+        <h1>🎯 ESL Team Countdown Rules</h1>
+
+        <div class="instructions">
+          <h2>📖 How to Play</h2>
+
+          <h3>🎲 The Challenge</h3>
+          <p>
+            Both teams work together! You'll receive
+            <span class="highlight">9 letters</span> and have
+            <span class="highlight">30-45 seconds</span> to find as many English
+            words as possible. When time's up, both teams enter their words
+            simultaneously!
+          </p>
+
+          <div class="example-box">
+            <strong>Example:</strong> If you get the letters "HEATWORDS", you
+            could make: HEAT, WORD, HEART, WATER, WORTH, etc. Remember them all!
+          </div>
+
+          <h3>📋 New Letters Round Rules</h3>
+          <ul>
+            <li>
+              <strong>Both teams play at the same time</strong> - no more taking
+              turns!
+            </li>
+            <li>Use only the letters provided</li>
+            <li>Each letter can only be used <strong>once per word</strong></li>
+            <li>Words must be at least <strong>3 letters long</strong></li>
+            <li>Only English words count</li>
+            <li>
+              <strong>Remember your words</strong> - enter them all when time's
+              up
+            </li>
+            <li>Teams can find the same words (both get points)</li>
+            <li>
+              <strong>Word facts</strong> - learn interesting facts about some
+              words!
+            </li>
+          </ul>
+
+          <h3>🔢 Math Challenge Rules</h3>
+          <ul>
+            <li>Use 6 numbers and basic operations (+, -, ×, ÷)</li>
+            <li>Try to reach the target number</li>
+            <li>You can use each number only once</li>
+            <li>You don't have to use all numbers</li>
+            <li>Teams can choose to skip math rounds</li>
+          </ul>
+
+          <h3>🏆 Scoring</h3>
+          <div class="difficulty-levels">
+            <div class="difficulty-card">
+              <h4>Letters Round</h4>
+              <p>
+                3-4 letters: 1pt<br />5-6 letters: 2pts<br />7+ letters: 3pts
+              </p>
+            </div>
+            <div class="difficulty-card">
+              <h4>Math Challenge</h4>
+              <p>
+                Exact answer: 10pts<br />Within 5: 7pts<br />Within 10: 5pts
+              </p>
+            </div>
+            <div class="difficulty-card">
+              <h4>Championship</h4>
+              <p>Team with most points after all rounds wins!</p>
+            </div>
+          </div>
+
+          <div class="tips">
+            <h3>💡 Team Strategy Tips</h3>
+            <ul>
+              <li>
+                <strong>Both teams brainstorm together</strong> - everyone looks
+                at the same letters
+              </li>
+              <li>
+                <strong>Remember, don't write!</strong> - memorize words during
+                the timer
+              </li>
+              <li>
+                <strong>Look for different word lengths</strong> - longer words
+                = more points
+              </li>
+              <li>
+                <strong>Stay organized</strong> - think systematically through
+                the letters
+              </li>
+              <li>
+                <strong>Teams can find the same words</strong> - both get
+                points, so don't worry about duplicates
+              </li>
+              <li>
+                <strong>Choose your letter type</strong> - vowel-heavy,
+                consonant-heavy, or balanced
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="showTeamSetup()">
+          ⚔️ Back to Team Setup
+        </button>
+      </div>
+
+      <!-- Game Screen -->
+      <div id="game-screen" class="game-screen">
+        <div class="team-vs-display">
+          <div class="team-box" id="team1-box">
+            <div class="team-name" id="team1-display">Team 1</div>
+            <div class="team-score" id="team1-score">0</div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="team-box" id="team2-box">
+            <div class="team-name" id="team2-display">Team 2</div>
+            <div class="team-score" id="team2-score">0</div>
+          </div>
+        </div>
+
+        <div class="round-info">
+          <div>
+            <strong
+              >Round <span id="current-round">1</span> of
+              <span id="total-rounds">5</span></strong
+            >
+          </div>
+          <div>
+            <strong>Both Teams Playing Together</strong>
+          </div>
+          <div><strong>Letters Challenge</strong></div>
+        </div>
+
+        <h1>🔤 Both Teams: Find Words Together!</h1>
+        <div class="timer" id="timer">30</div>
+        <div class="letters-display" id="letters"></div>
+
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+          "
+        >
+          <h2 style="color: #ffd700; margin-bottom: 1rem">📝 Instructions</h2>
+          <p style="font-size: 1.2rem; line-height: 1.6">
+            Both teams work together! Look at the letters above and find as many
+            English words as possible. Remember the words you find - you'll
+            enter them all when the timer ends!
+          </p>
+          <div
+            style="
+              margin-top: 1rem;
+              padding: 1rem;
+              background: rgba(255, 215, 0, 0.2);
+              border-radius: 10px;
+            "
+          >
+            <strong style="color: #ffd700">Rules:</strong> Use only these
+            letters • Each letter used once per word • Minimum 3 letters •
+            English words only
+          </div>
+        </div>
+
+        <button class="back-btn" onclick="endGameEarly()">
+          End Game Early
+        </button>
+      </div>
+
+      <!-- Math Challenge Screen -->
+      <div id="math-screen" class="math-challenge-screen">
+        <div class="team-vs-display">
+          <div class="team-box" id="math-team1-box">
+            <div class="team-name" id="math-team1-display">Team 1</div>
+            <div class="team-score" id="math-team1-score">0</div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="team-box" id="math-team2-box">
+            <div class="team-name" id="math-team2-display">Team 2</div>
+            <div class="team-score" id="math-team2-score">0</div>
+          </div>
+        </div>
+
+        <div class="round-info">
+          <div>
+            <strong
+              >Round <span id="math-current-round">1</span> of
+              <span id="math-total-rounds">5</span></strong
+            >
+          </div>
+          <div>
+            <strong
+              ><span id="math-current-team-turn">Team 1</span>'s Turn</strong
+            >
+          </div>
+          <div><strong>Math Challenge</strong></div>
+        </div>
+
+        <h1>🔢 Numbers Challenge!</h1>
+        <div class="timer" id="math-timer">60</div>
+        <div class="math-problem">
+          Target: <span id="target-number">573</span>
+        </div>
+
+        <div class="number-tiles" id="number-tiles">
+          <div class="number-tile">25</div>
+          <div class="number-tile">50</div>
+          <div class="number-tile">75</div>
+          <div class="number-tile">100</div>
+          <div class="number-tile">3</div>
+          <div class="number-tile">6</div>
+        </div>
+
+        <input
+          type="text"
+          class="word-input"
+          id="math-input"
+          placeholder="Enter your calculation (e.g., 25 + 50 * 3)"
+          style="width: 400px"
+        />
+        <br />
+        <button class="submit-btn" onclick="submitMathAnswer()">
+          Submit Answer
+        </button>
+        <button class="skip-btn" onclick="skipMathChallenge()">
+          Skip Math Challenge
+        </button>
+
+        <div id="math-result" class="score"></div>
+      </div>
+
+      <!-- Word Entry Screen -->
+      <div id="word-entry-screen" style="display: none">
+        <h1>⏰ Time's Up! Enter Your Words</h1>
+
+        <div class="team-vs-display">
+          <div class="team-box">
+            <div class="team-name" id="entry-team1-name">Team 1</div>
+            <div class="team-score" id="entry-team1-score">0</div>
+          </div>
+          <div class="vs-text">BOTH</div>
+          <div class="team-box">
+            <div class="team-name" id="entry-team2-name">Team 2</div>
+            <div class="team-score" id="entry-team2-score">0</div>
+          </div>
+        </div>
+
+        <div class="round-info">
+          <div>
+            <strong
+              >Round <span id="entry-current-round">1</span> of
+              <span id="entry-total-rounds">5</span></strong
+            >
+          </div>
+          <div>
+            <strong>Letters were: <span id="entry-letters"></span></strong>
+          </div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            margin: 2rem 0;
+          "
+        >
+          <div
+            style="
+              flex: 1;
+              background: rgba(255, 255, 255, 0.1);
+              padding: 1.5rem;
+              border-radius: 15px;
+            "
+          >
+            <h3 style="color: #ffd700; margin-bottom: 1rem">
+              <span id="word-entry-team1-name">Team 1</span> - Enter Your Words:
+            </h3>
+            <textarea
+              id="team1-words"
+              placeholder="Enter all words you found, separated by commas or new lines..."
+              style="
+                width: 100%;
+                height: 150px;
+                padding: 10px;
+                border-radius: 8px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-size: 1rem;
+                resize: vertical;
+              "
+            ></textarea>
+            <div
+              id="team1-word-count"
+              style="margin-top: 0.5rem; color: #87ceeb"
+            >
+              Words found: 0
+            </div>
+          </div>
+
+          <div
+            style="
+              flex: 1;
+              background: rgba(255, 255, 255, 0.1);
+              padding: 1.5rem;
+              border-radius: 15px;
+            "
+          >
+            <h3 style="color: #ffd700; margin-bottom: 1rem">
+              <span id="word-entry-team2-name">Team 2</span> - Enter Your Words:
+            </h3>
+            <textarea
+              id="team2-words"
+              placeholder="Enter all words you found, separated by commas or new lines..."
+              style="
+                width: 100%;
+                height: 150px;
+                padding: 10px;
+                border-radius: 8px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-size: 1rem;
+                resize: vertical;
+              "
+            ></textarea>
+            <div
+              id="team2-word-count"
+              style="margin-top: 0.5rem; color: #87ceeb"
+            >
+              Words found: 0
+            </div>
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="processTeamWords()">
+          ✅ Process Words & Continue
+        </button>
+        <button class="back-btn" onclick="skipWordEntry()">
+          ⏭️ Skip Word Entry
+        </button>
+      </div>
+
+      <!-- Round Results Screen -->
+      <div id="round-results-screen" style="display: none">
+        <h1>� Round <span id="round-result-number">1</span> Complete!</h1>
+        <div class="team-vs-display">
+          <div class="team-box">
+            <div class="team-name" id="round-team1-name">Team 1</div>
+            <div class="team-score">
+              <span id="round-team1-points">5</span> points this round
+            </div>
+            <div style="font-size: 1rem; opacity: 0.8">
+              Total: <span id="round-team1-total">15</span>
+            </div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="team-box">
+            <div class="team-name" id="round-team2-name">Team 2</div>
+            <div class="team-score">
+              <span id="round-team2-points">7</span> points this round
+            </div>
+            <div style="font-size: 1rem; opacity: 0.8">
+              Total: <span id="round-team2-total">12</span>
+            </div>
+          </div>
+        </div>
+        <div id="round-winner-message" class="score"></div>
+        <button class="start-btn" onclick="nextRound()">Next Round</button>
+      </div>
+
+      <!-- Final Results Screen -->
+      <div id="results-screen" style="display: none">
+        <h1>🏆 Championship Complete!</h1>
+        <div class="team-vs-display">
+          <div class="team-box" id="final-winner-box">
+            <div class="team-name" id="final-team1-name">Team 1</div>
+            <div class="team-score" id="final-team1-score">45</div>
+            <div style="font-size: 1rem">🏆 CHAMPIONS! 🏆</div>
+          </div>
+          <div class="vs-text">FINAL</div>
+          <div class="team-box">
+            <div class="team-name" id="final-team2-name">Team 2</div>
+            <div class="team-score" id="final-team2-score">38</div>
+            <div style="font-size: 1rem">Great effort!</div>
+          </div>
+        </div>
+        <div id="final-message" class="score"></div>
+        <div id="round-breakdown"></div>
+        <button class="start-btn" onclick="playAgain()">
+          New Championship
+        </button>
+        <button class="back-btn" onclick="showTeamSetup()">
+          Back to Setup
+        </button>
+      </div>
+
+      <div class="celebration" id="celebration"></div>
+    </div>
 
     <script>
-      class QuizChampion {
-        constructor() {
-          this.gameState = "menu"; // menu, playing, gameOver
-          this.currentQuestion = 0;
-          this.score = 0;
-          this.timeLeft = 15;
-          this.selectedAnswer = null;
-          this.showResult = false;
-          this.streak = 0;
-          this.powerUpActive = false;
-          this.lives = 3;
-          this.timer = null;
+      let gameState = {
+        team1: { name: "Team 1", score: 0, roundScores: [] },
+        team2: { name: "Team 2", score: 0, roundScores: [] },
+        currentTeam: 1,
+        currentRound: 1,
+        totalRounds: 5,
+        includeMath: true,
+        extendedTime: false,
+        roundType: "letters", // "letters" or "math"
+        letters: [],
+        timeLeft: 30,
+        roundScore: 0,
+        wordsFound: [],
+        timer: null,
+        mathTarget: 0,
+        mathNumbers: [],
+        gamePhase: "setup", // "setup", "playing", "round-results", "final-results"
+      };
 
-          this.questions = [
-            {
-              question: "What is the largest planet in our solar system?",
-              options: ["Earth", "Jupiter", "Saturn", "Neptune"],
-              correct: 1,
-              category: "Science",
-            },
-            {
-              question:
-                "Which programming language is known as the 'language of the web'?",
-              options: ["Python", "Java", "JavaScript", "C++"],
-              correct: 2,
-              category: "Technology",
-            },
-            {
-              question: "In which year did the Titanic sink?",
-              options: ["1910", "1911", "1912", "1913"],
-              correct: 2,
-              category: "History",
-            },
-            {
-              question: "What is the capital of Australia?",
-              options: ["Sydney", "Melbourne", "Canberra", "Perth"],
-              correct: 2,
-              category: "Geography",
-            },
-            {
-              question: "Which element has the chemical symbol 'Au'?",
-              options: ["Silver", "Gold", "Aluminum", "Argon"],
-              correct: 1,
-              category: "Science",
-            },
-            {
-              question: "Who painted the Mona Lisa?",
-              options: [
-                "Van Gogh",
-                "Picasso",
-                "Leonardo da Vinci",
-                "Michelangelo",
-              ],
-              correct: 2,
-              category: "Art",
-            },
-            {
-              question: "What is the fastest land animal?",
-              options: ["Lion", "Cheetah", "Leopard", "Gazelle"],
-              correct: 1,
-              category: "Nature",
-            },
-            {
-              question: "Which planet is closest to the Sun?",
-              options: ["Venus", "Mercury", "Mars", "Earth"],
-              correct: 1,
-              category: "Science",
-            },
-          ];
+      const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
+      const vowels = "AEIOU";
+      const largeNumbers = [25, 50, 75, 100];
+      const smallNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-          this.container = document.getElementById("gameContainer");
-          this.render();
+      // Word facts database
+      const wordFacts = {
+        HELLO:
+          "The word 'hello' was first used as a greeting in 1827, popularized by telephone inventor Alexander Graham Bell.",
+        WATER:
+          "Water is the only substance that naturally exists in all three states of matter on Earth: solid, liquid, and gas.",
+        HEART:
+          "The human heart beats about 100,000 times per day, pumping about 2,000 gallons of blood.",
+        COMPUTER:
+          "The first computer bug was an actual bug - a moth found stuck in a relay in 1947 by Grace Hopper.",
+        MUSIC:
+          "Music activates more areas of the brain than any other human activity, including both hemispheres simultaneously.",
+        FRIEND:
+          "The word 'friend' comes from the Old English 'freond,' meaning 'to love' or 'to be fond of.'",
+        LIGHT:
+          "Light travels at approximately 186,282 miles per second - nothing in the universe travels faster.",
+        OCEAN:
+          "We have explored less than 5% of our oceans, making them more mysterious than outer space.",
+        DREAM:
+          "Everyone dreams, but we forget about 95% of our dreams within 5 minutes of waking up.",
+        RAINBOW:
+          "A rainbow is actually a complete circle, but we usually only see half due to the ground blocking our view.",
+        BUTTERFLY:
+          "Butterflies taste with their feet and smell with their antennae.",
+        ELEPHANT:
+          "Elephants are one of the few animals that can recognize themselves in a mirror.",
+        CHOCOLATE:
+          "Chocolate was once used as currency by the Aztecs and was more valuable than gold.",
+        PIZZA:
+          "Pizza was originally a flatbread topped with oil, garlic, and salt, served to poor people in Naples.",
+        GUITAR:
+          "The guitar has ancient origins, with early versions dating back over 4,000 years.",
+        CASTLE:
+          "Medieval castles were often built on hills for better defense and to show the lord's power.",
+        DRAGON:
+          "Dragons appear in mythologies around the world, often symbolizing power, wisdom, or chaos.",
+        FOREST:
+          "Forests produce about 28% of the oxygen on Earth, with ocean plants producing the rest.",
+        MAGIC:
+          "The word 'magic' comes from the ancient Persian word 'magus,' meaning 'wise person.'",
+        PLANET:
+          "The word 'planet' comes from the Greek word 'planetes,' meaning 'wanderer.'",
+      };
+
+      function generateLetters(letterType = "balanced") {
+        const letters = [];
+        let vowelCount = 3;
+        let consonantCount = 6;
+
+        switch (letterType) {
+          case "vowel-heavy":
+            vowelCount = 4;
+            consonantCount = 5;
+            break;
+          case "consonant-heavy":
+            vowelCount = 2;
+            consonantCount = 7;
+            break;
+          case "random":
+            vowelCount = Math.floor(Math.random() * 4) + 2; // 2-5 vowels
+            consonantCount = 9 - vowelCount;
+            break;
+          case "balanced":
+          default:
+            vowelCount = 3;
+            consonantCount = 6;
+            break;
         }
 
-        startTimer() {
-          this.timer = setInterval(() => {
-            if (
-              this.gameState === "playing" &&
-              this.timeLeft > 0 &&
-              !this.showResult
-            ) {
-              this.timeLeft--;
-              this.render();
-              if (this.timeLeft === 0) {
-                this.handleTimeUp();
-              }
-            }
-          }, 1000);
+        // Add vowels
+        for (let i = 0; i < vowelCount; i++) {
+          letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
+        }
+        // Add consonants
+        for (let i = 0; i < consonantCount; i++) {
+          letters.push(
+            consonants[Math.floor(Math.random() * consonants.length)]
+          );
+        }
+        // Shuffle the array
+        return letters.sort(() => Math.random() - 0.5);
+      }
+
+      function generateMathChallenge() {
+        const numbers = [];
+        // Add 2 large numbers
+        for (let i = 0; i < 2; i++) {
+          numbers.push(
+            largeNumbers[Math.floor(Math.random() * largeNumbers.length)]
+          );
+        }
+        // Add 4 small numbers
+        for (let i = 0; i < 4; i++) {
+          numbers.push(
+            smallNumbers[Math.floor(Math.random() * smallNumbers.length)]
+          );
         }
 
-        stopTimer() {
-          if (this.timer) {
-            clearInterval(this.timer);
-            this.timer = null;
-          }
-        }
+        const target = Math.floor(Math.random() * 900) + 100; // Target between 100-999
 
-        startGame() {
-          this.gameState = "playing";
-          this.currentQuestion = 0;
-          this.score = 0;
-          this.timeLeft = 15;
-          this.selectedAnswer = null;
-          this.showResult = false;
-          this.streak = 0;
-          this.powerUpActive = false;
-          this.lives = 3;
-          this.render();
-          this.startTimer();
-        }
+        return { numbers: numbers.sort(() => Math.random() - 0.5), target };
+      }
 
-        handleAnswerSelect(answerIndex) {
-          if (this.showResult) return;
+      function showTeamSetup() {
+        hideAllScreens();
+        document.getElementById("team-setup-screen").style.display = "block";
+        document.getElementById("team1-name").focus();
+      }
 
-          this.selectedAnswer = answerIndex;
-          this.showResult = true;
+      function showInstructions() {
+        hideAllScreens();
+        document.getElementById("instructions-screen").style.display = "block";
+      }
 
-          const isCorrect =
-            answerIndex === this.questions[this.currentQuestion].correct;
+      function hideAllScreens() {
+        const screens = [
+          "team-setup-screen",
+          "instructions-screen",
+          "game-screen",
+          "math-screen",
+          "word-entry-screen",
+          "round-results-screen",
+          "results-screen",
+        ];
+        screens.forEach((screen) => {
+          document.getElementById(screen).style.display = "none";
+        });
+      }
 
-          if (isCorrect) {
-            const basePoints = this.powerUpActive ? 200 : 100;
-            const bonusPoints = Math.max(0, this.timeLeft * 5);
-            const streakBonus = this.streak >= 3 ? 50 : 0;
-            this.score += basePoints + bonusPoints + streakBonus;
-            this.streak++;
-          } else {
-            this.streak = 0;
-            this.lives--;
-          }
+      function startTeamGame() {
+        // Get team names
+        const team1Name =
+          document.getElementById("team1-name").value.trim() || "Team 1";
+        const team2Name =
+          document.getElementById("team2-name").value.trim() || "Team 2";
+        const numRounds = parseInt(document.getElementById("num-rounds").value);
+        const includeMath = document.getElementById("include-math").checked;
+        const extendedTime = document.getElementById("extended-time").checked;
+        const letterType = document.getElementById("letter-type").value;
 
-          this.render();
+        // Initialize game state
+        gameState = {
+          team1: { name: team1Name, score: 0, roundScores: [], roundWords: [] },
+          team2: { name: team2Name, score: 0, roundScores: [], roundWords: [] },
+          currentTeam: 1,
+          currentRound: 1,
+          totalRounds: numRounds,
+          includeMath: includeMath,
+          extendedTime: extendedTime,
+          letterType: letterType,
+          roundType: "letters",
+          letters: [],
+          timeLeft: extendedTime ? 45 : 30,
+          roundScore: 0,
+          wordsFound: [],
+          timer: null,
+          mathTarget: 0,
+          mathNumbers: [],
+          gamePhase: "playing",
+        };
 
-          setTimeout(() => {
-            if (
-              this.currentQuestion + 1 < this.questions.length &&
-              (isCorrect || this.lives > 0)
-            ) {
-              this.nextQuestion();
-            } else {
-              this.endGame();
-            }
-          }, 2000);
-        }
+        startRound();
+      }
 
-        handleTimeUp() {
-          this.showResult = true;
-          this.streak = 0;
-          this.lives--;
-          this.render();
-
-          setTimeout(() => {
-            if (
-              this.currentQuestion + 1 < this.questions.length &&
-              this.lives > 0
-            ) {
-              this.nextQuestion();
-            } else {
-              this.endGame();
-            }
-          }, 2000);
-        }
-
-        nextQuestion() {
-          this.currentQuestion++;
-          this.timeLeft = 15;
-          this.selectedAnswer = null;
-          this.showResult = false;
-          this.powerUpActive = false;
-          this.render();
-        }
-
-        endGame() {
-          this.gameState = "gameOver";
-          this.stopTimer();
-          this.render();
-        }
-
-        usePowerUp() {
-          if (!this.powerUpActive && this.streak >= 2) {
-            this.powerUpActive = true;
-            this.timeLeft = Math.min(this.timeLeft + 10, 25);
-            this.render();
-          }
-        }
-
-        getScoreRating() {
-          const percentage = (this.score / (this.questions.length * 100)) * 100;
-          if (percentage >= 90)
-            return { rating: "LEGENDARY!", color: "text-yellow-400" };
-          if (percentage >= 75)
-            return { rating: "AMAZING!", color: "text-green-400" };
-          if (percentage >= 60)
-            return { rating: "GREAT!", color: "text-blue-400" };
-          if (percentage >= 45)
-            return { rating: "GOOD!", color: "text-purple-400" };
-          return { rating: "NICE TRY!", color: "text-red-400" };
-        }
-
-        renderMenu() {
-          return `
-                    <div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
-                        <div class="text-center space-y-8">
-                            <div class="relative">
-                                <h1 class="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 drop-shadow-2xl animate-bounce">
-                                    QUIZ CHAMPION
-                                </h1>
-                                <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 rounded-lg blur opacity-20"></div>
-                            </div>
-                            
-                            <p class="text-2xl text-white/80 max-w-md mx-auto leading-relaxed">
-                                Test your knowledge across multiple categories in this high-energy quiz challenge!
-                            </p>
-                            
-                            <div class="space-y-4">
-                                <div class="text-white/60 space-y-2">
-                                    <p>🎯 Answer quickly for bonus points</p>
-                                    <p>⚡ Build streaks for power-ups</p>
-                                    <p>💎 3 lives to prove your knowledge</p>
-                                </div>
-                            </div>
-                            
-                            <button
-                                onclick="game.startGame()"
-                                class="px-12 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-2xl font-bold rounded-full hover:from-pink-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-2xl"
-                            >
-                                START GAME
-                            </button>
-                        </div>
-                    </div>
-                `;
-        }
-
-        renderGameOver() {
-          const { rating, color } = this.getScoreRating();
-          return `
-                    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
-                        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full text-center space-y-6 border border-white/20">
-                            <h2 class="${color} text-4xl font-black animate-bounce">
-                                GAME OVER!
-                            </h2>
-                            
-                            <div class="${color} text-6xl font-black">
-                                ${rating}
-                            </div>
-                            
-                            <div class="space-y-4">
-                                <div class="text-3xl font-bold text-white">
-                                    Final Score: <span class="text-yellow-400">${
-                                      this.score
-                                    }</span>
-                                </div>
-                                <div class="text-white/80">
-                                    Questions: ${this.currentQuestion + 1}/${
-            this.questions.length
-          }
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-3">
-                                <button
-                                    onclick="game.startGame()"
-                                    class="w-full px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white text-xl font-bold rounded-full hover:from-green-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300"
-                                >
-                                    PLAY AGAIN
-                                </button>
-                                <button
-                                    onclick="game.gameState='menu'; game.render();"
-                                    class="w-full px-6 py-3 bg-white/20 text-white text-lg font-semibold rounded-full hover:bg-white/30 transition-all duration-300"
-                                >
-                                    Main Menu
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-        }
-
-        renderGame() {
-          const question = this.questions[this.currentQuestion];
-          const livesHtml = Array.from(
-            { length: this.lives },
-            () => '<span class="text-red-500 text-xl">❤️</span>'
-          ).join("");
-
-          let optionsHtml = "";
-          question.options.forEach((option, index) => {
-            let buttonClass =
-              "p-4 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 ";
-
-            if (this.showResult) {
-              if (index === question.correct) {
-                buttonClass += "bg-green-500 text-white";
-              } else if (
-                index === this.selectedAnswer &&
-                index !== question.correct
-              ) {
-                buttonClass += "bg-red-500 text-white";
-              } else {
-                buttonClass += "bg-white/20 text-white/60";
-              }
-            } else {
-              buttonClass +=
-                this.selectedAnswer === index
-                  ? "bg-blue-500 text-white"
-                  : "bg-white/20 text-white hover:bg-white/30";
-            }
-
-            optionsHtml += `
-                        <button
-                            onclick="game.handleAnswerSelect(${index})"
-                            class="${buttonClass}"
-                            ${this.showResult ? "disabled" : ""}
-                        >
-                            ${option}
-                        </button>
-                    `;
-          });
-
-          let resultHtml = "";
-          if (this.showResult) {
-            if (this.selectedAnswer === question.correct) {
-              resultHtml = `
-                            <div class="text-green-400 text-2xl font-bold animate-bounce">
-                                ✅ CORRECT! +${
-                                  this.powerUpActive ? 200 : 100
-                                } points
-                                ${
-                                  this.timeLeft > 0
-                                    ? `+${this.timeLeft * 5} time bonus!`
-                                    : ""
-                                }
-                                ${this.streak >= 3 ? " +50 streak bonus!" : ""}
-                            </div>
-                        `;
-            } else if (this.selectedAnswer !== null) {
-              resultHtml = `
-                            <div class="text-red-400 text-2xl font-bold">
-                                ❌ INCORRECT!
-                            </div>
-                        `;
-            } else {
-              resultHtml = `
-                            <div class="text-yellow-400 text-2xl font-bold">
-                                ⏰ TIME'S UP!
-                            </div>
-                        `;
-            }
-          }
-
-          const powerUpButton =
-            this.streak >= 2 && !this.powerUpActive
-              ? `
-                    <button
-                        onclick="game.usePowerUp()"
-                        class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 rounded-full text-sm font-bold hover:scale-105 transform transition-all"
-                    >
-                        ⚡ POWER UP
-                    </button>
-                `
-              : "";
-
-          return `
-                    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
-                        <div class="max-w-4xl mx-auto space-y-6">
-                            <!-- Header -->
-                            <div class="flex justify-between items-center bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
-                                <div class="flex items-center space-x-4">
-                                    <div class="text-white font-bold">
-                                        Score: <span class="text-yellow-400 text-xl">${
-                                          this.score
-                                        }</span>
-                                    </div>
-                                    <div class="text-white font-bold">
-                                        Lives: ${livesHtml}
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center space-x-4">
-                                    <div class="text-white font-bold">
-                                        Streak: <span class="text-green-400">${
-                                          this.streak
-                                        }</span>
-                                    </div>
-                                    <div class="text-2xl font-bold px-4 py-2 rounded-full ${
-                                      this.timeLeft <= 5
-                                        ? "bg-red-500"
-                                        : "bg-blue-500"
-                                    } text-white">
-                                        ${this.timeLeft}s
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Question Card -->
-                            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                                <div class="text-center space-y-6">
-                                    <div class="flex justify-between items-center">
-                                        <span class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                                            ${question.category}
-                                        </span>
-                                        <span class="text-white/60 font-semibold">
-                                            Question ${
-                                              this.currentQuestion + 1
-                                            }/${this.questions.length}
-                                        </span>
-                                        ${powerUpButton}
-                                    </div>
-                                    
-                                    <h3 class="text-3xl font-bold text-white leading-relaxed">
-                                        ${question.question}
-                                    </h3>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        ${optionsHtml}
-                                    </div>
-                                    
-                                    ${resultHtml}
-                                </div>
-                            </div>
-
-                            <!-- Progress Bar -->
-                            <div class="bg-white/20 rounded-full h-3">
-                                <div
-                                    class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500"
-                                    style="width: ${
-                                      ((this.currentQuestion + 1) /
-                                        this.questions.length) *
-                                      100
-                                    }%"
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-        }
-
-        render() {
-          if (this.gameState === "menu") {
-            this.container.innerHTML = this.renderMenu();
-          } else if (this.gameState === "gameOver") {
-            this.container.innerHTML = this.renderGameOver();
-          } else {
-            this.container.innerHTML = this.renderGame();
-          }
+      function startRound() {
+        // Determine round type (alternate between letters and math if math is enabled)
+        if (gameState.includeMath && gameState.currentRound % 2 === 0) {
+          startMathRound();
+        } else {
+          startLettersRound();
         }
       }
 
-      // Initialize game when page loads
-      let game;
-      document.addEventListener("DOMContentLoaded", () => {
-        game = new QuizChampion();
+      function startLettersRound() {
+        gameState.roundType = "letters";
+        gameState.letters = generateLetters(gameState.letterType);
+        gameState.timeLeft = gameState.extendedTime ? 45 : 30;
+        gameState.roundScore = 0;
+        gameState.wordsFound = [];
+
+        hideAllScreens();
+        document.getElementById("game-screen").style.display = "block";
+
+        updateTeamDisplay();
+        updateRoundInfo();
+
+        document.getElementById("letters").textContent =
+          gameState.letters.join(" ");
+
+        startTimer("timer");
+      }
+
+      function startMathRound() {
+        gameState.roundType = "math";
+        const mathChallenge = generateMathChallenge();
+        gameState.mathNumbers = mathChallenge.numbers;
+        gameState.mathTarget = mathChallenge.target;
+        gameState.timeLeft = 60; // Math rounds get more time
+        gameState.roundScore = 0;
+
+        hideAllScreens();
+        document.getElementById("math-screen").style.display = "block";
+
+        updateMathTeamDisplay();
+        updateMathRoundInfo();
+
+        document.getElementById("target-number").textContent =
+          gameState.mathTarget;
+
+        const tilesContainer = document.getElementById("number-tiles");
+        tilesContainer.innerHTML = "";
+        gameState.mathNumbers.forEach((num) => {
+          const tile = document.createElement("div");
+          tile.className = "number-tile";
+          tile.textContent = num;
+          tilesContainer.appendChild(tile);
+        });
+
+        document.getElementById("math-input").value = "";
+        document.getElementById("math-result").textContent = "";
+        document.getElementById("math-input").focus();
+
+        startTimer("math-timer");
+      }
+
+      function updateTeamDisplay() {
+        document.getElementById("team1-display").textContent =
+          gameState.team1.name;
+        document.getElementById("team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("team2-display").textContent =
+          gameState.team2.name;
+        document.getElementById("team2-score").textContent =
+          gameState.team2.score;
+
+        // Both teams are active for letters rounds
+        if (gameState.roundType === "letters") {
+          document.getElementById("team1-box").classList.add("active");
+          document.getElementById("team2-box").classList.add("active");
+        } else {
+          // For math rounds, still highlight current team
+          document
+            .getElementById("team1-box")
+            .classList.toggle("active", gameState.currentTeam === 1);
+          document
+            .getElementById("team2-box")
+            .classList.toggle("active", gameState.currentTeam === 2);
+        }
+      }
+
+      function updateMathTeamDisplay() {
+        document.getElementById("math-team1-display").textContent =
+          gameState.team1.name;
+        document.getElementById("math-team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("math-team2-display").textContent =
+          gameState.team2.name;
+        document.getElementById("math-team2-score").textContent =
+          gameState.team2.score;
+
+        // Highlight current team
+        document
+          .getElementById("math-team1-box")
+          .classList.toggle("active", gameState.currentTeam === 1);
+        document
+          .getElementById("math-team2-box")
+          .classList.toggle("active", gameState.currentTeam === 2);
+      }
+
+      function updateRoundInfo() {
+        document.getElementById("current-round").textContent =
+          gameState.currentRound;
+        document.getElementById("total-rounds").textContent =
+          gameState.totalRounds;
+        const currentTeam =
+          gameState.currentTeam === 1
+            ? gameState.team1.name
+            : gameState.team2.name;
+        document.getElementById("current-team-turn").textContent = currentTeam;
+      }
+
+      function updateMathRoundInfo() {
+        document.getElementById("math-current-round").textContent =
+          gameState.currentRound;
+        document.getElementById("math-total-rounds").textContent =
+          gameState.totalRounds;
+        const currentTeam =
+          gameState.currentTeam === 1
+            ? gameState.team1.name
+            : gameState.team2.name;
+        document.getElementById("math-current-team-turn").textContent =
+          currentTeam;
+      }
+
+      function startTimer(timerId) {
+        const timerElement = document.getElementById(timerId);
+        timerElement.textContent = gameState.timeLeft;
+        timerElement.classList.remove("timer-critical");
+
+        gameState.timer = setInterval(() => {
+          gameState.timeLeft--;
+          timerElement.textContent = gameState.timeLeft;
+
+          if (gameState.timeLeft <= 10) {
+            timerElement.classList.add("timer-critical");
+          }
+
+          if (gameState.timeLeft <= 0) {
+            endRound();
+          }
+        }, 1000);
+      }
+
+      function submitMathAnswer() {
+        const input = document.getElementById("math-input");
+        const expression = input.value.trim();
+
+        if (!expression) {
+          alert("Please enter a calculation!");
+          return;
+        }
+
+        try {
+          // Basic validation - only allow numbers and basic operators
+          if (!/^[\d+\-*/() ]+$/.test(expression)) {
+            throw new Error("Only use numbers and +, -, *, /, () operators");
+          }
+
+          const result = eval(expression);
+          const target = gameState.mathTarget;
+          const difference = Math.abs(result - target);
+
+          let points = 0;
+          let feedback = "";
+
+          if (difference === 0) {
+            points = 10;
+            feedback = `🎯 PERFECT! You got exactly ${target}!`;
+          } else if (difference <= 5) {
+            points = 7;
+            feedback = `🎊 Excellent! ${result} is within 5 of ${target}!`;
+          } else if (difference <= 10) {
+            points = 5;
+            feedback = `👏 Good try! ${result} is within 10 of ${target}!`;
+          } else {
+            points = 0;
+            feedback = `❌ ${result} is too far from ${target}. Try again!`;
+          }
+
+          gameState.roundScore += points;
+          document.getElementById("math-result").innerHTML = `
+            <div>${feedback}</div>
+            <div>Round Score: ${gameState.roundScore}</div>
+          `;
+
+          if (points > 0) {
+            setTimeout(endRound, 2000);
+          }
+        } catch (error) {
+          alert("Invalid calculation! Please check your expression.");
+        }
+      }
+
+      function canMakeWord(word, availableLetters) {
+        const letterCount = {};
+        availableLetters.forEach((letter) => {
+          letterCount[letter] = (letterCount[letter] || 0) + 1;
+        });
+
+        for (let letter of word) {
+          if (!letterCount[letter] || letterCount[letter] === 0) {
+            return false;
+          }
+          letterCount[letter]--;
+        }
+        return true;
+      }
+
+      function skipMathChallenge() {
+        if (confirm("Are you sure you want to skip the math challenge?")) {
+          endRound();
+        }
+      }
+
+      function endRound() {
+        clearInterval(gameState.timer);
+
+        if (gameState.roundType === "letters") {
+          showWordEntryScreen();
+        } else {
+          // For math rounds, proceed as before
+          const currentTeam =
+            gameState.currentTeam === 1 ? gameState.team1 : gameState.team2;
+          currentTeam.score += gameState.roundScore;
+          currentTeam.roundScores.push(gameState.roundScore);
+          showRoundResults();
+        }
+      }
+
+      function showWordEntryScreen() {
+        hideAllScreens();
+        document.getElementById("word-entry-screen").style.display = "block";
+
+        // Update team names and scores
+        document.getElementById("entry-team1-name").textContent =
+          gameState.team1.name;
+        document.getElementById("entry-team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("entry-team2-name").textContent =
+          gameState.team2.name;
+        document.getElementById("entry-team2-score").textContent =
+          gameState.team2.score;
+
+        document.getElementById("word-entry-team1-name").textContent =
+          gameState.team1.name;
+        document.getElementById("word-entry-team2-name").textContent =
+          gameState.team2.name;
+
+        document.getElementById("entry-current-round").textContent =
+          gameState.currentRound;
+        document.getElementById("entry-total-rounds").textContent =
+          gameState.totalRounds;
+        document.getElementById("entry-letters").textContent =
+          gameState.letters.join(" ");
+
+        // Clear previous entries
+        document.getElementById("team1-words").value = "";
+        document.getElementById("team2-words").value = "";
+        document.getElementById("team1-word-count").textContent =
+          "Words found: 0";
+        document.getElementById("team2-word-count").textContent =
+          "Words found: 0";
+
+        // Add event listeners for word counting
+        document
+          .getElementById("team1-words")
+          .addEventListener("input", updateWordCount);
+        document
+          .getElementById("team2-words")
+          .addEventListener("input", updateWordCount);
+      }
+
+      function updateWordCount(event) {
+        const textarea = event.target;
+        const teamNumber = textarea.id.includes("team1") ? "1" : "2";
+        const words = textarea.value
+          .trim()
+          .split(/[\n,]+/)
+          .filter((word) => word.trim().length >= 3);
+        document.getElementById(
+          `team${teamNumber}-word-count`
+        ).textContent = `Words found: ${words.length}`;
+      }
+
+      function processTeamWords() {
+        const team1Input = document.getElementById("team1-words").value;
+        const team2Input = document.getElementById("team2-words").value;
+
+        const team1Words = team1Input
+          .trim()
+          .split(/[\n,]+/)
+          .map((word) => word.trim().toUpperCase())
+          .filter((word) => word.length >= 3);
+
+        const team2Words = team2Input
+          .trim()
+          .split(/[\n,]+/)
+          .map((word) => word.trim().toUpperCase())
+          .filter((word) => word.length >= 3);
+
+        // Validate and score words
+        const team1ValidWords = validateAndScoreWords(team1Words);
+        const team2ValidWords = validateAndScoreWords(team2Words);
+
+        // Update scores
+        gameState.team1.score += team1ValidWords.totalScore;
+        gameState.team1.roundScores.push(team1ValidWords.totalScore);
+        gameState.team1.roundWords.push(team1ValidWords.validWords);
+
+        gameState.team2.score += team2ValidWords.totalScore;
+        gameState.team2.roundScores.push(team2ValidWords.totalScore);
+        gameState.team2.roundWords.push(team2ValidWords.validWords);
+
+        // Store results for showing in round results
+        gameState.lastRoundResults = {
+          team1: team1ValidWords,
+          team2: team2ValidWords,
+        };
+
+        showRoundResults();
+      }
+
+      function validateAndScoreWords(words) {
+        const validWords = [];
+        const invalidWords = [];
+        let totalScore = 0;
+
+        words.forEach((word) => {
+          if (word.length < 3) {
+            invalidWords.push({
+              word,
+              reason: "Too short (minimum 3 letters)",
+            });
+            return;
+          }
+
+          if (!canMakeWord(word, gameState.letters)) {
+            invalidWords.push({
+              word,
+              reason: "Cannot be made from available letters",
+            });
+            return;
+          }
+
+          // Calculate points
+          let points = 1;
+          if (word.length >= 7) points = 3;
+          else if (word.length >= 5) points = 2;
+
+          validWords.push({ word, points, fact: wordFacts[word] || null });
+          totalScore += points;
+        });
+
+        return { validWords, invalidWords, totalScore };
+      }
+
+      function skipWordEntry() {
+        if (
+          confirm(
+            "Skip word entry? Both teams will get 0 points for this round."
+          )
+        ) {
+          gameState.team1.roundScores.push(0);
+          gameState.team2.roundScores.push(0);
+          gameState.team1.roundWords.push([]);
+          gameState.team2.roundWords.push([]);
+
+          gameState.lastRoundResults = {
+            team1: { validWords: [], invalidWords: [], totalScore: 0 },
+            team2: { validWords: [], invalidWords: [], totalScore: 0 },
+          };
+
+          showRoundResults();
+        }
+      }
+
+      function showRoundResults() {
+        hideAllScreens();
+        document.getElementById("round-results-screen").style.display = "block";
+
+        document.getElementById("round-result-number").textContent =
+          gameState.currentRound;
+
+        if (gameState.lastRoundResults) {
+          const team1Results = gameState.lastRoundResults.team1;
+          const team2Results = gameState.lastRoundResults.team2;
+
+          document.getElementById("round-team1-name").textContent =
+            gameState.team1.name;
+          document.getElementById("round-team1-points").textContent =
+            team1Results.totalScore;
+          document.getElementById("round-team1-total").textContent =
+            gameState.team1.score;
+
+          document.getElementById("round-team2-name").textContent =
+            gameState.team2.name;
+          document.getElementById("round-team2-points").textContent =
+            team2Results.totalScore;
+          document.getElementById("round-team2-total").textContent =
+            gameState.team2.score;
+
+          // Create detailed results display
+          let resultsHTML = "";
+
+          if (team1Results.totalScore > team2Results.totalScore) {
+            resultsHTML += `<h3>🏆 ${gameState.team1.name} wins this round!</h3>`;
+          } else if (team2Results.totalScore > team1Results.totalScore) {
+            resultsHTML += `<h3>🏆 ${gameState.team2.name} wins this round!</h3>`;
+          } else {
+            resultsHTML += `<h3>🤝 It's a tie this round!</h3>`;
+          }
+
+          // Show word details with facts
+          resultsHTML += `<div style="display: flex; gap: 2rem; margin-top: 2rem;">`;
+
+          // Team 1 results
+          resultsHTML += `<div style="flex: 1; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">`;
+          resultsHTML += `<h4 style="color: #ffd700;">${gameState.team1.name} Words:</h4>`;
+          if (team1Results.validWords.length > 0) {
+            team1Results.validWords.forEach((wordObj) => {
+              resultsHTML += `<div style="margin: 0.5rem 0; padding: 0.5rem; background: rgba(76,175,80,0.2); border-radius: 5px;">`;
+              resultsHTML += `<strong>${wordObj.word}</strong> (+${wordObj.points} pts)`;
+              if (wordObj.fact) {
+                resultsHTML += `<div style="font-size: 0.9rem; color: #87ceeb; margin-top: 0.3rem;">💡 ${wordObj.fact}</div>`;
+              }
+              resultsHTML += `</div>`;
+            });
+          } else {
+            resultsHTML += `<div style="color: #ff6b6b;">No valid words found</div>`;
+          }
+          resultsHTML += `</div>`;
+
+          // Team 2 results
+          resultsHTML += `<div style="flex: 1; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">`;
+          resultsHTML += `<h4 style="color: #ffd700;">${gameState.team2.name} Words:</h4>`;
+          if (team2Results.validWords.length > 0) {
+            team2Results.validWords.forEach((wordObj) => {
+              resultsHTML += `<div style="margin: 0.5rem 0; padding: 0.5rem; background: rgba(76,175,80,0.2); border-radius: 5px;">`;
+              resultsHTML += `<strong>${wordObj.word}</strong> (+${wordObj.points} pts)`;
+              if (wordObj.fact) {
+                resultsHTML += `<div style="font-size: 0.9rem; color: #87ceeb; margin-top: 0.3rem;">💡 ${wordObj.fact}</div>`;
+              }
+              resultsHTML += `</div>`;
+            });
+          } else {
+            resultsHTML += `<div style="color: #ff6b6b;">No valid words found</div>`;
+          }
+          resultsHTML += `</div>`;
+          resultsHTML += `</div>`;
+
+          document.getElementById("round-winner-message").innerHTML =
+            resultsHTML;
+
+          if (team1Results.totalScore > 10 || team2Results.totalScore > 10) {
+            createCelebration();
+          }
+        } else {
+          // Fallback for math rounds or other cases
+          const team1Points =
+            gameState.currentTeam === 1 ? gameState.roundScore : 0;
+          const team2Points =
+            gameState.currentTeam === 2 ? gameState.roundScore : 0;
+
+          document.getElementById("round-team1-name").textContent =
+            gameState.team1.name;
+          document.getElementById("round-team1-points").textContent =
+            team1Points;
+          document.getElementById("round-team1-total").textContent =
+            gameState.team1.score;
+
+          document.getElementById("round-team2-name").textContent =
+            gameState.team2.name;
+          document.getElementById("round-team2-points").textContent =
+            team2Points;
+          document.getElementById("round-team2-total").textContent =
+            gameState.team2.score;
+
+          const currentTeamName =
+            gameState.currentTeam === 1
+              ? gameState.team1.name
+              : gameState.team2.name;
+          document.getElementById(
+            "round-winner-message"
+          ).innerHTML = `<h3>${currentTeamName} scored ${gameState.roundScore} points this round!</h3>`;
+        }
+      }
+
+      function nextRound() {
+        gameState.currentRound++;
+
+        if (gameState.currentRound > gameState.totalRounds) {
+          showFinalResults();
+        } else {
+          startRound();
+        }
+      }
+
+      function showFinalResults() {
+        hideAllScreens();
+        document.getElementById("results-screen").style.display = "block";
+
+        const winner =
+          gameState.team1.score > gameState.team2.score
+            ? gameState.team1
+            : gameState.team2;
+        const loser =
+          gameState.team1.score > gameState.team2.score
+            ? gameState.team2
+            : gameState.team1;
+
+        document.getElementById("final-team1-name").textContent = winner.name;
+        document.getElementById("final-team1-score").textContent = winner.score;
+        document.getElementById("final-team2-name").textContent = loser.name;
+        document.getElementById("final-team2-score").textContent = loser.score;
+
+        const winnerBox = document.getElementById("final-winner-box");
+        winnerBox.innerHTML = `
+          <div class="team-name">${winner.name}</div>
+          <div class="team-score">${winner.score}</div>
+          <div style="font-size: 1rem;">🏆 CHAMPIONS! 🏆</div>
+        `;
+
+        let message = "";
+        const scoreDiff = Math.abs(
+          gameState.team1.score - gameState.team2.score
+        );
+        if (scoreDiff > 20) {
+          message = `🌟 Dominant victory for ${winner.name}!`;
+        } else if (scoreDiff > 10) {
+          message = `🎉 Great win for ${winner.name}!`;
+        } else {
+          message = `🔥 What an incredibly close match!`;
+        }
+
+        document.getElementById(
+          "final-message"
+        ).innerHTML = `<h3>${message}</h3>`;
+
+        // Create round breakdown
+        let breakdown = "<h3>Round by Round:</h3>";
+        for (let i = 0; i < gameState.totalRounds; i++) {
+          const team1Round = gameState.team1.roundScores[i] || 0;
+          const team2Round = gameState.team2.roundScores[i] || 0;
+          breakdown += `<div>Round ${i + 1}: ${
+            gameState.team1.name
+          } ${team1Round} - ${team2Round} ${gameState.team2.name}</div>`;
+        }
+        document.getElementById("round-breakdown").innerHTML = breakdown;
+
+        createCelebration();
+      }
+
+      function createCelebration() {
+        const celebration = document.getElementById("celebration");
+        celebration.innerHTML = "";
+
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + "%";
+          confetti.style.backgroundColor = [
+            "#ffd700",
+            "#ff6b6b",
+            "#4ecdc4",
+            "#45b7d1",
+            "#96ceb4",
+          ][Math.floor(Math.random() * 5)];
+          confetti.style.animationDelay = Math.random() * 3 + "s";
+          celebration.appendChild(confetti);
+        }
+
+        setTimeout(() => {
+          celebration.innerHTML = "";
+        }, 4000);
+      }
+
+      function playAgain() {
+        showTeamSetup();
+      }
+
+      function endGameEarly() {
+        if (confirm("Are you sure you want to end the game early?")) {
+          clearInterval(gameState.timer);
+          showFinalResults();
+        }
+      }
+
+      // Event listeners
+      document.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          if (
+            document.getElementById("math-screen").style.display === "block"
+          ) {
+            submitMathAnswer();
+          }
+        }
       });
+
+      // Initialize
+      showTeamSetup();
     </script>
-    <script src="../js/game-ads.js"></script>
   </body>
 </html>
