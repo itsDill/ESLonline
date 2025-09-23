@@ -132,6 +132,13 @@
         color: var(--text-primary);
         background: var(--bg-primary);
         transition: all 0.3s ease;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Ensure no gaps between header and hero */
+      header + .hero {
+        margin-top: 0;
       }
 
       .container {
@@ -150,6 +157,8 @@
         text-align: center;
         background: none;
         overflow: hidden;
+        margin-top: 0;
+        padding-top: 0;
       }
 
       .hero-bg {
@@ -196,9 +205,10 @@
       /* Page Header */
       .page-header {
         background: var(--bg-secondary, #f9fafb);
-        padding: 3rem 0 2rem 0;
+        padding: 2rem 0 1.5rem 0;
         text-align: center;
         border-bottom: 1px solid var(--border-color, #e5e7eb);
+        margin-top: 0;
       }
 
       .page-header-content {
@@ -249,7 +259,7 @@
 
       /* Main Content */
       .main-content {
-        padding: 4rem 0;
+        padding: 3rem 0;
       }
 
       .content-grid {
@@ -268,9 +278,9 @@
       .sidebar-section {
         background: var(--bg-primary);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
         box-shadow: var(--shadow-sm);
       }
 
@@ -815,11 +825,11 @@
       /* Stats Section */
       .stats-section {
         text-align: center;
-        padding: 3rem 0;
+        padding: 2.5rem 0;
         background: var(--gradient-primary);
         color: white;
         border-radius: 16px;
-        margin: 3rem 0;
+        margin: 2rem 0 3rem 0;
       }
 
       .stats-grid {
@@ -842,6 +852,129 @@
       .stat-label {
         font-size: 0.9rem;
         opacity: 0.9;
+      }
+
+      /* Related Resources Section */
+      .related-resources-section {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 3rem;
+        margin: 3rem 0;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .resource-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .resource-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--gradient-primary);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+      }
+
+      .resource-card:hover,
+      .resource-card:focus {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+      }
+
+      .resource-card:hover::before,
+      .resource-card:focus::before {
+        transform: scaleX(1);
+      }
+
+      .card-footer {
+        margin-top: auto;
+        padding-top: 1.5rem;
+      }
+
+      .card-features {
+        display: flex;
+        gap: 0.75rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+      }
+
+      .feature-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .feature-tag i {
+        font-size: 0.7rem;
+        color: var(--primary-color);
+      }
+
+      .resource-card:hover .feature-tag {
+        background: var(--primary-light);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .resource-card:hover .feature-tag i {
+        transform: scale(1.1);
+      }
+
+      .resources-cta {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .resources-cta p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .inline-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .inline-link:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
       }
 
       /* CTA Section */
@@ -1039,7 +1172,12 @@
           grid-template-columns: 1fr;
         }
 
-        .writing-section {
+        .resources-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .writing-section,
+        .related-resources-section {
           padding: 2rem;
         }
 
@@ -1075,7 +1213,8 @@
           padding: 2rem 0;
         }
 
-        .writing-section {
+        .writing-section,
+        .related-resources-section {
           padding: 1.5rem;
         }
 
@@ -1085,6 +1224,18 @@
 
         .interactive-section {
           padding: 2rem;
+        }
+
+        .card-features {
+          justify-content: center;
+        }
+
+        .resources-cta {
+          padding: 1rem;
+        }
+
+        .resources-grid {
+          gap: 1.5rem;
         }
       }
     </style>
@@ -1209,6 +1360,7 @@
         src="../images/11.png"
         alt="Writing Fundamentals Hero"
         class="hero-bg"
+        loading="eager"
       />
       <div class="hero-content">
         <h1 class="hero-title">Master Writing Fundamentals</h1>
@@ -1989,6 +2141,89 @@
               </button>
             </section>
 
+            <!-- Related Writing Resources Section -->
+            <section class="related-resources-section">
+              <div class="section-header">
+                <div class="section-icon">
+                  <i class="fas fa-newspaper"></i>
+                </div>
+                <h2>Enhance Your Writing Journey</h2>
+                <span class="difficulty-badge difficulty-intermediate">Recommended</span>
+              </div>
+              
+              <div class="resources-grid">
+                <div class="resource-card">
+                  <div class="card-header">
+                    <div class="card-icon">
+                      <i class="fas fa-pen-fancy"></i>
+                    </div>
+                    <h3 class="card-title">Writing Lessons Blog</h3>
+                  </div>
+                  <div class="card-content">
+                    <p>Dive deeper into advanced writing techniques with our comprehensive blog series covering creative writing, academic essays, and professional communication.</p>
+                    <div class="card-features">
+                      <span class="feature-tag"><i class="fas fa-clock"></i> 5-10 min reads</span>
+                      <span class="feature-tag"><i class="fas fa-star"></i> Expert tips</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="../blog/writing-lessons.html" class="btn">
+                      <i class="fas fa-arrow-right"></i>
+                      Read Writing Blog
+                    </a>
+                  </div>
+                </div>
+
+                <div class="resource-card">
+                  <div class="card-header">
+                    <div class="card-icon">
+                      <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="card-title">Social Writing Lessons</h3>
+                  </div>
+                  <div class="card-content">
+                    <p>Learn how to write effectively for social media, emails, and everyday communication. Perfect for connecting your writing skills to real-world applications.</p>
+                    <div class="card-features">
+                      <span class="feature-tag"><i class="fas fa-users"></i> Social skills</span>
+                      <span class="feature-tag"><i class="fas fa-mobile-alt"></i> Modern writing</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="../blog/social-lessons.html" class="btn">
+                      <i class="fas fa-arrow-right"></i>
+                      Explore Social Writing
+                    </a>
+                  </div>
+                </div>
+
+                <div class="resource-card">
+                  <div class="card-header">
+                    <div class="card-icon">
+                      <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="card-title">Creative Writing & Music</h3>
+                  </div>
+                  <div class="card-content">
+                    <p>Discover how music and entertainment can inspire your writing. Learn about rhythm in prose, creative expression, and making your writing more engaging.</p>
+                    <div class="card-features">
+                      <span class="feature-tag"><i class="fas fa-lightbulb"></i> Creative techniques</span>
+                      <span class="feature-tag"><i class="fas fa-heart"></i> Inspiration</span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="../blog/esl-music-entertainment-lessons.html" class="btn">
+                      <i class="fas fa-arrow-right"></i>
+                      Get Inspired
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="resources-cta">
+                <p><i class="fas fa-info-circle"></i> Want more writing resources? Check out our complete <a href="../blog/blog.html" class="inline-link">writing blog collection</a> for expert tips and lessons.</p>
+              </div>
+            </section>
+
             <!-- Call to Action Section -->
             <section class="cta-section">
               <h2>Ready to Transform Your Writing Skills?</h2>
@@ -1997,7 +2232,7 @@
                 our comprehensive writing resources.
               </p>
               <div class="cta-buttons">
-                <a href="../eslresources.html" class="btn">
+                <a href="eslresources.html" class="btn">
                   <i class="fas fa-book-open"></i>
                   Explore All Resources
                 </a>
@@ -2333,7 +2568,7 @@
       }, observerOptions);
 
       document
-        .querySelectorAll(".stats-section, .cta-section, .fundamental-card")
+        .querySelectorAll(".stats-section, .cta-section, .fundamental-card, .resource-card, .related-resources-section")
         .forEach((el) => {
           el.classList.add("animate-on-scroll");
           observer.observe(el);
