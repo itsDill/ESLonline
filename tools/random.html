@@ -409,6 +409,46 @@
         animation: pulse 1s ease-in-out infinite;
       }
 
+      .timer-display {
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        color: var(--primary);
+        background: var(--light);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        border: 3px solid var(--primary);
+        font-family: "Arial", monospace;
+        letter-spacing: 0.1em;
+      }
+
+      .timer-display.active {
+        animation: pulse 2s ease-in-out infinite;
+        border-color: var(--secondary);
+        color: var(--secondary);
+      }
+
+      .timer-display.warning {
+        border-color: var(--orange);
+        color: var(--orange);
+        animation: pulse 1s ease-in-out infinite;
+      }
+
+      .timer-display.finished {
+        border-color: var(--primary);
+        color: var(--primary);
+        animation: pulse 0.5s ease-in-out infinite;
+        background: rgba(255, 107, 107, 0.1);
+      }
+
+      .timer-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
       @media (max-width: 768px) {
         .title {
           font-size: 2.5rem;
@@ -923,6 +963,53 @@
           <div class="result-display" id="passwordResult">
             <span class="placeholder-text"
               >Click generate to get a random password</span
+            >
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="generator-card">
+          <div class="card-header">
+            <div class="card-icon">⏱️</div>
+            <h3 class="card-title">Timer</h3>
+          </div>
+          <div class="generator-content">
+            <div class="preset-buttons">
+              <button class="preset-btn" onclick="setTimer(30)">
+                30 Seconds
+              </button>
+              <button class="preset-btn" onclick="setTimer(60)">
+                1 Minute
+              </button>
+              <button class="preset-btn" onclick="setTimer(120)">
+                2 Minutes
+              </button>
+              <button class="preset-btn" onclick="setTimer(300)">
+                5 Minutes
+              </button>
+            </div>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+              <button
+                class="generate-btn"
+                id="timerStartBtn"
+                onclick="startTimer()"
+              >
+                ▶️ Start Timer
+              </button>
+              <button
+                class="preset-btn"
+                id="timerStopBtn"
+                onclick="stopTimer()"
+                style="display: none"
+              >
+                ⏹️ Stop Timer
+              </button>
+            </div>
+          </div>
+          <div class="result-display" id="timerResult">
+            <span class="placeholder-text"
+              >Select a time and start the timer</span
             >
           </div>
         </div>
@@ -1496,6 +1583,123 @@
         const now = new Date();
         history.push({ type, result, time: now });
         renderHistory();
+      }
+
+      // Timer functionality
+      let timerInterval = null;
+      let timerSeconds = 0;
+      let selectedTime = 0;
+
+      function setTimer(seconds) {
+        selectedTime = seconds;
+        timerSeconds = seconds;
+        updateTimerDisplay();
+        document.getElementById(
+          "timerResult"
+        ).innerHTML = `<span class="placeholder-text">Timer set for ${formatTime(
+          seconds
+        )}</span>`;
+
+        // Reset timer display classes
+        const display = document.getElementById("timerDisplay");
+        display.className = "timer-display";
+
+        // Reset buttons
+        document.getElementById("timerStartBtn").style.display = "inline-block";
+        document.getElementById("timerStopBtn").style.display = "none";
+      }
+
+      function startTimer() {
+        if (selectedTime === 0) {
+          alert("Please select a timer duration first!");
+          return;
+        }
+
+        document.getElementById("timerStartBtn").style.display = "none";
+        document.getElementById("timerStopBtn").style.display = "inline-block";
+
+        const display = document.getElementById("timerDisplay");
+        display.className = "timer-display active";
+
+        document.getElementById(
+          "timerResult"
+        ).innerHTML = `<span class="result-text">Timer running...</span>`;
+
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          updateTimerDisplay();
+
+          // Warning at 10 seconds
+          if (timerSeconds <= 10 && timerSeconds > 0) {
+            display.className = "timer-display warning";
+          }
+
+          // Timer finished
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            display.className = "timer-display finished";
+            document.getElementById(
+              "timerResult"
+            ).innerHTML = `<span class="result-text">🎉 Time's up!</span>`;
+
+            // Play sound or alert
+            alert("⏰ Time's up!");
+
+            // Reset buttons
+            document.getElementById("timerStartBtn").style.display =
+              "inline-block";
+            document.getElementById("timerStopBtn").style.display = "none";
+
+            // Add to history
+            addToHistory(
+              "timer",
+              `${formatTime(selectedTime)} timer completed`
+            );
+          }
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+
+        const display = document.getElementById("timerDisplay");
+        display.className = "timer-display";
+
+        document.getElementById("timerStartBtn").style.display = "inline-block";
+        document.getElementById("timerStopBtn").style.display = "none";
+        document.getElementById(
+          "timerResult"
+        ).innerHTML = `<span class="placeholder-text">Timer stopped</span>`;
+
+        // Reset timer to selected time
+        timerSeconds = selectedTime;
+        updateTimerDisplay();
+      }
+
+      function updateTimerDisplay() {
+        const minutes = Math.floor(timerSeconds / 60);
+        const seconds = timerSeconds % 60;
+        document.getElementById("timerDisplay").textContent = `${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        if (minutes === 0) {
+          return `${remainingSeconds} seconds`;
+        } else if (remainingSeconds === 0) {
+          return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+        } else {
+          return `${minutes} minute${
+            minutes > 1 ? "s" : ""
+          } ${remainingSeconds} seconds`;
+        }
       }
 
       // Initialize
