@@ -6,8 +6,7 @@
 const CACHE_NAME = "esl-games-v1.0.0";
 const STATIC_RESOURCES = [
   "/games/games.html",
-  "/css/game-ads.css",
-  "/js/game-ads.js",
+
   "/css/header.css",
   "/css/main.css",
   "/images/1.png",
