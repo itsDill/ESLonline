@@ -288,29 +288,278 @@
     
 
     
-    <!-- PERFORMANCE OPTIMIZATION: Load critical CSS synchronously to prevent FOUC -->
-    <link rel="stylesheet" href="css/header.css" />
-    <link rel="stylesheet" href="css/main.css" />
+    <!-- PERFORMANCE OPTIMIZATION: Load additional CSS asynchronously -->
+    <link rel="preload" href="css/header.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" href="css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="css/header.css" />
+      <link rel="stylesheet" href="css/main.css" />
+    </noscript>
 
     <style>
-      /* CRITICAL ABOVE-THE-FOLD STYLES - Minified for performance */
-      *{box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;margin:0;line-height:1.6;color:#333;font-display:swap}
-      header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;border-bottom:1px solid #e5e7eb}
-      .navbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;max-width:1200px;margin:0 auto}
-      .logo-container{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#333}.logo-image{border-radius:8px}
-      .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:white;overflow:hidden;contain:layout}
-      .hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1}
-      .hero-content{position:relative;z-index:2;max-width:800px;padding:2rem}
-
-      .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;transition:all .3s ease;border:none;cursor:pointer}
-      .btn-primary{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(79,70,229,.4)}
-      .container{max-width:1200px;margin:0 auto;padding:0 1rem}
-      .skip-link{position:absolute;top:-40px;left:6px;background:#000;color:#fff;padding:8px;text-decoration:none;z-index:10001}.skip-link:focus{top:6px}
-      @media(max-width:768px){.navbar{padding:1rem}.hero{background-attachment:scroll}.hero-content{padding:1rem}}
-      /* Loading and performance optimizations */
-      .hero,.features-showcase,.learning-paths{will-change:transform}.modal{display:none!important;visibility:hidden!important}
-      /* Critical icon styles to prevent icon disappearance */
-      .fas,.far,.fab,.fal,.fad,.fass,.fasr,.fasl{font-family:"Font Awesome 6 Free","Font Awesome 6 Pro","Font Awesome 6 Brands"!important;font-weight:900;display:inline-block}
+      /* CRITICAL INLINE STYLES - Prevent FOUC and ensure immediate rendering */
+      
+      /* CSS Variables - Essential colors */
+      :root {
+        --primary-color: #46bbe5;
+        --primary-hover: #05425c;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --border-color: #e5e7eb;
+      }
+      
+      /* Reset and Base - Critical for layout */
+      *, *::before, *::after { box-sizing: border-box; }
+      body { 
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+        margin: 0; 
+        line-height: 1.6; 
+        color: var(--text-primary); 
+        font-display: swap;
+        background: var(--bg-primary);
+      }
+      
+      /* Header - Absolutely critical for immediate rendering */
+      header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+      
+      .logo-image {
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+      }
+      
+      .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+      
+      /* Navigation - Critical for header */
+      .nav-links {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 2rem;
+      }
+      
+      .nav-item {
+        position: relative;
+      }
+      
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 500;
+        padding: 0.5rem 0;
+        transition: color 0.3s ease;
+      }
+      
+      .nav-link:hover {
+        color: var(--primary-color);
+      }
+      
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .control-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+      
+      .control-btn:hover {
+        background: rgba(70, 187, 229, 0.1);
+        color: var(--primary-color);
+      }
+      
+      /* Hero Section - Critical above-the-fold */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        overflow: hidden;
+        contain: layout;
+      }
+      
+      .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+      }
+      
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 2rem;
+      }
+      
+      .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      
+      .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+      
+      /* Buttons - Critical for CTA */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), #0d4f66);
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(70, 187, 229, 0.4);
+      }
+      
+      /* Utilities */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 10001;
+      }
+      
+      .skip-link:focus {
+        top: 6px;
+      }
+      
+      /* FontAwesome Icons - CRITICAL - Include most common icons inline */
+      @font-face {
+        font-family: "Font Awesome 6 Free";
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2") format("woff2");
+        unicode-range: U+F015,U+F02D,U+F121,U+F522,U+F7D9,U+F518,U+F186,U+F505,U+F0C9,U+F078,U+F005,U+F19D,U+F0C0,U+F11B,U+F57D,U+F061;
+      }
+      
+      .fas, .far, .fab, .fal, .fad, .fass, .fasr, .fasl {
+        font-family: "Font Awesome 6 Free" !important;
+        font-weight: 900 !important;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+      }
+      
+      /* Critical icon content - for immediate display */
+      .fa-home:before { content: "\f015"; }
+      .fa-book:before { content: "\f02d"; }
+      .fa-code:before { content: "\f121"; }
+      .fa-dice:before { content: "\f522"; }
+      .fa-tools:before { content: "\f7d9"; }
+      .fa-book-open:before { content: "\f518"; }
+      .fa-moon:before { content: "\f186"; }
+      .fa-user-shield:before { content: "\f505"; }
+      .fa-bars:before { content: "\f0c9"; }
+      .fa-chevron-down:before { content: "\f078"; }
+      .fa-star:before { content: "\f005"; }
+      .fa-graduation-cap:before { content: "\f19d"; }
+      .fa-users:before { content: "\f0c0"; }
+      .fa-gamepad:before { content: "\f11b"; }
+      .fa-globe-americas:before { content: "\f57d"; }
+      .fa-arrow-right:before { content: "\f061"; }
+      
+      /* Mobile - Critical responsive behavior */
+      @media (max-width: 768px) {
+        .navbar { padding: 1rem; }
+        .nav-links { display: none; }
+        .hero { background-attachment: scroll; }
+        .hero-content { padding: 1rem; }
+        .mobile-toggle { display: flex !important; }
+      }
+      
+      @media (min-width: 769px) {
+        .mobile-toggle { display: none !important; }
+      }
+      
+      /* Performance */
+      .hero, .features-showcase, .learning-paths { will-change: transform; }
+      .modal { display: none !important; visibility: hidden !important; }
     </style>
   </head>
 
