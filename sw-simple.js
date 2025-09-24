@@ -48,9 +48,7 @@ self.addEventListener("fetch", (event) => {
   // Skip non-GET requests and external resources we don't want to cache
   if (
     event.request.method !== "GET" ||
-    event.request.url.includes("google") ||
-    event.request.url.includes("facebook") ||
-    event.request.url.includes("ads")
+    event.request.url.includes("facebook")
   ) {
     return;
   }
