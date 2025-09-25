@@ -1522,6 +1522,139 @@
         filter: invert(1) hue-rotate(180deg);
       }
 
+      /* New Mode Styles */
+      .writing-mode, .conversation-mode {
+        opacity: 0;
+        animation: slideInUp 0.6s ease forwards;
+      }
+
+      #writing-canvas {
+        touch-action: none;
+        border: 2px dashed var(--border-color);
+        transition: border-color 0.3s ease;
+      }
+
+      #writing-canvas:hover {
+        border-color: var(--primary);
+      }
+
+      .conversation-option:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      .cultural-option:hover {
+        background: var(--primary-light) !important;
+        border-color: var(--primary) !important;
+        transform: translateY(-2px);
+      }
+
+      .category-filter:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .category-filter.active {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      /* Enhanced mobile styles for new features */
+      @media (max-width: 768px) {
+        .mode-selector {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+        }
+
+        .mode-btn {
+          font-size: 0.9rem;
+          padding: 0.7rem 1rem;
+        }
+
+        #writing-canvas {
+          width: 100%;
+          height: 150px;
+        }
+
+        .conversation-line {
+          flex-direction: column !important;
+          text-align: center !important;
+        }
+
+        .conversation-line > div:last-child {
+          text-align: center !important;
+        }
+
+        .cultural-option, .conversation-option {
+          font-size: 0.9rem;
+          padding: 0.8rem;
+        }
+
+        .category-filter {
+          font-size: 0.8rem;
+          padding: 0.5rem 1rem;
+        }
+
+        #vocabulary-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .mode-selector {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-buttons {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-buttons .btn {
+          width: 100%;
+          margin: 0.25rem 0;
+        }
+      }
+
+      /* Animation keyframes for new features */
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .conversation-line:nth-child(odd) {
+        animation: slideInLeft 0.6s ease forwards;
+      }
+
+      .conversation-line:nth-child(even) {
+        animation: slideInRight 0.6s ease forwards;
+      }
+
+      /* Success/error states */
+      .success-light {
+        background: rgba(16, 185, 129, 0.1) !important;
+      }
+
+      .error-light {
+        background: rgba(239, 68, 68, 0.1) !important;
+      }
+
       /* Print styles */
       @media print {
         .settings-toggle,
@@ -1535,6 +1668,12 @@
         .flashcard {
           box-shadow: none !important;
           border: 2px solid #333 !important;
+        }
+
+        #writing-mode,
+        #conversation-mode,
+        #cultural-quiz {
+          display: none !important;
         }
       }
     </style>
@@ -1726,11 +1865,20 @@
           <button class="btn btn-outline" onclick="switchMode('quiz', event)">
             <i class="fas fa-brain"></i> Take Quiz
           </button>
+          <button class="btn btn-outline" onclick="switchMode('writing', event)">
+            <i class="fas fa-pen"></i> Writing Practice
+          </button>
           <button
             class="btn btn-outline"
             onclick="document.getElementById('cultural-context').scrollIntoView({behavior: 'smooth'})"
           >
             <i class="fas fa-temple"></i> Learn Culture
+          </button>
+          <button
+            class="btn btn-outline"
+            onclick="document.getElementById('grammar-guide').scrollIntoView({behavior: 'smooth'})"
+          >
+            <i class="fas fa-book"></i> Grammar Guide
           </button>
         </div>
 
@@ -1841,6 +1989,14 @@
         <button class="mode-btn" onclick="switchMode('quiz', event)">
           <i class="fas fa-question-circle"></i>
           Quiz
+        </button>
+        <button class="mode-btn" onclick="switchMode('writing', event)">
+          <i class="fas fa-pen"></i>
+          Writing
+        </button>
+        <button class="mode-btn" onclick="switchMode('conversation', event)">
+          <i class="fas fa-comments"></i>
+          Conversation
         </button>
         <button class="mode-btn" onclick="switchMode('study', event)">
           <i class="fas fa-book-open"></i>
@@ -2257,6 +2413,548 @@
         </div>
       </section>
 
+      <!-- Writing Practice Mode -->
+      <section id="writing-mode" class="quiz-mode" style="display: none;">
+        <div class="quiz-header">
+          <h2><i class="fas fa-pen"></i> Thai Writing Practice</h2>
+          <div class="quiz-progress">
+            Exercise <span id="writing-current">1</span> of
+            <span id="writing-total">10</span>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem; border: 2px solid rgba(102, 126, 234, 0.1);">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">Write the Thai Script</h3>
+            <div style="background: var(--primary-light); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+              <div style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 0.5rem;" id="writing-english">Hello</div>
+              <div style="font-size: 1rem; color: var(--text-secondary); font-style: italic;" id="writing-phonetic">sà-wàt-dii</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <canvas id="writing-canvas" width="600" height="200" style="border: 2px solid var(--border-color); border-radius: var(--border-radius); background: white; cursor: crosshair; max-width: 100%;"></canvas>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+              <button class="btn btn-warning btn-sm" onclick="clearCanvas()">
+                <i class="fas fa-eraser"></i> Clear
+              </button>
+              <button class="btn btn-info btn-sm" onclick="showWritingHint()">
+                <i class="fas fa-lightbulb"></i> Show Answer
+              </button>
+              <button class="btn btn-success btn-sm" onclick="nextWritingExercise()">
+                <i class="fas fa-check"></i> Check & Next
+              </button>
+            </div>
+          </div>
+
+          <div id="writing-hint" style="display: none; text-align: center; padding: 1rem; background: var(--success-light); border-radius: var(--border-radius); border: 1px solid rgba(16, 185, 129, 0.2);">
+            <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;" id="writing-answer">สวัสดี</div>
+            <small style="color: var(--text-secondary);">Practice writing this Thai script above</small>
+          </div>
+        </div>
+
+        <div style="background: rgba(102, 126, 234, 0.05); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+          <h4 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">
+            <i class="fas fa-info-circle"></i> Thai Writing Tips
+          </h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="background: white; padding: 1rem; border-radius: var(--border-radius); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <strong style="color: var(--primary);">📝 Stroke Order:</strong>
+              <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Thai letters have specific stroke orders. Start from top-left and move clockwise.</p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: var(--border-radius); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <strong style="color: var(--secondary);">🔄 Continuous Practice:</strong>
+              <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Regular writing practice helps with muscle memory and character recognition.</p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: var(--border-radius); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <strong style="color: var(--accent);">👁️ Visual Learning:</strong>
+              <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Compare your writing with the correct form to improve accuracy.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conversation Practice Mode -->
+      <section id="conversation-mode" class="quiz-mode" style="display: none;">
+        <div class="quiz-header">
+          <h2><i class="fas fa-comments"></i> Thai Conversation Practice</h2>
+          <div class="quiz-progress">
+            Scenario <span id="conversation-current">1</span> of
+            <span id="conversation-total">5</span>
+          </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem; border: 2px solid rgba(102, 126, 234, 0.1);">
+          <div id="conversation-scenario" style="text-align: center; margin-bottom: 2rem;">
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">🏪 At the Market</h3>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6;">You want to buy some fruit at a local Thai market. Practice this conversation:</p>
+          </div>
+
+          <div id="conversation-dialogue" style="background: white; border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div class="conversation-line" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-user"></i>
+              </div>
+              <div style="flex: 1;">
+                <div style="background: var(--primary-light); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                  <div style="font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem;">ส้มราคาเท่าไหร่ครับ?</div>
+                  <div style="font-style: italic; color: var(--text-secondary);">sôm raa-kaa tâo-rài kráp?</div>
+                </div>
+                <small style="color: var(--text-muted);">How much are the oranges?</small>
+                <button onclick="speakThai('ส้มราคาเท่าไหร่ครับ')" style="margin-left: 1rem; background: none; border: none; color: var(--primary); cursor: pointer; font-size: 1.1rem;">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="conversation-line" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-direction: row-reverse;">
+              <div style="width: 40px; height: 40px; background: var(--secondary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-store"></i>
+              </div>
+              <div style="flex: 1; text-align: right;">
+                <div style="background: var(--secondary-light); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                  <div style="font-size: 1.3rem; color: var(--secondary); margin-bottom: 0.5rem;">ใบละสิบบาทค่ะ</div>
+                  <div style="font-style: italic; color: var(--text-secondary);">bai lá sìp baat kâ</div>
+                </div>
+                <small style="color: var(--text-muted);">Ten baht each.</small>
+                <button onclick="speakThai('ใบละสิบบาทค่ะ')" style="margin-right: 1rem; background: none; border: none; color: var(--secondary); cursor: pointer; font-size: 1.1rem;">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <h4 style="color: var(--primary); margin-bottom: 1rem;">Your Response:</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+              <button class="conversation-option" onclick="selectConversationOption(this, true)" style="padding: 1rem; background: white; border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                <div style="font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem;">เอาสามใบครับ</div>
+                <div style="font-style: italic; color: var(--text-secondary); margin-bottom: 0.5rem;">ao sǎam bai kráp</div>
+                <small style="color: var(--text-muted);">I'll take three.</small>
+              </button>
+              <button class="conversation-option" onclick="selectConversationOption(this, false)" style="padding: 1rem; background: white; border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                <div style="font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem;">แพงเกินไปครับ</div>
+                <div style="font-style: italic; color: var(--text-secondary); margin-bottom: 0.5rem;">paeng gəən bpai kráp</div>
+                <small style="color: var(--text-muted);">Too expensive.</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn btn-info btn-sm" onclick="showConversationHint()">
+              <i class="fas fa-lightbulb"></i> Cultural Tip
+            </button>
+            <button class="btn btn-primary" onclick="nextConversationScenario()">
+              <i class="fas fa-arrow-right"></i> Next Scenario
+            </button>
+          </div>
+        </div>
+
+        <div id="conversation-hint" style="display: none; background: var(--info-light); padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid rgba(59, 130, 246, 0.2); margin-top: 1rem;">
+          <h4 style="color: var(--info); margin-bottom: 1rem;">
+            <i class="fas fa-info-circle"></i> Cultural Context
+          </h4>
+          <p style="color: var(--text-secondary); line-height: 1.6;">
+            In Thai markets, bargaining is common and expected. Vendors often start with higher prices, and polite negotiation is part of the cultural experience. Using "ครับ/ค่ะ" shows respect and often leads to better prices!
+          </p>
+        </div>
+      </section>
+
+      <!-- Thai Grammar Guide Section -->
+      <section
+        id="grammar-guide"
+        style="
+          margin-top: 3rem;
+          padding: 2rem;
+          background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+          border-radius: var(--border-radius);
+          box-shadow: var(--box-shadow);
+        "
+      >
+        <h2
+          style="
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+          "
+        >
+          <i class="fas fa-book"></i>
+          Essential Thai Grammar
+        </h2>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+          "
+        >
+          <div
+            style="
+              padding: 1.5rem;
+              background: var(--primary-light);
+              border-radius: var(--border-radius);
+              border-left: 4px solid var(--primary);
+            "
+          >
+            <h3
+              style="
+                color: var(--primary);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-sort-alpha-down"></i>
+              Word Order
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+              "
+            >
+              Thai follows <strong>Subject-Verb-Object</strong> order, similar to English.
+            </p>
+            <div style="background: white; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+              <div style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">Example:</div>
+              <div style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 0.3rem;">ฉัน กิน ข้าว</div>
+              <div style="font-style: italic; color: var(--text-secondary); margin-bottom: 0.3rem;">chǎn gin kâao</div>
+              <div style="color: var(--text-muted); font-size: 0.9rem;">I eat rice</div>
+            </div>
+            <ul
+              style="
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-left: 1rem;
+              "
+            >
+              <li><strong>ฉัน (chǎn)</strong> - Subject (I)</li>
+              <li><strong>กิน (gin)</strong> - Verb (eat)</li>
+              <li><strong>ข้าว (kâao)</strong> - Object (rice)</li>
+            </ul>
+          </div>
+
+          <div
+            style="
+              padding: 1.5rem;
+              background: var(--secondary-light);
+              border-radius: var(--border-radius);
+              border-left: 4px solid var(--secondary);
+            "
+          >
+            <h3
+              style="
+                color: var(--secondary);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-clock"></i>
+              Tenses
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+              "
+            >
+              Thai verbs don't change form! Time is shown with time markers.
+            </p>
+            <div style="display: grid; gap: 0.5rem;">
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Past:</strong> 
+                <span style="color: var(--secondary);">แล้ว (láew)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">กินแล้ว (gin láew) - already ate</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Present:</strong> 
+                <span style="color: var(--secondary);">กำลัง (gam-laŋ)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">กำลังกิน (gam-laŋ gin) - eating now</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Future:</strong> 
+                <span style="color: var(--secondary);">จะ (jà)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">จะกิน (jà gin) - will eat</div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              padding: 1.5rem;
+              background: var(--accent-light);
+              border-radius: var(--border-radius);
+              border-left: 4px solid var(--accent);
+            "
+          >
+            <h3
+              style="
+                color: var(--accent-dark);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-question"></i>
+              Questions
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+              "
+            >
+              Form questions by adding question words or particles.
+            </p>
+            <div style="display: grid; gap: 0.5rem;">
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Yes/No:</strong> 
+                <span style="color: var(--accent);">...ไหม (mái)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">กินไหม (gin mái) - Do you eat?</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">What:</strong> 
+                <span style="color: var(--accent);">อะไร (à-rai)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">กินอะไร (gin à-rai) - What do you eat?</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Where:</strong> 
+                <span style="color: var(--accent);">ที่ไหน (tîi-nǎi)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">กินที่ไหน (gin tîi-nǎi) - Where do you eat?</div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              padding: 1.5rem;
+              background: var(--info-light);
+              border-radius: var(--border-radius);
+              border-left: 4px solid var(--info);
+            "
+          >
+            <h3
+              style="
+                color: var(--info);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <i class="fas fa-users"></i>
+              Classifiers
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+              "
+            >
+              Thai uses classifiers when counting. Pattern: <strong>Number + Classifier + Noun</strong>
+            </p>
+            <div style="display: grid; gap: 0.5rem;">
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">People:</strong> 
+                <span style="color: var(--info);">คน (kon)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">สามคน (sǎam kon) - 3 people</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Animals:</strong> 
+                <span style="color: var(--info);">ตัว (tua)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">สองตัว (sɔ̌ɔŋ tua) - 2 animals</div>
+              </div>
+              <div style="background: white; padding: 0.8rem; border-radius: var(--border-radius);">
+                <strong style="color: var(--text-primary);">Objects:</strong> 
+                <span style="color: var(--info);">อัน (an)</span>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem;">หนึ่งอัน (nɯ̀ŋ an) - 1 thing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            background: rgba(102, 126, 234, 0.05);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+          "
+        >
+          <h3 style="color: var(--primary); margin-bottom: 1.5rem;">
+            <i class="fas fa-lightbulb"></i> Grammar Practice Tips
+          </h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 1rem;
+            "
+          >
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+              <strong style="color: var(--primary);">Start Simple</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Begin with basic Subject-Verb-Object sentences
+              </p>
+            </div>
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+              <strong style="color: var(--secondary);">Focus on Context</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Thai grammar is heavily context-dependent
+              </p>
+            </div>
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
+              <strong style="color: var(--accent);">Practice Patterns</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Repeat sentence patterns with different vocabulary
+              </p>
+            </div>
+            <div
+              style="
+                background: white;
+                padding: 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">💬</div>
+              <strong style="color: var(--success);">Use in Context</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Apply grammar rules in real conversations
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Vocabulary Categories Section -->
+      <section
+        id="vocabulary-categories"
+        style="
+          margin-top: 3rem;
+          padding: 2rem;
+          background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+          border-radius: var(--border-radius);
+          box-shadow: var(--box-shadow);
+        "
+      >
+        <h2
+          style="
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+          "
+        >
+          <i class="fas fa-tags"></i>
+          Vocabulary by Category
+        </h2>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+          "
+        >
+          <button class="category-filter active" onclick="filterVocabulary('all')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--primary); background: var(--primary); color: white; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            All Categories
+          </button>
+          <button class="category-filter" onclick="filterVocabulary('greetings')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--primary); background: transparent; color: var(--primary); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            Greetings
+          </button>
+          <button class="category-filter" onclick="filterVocabulary('food')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--secondary); background: transparent; color: var(--secondary); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            Food
+          </button>
+          <button class="category-filter" onclick="filterVocabulary('family')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--accent); background: transparent; color: var(--accent); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            Family
+          </button>
+          <button class="category-filter" onclick="filterVocabulary('colors')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--success); background: transparent; color: var(--success); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            Colors
+          </button>
+          <button class="category-filter" onclick="filterVocabulary('numbers')" style="padding: 0.6rem 1.2rem; border: 2px solid var(--info); background: transparent; color: var(--info); border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;">
+            Numbers
+          </button>
+        </div>
+
+        <div id="vocabulary-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+          <!-- Vocabulary cards will be populated by JavaScript -->
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+          <button class="btn btn-primary" onclick="studyCategoryFlashcards()" id="study-category-btn">
+            <i class="fas fa-play"></i> Study Selected Category
+          </button>
+        </div>
+      </section>
+
       <!-- Cultural Context Section -->
       <section
         id="cultural-context"
@@ -2488,6 +3186,54 @@
           </div>
         </div>
 
+        <!-- Interactive Cultural Learning -->
+        <div
+          style="
+            background: rgba(102, 126, 234, 0.05);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
+          "
+        >
+          <h3 style="color: var(--primary); text-align: center; margin-bottom: 2rem;">
+            <i class="fas fa-gamepad"></i> Interactive Cultural Quiz
+          </h3>
+          
+          <div id="cultural-quiz" style="text-align: center;">
+            <div style="background: white; padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+              <h4 style="color: var(--primary); margin-bottom: 1rem;" id="cultural-question">
+                What should you do when entering a Thai temple?
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <button class="cultural-option" onclick="selectCulturalAnswer(this, false)" style="padding: 1rem; background: var(--bg-secondary); border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                  Keep your shoes on
+                </button>
+                <button class="cultural-option" onclick="selectCulturalAnswer(this, true)" style="padding: 1rem; background: var(--bg-secondary); border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                  Remove your shoes
+                </button>
+                <button class="cultural-option" onclick="selectCulturalAnswer(this, false)" style="padding: 1rem; background: var(--bg-secondary); border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                  Wear a hat
+                </button>
+                <button class="cultural-option" onclick="selectCulturalAnswer(this, false)" style="padding: 1rem; background: var(--bg-secondary); border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;">
+                  Speak loudly
+                </button>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="nextCulturalQuestion()" id="cultural-next" style="display: none;">
+                <i class="fas fa-arrow-right"></i> Next Question
+              </button>
+            </div>
+            
+            <div id="cultural-explanation" style="background: var(--success-light); padding: 1.5rem; border-radius: var(--border-radius); border: 1px solid rgba(16, 185, 129, 0.2); display: none;">
+              <h4 style="color: var(--success); margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i> Explanation
+              </h4>
+              <p style="color: var(--text-secondary); line-height: 1.6;" id="cultural-explanation-text">
+                In Thai culture, shoes are considered unclean and must be removed before entering temples, homes, and some shops. This shows respect for sacred spaces.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div
           style="
             text-align: center;
@@ -2584,6 +3330,44 @@
                 "
               >
                 Aim for 10-15 new words per day with our flashcard system
+              </p>
+            </div>
+            <div
+              style="
+                padding: 1rem;
+                background: white;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <strong style="color: var(--info)">🌍 Cultural Context:</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Understanding culture helps you use language appropriately
+              </p>
+            </div>
+            <div
+              style="
+                padding: 1rem;
+                background: white;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <strong style="color: var(--warning)">📱 Use Technology:</strong>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  margin-top: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                Combine traditional learning with modern tools like this app
               </p>
             </div>
           </div>
@@ -4208,16 +4992,36 @@
           event.target.classList.add("active");
         }
 
-        document.getElementById("flashcard-mode").style.display =
-          mode === "flashcards" ? "block" : "none";
-        document.getElementById("quiz-mode").style.display =
-          mode === "quiz" ? "block" : "none";
+        // Hide all modes
+        document.getElementById("flashcard-mode").style.display = "none";
+        document.getElementById("quiz-mode").style.display = "none";
+        document.getElementById("writing-mode").style.display = "none";
+        document.getElementById("conversation-mode").style.display = "none";
+
+        // Show selected mode
+        switch(mode) {
+          case "flashcards":
+            document.getElementById("flashcard-mode").style.display = "block";
+            break;
+          case "quiz":
+            document.getElementById("quiz-mode").style.display = "block";
+            initQuiz();
+            break;
+          case "writing":
+            document.getElementById("writing-mode").style.display = "block";
+            initWritingMode();
+            break;
+          case "conversation":
+            document.getElementById("conversation-mode").style.display = "block";
+            initConversationMode();
+            break;
+          case "study":
+            document.getElementById("flashcard-mode").style.display = "block";
+            showFeedback("Study mode - use flashcards with spaced repetition!", "info");
+            break;
+        }
 
         currentMode = mode;
-
-        if (mode === "quiz") {
-          initQuiz();
-        }
       }
 
       function markCard(difficulty) {
@@ -5095,6 +5899,505 @@ Join me in learning Thai: ${window.location.href}`;
         showFeedback("Progress updated! 📊", "info");
         updateProgressDisplay();
       }
+
+      // Writing Mode Functions
+      let writingCanvas, writingCtx;
+      let writingExercises = [];
+      let currentWritingIndex = 0;
+      let isDrawing = false;
+
+      function initWritingMode() {
+        writingCanvas = document.getElementById('writing-canvas');
+        writingCtx = writingCanvas.getContext('2d');
+        
+        // Set up canvas for drawing
+        writingCtx.strokeStyle = '#333';
+        writingCtx.lineWidth = 3;
+        writingCtx.lineCap = 'round';
+        
+        // Create writing exercises from flashcard data
+        writingExercises = flashcards.slice(0, 10).map(card => ({
+          english: card.answer,
+          phonetic: card.phonetic,
+          thai: card.thai
+        }));
+        
+        loadWritingExercise();
+        setupCanvasEvents();
+      }
+
+      function setupCanvasEvents() {
+        let rect = writingCanvas.getBoundingClientRect();
+        
+        writingCanvas.addEventListener('mousedown', startDrawing);
+        writingCanvas.addEventListener('mousemove', draw);
+        writingCanvas.addEventListener('mouseup', stopDrawing);
+        writingCanvas.addEventListener('mouseout', stopDrawing);
+        
+        // Touch events for mobile
+        writingCanvas.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          const mouseEvent = new MouseEvent('mousedown', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          writingCanvas.dispatchEvent(mouseEvent);
+        });
+        
+        writingCanvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          const mouseEvent = new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          writingCanvas.dispatchEvent(mouseEvent);
+        });
+        
+        writingCanvas.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          const mouseEvent = new MouseEvent('mouseup', {});
+          writingCanvas.dispatchEvent(mouseEvent);
+        });
+      }
+
+      function startDrawing(e) {
+        isDrawing = true;
+        const rect = writingCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        writingCtx.beginPath();
+        writingCtx.moveTo(x, y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        
+        const rect = writingCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        writingCtx.lineTo(x, y);
+        writingCtx.stroke();
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+      }
+
+      function clearCanvas() {
+        writingCtx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
+      }
+
+      function loadWritingExercise() {
+        const exercise = writingExercises[currentWritingIndex];
+        document.getElementById('writing-english').textContent = exercise.english;
+        document.getElementById('writing-phonetic').textContent = exercise.phonetic;
+        document.getElementById('writing-answer').textContent = exercise.thai;
+        document.getElementById('writing-current').textContent = currentWritingIndex + 1;
+        document.getElementById('writing-total').textContent = writingExercises.length;
+        document.getElementById('writing-hint').style.display = 'none';
+        clearCanvas();
+      }
+
+      function showWritingHint() {
+        document.getElementById('writing-hint').style.display = 'block';
+        showFeedback("Practice writing the Thai characters above!", "info");
+      }
+
+      function nextWritingExercise() {
+        showFeedback("Great practice! ✍️", "success");
+        currentWritingIndex = (currentWritingIndex + 1) % writingExercises.length;
+        loadWritingExercise();
+      }
+
+      // Conversation Mode Functions
+      let conversationScenarios = [
+        {
+          title: "🏪 At the Market",
+          description: "You want to buy some fruit at a local Thai market.",
+          dialogue: [
+            {
+              speaker: "you",
+              thai: "ส้มราคาเท่าไหร่ครับ?",
+              phonetic: "sôm raa-kaa tâo-rài kráp?",
+              english: "How much are the oranges?"
+            },
+            {
+              speaker: "vendor",
+              thai: "ใบละสิบบาทค่ะ",
+              phonetic: "bai lá sìp baat kâ",
+              english: "Ten baht each."
+            }
+          ],
+          options: [
+            {
+              thai: "เอาสามใบครับ",
+              phonetic: "ao sǎam bai kráp",
+              english: "I'll take three.",
+              correct: true
+            },
+            {
+              thai: "แพงเกินไปครับ",
+              phonetic: "paeng gəən bpai kráp",
+              english: "Too expensive.",
+              correct: false
+            }
+          ],
+          culturalTip: "In Thai markets, bargaining is common and expected. Vendors often start with higher prices, and polite negotiation is part of the cultural experience. Using 'ครับ/ค่ะ' shows respect and often leads to better prices!"
+        },
+        {
+          title: "🍜 Ordering Food",
+          description: "You're at a Thai restaurant and want to order.",
+          dialogue: [
+            {
+              speaker: "waiter",
+              thai: "สั่งอะไรดีครับ?",
+              phonetic: "sàng à-rai dii kráp?",
+              english: "What would you like to order?"
+            }
+          ],
+          options: [
+            {
+              thai: "ขอผัดไทยหนึ่งจานครับ",
+              phonetic: "kǒr pàt-tai nɯ̀ng jaan kráp",
+              english: "I'd like one plate of Pad Thai, please.",
+              correct: true
+            },
+            {
+              thai: "ไม่เป็นไรครับ",
+              phonetic: "mâi bpen rai kráp",
+              english: "It's okay.",
+              correct: false
+            }
+          ],
+          culturalTip: "When ordering food in Thailand, it's polite to use 'ขอ' (kǒr) meaning 'please give me' rather than direct commands. Thai people appreciate politeness!"
+        }
+      ];
+      
+      let currentConversationIndex = 0;
+
+      function initConversationMode() {
+        loadConversationScenario();
+      }
+
+      function loadConversationScenario() {
+        const scenario = conversationScenarios[currentConversationIndex];
+        document.getElementById('conversation-current').textContent = currentConversationIndex + 1;
+        document.getElementById('conversation-total').textContent = conversationScenarios.length;
+        
+        // Update scenario info
+        const scenarioDiv = document.getElementById('conversation-scenario');
+        scenarioDiv.innerHTML = `
+          <h3 style="color: var(--primary); margin-bottom: 1rem;">${scenario.title}</h3>
+          <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6;">${scenario.description}</p>
+        `;
+        
+        // Update dialogue
+        const dialogueDiv = document.getElementById('conversation-dialogue');
+        let dialogueHTML = '';
+        
+        scenario.dialogue.forEach(line => {
+          const isUser = line.speaker === 'you';
+          const icon = isUser ? 'fa-user' : 'fa-store';
+          const color = isUser ? 'var(--primary)' : 'var(--secondary)';
+          const bgColor = isUser ? 'var(--primary-light)' : 'var(--secondary-light)';
+          const alignment = isUser ? 'flex-direction: row' : 'flex-direction: row-reverse';
+          const textAlign = isUser ? 'left' : 'right';
+          const marginSide = isUser ? 'margin-left: 1rem' : 'margin-right: 1rem';
+          
+          dialogueHTML += `
+            <div class="conversation-line" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; ${alignment}">
+              <div style="width: 40px; height: 40px; background: ${color}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas ${icon}"></i>
+              </div>
+              <div style="flex: 1; text-align: ${textAlign};">
+                <div style="background: ${bgColor}; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 0.5rem;">
+                  <div style="font-size: 1.3rem; color: ${color}; margin-bottom: 0.5rem;">${line.thai}</div>
+                  <div style="font-style: italic; color: var(--text-secondary);">${line.phonetic}</div>
+                </div>
+                <small style="color: var(--text-muted);">${line.english}</small>
+                <button onclick="speakThai('${line.thai}')" style="${marginSide}; background: none; border: none; color: ${color}; cursor: pointer; font-size: 1.1rem;">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        dialogueDiv.innerHTML = dialogueHTML;
+        
+        // Update options (assuming we show options after dialogue)
+        updateConversationOptions();
+      }
+
+      function updateConversationOptions() {
+        const scenario = conversationScenarios[currentConversationIndex];
+        // Options are already in HTML, just need to update the onclick handlers
+        const optionsContainer = document.querySelector('#conversation-mode .conversation-option').parentElement;
+        optionsContainer.innerHTML = '';
+        
+        scenario.options.forEach(option => {
+          const button = document.createElement('button');
+          button.className = 'conversation-option';
+          button.style.cssText = 'padding: 1rem; background: white; border: 2px solid var(--border-color); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease;';
+          button.onclick = () => selectConversationOption(button, option.correct);
+          
+          button.innerHTML = `
+            <div style="font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem;">${option.thai}</div>
+            <div style="font-style: italic; color: var(--text-secondary); margin-bottom: 0.5rem;">${option.phonetic}</div>
+            <small style="color: var(--text-muted);">${option.english}</small>
+          `;
+          
+          optionsContainer.appendChild(button);
+        });
+      }
+
+      function selectConversationOption(button, isCorrect) {
+        // Remove previous selections
+        document.querySelectorAll('.conversation-option').forEach(opt => {
+          opt.style.borderColor = 'var(--border-color)';
+          opt.style.background = 'white';
+        });
+        
+        // Highlight selection
+        if (isCorrect) {
+          button.style.borderColor = 'var(--success)';
+          button.style.background = 'var(--success-light)';
+          showFeedback("Great choice! 👍", "success");
+        } else {
+          button.style.borderColor = 'var(--danger)';
+          button.style.background = 'rgba(239, 68, 68, 0.1)';
+          showFeedback("Try the other option for better results!", "warning");
+        }
+      }
+
+      function showConversationHint() {
+        const scenario = conversationScenarios[currentConversationIndex];
+        const hintDiv = document.getElementById('conversation-hint');
+        document.getElementById('cultural-explanation-text').textContent = scenario.culturalTip;
+        hintDiv.style.display = hintDiv.style.display === 'block' ? 'none' : 'block';
+      }
+
+      function nextConversationScenario() {
+        currentConversationIndex = (currentConversationIndex + 1) % conversationScenarios.length;
+        loadConversationScenario();
+        document.getElementById('conversation-hint').style.display = 'none';
+      }
+
+      // Cultural Quiz Functions
+      let culturalQuestions = [
+        {
+          question: "What should you do when entering a Thai temple?",
+          options: ["Keep your shoes on", "Remove your shoes", "Wear a hat", "Speak loudly"],
+          correct: 1,
+          explanation: "In Thai culture, shoes are considered unclean and must be removed before entering temples, homes, and some shops. This shows respect for sacred spaces."
+        },
+        {
+          question: "How do you show respect when greeting elders in Thailand?",
+          options: ["Shake hands firmly", "Wave casually", "Wai with hands higher", "Bow deeply"],
+          correct: 2,
+          explanation: "The wai (pressing palms together) with hands held higher shows more respect. For elders, monks, and people of higher status, raise your hands to chest or forehead level."
+        },
+        {
+          question: "What does 'ครับ/ค่ะ' add to your speech?",
+          options: ["Makes it louder", "Shows politeness", "Changes meaning", "Adds emphasis"],
+          correct: 1,
+          explanation: "ครับ (for males) and ค่ะ (for females) are polite particles that show respect and courtesy. Using them makes you sound more polite and respectful."
+        }
+      ];
+      
+      let currentCulturalIndex = 0;
+
+      function selectCulturalAnswer(button, isCorrect) {
+        // Remove previous selections
+        document.querySelectorAll('.cultural-option').forEach(opt => {
+          opt.style.borderColor = 'var(--border-color)';
+          opt.style.background = 'var(--bg-secondary)';
+        });
+        
+        // Show correct/incorrect
+        if (isCorrect) {
+          button.style.borderColor = 'var(--success)';
+          button.style.background = 'var(--success-light)';
+        } else {
+          button.style.borderColor = 'var(--danger)';
+          button.style.background = 'rgba(239, 68, 68, 0.1)';
+          
+          // Highlight correct answer
+          const correctIndex = culturalQuestions[currentCulturalIndex].correct;
+          const correctButton = document.querySelectorAll('.cultural-option')[correctIndex];
+          correctButton.style.borderColor = 'var(--success)';
+          correctButton.style.background = 'var(--success-light)';
+        }
+        
+        // Show explanation
+        const explanationDiv = document.getElementById('cultural-explanation');
+        const explanationText = document.getElementById('cultural-explanation-text');
+        explanationText.textContent = culturalQuestions[currentCulturalIndex].explanation;
+        explanationDiv.style.display = 'block';
+        
+        // Show next button
+        document.getElementById('cultural-next').style.display = 'inline-flex';
+        
+        // Disable all options
+        document.querySelectorAll('.cultural-option').forEach(opt => {
+          opt.style.pointerEvents = 'none';
+        });
+      }
+
+      function nextCulturalQuestion() {
+        currentCulturalIndex = (currentCulturalIndex + 1) % culturalQuestions.length;
+        loadCulturalQuestion();
+      }
+
+      function loadCulturalQuestion() {
+        const question = culturalQuestions[currentCulturalIndex];
+        document.getElementById('cultural-question').textContent = question.question;
+        
+        const options = document.querySelectorAll('.cultural-option');
+        options.forEach((opt, index) => {
+          opt.textContent = question.options[index];
+          opt.style.borderColor = 'var(--border-color)';
+          opt.style.background = 'var(--bg-secondary)';
+          opt.style.pointerEvents = 'auto';
+          opt.onclick = () => selectCulturalAnswer(opt, index === question.correct);
+        });
+        
+        document.getElementById('cultural-explanation').style.display = 'none';
+        document.getElementById('cultural-next').style.display = 'none';
+      }
+
+      // Vocabulary Categories Functions
+      let selectedCategory = 'all';
+      let categoryColors = {
+        'greetings': 'var(--primary)',
+        'food': 'var(--secondary)', 
+        'family': 'var(--accent)',
+        'colors': 'var(--success)',
+        'numbers': 'var(--info)',
+        'verbs': 'var(--warning)',
+        'adjectives': 'var(--danger)',
+        'places': '#8b5fbf',
+        'time': '#20c997',
+        'emotions': '#fd7e14'
+      };
+
+      function filterVocabulary(category) {
+        selectedCategory = category;
+        
+        // Update filter buttons
+        document.querySelectorAll('.category-filter').forEach(btn => {
+          btn.classList.remove('active');
+          const btnColor = btn.textContent.toLowerCase().includes('greetings') ? 'var(--primary)' :
+                          btn.textContent.toLowerCase().includes('food') ? 'var(--secondary)' :
+                          btn.textContent.toLowerCase().includes('family') ? 'var(--accent)' :
+                          btn.textContent.toLowerCase().includes('colors') ? 'var(--success)' :
+                          btn.textContent.toLowerCase().includes('numbers') ? 'var(--info)' : 'var(--primary)';
+          btn.style.background = 'transparent';
+          btn.style.color = btnColor;
+        });
+        
+        // Activate selected button
+        event.target.classList.add('active');
+        const activeColor = category === 'all' ? 'var(--primary)' : categoryColors[category] || 'var(--primary)';
+        event.target.style.background = activeColor;
+        event.target.style.color = 'white';
+        
+        // Update vocabulary grid
+        updateVocabularyGrid();
+        
+        // Update study button
+        const studyBtn = document.getElementById('study-category-btn');
+        studyBtn.innerHTML = `<i class="fas fa-play"></i> Study ${category === 'all' ? 'All Categories' : category.charAt(0).toUpperCase() + category.slice(1)}`;
+      }
+
+      function updateVocabularyGrid() {
+        const grid = document.getElementById('vocabulary-grid');
+        const allCards = Object.values(flashcardData).flat();
+        
+        let filteredCards = selectedCategory === 'all' ? 
+          allCards : 
+          allCards.filter(card => card.category === selectedCategory);
+        
+        grid.innerHTML = '';
+        
+        filteredCards.slice(0, 20).forEach(card => {
+          const cardColor = categoryColors[card.category] || 'var(--primary)';
+          const cardDiv = document.createElement('div');
+          cardDiv.style.cssText = `
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid ${cardColor};
+            transition: all 0.3s ease;
+            cursor: pointer;
+          `;
+          
+          cardDiv.innerHTML = `
+            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+              <span style="background: ${cardColor}; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600;">
+                ${card.category}
+              </span>
+              <button onclick="speakThai('${card.thai}')" style="background: none; border: none; color: ${cardColor}; cursor: pointer; font-size: 1.2rem;">
+                <i class="fas fa-volume-up"></i>
+              </button>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; color: ${cardColor}; margin-bottom: 0.5rem;">${card.thai}</div>
+              <div style="font-style: italic; color: var(--text-secondary); margin-bottom: 0.5rem;">${card.phonetic}</div>
+              <div style="color: var(--text-primary); font-weight: 600;">${card.answer}</div>
+            </div>
+          `;
+          
+          cardDiv.onmouseenter = () => {
+            cardDiv.style.transform = 'translateY(-4px)';
+            cardDiv.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+          };
+          
+          cardDiv.onmouseleave = () => {
+            cardDiv.style.transform = 'translateY(0)';
+            cardDiv.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+          };
+          
+          grid.appendChild(cardDiv);
+        });
+        
+        if (filteredCards.length === 0) {
+          grid.innerHTML = '<p style="text-align: center; color: var(--text-muted); grid-column: 1 / -1;">No vocabulary found for this category.</p>';
+        }
+      }
+
+      function studyCategoryFlashcards() {
+        if (selectedCategory !== 'all') {
+          // Filter flashcards by category
+          flashcards = flashcardData[currentDifficulty].filter(card => card.category === selectedCategory);
+          if (flashcards.length === 0) {
+            showFeedback("No cards found in this category for current difficulty level!", "warning");
+            return;
+          }
+        } else {
+          flashcards = flashcardData[currentDifficulty];
+        }
+        
+        flashcardIndex = 0;
+        switchMode('flashcards', null);
+        updateFlashcard();
+        document.getElementById('flashcard-mode').scrollIntoView({behavior: 'smooth'});
+        showFeedback(`Studying ${selectedCategory === 'all' ? 'all categories' : selectedCategory}! 📚`, "success");
+      }
+
+      // Initialize vocabulary grid on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        // Existing initialization code...
+        
+        // Initialize vocabulary categories
+        setTimeout(() => {
+          updateVocabularyGrid();
+        }, 1000);
+      });
     </script>
   </body>
 </html>
