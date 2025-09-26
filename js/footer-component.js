@@ -13,22 +13,7 @@ const FooterComponent = {
     <!-- Enhanced Professional Footer -->
     <footer>
       <div class="container">
-        <!-- Newsletter Section -->
-        <div class="footer-newsletter">
-          <div class="newsletter-content">
-            <div class="newsletter-text">
-              <h3><i class="fas fa-paper-plane"></i> Stay Updated</h3>
-              <p>Get the latest learning resources and tips delivered to your inbox</p>
-            </div>
-            <div class="newsletter-form">
-              <input type="email" placeholder="Enter your email address" id="newsletterEmail">
-              <button type="button" class="btn-newsletter" onclick="subscribeNewsletter()">
-                <i class="fas fa-arrow-right"></i>
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
+
 
         <div class="footer-content">
           <!-- Brand Section with enhanced info -->
@@ -247,35 +232,7 @@ const FooterComponent = {
     script.textContent = `
       // Enhanced Footer Functionality
       
-      // Newsletter subscription
-      function subscribeNewsletter() {
-        const emailInput = document.getElementById('newsletterEmail');
-        const email = emailInput.value.trim();
-        
-        if (!email) {
-          showNotification('Please enter your email address', 'warning');
-          return;
-        }
-        
-        if (!isValidEmail(email)) {
-          showNotification('Please enter a valid email address', 'error');
-          return;
-        }
-        
-        // Simulate subscription (replace with actual API call)
-        const btn = document.querySelector('.btn-newsletter');
-        const originalText = btn.innerHTML;
-        
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
-        btn.disabled = true;
-        
-        setTimeout(() => {
-          showNotification('Thank you for subscribing! Check your email for confirmation.', 'success');
-          emailInput.value = '';
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-        }, 2000);
-      }
+
       
       // Email validation
       function isValidEmail(email) {
@@ -441,15 +398,7 @@ const FooterComponent = {
       document.addEventListener('DOMContentLoaded', function() {
         initBackToTop();
         
-        // Enter key support for newsletter
-        const emailInput = document.getElementById('newsletterEmail');
-        if (emailInput) {
-          emailInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-              subscribeNewsletter();
-            }
-          });
-        }
+
       });
       
       window.footerFunctionalityInjected = true;
