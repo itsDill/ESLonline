@@ -588,17 +588,30 @@
         align-items: center;
         justify-content: center;
         background: var(--bg-primary, #fff);
-        border: 2px solid var(--primary, #4f46e5);
+        border: 2px solid var(--primary-color, #46bbe5);
         border-radius: 16px;
         width: 220px;
         height: 140px;
         text-decoration: none;
-        color: var(--primary, #4f46e5);
+        color: var(--primary-color, #46bbe5);
         font-size: 1.15rem;
         font-weight: 600;
-        box-shadow: 0 4px 16px rgba(67, 97, 238, 0.07);
-        transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+        box-shadow: 0 4px 16px rgba(70, 187, 229, 0.1);
+        transition: all 0.3s ease;
         gap: 0.7rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .tool-link-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(70, 187, 229, 0.1), transparent);
+        transition: left 0.5s ease;
       }
 
       /* Center the heading text in tool-link-box */
@@ -614,10 +627,43 @@
       }
 
       .tool-link-box:hover {
-        background: var(--primary, #4f46e5);
+        background: var(--primary-color, #46bbe5);
         color: #fff;
-        box-shadow: 0 8px 32px rgba(67, 97, 238, 0.13);
-        transform: translateY(-4px) scale(1.04);
+        box-shadow: 0 12px 40px rgba(70, 187, 229, 0.25);
+        transform: translateY(-6px) scale(1.05);
+        border-color: var(--primary-hover, #05425c);
+      }
+
+      .tool-link-box:hover::before {
+        left: 100%;
+      }
+
+      /* Notification styles */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        font-weight: 500;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        background: var(--accent-color);
+      }
+
+      .notification.error {
+        background: var(--error-color);
       }
 
       @media (max-width: 900px) {
@@ -827,7 +873,17 @@
     </section>
 
     <!-- Top Banner Ad -->
-
+    <div style="text-align: center; margin: 2rem 0; padding: 1rem;">
+      <ins class="adsbygoogle"
+        style="display:block; margin: 0 auto;"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="1718707782"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
 
     <!-- English Tools Section -->
     <section class="section">
@@ -959,6 +1015,19 @@
       </div>
     </section>
 
+    <!-- Middle Content Ad -->
+    <div style="text-align: center; margin: 3rem 0; padding: 1rem;">
+      <ins class="adsbygoogle"
+        style="display:block; margin: 0 auto;"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="4353992878"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <!-- Featured Tools Section -->
     <section class="section" style="background: var(--bg-secondary)">
       <div class="container">
@@ -966,6 +1035,19 @@
         <p class="section-description">
           Quick access to our most popular teaching and classroom tools
         </p>
+
+        <!-- Tool Search & Filter -->
+        <div class="tool-search-container" style="text-align: center; margin: 2rem 0;">
+          <div style="display: inline-flex; align-items: center; background: var(--bg-primary); border: 2px solid var(--border-color); border-radius: 12px; padding: 0.75rem 1rem; max-width: 400px; width: 100%;">
+            <i class="fas fa-search" style="color: var(--text-secondary); margin-right: 0.75rem;"></i>
+            <input 
+              type="text" 
+              id="toolSearch" 
+              placeholder="Search tools..." 
+              style="border: none; outline: none; background: none; flex: 1; font-size: 1rem; color: var(--text-primary);"
+            />
+          </div>
+        </div>
 
         <div
           class="tool-links-row"
@@ -1156,11 +1238,32 @@
           timerInterval = setInterval(() => {
             timeLeft--;
             updateTimerDisplay();
+            
+            // Visual feedback for last 10 seconds
+            if (timeLeft <= 10 && timeLeft > 0) {
+              timerDisplay.style.color = '#ef4444';
+              timerDisplay.style.animation = 'pulse 1s infinite';
+            }
+            
             if (timeLeft <= 0) {
               clearInterval(timerInterval);
               isRunning = false;
               startTimer.innerHTML = '<i class="fas fa-play"></i> Start';
-              alert("Time's up!");
+              timerDisplay.style.color = '#ef4444';
+              timerDisplay.style.animation = 'flash 0.5s infinite';
+              
+              // Sound notification
+              try {
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmAeBj+R2+zAcCEDKHp');
+                audio.play().catch(() => {});
+              } catch(e) {}
+              
+              // Show completion message
+              setTimeout(() => {
+                timerDisplay.style.animation = 'none';
+                timerDisplay.style.color = 'var(--primary-color)';
+                showNotification("⏰ Time's up! Great job on completing your activity!", 'success');
+              }, 100);
             }
           }, 1000);
         } else {
@@ -1233,7 +1336,10 @@
       }
 
       document.getElementById("clearBoard").addEventListener("click", () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (confirm("Are you sure you want to clear the whiteboard?")) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          showNotification("🧹 Whiteboard cleared!", 'info');
+        }
       });
 
       document.getElementById("saveBoard").addEventListener("click", () => {
@@ -1241,6 +1347,7 @@
         link.download = "whiteboard.png";
         link.href = canvas.toDataURL();
         link.click();
+        showNotification("💾 Whiteboard saved successfully!", 'success');
       });
 
       // Rewards Chart
@@ -1316,6 +1423,92 @@
         // Restore image
         ctx.putImageData(imageData, 0, 0);
       });
+
+      // Tool Search Functionality
+      const toolSearch = document.getElementById('toolSearch');
+      if (toolSearch) {
+        toolSearch.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          const toolBoxes = document.querySelectorAll('.tool-link-box');
+          
+          toolBoxes.forEach(box => {
+            const toolName = box.querySelector('span').textContent.toLowerCase();
+            const shouldShow = toolName.includes(searchTerm);
+            box.style.display = shouldShow ? 'flex' : 'none';
+            
+            if (shouldShow && searchTerm) {
+              box.style.animation = 'pulse 0.5s ease-in-out';
+            }
+          });
+        });
+      }
+
+      // Tool Usage Analytics (track popular tools)
+      function trackToolUsage(toolName) {
+        try {
+          const usage = JSON.parse(localStorage.getItem('toolUsage') || '{}');
+          usage[toolName] = (usage[toolName] || 0) + 1;
+          localStorage.setItem('toolUsage', JSON.stringify(usage));
+        } catch (e) {
+          console.log('Analytics tracking unavailable');
+        }
+      }
+
+      // Add click tracking to tool links
+      document.querySelectorAll('.tool-link-box').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const toolName = this.querySelector('span').textContent;
+          trackToolUsage(toolName);
+          
+          // Add click animation
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 150);
+        });
+      });
+
+      // Add animations for timer and search results
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.05); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes flash {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Notification system
+      function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+          ${message}
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+      }
+
+      // Show welcome notification
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          showNotification('🎉 Welcome to ESL Fun Online Tools! Start exploring our interactive features.', 'success');
+        }, 1000);
+      });
+
       updateRewardsChart();
     </script>
 
