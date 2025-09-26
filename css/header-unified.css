@@ -578,8 +578,17 @@ header + main {
 .breadcrumb-nav,
 .breadcrumb,
 nav.breadcrumb,
-nav[aria-label="Breadcrumb"] {
+nav[aria-label="Breadcrumb"],
+nav[aria-label="breadcrumb"],
+.breadcrumb-container,
+div.breadcrumb,
+section.breadcrumb {
   display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }
 
 /* Ensure main content starts right after header */
@@ -606,4 +615,87 @@ header + section.hero::before {
   height: 1px;
   background: transparent;
   z-index: 2;
+}
+
+/* Ensure all pages have consistent spacing after header */
+header + div,
+header + section:not(.hero),
+header + main,
+header + article {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Force removal of any unwanted spacing elements */
+header ~ *:first-of-type {
+  margin-top: 0 !important;
+}
+
+/* Specific fix for pages with register/contact sections */
+.register-section,
+.contact-section,
+.blog-container {
+  margin-top: 0 !important;
+  padding-top: 2rem !important;
+}
+
+/* Critical fix for pages with custom hero sections that don't account for fixed header */
+.hero {
+  margin-top: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure hero sections account for fixed header properly */
+section.hero,
+.hero {
+  padding-top: var(--header-height) !important;
+}
+
+@media (max-width: 768px) {
+  section.hero,
+  .hero {
+    padding-top: var(--header-height-mobile) !important;
+  }
+}
+
+/* Fix for pages that incorrectly use margin-top instead of padding-top */
+.hero[style*="margin-top"] {
+  margin-top: 0 !important;
+}
+
+/* Ensure no visual artifacts between header and hero */
+header {
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.hero::before {
+  top: 0 !important;
+}
+
+/* Force clean header-to-hero transition */
+body {
+  margin: 0 !important;
+  padding-top: var(--header-height) !important;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: var(--header-height-mobile) !important;
+  }
+}
+
+/* Specific overrides for hero content positioning */
+.hero-content {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+.hero-bg {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 1 !important;
 }

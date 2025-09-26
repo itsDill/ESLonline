@@ -350,6 +350,50 @@
   </head>
 
   <body>
+    <!-- THEME TOGGLE SCRIPT - IMMEDIATE EXECUTION -->
+    <script>
+      // Load saved theme immediately on body
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+    </script>
+    
+    <script>
+      // Theme toggle initialization - runs after DOM elements exist
+      window.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+          console.log('Theme toggle found on index page');
+          
+          // Set initial icon based on current theme
+          const icon = themeToggle.querySelector('i');
+          if (icon) {
+            icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon';
+          }
+          
+          // Remove any existing click handlers and add new one
+          themeToggle.onclick = null;
+          themeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Theme toggle clicked');
+            
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            if (icon) {
+              icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            
+            console.log('Theme changed to:', isDark ? 'dark' : 'light');
+          });
+        } else {
+          console.log('Theme toggle NOT found on index page');
+        }
+      });
+    </script>
+    
     <!-- Accessibility: Skip link for keyboard navigation -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
@@ -1149,6 +1193,8 @@
       // Initialize network canvas and page-specific features
       document.addEventListener('DOMContentLoaded', function() {
         
+
+        
         // Simple animated title function
         function initAnimatedTitle() {
           const titleElement = document.querySelector('.hero-title');
@@ -1629,8 +1675,6 @@
           default: return 'info-circle';
         }
       }
-
-
     </script>
   </body>
 </html>

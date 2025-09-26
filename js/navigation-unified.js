@@ -22,6 +22,8 @@
     initScrollEffects();
     // Set current page indicator
     setCurrentPageIndicator();
+    // Initialize theme toggle
+    initThemeToggle();
   }
 
   // =====================================
@@ -325,27 +327,33 @@
   }
 
   // =====================================
-  // THEME TOGGLE (if exists)
+  // THEME TOGGLE
   // =====================================
-  const themeToggle = document.getElementById("themeToggle");
-  if (themeToggle) {
-    // Initialize theme from localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark-mode");
-    }
-
-    themeToggle.addEventListener("click", function () {
-      document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-
-      // Update icon
-      const icon = themeToggle.querySelector("i");
-      if (icon) {
-        icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+  function initThemeToggle() {
+    const themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      // Initialize theme from localStorage
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        const icon = themeToggle.querySelector("i");
+        if (icon) {
+          icon.className = "fas fa-sun";
+        }
       }
-    });
+
+      themeToggle.addEventListener("click", function () {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+
+        // Update icon
+        const icon = themeToggle.querySelector("i");
+        if (icon) {
+          icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+        }
+      });
+    }
   }
 
   // =====================================
