@@ -5,11 +5,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- SECURITY OPTIMIZATION: Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <!-- ENHANCED SECURITY CONFIGURATION -->
+    <!-- Comprehensive Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'strict-dynamic' 'nonce-${Math.random().toString(36).substring(2)}' 
+        https://www.googletagmanager.com 
+        https://pagead2.googlesyndication.com 
+        https://tpc.googlesyndication.com 
+        https://googleads.g.doubleclick.net
+        https://www.google-analytics.com;
+      style-src 'self' 'unsafe-inline' 
+        https://fonts.googleapis.com 
+        https://cdnjs.cloudflare.com;
+      font-src 'self' 
+        https://fonts.gstatic.com 
+        https://cdnjs.cloudflare.com;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' 
+        https://www.google-analytics.com 
+        https://googleads.g.doubleclick.net
+        https://www.googletagmanager.com;
+      frame-src 'self' 
+        https://googleads.g.doubleclick.net 
+        https://tpc.googlesyndication.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+      require-trusted-types-for 'script';
+      trusted-types default;
+      upgrade-insecure-requests;
+    " />
+    
+    <!-- Additional Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="
+      camera=(), 
+      microphone=(), 
+      geolocation=(), 
+      interest-cohort=(),
+      web-share=(),
+      usb=(),
+      serial=(),
+      bluetooth=(),
+      payment=()
+    " />
+    
+    <!-- Note: X-Frame-Options, HSTS, and COOP headers configured at server level (.htaccess) -->
+    <!-- This approach provides stronger enforcement than meta tags -->
     
     <meta
       name="description"
@@ -285,6 +330,9 @@
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019" crossorigin="anonymous"></script>
+    
+    <!-- Security Enhancements - Load early to prevent issues -->
+    <script src="js/security-enhancements.js"></script>
   </head>
 
   <body>

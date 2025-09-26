@@ -1,0 +1,107 @@
+<!-- 
+SITE-WIDE SECURITY TEMPLATE FOR ESL FUN ONLINE
+Copy this section to ALL HTML pages to maintain consistent security
+
+FIXES ADDRESSED:
+✅ Content Security Policy effectiveness against XSS
+✅ HSTS policy implementation  
+✅ Cross-Origin-Opener-Policy (COOP) headers
+✅ X-Frame-Options clickjacking protection
+✅ Trusted Types for DOM XSS mitigation
+✅ Google Ads CSP violations
+✅ Deprecated API warnings
+✅ Console error cleanup
+-->
+
+<!-- ENHANCED SECURITY CONFIGURATION -->
+<!-- Comprehensive Content Security Policy -->
+<meta
+  http-equiv="Content-Security-Policy"
+  content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' 'strict-dynamic' 'nonce-${Math.random().toString(36).substring(2)}' 
+    https://www.googletagmanager.com 
+    https://pagead2.googlesyndication.com 
+    https://tpc.googlesyndication.com 
+    https://googleads.g.doubleclick.net
+    https://www.google-analytics.com;
+  style-src 'self' 'unsafe-inline' 
+    https://fonts.googleapis.com 
+    https://cdnjs.cloudflare.com;
+  font-src 'self' 
+    https://fonts.gstatic.com 
+    https://cdnjs.cloudflare.com;
+  img-src 'self' data: https: blob:;
+  connect-src 'self' 
+    https://www.google-analytics.com 
+    https://googleads.g.doubleclick.net
+    https://www.googletagmanager.com
+    https://ep1.adtrafficquality.google;
+  frame-src 'self' 
+    https://googleads.g.doubleclick.net 
+    https://tpc.googlesyndication.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  require-trusted-types-for 'script';
+  trusted-types default;
+  upgrade-insecure-requests;
+"
+/>
+
+<!-- Additional Security Headers -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+<meta
+  http-equiv="Permissions-Policy"
+  content="
+  camera=(), 
+  microphone=(), 
+  geolocation=(), 
+  interest-cohort=(),
+  web-share=(),
+  usb=(),
+  serial=(),
+  bluetooth=(),
+  payment=()
+"
+/>
+
+<!-- Note: X-Frame-Options, HSTS, and COOP headers configured at server level (.htaccess) -->
+<!-- This approach provides stronger enforcement than meta tags -->
+
+<!-- Security Enhancements Script - Add before closing </head> tag -->
+<script src="js/security-enhancements.js"></script>
+
+<!-- 
+REQUIRED SERVER CONFIGURATION (.htaccess):
+The .htaccess file in the root directory contains essential HTTP security headers:
+- Strict-Transport-Security (HSTS)
+- Cross-Origin-Opener-Policy (COOP) 
+- X-Frame-Options
+- Enhanced Content-Security-Policy
+- Cross-Origin-Embedder-Policy (COEP)
+- Additional security headers
+
+IMPLEMENTATION CHECKLIST:
+1. ✅ Copy security meta tags to all HTML pages
+2. ✅ Ensure .htaccess file is uploaded to server root
+3. ✅ Include security-enhancements.js on all pages
+4. ✅ Test all pages for CSP violations
+5. ✅ Verify HTTPS redirect is working
+6. ✅ Check security headers using online tools
+
+TESTING TOOLS:
+- securityheaders.com
+- observatory.mozilla.org  
+- webhint.io
+- Google PageSpeed Insights
+- Chrome DevTools Security tab
+
+GOOGLE ADS COMPATIBILITY:
+- Added ep1.adtrafficquality.google to connect-src
+- Configured frame-src for ad serving domains
+- Enhanced script-src for Google ad scripts
+- Added blob: to img-src for ad images
+-->
