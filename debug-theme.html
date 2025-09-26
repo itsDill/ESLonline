@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug Theme Toggle</title>
+    <style>
+      /* Basic CSS variables like in main.css */
+      :root {
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --transition-normal: 0.3s ease;
+      }
+
+      .dark-mode {
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+        --bg-primary: #1f2937;
+        --bg-secondary: #111827;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        color: var(--text-primary);
+        background: var(--bg-primary);
+        transition: background-color var(--transition-normal),
+          color var(--transition-normal);
+        padding: 2rem;
+        min-height: 100vh;
+      }
+
+      .card {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        transition: background-color var(--transition-normal);
+      }
+
+      .theme-toggle {
+        padding: 10px 20px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--text-secondary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all var(--transition-normal);
+      }
+
+      .theme-toggle:hover {
+        background: var(--text-primary);
+        color: var(--bg-primary);
+      }
+
+      .debug-info {
+        margin-top: 2rem;
+        padding: 1rem;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Theme Toggle Debug</h1>
+    <p>This is a test to debug the dark/light theme toggle functionality.</p>
+
+    <button class="theme-toggle" id="themeToggle">
+      <i class="fas fa-moon"></i> Toggle Theme
+    </button>
+
+    <div class="card">
+      <h2>Test Card</h2>
+      <p>This card should change colors when you toggle the theme.</p>
+    </div>
+
+    <div class="debug-info" id="debugInfo">
+      <strong>Debug Info:</strong><br />
+      Body classes: <span id="bodyClasses"></span><br />
+      Current theme: <span id="currentTheme"></span><br />
+      Computed background color: <span id="computedBg"></span><br />
+      Computed text color: <span id="computedText"></span>
+    </div>
+
+    <script>
+      const themeToggle = document.getElementById("themeToggle");
+      const bodyClassesSpan = document.getElementById("bodyClasses");
+      const currentThemeSpan = document.getElementById("currentTheme");
+      const computedBgSpan = document.getElementById("computedBg");
+      const computedTextSpan = document.getElementById("computedText");
+
+      function updateDebugInfo() {
+        bodyClassesSpan.textContent = document.body.className || "none";
+        currentThemeSpan.textContent = document.body.classList.contains(
+          "dark-mode"
+        )
+          ? "dark"
+          : "light";
+
+        const computedStyle = getComputedStyle(document.body);
+        computedBgSpan.textContent = computedStyle.backgroundColor;
+        computedTextSpan.textContent = computedStyle.color;
+      }
+
+      // Initialize theme from localStorage
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+      }
+
+      // Initial debug info update
+      updateDebugInfo();
+
+      themeToggle.addEventListener("click", function () {
+        console.log("Theme toggle clicked");
+
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+
+        console.log("Theme changed to:", isDark ? "dark" : "light");
+
+        // Update debug info
+        updateDebugInfo();
+      });
+
+      // Update debug info every second to catch changes
+      setInterval(updateDebugInfo, 1000);
+    </script>
+  </body>
+</html>

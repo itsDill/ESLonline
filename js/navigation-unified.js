@@ -331,29 +331,58 @@
   // =====================================
   function initThemeToggle() {
     const themeToggle = document.getElementById("themeToggle");
-    if (themeToggle) {
-      // Initialize theme from localStorage
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        const icon = themeToggle.querySelector("i");
-        if (icon) {
-          icon.className = "fas fa-sun";
-        }
+    if (!themeToggle) {
+      console.warn("Theme toggle button not found");
+      return;
+    }
+
+    console.log("Initializing theme toggle");
+
+    // Check current theme state
+    const isDarkMode = document.body.classList.contains("dark-mode");
+
+    // Set initial icon based on current theme
+    const icon = themeToggle.querySelector("i");
+    if (icon) {
+      icon.className = isDarkMode ? "fas fa-sun" : "fas fa-moon";
+    }
+
+    // Remove any existing click handlers to prevent duplicates
+    const newToggle = themeToggle.cloneNode(true);
+    themeToggle.parentNode.replaceChild(newToggle, themeToggle);
+
+    // Add fresh click handler
+    newToggle.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log(
+        "Theme toggle clicked - current classes:",
+        document.body.className
+      );
+
+      // Toggle theme on both html and body for compatibility
+      document.documentElement.classList.toggle("dark-mode");
+      document.body.classList.toggle("dark-mode");
+
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+
+      console.log("Theme changed to:", isDark ? "dark" : "light");
+
+      // Update icon
+      const iconElement = newToggle.querySelector("i");
+      if (iconElement) {
+        iconElement.className = isDark ? "fas fa-sun" : "fas fa-moon";
       }
 
-      themeToggle.addEventListener("click", function () {
-        document.body.classList.toggle("dark-mode");
-        const isDark = document.body.classList.contains("dark-mode");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+      // Force a repaint to ensure CSS changes are applied
+      document.body.style.display = "none";
+      document.body.offsetHeight; // Trigger reflow
+      document.body.style.display = "";
+    });
 
-        // Update icon
-        const icon = themeToggle.querySelector("i");
-        if (icon) {
-          icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
-        }
-      });
-    }
+    console.log("Theme toggle initialized successfully");
   }
 
   // =====================================
