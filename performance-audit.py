@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-Performance Audit and Optimization Script for ESL Fun Online
-Analyzes current performance issues and implements fixes
+ESL Fun Online - Performance Audit Script
+Addresses the Page Insights metrics issues identified
+Analyzes implemented optimizations for CLS, LCP, FCP, TBT improvements
 """
 
 import os
-import re
+import sys
 import json
+import time
 from pathlib import Path
+import re
 
 def analyze_current_performance():
     """Analyze the current performance issues"""

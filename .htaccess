@@ -43,36 +43,25 @@
     ExpiresDefault "access plus 1 week"
 </IfModule>
 
-# ENHANCED SECURITY HEADERS - FIXES PAGE INSIGHTS ISSUES
+# Security headers
 <IfModule mod_headers.c>
-    # HSTS - Strong policy to prevent downgrade attacks
-    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+    # HSTS
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     
-    # Enhanced Content Security Policy - Addresses CSP effectiveness issues
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'strict-dynamic' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://ep1.adtrafficquality.google; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; require-trusted-types-for 'script'; trusted-types default; upgrade-insecure-requests;"
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';"
     
-    # X-Frame-Options - Mitigate clickjacking
+    # X-Frame-Options
     Header always set X-Frame-Options "DENY"
     
-    # X-Content-Type-Options - Prevent MIME sniffing
+    # X-Content-Type-Options
     Header always set X-Content-Type-Options "nosniff"
     
-    # Referrer Policy - Control referrer information
+    # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     
-    # Cross-Origin-Opener-Policy - Proper origin isolation
+    # Cross-Origin-Opener-Policy
     Header always set Cross-Origin-Opener-Policy "same-origin"
-    
-    # Additional Security Headers
-    Header always set Cross-Origin-Embedder-Policy "require-corp"
-    Header always set Cross-Origin-Resource-Policy "cross-origin"
-    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=(), web-share=(), usb=(), serial=(), bluetooth=(), payment=()"
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Expect-CT "max-age=86400, enforce"
-    
-    # Hide server information
-    Header unset Server
-    Header unset X-Powered-By
 </IfModule>
 
 # Enable Keep-Alive
@@ -83,51 +72,9 @@
 # Remove ETags
 FileETag None
 
-# FORCE HTTPS AND SECURITY REDIRECTS
+# Redirect to HTTPS
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Force HTTPS redirect
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # Remove www redirect (optional - adjust based on preference)
-    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [R=301,L]
-</IfModule>
-
-# ADDITIONAL SECURITY MEASURES
-<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|conf|bak|backup)$">
-    Order Allow,Deny 
-    Deny from all
-</FilesMatch>
-
-# Prevent access to hidden files and directories
-<FilesMatch "^\.">
-    Order Allow,Deny
-    Deny from all
-</FilesMatch>
-
-# Block common exploit attempts
-<IfModule mod_rewrite.c>
-    RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
-    RewriteCond %{QUERY_STRING} \.\./\.\./\.\./\.\./\.\./\.\./  [OR]
-    RewriteCond %{QUERY_STRING} ^.*\.(bash|git|hg|log|svn|swp|cvs) [OR]
-    RewriteCond %{QUERY_STRING} etc/passwd [OR]
-    RewriteCond %{QUERY_STRING} boot\.ini [OR]
-    RewriteCond %{QUERY_STRING} ftp\: [OR]
-    RewriteCond %{QUERY_STRING} http\: [OR]
-    RewriteCond %{QUERY_STRING} https\: [OR]
-    RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|\%3D) [OR]
-    RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [OR]
-    RewriteCond %{QUERY_STRING} ^.*(\[|\]|\(|\)|<|>|ê|"|;|\?|\*|=$).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(&#x22;|&#x27;|&#x3C;|&#x3E;|&#x5C;|&#x7B;|&#x7C;).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(%24&x).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(%0|%A|%B|%C|%D|%E|%F|127\.0).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(globals|encode|localhost|loopback).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(request|select|concat|union|declare).* [OR]
-    RewriteCond %{QUERY_STRING} ^.*(script|javascript|vbscript|onload).* [NC]
-    RewriteRule ^(.*)$ - [F,L]
 </IfModule>
