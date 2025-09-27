@@ -10,7 +10,11 @@ const STATIC_RESOURCES = [
   "/css/main.css",
   "/js/navigation.js",
   "/images/hero.webp",
+  "/images/logo-optimized.webp",
+  "/images/1.webp",
+  // Fallback PNG images
   "/images/logo-optimized.png",
+  "/images/1.png",
 ];
 
 // Install event - cache static resources

@@ -9,7 +9,7 @@
     <!-- Comprehensive Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'strict-dynamic' 'nonce-${Math.random().toString(36).substring(2)}' 
+      script-src 'self' 'unsafe-inline' 'strict-dynamic'
         https://www.googletagmanager.com 
         https://pagead2.googlesyndication.com 
         https://tpc.googlesyndication.com 
@@ -92,8 +92,11 @@
     <link rel="canonical" href="https://eslfunonline.com/" />
     
     <!-- Favicon and Touch Icons -->
+    <link rel="icon" type="image/webp" sizes="32x32" href="images/logo-optimized.webp" />
+    <link rel="icon" type="image/webp" sizes="16x16" href="images/logo-optimized.webp" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/logo-optimized.webp" />
+    <!-- Fallback for browsers that don't support WebP -->
     <link rel="icon" type="image/png" sizes="32x32" href="images/logo-optimized.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logo-optimized.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="images/logo-optimized.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#46bbe5" />
@@ -238,11 +241,11 @@
       "url": "https://eslfunonline.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://eslfunonline.com/images/1.png",
+        "url": "https://eslfunonline.com/images/1.webp",
         "width": 200,
         "height": 200
       },
-      "image": "https://eslfunonline.com/images/1.png",
+      "image": "https://eslfunonline.com/images/1.webp",
       "sameAs": [
         "https://www.facebook.com/eslfunonline",
         "https://twitter.com/eslfunonline",
@@ -456,6 +459,11 @@
     <link rel="stylesheet" href="css/header-unified.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/main.css" />
+    
+    <!-- Performance and SEO Optimizations -->
+    <link rel="stylesheet" href="css/performance-optimizations.css" />
+    <link rel="stylesheet" href="css/seo-optimizations.css" />
+    <link rel="stylesheet" href="css/ux-ui-enhancements.css" />
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019" crossorigin="anonymous"></script>
@@ -465,15 +473,23 @@
   </head>
 
   <body>
-    <!-- THEME TOGGLE SCRIPT - IMMEDIATE EXECUTION -->
+    <!-- THEME INITIALIZATION SCRIPT - IMMEDIATE EXECUTION -->
     <script>
       // Load saved theme immediately on body - before any styles load
       (function() {
-        const savedTheme = localStorage.getItem('theme');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        console.log('Initial theme loading:', savedTheme);
+        
         if (savedTheme === 'dark') {
           document.documentElement.classList.add('dark-mode');
           document.body.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+          document.body.classList.remove('dark-mode');
         }
+        
+        // Store theme state for the navigation fix script
+        window.initialTheme = savedTheme;
       })();
     </script>
     
@@ -485,15 +501,18 @@
       <div class="container">
         <nav class="navbar">
           <a href="index.html" class="logo-container">
-            <img
-              src="images/logo-optimized.png"
-              alt="ESL Fun Online Logo"
-              class="logo-image"
-              loading="eager"
-              decoding="async"
-              width="40"
-              height="40"
-            />
+            <picture>
+              <source srcset="images/logo-optimized.webp" type="image/webp">
+              <img
+                src="images/logo-optimized.png"
+                alt="ESL Fun Online Logo"
+                class="logo-image"
+                loading="eager"
+                decoding="async"
+                width="40"
+                height="40"
+              />
+            </picture>
             <span class="logo-text">ESL Fun Online</span>
           </a>
 
@@ -1158,7 +1177,10 @@
           </div>
           <div class="brand-visual">
             <div class="brand-logo-showcase">
-              <img src="images/1.png" alt="ESL Fun Online Logo" class="brand-logo" />
+              <picture>
+                <source srcset="images/1.webp" type="image/webp">
+                <img src="images/1.png" alt="ESL Fun Online Logo" class="brand-logo" loading="lazy" decoding="async" width="120" height="120" />
+              </picture>
               <h3>ESL Fun Online</h3>
               <p class="brand-tagline">Where English Learning Becomes Fun</p>
             </div>
@@ -1197,7 +1219,10 @@
           <!-- Brand Section -->
           <div class="footer-section footer-brand">
             <div class="brand-header">
-              <img src="images/logo-optimized.png" alt="ESL Fun Online" class="footer-logo" loading="lazy" decoding="async" width="40" height="40">
+              <picture>
+                <source srcset="images/logo-optimized.webp" type="image/webp">
+                <img src="images/logo-optimized.png" alt="ESL Fun Online" class="footer-logo" loading="lazy" decoding="async" width="40" height="40">
+              </picture>
               <h3>ESL Fun Online</h3>
             </div>
             <p>
@@ -1286,10 +1311,87 @@
     <link rel="stylesheet" href="css/accessibility-fixes.css" />
     <link rel="stylesheet" href="css/mobile-contrast-fix.css" />
     <link rel="stylesheet" href="css/dark-mode-comprehensive.css" />
+    
+    <!-- CRITICAL: Navigation fixes must load LAST to override all other styles -->
+    <link rel="stylesheet" href="css/navigation-fixes.css" />
+    
+    <!-- EMERGENCY FIX: Inline styles to force button visibility -->
+    <style>
+      /* FORCE mobile toggle to always be visible */
+      .mobile-toggle, #mobileToggle {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 9999 !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        background: transparent !important;
+        border: 2px solid transparent !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      
+      /* FORCE theme toggle to always be visible */
+      .theme-toggle, #themeToggle {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        cursor: pointer !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      
+      /* Ensure controls section works */
+      .controls {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+      }
+      
+      /* Mobile breakpoint override */
+      @media (max-width: 768px) {
+        .mobile-toggle, #mobileToggle {
+          display: flex !important;
+          order: 999 !important;
+        }
+        
+        .controls {
+          display: flex !important;
+          gap: 0.5rem !important;
+        }
+      }
+    </style>
 
     <!-- Scripts -->
-    <script src="js/navigation-unified.js" defer></script>
-    <script src="js/navigation.js" defer></script>
+    <!-- Navigation Fix: Load this FIRST to fix mobile menu and theme toggle issues -->
+    <script src="js/navigation-fix.js"></script>
+    
+    <!-- Quick Debug Script to verify button functionality -->
+    <script>
+      // Quick debug to verify buttons are working
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileBtn = document.getElementById('mobileToggle');
+        const themeBtn = document.getElementById('themeToggle');
+        
+        console.log('DEBUG: Elements found:', {
+          mobileToggle: !!mobileBtn,
+          themeToggle: !!themeBtn
+        });
+        
+        if (mobileBtn) {
+          console.log('DEBUG: Mobile button visible:', window.getComputedStyle(mobileBtn).display);
+        }
+        
+        if (themeBtn) {
+          console.log('DEBUG: Theme button visible:', window.getComputedStyle(themeBtn).display);
+        }
+      });
+    </script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"></script>
@@ -1457,6 +1559,26 @@
         // Fallback: still show the page
         document.body.style.opacity = '1';
       }
+      
+      // Test button functionality after page load
+      setTimeout(() => {
+        const mobile = document.getElementById('mobileToggle');
+        const theme = document.getElementById('themeToggle');
+        
+        if (mobile) {
+          console.log('Mobile button found, adding test listener');
+          mobile.addEventListener('click', () => {
+            console.log('MOBILE BUTTON CLICKED! Navigation fix is working.');
+          });
+        }
+        
+        if (theme) {
+          console.log('Theme button found, adding test listener');
+          theme.addEventListener('click', () => {
+            console.log('THEME BUTTON CLICKED! Theme toggle is working.');
+          });
+        }
+      }, 1000);
       
       // Add missing functions that are referenced in HTML
       window.scrollToTop = function() {
