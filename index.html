@@ -19,6 +19,17 @@
     <meta name="author" content="ESL Fun Online" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="English" />
+    <meta name="geo.region" content="TH" />
+    <meta name="geo.placename" content="Thailand" />
+    <meta name="theme-color" content="#46bbe5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Enhanced SEO Tags -->
+    <meta name="google-site-verification" content="" />
+    <link rel="alternate" hreflang="en" href="https://eslfunonline.com/" />
+    <link rel="alternate" hreflang="th" href="https://eslfunonline.com/th/" />
 
     <!-- Open Graph tags for social sharing -->
     <meta
@@ -638,10 +649,36 @@
       }
 
       .activity-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 700;
         color: var(--text-primary);
         margin-bottom: 1rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .challenge-badge {
+        display: inline-block;
+        background: linear-gradient(45deg, #ff6b35, #f7931e);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        animation: pulse 2s infinite;
+        box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
       }
 
       .activity-subtitle {
@@ -651,20 +688,433 @@
       }
 
       .vocabulary-game {
-        background: var(--bg-secondary);
-        border-radius: var(--radius-lg);
-        padding: 2rem;
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary) 0%,
+          rgba(70, 187, 229, 0.1) 100%
+        );
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: var(--shadow-lg);
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+        overflow: hidden;
         margin: 2rem 0;
       }
 
+      .vocabulary-game::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        z-index: -1;
+        margin: -2px;
+        border-radius: inherit;
+      }
+
       .word-card {
-        background: var(--gradient-primary);
-        color: white;
+        background: white;
         padding: 2rem;
-        border-radius: var(--radius-lg);
-        margin-bottom: 1.5rem;
+        border-radius: 15px;
         font-size: 1.5rem;
         font-weight: 600;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 3px solid var(--primary-color);
+        position: relative;
+        transform: translateY(0);
+        transition: all 0.3s ease;
+        color: var(--text-primary);
+      }
+
+      .word-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      /* Enhanced question display styling */
+      .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .question-number {
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .difficulty-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .difficulty-badge.easy {
+        background: linear-gradient(45deg, #10b981, #34d399);
+        color: white;
+      }
+
+      .difficulty-badge.medium {
+        background: linear-gradient(45deg, #f59e0b, #fbbf24);
+        color: white;
+      }
+
+      .difficulty-badge.expert {
+        background: linear-gradient(45deg, #ef4444, #f87171);
+        color: white;
+        animation: expertPulse 2s infinite;
+      }
+
+      @keyframes expertPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+        }
+      }
+      .question-number {
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .word-display {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 1rem 0;
+        text-decoration: underline;
+        text-decoration-color: var(--primary-color);
+      }
+
+      .context-sentence {
+        font-style: italic;
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: rgba(70, 187, 229, 0.1);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .question-prompt {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-top: 1rem;
+      }
+
+      .option-letter {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-right: 0.5rem;
+      }
+
+      /* Game results styling */
+      .game-results {
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .result-header h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      }
+
+      .score-display {
+        font-size: 3rem;
+        font-weight: 900;
+        margin: 0.5rem 0;
+      }
+
+      .percentage {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .result-message {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+
+      .result-stats {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      .result-stats p {
+        margin: 0.3rem 0;
+      }
+
+      /* Result type styling */
+      .legendary .score-display {
+        color: #ffd700;
+      }
+      .legendary .result-message {
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #000;
+      }
+
+      .exceptional .score-display {
+        color: #ff6b35;
+      }
+      .exceptional .result-message {
+        background: linear-gradient(45deg, #ff6b35, #f7931e);
+        color: white;
+      }
+
+      .impressive .score-display {
+        color: var(--secondary-color);
+      }
+      .impressive .result-message {
+        background: var(--secondary-color);
+        color: white;
+      }
+
+      .decent .score-display {
+        color: var(--primary-color);
+      }
+      .decent .result-message {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .challenging .score-display {
+        color: #ef4444;
+      }
+      .challenging .result-message {
+        background: #ef4444;
+        color: white;
+      }
+
+      /* Enhanced game set styling */
+      .game-set-info {
+        margin: 1rem 0;
+      }
+
+      .set-badge {
+        display: inline-block;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        box-shadow: 0 2px 10px rgba(var(--primary-rgb), 0.3);
+      }
+
+      /* Social sharing styling */
+      .social-share {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .share-btn {
+        background: linear-gradient(45deg, #1da1f2, #0d8bd9);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3);
+      }
+
+      .share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
+      }
+
+      .motivational {
+        background: linear-gradient(45deg, #4ade80, #22c55e);
+        color: white;
+        padding: 0.8rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        font-weight: 500;
+      }
+
+      /* Game set indicator */
+      .game-set-indicator {
+        font-size: 0.9rem;
+        color: var(--secondary-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        padding: 0.3rem 0.8rem;
+        background: rgba(var(--secondary-rgb), 0.1);
+        border-radius: 15px;
+        display: inline-block;
+        animation: fadeInScale 0.6s ease-out;
+      }
+
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Success and error animations */
+      .success-pulse {
+        animation: successPulse 0.6s ease-out;
+      }
+
+      .error-shake {
+        animation: errorShake 0.6s ease-out;
+      }
+
+      @keyframes successPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes errorShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      /* Feedback messages */
+      .feedback-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        z-index: 100;
+        animation: feedbackFade 1s ease-out;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .feedback-message.success {
+        background: linear-gradient(45deg, #22c55e, #16a34a);
+        color: white;
+      }
+
+      .feedback-message.error {
+        background: linear-gradient(45deg, #ef4444, #dc2626);
+        color: white;
+      }
+
+      @keyframes feedbackFade {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.8);
+        }
+        20% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+        80% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.9);
+        }
+      }
+
+      /* Enhanced score display */
+      .score-container {
+        text-align: center;
+        padding: 1rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--shadow-sm);
+        margin: 1rem 0;
+      }
+
+      .current-score {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0.5rem 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-top: 0.5rem;
+      }
+
+      .accuracy {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-top: 0.3rem;
       }
 
       .options-grid {
@@ -675,31 +1125,82 @@
       }
 
       .option-btn {
-        padding: 1rem;
-        background: var(--bg-primary);
+        background: white;
         border: 2px solid var(--border-color);
-        border-radius: var(--radius);
+        padding: 1.2rem 1.5rem;
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         font-weight: 500;
+        font-size: 1rem;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .option-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(70, 187, 229, 0.1),
+          transparent
+        );
+        transition: left 0.5s;
       }
 
       .option-btn:hover {
         border-color: var(--primary-color);
         background: var(--primary-color);
         color: white;
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.3);
+      }
+
+      .option-btn:hover::before {
+        left: 100%;
       }
 
       .option-btn.correct {
         background: var(--secondary-color);
-        color: white;
         border-color: var(--secondary-color);
+        color: white;
+        animation: correctAnswer 0.6s ease;
       }
 
       .option-btn.incorrect {
         background: #ef4444;
-        color: white;
         border-color: #ef4444;
+        color: white;
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes correctAnswer {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
       }
 
       .activity-score {
@@ -946,9 +1447,18 @@
         }
 
         /* Better mobile hero section */
+        .hero {
+          padding-top: 6rem; /* Add space for fixed header */
+        }
+
+        .hero-content {
+          padding-top: 2rem;
+        }
+
         .hero-content h1 {
           font-size: 2.5rem;
           line-height: 1.2;
+          margin-top: 1rem; /* Additional spacing on mobile */
         }
 
         .hero-content p {
@@ -1173,6 +1683,11 @@
           font-size: 1.8rem;
         }
 
+        .challenge-badge {
+          font-size: 0.6rem;
+          padding: 0.2rem 0.6rem;
+        }
+
         .vocabulary-game {
           padding: 1rem;
         }
@@ -1180,6 +1695,34 @@
         .word-card {
           padding: 1rem;
           font-size: 1.1rem;
+        }
+
+        .word-display {
+          font-size: 1.5rem;
+        }
+
+        .context-sentence {
+          font-size: 1rem;
+          padding: 0.75rem;
+        }
+
+        .score-display {
+          font-size: 2rem;
+        }
+
+        .result-message {
+          font-size: 1rem;
+        }
+
+        .question-header {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .difficulty-badge {
+          font-size: 0.6rem;
+          padding: 0.2rem 0.6rem;
         }
 
         .feature-card {
@@ -1560,9 +2103,13 @@
     <section class="activity-section" id="activity">
       <div class="container">
         <div class="activity-container">
-          <h2 class="activity-title">Try Our Vocabulary Challenge!</h2>
+          <h2 class="activity-title">
+            <span class="challenge-badge">⚡ ULTIMATE TEST</span>
+            Only 1% Can Pass This English Mastery Test!
+          </h2>
           <p class="activity-subtitle">
-            Test your English skills with this interactive vocabulary game
+            From everyday English to expert-level mastery. Start easy, but can
+            you survive the final questions that stump even teachers?
           </p>
 
           <div class="vocabulary-game" id="vocabularyGame">
@@ -1585,7 +2132,7 @@
               margin-top: 1rem;
             "
           >
-            <i class="fas fa-refresh"></i> New Game
+            <i class="fas fa-shuffle"></i> New Challenge
           </button>
         </div>
       </div>
@@ -1888,54 +2435,245 @@
 
     <!-- Enhanced JavaScript for Interactive Features -->
     <script>
-      // Vocabulary Game Data
-      const vocabularyQuestions = [
+      // Progressive English Mastery Test - 1% Pass Rate
+      // Three different game sets for variety
+      const gameSet1 = [
         {
-          word: "Entrepreneur",
+          word: "Grammar Basics",
+          context: "Choose the correct sentence:",
           options: [
-            "A person who starts a business",
-            "A type of investment",
-            "A business meeting",
-            "A financial report",
+            "Me and John went to the store",
+            "John and I went to the store",
+            "John and me went to the store",
+            "I and John went to the store",
           ],
+          correct: 1,
+        },
+        {
+          word: "Common Usage",
+          context: "Which sentence is correct?",
+          options: [
+            "I could care less about that movie",
+            "I couldn't care less about that movie",
+            "I should care less about that movie",
+            "I would care less about that movie",
+          ],
+          correct: 1,
+        },
+        {
+          word: "Word Choice",
+          context: "The weather will _____ our picnic plans.",
+          options: ["effect", "affect", "infect", "defect"],
+          correct: 1,
+        },
+        {
+          word: "Phrasal Verbs",
+          context: "I need to _____ this information before the meeting.",
+          options: ["look up", "look over", "look into", "look after"],
+          correct: 1,
+        },
+        {
+          word: "Subjunctive Mood",
+          context: "If I _____ you, I would accept that job offer.",
+          options: ["was", "were", "am", "will be"],
+          correct: 1,
+        },
+        {
+          word: "Advanced Grammar",
+          context:
+            "Neither the CEO nor the board members _____ aware of the issue.",
+          options: ["was", "were", "is", "are"],
+          correct: 1,
+        },
+        {
+          word: "Sophisticated Vocabulary",
+          context:
+            "Her argument was so _____ that even experts found flaws in the logic.",
+          options: ["obvious", "clear", "specious", "honest"],
+          correct: 2,
+        },
+        {
+          word: "Literary Device",
+          context: "The phrase 'deafening silence' is an example of:",
+          options: ["metaphor", "simile", "oxymoron", "alliteration"],
+          correct: 2,
+        },
+        {
+          word: "Etymology Expert",
+          context:
+            "Which word means 'characterized by excessive eagerness to please'?",
+          options: ["obsequious", "querulous", "garrulous", "incredulous"],
           correct: 0,
         },
         {
-          word: "Innovation",
+          word: "Master Level",
+          context:
+            "In the sentence 'The data suggest a correlation,' the verb form is:",
           options: [
-            "Old method",
-            "New idea or method",
-            "Company policy",
-            "Market research",
+            "incorrect - should be 'suggests'",
+            "correct - 'data' is plural",
+            "informal but acceptable",
+            "archaic usage",
           ],
           correct: 1,
-        },
-        {
-          word: "Collaborate",
-          options: ["Work alone", "Work together", "Compete", "Delegate"],
-          correct: 1,
-        },
-        {
-          word: "Negotiate",
-          options: [
-            "To argue",
-            "To discuss terms",
-            "To refuse",
-            "To accept immediately",
-          ],
-          correct: 1,
-        },
-        {
-          word: "Efficient",
-          options: [
-            "Slow",
-            "Expensive",
-            "Working well with no waste",
-            "Complicated",
-          ],
-          correct: 2,
         },
       ];
+
+      const gameSet2 = [
+        {
+          word: "Basic Grammar",
+          context: "Which is the correct plural form?",
+          options: ["childs", "children", "childrens", "child's"],
+          correct: 1,
+        },
+        {
+          word: "Common Mistakes",
+          context: "Choose the correct sentence:",
+          options: [
+            "Between you and I, this is wrong",
+            "Between you and me, this is correct",
+            "Between I and you, this works",
+            "Between me and you, sounds good",
+          ],
+          correct: 1,
+        },
+        {
+          word: "Verb Forms",
+          context: "Yesterday, I _____ my homework.",
+          options: ["done", "did", "do", "doing"],
+          correct: 1,
+        },
+        {
+          word: "Prepositions",
+          context: "She arrived _____ the airport at midnight.",
+          options: ["in", "on", "at", "to"],
+          correct: 2,
+        },
+        {
+          word: "Modal Verbs",
+          context: "You _____ smoke in the hospital.",
+          options: ["mustn't", "don't have to", "needn't", "won't"],
+          correct: 0,
+        },
+        {
+          word: "Complex Grammar",
+          context: "Had I known earlier, I _____ differently.",
+          options: ["would act", "would have acted", "will act", "had acted"],
+          correct: 1,
+        },
+        {
+          word: "Nuanced Meaning",
+          context: "The politician's response was deliberately _____.",
+          options: ["clear", "honest", "equivocal", "simple"],
+          correct: 2,
+        },
+        {
+          word: "Figurative Language",
+          context: "'Time is money' is an example of:",
+          options: ["hyperbole", "metaphor", "alliteration", "personification"],
+          correct: 1,
+        },
+        {
+          word: "Advanced Vocabulary",
+          context: "Which word means 'a person who pretends to have virtues'?",
+          options: ["hypocrite", "skeptic", "cynic", "pessimist"],
+          correct: 0,
+        },
+        {
+          word: "Expert Grammar",
+          context: "The sentence 'Whom did you see?' is:",
+          options: [
+            "incorrect - should be 'who'",
+            "formally correct but sounds outdated",
+            "always preferred in writing",
+            "grammatically impossible",
+          ],
+          correct: 1,
+        },
+      ];
+
+      const gameSet3 = [
+        {
+          word: "Simple Tenses",
+          context: "She _____ to work every day.",
+          options: ["go", "goes", "going", "gone"],
+          correct: 1,
+        },
+        {
+          word: "Article Usage",
+          context: "I saw _____ movie last night.",
+          options: ["a", "an", "the", "no article needed"],
+          correct: 0,
+        },
+        {
+          word: "Comparative Forms",
+          context: "This book is _____ than that one.",
+          options: ["more better", "better", "more good", "gooder"],
+          correct: 1,
+        },
+        {
+          word: "Question Formation",
+          context: "How to ask about someone's job?",
+          options: [
+            "What you do for work?",
+            "What do you do for work?",
+            "What are you do for work?",
+            "What you are doing for work?",
+          ],
+          correct: 1,
+        },
+        {
+          word: "Conditional Sentences",
+          context: "If it rains tomorrow, we _____ inside.",
+          options: ["stay", "will stay", "stayed", "staying"],
+          correct: 1,
+        },
+        {
+          word: "Perfect Tenses",
+          context: "By next year, I _____ here for five years.",
+          options: [
+            "will work",
+            "will be working",
+            "will have worked",
+            "will have been working",
+          ],
+          correct: 3,
+        },
+        {
+          word: "Sophisticated Usage",
+          context: "The solution was both elegant and _____.",
+          options: ["simple", "complex", "parsimonious", "obvious"],
+          correct: 2,
+        },
+        {
+          word: "Literary Terms",
+          context: "A story within a story is called:",
+          options: ["metaphor", "allegory", "frame narrative", "symbolism"],
+          correct: 2,
+        },
+        {
+          word: "Rare Vocabulary",
+          context: "Which word means 'existing in name only'?",
+          options: ["nominal", "formal", "official", "temporary"],
+          correct: 0,
+        },
+        {
+          word: "Expert Level",
+          context: "The correct use of 'lie' vs 'lay' in past tense:",
+          options: [
+            "Yesterday I laid down (correct)",
+            "Yesterday I lay down (correct)",
+            "Yesterday I lied down (correct)",
+            "All forms are acceptable",
+          ],
+          correct: 1,
+        },
+      ];
+
+      // Game sets collection
+      const allGameSets = [gameSet1, gameSet2, gameSet3];
+      let currentGameSet = 0;
+      let vocabularyQuestions = allGameSets[currentGameSet];
 
       let currentQuestion = 0;
       let score = 0;
@@ -1943,9 +2681,19 @@
 
       // Initialize vocabulary game
       function initVocabularyGame() {
+        // Randomly select a game set for variety
+        currentGameSet = Math.floor(Math.random() * allGameSets.length);
+        vocabularyQuestions = allGameSets[currentGameSet];
+
         currentQuestion = 0;
         score = 0;
         gameActive = true;
+
+        // Show which game set is selected
+        console.log(
+          `Starting Game Set ${currentGameSet + 1} of ${allGameSets.length}`
+        );
+
         loadQuestion();
       }
 
@@ -1956,9 +2704,46 @@
         }
 
         const question = vocabularyQuestions[currentQuestion];
-        document.getElementById(
-          "wordCard"
-        ).textContent = `What does "${question.word}" mean?`;
+        const wordCard = document.getElementById("wordCard");
+
+        // Determine difficulty level for visual feedback
+        let difficultyLevel = "";
+        let difficultyClass = "";
+        if (currentQuestion <= 2) {
+          difficultyLevel = "EASY - Hook Questions";
+          difficultyClass = "easy";
+        } else if (currentQuestion <= 5) {
+          difficultyLevel = "MEDIUM - Building Difficulty";
+          difficultyClass = "medium";
+        } else {
+          difficultyLevel = "EXPERT - Only 1% Pass These";
+          difficultyClass = "expert";
+        }
+
+        // Enhanced question display with context and difficulty
+        const gameSetNames = [
+          "Grammar Master",
+          "Language Expert",
+          "Word Wizard",
+        ];
+        const gameSetIcons = ["📚", "🧠", "✨"];
+        const currentSetName = gameSetNames[currentGameSet];
+        const currentSetIcon = gameSetIcons[currentGameSet];
+
+        wordCard.innerHTML = `
+          <div class="question-header">
+            <div class="game-set-indicator">
+              ${currentSetIcon} ${currentSetName} Challenge
+            </div>
+            <div class="question-number">Question ${currentQuestion + 1} of ${
+          vocabularyQuestions.length
+        }</div>
+            <div class="difficulty-badge ${difficultyClass}">${difficultyLevel}</div>
+          </div>
+          <div class="word-display">${question.word}</div>
+          <div class="context-sentence">${question.context}</div>
+          <div class="question-prompt">Choose the best answer:</div>
+        `;
 
         const optionsGrid = document.getElementById("optionsGrid");
         optionsGrid.innerHTML = "";
@@ -1966,7 +2751,9 @@
         question.options.forEach((option, index) => {
           const button = document.createElement("button");
           button.className = "option-btn";
-          button.textContent = option;
+          button.innerHTML = `<span class="option-letter">${String.fromCharCode(
+            65 + index
+          )}.</span> ${option}`;
           button.onclick = () => selectAnswer(index);
           optionsGrid.appendChild(button);
         });
@@ -1979,6 +2766,7 @@
 
         const question = vocabularyQuestions[currentQuestion];
         const buttons = document.querySelectorAll(".option-btn");
+        const wordCard = document.getElementById("wordCard");
 
         buttons.forEach((btn, index) => {
           btn.disabled = true;
@@ -1989,8 +2777,35 @@
           }
         });
 
+        // Visual feedback based on answer
         if (selectedIndex === question.correct) {
           score++;
+          // Add success animation to word card
+          wordCard.classList.add("success-pulse");
+          // Show temporary success message
+          const successMsg = document.createElement("div");
+          successMsg.className = "feedback-message success";
+          successMsg.innerHTML = "✅ Correct! Well done!";
+          wordCard.appendChild(successMsg);
+
+          setTimeout(() => {
+            successMsg.remove();
+            wordCard.classList.remove("success-pulse");
+          }, 1000);
+        } else {
+          // Add error animation
+          wordCard.classList.add("error-shake");
+          // Show temporary error message
+          const errorMsg = document.createElement("div");
+          errorMsg.className = "feedback-message error";
+          errorMsg.innerHTML =
+            "❌ Incorrect. The right answer was highlighted.";
+          wordCard.appendChild(errorMsg);
+
+          setTimeout(() => {
+            errorMsg.remove();
+            wordCard.classList.remove("error-shake");
+          }, 1000);
         }
 
         setTimeout(() => {
@@ -2000,27 +2815,145 @@
       }
 
       function updateScore() {
-        document.getElementById(
-          "gameScore"
-        ).textContent = `Score: ${score}/${currentQuestion}`;
+        const scoreElement = document.getElementById("gameScore");
+        const percentage =
+          currentQuestion > 0 ? Math.round((score / currentQuestion) * 100) : 0;
+        scoreElement.innerHTML = `
+          <div class="score-container">
+            <div class="current-score">Score: ${score}/${currentQuestion}</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${
+                (currentQuestion / vocabularyQuestions.length) * 100
+              }%"></div>
+            </div>
+            <div class="progress-text">Question ${currentQuestion}/${
+          vocabularyQuestions.length
+        }</div>
+            ${
+              currentQuestion > 0
+                ? `<div class="accuracy">Accuracy: ${percentage}%</div>`
+                : ""
+            }
+          </div>
+        `;
       }
 
       function endGame() {
         gameActive = false;
+        const percentage = Math.round(
+          (score / vocabularyQuestions.length) * 100
+        );
+        let resultMessage = "";
+        let resultIcon = "";
+        let resultClass = "";
+
+        if (percentage >= 90) {
+          resultMessage = "🏆 LEGENDARY! You're in the top 1%!";
+          resultClass = "legendary";
+        } else if (percentage >= 80) {
+          resultMessage = "🔥 EXCEPTIONAL! Almost perfect!";
+          resultClass = "exceptional";
+        } else if (percentage >= 70) {
+          resultMessage = "⭐ IMPRESSIVE! Above average intelligence!";
+          resultClass = "impressive";
+        } else if (percentage >= 60) {
+          resultMessage = "👍 DECENT! Room for improvement.";
+          resultClass = "decent";
+        } else {
+          resultMessage = "📚 CHALLENGING! These words stump 99% of people.";
+          resultClass = "challenging";
+        }
+
+        // Create motivational message based on game set
+        const gameSetNames = [
+          "Grammar Master",
+          "Language Expert",
+          "Word Wizard",
+        ];
+        const currentSetName = gameSetNames[currentGameSet];
+
         document.getElementById("wordCard").innerHTML = `
-          <div style="text-align: center;">
-            <h3>Game Complete!</h3>
-            <p>Final Score: ${score}/${vocabularyQuestions.length}</p>
-            <p>${
-              score >= 4
-                ? "🎉 Excellent work!"
-                : score >= 3
-                ? "👍 Good job!"
-                : "📚 Keep studying!"
-            }</p>
+          <div class="game-results ${resultClass}">
+            <div class="result-header">
+              <h3>Challenge Complete!</h3>
+              <div class="game-set-info">
+                <span class="set-badge">Game Set: ${currentSetName}</span>
+              </div>
+              <div class="score-display">${score}/${
+          vocabularyQuestions.length
+        }</div>
+              <div class="percentage">${percentage}%</div>
+            </div>
+            <div class="result-message">${resultMessage}</div>
+            <div class="result-stats">
+              <p><strong>Test Type:</strong> Progressive English Mastery</p>
+              <p><strong>Average Score:</strong> 4.2/10 (42%)</p>
+              <p><strong>Your Level:</strong> ${
+                percentage >= 90
+                  ? "Native-Level Mastery"
+                  : percentage >= 80
+                  ? "Advanced Proficiency"
+                  : percentage >= 70
+                  ? "Upper-Intermediate"
+                  : percentage >= 60
+                  ? "Intermediate"
+                  : percentage >= 40
+                  ? "Pre-Intermediate"
+                  : "Elementary - Keep Practicing!"
+              }</p>
+              <p><strong>Progression:</strong> Easy (1-3) → Medium (4-6) → Expert (7-10)</p>
+              ${
+                percentage < 70
+                  ? '<p class="motivational"><strong>💡 Tip:</strong> Try different game sets to improve your English skills across various topics!</p>'
+                  : ""
+              }
+            </div>
+            <div class="social-share">
+              <p><strong>Share your score:</strong></p>
+              <button onclick="shareScore()" class="share-btn">📱 Share Results</button>
+            </div>
           </div>
         `;
         document.getElementById("optionsGrid").innerHTML = "";
+      }
+
+      // Share score function
+      function shareScore() {
+        const percentage = Math.round(
+          (score / vocabularyQuestions.length) * 100
+        );
+        const gameSetNames = [
+          "Grammar Master",
+          "Language Expert",
+          "Word Wizard",
+        ];
+        const currentSetName = gameSetNames[currentGameSet];
+        const shareText = `I just scored ${score}/${vocabularyQuestions.length} (${percentage}%) on the ${currentSetName} English Test! Only 1% can pass this challenge. Can you beat my score? Try it at ESLonline.com`;
+
+        if (navigator.share) {
+          navigator.share({
+            title: "English Mastery Test Results",
+            text: shareText,
+            url: window.location.href,
+          });
+        } else {
+          // Fallback for browsers without Web Share API
+          navigator.clipboard
+            .writeText(shareText)
+            .then(() => {
+              alert("Results copied to clipboard! Share with your friends.");
+            })
+            .catch(() => {
+              // Final fallback
+              const textarea = document.createElement("textarea");
+              textarea.value = shareText;
+              document.body.appendChild(textarea);
+              textarea.select();
+              document.execCommand("copy");
+              document.body.removeChild(textarea);
+              alert("Results copied to clipboard! Share with your friends.");
+            });
+        }
       }
 
       function resetGame() {
