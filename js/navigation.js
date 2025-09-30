@@ -35,6 +35,10 @@ function initializeNavigation() {
   if (themeToggle) {
     const savedTheme = localStorage.getItem("theme") || "light";
     body.classList.toggle("dark-mode", savedTheme === "dark");
+    document.documentElement.classList.toggle(
+      "dark-mode",
+      savedTheme === "dark"
+    );
 
     const themeIcon = themeToggle.querySelector("i");
     if (themeIcon) {
@@ -50,6 +54,7 @@ function initializeNavigation() {
     freshThemeToggle.addEventListener("click", (e) => {
       e.preventDefault();
       body.classList.toggle("dark-mode");
+      document.documentElement.classList.toggle("dark-mode");
       const isDark = body.classList.contains("dark-mode");
       const theme = isDark ? "dark" : "light";
 
@@ -58,6 +63,8 @@ function initializeNavigation() {
       if (icon) {
         icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
       }
+
+      console.log("Theme toggled to:", theme);
     });
   }
 
