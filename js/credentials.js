@@ -20,11 +20,22 @@ const credentialsDatabase = {
       name: "Test Student",
       dashboard: "students/dashboard.html",
     },
+    // Student accounts
+    tem: {
+      password: "5555",
+      name: "Tem",
+      dashboard: "students/temreview.html",
+    },
+    bam: {
+      password: "5555",
+      name: "Bam",
+      dashboard: "students/bamreview.html",
+    },
   },
   teachers: {
     // Sample teacher accounts
     teacher001: {
-      password: "teacher123",
+      password: "",
       name: "Demo Teacher",
       dashboard: "teachers/dashboard.html",
     },
