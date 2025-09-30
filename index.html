@@ -74,6 +74,22 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
 
+    <!-- Conditional preload for hero image on desktop only -->
+    <link
+      rel="preload"
+      href="images/hero.webp"
+      as="image"
+      media="(min-width: 769px)"
+    />
+
+    <!-- Preload critical CSS for mobile -->
+    <link
+      rel="preload"
+      href="css/hero-mobile.css"
+      as="style"
+      media="(max-width: 768px)"
+    />
+
     <title>
       ESL Fun Online | Master English & Coding Skills with Expert Instruction
     </title>
@@ -199,6 +215,49 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/layout-fixes.css" />
     <link rel="stylesheet" href="css/mobile-footer.css" />
+    <link
+      rel="stylesheet"
+      href="css/hero-mobile.css"
+      media="(max-width: 768px)"
+    />
+
+    <!-- Critical CSS for mobile hero - loads immediately -->
+    <style>
+      @media (max-width: 768px) {
+        .hero {
+          background: linear-gradient(
+            135deg,
+            #667eea 0%,
+            #764ba2 50%,
+            #f093fb 100%
+          ) !important;
+          min-height: 80vh !important;
+          padding: 1rem 0 !important;
+        }
+        .hero::before {
+          display: none !important;
+        }
+        .floating-elements {
+          display: none !important;
+        }
+        .hero-title,
+        .hero-subtitle,
+        .hero-stats,
+        .hero-cta {
+          animation: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .hero {
+          min-height: 70vh !important;
+        }
+        .scroll-indicator {
+          display: none !important;
+        }
+      }
+    </style>
 
     <style>
       :root {
@@ -303,9 +362,33 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: url("images/hero.webp") center/cover;
+        background: var(--hero-bg-loaded, none) center/cover;
         opacity: 0.15;
         z-index: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .hero.bg-loaded::before {
+        opacity: 0.15;
+      }
+
+      /* Mobile-first hero optimization */
+      @media (max-width: 768px) {
+        .hero {
+          min-height: 80vh;
+          padding: 1rem 0;
+        }
+
+        .hero::before {
+          background: none !important;
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          min-height: 70vh;
+        }
       }
 
       .hero-content {
@@ -446,6 +529,12 @@
         animation: bounce 2s infinite;
       }
 
+      @media (max-width: 480px) {
+        .scroll-indicator {
+          display: none; /* Hide on small mobile screens */
+        }
+      }
+
       @keyframes bounce {
         0%,
         20%,
@@ -504,6 +593,13 @@
         }
         66% {
           transform: translateY(10px) rotate(240deg);
+        }
+      }
+
+      /* Hide floating elements on mobile for performance */
+      @media (max-width: 768px) {
+        .floating-elements {
+          display: none;
         }
       }
 
@@ -1382,22 +1478,45 @@
       @media (max-width: 768px) {
         .hero {
           padding: 1rem;
-          min-height: 90vh;
+          min-height: 80vh;
+          padding-top: 4rem;
+        }
+
+        .hero-content {
+          padding: 1rem;
         }
 
         .hero-stats {
-          gap: 1.5rem;
+          gap: 1rem;
+          margin: 2rem 0;
+        }
+
+        .stat-item {
+          flex: 1;
+          min-width: 80px;
+        }
+
+        .stat-number {
+          font-size: 1.8rem !important;
+        }
+
+        .stat-label {
+          font-size: 0.8rem;
         }
 
         .hero-cta {
           flex-direction: column;
           align-items: center;
+          gap: 1rem;
+          margin-top: 2rem;
         }
 
         .cta-primary,
         .cta-secondary {
           width: 100%;
-          max-width: 300px;
+          max-width: 280px;
+          padding: 1rem 1.5rem;
+          font-size: 1rem;
         }
 
         .features-grid {
@@ -1447,23 +1566,30 @@
         }
 
         /* Better mobile hero section */
-        .hero {
-          padding-top: 6rem; /* Add space for fixed header */
-        }
-
-        .hero-content {
-          padding-top: 2rem;
-        }
-
-        .hero-content h1 {
-          font-size: 2.5rem;
+        .hero-title {
+          font-size: 2rem !important;
           line-height: 1.2;
-          margin-top: 1rem; /* Additional spacing on mobile */
+          margin-bottom: 1rem;
+          animation: none; /* Disable animation on mobile for performance */
         }
 
-        .hero-content p {
-          font-size: 1.1rem;
-          margin-bottom: 2rem;
+        .hero-subtitle {
+          font-size: 1rem !important;
+          margin-bottom: 1.5rem;
+          line-height: 1.5;
+          animation: none;
+        }
+
+        /* Disable heavy animations on mobile */
+        .hero-content * {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        /* Optimize scroll indicator for mobile */
+        .scroll-indicator {
+          bottom: 1rem;
+          font-size: 1.2rem;
         }
 
         /* Optimize activity section for mobile */
@@ -1649,17 +1775,56 @@
         }
 
         .hero {
-          padding: 3rem 0 2rem;
+          padding: 2rem 0 1rem;
+          min-height: 70vh;
         }
 
-        .hero-content h1 {
-          font-size: 2rem;
+        .hero-content {
+          padding: 0.5rem;
+        }
+
+        .hero-title {
+          font-size: 1.8rem !important;
           margin-bottom: 1rem;
+          line-height: 1.1;
         }
 
-        .hero-content p {
-          font-size: 1rem;
+        .hero-subtitle {
+          font-size: 0.95rem !important;
           margin-bottom: 1.5rem;
+          padding: 0 0.5rem;
+        }
+
+        .hero-stats {
+          gap: 0.5rem;
+          margin: 1.5rem 0;
+          flex-wrap: wrap;
+          justify-content: space-around;
+        }
+
+        .stat-item {
+          min-width: 70px;
+          flex: 0 1 30%;
+        }
+
+        .stat-number {
+          font-size: 1.5rem !important;
+        }
+
+        .stat-label {
+          font-size: 0.7rem;
+          line-height: 1.2;
+        }
+
+        .hero-cta {
+          margin-top: 1.5rem;
+        }
+
+        .cta-primary,
+        .cta-secondary {
+          padding: 0.9rem 1.2rem;
+          font-size: 0.95rem;
+          min-height: 48px;
         }
 
         .stats-grid {
@@ -3352,6 +3517,39 @@
           document.body.classList.add("reduced-motion");
         }
       }
+
+      // Hero Background Lazy Loading for Desktop Only
+      function initHeroOptimization() {
+        const hero = document.querySelector(".hero");
+        const isMobile = window.innerWidth <= 768;
+
+        if (!isMobile) {
+          // Only load background image on desktop
+          const img = new Image();
+          img.onload = function () {
+            hero.style.setProperty(
+              "--hero-bg-loaded",
+              'url("images/hero.webp")'
+            );
+            hero.classList.add("bg-loaded");
+          };
+          img.src = "images/hero.webp";
+        } else {
+          // On mobile, ensure background is just gradient
+          hero.style.background =
+            "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)";
+        }
+
+        // Optimize scroll indicator for mobile
+        const scrollIndicator = document.querySelector(".scroll-indicator");
+        if (scrollIndicator && isMobile) {
+          scrollIndicator.style.display = "none"; // Hide on very small screens
+        }
+      }
+
+      // Call hero optimization on load
+      document.addEventListener("DOMContentLoaded", initHeroOptimization);
+      window.addEventListener("resize", initHeroOptimization);
     </script>
   </body>
 </html>
