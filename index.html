@@ -27,7 +27,10 @@
     <meta name="format-detection" content="telephone=no" />
 
     <!-- Cache Control Meta Tags (Invisible to Users) -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta http-equiv="Last-Modified" content="" />
@@ -250,42 +253,48 @@
 
     <!-- Dynamic Cache Busting (Invisible to Users) -->
     <script>
-      (function() {
+      (function () {
         var timestamp = Date.now();
         var version = Math.floor(timestamp / 1000);
-        
+
         // Update CSS cache busting
-        var cssLinks = document.querySelectorAll('link[rel="stylesheet"][href*="?v="]');
-        cssLinks.forEach(function(link) {
-          link.href = link.href.replace('?v=', '?v=' + version);
+        var cssLinks = document.querySelectorAll(
+          'link[rel="stylesheet"][href*="?v="]'
+        );
+        cssLinks.forEach(function (link) {
+          link.href = link.href.replace("?v=", "?v=" + version);
         });
-        
+
         // Update preload cache busting
-        var preloadLinks = document.querySelectorAll('link[rel="preload"][href*="css/"]');
-        preloadLinks.forEach(function(link) {
-          if (link.href.indexOf('?') === -1) {
-            link.href += '?v=' + version;
+        var preloadLinks = document.querySelectorAll(
+          'link[rel="preload"][href*="css/"]'
+        );
+        preloadLinks.forEach(function (link) {
+          if (link.href.indexOf("?") === -1) {
+            link.href += "?v=" + version;
           }
         });
-        
+
         // Set dynamic meta tags
-        var lastModified = document.querySelector('meta[http-equiv="Last-Modified"]');
+        var lastModified = document.querySelector(
+          'meta[http-equiv="Last-Modified"]'
+        );
         var etag = document.querySelector('meta[http-equiv="ETag"]');
         if (lastModified) lastModified.content = new Date().toUTCString();
         if (etag) etag.content = '"' + version + '"';
-        
+
         // Force reload on browser back/forward
-        window.addEventListener('pageshow', function(event) {
+        window.addEventListener("pageshow", function (event) {
           if (event.persisted) {
             window.location.reload();
           }
         });
-        
+
         // Clear browser cache on load
-        if ('caches' in window) {
-          caches.keys().then(function(names) {
-            names.forEach(function(name) {
-              if (name.includes('eslfun') || name.includes('static')) {
+        if ("caches" in window) {
+          caches.keys().then(function (names) {
+            names.forEach(function (name) {
+              if (name.includes("eslfun") || name.includes("static")) {
                 caches.delete(name);
               }
             });
@@ -293,29 +302,10 @@
         }
       })();
     </script>
-        var etag = document.querySelector('meta[http-equiv="ETag"]');
-        if (lastModified) lastModified.content = new Date().toUTCString();
-        if (etag) etag.content = '"' + version + '"';
-        
-        // Force reload on browser back/forward
-        window.addEventListener('pageshow', function(event) {
-          if (event.persisted) {
-            window.location.reload();
-          }
-        });
-        
-        // Clear browser cache on load
-        if ('caches' in window) {
-          caches.keys().then(function(names) {
-            names.forEach(function(name) {
-              if (name.includes('eslfun') || name.includes('static')) {
-                caches.delete(name);
-              }
-            });
-          });
-        }
-      })();
-    </script>
+
+    <!-- Performance optimizations -->
+    <style>
+      @media (prefers-reduced-motion: reduce) {
         .hero-title,
         .hero-subtitle,
         .hero-stats,
@@ -3462,59 +3452,65 @@
 
     <!-- Load scripts -->
     <script src="js/navigation.js?v="></script>
-    
+
     <!-- Final Cache Control Script (Invisible to Users) -->
     <script>
       // Update navigation.js cache busting and final cache control
-      (function() {
+      (function () {
         var timestamp = Date.now();
         var version = Math.floor(timestamp / 1000);
-        
+
         // Update all script tags with cache busting
         var scriptTags = document.querySelectorAll('script[src*="?v="]');
-        scriptTags.forEach(function(script) {
-          var newSrc = script.src.replace(/\?v=\d*/, '?v=' + version);
-          if (newSrc !== script.src && script.src.indexOf('navigation.js') !== -1) {
+        scriptTags.forEach(function (script) {
+          var newSrc = script.src.replace(/\?v=\d*/, "?v=" + version);
+          if (
+            newSrc !== script.src &&
+            script.src.indexOf("navigation.js") !== -1
+          ) {
             // For navigation.js, create a new script element
-            var newScript = document.createElement('script');
+            var newScript = document.createElement("script");
             newScript.src = newSrc;
             newScript.async = script.async;
             newScript.defer = script.defer;
             script.parentNode.replaceChild(newScript, script);
           }
         });
-        
+
         // Add additional cache busting headers via fetch override
         var originalFetch = window.fetch;
-        window.fetch = function() {
+        window.fetch = function () {
           var args = Array.prototype.slice.call(arguments);
           if (args[1]) {
             args[1].headers = args[1].headers || {};
-            args[1].headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-            args[1].headers['Pragma'] = 'no-cache';
-            args[1].headers['Expires'] = '0';
+            args[1].headers["Cache-Control"] =
+              "no-cache, no-store, must-revalidate";
+            args[1].headers["Pragma"] = "no-cache";
+            args[1].headers["Expires"] = "0";
           } else {
             args[1] = {
               headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-              }
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                Pragma: "no-cache",
+                Expires: "0",
+              },
             };
           }
           return originalFetch.apply(this, args);
         };
-        
+
         // Force browser to revalidate on focus
-        window.addEventListener('focus', function() {
-          if (document.visibilityState === 'visible') {
+        window.addEventListener("focus", function () {
+          if (document.visibilityState === "visible") {
             // Subtle cache refresh on window focus
-            setTimeout(function() {
-              var metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
+            setTimeout(function () {
+              var metaRefresh = document.querySelector(
+                'meta[http-equiv="refresh"]'
+              );
               if (!metaRefresh) {
-                metaRefresh = document.createElement('meta');
-                metaRefresh.setAttribute('http-equiv', 'refresh');
-                metaRefresh.setAttribute('content', '86400'); // 24 hours
+                metaRefresh = document.createElement("meta");
+                metaRefresh.setAttribute("http-equiv", "refresh");
+                metaRefresh.setAttribute("content", "86400"); // 24 hours
                 document.head.appendChild(metaRefresh);
               }
             }, 100);
