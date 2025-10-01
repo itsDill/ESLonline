@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Learn Japanese basics with interactive flashcards. Master hiragana, katakana, kanji, and essential Japanese vocabulary with our engaging learning tool."
+    />
+    <meta
+      name="keywords"
+      content="Japanese flashcards, learn Japanese, hiragana, katakana, kanji, Japanese vocabulary, Japanese language learning"
+    />
+    <meta name="author" content="ESL Fun Online" />
+    <title>
+      Japanese Basics Flashcards | ESL Fun Online - Learn Japanese Interactive
+    </title>
+
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/tools/flashcards-japanese.html"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/layout-fixes.css" />
+    <link rel="stylesheet" href="../css/mobile-footer.css" />
+
+    <style>
+      :root {
+        --primary-color: #46bbe5;
+        --primary-hover: #05425c;
+        --japanese-red: #e60012;
+        --japanese-navy: #003f7f;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --border-color: #e5e7eb;
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .flashcard-container {
+        perspective: 1000px;
+        margin: 2rem 0;
+        height: 400px;
+      }
+
+      .flashcard {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+        cursor: pointer;
+      }
+
+      .flashcard.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .flashcard-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .flashcard-front {
+        background: linear-gradient(135deg, var(--japanese-red), #ff6b6b);
+        color: white;
+      }
+
+      .flashcard-back {
+        background: linear-gradient(135deg, var(--japanese-navy), #4a90e2);
+        color: white;
+        transform: rotateY(180deg);
+      }
+
+      .japanese-character {
+        font-size: 5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        font-family: "Hiragino Sans", "Yu Gothic", "游ゴシック", "Meiryo",
+          sans-serif;
+      }
+
+      .romaji {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-style: italic;
+      }
+
+      .english-translation {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .example-sentence {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-top: 1rem;
+        max-width: 80%;
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+      }
+
+      .btn-secondary:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+
+      .stat-card {
+        background: var(--bg-primary);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        border: 2px solid var(--border-color);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--japanese-red);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .progress-bar {
+        background: var(--bg-secondary);
+        height: 8px;
+        border-radius: 4px;
+        margin: 1rem 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: var(--japanese-red);
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+        border-radius: 4px;
+      }
+
+      .category-selector {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .category-btn {
+        padding: 0.5rem 1rem;
+        margin: 0 0.5rem;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category-btn.active {
+        background: var(--japanese-red);
+        color: white;
+        border-color: var(--japanese-red);
+      }
+
+      .quiz-mode {
+        background: var(--bg-secondary);
+        padding: 2rem;
+        border-radius: 16px;
+        margin: 2rem 0;
+        text-align: center;
+      }
+
+      .quiz-question {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        color: var(--text-primary);
+      }
+
+      .quiz-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .quiz-option {
+        padding: 1rem;
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .quiz-option:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+      }
+
+      .quiz-option.correct {
+        background: #dcfce7;
+        border-color: #10b981;
+      }
+
+      .quiz-option.incorrect {
+        background: #fecaca;
+        border-color: #ef4444;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .flashcard-container {
+          height: 350px;
+        }
+
+        .japanese-character {
+          font-size: 3.5rem;
+        }
+
+        .controls {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .stats-container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+              width="40"
+              height="40"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+          <ul class="nav-links" id="navLinks">
+            <li>
+              <a href="../index.html" class="nav-link"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li>
+              <a href="../tools/tools.html" class="nav-link"
+                ><i class="fas fa-tools"></i> Tools</a
+              >
+            </li>
+            <li>
+              <a href="../games/games.html" class="nav-link"
+                ><i class="fas fa-gamepad"></i> Games</a
+              >
+            </li>
+          </ul>
+          <div class="controls">
+            <button class="control-btn theme-toggle" id="themeToggle">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div style="text-align: center; margin: 2rem 0">
+          <h1
+            style="
+              font-size: 3rem;
+              font-weight: 700;
+              color: var(--text-primary);
+              margin-bottom: 1rem;
+            "
+          >
+            🇯🇵 Japanese Basics Flashcards
+          </h1>
+          <p style="font-size: 1.2rem; color: var(--text-secondary)">
+            Learn hiragana, katakana, kanji, and essential Japanese vocabulary
+            with interactive flashcards
+          </p>
+        </div>
+
+        <div class="category-selector">
+          <h3>Choose Category:</h3>
+          <button class="category-btn active" data-category="hiragana">
+            Hiragana
+          </button>
+          <button class="category-btn" data-category="katakana">
+            Katakana
+          </button>
+          <button class="category-btn" data-category="vocabulary">
+            Vocabulary
+          </button>
+          <button class="category-btn" data-category="kanji">
+            Basic Kanji
+          </button>
+        </div>
+
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-value" id="currentCard">1</div>
+            <div class="stat-label">Current Card</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="totalCards">20</div>
+            <div class="stat-label">Total Cards</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="correctAnswers">0</div>
+            <div class="stat-label">Correct</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="accuracy">100</div>
+            <div class="stat-label">Accuracy %</div>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-face flashcard-front">
+              <div class="japanese-character" id="japaneseChar">あ</div>
+              <div class="romaji" id="romaji">a</div>
+              <p style="font-size: 1rem; opacity: 0.8; margin-top: 1rem">
+                Click to see more info
+              </p>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <div class="english-translation" id="englishTranslation">
+                Letter 'A'
+              </div>
+              <div class="example-sentence" id="exampleSentence">
+                あり (ari) - ant
+              </div>
+              <p style="font-size: 1rem; opacity: 0.8; margin-top: 1rem">
+                Click to flip back
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-secondary" id="prevBtn">
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <button class="btn btn-primary" id="flipBtn">
+            <i class="fas fa-sync-alt"></i> Flip Card
+          </button>
+          <button class="btn btn-secondary" id="nextBtn">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+          <button class="btn btn-secondary" id="shuffleBtn">
+            <i class="fas fa-random"></i> Shuffle
+          </button>
+          <button class="btn btn-primary" id="quizBtn">
+            <i class="fas fa-question-circle"></i> Quiz Mode
+          </button>
+        </div>
+
+        <div class="quiz-mode" id="quizMode" style="display: none">
+          <h3>Quiz Time! 🧠</h3>
+          <div class="quiz-question" id="quizQuestion">
+            What is the romaji for this character?
+          </div>
+          <div
+            class="japanese-character"
+            id="quizCharacter"
+            style="color: var(--japanese-red); margin: 1rem 0"
+          >
+            あ
+          </div>
+          <div class="quiz-options" id="quizOptions">
+            <!-- Quiz options will be populated here -->
+          </div>
+          <button class="btn btn-secondary" id="exitQuizBtn">
+            <i class="fas fa-times"></i> Exit Quiz
+          </button>
+        </div>
+
+        <div style="text-align: center; margin: 3rem 0">
+          <a href="tools.html" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Tools
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Japanese learning data
+      const learningData = {
+        hiragana: [
+          {
+            char: "あ",
+            romaji: "a",
+            english: "Letter 'A'",
+            example: "あり (ari) - ant",
+          },
+          {
+            char: "い",
+            romaji: "i",
+            english: "Letter 'I'",
+            example: "いい (ii) - good",
+          },
+          {
+            char: "う",
+            romaji: "u",
+            english: "Letter 'U'",
+            example: "うみ (umi) - sea",
+          },
+          {
+            char: "え",
+            romaji: "e",
+            english: "Letter 'E'",
+            example: "えき (eki) - station",
+          },
+          {
+            char: "お",
+            romaji: "o",
+            english: "Letter 'O'",
+            example: "おか (oka) - hill",
+          },
+          {
+            char: "か",
+            romaji: "ka",
+            english: "Letter 'KA'",
+            example: "かみ (kami) - paper",
+          },
+          {
+            char: "き",
+            romaji: "ki",
+            english: "Letter 'KI'",
+            example: "き (ki) - tree",
+          },
+          {
+            char: "く",
+            romaji: "ku",
+            english: "Letter 'KU'",
+            example: "くつ (kutsu) - shoes",
+          },
+          {
+            char: "け",
+            romaji: "ke",
+            english: "Letter 'KE'",
+            example: "けし (keshi) - eraser",
+          },
+          {
+            char: "こ",
+            romaji: "ko",
+            english: "Letter 'KO'",
+            example: "ここ (koko) - here",
+          },
+          {
+            char: "さ",
+            romaji: "sa",
+            english: "Letter 'SA'",
+            example: "さかな (sakana) - fish",
+          },
+          {
+            char: "し",
+            romaji: "shi",
+            english: "Letter 'SHI'",
+            example: "しお (shio) - salt",
+          },
+          {
+            char: "す",
+            romaji: "su",
+            english: "Letter 'SU'",
+            example: "すし (sushi) - sushi",
+          },
+          {
+            char: "せ",
+            romaji: "se",
+            english: "Letter 'SE'",
+            example: "せん (sen) - line",
+          },
+          {
+            char: "そ",
+            romaji: "so",
+            english: "Letter 'SO'",
+            example: "そら (sora) - sky",
+          },
+          {
+            char: "た",
+            romaji: "ta",
+            english: "Letter 'TA'",
+            example: "たまご (tamago) - egg",
+          },
+          {
+            char: "ち",
+            romaji: "chi",
+            english: "Letter 'CHI'",
+            example: "ちず (chizu) - map",
+          },
+          {
+            char: "つ",
+            romaji: "tsu",
+            english: "Letter 'TSU'",
+            example: "つき (tsuki) - moon",
+          },
+          {
+            char: "て",
+            romaji: "te",
+            english: "Letter 'TE'",
+            example: "て (te) - hand",
+          },
+          {
+            char: "と",
+            romaji: "to",
+            english: "Letter 'TO'",
+            example: "とり (tori) - bird",
+          },
+        ],
+        katakana: [
+          {
+            char: "ア",
+            romaji: "a",
+            english: "Letter 'A'",
+            example: "アメリカ (Amerika) - America",
+          },
+          {
+            char: "イ",
+            romaji: "i",
+            english: "Letter 'I'",
+            example: "イタリア (Itaria) - Italy",
+          },
+          {
+            char: "ウ",
+            romaji: "u",
+            english: "Letter 'U'",
+            example: "ウィーン (Wīn) - Vienna",
+          },
+          {
+            char: "エ",
+            romaji: "e",
+            english: "Letter 'E'",
+            example: "エレベーター (erebētā) - elevator",
+          },
+          {
+            char: "オ",
+            romaji: "o",
+            english: "Letter 'O'",
+            example: "オレンジ (orenji) - orange",
+          },
+          {
+            char: "カ",
+            romaji: "ka",
+            english: "Letter 'KA'",
+            example: "カメラ (kamera) - camera",
+          },
+          {
+            char: "キ",
+            romaji: "ki",
+            english: "Letter 'KI'",
+            example: "キッチン (kicchin) - kitchen",
+          },
+          {
+            char: "ク",
+            romaji: "ku",
+            english: "Letter 'KU'",
+            example: "クッキー (kukkī) - cookie",
+          },
+          {
+            char: "ケ",
+            romaji: "ke",
+            english: "Letter 'KE'",
+            example: "ケーキ (kēki) - cake",
+          },
+          {
+            char: "コ",
+            romaji: "ko",
+            english: "Letter 'KO'",
+            example: "コーヒー (kōhī) - coffee",
+          },
+        ],
+        vocabulary: [
+          {
+            char: "こんにちは",
+            romaji: "konnichiwa",
+            english: "Hello",
+            example: "こんにちは、元気ですか？ - Hello, how are you?",
+          },
+          {
+            char: "ありがとう",
+            romaji: "arigatou",
+            english: "Thank you",
+            example: "ありがとうございます - Thank you very much",
+          },
+          {
+            char: "さようなら",
+            romaji: "sayounara",
+            english: "Goodbye",
+            example: "さようなら、また明日 - Goodbye, see you tomorrow",
+          },
+          {
+            char: "はい",
+            romaji: "hai",
+            english: "Yes",
+            example: "はい、そうです - Yes, that's right",
+          },
+          {
+            char: "いいえ",
+            romaji: "iie",
+            english: "No",
+            example: "いいえ、違います - No, that's wrong",
+          },
+          {
+            char: "すみません",
+            romaji: "sumimasen",
+            english: "Excuse me/Sorry",
+            example:
+              "すみません、駅はどこですか？ - Excuse me, where is the station?",
+          },
+          {
+            char: "わたし",
+            romaji: "watashi",
+            english: "I/Me",
+            example: "わたしは学生です - I am a student",
+          },
+          {
+            char: "あなた",
+            romaji: "anata",
+            english: "You",
+            example: "あなたの名前は？ - What is your name?",
+          },
+          {
+            char: "食べる",
+            romaji: "taberu",
+            english: "To eat",
+            example: "朝ごはんを食べる - To eat breakfast",
+          },
+          {
+            char: "飲む",
+            romaji: "nomu",
+            english: "To drink",
+            example: "水を飲む - To drink water",
+          },
+        ],
+        kanji: [
+          {
+            char: "人",
+            romaji: "hito/jin",
+            english: "Person",
+            example: "日本人 (nihonjin) - Japanese person",
+          },
+          {
+            char: "日",
+            romaji: "hi/nichi",
+            english: "Day/Sun",
+            example: "今日 (kyou) - today",
+          },
+          {
+            char: "本",
+            romaji: "hon/moto",
+            english: "Book/Origin",
+            example: "日本 (nihon) - Japan",
+          },
+          {
+            char: "大",
+            romaji: "oo/dai",
+            english: "Big",
+            example: "大きい (ookii) - big",
+          },
+          {
+            char: "小",
+            romaji: "chii/shou",
+            english: "Small",
+            example: "小さい (chiisai) - small",
+          },
+          {
+            char: "山",
+            romaji: "yama/san",
+            english: "Mountain",
+            example: "富士山 (fujisan) - Mt. Fuji",
+          },
+          {
+            char: "川",
+            romaji: "kawa/sen",
+            english: "River",
+            example: "川で泳ぐ - swim in the river",
+          },
+          {
+            char: "学",
+            romaji: "gaku/mana",
+            english: "Study/Learn",
+            example: "学校 (gakkou) - school",
+          },
+          {
+            char: "校",
+            romaji: "kou",
+            english: "School",
+            example: "高校 (koukou) - high school",
+          },
+          {
+            char: "水",
+            romaji: "mizu/sui",
+            english: "Water",
+            example: "水を飲む - drink water",
+          },
+        ],
+      };
+
+      let currentCategory = "hiragana";
+      let currentCardIndex = 0;
+      let currentVocabulary = learningData.hiragana;
+      let isFlipped = false;
+      let quizMode = false;
+      let correctAnswers = 0;
+      let totalQuizQuestions = 0;
+
+      // DOM elements
+      const flashcard = document.getElementById("flashcard");
+      const japaneseChar = document.getElementById("japaneseChar");
+      const romaji = document.getElementById("romaji");
+      const englishTranslation = document.getElementById("englishTranslation");
+      const exampleSentence = document.getElementById("exampleSentence");
+      const currentCardSpan = document.getElementById("currentCard");
+      const totalCardsSpan = document.getElementById("totalCards");
+      const correctAnswersSpan = document.getElementById("correctAnswers");
+      const accuracySpan = document.getElementById("accuracy");
+      const progressFill = document.getElementById("progressFill");
+      const quizModeDiv = document.getElementById("quizMode");
+
+      // Event listeners
+      document.querySelectorAll(".category-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".category-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.dataset.category;
+          currentVocabulary = learningData[currentCategory];
+          currentCardIndex = 0;
+          correctAnswers = 0;
+          totalQuizQuestions = 0;
+          updateCard();
+          updateStats();
+        });
+      });
+
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        if (currentCardIndex > 0) {
+          currentCardIndex--;
+          updateCard();
+          updateStats();
+        }
+      });
+
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        if (currentCardIndex < currentVocabulary.length - 1) {
+          currentCardIndex++;
+          updateCard();
+          updateStats();
+        }
+      });
+
+      document.getElementById("flipBtn").addEventListener("click", flipCard);
+      flashcard.addEventListener("click", flipCard);
+
+      document.getElementById("shuffleBtn").addEventListener("click", () => {
+        currentVocabulary = [...currentVocabulary].sort(
+          () => Math.random() - 0.5
+        );
+        currentCardIndex = 0;
+        updateCard();
+        updateStats();
+      });
+
+      document.getElementById("quizBtn").addEventListener("click", startQuiz);
+      document
+        .getElementById("exitQuizBtn")
+        .addEventListener("click", exitQuiz);
+
+      function updateCard() {
+        const card = currentVocabulary[currentCardIndex];
+        japaneseChar.textContent = card.char;
+        romaji.textContent = card.romaji;
+        englishTranslation.textContent = card.english;
+        exampleSentence.textContent = card.example;
+
+        if (isFlipped) {
+          flashcard.classList.remove("flipped");
+          isFlipped = false;
+        }
+      }
+
+      function flipCard() {
+        if (quizMode) return;
+
+        flashcard.classList.toggle("flipped");
+        isFlipped = !isFlipped;
+      }
+
+      function updateStats() {
+        currentCardSpan.textContent = currentCardIndex + 1;
+        totalCardsSpan.textContent = currentVocabulary.length;
+        correctAnswersSpan.textContent = correctAnswers;
+
+        const accuracy =
+          totalQuizQuestions > 0
+            ? Math.round((correctAnswers / totalQuizQuestions) * 100)
+            : 100;
+        accuracySpan.textContent = accuracy;
+
+        const progress =
+          ((currentCardIndex + 1) / currentVocabulary.length) * 100;
+        progressFill.style.width = progress + "%";
+      }
+
+      function startQuiz() {
+        quizMode = true;
+        quizModeDiv.style.display = "block";
+        flashcard.parentElement.style.display = "none";
+        generateQuizQuestion();
+      }
+
+      function exitQuiz() {
+        quizMode = false;
+        quizModeDiv.style.display = "none";
+        flashcard.parentElement.style.display = "block";
+      }
+
+      function generateQuizQuestion() {
+        const card = currentVocabulary[currentCardIndex];
+        const quizCharacter = document.getElementById("quizCharacter");
+        const quizOptions = document.getElementById("quizOptions");
+        const quizQuestion = document.getElementById("quizQuestion");
+
+        quizCharacter.textContent = card.char;
+
+        // Set question based on category
+        if (currentCategory === "hiragana" || currentCategory === "katakana") {
+          quizQuestion.textContent = "What is the romaji for this character?";
+        } else {
+          quizQuestion.textContent = "What does this mean in English?";
+        }
+
+        // Generate options (1 correct + 3 incorrect)
+        const correctAnswer =
+          currentCategory === "hiragana" || currentCategory === "katakana"
+            ? card.romaji
+            : card.english;
+        const options = [correctAnswer];
+        const otherCards = currentVocabulary.filter((c) => c !== card);
+
+        while (options.length < 4 && otherCards.length > 0) {
+          const randomCard =
+            otherCards[Math.floor(Math.random() * otherCards.length)];
+          const optionValue =
+            currentCategory === "hiragana" || currentCategory === "katakana"
+              ? randomCard.romaji
+              : randomCard.english;
+          if (!options.includes(optionValue)) {
+            options.push(optionValue);
+          }
+          otherCards.splice(otherCards.indexOf(randomCard), 1);
+        }
+
+        // Shuffle options
+        options.sort(() => Math.random() - 0.5);
+
+        // Create option buttons
+        quizOptions.innerHTML = "";
+        options.forEach((option) => {
+          const button = document.createElement("button");
+          button.className = "quiz-option";
+          button.textContent = option;
+          button.addEventListener("click", () =>
+            checkAnswer(button, option, correctAnswer)
+          );
+          quizOptions.appendChild(button);
+        });
+      }
+
+      function checkAnswer(button, selected, correct) {
+        totalQuizQuestions++;
+
+        document.querySelectorAll(".quiz-option").forEach((opt) => {
+          opt.style.pointerEvents = "none";
+          if (opt.textContent === correct) {
+            opt.classList.add("correct");
+          } else if (opt === button && selected !== correct) {
+            opt.classList.add("incorrect");
+          }
+        });
+
+        if (selected === correct) {
+          correctAnswers++;
+        }
+
+        updateStats();
+
+        setTimeout(() => {
+          if (currentCardIndex < currentVocabulary.length - 1) {
+            currentCardIndex++;
+            generateQuizQuestion();
+          } else {
+            alert(
+              `Quiz completed! Your accuracy: ${Math.round(
+                (correctAnswers / totalQuizQuestions) * 100
+              )}%`
+            );
+            exitQuiz();
+          }
+        }, 2000);
+      }
+
+      // Initialize
+      updateCard();
+      updateStats();
+    </script>
+
+    <script src="../js/navigation.js"></script>
+  </body>
+</html>

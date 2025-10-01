@@ -2117,6 +2117,27 @@
               </div>
             </li>
             <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-music"></i>
+                Music
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="music/fundamentals.html" class="dropdown-item">
+                  <i class="fas fa-music"></i>
+                  Music Fundamentals
+                </a>
+                <a href="music/guitar.html" class="dropdown-item">
+                  <i class="fas fa-guitar"></i>
+                  Guitar
+                </a>
+                <a href="music/bass.html" class="dropdown-item">
+                  <i class="fas fa-bass-clef"></i>
+                  Bass
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
               <a href="games/games.html" class="nav-link">
                 <i class="fas fa-dice"></i>
                 Games
@@ -4142,9 +4163,19 @@
             }
           }
 
-          // Throttle scroll events for better performance
+          // Throttle scroll events for better performance and avoid dropdown interference
           let ticking = false;
           function requestTick() {
+            // Don't process if dropdowns are open
+            if (
+              document.querySelector(".nav-links.mobile-menu-open") ||
+              document.querySelector(".nav-item.desktop-open") ||
+              document.querySelector(".nav-item.dropdown-protected") ||
+              document.querySelector(".nav-item:hover")
+            ) {
+              return;
+            }
+
             if (!ticking) {
               requestAnimationFrame(toggleBackToTop);
               ticking = true;
@@ -4327,6 +4358,16 @@
         const progressBar = document.getElementById("scrollProgress");
 
         window.addEventListener("scroll", () => {
+          // Don't interfere with dropdown menus during scroll
+          if (
+            document.querySelector(".nav-links.mobile-menu-open") ||
+            document.querySelector(".nav-item.desktop-open") ||
+            document.querySelector(".nav-item.dropdown-protected") ||
+            document.querySelector(".nav-item:hover")
+          ) {
+            return;
+          }
+
           const winScroll =
             document.body.scrollTop || document.documentElement.scrollTop;
           const height =
@@ -4381,11 +4422,21 @@
 
       // Performance optimizations
       function initPerformanceOptimizations() {
-        // Debounce scroll events
+        // Debounce scroll events and avoid dropdown interference
         let scrollTimeout;
         const originalScrollHandler = window.onscroll;
 
         window.addEventListener("scroll", () => {
+          // Don't process scroll events if dropdowns are open
+          if (
+            document.querySelector(".nav-links.mobile-menu-open") ||
+            document.querySelector(".nav-item.desktop-open") ||
+            document.querySelector(".nav-item.dropdown-protected") ||
+            document.querySelector(".nav-item:hover")
+          ) {
+            return;
+          }
+
           if (scrollTimeout) {
             clearTimeout(scrollTimeout);
           }

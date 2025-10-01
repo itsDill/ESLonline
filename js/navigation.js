@@ -207,7 +207,7 @@ function initializeNavigation() {
       }
     }
 
-    // Desktop dropdown toggle function
+    // Desktop dropdown toggle function with stability improvements
     function toggleDesktopDropdown(item, chevron) {
       const isOpen = item.classList.contains("desktop-open");
 
@@ -218,12 +218,18 @@ function initializeNavigation() {
         }
       });
 
-      // Toggle current dropdown
+      // Toggle current dropdown with stability delay
       if (isOpen) {
         resetDropdown(item);
       } else {
         item.classList.add("desktop-open");
         chevron.style.transform = "rotate(180deg)";
+
+        // Add temporary protection class to prevent immediate closing
+        item.classList.add("dropdown-protected");
+        setTimeout(() => {
+          item.classList.remove("dropdown-protected");
+        }, 300);
       }
     }
 
@@ -236,14 +242,28 @@ function initializeNavigation() {
       }
     }
 
-    // Close menu when clicking outside
+    // Close menu when clicking outside (with protection for recently opened dropdowns)
     document.addEventListener("click", function (e) {
+      // Check for mobile menu
       if (
         isMenuOpen &&
         !freshMobileToggle.contains(e.target) &&
         !freshNavLinks.contains(e.target)
       ) {
         closeMenu();
+        return;
+      }
+
+      // Check for desktop dropdowns (but protect recently opened ones)
+      if (window.innerWidth > 768) {
+        navItems.forEach((item) => {
+          const isOpen = item.classList.contains("desktop-open");
+          const isProtected = item.classList.contains("dropdown-protected");
+
+          if (isOpen && !isProtected && !item.contains(e.target)) {
+            resetDropdown(item);
+          }
+        });
       }
     });
 

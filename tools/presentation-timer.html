@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Professional presentation timer with visual countdown, progress indicators, and speaker notes. Perfect for managing presentation time effectively."
+    />
+    <meta
+      name="keywords"
+      content="presentation timer, countdown timer, speaker timer, presentation countdown, time management, public speaking"
+    />
+    <meta name="author" content="ESL Fun Online" />
+    <title>
+      Presentation Timer | ESL Fun Online - Manage Your Presentation Time
+    </title>
+
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/tools/presentation-timer.html"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/layout-fixes.css" />
+    <link rel="stylesheet" href="../css/mobile-footer.css" />
+
+    <style>
+      :root {
+        --primary-color: #46bbe5;
+        --primary-hover: #05425c;
+        --secondary-color: #f59e0b;
+        --accent-color: #10b981;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --border-color: #e5e7eb;
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .timer-container {
+        background: var(--bg-primary);
+        border-radius: 20px;
+        padding: 3rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        text-align: center;
+        position: relative;
+      }
+
+      .main-timer {
+        font-size: clamp(4rem, 15vw, 8rem);
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+        margin: 2rem 0;
+        color: var(--primary-color);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: color 0.3s ease;
+      }
+
+      .main-timer.warning {
+        color: var(--warning-color);
+        animation: pulse-warning 2s infinite;
+      }
+
+      .main-timer.danger {
+        color: var(--error-color);
+        animation: pulse-danger 1s infinite;
+      }
+
+      @keyframes pulse-warning {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @keyframes pulse-danger {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.05);
+        }
+      }
+
+      .progress-circle {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 2rem auto;
+      }
+
+      .progress-circle svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+      }
+
+      .progress-circle-bg {
+        fill: none;
+        stroke: var(--border-color);
+        stroke-width: 8;
+      }
+
+      .progress-circle-fill {
+        fill: none;
+        stroke: var(--primary-color);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke 0.3s ease;
+        stroke-dasharray: 628;
+        stroke-dashoffset: 628;
+      }
+
+      .time-sections {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .time-section {
+        background: var(--bg-secondary);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+
+      .time-section.active {
+        border-color: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: white;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-time {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+        min-width: 140px;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+      }
+
+      .btn-secondary:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-success {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .btn-warning {
+        background: var(--warning-color);
+        color: white;
+      }
+
+      .btn-danger {
+        background: var(--error-color);
+        color: white;
+      }
+
+      .setup-section {
+        background: var(--bg-secondary);
+        padding: 2rem;
+        border-radius: 16px;
+        margin: 2rem 0;
+      }
+
+      .setup-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .setup-item {
+        background: var(--bg-primary);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+      }
+
+      .setup-item h4 {
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      }
+
+      .time-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .preset-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .preset-btn {
+        padding: 0.5rem 1rem;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .preset-btn:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .status-indicator {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+      }
+
+      .status-ready {
+        background: #e5e7eb;
+        color: var(--text-secondary);
+      }
+
+      .status-running {
+        background: var(--success-color);
+        color: white;
+        animation: pulse 2s infinite;
+      }
+
+      .status-paused {
+        background: var(--warning-color);
+        color: white;
+      }
+
+      .status-finished {
+        background: var(--error-color);
+        color: white;
+        animation: flash 1s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @keyframes flash {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .notes-section {
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .notes-input {
+        width: 100%;
+        min-height: 120px;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        resize: vertical;
+      }
+
+      .fullscreen-btn {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease;
+      }
+
+      .fullscreen-mode {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+      }
+
+      .fullscreen-mode .main-timer {
+        color: white;
+        font-size: clamp(8rem, 25vw, 15rem);
+      }
+
+      .fullscreen-mode .main-timer.warning {
+        color: var(--warning-color);
+      }
+
+      .fullscreen-mode .main-timer.danger {
+        color: var(--error-color);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .timer-container {
+          padding: 2rem 1rem;
+        }
+
+        .controls {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .setup-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .time-sections {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+              width="40"
+              height="40"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+          <ul class="nav-links" id="navLinks">
+            <li>
+              <a href="../index.html" class="nav-link"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+            <li>
+              <a href="../tools/tools.html" class="nav-link"
+                ><i class="fas fa-tools"></i> Tools</a
+              >
+            </li>
+            <li>
+              <a href="../games/games.html" class="nav-link"
+                ><i class="fas fa-gamepad"></i> Games</a
+              >
+            </li>
+          </ul>
+          <div class="controls">
+            <button class="control-btn theme-toggle" id="themeToggle">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div style="text-align: center; margin: 2rem 0">
+          <h1
+            style="
+              font-size: 3rem;
+              font-weight: 700;
+              color: var(--text-primary);
+              margin-bottom: 1rem;
+            "
+          >
+            ⏱️ Presentation Timer
+          </h1>
+          <p style="font-size: 1.2rem; color: var(--text-secondary)">
+            Professional timer for presentations, speeches, and talks. Visual
+            cues help you stay on track and manage your time effectively.
+          </p>
+        </div>
+
+        <div class="setup-section">
+          <h3
+            style="
+              text-align: center;
+              margin-bottom: 2rem;
+              color: var(--text-primary);
+            "
+          >
+            Setup Your Presentation
+          </h3>
+          <div class="setup-grid">
+            <div class="setup-item">
+              <h4><i class="fas fa-clock"></i> Total Duration</h4>
+              <input
+                type="number"
+                class="time-input"
+                id="totalMinutes"
+                value="20"
+                min="1"
+                max="180"
+              />
+              <label style="font-size: 0.9rem; color: var(--text-secondary)"
+                >Minutes</label
+              >
+              <div class="preset-buttons">
+                <button class="preset-btn" data-minutes="5">5 min</button>
+                <button class="preset-btn" data-minutes="10">10 min</button>
+                <button class="preset-btn" data-minutes="15">15 min</button>
+                <button class="preset-btn" data-minutes="20">20 min</button>
+                <button class="preset-btn" data-minutes="30">30 min</button>
+                <button class="preset-btn" data-minutes="45">45 min</button>
+              </div>
+            </div>
+
+            <div class="setup-item">
+              <h4><i class="fas fa-exclamation-triangle"></i> Warning Times</h4>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 0.5rem;
+                "
+              >
+                <div>
+                  <input
+                    type="number"
+                    class="time-input"
+                    id="warningMinutes"
+                    value="5"
+                    min="1"
+                  />
+                  <label style="font-size: 0.9rem; color: var(--text-secondary)"
+                    >Warning (min)</label
+                  >
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    class="time-input"
+                    id="dangerMinutes"
+                    value="2"
+                    min="1"
+                  />
+                  <label style="font-size: 0.9rem; color: var(--text-secondary)"
+                    >Final (min)</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="setup-item">
+              <h4><i class="fas fa-list"></i> Sections (Optional)</h4>
+              <input
+                type="number"
+                class="time-input"
+                id="sectionsCount"
+                value="3"
+                min="1"
+                max="10"
+              />
+              <label style="font-size: 0.9rem; color: var(--text-secondary)"
+                >Number of sections</label
+              >
+              <div class="preset-buttons">
+                <button class="preset-btn" data-sections="1">1 section</button>
+                <button class="preset-btn" data-sections="3">3 sections</button>
+                <button class="preset-btn" data-sections="5">5 sections</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-container">
+          <div class="status-indicator status-ready" id="statusIndicator">
+            Ready
+          </div>
+
+          <div class="main-timer" id="mainTimer">20:00</div>
+
+          <div class="progress-circle">
+            <svg viewBox="0 0 200 200">
+              <circle
+                class="progress-circle-bg"
+                cx="100"
+                cy="100"
+                r="90"
+              ></circle>
+              <circle
+                class="progress-circle-fill"
+                cx="100"
+                cy="100"
+                r="90"
+                id="progressCircle"
+              ></circle>
+            </svg>
+          </div>
+
+          <div class="time-sections" id="timeSections" style="display: none">
+            <!-- Sections will be populated here -->
+          </div>
+
+          <div class="controls">
+            <button class="btn btn-primary" id="startBtn">
+              <i class="fas fa-play"></i> Start
+            </button>
+            <button class="btn btn-warning" id="pauseBtn" style="display: none">
+              <i class="fas fa-pause"></i> Pause
+            </button>
+            <button class="btn btn-secondary" id="resetBtn">
+              <i class="fas fa-redo"></i> Reset
+            </button>
+            <button class="btn btn-secondary" id="fullscreenBtn">
+              <i class="fas fa-expand"></i> Fullscreen
+            </button>
+            <a href="tools.html" class="btn btn-secondary">
+              <i class="fas fa-arrow-left"></i> Back to Tools
+            </a>
+          </div>
+        </div>
+
+        <div class="notes-section">
+          <h3 style="margin-bottom: 1rem; color: var(--text-primary)">
+            <i class="fas fa-sticky-note"></i> Speaker Notes
+          </h3>
+          <textarea
+            class="notes-input"
+            id="speakerNotes"
+            placeholder="Add your presentation notes, key points, or reminders here..."
+          ></textarea>
+        </div>
+      </div>
+    </main>
+
+    <!-- Fullscreen Timer -->
+    <div class="fullscreen-mode" id="fullscreenTimer" style="display: none">
+      <div class="main-timer" id="fullscreenMainTimer">20:00</div>
+      <div style="font-size: 1.5rem; margin-top: 2rem; opacity: 0.8">
+        Press <strong>ESC</strong> to exit fullscreen
+      </div>
+    </div>
+
+    <script>
+      let totalTime = 20 * 60; // in seconds
+      let currentTime = totalTime;
+      let warningTime = 5 * 60;
+      let dangerTime = 2 * 60;
+      let sectionsCount = 3;
+      let sections = [];
+      let currentSection = 0;
+      let timerInterval = null;
+      let isRunning = false;
+      let isPaused = false;
+      let isFullscreen = false;
+
+      // DOM elements
+      const mainTimer = document.getElementById("mainTimer");
+      const fullscreenMainTimer = document.getElementById(
+        "fullscreenMainTimer"
+      );
+      const statusIndicator = document.getElementById("statusIndicator");
+      const progressCircle = document.getElementById("progressCircle");
+      const startBtn = document.getElementById("startBtn");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const fullscreenTimer = document.getElementById("fullscreenTimer");
+      const timeSections = document.getElementById("timeSections");
+      const totalMinutesInput = document.getElementById("totalMinutes");
+      const warningMinutesInput = document.getElementById("warningMinutes");
+      const dangerMinutesInput = document.getElementById("dangerMinutes");
+      const sectionsCountInput = document.getElementById("sectionsCount");
+
+      // Event listeners
+      document.querySelectorAll(".preset-btn[data-minutes]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          totalMinutesInput.value = btn.dataset.minutes;
+          updateSettings();
+        });
+      });
+
+      document.querySelectorAll(".preset-btn[data-sections]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sectionsCountInput.value = btn.dataset.sections;
+          updateSettings();
+        });
+      });
+
+      [
+        totalMinutesInput,
+        warningMinutesInput,
+        dangerMinutesInput,
+        sectionsCountInput,
+      ].forEach((input) => {
+        input.addEventListener("change", updateSettings);
+      });
+
+      startBtn.addEventListener("click", startTimer);
+      pauseBtn.addEventListener("click", pauseTimer);
+      resetBtn.addEventListener("click", resetTimer);
+      fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space" && !e.target.matches("input, textarea")) {
+          e.preventDefault();
+          if (isRunning) {
+            pauseTimer();
+          } else {
+            startTimer();
+          }
+        } else if (e.code === "Escape") {
+          if (isFullscreen) {
+            exitFullscreen();
+          }
+        } else if (e.code === "KeyR" && e.ctrlKey) {
+          e.preventDefault();
+          resetTimer();
+        } else if (e.code === "KeyF" && e.ctrlKey) {
+          e.preventDefault();
+          toggleFullscreen();
+        }
+      });
+
+      function updateSettings() {
+        if (isRunning) return;
+
+        totalTime = parseInt(totalMinutesInput.value) * 60;
+        warningTime = parseInt(warningMinutesInput.value) * 60;
+        dangerTime = parseInt(dangerMinutesInput.value) * 60;
+        sectionsCount = parseInt(sectionsCountInput.value);
+
+        currentTime = totalTime;
+        updateDisplay();
+        generateSections();
+      }
+
+      function generateSections() {
+        sections = [];
+        const sectionTime = Math.floor(totalTime / sectionsCount);
+
+        for (let i = 0; i < sectionsCount; i++) {
+          sections.push({
+            title: `Section ${i + 1}`,
+            duration: sectionTime,
+            elapsed: 0,
+            active: i === 0,
+          });
+        }
+
+        renderSections();
+      }
+
+      function renderSections() {
+        if (sectionsCount <= 1) {
+          timeSections.style.display = "none";
+          return;
+        }
+
+        timeSections.style.display = "grid";
+        timeSections.innerHTML = "";
+
+        sections.forEach((section, index) => {
+          const sectionDiv = document.createElement("div");
+          sectionDiv.className = `time-section ${
+            section.active ? "active" : ""
+          }`;
+          sectionDiv.innerHTML = `
+                    <div class="section-title">${section.title}</div>
+                    <div class="section-time">${formatTime(
+                      section.duration - section.elapsed
+                    )}</div>
+                `;
+          timeSections.appendChild(sectionDiv);
+        });
+      }
+
+      function startTimer() {
+        if (isPaused) {
+          // Resume
+          isRunning = true;
+          isPaused = false;
+        } else {
+          // Fresh start
+          isRunning = true;
+          currentSection = 0;
+          if (sections.length > 0) {
+            sections.forEach((section, index) => {
+              section.active = index === 0;
+              section.elapsed = 0;
+            });
+          }
+        }
+
+        startBtn.style.display = "none";
+        pauseBtn.style.display = "inline-flex";
+        statusIndicator.textContent = "Running";
+        statusIndicator.className = "status-indicator status-running";
+
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      function pauseTimer() {
+        isRunning = false;
+        isPaused = true;
+        clearInterval(timerInterval);
+
+        startBtn.style.display = "inline-flex";
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+        pauseBtn.style.display = "none";
+        statusIndicator.textContent = "Paused";
+        statusIndicator.className = "status-indicator status-paused";
+      }
+
+      function resetTimer() {
+        isRunning = false;
+        isPaused = false;
+        clearInterval(timerInterval);
+        currentTime = totalTime;
+        currentSection = 0;
+
+        startBtn.style.display = "inline-flex";
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+        pauseBtn.style.display = "none";
+        statusIndicator.textContent = "Ready";
+        statusIndicator.className = "status-indicator status-ready";
+
+        // Reset sections
+        if (sections.length > 0) {
+          sections.forEach((section, index) => {
+            section.active = index === 0;
+            section.elapsed = 0;
+          });
+        }
+
+        updateDisplay();
+        renderSections();
+      }
+
+      function updateTimer() {
+        currentTime--;
+
+        // Update sections
+        if (sections.length > 0 && currentSection < sections.length) {
+          sections[currentSection].elapsed++;
+
+          if (
+            sections[currentSection].elapsed >=
+              sections[currentSection].duration &&
+            currentSection < sections.length - 1
+          ) {
+            sections[currentSection].active = false;
+            currentSection++;
+            if (currentSection < sections.length) {
+              sections[currentSection].active = true;
+            }
+          }
+        }
+
+        updateDisplay();
+        renderSections();
+
+        if (currentTime <= 0) {
+          finishTimer();
+        }
+      }
+
+      function finishTimer() {
+        isRunning = false;
+        clearInterval(timerInterval);
+
+        startBtn.style.display = "inline-flex";
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+        pauseBtn.style.display = "none";
+        statusIndicator.textContent = "Finished";
+        statusIndicator.className = "status-indicator status-finished";
+
+        // Play completion sound
+        try {
+          const audio = new Audio(
+            "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmAeBj+R2+zAcCEDKHp"
+          );
+          audio.play().catch(() => {});
+        } catch (e) {}
+
+        alert("🎉 Presentation time complete! Great job!");
+      }
+
+      function updateDisplay() {
+        const timeStr = formatTime(currentTime);
+        mainTimer.textContent = timeStr;
+        fullscreenMainTimer.textContent = timeStr;
+
+        // Update timer color based on remaining time
+        const timerElements = [mainTimer, fullscreenMainTimer];
+        timerElements.forEach((timer) => {
+          timer.classList.remove("warning", "danger");
+          if (currentTime <= dangerTime) {
+            timer.classList.add("danger");
+          } else if (currentTime <= warningTime) {
+            timer.classList.add("warning");
+          }
+        });
+
+        // Update progress circle
+        const progress = (totalTime - currentTime) / totalTime;
+        const circumference = 2 * Math.PI * 90;
+        const offset = circumference * (1 - progress);
+        progressCircle.style.strokeDashoffset = offset;
+
+        // Update progress circle color
+        if (currentTime <= dangerTime) {
+          progressCircle.style.stroke = "var(--error-color)";
+        } else if (currentTime <= warningTime) {
+          progressCircle.style.stroke = "var(--warning-color)";
+        } else {
+          progressCircle.style.stroke = "var(--primary-color)";
+        }
+      }
+
+      function formatTime(seconds) {
+        const mins = Math.floor(Math.abs(seconds) / 60);
+        const secs = Math.abs(seconds) % 60;
+        const sign = seconds < 0 ? "-" : "";
+        return `${sign}${mins.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      function toggleFullscreen() {
+        if (isFullscreen) {
+          exitFullscreen();
+        } else {
+          enterFullscreen();
+        }
+      }
+
+      function enterFullscreen() {
+        isFullscreen = true;
+        fullscreenTimer.style.display = "flex";
+        fullscreenBtn.innerHTML =
+          '<i class="fas fa-compress"></i> Exit Fullscreen';
+
+        // Request fullscreen API if available
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      }
+
+      function exitFullscreen() {
+        isFullscreen = false;
+        fullscreenTimer.style.display = "none";
+        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
+
+        // Exit fullscreen API if available
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      // Initialize
+      updateSettings();
+      generateSections();
+      updateDisplay();
+
+      // Auto-save notes
+      const speakerNotes = document.getElementById("speakerNotes");
+      speakerNotes.addEventListener("input", () => {
+        localStorage.setItem("presentationNotes", speakerNotes.value);
+      });
+
+      // Load saved notes
+      const savedNotes = localStorage.getItem("presentationNotes");
+      if (savedNotes) {
+        speakerNotes.value = savedNotes;
+      }
+    </script>
+
+    <script src="../js/navigation.js"></script>
+  </body>
+</html>
