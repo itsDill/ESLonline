@@ -77,21 +77,33 @@
 
     <style>
       :root {
-        --primary-color: #46bbe5;
-        --primary-hover: #05425c;
+        --primary-color: #4f46e5;
+        --primary-hover: #3730a3;
         --secondary-color: #f59e0b;
         --accent-color: #10b981;
         --danger-color: #ef4444;
-        --success-color: #10b981;
+        --success-color: #22c55e;
+        --purple-color: #8b5cf6;
+        --pink-color: #ec4899;
+        --cyan-color: #06b6d4;
+        --orange-color: #f97316;
         --text-primary: #1f2937;
         --text-secondary: #6b7280;
         --bg-primary: #ffffff;
-        --bg-secondary: #f9fafb;
-        --bg-tertiary: #f3f4f6;
-        --border-color: #e5e7eb;
-        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --border-color: #e2e8f0;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fecfef 50%,
+          #fecfef 100%
+        );
+        --gradient-success: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        --gradient-danger: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
       }
 
       * {
@@ -106,155 +118,353 @@
         min-height: 100vh;
         color: var(--text-primary);
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 1rem;
+        padding: 1rem 0.5rem;
+        overflow-x: hidden;
       }
 
       .game-container {
         background: var(--bg-primary);
-        border-radius: 20px;
+        border-radius: 24px;
         box-shadow: var(--shadow-lg);
-        padding: 2rem;
-        max-width: 800px;
-        width: 100%;
+        padding: 1.5rem;
+        max-width: 100%;
+        width: min(800px, 100vw - 1rem);
         text-align: center;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .game-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-secondary);
+        opacity: 0.05;
+        z-index: 0;
+      }
+
+      .game-container > * {
+        position: relative;
+        z-index: 1;
       }
 
       .game-header {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .game-header h1 {
         font-family: "Poppins", sans-serif;
-        font-size: 2.5rem;
-        color: var(--primary-color);
+        font-size: clamp(1.8rem, 4vw, 2.2rem);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--purple-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+        animation: pulse 2s ease-in-out infinite;
       }
 
       .game-header p {
         color: var(--text-secondary);
-        font-size: 1.1rem;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        font-weight: 500;
       }
 
       .balance-area {
-        background: var(--bg-secondary);
-        border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        min-height: 300px;
+        background: var(--gradient-success);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        min-height: 200px;
+        max-height: 250px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        animation: fadeInUp 0.6s ease-out;
+        transition: all 0.3s ease;
+      }
+
+      .balance-area.danger-bg {
+        background: var(--gradient-danger);
       }
 
       .balanceman {
-        font-size: 6rem;
-        transition: all 0.3s ease;
-        margin-bottom: 1rem;
+        font-size: clamp(3rem, 8vw, 4.5rem);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        margin-bottom: 0.75rem;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        animation: bounceIn 1s ease-out;
       }
 
       .balanceman.safe {
         color: var(--success-color);
+        animation: gentle-sway 3s ease-in-out infinite;
+      }
+
+      @keyframes gentle-sway {
+        0%,
+        100% {
+          transform: rotate(-2deg);
+        }
+        50% {
+          transform: rotate(2deg);
+        }
       }
 
       .balanceman.danger {
         color: var(--danger-color);
-        animation: shake 0.5s ease-in-out;
+        animation: shake 0.5s ease-in-out infinite;
       }
 
       @keyframes shake {
         0%,
         100% {
-          transform: translateX(0);
+          transform: translateX(0) rotate(0deg);
         }
         25% {
-          transform: translateX(-5px);
+          transform: translateX(-8px) rotate(-5deg);
         }
         75% {
-          transform: translateX(5px);
+          transform: translateX(8px) rotate(5deg);
         }
       }
 
       .balance-status {
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
       }
 
       .word-display {
         font-family: "Poppins", sans-serif;
-        font-size: 2.5rem;
+        font-size: clamp(1.5rem, 4vw, 2rem);
         font-weight: bold;
-        letter-spacing: 0.5rem;
-        margin-bottom: 1rem;
-        color: var(--primary-color);
+        letter-spacing: clamp(0.2rem, 1vw, 0.4rem);
+        margin-bottom: 0.75rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--cyan-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        min-height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .word-hint {
-        background: var(--bg-tertiary);
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 0.75rem;
+        border-radius: 12px;
+        margin-bottom: 0;
         font-style: italic;
         color: var(--text-secondary);
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
 
       .game-stats {
-        display: flex;
-        justify-content: space-around;
-        background: var(--bg-tertiary);
-        border-radius: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.75rem;
+        background: var(--bg-secondary);
+        border-radius: 16px;
         padding: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border-color);
+        animation: fadeInUp 0.8s ease-out;
       }
 
       .stat {
         text-align: center;
+        padding: 0.5rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.6);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .stat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       .stat-value {
-        font-size: 1.5rem;
+        font-size: clamp(1.2rem, 3vw, 1.4rem);
         font-weight: bold;
-        color: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--orange-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transition: all 0.3s ease;
       }
 
       .stat-label {
-        font-size: 0.9rem;
+        font-size: clamp(0.7rem, 2vw, 0.8rem);
         color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .alphabet-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-        gap: 0.5rem;
-        margin-bottom: 2rem;
-        max-width: 600px;
+        grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
+        animation: fadeInUp 1s ease-out;
       }
 
       .letter-btn {
-        background: var(--bg-secondary);
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary),
+          rgba(255, 255, 255, 0.8)
+        );
         border: 2px solid var(--border-color);
         color: var(--text-primary);
-        padding: 0.75rem;
-        border-radius: 8px;
-        font-size: 1.1rem;
+        padding: clamp(0.5rem, 2vw, 0.65rem);
+        border-radius: 10px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .letter-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .letter-btn:hover::before {
+        left: 100%;
       }
 
       .letter-btn:hover {
-        background: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--purple-color)
+        );
         color: white;
-        transform: translateY(-2px);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+        border-color: var(--primary-color);
+      }
+
+      .letter-btn:active {
+        transform: translateY(-1px) scale(0.98);
       }
 
       .letter-btn:disabled {
@@ -262,160 +472,549 @@
         color: var(--text-secondary);
         cursor: not-allowed;
         transform: none;
+        box-shadow: none;
+        opacity: 0.6;
       }
 
       .letter-btn.correct {
-        background: var(--success-color);
+        background: linear-gradient(
+          135deg,
+          var(--success-color),
+          var(--accent-color)
+        );
         color: white;
         border-color: var(--success-color);
+        animation: correctGuess 0.6s ease-out;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+      }
+
+      @keyframes correctGuess {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+          background: linear-gradient(135deg, #4ade80, #22c55e);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .letter-btn.incorrect {
-        background: var(--danger-color);
+        background: linear-gradient(135deg, var(--danger-color), #f87171);
         color: white;
         border-color: var(--danger-color);
+        animation: incorrectGuess 0.6s ease-out;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      }
+
+      @keyframes incorrectGuess {
+        0% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.1) rotate(-5deg);
+        }
+        75% {
+          transform: scale(1.1) rotate(5deg);
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
       }
 
       .game-controls {
         display: flex;
-        gap: 1rem;
+        gap: 0.75rem;
         justify-content: center;
         flex-wrap: wrap;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1.2s ease-out;
       }
 
       .btn {
-        padding: 0.75rem 1.5rem;
+        padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 3vw, 1.3rem);
         border: none;
-        border-radius: 10px;
-        font-size: 1rem;
+        border-radius: 12px;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
       }
 
       .btn-primary {
-        background: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--purple-color)
+        );
         color: white;
       }
 
       .btn-primary:hover {
-        background: var(--primary-hover);
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, var(--primary-hover), #7c3aed);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
       }
 
       .btn-secondary {
-        background: var(--bg-tertiary);
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary),
+          rgba(255, 255, 255, 0.8)
+        );
         color: var(--text-primary);
         border: 2px solid var(--border-color);
       }
 
       .btn-secondary:hover {
-        background: var(--bg-secondary);
-        border-color: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color),
+          var(--orange-color)
+        );
+        color: white;
+        border-color: var(--secondary-color);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
       }
 
       .btn-success {
-        background: var(--success-color);
+        background: linear-gradient(
+          135deg,
+          var(--success-color),
+          var(--accent-color)
+        );
         color: white;
       }
 
+      .btn-success:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+      }
+
       .btn-danger {
-        background: var(--danger-color);
+        background: linear-gradient(135deg, var(--danger-color), #f87171);
         color: white;
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+      }
+
+      .btn:active {
+        transform: translateY(-1px) scale(0.98);
       }
 
       .game-message {
         margin: 1rem 0;
         padding: 1rem;
-        border-radius: 10px;
+        border-radius: 16px;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        animation: messageSlideIn 0.5s ease-out;
+        backdrop-filter: blur(10px);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      @keyframes messageSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
 
       .message-success {
-        background: rgba(16, 185, 129, 0.1);
+        background: linear-gradient(
+          135deg,
+          rgba(34, 197, 94, 0.15),
+          rgba(16, 185, 129, 0.15)
+        );
         color: var(--success-color);
-        border: 2px solid rgba(16, 185, 129, 0.3);
+        border-color: rgba(34, 197, 94, 0.3);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
       }
 
       .message-danger {
-        background: rgba(239, 68, 68, 0.1);
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.15),
+          rgba(248, 113, 113, 0.15)
+        );
         color: var(--danger-color);
-        border: 2px solid rgba(239, 68, 68, 0.3);
+        border-color: rgba(239, 68, 68, 0.3);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
       }
 
-      .difficulty-selector {
-        margin-bottom: 2rem;
+      .difficulty-selector,
+      .category-selector {
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.6s ease-out;
       }
 
-      .difficulty-btn {
-        margin: 0 0.5rem;
-        padding: 0.5rem 1rem;
+      .difficulty-selector h3,
+      .category-selector h3 {
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .difficulty-btn,
+      .category-btn {
+        margin: 0.25rem;
+        padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2.5vw, 1rem);
         border: 2px solid var(--border-color);
-        background: var(--bg-secondary);
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary),
+          rgba(255, 255, 255, 0.8)
+        );
         color: var(--text-primary);
         border-radius: 20px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+      }
+
+      .difficulty-btn::before,
+      .category-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .difficulty-btn:hover::before,
+      .category-btn:hover::before {
+        left: 100%;
+      }
+
+      .difficulty-btn:hover,
+      .category-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
       }
 
       .difficulty-btn.active {
-        background: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--purple-color)
+        );
         color: white;
         border-color: var(--primary-color);
-      }
-
-      .category-selector {
-        margin-bottom: 2rem;
-      }
-
-      .category-btn {
-        margin: 0.25rem;
-        padding: 0.5rem 1rem;
-        border: 2px solid var(--border-color);
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
       }
 
       .category-btn.active {
-        background: var(--secondary-color);
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color),
+          var(--orange-color)
+        );
         color: white;
         border-color: var(--secondary-color);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
       }
 
       @media (max-width: 768px) {
         .game-container {
           padding: 1rem;
+          margin: 0.5rem;
+          border-radius: 20px;
         }
 
         .game-header h1 {
-          font-size: 2rem;
+          font-size: clamp(1.5rem, 5vw, 1.8rem);
         }
 
         .word-display {
-          font-size: 2rem;
-          letter-spacing: 0.3rem;
+          font-size: clamp(1.2rem, 5vw, 1.6rem);
+          letter-spacing: clamp(0.1rem, 1.5vw, 0.3rem);
         }
 
         .balanceman {
-          font-size: 4rem;
+          font-size: clamp(2.5rem, 10vw, 3.5rem);
         }
 
         .alphabet-grid {
           grid-template-columns: repeat(6, 1fr);
+          gap: 0.3rem;
         }
 
         .letter-btn {
-          padding: 0.5rem;
-          font-size: 1rem;
+          padding: clamp(0.4rem, 2vw, 0.5rem);
+          font-size: clamp(0.8rem, 3vw, 0.9rem);
+          border-radius: 8px;
         }
+
+        .game-stats {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+          padding: 0.75rem;
+        }
+
+        .balance-area {
+          padding: 1rem;
+          min-height: 180px;
+          max-height: 200px;
+        }
+
+        .game-controls {
+          gap: 0.5rem;
+        }
+
+        .btn {
+          padding: clamp(0.5rem, 2vw, 0.6rem) clamp(0.8rem, 3vw, 1rem);
+          font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+        }
+
+        .difficulty-btn,
+        .category-btn {
+          padding: clamp(0.3rem, 1.5vw, 0.4rem) clamp(0.6rem, 2.5vw, 0.8rem);
+          font-size: clamp(0.7rem, 2vw, 0.75rem);
+          margin: 0.2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 0.5rem 0.25rem;
+        }
+
+        .game-container {
+          padding: 0.75rem;
+          margin: 0.25rem;
+        }
+
+        .balance-area {
+          padding: 0.75rem;
+          min-height: 160px;
+          max-height: 180px;
+        }
+
+        .alphabet-grid {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 0.25rem;
+        }
+
+        .game-stats {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.3rem;
+          padding: 0.5rem;
+        }
+
+        .stat {
+          padding: 0.3rem;
+        }
+
+        .category-selector,
+        .difficulty-selector {
+          margin-bottom: 1rem;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .game-container {
+          max-width: 900px;
+        }
+
+        .alphabet-grid {
+          grid-template-columns: repeat(13, 1fr);
+          max-width: 700px;
+        }
+      }
+
+      /* Enhanced animations for better UX */
+      @keyframes letterReveal {
+        from {
+          opacity: 0;
+          transform: scale(0.5) rotate(180deg);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+      }
+
+      .word-display .letter-reveal {
+        animation: letterReveal 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      @keyframes scoreIncrease {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+          color: var(--success-color);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .score-animation {
+        animation: scoreIncrease 0.6s ease-out;
+      }
+
+      /* Loading state for better UX */
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+        position: relative;
+      }
+
+      .loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid transparent;
+        border-top: 2px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Confetti animation */
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Improved accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Focus states for keyboard navigation */
+      .letter-btn:focus,
+      .btn:focus,
+      .difficulty-btn:focus,
+      .category-btn:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      /* Enhanced hint button */
+      .btn-hint {
+        background: linear-gradient(
+          135deg,
+          var(--cyan-color),
+          var(--accent-color)
+        );
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-hint:hover {
+        background: linear-gradient(135deg, #0891b2, #059669);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+      }
+
+      .btn-hint:disabled {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Progress indicator for wrong guesses */
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+        margin: 1rem 0;
+        overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--success-color),
+          var(--secondary-color),
+          var(--danger-color)
+        );
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
     </style>
   </head>
@@ -424,6 +1023,16 @@
       <div class="game-header">
         <h1><i class="fas fa-balance-scale"></i> BalanceMan</h1>
         <p>Help BalanceMan stay balanced by guessing the English word!</p>
+        <p
+          style="
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+          "
+        >
+          💡 Use keyboard: A-Z to guess, H for hint, Enter for new game, Esc to
+          exit
+        </p>
       </div>
 
       <div class="difficulty-selector" id="difficultySelector">
@@ -457,6 +1066,9 @@
         <div class="balance-status" id="balanceStatus">
           BalanceMan is stable!
         </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
         <div class="word-display" id="wordDisplay"></div>
         <div class="word-hint" id="wordHint"></div>
       </div>
@@ -488,12 +1100,12 @@
         <button class="btn btn-primary" id="newGameBtn">
           <i class="fas fa-play"></i> New Game
         </button>
-        <button class="btn btn-secondary" id="hintBtn">
-          <i class="fas fa-lightbulb"></i> Get Hint
+        <button class="btn btn-hint" id="hintBtn">
+          <i class="fas fa-lightbulb"></i> Get Hint (-5 pts)
         </button>
         <button
           class="btn btn-secondary"
-          onclick="window.location.href='games.html'"
+          onclick="window.location.href='../games.html'"
         >
           <i class="fas fa-arrow-left"></i> Back to Games
         </button>
@@ -745,7 +1357,21 @@
               letter <= "Z" &&
               !this.guessedLetters.has(letter)
             ) {
+              e.preventDefault();
               this.guessLetter(letter);
+            } else if (e.key === "Enter") {
+              e.preventDefault();
+              if (document.getElementById("newGameBtn").offsetParent !== null) {
+                this.startNewGame();
+              }
+            } else if (e.key === "h" || e.key === "H") {
+              e.preventDefault();
+              if (!document.getElementById("hintBtn").disabled) {
+                this.showHint();
+              }
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              window.location.href = "../games.html";
             }
           });
         }
@@ -769,7 +1395,11 @@
           this.updateBalanceMan();
           this.hideMessage();
 
-          document.getElementById("hintBtn").disabled = false;
+          // Reset hint button
+          const hintBtn = document.getElementById("hintBtn");
+          hintBtn.disabled = false;
+          hintBtn.innerHTML =
+            '<i class="fas fa-lightbulb"></i> Get Hint (-5 pts)';
         }
 
         guessLetter(letter) {
@@ -778,27 +1408,93 @@
           this.guessedLetters.add(letter);
 
           const letterBtn = document.querySelector(`[onclick*="${letter}"]`);
-
-          if (this.currentWord.includes(letter)) {
-            letterBtn.classList.add("correct");
-            this.correctGuesses++;
-            this.score += 10;
-
-            if (this.isWordComplete()) {
-              this.handleWordComplete();
-            }
-          } else {
-            letterBtn.classList.add("incorrect");
-            this.wrongGuesses++;
-
-            if (this.wrongGuesses >= this.maxWrongGuesses) {
-              this.handleGameOver();
-            }
-          }
-
           letterBtn.disabled = true;
-          this.updateDisplay();
-          this.updateBalanceMan();
+
+          // Add loading state
+          letterBtn.classList.add("loading");
+
+          setTimeout(() => {
+            letterBtn.classList.remove("loading");
+
+            if (this.currentWord.includes(letter)) {
+              letterBtn.classList.add("correct");
+              this.correctGuesses++;
+              this.score += 10;
+              this.animateScoreIncrease();
+
+              // Play success sound effect (if available)
+              this.playSound("correct");
+
+              if (this.isWordComplete()) {
+                this.handleWordComplete();
+              }
+            } else {
+              letterBtn.classList.add("incorrect");
+              this.wrongGuesses++;
+
+              // Play error sound effect (if available)
+              this.playSound("incorrect");
+
+              if (this.wrongGuesses >= this.maxWrongGuesses) {
+                this.handleGameOver();
+              }
+            }
+
+            this.updateDisplay();
+            this.updateBalanceMan();
+          }, 200);
+        }
+
+        animateScoreIncrease() {
+          const scoreElement = document.getElementById("gameScore");
+          scoreElement.classList.add("score-animation");
+          setTimeout(() => {
+            scoreElement.classList.remove("score-animation");
+          }, 600);
+        }
+
+        playSound(type) {
+          // Simple audio feedback using Web Audio API
+          try {
+            const audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            if (type === "correct") {
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                audioContext.currentTime
+              ); // C5
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                audioContext.currentTime + 0.1
+              ); // E5
+            } else {
+              oscillator.frequency.setValueAtTime(
+                220,
+                audioContext.currentTime
+              ); // A3
+              oscillator.frequency.setValueAtTime(
+                196,
+                audioContext.currentTime + 0.1
+              ); // G3
+            }
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.3
+            );
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+          } catch (e) {
+            // Audio not supported or blocked
+          }
         }
 
         isWordComplete() {
@@ -811,73 +1507,195 @@
 
         handleWordComplete() {
           this.wordsCompleted++;
-          this.score += this.hintUsed ? 25 : 50; // Bonus for not using hint
+          const bonusScore = this.hintUsed ? 25 : 50;
+          this.score += bonusScore;
 
-          this.showMessage("🎉 Excellent! BalanceMan is safe!", "success");
+          // Create celebration effect
+          this.createCelebrationEffect();
+
+          const message = this.hintUsed
+            ? `🎉 Great job! BalanceMan is safe! (+${bonusScore} points)`
+            : `🌟 Perfect! No hints needed! (+${bonusScore} points)`;
+
+          this.showMessage(message, "success");
+
+          // Add confetti animation
+          this.showConfetti();
 
           setTimeout(() => {
             this.startNewGame();
-          }, 2000);
+          }, 2500);
+        }
+
+        createCelebrationEffect() {
+          const balanceArea = document.querySelector(".balance-area");
+          balanceArea.style.background = "var(--gradient-success)";
+          balanceArea.style.transform = "scale(1.02)";
+
+          setTimeout(() => {
+            balanceArea.style.transform = "scale(1)";
+          }, 300);
+        }
+
+        showConfetti() {
+          // Simple confetti effect
+          const colors = [
+            "#ff6b6b",
+            "#4ecdc4",
+            "#45b7d1",
+            "#96ceb4",
+            "#ffeaa7",
+            "#dda0dd",
+          ];
+
+          for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+              const confetti = document.createElement("div");
+              confetti.style.cssText = `
+                position: fixed;
+                top: -10px;
+                left: ${Math.random() * 100}vw;
+                width: 10px;
+                height: 10px;
+                background: ${
+                  colors[Math.floor(Math.random() * colors.length)]
+                };
+                z-index: 1000;
+                border-radius: 50%;
+                animation: confetti-fall 3s linear forwards;
+                pointer-events: none;
+              `;
+
+              document.body.appendChild(confetti);
+
+              setTimeout(() => {
+                confetti.remove();
+              }, 3000);
+            }, i * 100);
+          }
         }
 
         handleGameOver() {
           this.showMessage(
-            `💔 BalanceMan fell! The word was "${this.currentWord}"`,
+            `💔 BalanceMan fell! The word was "${this.currentWord}". Try again!`,
             "danger"
           );
 
-          // Disable all letter buttons
-          document.querySelectorAll(".letter-btn").forEach((btn) => {
-            btn.disabled = true;
+          // Disable all letter buttons with animation
+          document.querySelectorAll(".letter-btn").forEach((btn, index) => {
+            setTimeout(() => {
+              btn.disabled = true;
+              btn.style.opacity = "0.5";
+            }, index * 50);
           });
+
+          // Auto-restart after delay
+          setTimeout(() => {
+            if (confirm("Would you like to try again with a new word?")) {
+              this.startNewGame();
+            }
+          }, 3000);
         }
 
         updateDisplay() {
-          // Update word display
+          // Update word display with animation
           const display = this.currentWord
             .split("")
-            .map((letter) =>
-              this.guessedLetters.has(letter) || letter === " " ? letter : "_"
-            )
+            .map((letter, index) => {
+              if (this.guessedLetters.has(letter) || letter === " ") {
+                return `<span class="letter-reveal" style="animation-delay: ${
+                  index * 0.1
+                }s">${letter}</span>`;
+              }
+              return "_";
+            })
             .join(" ");
-          document.getElementById("wordDisplay").textContent = display;
 
-          // Update stats
-          document.getElementById("correctGuesses").textContent =
-            this.correctGuesses;
-          document.getElementById("wrongGuesses").textContent =
-            this.wrongGuesses;
-          document.getElementById("wordsCompleted").textContent =
-            this.wordsCompleted;
-          document.getElementById("gameScore").textContent = this.score;
+          document.getElementById("wordDisplay").innerHTML = display;
+
+          // Update stats with smooth transitions
+          this.updateStatWithAnimation("correctGuesses", this.correctGuesses);
+          this.updateStatWithAnimation("wrongGuesses", this.wrongGuesses);
+          this.updateStatWithAnimation("wordsCompleted", this.wordsCompleted);
+          this.updateStatWithAnimation("gameScore", this.score);
+        }
+
+        updateStatWithAnimation(elementId, newValue) {
+          const element = document.getElementById(elementId);
+          const currentValue = parseInt(element.textContent) || 0;
+
+          if (newValue !== currentValue) {
+            // Animate number change
+            const increment = newValue > currentValue ? 1 : -1;
+            const step = () => {
+              const current = parseInt(element.textContent) || 0;
+              if (
+                (increment > 0 && current < newValue) ||
+                (increment < 0 && current > newValue)
+              ) {
+                element.textContent = current + increment;
+                setTimeout(step, 50);
+              } else {
+                element.textContent = newValue;
+              }
+            };
+            step();
+          }
         }
 
         updateBalanceMan() {
           const figure = document.getElementById("balancemanFigure");
           const status = document.getElementById("balanceStatus");
+          const balanceArea = document.querySelector(".balance-area");
 
           const dangerLevel = this.wrongGuesses / this.maxWrongGuesses;
+          const progressPercent = dangerLevel * 100;
+
+          // Update progress bar
+          const progressFill = document.getElementById("progressFill");
+          if (progressFill) {
+            progressFill.style.width = `${progressPercent}%`;
+          }
+
+          // Remove existing classes
+          figure.className = "balanceman";
+          balanceArea.classList.remove("danger-bg");
 
           if (dangerLevel === 0) {
             figure.textContent = "⚖️";
-            figure.className = "balanceman safe";
-            status.textContent = "BalanceMan is perfectly balanced!";
-          } else if (dangerLevel < 0.5) {
+            figure.classList.add("safe");
+            status.textContent = "BalanceMan is perfectly balanced! 🎯";
+            status.style.color = "var(--success-color)";
+          } else if (dangerLevel < 0.33) {
             figure.textContent = "⚖️";
-            figure.className = "balanceman safe";
-            status.textContent = "BalanceMan is slightly wobbly...";
-          } else if (dangerLevel < 0.8) {
+            figure.classList.add("safe");
+            status.textContent = "BalanceMan is slightly wobbly... 😅";
+            status.style.color = "var(--secondary-color)";
+          } else if (dangerLevel < 0.67) {
             figure.textContent = "🤹";
-            figure.className = "balanceman danger";
-            status.textContent = "BalanceMan is struggling to balance!";
+            figure.classList.add("danger");
+            status.textContent = "BalanceMan is struggling to balance! 😰";
+            status.style.color = "var(--orange-color)";
+            balanceArea.classList.add("danger-bg");
           } else if (dangerLevel < 1) {
             figure.textContent = "🤸";
-            figure.className = "balanceman danger";
-            status.textContent = "BalanceMan is about to fall!";
+            figure.classList.add("danger");
+            status.textContent = "BalanceMan is about to fall! 🚨";
+            status.style.color = "var(--danger-color)";
+            balanceArea.classList.add("danger-bg");
           } else {
-            figure.textContent = "💔";
-            figure.className = "balanceman danger";
-            status.textContent = "BalanceMan has fallen!";
+            figure.textContent = "�";
+            figure.classList.add("danger");
+            status.textContent = "BalanceMan has fallen! 💔";
+            status.style.color = "var(--danger-color)";
+            balanceArea.classList.add("danger-bg");
+          }
+
+          // Add shake animation for danger states
+          if (dangerLevel >= 0.5) {
+            figure.style.animation = "shake 0.5s ease-in-out infinite";
+          } else {
+            figure.style.animation = "";
           }
         }
 
@@ -892,12 +1710,28 @@
           if (!this.hintUsed) {
             document.getElementById(
               "wordHint"
-            ).textContent = `Hint: ${this.currentHint}`;
+            ).textContent = `💡 Hint: ${this.currentHint}`;
             this.hintUsed = true;
-            document.getElementById("hintBtn").disabled = true;
+
+            const hintBtn = document.getElementById("hintBtn");
+            hintBtn.disabled = true;
+            hintBtn.textContent = "Hint Used";
+            hintBtn.innerHTML = '<i class="fas fa-check"></i> Hint Used';
+
             this.score = Math.max(0, this.score - 5); // Small penalty for using hint
             this.updateDisplay();
+            this.animateScoreDecrease();
           }
+        }
+
+        animateScoreDecrease() {
+          const scoreElement = document.getElementById("gameScore");
+          scoreElement.style.color = "var(--danger-color)";
+          scoreElement.classList.add("score-animation");
+          setTimeout(() => {
+            scoreElement.classList.remove("score-animation");
+            scoreElement.style.color = "";
+          }, 600);
         }
 
         showMessage(text, type) {

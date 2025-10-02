@@ -228,6 +228,27 @@
     <link rel="stylesheet" href="../css/mobile-footer.css" />
 
     <style>
+      /* Container improvements for better desktop layout */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        width: 100%;
+      }
+
+      @media (min-width: 1600px) {
+        .container {
+          max-width: 1600px;
+          padding: 0 2rem;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .container {
+          padding: 0 1rem;
+        }
+      }
+
       /* CSS Variables for Design System */
       :root {
         --primary-color: #46bbe5;
@@ -560,6 +581,18 @@
         min-height: calc(100vh - 400px);
       }
 
+      .main-content .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      @media (min-width: 1600px) {
+        .main-content .container {
+          max-width: 1600px;
+        }
+      }
+
       /* Quick Filters */
       .quick-filters {
         background: var(--bg-card);
@@ -568,6 +601,14 @@
         margin-bottom: 2rem;
         box-shadow: var(--shadow);
         border: 1px solid var(--border-light);
+        max-width: 100%;
+      }
+
+      @media (min-width: 1200px) {
+        .quick-filters {
+          padding: 2rem;
+          margin-bottom: 3rem;
+        }
       }
 
       .quick-filters h3 {
@@ -780,10 +821,37 @@
       /* Games Grid - Enhanced Layout */
       .games-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 2.5rem;
+        grid-template-columns: 1fr;
+        gap: 2rem;
         padding: 0;
         margin: 0;
+        max-width: 100%;
+      }
+
+      /* Responsive grid adjustments */
+      @media (min-width: 768px) {
+        .games-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 2rem;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .games-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2.5rem;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (min-width: 1400px) {
+        .games-grid {
+          max-width: 1300px;
+          gap: 3rem;
+        }
       }
 
       /* Card Load Animation */
@@ -833,7 +901,7 @@
           0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         display: flex;
         flex-direction: column;
-        height: 380px;
+        height: 400px;
         position: relative;
         backdrop-filter: blur(10px);
         will-change: transform, box-shadow;
@@ -842,6 +910,7 @@
           var(--bg-card),
           rgba(255, 255, 255, 0.98)
         );
+        width: 100%;
       }
 
       .game-card::before {
@@ -883,7 +952,7 @@
 
       .game-image-container {
         position: relative;
-        height: 220px;
+        height: 240px;
         overflow: hidden;
         background: linear-gradient(
           135deg,
@@ -893,6 +962,18 @@
         flex-shrink: 0;
         z-index: 2;
         border-radius: 16px 16px 0 0;
+      }
+
+      @media (min-width: 768px) {
+        .game-image-container {
+          height: 250px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .game-image-container {
+          height: 260px;
+        }
       }
 
       .game-image-container::after {
@@ -1558,11 +1639,12 @@
         .games-grid {
           grid-template-columns: 1fr;
           gap: 2rem;
+          padding: 0 0.5rem;
         }
 
         .game-card {
           height: 360px;
-          margin: 0 0.5rem;
+          margin: 0;
         }
 
         .game-card:hover {
@@ -1631,30 +1713,6 @@
           width: 95%;
           margin: 0 10px;
           max-height: 70vh;
-        }
-      }
-
-      /* Tablet Responsiveness */
-      @media (min-width: 769px) and (max-width: 1024px) {
-        .games-grid {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 2rem;
-        }
-
-        .game-card {
-          height: 370px;
-        }
-
-        .game-card:hover {
-          transform: translateY(-8px) scale(1.025);
-        }
-      }
-
-      /* Desktop */
-      @media (min-width: 1025px) {
-        .games-grid {
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2rem;
         }
       }
 
@@ -2675,7 +2733,7 @@
           skill: "vocabulary",
           difficulty: "beginner",
           devices: ["mobile", "tablet", "desktop"],
-          image: "../images/game1.png",
+          image: "../images/image.png",
           link: "uno.html",
           icon: "fas fa-cards-blank",
           rating: 4.8,
@@ -2692,7 +2750,7 @@
           skill: "grammar",
           difficulty: "intermediate",
           devices: ["mobile", "tablet", "desktop"],
-          image: "../images/game2.png",
+          image: "../images/image copy 2.png",
           link: "quizchamp.html",
           icon: "fas fa-trophy",
           rating: 4.6,
@@ -2709,7 +2767,7 @@
           skill: "vocabulary",
           difficulty: "intermediate",
           devices: ["mobile", "tablet", "desktop"],
-          image: "../images/game3.png",
+          image: "../images/image copy 3.png",
           link: "whowants.html",
           icon: "fas fa-puzzle-piece",
           rating: 4.4,
@@ -3257,40 +3315,19 @@
             return `
               <div class="game-card" data-skill="${
                 game.skill
-              }" onclick="handleCardClick(event, '${game.link}')"
+              }" onclick="handleCardClick(event, '${game.link}')">
                 <div class="game-image-container">
                   ${
                     game.image
                       ? `<img src="${game.image}" alt="${game.title}" class="game-image" loading="lazy">`
                       : `<i class="${game.icon} game-fallback-icon"></i>`
                   }
-                  <button class="favorite-btn ${isFavorite ? "active" : ""}" 
-                          onclick="event.stopPropagation(); event.preventDefault(); toggleFavorite(${
-                            game.id
-                          })"
-                          type="button"
-                          aria-label="${
-                            isFavorite
-                              ? "Remove from favorites"
-                              : "Add to favorites"
-                          }">
-                    <i class="fas fa-heart"></i>
-                  </button>
                 </div>
                 <div class="game-content">
                   <h3 class="game-title">${game.title}</h3>
                   <p class="game-description">${game.description}</p>
                   <div class="game-footer">
                     <span class="game-skill">${game.skill}</span>
-                    <button class="btn-play" 
-                            onclick="event.stopPropagation(); event.preventDefault(); playGame('${
-                              game.link
-                            }');"
-                            type="button"
-                            aria-label="Play ${game.title}">
-                      <i class="fas fa-play"></i>
-                      Play
-                    </button>
                   </div>
                 </div>
               </div>
@@ -3326,13 +3363,8 @@
         return num.toString();
       }
 
-      // Handle card click (avoid button conflicts)
+      // Handle card click
       function handleCardClick(event, gameLink) {
-        // Don't navigate if clicking on buttons
-        if (event.target.closest("button")) {
-          return;
-        }
-
         // Navigate to game
         playGame(gameLink);
       }

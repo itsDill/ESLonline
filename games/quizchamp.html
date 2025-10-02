@@ -22,12 +22,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      ESL Countdown Quiz Championship - Test Your English Knowledge | ESL Fun
+      ESL Countdown Championship - Choose Your Letters & Find Words | ESL Fun
       Online
     </title>
     <meta
       name="description"
-      content="Challenge yourself with timed questions in our ESL Countdown Quiz! Test grammar, vocabulary, and English knowledge. Race against time in this exciting educational game."
+      content="Play the classic Countdown letters game! Take turns choosing vowels and consonants, then race against time to find the longest words in this authentic ESL adaptation."
     />
     <meta
       name="keywords"
@@ -110,11 +110,15 @@
       body {
         font-family: "Arial", sans-serif;
         background: linear-gradient(
-          135deg,
-          #1e3c72 0%,
-          #2a5298 50%,
-          #667eea 100%
-        );
+            135deg,
+            rgba(30, 60, 114, 0.3) 0%,
+            rgba(42, 82, 152, 0.4) 50%,
+            rgba(102, 126, 234, 0.3) 100%
+          ),
+          url("../images/image copy.png");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -124,15 +128,15 @@
       }
 
       .game-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(8px);
         border-radius: 20px;
         padding: 2rem;
         max-width: 900px;
         width: 95%;
         text-align: center;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         position: relative;
       }
 
@@ -340,8 +344,9 @@
       h1 {
         font-size: 2.5rem;
         margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         animation: pulse 2s infinite;
+        color: #ffffff;
       }
 
       @keyframes pulse {
@@ -354,14 +359,353 @@
         }
       }
 
-      .instructions {
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 8px 25px rgba(255, 107, 107, 0.8);
+          transform: scale(1.02);
+        }
+      }
+
+      .quick-start-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        margin: 1rem 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4caf50, #45a049);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+
+      .sound-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+
+      .sound-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
+      .hint-box {
+        background: rgba(255, 215, 0, 0.1);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        animation: hint-pulse 3s infinite;
+      }
+
+      @keyframes hint-pulse {
+        0%,
+        100% {
+          border-color: rgba(255, 215, 0, 0.3);
+        }
+        50% {
+          border-color: rgba(255, 215, 0, 0.6);
+        }
+      }
+
+      .word-suggestion {
+        display: inline-block;
+        background: rgba(135, 206, 235, 0.2);
+        color: #87ceeb;
+        padding: 5px 10px;
+        margin: 3px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        border: 1px solid rgba(135, 206, 235, 0.3);
+      }
+
+      kbd {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+        font-family: monospace;
+        color: #ffd700;
+      }
+
+      .letter-tile {
+        display: inline-block;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.2),
+          rgba(255, 255, 255, 0.1)
+        );
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 5px;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .letter-tile:hover {
+        transform: scale(1.1);
+        border-color: #ffd700;
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+      }
+
+      .feedback-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 20px 40px;
+        border-radius: 15px;
+        font-size: 1.2rem;
+        z-index: 1001;
+        animation: fade-in-out 2s ease;
+      }
+
+      @keyframes fade-in-out {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.8);
+        }
+        20%,
+        80% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      .letter-selection-screen {
+        display: none;
+      }
+
+      .choice-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .vowel-btn,
+      .consonant-btn {
+        padding: 20px 40px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+      }
+
+      .vowel-btn {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        color: white;
+      }
+
+      .consonant-btn {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        color: white;
+      }
+
+      .vowel-btn:hover,
+      .consonant-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .vowel-btn:disabled,
+      .consonant-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .letter-selection-display {
         background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .selected-letters {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+      }
+
+      .selected-letter {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.3),
+          rgba(255, 255, 255, 0.1)
+        );
+        border: 3px solid #ffd700;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        min-width: 60px;
+        text-align: center;
+        animation: letter-appear 0.5s ease;
+      }
+
+      @keyframes letter-appear {
+        0% {
+          transform: scale(0) rotate(180deg);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+      }
+
+      .countdown-info {
+        text-align: center;
+        margin: 2rem 0;
+      }
+
+      .current-player {
+        font-size: 1.8rem;
+        color: #ffd700;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      .letters-remaining {
+        font-size: 1.2rem;
+        color: #87ceeb;
+        margin-bottom: 1rem;
+      }
+
+      .individual-play-screen {
+        display: none;
+      }
+
+      .player-turn-indicator {
+        background: rgba(255, 215, 0, 0.2);
+        border: 2px solid #ffd700;
+        border-radius: 15px;
+        padding: 1rem;
+        margin: 1rem 0;
+        text-align: center;
+      }
+
+      .word-input-section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .word-submit-area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .countdown-word-input {
+        padding: 15px 20px;
+        font-size: 1.4rem;
+        border: 3px solid rgba(255, 215, 0, 0.5);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-align: center;
+        min-width: 300px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .countdown-word-input:focus {
+        border-color: #ffd700;
+        outline: none;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+      }
+
+      .reveal-screen {
+        display: none;
+      }
+
+      .word-reveal {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .player-word {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-left: 5px solid #ffd700;
+      }
+
+      .word-display {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+      }
+
+      .word-points {
+        font-size: 1.2rem;
+        color: #87ceeb;
+      }
+
+      .invalid-word {
+        border-left-color: #e74c3c;
+      }
+
+      .invalid-word .word-display {
+        color: #e74c3c;
+      }
+
+      .instructions {
+        background: rgba(255, 255, 255, 0.08);
         border-radius: 15px;
         padding: 2rem;
         margin: 2rem 0;
         text-align: left;
         line-height: 1.8;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
       }
 
       .instructions h2 {
@@ -369,7 +713,7 @@
         text-align: center;
         margin-bottom: 1.5rem;
         font-size: 1.8rem;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
       }
 
       .instructions h3 {
@@ -539,16 +883,24 @@
   </head>
   <body>
     <div class="game-container">
+      <button
+        class="sound-toggle"
+        onclick="toggleSound()"
+        title="Toggle Sound Effects"
+      >
+        🔊
+      </button>
+
       <!-- Team Setup Screen -->
       <div id="team-setup-screen" class="team-setup-screen">
         <h1>⚔️ ESL Team Countdown Championship</h1>
 
         <div class="instructions">
-          <h2>🏆 Team Battle Setup</h2>
+          <h2>🏆 Countdown Championship Setup</h2>
           <p>
-            Get ready for the ultimate collaborative word-finding showdown! Both
-            teams will work together simultaneously in each round, then compete
-            to see who found more words!
+            Experience the authentic Countdown TV show! Players take turns
+            choosing vowels and consonants to build 9 letters, then compete
+            individually to find the longest words!
           </p>
 
           <div class="setup-form">
@@ -616,12 +968,41 @@
           </div>
         </div>
 
-        <button class="start-btn" onclick="startTeamGame()">
-          🚀 Start Championship!
-        </button>
-        <button class="back-btn" onclick="showInstructions()">
-          📖 View Rules
-        </button>
+        <div style="text-align: center; margin-top: 2rem">
+          <button
+            class="start-btn"
+            onclick="startTeamGame()"
+            style="
+              font-size: 1.4rem;
+              padding: 20px 50px;
+              margin: 10px;
+              animation: pulse-glow 2s infinite;
+            "
+          >
+            🚀 START CHAMPIONSHIP!
+          </button>
+          <br />
+          <button
+            class="quick-start-btn"
+            onclick="quickStart()"
+            style="
+              background: linear-gradient(45deg, #4caf50, #45a049);
+              color: white;
+              border: none;
+              padding: 12px 30px;
+              font-size: 1rem;
+              border-radius: 25px;
+              cursor: pointer;
+              margin: 10px;
+              transition: all 0.3s ease;
+            "
+          >
+            ⚡ Quick Start (Default Settings)
+          </button>
+          <button class="back-btn" onclick="showInstructions()">
+            📖 View Rules
+          </button>
+        </div>
       </div>
 
       <!-- Instructions Screen -->
@@ -631,39 +1012,47 @@
         <div class="instructions">
           <h2>📖 How to Play</h2>
 
-          <h3>🎲 The Challenge</h3>
+          <h3>🎲 The Countdown Challenge</h3>
           <p>
-            Both teams work together! You'll receive
-            <span class="highlight">9 letters</span> and have
-            <span class="highlight">30-45 seconds</span> to find as many English
-            words as possible. When time's up, both teams enter their words
-            simultaneously!
+            Just like the TV show! Players take turns choosing
+            <span class="highlight">vowels or consonants</span> until you have
+            <span class="highlight">9 letters</span>. Then both players work
+            <span class="highlight">separately</span> for 30 seconds to find the
+            longest word possible!
           </p>
 
           <div class="example-box">
-            <strong>Example:</strong> If you get the letters "HEATWORDS", you
-            could make: HEAT, WORD, HEART, WATER, WORTH, etc. Remember them all!
+            <strong>How it works:</strong> Player 1 chooses "Vowel" → gets E.
+            Player 2 chooses "Consonant" → gets R. Continue until 9 letters are
+            selected. Then both players secretly find words!
           </div>
 
-          <h3>📋 New Letters Round Rules</h3>
+          <h3>📋 Letter Selection Rules</h3>
           <ul>
             <li>
-              <strong>Both teams play at the same time</strong> - no more taking
-              turns!
+              <strong>Take turns choosing</strong> - alternate between players
             </li>
-            <li>Use only the letters provided</li>
-            <li>Each letter can only be used <strong>once per word</strong></li>
+            <li>
+              <strong>Must have at least 3 vowels and 4 consonants</strong>
+            </li>
+            <li>
+              Choose "VOWEL" or "CONSONANT" - letters are randomly selected
+            </li>
+            <li>Continue until all 9 letters are chosen</li>
+            <li>
+              <strong>No going back</strong> - once chosen, letters are final
+            </li>
+          </ul>
+
+          <h3>⏱️ Word Finding Rules</h3>
+          <ul>
+            <li><strong>30 seconds</strong> to find your best word</li>
+            <li>Players work <strong>individually and secretly</strong></li>
+            <li>Use only the 9 selected letters</li>
+            <li>Each letter can only be used <strong>once</strong></li>
             <li>Words must be at least <strong>3 letters long</strong></li>
-            <li>Only English words count</li>
-            <li>
-              <strong>Remember your words</strong> - enter them all when time's
-              up
-            </li>
-            <li>Teams can find the same words (both get points)</li>
-            <li>
-              <strong>Word facts</strong> - learn interesting facts about some
-              words!
-            </li>
+            <li><strong>Longest word wins the round!</strong></li>
+            <li>Same length words = points for both players</li>
           </ul>
 
           <h3>🔢 Math Challenge Rules</h3>
@@ -675,12 +1064,13 @@
             <li>Teams can choose to skip math rounds</li>
           </ul>
 
-          <h3>🏆 Scoring</h3>
+          <h3>🏆 Countdown Scoring</h3>
           <div class="difficulty-levels">
             <div class="difficulty-card">
               <h4>Letters Round</h4>
               <p>
-                3-4 letters: 1pt<br />5-6 letters: 2pts<br />7+ letters: 3pts
+                Longest word wins!<br />3-4 letters: 1pt<br />5-6 letters:
+                2pts<br />7+ letters: 3pts<br />9-letter word: 18pts!
               </p>
             </div>
             <div class="difficulty-card">
@@ -691,44 +1081,193 @@
             </div>
             <div class="difficulty-card">
               <h4>Championship</h4>
-              <p>Team with most points after all rounds wins!</p>
+              <p>Best of multiple rounds wins the championship!</p>
             </div>
           </div>
 
           <div class="tips">
-            <h3>💡 Team Strategy Tips</h3>
+            <h3>💡 Countdown Strategy Tips</h3>
             <ul>
               <li>
-                <strong>Both teams brainstorm together</strong> - everyone looks
-                at the same letters
+                <strong>Letter Selection:</strong> Choose a good mix of vowels
+                and consonants
               </li>
               <li>
-                <strong>Remember, don't write!</strong> - memorize words during
-                the timer
+                <strong>Common letters:</strong> E, A, R, I, O, T, N, S are very
+                useful
               </li>
               <li>
-                <strong>Look for different word lengths</strong> - longer words
-                = more points
+                <strong>Word Finding:</strong> Look for common endings like
+                -ING, -ED, -ER
               </li>
               <li>
-                <strong>Stay organized</strong> - think systematically through
-                the letters
+                <strong>Start small:</strong> Find short words first, then build
+                longer ones
               </li>
               <li>
-                <strong>Teams can find the same words</strong> - both get
-                points, so don't worry about duplicates
+                <strong>Use all letters:</strong> A 9-letter word gives maximum
+                points!
               </li>
-              <li>
-                <strong>Choose your letter type</strong> - vowel-heavy,
-                consonant-heavy, or balanced
-              </li>
+              <li><strong>Think quickly:</strong> You only have 30 seconds!</li>
             </ul>
+
+            <div
+              style="
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(135, 206, 235, 0.1);
+                border-radius: 8px;
+              "
+            >
+              <h4 style="color: #87ceeb">⌨️ Keyboard Shortcuts:</h4>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 0.5rem;
+                  font-size: 0.9rem;
+                "
+              >
+                <div>• <kbd>Enter</kbd> - Submit math answer</div>
+                <div>• <kbd>H</kbd> - Show/hide hints</div>
+                <div>• <kbd>Space</kbd> - Quick start</div>
+                <div>• <kbd>Esc</kbd> - End game early</div>
+              </div>
+            </div>
           </div>
         </div>
 
         <button class="start-btn" onclick="showTeamSetup()">
           ⚔️ Back to Team Setup
         </button>
+      </div>
+
+      <!-- Letter Selection Screen -->
+      <div id="letter-selection-screen" class="letter-selection-screen">
+        <div class="team-vs-display">
+          <div class="team-box" id="selection-team1-box">
+            <div class="team-name" id="selection-team1-display">Player 1</div>
+            <div class="team-score" id="selection-team1-score">0</div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="team-box" id="selection-team2-box">
+            <div class="team-name" id="selection-team2-display">Player 2</div>
+            <div class="team-score" id="selection-team2-score">0</div>
+          </div>
+        </div>
+
+        <div class="countdown-info">
+          <div class="current-player" id="current-chooser">Player 1's Turn</div>
+          <div class="letters-remaining" id="letters-remaining">
+            Choose letter 1 of 9
+          </div>
+        </div>
+
+        <div class="choice-buttons">
+          <button
+            class="vowel-btn"
+            id="vowel-btn"
+            onclick="chooseLetter('vowel')"
+          >
+            📢 VOWEL
+          </button>
+          <button
+            class="consonant-btn"
+            id="consonant-btn"
+            onclick="chooseLetter('consonant')"
+          >
+            🔤 CONSONANT
+          </button>
+        </div>
+
+        <div class="letter-selection-display">
+          <h3 style="color: #ffd700; margin-bottom: 1rem">Selected Letters:</h3>
+          <div class="selected-letters" id="selected-letters-display">
+            <!-- Letters will appear here as they're chosen -->
+          </div>
+
+          <div style="margin-top: 1rem; color: #87ceeb">
+            <span id="vowel-count">Vowels: 0</span> |
+            <span id="consonant-count">Consonants: 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Individual Play Screen -->
+      <div id="individual-play-screen" class="individual-play-screen">
+        <div class="team-vs-display">
+          <div class="team-box" id="play-team1-box">
+            <div class="team-name" id="play-team1-display">Player 1</div>
+            <div class="team-score" id="play-team1-score">0</div>
+          </div>
+          <div class="vs-text">VS</div>
+          <div class="team-box" id="play-team2-box">
+            <div class="team-name" id="play-team2-display">Player 2</div>
+            <div class="team-score" id="play-team2-score">0</div>
+          </div>
+        </div>
+
+        <div class="player-turn-indicator">
+          <h2 id="current-player-indicator">
+            Both Players: Find Your Best Word!
+          </h2>
+          <div class="timer" id="countdown-timer">30</div>
+        </div>
+
+        <div class="selected-letters" id="play-letters-display">
+          <!-- Selected letters will be shown here -->
+        </div>
+
+        <div class="word-input-section">
+          <h3 style="color: #ffd700; margin-bottom: 1rem">Enter Your Word:</h3>
+          <div class="word-submit-area">
+            <input
+              type="text"
+              class="countdown-word-input"
+              id="player-word-input"
+              placeholder="TYPE YOUR WORD HERE"
+              maxlength="9"
+            />
+            <button class="submit-btn" onclick="submitPlayerWord()">
+              Submit Word
+            </button>
+          </div>
+          <div style="color: #87ceeb; margin-top: 1rem; text-align: center">
+            💡 Tip: Longer words score more points! A 9-letter word = 18 points!
+          </div>
+        </div>
+      </div>
+
+      <!-- Word Reveal Screen -->
+      <div id="reveal-screen" class="reveal-screen">
+        <h1>🎯 Word Reveal!</h1>
+
+        <div class="selected-letters" id="reveal-letters-display">
+          <!-- Letters will be shown here -->
+        </div>
+
+        <div class="word-reveal">
+          <div class="player-word" id="player1-word-reveal">
+            <div class="word-display" id="player1-word-display">TESTING</div>
+            <div class="word-points" id="player1-word-points">
+              7 letters - 3 points
+            </div>
+          </div>
+
+          <div class="player-word" id="player2-word-reveal">
+            <div class="word-display" id="player2-word-display">TEST</div>
+            <div class="word-points" id="player2-word-points">
+              4 letters - 1 point
+            </div>
+          </div>
+        </div>
+
+        <div id="round-winner-announcement" class="score"></div>
+
+        <button class="start-btn" onclick="nextCountdownRound()">
+          Next Round
+        </button>
+        <button class="back-btn" onclick="endGameEarly()">End Game</button>
       </div>
 
       <!-- Game Screen -->
@@ -758,9 +1297,19 @@
           <div><strong>Letters Challenge</strong></div>
         </div>
 
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            id="round-progress"
+            style="width: 20%"
+          ></div>
+        </div>
+
         <h1>🔤 Both Teams: Find Words Together!</h1>
         <div class="timer" id="timer">30</div>
-        <div class="letters-display" id="letters"></div>
+        <div class="letters-display" id="letters-container">
+          <!-- Letters will be populated as individual tiles -->
+        </div>
 
         <div
           style="
@@ -788,6 +1337,41 @@
             letters • Each letter used once per word • Minimum 3 letters •
             English words only
           </div>
+
+          <div id="hint-container" class="hint-box" style="display: none">
+            <h4 style="color: #ffd700; margin-bottom: 0.5rem">💡 Hints:</h4>
+            <div id="word-hints"></div>
+            <button
+              onclick="toggleHints()"
+              style="
+                background: rgba(255, 255, 255, 0.2);
+                border: 1px solid #ffd700;
+                color: #ffd700;
+                padding: 5px 15px;
+                border-radius: 15px;
+                cursor: pointer;
+                margin-top: 10px;
+              "
+            >
+              Hide Hints
+            </button>
+          </div>
+
+          <button
+            onclick="showHints()"
+            id="show-hints-btn"
+            style="
+              background: rgba(255, 215, 0, 0.2);
+              border: 1px solid #ffd700;
+              color: #ffd700;
+              padding: 8px 20px;
+              border-radius: 20px;
+              cursor: pointer;
+              margin-top: 15px;
+            "
+          >
+            💡 Show Hints
+          </button>
         </div>
 
         <button class="back-btn" onclick="endGameEarly()">
@@ -859,7 +1443,7 @@
 
       <!-- Word Entry Screen -->
       <div id="word-entry-screen" style="display: none">
-        <h1>⏰ Time's Up! Enter Your Words</h1>
+        <h1>⏰ Round Complete! Enter All Words Found</h1>
 
         <div class="team-vs-display">
           <div class="team-box">
@@ -883,6 +1467,44 @@
           <div>
             <strong>Letters were: <span id="entry-letters"></span></strong>
           </div>
+        </div>
+
+        <div
+          style="
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+          "
+        >
+          <h3 style="color: #ffd700; margin-bottom: 1rem">
+            📝 Now Enter ALL Words You Found!
+          </h3>
+          <p style="color: #87ceeb; font-size: 1.1rem">
+            Time to reveal your vocabulary skills! Enter every word you
+            discovered during the countdown. Both teams should list all words
+            they found, separated by commas or new lines.
+          </p>
+        </div>
+
+        <div
+          style="
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+          "
+        >
+          <h3 style="color: #ffd700; margin-bottom: 1rem">
+            📝 Now Enter ALL Words You Found!
+          </h3>
+          <p style="color: #87ceeb; font-size: 1.1rem">
+            Time to reveal your vocabulary skills! Enter every word you
+            discovered during the countdown. Both teams should list all words
+            they found, separated by commas or new lines.
+          </p>
         </div>
 
         <div
@@ -1029,8 +1651,8 @@
 
     <script>
       let gameState = {
-        team1: { name: "Team 1", score: 0, roundScores: [] },
-        team2: { name: "Team 2", score: 0, roundScores: [] },
+        team1: { name: "Player 1", score: 0, roundScores: [] },
+        team2: { name: "Player 2", score: 0, roundScores: [] },
         currentTeam: 1,
         currentRound: 1,
         totalRounds: 5,
@@ -1038,14 +1660,87 @@
         extendedTime: false,
         roundType: "letters", // "letters" or "math"
         letters: [],
+        selectedLetters: [],
+        vowelCount: 0,
+        consonantCount: 0,
+        lettersToSelect: 9,
+        currentSelector: 1, // who's choosing letters
         timeLeft: 30,
         roundScore: 0,
         wordsFound: [],
         timer: null,
         mathTarget: 0,
         mathNumbers: [],
-        gamePhase: "setup", // "setup", "playing", "round-results", "final-results"
+        gamePhase: "setup", // "setup", "selecting", "playing", "revealing", "round-results", "final-results"
+        soundEnabled: true,
+        hintsShown: false,
+        player1Word: "",
+        player2Word: "",
+        bothWordsSubmitted: false,
       };
+
+      // Sound effects
+      const sounds = {
+        tick: () => gameState.soundEnabled && playBeep(800, 100),
+        success: () => gameState.soundEnabled && playBeep(1000, 200),
+        warning: () => gameState.soundEnabled && playBeep(400, 300),
+        victory: () => gameState.soundEnabled && playVictorySound(),
+      };
+
+      function playBeep(frequency, duration) {
+        try {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.value = frequency;
+          oscillator.type = "sine";
+
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + duration / 1000
+          );
+
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + duration / 1000);
+        } catch (e) {
+          console.log("Audio not supported");
+        }
+      }
+
+      function playVictorySound() {
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((note, i) => {
+          setTimeout(() => playBeep(note, 200), i * 150);
+        });
+      }
+
+      function toggleSound() {
+        gameState.soundEnabled = !gameState.soundEnabled;
+        const btn = document.querySelector(".sound-toggle");
+        btn.textContent = gameState.soundEnabled ? "🔊" : "🔇";
+        btn.title = gameState.soundEnabled
+          ? "Disable Sound Effects"
+          : "Enable Sound Effects";
+      }
+
+      function quickStart() {
+        // Set default values and start immediately
+        document.getElementById("team1-name").value = "Player 1";
+        document.getElementById("team2-name").value = "Player 2";
+        document.getElementById("num-rounds").value = "5";
+        document.getElementById("include-math").checked = true;
+        document.getElementById("extended-time").checked = false;
+        document.getElementById("letter-type").value = "balanced";
+
+        sounds.success();
+        setTimeout(() => startTeamGame(), 500);
+      }
 
       const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
       const vowels = "AEIOU";
@@ -1170,6 +1865,9 @@
         const screens = [
           "team-setup-screen",
           "instructions-screen",
+          "letter-selection-screen",
+          "individual-play-screen",
+          "reveal-screen",
           "game-screen",
           "math-screen",
           "word-entry-screen",
@@ -1221,27 +1919,396 @@
         if (gameState.includeMath && gameState.currentRound % 2 === 0) {
           startMathRound();
         } else {
-          startLettersRound();
+          startLetterSelection();
+        }
+      }
+
+      function startLetterSelection() {
+        gameState.roundType = "letters";
+        gameState.selectedLetters = [];
+        gameState.vowelCount = 0;
+        gameState.consonantCount = 0;
+        gameState.currentSelector = 1;
+        gameState.gamePhase = "selecting";
+        gameState.player1Word = "";
+        gameState.player2Word = "";
+        gameState.bothWordsSubmitted = false;
+
+        hideAllScreens();
+        document.getElementById("letter-selection-screen").style.display =
+          "block";
+
+        updateSelectionDisplay();
+        updateLetterCounts();
+        updateCurrentChooser();
+
+        sounds.success();
+      }
+
+      function chooseLetter(type) {
+        if (gameState.selectedLetters.length >= 9) return;
+
+        // Check constraints
+        if (type === "vowel" && gameState.vowelCount >= 5) {
+          showFeedback("Maximum 5 vowels allowed!", "warning");
+          return;
+        }
+        if (type === "consonant" && gameState.consonantCount >= 6) {
+          showFeedback("Maximum 6 consonants allowed!", "warning");
+          return;
+        }
+
+        // Must have at least 3 vowels and 3 consonants
+        const remaining = 9 - gameState.selectedLetters.length;
+        if (
+          type === "vowel" &&
+          gameState.consonantCount < 3 &&
+          remaining - 1 < 3 - gameState.consonantCount
+        ) {
+          showFeedback("Must have at least 3 consonants!", "warning");
+          return;
+        }
+        if (
+          type === "consonant" &&
+          gameState.vowelCount < 3 &&
+          remaining - 1 < 3 - gameState.vowelCount
+        ) {
+          showFeedback("Must have at least 3 vowels!", "warning");
+          return;
+        }
+
+        // Select random letter of chosen type
+        let letter;
+        if (type === "vowel") {
+          letter = vowels[Math.floor(Math.random() * vowels.length)];
+          gameState.vowelCount++;
+        } else {
+          letter = consonants[Math.floor(Math.random() * consonants.length)];
+          gameState.consonantCount++;
+        }
+
+        gameState.selectedLetters.push(letter);
+        sounds.tick();
+
+        // Update display
+        updateSelectionDisplay();
+        updateLetterCounts();
+
+        // Check if we're done selecting
+        if (gameState.selectedLetters.length >= 9) {
+          setTimeout(() => {
+            showFeedback(
+              "Letter selection complete! Get ready to find words!",
+              "success"
+            );
+            setTimeout(startIndividualPlay, 1500);
+          }, 500);
+        } else {
+          // Switch to next player
+          gameState.currentSelector = gameState.currentSelector === 1 ? 2 : 1;
+          updateCurrentChooser();
+        }
+      }
+
+      function updateSelectionDisplay() {
+        // Update team displays
+        document.getElementById("selection-team1-display").textContent =
+          gameState.team1.name;
+        document.getElementById("selection-team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("selection-team2-display").textContent =
+          gameState.team2.name;
+        document.getElementById("selection-team2-score").textContent =
+          gameState.team2.score;
+
+        // Show selected letters
+        const lettersDisplay = document.getElementById(
+          "selected-letters-display"
+        );
+        lettersDisplay.innerHTML = "";
+
+        gameState.selectedLetters.forEach((letter, index) => {
+          const letterElement = document.createElement("div");
+          letterElement.className = "selected-letter";
+          letterElement.textContent = letter;
+          letterElement.style.animationDelay = `${index * 0.1}s`;
+          lettersDisplay.appendChild(letterElement);
+        });
+
+        // Add placeholders for remaining letters
+        for (let i = gameState.selectedLetters.length; i < 9; i++) {
+          const placeholder = document.createElement("div");
+          placeholder.className = "selected-letter";
+          placeholder.style.opacity = "0.3";
+          placeholder.style.border = "3px dashed rgba(255, 215, 0, 0.5)";
+          placeholder.textContent = "?";
+          lettersDisplay.appendChild(placeholder);
+        }
+      }
+
+      function updateLetterCounts() {
+        document.getElementById(
+          "vowel-count"
+        ).textContent = `Vowels: ${gameState.vowelCount}`;
+        document.getElementById(
+          "consonant-count"
+        ).textContent = `Consonants: ${gameState.consonantCount}`;
+
+        // Update button states
+        const vowelBtn = document.getElementById("vowel-btn");
+        const consonantBtn = document.getElementById("consonant-btn");
+
+        vowelBtn.disabled = gameState.vowelCount >= 5;
+        consonantBtn.disabled = gameState.consonantCount >= 6;
+
+        // Check constraints for minimum letters
+        const remaining = 9 - gameState.selectedLetters.length;
+        if (
+          gameState.consonantCount < 3 &&
+          remaining === 3 - gameState.consonantCount
+        ) {
+          vowelBtn.disabled = true;
+        }
+        if (
+          gameState.vowelCount < 3 &&
+          remaining === 3 - gameState.vowelCount
+        ) {
+          consonantBtn.disabled = true;
+        }
+      }
+
+      function updateCurrentChooser() {
+        const currentChooser = document.getElementById("current-chooser");
+        const lettersRemaining = document.getElementById("letters-remaining");
+
+        const playerName =
+          gameState.currentSelector === 1
+            ? gameState.team1.name
+            : gameState.team2.name;
+        currentChooser.textContent = `${playerName}'s Turn`;
+        lettersRemaining.textContent = `Choose letter ${
+          gameState.selectedLetters.length + 1
+        } of 9`;
+
+        // Highlight current player
+        document
+          .getElementById("selection-team1-box")
+          .classList.toggle("active", gameState.currentSelector === 1);
+        document
+          .getElementById("selection-team2-box")
+          .classList.toggle("active", gameState.currentSelector === 2);
+      }
+
+      function startIndividualPlay() {
+        gameState.gamePhase = "playing";
+        gameState.timeLeft = 30;
+
+        hideAllScreens();
+        document.getElementById("individual-play-screen").style.display =
+          "block";
+
+        // Update displays
+        document.getElementById("play-team1-display").textContent =
+          gameState.team1.name;
+        document.getElementById("play-team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("play-team2-display").textContent =
+          gameState.team2.name;
+        document.getElementById("play-team2-score").textContent =
+          gameState.team2.score;
+
+        // Show letters
+        const lettersDisplay = document.getElementById("play-letters-display");
+        lettersDisplay.innerHTML = "";
+        gameState.selectedLetters.forEach((letter) => {
+          const letterElement = document.createElement("div");
+          letterElement.className = "selected-letter";
+          letterElement.textContent = letter;
+          lettersDisplay.appendChild(letterElement);
+        });
+
+        // Clear input and focus
+        document.getElementById("player-word-input").value = "";
+        document.getElementById("player-word-input").focus();
+
+        // Both players active
+        document.getElementById("play-team1-box").classList.add("active");
+        document.getElementById("play-team2-box").classList.add("active");
+
+        startTimer("countdown-timer");
+      }
+
+      function submitPlayerWord() {
+        const input = document.getElementById("player-word-input");
+        const word = input.value.trim().toUpperCase();
+
+        if (!word) {
+          showFeedback("Please enter a word!", "warning");
+          return;
+        }
+
+        if (word.length < 3) {
+          showFeedback("Word must be at least 3 letters!", "warning");
+          return;
+        }
+
+        if (!canMakeWord(word, gameState.selectedLetters)) {
+          showFeedback(
+            "Word cannot be made from the selected letters!",
+            "error"
+          );
+          return;
+        }
+
+        // Store the word (in a real game, this would be hidden from the other player)
+        if (!gameState.player1Word) {
+          gameState.player1Word = word;
+          showFeedback(
+            `Word submitted! Continue playing until time runs out for team word entry...`,
+            "success"
+          );
+          input.disabled = true;
+        } else if (!gameState.player2Word) {
+          gameState.player2Word = word;
+          showFeedback(
+            `Word submitted! Continue playing until time runs out for team word entry...`,
+            "success"
+          );
+          input.disabled = true;
+          gameState.bothWordsSubmitted = true;
+        }
+      }
+
+      function revealWords() {
+        // If only one word submitted when time runs out, use empty string for the other
+        if (!gameState.player1Word) gameState.player1Word = "";
+        if (!gameState.player2Word) gameState.player2Word = "";
+
+        hideAllScreens();
+        document.getElementById("reveal-screen").style.display = "block";
+
+        // Show letters
+        const lettersDisplay = document.getElementById(
+          "reveal-letters-display"
+        );
+        lettersDisplay.innerHTML = "";
+        gameState.selectedLetters.forEach((letter) => {
+          const letterElement = document.createElement("div");
+          letterElement.className = "selected-letter";
+          letterElement.textContent = letter;
+          lettersDisplay.appendChild(letterElement);
+        });
+
+        // Calculate scores and show words
+        const player1Result = calculateWordScore(gameState.player1Word);
+        const player2Result = calculateWordScore(gameState.player2Word);
+
+        // Display Player 1 word
+        const p1WordDisplay = document.getElementById("player1-word-display");
+        const p1PointsDisplay = document.getElementById("player1-word-points");
+        const p1WordElement = document.getElementById("player1-word-reveal");
+
+        if (gameState.player1Word) {
+          p1WordDisplay.textContent = gameState.player1Word;
+          p1PointsDisplay.textContent = `${gameState.player1Word.length} letters - ${player1Result.points} points`;
+          p1WordElement.classList.remove("invalid-word");
+        } else {
+          p1WordDisplay.textContent = "(No word submitted)";
+          p1PointsDisplay.textContent = "0 points";
+          p1WordElement.classList.add("invalid-word");
+        }
+
+        // Display Player 2 word
+        const p2WordDisplay = document.getElementById("player2-word-display");
+        const p2PointsDisplay = document.getElementById("player2-word-points");
+        const p2WordElement = document.getElementById("player2-word-reveal");
+
+        if (gameState.player2Word) {
+          p2WordDisplay.textContent = gameState.player2Word;
+          p2PointsDisplay.textContent = `${gameState.player2Word.length} letters - ${player2Result.points} points`;
+          p2WordElement.classList.remove("invalid-word");
+        } else {
+          p2WordDisplay.textContent = "(No word submitted)";
+          p2PointsDisplay.textContent = "0 points";
+          p2WordElement.classList.add("invalid-word");
+        }
+
+        // Update scores
+        gameState.team1.score += player1Result.points;
+        gameState.team1.roundScores.push(player1Result.points);
+        gameState.team2.score += player2Result.points;
+        gameState.team2.roundScores.push(player2Result.points);
+
+        // Announce winner
+        const announcement = document.getElementById(
+          "round-winner-announcement"
+        );
+        if (player1Result.points > player2Result.points) {
+          announcement.innerHTML = `<h3>🏆 ${gameState.team1.name} wins this round!</h3>`;
+          sounds.victory();
+        } else if (player2Result.points > player1Result.points) {
+          announcement.innerHTML = `<h3>🏆 ${gameState.team2.name} wins this round!</h3>`;
+          sounds.victory();
+        } else {
+          announcement.innerHTML = `<h3>🤝 It's a tie this round!</h3>`;
+        }
+
+        // Add word facts if available
+        let factsHTML = "";
+        if (gameState.player1Word && wordFacts[gameState.player1Word]) {
+          factsHTML += `<div style="margin-top: 1rem; padding: 1rem; background: rgba(135, 206, 235, 0.2); border-radius: 10px;">`;
+          factsHTML += `<strong>${gameState.player1Word}:</strong> ${
+            wordFacts[gameState.player1Word]
+          }</div>`;
+        }
+        if (gameState.player2Word && wordFacts[gameState.player2Word]) {
+          factsHTML += `<div style="margin-top: 1rem; padding: 1rem; background: rgba(135, 206, 235, 0.2); border-radius: 10px;">`;
+          factsHTML += `<strong>${gameState.player2Word}:</strong> ${
+            wordFacts[gameState.player2Word]
+          }</div>`;
+        }
+
+        if (factsHTML) {
+          announcement.innerHTML += factsHTML;
+        }
+      }
+
+      function calculateWordScore(word) {
+        if (!word || word.length < 3) {
+          return { points: 0, valid: false };
+        }
+
+        if (!canMakeWord(word, gameState.selectedLetters)) {
+          return { points: 0, valid: false };
+        }
+
+        let points = 0;
+        if (word.length === 9) {
+          points = 18; // Bonus for using all letters
+        } else if (word.length >= 7) {
+          points = 3;
+        } else if (word.length >= 5) {
+          points = 2;
+        } else {
+          points = 1;
+        }
+
+        return { points, valid: true };
+      }
+
+      function nextCountdownRound() {
+        gameState.currentRound++;
+
+        if (gameState.currentRound > gameState.totalRounds) {
+          showFinalResults();
+        } else {
+          startRound();
         }
       }
 
       function startLettersRound() {
-        gameState.roundType = "letters";
-        gameState.letters = generateLetters(gameState.letterType);
-        gameState.timeLeft = gameState.extendedTime ? 45 : 30;
-        gameState.roundScore = 0;
-        gameState.wordsFound = [];
-
-        hideAllScreens();
-        document.getElementById("game-screen").style.display = "block";
-
-        updateTeamDisplay();
-        updateRoundInfo();
-
-        document.getElementById("letters").textContent =
-          gameState.letters.join(" ");
-
-        startTimer("timer");
+        // Legacy function - redirects to new Countdown format
+        startLetterSelection();
       }
 
       function startMathRound() {
@@ -1357,12 +2424,120 @@
 
           if (gameState.timeLeft <= 10) {
             timerElement.classList.add("timer-critical");
+            sounds.warning();
+          } else if (gameState.timeLeft <= 5) {
+            sounds.tick();
           }
 
           if (gameState.timeLeft <= 0) {
             endRound();
           }
         }, 1000);
+      }
+
+      function showHints() {
+        if (!gameState.hintsShown) {
+          const hints = generateHints(gameState.letters);
+          const hintContainer = document.getElementById("hint-container");
+          const wordHints = document.getElementById("word-hints");
+
+          wordHints.innerHTML = hints
+            .map((hint) => `<span class="word-suggestion">${hint}</span>`)
+            .join("");
+
+          hintContainer.style.display = "block";
+          document.getElementById("show-hints-btn").style.display = "none";
+          gameState.hintsShown = true;
+        }
+      }
+
+      function toggleHints() {
+        const hintContainer = document.getElementById("hint-container");
+        const showBtn = document.getElementById("show-hints-btn");
+
+        if (hintContainer.style.display === "none") {
+          hintContainer.style.display = "block";
+          showBtn.style.display = "none";
+        } else {
+          hintContainer.style.display = "none";
+          showBtn.style.display = "inline-block";
+        }
+      }
+
+      function generateHints(letters) {
+        const hints = [];
+        const letterStr = letters.join("").toLowerCase();
+
+        // Common 3-letter word patterns
+        const patterns = [
+          { pattern: /[aeiou]/, hint: "Look for words starting with vowels" },
+          { pattern: /th/, hint: "Try 'TH' combinations" },
+          { pattern: /er/, hint: "Look for 'ER' endings" },
+          { pattern: /ing/, hint: "Check for 'ING' words" },
+          { pattern: /[aeiou][nt]/, hint: "Try vowel + N or T" },
+        ];
+
+        // Check available letters for common words
+        const commonWords = [
+          "THE",
+          "AND",
+          "FOR",
+          "ARE",
+          "BUT",
+          "NOT",
+          "YOU",
+          "ALL",
+          "CAN",
+          "HER",
+          "WAS",
+          "ONE",
+          "OUR",
+          "OUT",
+          "HAD",
+          "HAS",
+          "HIS",
+          "HOW",
+          "MAN",
+          "NEW",
+          "NOW",
+          "OLD",
+          "SEE",
+          "TWO",
+          "WAY",
+          "WHO",
+          "BOY",
+          "DID",
+          "ITS",
+          "LET",
+          "PUT",
+          "SAY",
+          "SHE",
+          "TOO",
+          "USE",
+        ];
+
+        commonWords.forEach((word) => {
+          if (canMakeWord(word, letters)) {
+            hints.push(`Try "${word}"`);
+          }
+        });
+
+        // Add pattern hints
+        patterns.forEach((p) => {
+          if (p.pattern.test(letterStr)) {
+            hints.push(p.hint);
+          }
+        });
+
+        return hints.slice(0, 5); // Limit to 5 hints
+      }
+
+      function updateProgress() {
+        const progress = (gameState.currentRound / gameState.totalRounds) * 100;
+        const progressBar = document.getElementById("round-progress");
+        if (progressBar) {
+          progressBar.style.width = progress + "%";
+        }
       }
 
       function submitMathAnswer() {
@@ -1440,7 +2615,10 @@
         clearInterval(gameState.timer);
 
         if (gameState.roundType === "letters") {
-          showWordEntryScreen();
+          if (gameState.gamePhase === "playing") {
+            // Time's up in individual play - go to team word entry
+            showTeamWordEntry();
+          }
         } else {
           // For math rounds, proceed as before
           const currentTeam =
@@ -1449,6 +2627,49 @@
           currentTeam.roundScores.push(gameState.roundScore);
           showRoundResults();
         }
+      }
+
+      function showTeamWordEntry() {
+        hideAllScreens();
+        document.getElementById("word-entry-screen").style.display = "block";
+
+        // Update team names and scores
+        document.getElementById("entry-team1-name").textContent =
+          gameState.team1.name;
+        document.getElementById("entry-team1-score").textContent =
+          gameState.team1.score;
+        document.getElementById("entry-team2-name").textContent =
+          gameState.team2.name;
+        document.getElementById("entry-team2-score").textContent =
+          gameState.team2.score;
+
+        document.getElementById("word-entry-team1-name").textContent =
+          gameState.team1.name;
+        document.getElementById("word-entry-team2-name").textContent =
+          gameState.team2.name;
+
+        document.getElementById("entry-current-round").textContent =
+          gameState.currentRound;
+        document.getElementById("entry-total-rounds").textContent =
+          gameState.totalRounds;
+        document.getElementById("entry-letters").textContent =
+          gameState.selectedLetters.join(" ");
+
+        // Clear previous entries
+        document.getElementById("team1-words").value = "";
+        document.getElementById("team2-words").value = "";
+        document.getElementById("team1-word-count").textContent =
+          "Words found: 0";
+        document.getElementById("team2-word-count").textContent =
+          "Words found: 0";
+
+        // Add event listeners for word counting
+        document
+          .getElementById("team1-words")
+          .addEventListener("input", updateWordCount);
+        document
+          .getElementById("team2-words")
+          .addEventListener("input", updateWordCount);
       }
 
       function showWordEntryScreen() {
@@ -1510,6 +2731,11 @@
         const team1Input = document.getElementById("team1-words").value;
         const team2Input = document.getElementById("team2-words").value;
 
+        if (!team1Input.trim() && !team2Input.trim()) {
+          showFeedback("No words entered by either team!", "warning");
+          return;
+        }
+
         const team1Words = team1Input
           .trim()
           .split(/[\n,]+/)
@@ -1521,6 +2747,8 @@
           .split(/[\n,]+/)
           .map((word) => word.trim().toUpperCase())
           .filter((word) => word.length >= 3);
+
+        showFeedback("Processing words...", "info");
 
         // Validate and score words
         const team1ValidWords = validateAndScoreWords(team1Words);
@@ -1541,7 +2769,13 @@
           team2: team2ValidWords,
         };
 
-        showRoundResults();
+        setTimeout(() => {
+          showFeedback(
+            `Round complete! ${gameState.team1.name}: ${team1ValidWords.totalScore} pts, ${gameState.team2.name}: ${team2ValidWords.totalScore} pts`,
+            "success"
+          );
+          setTimeout(() => showRoundResults(), 1000);
+        }, 500);
       }
 
       function validateAndScoreWords(words) {
@@ -1558,7 +2792,7 @@
             return;
           }
 
-          if (!canMakeWord(word, gameState.letters)) {
+          if (!canMakeWord(word, gameState.selectedLetters)) {
             invalidWords.push({
               word,
               reason: "Cannot be made from available letters",
@@ -1760,17 +2994,61 @@
           "final-message"
         ).innerHTML = `<h3>${message}</h3>`;
 
-        // Create round breakdown
-        let breakdown = "<h3>Round by Round:</h3>";
+        // Create enhanced round breakdown with statistics
+        let breakdown = "<h3>Championship Statistics:</h3>";
+
+        // Calculate additional stats
+        const team1Avg = (
+          gameState.team1.score / gameState.totalRounds
+        ).toFixed(1);
+        const team2Avg = (
+          gameState.team2.score / gameState.totalRounds
+        ).toFixed(1);
+        const team1Wins = gameState.team1.roundScores.filter(
+          (score, i) => score > (gameState.team2.roundScores[i] || 0)
+        ).length;
+        const team2Wins = gameState.team2.roundScores.filter(
+          (score, i) => score > (gameState.team1.roundScores[i] || 0)
+        ).length;
+
+        breakdown += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">`;
+        breakdown += `<div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">`;
+        breakdown += `<h4 style="color: #ffd700;">${gameState.team1.name} Stats</h4>`;
+        breakdown += `<div>Rounds Won: ${team1Wins}</div>`;
+        breakdown += `<div>Average Score: ${team1Avg}</div>`;
+        breakdown += `<div>Best Round: ${Math.max(
+          ...gameState.team1.roundScores
+        )}</div>`;
+        breakdown += `</div>`;
+        breakdown += `<div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">`;
+        breakdown += `<h4 style="color: #ffd700;">${gameState.team2.name} Stats</h4>`;
+        breakdown += `<div>Rounds Won: ${team2Wins}</div>`;
+        breakdown += `<div>Average Score: ${team2Avg}</div>`;
+        breakdown += `<div>Best Round: ${Math.max(
+          ...gameState.team2.roundScores
+        )}</div>`;
+        breakdown += `</div>`;
+        breakdown += `</div>`;
+
+        breakdown += "<h4>Round by Round:</h4>";
         for (let i = 0; i < gameState.totalRounds; i++) {
           const team1Round = gameState.team1.roundScores[i] || 0;
           const team2Round = gameState.team2.roundScores[i] || 0;
-          breakdown += `<div>Round ${i + 1}: ${
-            gameState.team1.name
-          } ${team1Round} - ${team2Round} ${gameState.team2.name}</div>`;
+          const roundWinner =
+            team1Round > team2Round
+              ? gameState.team1.name
+              : team2Round > team1Round
+              ? gameState.team2.name
+              : "Tie";
+          breakdown += `<div style="padding: 0.5rem; margin: 0.3rem 0; background: rgba(255,255,255,0.05); border-radius: 5px;">Round ${
+            i + 1
+          }: ${gameState.team1.name} ${team1Round} - ${team2Round} ${
+            gameState.team2.name
+          } <span style="color: #ffd700;">(${roundWinner})</span></div>`;
         }
         document.getElementById("round-breakdown").innerHTML = breakdown;
 
+        sounds.victory();
         createCelebration();
       }
 
@@ -1816,12 +3094,147 @@
             document.getElementById("math-screen").style.display === "block"
           ) {
             submitMathAnswer();
+          } else if (
+            document.getElementById("individual-play-screen").style.display ===
+            "block"
+          ) {
+            submitPlayerWord();
           }
         }
       });
 
+      document.addEventListener("keydown", function (e) {
+        switch (e.key.toLowerCase()) {
+          case "v":
+            if (
+              document.getElementById("letter-selection-screen").style
+                .display === "block"
+            ) {
+              e.preventDefault();
+              chooseLetter("vowel");
+            }
+            break;
+          case "c":
+            if (
+              document.getElementById("letter-selection-screen").style
+                .display === "block"
+            ) {
+              e.preventDefault();
+              chooseLetter("consonant");
+            }
+            break;
+          case "h":
+            if (
+              document.getElementById("game-screen").style.display === "block"
+            ) {
+              e.preventDefault();
+              if (gameState.hintsShown) {
+                toggleHints();
+              } else {
+                showHints();
+              }
+            }
+            break;
+          case " ":
+            if (
+              document.getElementById("team-setup-screen").style.display ===
+              "block"
+            ) {
+              e.preventDefault();
+              quickStart();
+            }
+            break;
+          case "escape":
+            if (
+              document.getElementById("game-screen").style.display ===
+                "block" ||
+              document.getElementById("math-screen").style.display ===
+                "block" ||
+              document.getElementById("letter-selection-screen").style
+                .display === "block" ||
+              document.getElementById("individual-play-screen").style
+                .display === "block"
+            ) {
+              e.preventDefault();
+              if (confirm("End game early?")) {
+                endGameEarly();
+              }
+            }
+            break;
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        switch (e.key.toLowerCase()) {
+          case "h":
+            if (
+              document.getElementById("game-screen").style.display === "block"
+            ) {
+              e.preventDefault();
+              if (gameState.hintsShown) {
+                toggleHints();
+              } else {
+                showHints();
+              }
+            }
+            break;
+          case " ":
+            if (
+              document.getElementById("team-setup-screen").style.display ===
+              "block"
+            ) {
+              e.preventDefault();
+              quickStart();
+            }
+            break;
+          case "escape":
+            if (
+              document.getElementById("game-screen").style.display ===
+                "block" ||
+              document.getElementById("math-screen").style.display === "block"
+            ) {
+              e.preventDefault();
+              if (confirm("End game early?")) {
+                endGameEarly();
+              }
+            }
+            break;
+        }
+      });
+
+      function showFeedback(message, type = "info") {
+        const feedback = document.createElement("div");
+        feedback.className = "feedback-message";
+        feedback.innerHTML = message;
+
+        if (type === "success") {
+          feedback.style.background = "rgba(76, 175, 80, 0.9)";
+          sounds.success();
+        } else if (type === "warning") {
+          feedback.style.background = "rgba(255, 152, 0, 0.9)";
+          sounds.warning();
+        } else if (type === "error") {
+          feedback.style.background = "rgba(244, 67, 54, 0.9)";
+          sounds.warning();
+        }
+
+        document.body.appendChild(feedback);
+
+        setTimeout(() => {
+          if (document.body.contains(feedback)) {
+            document.body.removeChild(feedback);
+          }
+        }, 2000);
+      }
+
       // Initialize
-      showTeamSetup();
+      document.addEventListener("DOMContentLoaded", function () {
+        showTeamSetup();
+        showFeedback(
+          "🏆 Welcome to ESL Quiz Championship! Press SPACE for quick start or set up your teams below.",
+          "success"
+        );
+      });
     </script>
   </body>
 </html>
