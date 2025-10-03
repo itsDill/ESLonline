@@ -1,0 +1,27 @@
+# Security protection for admin files
+# Place this content in your main .htaccess file to protect admin dashboard
+
+# Protect admin dashboard
+<FilesMatch "view-submissions\.html|admin\.html">
+    # Require HTTP authentication for admin files
+    AuthType Basic
+    AuthName "Admin Area - Authorized Personnel Only"
+    AuthUserFile /path/to/.htpasswd
+    Require valid-user
+    
+    # Additional IP restrictions (replace with your IP)
+    # Require ip 192.168.1.100
+    # Require ip YOUR.PUBLIC.IP.HERE
+</FilesMatch>
+
+# Protect sensitive files
+<FilesMatch "(submissions\.json|\.htpasswd|\.env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block direct access to PHP files from web
+<FilesMatch "form-handler\.php">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
