@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Technology Lesson – ESL (Age 12)</title>
+    <meta
+      name="description"
+      content="Fun ESL lesson for 12-year-olds: technology vocabulary, games, exercises, and random generator."
+    />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/mobile-footer.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      body {
+        padding-top: var(--header-height);
+        background: var(--bg-primary);
+        line-height: 1.6;
+      }
+
+      .lesson-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .lesson-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: var(--radius-lg);
+        padding: 3rem 2rem;
+        margin: 2rem 0;
+        text-align: center;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .lesson-title {
+        font-family: var(--font-family-brand);
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+
+      .lesson-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .lesson-section {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-sm);
+        transition: all var(--transition-normal);
+      }
+
+      .lesson-section:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .section-title {
+        font-family: var(--font-family-brand);
+        font-size: 1.75rem;
+        font-weight: var(--font-weight-semibold);
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .section-icon {
+        font-size: 2rem;
+      }
+
+      /* Enhanced Vocabulary Cards */
+      .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .vocab-card {
+        background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+        border: 2px solid #cbd5e1;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .vocab-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        border-color: var(--primary-color);
+      }
+
+      .vocab-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: left 0.5s;
+      }
+
+      .vocab-card:hover::before {
+        left: 100%;
+      }
+
+      .vocab-img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        transition: transform 0.3s ease;
+      }
+
+      .vocab-card:hover .vocab-img {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      .vocab-word {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-bold);
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .vocab-definition {
+        color: var(--text-secondary);
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .vocab-card.revealed .vocab-definition {
+        opacity: 1;
+        max-height: 200px;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid var(--primary-color);
+      }
+
+      .usage-example {
+        font-style: italic;
+        color: var(--primary-color);
+        margin-top: 0.75rem;
+        background: rgba(99, 102, 241, 0.1);
+        padding: 0.75rem;
+        border-radius: 8px;
+        border-left: 3px solid var(--primary-color);
+      }
+
+      .click-hint {
+        font-size: 0.875rem;
+        color: var(--accent-color);
+        font-style: italic;
+        margin-top: 0.75rem;
+        opacity: 0.7;
+        animation: pulse 2s infinite;
+      }
+
+      .vocab-card.revealed .click-hint {
+        opacity: 0;
+        display: none;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+
+      /* Game Sections */
+      .game-section {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-md);
+        border: 2px solid #f59e0b;
+      }
+
+      .bingo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .bingo-item {
+        background: #fff;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+      }
+
+      .bingo-item:hover {
+        transform: scale(1.05);
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .bingo-item.marked {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(0.95);
+      }
+
+      /* Progress Tracking */
+      .progress-section {
+        background: #f0f9ff;
+        border: 2px solid #0ea5e9;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: center;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #059669);
+        width: 0%;
+        transition: width 0.5s ease;
+        border-radius: 10px;
+      }
+
+      /* Random Generator */
+      .random-section {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-md);
+        text-align: center;
+        border: 2px solid #06b6d4;
+      }
+
+      .random-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
+
+      .random-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      .random-output {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-top: 2rem;
+        color: var(--primary-color);
+        min-height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.8);
+        border-radius: 15px;
+        padding: 1rem;
+        border: 2px dashed var(--primary-color);
+        animation: bounce 0.5s ease;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 60%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        80% { transform: translateY(-5px); }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .lesson-container {
+          padding: 1rem;
+        }
+
+        .lesson-header {
+          padding: 2rem 1rem;
+        }
+
+        .lesson-section {
+          padding: 1.5rem;
+        }
+
+        .section-title {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+
+        .vocab-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .bingo-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../english/eslresources.html" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="../english/grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
+                </a>
+                <a href="../english/vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+                <a href="../english/writingf.html" class="dropdown-item">
+                  <i class="fas fa-pen"></i>
+                  Writing for Success
+                </a>
+                <a href="../english/business.html" class="dropdown-item">
+                  <i class="fas fa-briefcase"></i>
+                  Business English
+                </a>
+                <a href="../english/test.html" class="dropdown-item">
+                  <i class="fas fa-graduation-cap"></i>
+                  Test Preparation
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="../coding/codingresources.html" class="nav-link">
+                <i class="fas fa-code"></i>
+                Coding
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="../coding/computerbasics.html" class="dropdown-item">
+                  <i class="fas fa-desktop"></i>
+                  Computer Basics
+                </a>
+                <a href="../coding/ai.html" class="dropdown-item">
+                  <i class="fas fa-robot"></i>
+                  AI Basics
+                </a>
+                <a href="../coding/codingresources.html" class="dropdown-item">
+                  <i class="fas fa-terminal"></i>
+                  Coding Resources
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="../games/games.html" class="nav-link">
+                <i class="fas fa-dice"></i>
+                Games
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../tools/tools.html" class="nav-link">
+                <i class="fas fa-tools"></i>
+                Toolkit
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="blog.html" class="nav-link">
+                <i class="fas fa-book-open"></i>
+                Blog
+              </a>
+            </li>
+          </ul>
+
+            <div class="controls">
+            <button
+              class="control-btn theme-toggle"
+              id="themeToggle"
+              aria-label="Toggle dark mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+            <a
+              class="control-btn admin-toggle"
+              id="adminToggle"
+              aria-label="Admin"
+              href="../login.html"
+            >
+              <i class="fas fa-user-shield"></i>
+            </a>
+            </div>
+            <button class="control-btn mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+              <i class="fas fa-bars"></i>
+            </button>
+          </nav>
+    </header>
+    <div class="lesson-container">
+      <div class="lesson-header">
+        <h1 class="lesson-title">Technology Lesson</h1>
+        <p class="lesson-subtitle">
+          Fun ESL lesson for 12-year-olds: learn technology words, play games,
+          and practice English!
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+          "
+        >
+          <div style="text-align: center">
+            <i
+              class="fas fa-clock"
+              style="font-size: 2rem; color: var(--primary-color)"
+            ></i>
+            <div>45-60 min</div>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fas fa-laptop"
+              style="font-size: 2rem; color: var(--secondary-color)"
+            ></i>
+            <div>Theme: Technology</div>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fas fa-child"
+              style="font-size: 2rem; color: var(--accent-color)"
+            ></i>
+            <div>Age: 12</div>
+          </div>
+        </div>
+      </div>
+      <!-- Vocabulary Section -->
+      <div class="lesson-section">
+        <h2 class="section-title">
+          <span class="section-icon">💻</span> Technology Vocabulary
+        </h2>
+        <p>
+          Click each card to reveal the meaning and example. Try to say the
+          word!
+        </p>
+        <div class="vocab-grid">
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/computer.png"
+              alt="computer"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Computer</div>
+            <div class="vocab-definition">
+              A machine for working, playing games, or searching the internet.
+              <div class="usage-example">I use my computer to do homework.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/tablet.png"
+              alt="tablet"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Tablet</div>
+            <div class="vocab-definition">
+              A small, flat computer you can touch.
+              <div class="usage-example">She draws pictures on her tablet.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/smartphone.png"
+              alt="smartphone"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Smartphone</div>
+            <div class="vocab-definition">
+              A phone you can use for games, photos, and the internet.
+              <div class="usage-example">
+                He calls his friend on his smartphone.
+              </div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/keyboard.png"
+              alt="keyboard"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Keyboard</div>
+            <div class="vocab-definition">
+              The part you use to type letters and numbers.
+              <div class="usage-example">Type your name on the keyboard.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/mouse.png"
+              alt="mouse"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Mouse</div>
+            <div class="vocab-definition">
+              A small tool to move the pointer on the screen.
+              <div class="usage-example">Click the mouse to open the game.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/internet.png"
+              alt="internet"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Internet</div>
+            <div class="vocab-definition">
+              A place to find information, watch videos, and talk to friends.
+              <div class="usage-example">I watch videos on the internet.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/robot.png"
+              alt="robot"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Robot</div>
+            <div class="vocab-definition">
+              A machine that can move and do tasks like a person.
+              <div class="usage-example">The robot helps clean the house.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/camera.png"
+              alt="camera"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Camera</div>
+            <div class="vocab-definition">
+              A device used to take photos and videos.
+              <div class="usage-example">I take selfies with my camera.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/headphones.png"
+              alt="headphones"
+              class="vocab-img"
+            />
+            <div class="vocab-word">Headphones</div>
+            <div class="vocab-definition">
+              Something you wear on your ears to listen to music or sounds.
+              <div class="usage-example">I wear headphones when I study.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+          <div class="vocab-card" onclick="toggleCard(this)">
+            <img
+              src="../images/vocab/wifi.png"
+              alt="wifi"
+              class="vocab-img"
+            />
+            <div class="vocab-word">WiFi</div>
+            <div class="vocab-definition">
+              Invisible internet connection that devices use without cables.
+              <div class="usage-example">Our house has fast WiFi.</div>
+            </div>
+            <div class="click-hint">Click to reveal!</div>
+          </div>
+        </div>
+
+        <!-- Progress Tracking -->
+        <div class="progress-section">
+          <h3><i class="fas fa-star"></i> Your Progress</h3>
+          <p>Words learned: <span id="wordsLearned">0</span> / <span id="totalWords">9</span></p>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p id="progressMessage">Click on the vocabulary cards to start learning!</p>
+        </div>
+      </div>
+      <!-- Interactive Bingo Game -->
+      <div class="game-section">
+        <h2 class="section-title">
+          <span class="section-icon">🎮</span> Interactive Technology Bingo
+        </h2>
+        <p>
+          Click on a word when you hear it! Try to get 3 in a row. 
+          <button onclick="resetBingo()" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer;">Reset Game</button>
+        </p>
+        <div class="bingo-grid">
+          <div class="bingo-item" onclick="markBingo(this)">Computer</div>
+          <div class="bingo-item" onclick="markBingo(this)">Tablet</div>
+          <div class="bingo-item" onclick="markBingo(this)">Mouse</div>
+          <div class="bingo-item" onclick="markBingo(this)">Keyboard</div>
+          <div class="bingo-item" onclick="markBingo(this)">Internet</div>
+          <div class="bingo-item" onclick="markBingo(this)">WiFi</div>
+          <div class="bingo-item" onclick="markBingo(this)">Camera</div>
+          <div class="bingo-item" onclick="markBingo(this)">Robot</div>
+          <div class="bingo-item" onclick="markBingo(this)">Phone</div>
+        </div>
+        <div id="bingoMessage" style="margin-top: 1rem; font-weight: bold; color: var(--primary-color);"></div>
+      </div>
+      <!-- Enhanced Exercise Section -->
+      <div class="lesson-section">
+        <h2 class="section-title">
+          <span class="section-icon">📝</span> Practice Exercises
+        </h2>
+        
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">1. Match the Words to Pictures</h3>
+        <p>Match the word to the picture. Click to reveal the answer!</p>
+        <div style="display: grid; gap: 0.5rem;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; transition: all 0.3s ease;">
+            1. <b>Tablet</b>
+            <button onclick="showAnswer(this, 'B')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+            <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">B ✓</span>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; transition: all 0.3s ease;">
+            2. <b>Mouse</b>
+            <button onclick="showAnswer(this, 'E')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+            <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">E ✓</span>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; transition: all 0.3s ease;">
+            3. <b>Robot</b>
+            <button onclick="showAnswer(this, 'G')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+            <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">G ✓</span>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; transition: all 0.3s ease;">
+            4. <b>Keyboard</b>
+            <button onclick="showAnswer(this, 'D')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+            <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">D ✓</span>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; transition: all 0.3s ease;">
+            5. <b>Camera</b>
+            <button onclick="showAnswer(this, 'H')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+            <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">H ✓</span>
+          </div>
+        </div>
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #f1f5f9; border-radius: 8px;">
+          <b>Pictures:</b> A. Computer | B. Tablet | C. Smartphone | D. Keyboard | E. Mouse | F. Internet | G. Robot | H. Camera | I. Headphones
+        </div>
+
+        <h3 style="color: var(--primary-color); margin-top: 2rem; margin-bottom: 1rem;">2. True or False</h3>
+        <p>Click to see if the sentence is true or false!</p>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; transition: all 0.3s ease;">
+          "A mouse is an animal that lives in your computer."
+          <button onclick="showAnswer(this, 'FALSE - A computer mouse is a tool!')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+          <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">FALSE - A computer mouse is a tool! 😄</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; transition: all 0.3s ease;">
+          "You can take photos with a camera."
+          <button onclick="showAnswer(this, 'TRUE!')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+          <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">TRUE! 📸</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; transition: all 0.3s ease;">
+          "WiFi needs cables to work."
+          <button onclick="showAnswer(this, 'FALSE - WiFi is wireless!')" style="background: var(--secondary-color); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; margin-left: 1rem; cursor: pointer; transition: all 0.3s ease;">Show Answer</button>
+          <span style="display: none; color: var(--primary-color); font-weight: bold; margin-left: 1rem; animation: fadeIn 0.5s ease;">FALSE - WiFi is wireless! 📶</span>
+        </div>
+      </div>
+
+      <!-- Enhanced Conversation Practice -->
+      <div class="lesson-section">
+        <h2 class="section-title">
+          <span class="section-icon">💬</span> Conversation Practice
+        </h2>
+        <p>Practice these questions with your teacher or classmates!</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+          <div style="background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); border: 2px solid #0ea5e9; border-radius: 12px; padding: 1.5rem;">
+            <h3 style="color: #0369a1; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-home"></i> At Home
+            </h3>
+            <ul style="color: var(--text-secondary); line-height: 1.8;">
+              <li>Do you use a computer at home?</li>
+              <li>What is your favorite app?</li>
+              <li>How do you use the internet?</li>
+              <li>Do you like learning with technology?</li>
+            </ul>
+          </div>
+          
+          <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 2px solid #10b981; border-radius: 12px; padding: 1.5rem;">
+            <h3 style="color: #059669; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <i class="fas fa-robot"></i> Future Tech
+            </h3>
+            <ul style="color: var(--text-secondary); line-height: 1.8;">
+              <li>Would you like a robot friend?</li>
+              <li>What will technology be like in 10 years?</li>
+              <li>Do you want a flying car?</li>
+              <li>What's the coolest gadget ever?</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+          <h3 style="color: #d97706; margin-bottom: 1rem;">🎭 Role Play Activity</h3>
+          <p style="color: var(--text-secondary);">
+            <strong>Scenario:</strong> You're in a computer store. One person is the customer, one is the store worker. 
+            Practice asking about different technology items and their features!
+          </p>
+          <div style="margin-top: 1rem; font-style: italic; color: #92400e;">
+            Example: "Excuse me, can you help me? I need a new tablet for drawing..."
+          </div>
+        </div>
+      </div>
+      <!-- Random Generator Section -->
+      <div class="random-section">
+        <h2 class="section-title">
+          <span class="section-icon">🔀</span> Random Generator
+        </h2>
+        <p>
+          Click a button to get a random question, word, color, number, food, or
+          country!
+        </p>
+        <div>
+          <button class="random-btn" onclick="randomQuestion()">
+            Question
+          </button>
+          <button class="random-btn" onclick="randomWord()">Word</button>
+          <button class="random-btn" onclick="randomColor()">Color</button>
+          <button class="random-btn" onclick="randomNumber()">Number</button>
+          <button class="random-btn" onclick="randomFood()">Food</button>
+          <button class="random-btn" onclick="randomCountry()">Country</button>
+        </div>
+        <div class="random-output" id="randomOutput"></div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="brand-header">
+              <img src="../images/1.png" alt="ESL Fun Online" class="footer-logo">
+              <h3>ESL Fun Online</h3>
+            </div>
+            <p>Empowering English learners worldwide with engaging, effective lessons and resources.</p>
+          </div>
+          
+          <div class="footer-section">
+            <h3><i class="fas fa-book"></i> Resources</h3>
+            <ul>
+              <li><a href="../lessons.html"><i class="fas fa-graduation-cap"></i> Lessons</a></li>
+              <li><a href="../games/games.html"><i class="fas fa-gamepad"></i> Games</a></li>
+              <li><a href="blog.html"><i class="fas fa-blog"></i> Blog</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-section">
+            <h3><i class="fas fa-info-circle"></i> About</h3>
+            <ul>
+              <li><a href="../contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+              <li><a href="../privacy.html"><i class="fas fa-shield-alt"></i> Privacy</a></li>
+              <li><a href="../terms.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            <p>&copy; 2025 ESL Fun Online. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      // Progress Tracking
+      let wordsLearned = 0;
+      const totalWords = 9;
+      
+      function updateProgress() {
+        const percentage = (wordsLearned / totalWords) * 100;
+        document.getElementById('progressFill').style.width = percentage + '%';
+        document.getElementById('wordsLearned').textContent = wordsLearned;
+        
+        const progressMessage = document.getElementById('progressMessage');
+        if (percentage === 0) {
+          progressMessage.textContent = "Click on the vocabulary cards to start learning!";
+        } else if (percentage < 50) {
+          progressMessage.textContent = "Great start! Keep going! 🌟";
+        } else if (percentage < 100) {
+          progressMessage.textContent = "You're doing amazing! Almost there! 🚀";
+        } else {
+          progressMessage.textContent = "Congratulations! You've learned all the words! 🎉";
+        }
+      }
+
+      function toggleCard(card) {
+        const wasRevealed = card.classList.contains('revealed');
+        card.classList.toggle('revealed');
+        
+        if (!wasRevealed && card.classList.contains('revealed')) {
+          wordsLearned++;
+          card.style.animation = 'bounce 0.5s ease';
+        } else if (wasRevealed && !card.classList.contains('revealed')) {
+          wordsLearned--;
+        }
+        
+        updateProgress();
+      }
+      
+      function showAnswer(btn, answer) {
+        btn.style.display = 'none';
+        btn.nextElementSibling.style.display = 'inline';
+      }
+
+      // Bingo Game Functions
+      function markBingo(item) {
+        item.classList.toggle('marked');
+        checkBingoWin();
+      }
+
+      function checkBingoWin() {
+        const items = document.querySelectorAll('.bingo-item');
+        const marked = document.querySelectorAll('.bingo-item.marked');
+        const message = document.getElementById('bingoMessage');
+        
+        if (marked.length >= 3) {
+          message.textContent = '🎉 Great job! You marked ' + marked.length + ' words!';
+          message.style.color = '#10b981';
+        } else {
+          message.textContent = '';
+        }
+      }
+
+      function resetBingo() {
+        document.querySelectorAll('.bingo-item').forEach(item => {
+          item.classList.remove('marked');
+        });
+        document.getElementById('bingoMessage').textContent = '';
+      }
+
+      // Enhanced Random Generators
+      const questions = [
+        "What's your favorite app?",
+        "Do you like video games?",
+        "What do you use the internet for?",
+        "Can you name a famous YouTuber?",
+        "Do you have a favorite website?",
+        "Would you like a robot at home?",
+        "How many hours do you use technology per day?",
+        "What's the coolest gadget you've seen?",
+        "Do you think robots are helpful or scary?",
+        "What would you do without the internet for a day?"
+      ];
+      
+      const words = [
+        "Computer", "Tablet", "Smartphone", "Keyboard", "Mouse", "Internet",
+        "Robot", "Camera", "Headphones", "WiFi", "App", "Game", "Screen",
+        "Charger", "Speaker", "Microphone", "Printer", "Scanner"
+      ];
+      
+      const colors = [
+        "Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Pink", 
+        "Black", "White", "Gray", "Brown", "Silver", "Gold", "Turquoise"
+      ];
+      
+      const foods = [
+        "Pizza", "Burger", "Sushi", "Pasta", "Ice Cream", "Sandwich",
+        "Salad", "Fries", "Chicken", "Apple", "Chocolate", "Cookies",
+        "Tacos", "Soup", "Rice", "Noodles"
+      ];
+      
+      const countries = [
+        "Japan", "USA", "UK", "Canada", "Australia", "Thailand", "China",
+        "France", "Brazil", "Germany", "Italy", "Spain", "Mexico", "India",
+        "South Korea", "Russia", "Egypt", "Kenya"
+      ];
+
+      function animateOutput() {
+        const output = document.getElementById('randomOutput');
+        output.style.animation = 'none';
+        setTimeout(() => {
+          output.style.animation = 'bounce 0.5s ease';
+        }, 10);
+      }
+
+      function randomQuestion() {
+        const output = document.getElementById('randomOutput');
+        output.textContent = questions[Math.floor(Math.random() * questions.length)];
+        animateOutput();
+      }
+      
+      function randomWord() {
+        const output = document.getElementById('randomOutput');
+        output.textContent = words[Math.floor(Math.random() * words.length)];
+        animateOutput();
+      }
+      
+      function randomColor() {
+        const output = document.getElementById('randomOutput');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        output.textContent = color;
+        output.style.color = color.toLowerCase();
+        animateOutput();
+      }
+      
+      function randomNumber() {
+        const output = document.getElementById('randomOutput');
+        output.textContent = Math.floor(Math.random() * 100) + 1;
+        output.style.color = 'var(--primary-color)';
+        animateOutput();
+      }
+      
+      function randomFood() {
+        const output = document.getElementById('randomOutput');
+        output.textContent = foods[Math.floor(Math.random() * foods.length)];
+        output.style.color = 'var(--primary-color)';
+        animateOutput();
+      }
+      
+      function randomCountry() {
+        const output = document.getElementById('randomOutput');
+        output.textContent = countries[Math.floor(Math.random() * countries.length)];
+        output.style.color = 'var(--primary-color)';
+        animateOutput();
+      }
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu and theme toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        const themeToggle = document.getElementById('themeToggle');
+
+        if (mobileToggle && navLinks) {
+          mobileToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            document.body.classList.toggle('mobile-menu-open');
+          });
+        }
+
+        if (themeToggle) {
+          themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+          });
+
+          // Load saved theme preference
+          if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+          }
+        }
+
+        // Initialize progress
+        updateProgress();
+      });
+    </script>
+  </body>
+</html>
