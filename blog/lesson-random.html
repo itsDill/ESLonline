@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-Topic ESL Lesson: Travel, Music, Social & Shopping</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #3b82f6;
+        --secondary-color: #8b5cf6;
+        --accent-color: #f59e0b;
+        --success-color: #10b981;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --radius: 8px;
+        --radius-lg: 12px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .lesson-header {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .lesson-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .lesson-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .topic-tabs {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 2rem 0;
+      }
+
+      .tab-btn {
+        background: white;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        padding: 1rem 2rem;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .tab-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .tab-btn.active {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .topic-content {
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .topic-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-md);
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .vocab-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .vocab-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+      }
+
+      .vocab-type {
+        display: inline-block;
+        background: var(--accent-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+
+      .vocab-term {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 0.5rem 0;
+      }
+
+      .vocab-meaning {
+        color: var(--text-secondary);
+        margin-top: 1rem;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .vocab-card.revealed .vocab-meaning {
+        opacity: 1;
+        max-height: 300px;
+      }
+
+      .example-box {
+        background: linear-gradient(135deg, #667eea20, #764ba220);
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: var(--radius);
+        font-style: italic;
+      }
+
+      .grammar-section {
+        background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .tense-card {
+        background: white;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-left: 4px solid var(--secondary-color);
+      }
+
+      .tense-title {
+        font-size: 1.25rem;
+        color: var(--secondary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .tense-examples {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .tense-example {
+        background: var(--bg-secondary);
+        padding: 1rem;
+        border-radius: var(--radius);
+        border-left: 3px solid var(--success-color);
+      }
+
+      .practice-section {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .exercise-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .exercise-question {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+      }
+
+      .answer-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .answer-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .answer-box {
+        background: linear-gradient(135deg, #10b98120, #059669 20);
+        border-left: 4px solid var(--success-color);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: var(--radius);
+        display: none;
+      }
+
+      .answer-box.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hint {
+        font-size: 0.875rem;
+        color: var(--accent-color);
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        .lesson-header {
+          padding: 2rem 1rem;
+        }
+
+        .section-card {
+          padding: 1.5rem;
+        }
+
+        .vocab-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tab-btn {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="lesson-header">
+        <h1 class="lesson-title">Multi-Topic ESL Lesson</h1>
+        <p class="lesson-subtitle">
+          Master essential vocabulary, idioms, phrasal verbs, and grammar across
+          four engaging topics: Travel, Music, Social Life, and Shopping
+        </p>
+      </div>
+
+      <div class="topic-tabs">
+        <button class="tab-btn active" onclick="showTopic('travel')">
+          <i class="fas fa-plane"></i> Travel
+        </button>
+        <button class="tab-btn" onclick="showTopic('music')">
+          <i class="fas fa-music"></i> Music
+        </button>
+        <button class="tab-btn" onclick="showTopic('social')">
+          <i class="fas fa-users"></i> Social
+        </button>
+        <button class="tab-btn" onclick="showTopic('shopping')">
+          <i class="fas fa-shopping-bag"></i> Shopping
+        </button>
+      </div>
+
+      <!-- TRAVEL TOPIC -->
+      <div id="travel" class="topic-content active">
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-book"></i> Travel Idioms
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Hit the road</div>
+              <div class="vocab-meaning">
+                To begin a journey; to leave and start traveling
+                <div class="example-box">
+                  "We need to hit the road early tomorrow if we want to avoid
+                  traffic."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Off the beaten path</div>
+              <div class="vocab-meaning">
+                In a remote or unconventional location; not touristy
+                <div class="example-box">
+                  "I prefer exploring places off the beaten path rather than
+                  visiting crowded tourist spots."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Get cold feet</div>
+              <div class="vocab-meaning">
+                To become nervous or hesitant about something you planned to do
+                <div class="example-box">
+                  "She got cold feet about skydiving and decided to stay on the
+                  ground."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Travel light</div>
+              <div class="vocab-meaning">
+                To travel with minimal luggage or belongings
+                <div class="example-box">
+                  "For a weekend trip, it's best to travel light with just a
+                  backpack."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-rocket"></i> Travel Phrasal Verbs
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Check in</div>
+              <div class="vocab-meaning">
+                To register your arrival at a hotel, airport, etc.
+                <div class="example-box">
+                  "We need to check in at the hotel before 3 PM."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Get away</div>
+              <div class="vocab-meaning">
+                To go on vacation; to escape from daily routine
+                <div class="example-box">
+                  "I need to get away for a few days and relax at the beach."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Set off</div>
+              <div class="vocab-meaning">
+                To begin a journey; to start traveling
+                <div class="example-box">
+                  "They set off on their road trip at dawn."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Stop over</div>
+              <div class="vocab-meaning">
+                To make a brief stop during a journey
+                <div class="example-box">
+                  "We'll stop over in Dubai for a few hours before continuing to
+                  Australia."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grammar-section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i> Grammar: Future Tenses for
+            Travel Plans
+          </h2>
+
+          <div class="tense-card">
+            <div class="tense-title">Future Simple (will + verb)</div>
+            <p>
+              <strong>Use:</strong> Predictions, spontaneous decisions, promises
+            </p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                <strong>Prediction:</strong> "The weather will be beautiful in
+                Spain next week."
+              </div>
+              <div class="tense-example">
+                <strong>Spontaneous:</strong> "I'll book the tickets right now!"
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">Going to + verb</div>
+            <p>
+              <strong>Use:</strong> Plans already decided, predictions with
+              evidence
+            </p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                <strong>Plan:</strong> "We're going to visit Paris this summer."
+              </div>
+              <div class="tense-example">
+                <strong>Evidence:</strong> "Look at those clouds - it's going to
+                rain!"
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">
+              Present Continuous (am/is/are + verb-ing)
+            </div>
+            <p>
+              <strong>Use:</strong> Fixed arrangements with specific times/dates
+            </p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                <strong>Arrangement:</strong> "I'm meeting my tour guide at 9 AM
+                tomorrow."
+              </div>
+              <div class="tense-example">
+                <strong>Schedule:</strong> "We're flying to Tokyo on Monday."
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-section">
+          <h2 class="section-title">
+            <i class="fas fa-pen"></i> Practice Exercises
+          </h2>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              1. Complete the sentence: "Don't worry about packing too much - we
+              should _____ light for this weekend trip."
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> travel<br />
+              <strong>Explanation:</strong> "Travel light" is an idiom meaning
+              to take minimal luggage.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              2. Choose the correct tense: "We _____ (visit) the museum tomorrow
+              at 2 PM."
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> are visiting<br />
+              <strong>Explanation:</strong> Use present continuous for fixed
+              arrangements with specific times.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              3. What does "off the beaten path" mean?
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> In a remote or unconventional location;
+              not touristy<br />
+              <strong>Example:</strong> "Let's find a restaurant off the beaten
+              path."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MUSIC TOPIC -->
+      <div id="music" class="topic-content">
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-book"></i> Music Idioms
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Music to my ears</div>
+              <div class="vocab-meaning">
+                Exactly what you want to hear; very pleasant news
+                <div class="example-box">
+                  "When he said I got the job, it was music to my ears!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Face the music</div>
+              <div class="vocab-meaning">
+                To accept the consequences of your actions
+                <div class="example-box">
+                  "He failed the exam because he didn't study, so now he has to
+                  face the music."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Ring a bell</div>
+              <div class="vocab-meaning">
+                To sound familiar; to remind you of something
+                <div class="example-box">
+                  "Does the name Sarah Johnson ring a bell? I think you've met
+                  her before."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Blow your own trumpet</div>
+              <div class="vocab-meaning">
+                To boast about your achievements
+                <div class="example-box">
+                  "I don't mean to blow my own trumpet, but I won first place in
+                  the competition."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-rocket"></i> Music Phrasal Verbs
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Turn up</div>
+              <div class="vocab-meaning">
+                To increase the volume or intensity
+                <div class="example-box">
+                  "Can you turn up the music? I love this song!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Turn down</div>
+              <div class="vocab-meaning">
+                To decrease the volume; to reject
+                <div class="example-box">
+                  "Please turn down the music - it's too loud!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Play along</div>
+              <div class="vocab-meaning">
+                To cooperate; to join in playing music
+                <div class="example-box">
+                  "I can play along on guitar if you start singing."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Warm up</div>
+              <div class="vocab-meaning">
+                To practice before a performance; to prepare
+                <div class="example-box">
+                  "The band needs to warm up before going on stage."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grammar-section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i> Grammar: Present Perfect for
+            Experiences
+          </h2>
+
+          <div class="tense-card">
+            <div class="tense-title">
+              Present Perfect (have/has + past participle)
+            </div>
+            <p>
+              <strong>Use:</strong> Life experiences, recent actions, actions
+              continuing from past to present
+            </p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                <strong>Experience:</strong> "I have been to three concerts this
+                year."
+              </div>
+              <div class="tense-example">
+                <strong>Recent:</strong> "She has just released a new album."
+              </div>
+              <div class="tense-example">
+                <strong>Duration:</strong> "They have played together for five
+                years."
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">Common Time Expressions</div>
+            <div class="tense-examples">
+              <div class="tense-example">
+                ever, never, already, yet, just, recently, lately, so far, up to
+                now
+              </div>
+              <div class="tense-example">
+                "Have you ever seen a live orchestra performance?"<br />
+                "I've never heard anything like that before!"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-section">
+          <h2 class="section-title">
+            <i class="fas fa-pen"></i> Practice Exercises
+          </h2>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              1. Complete with present perfect: "_____ you ever _____ (attend) a
+              music festival?"
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> Have / attended<br />
+              <strong>Explanation:</strong> Use present perfect with "ever" for
+              life experiences.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              2. What does "music to my ears" mean?
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> Exactly what you want to hear; very
+              pleasant news<br />
+              <strong>Example:</strong> "Your compliment was music to my ears!"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOCIAL TOPIC -->
+      <div id="social" class="topic-content">
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-book"></i> Social Idioms
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Break the ice</div>
+              <div class="vocab-meaning">
+                To initiate conversation in a social setting; to make people
+                feel comfortable
+                <div class="example-box">
+                  "He told a funny joke to break the ice at the party."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Hit it off</div>
+              <div class="vocab-meaning">
+                To immediately form a good relationship with someone
+                <div class="example-box">
+                  "We hit it off right away and have been best friends ever
+                  since."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">The life of the party</div>
+              <div class="vocab-meaning">
+                The most entertaining and fun person at a social gathering
+                <div class="example-box">
+                  "Tom is always the life of the party with his great stories."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Get along with</div>
+              <div class="vocab-meaning">
+                To have a good relationship with someone
+                <div class="example-box">
+                  "I get along with all my coworkers very well."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-rocket"></i> Social Phrasal Verbs
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Hang out</div>
+              <div class="vocab-meaning">
+                To spend time with someone casually
+                <div class="example-box">
+                  "Let's hang out this weekend and catch up!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Show up</div>
+              <div class="vocab-meaning">
+                To arrive; to appear at a place
+                <div class="example-box">
+                  "He showed up late to the meeting again."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Catch up</div>
+              <div class="vocab-meaning">
+                To exchange news with someone you haven't seen for a while
+                <div class="example-box">
+                  "We need to catch up over coffee soon!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Fall out</div>
+              <div class="vocab-meaning">
+                To have an argument and stop being friends
+                <div class="example-box">
+                  "They fell out over a misunderstanding but made up later."
+                </div>
+              </div>
+              <div class="hint
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grammar-section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i> Grammar: Modal Verbs for
+            Social Situations
+          </h2>
+
+          <div class="tense-card">
+            <div class="tense-title">Should / Ought to (Advice)</div>
+            <p><strong>Use:</strong> Giving advice or recommendations</p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                "You should invite her to the party."
+              </div>
+              <div class="tense-example">
+                "We ought to call them before we visit."
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">Could / Would you (Polite requests)</div>
+            <p><strong>Use:</strong> Making polite requests or suggestions</p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                "Could you help me organize the event?"
+              </div>
+              <div class="tense-example">
+                "Would you like to join us for dinner?"
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">May / Might (Possibility)</div>
+            <p><strong>Use:</strong> Expressing possibility or permission</p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                "She may come to the gathering later."
+              </div>
+              <div class="tense-example">"They might not show up tonight."</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-section">
+          <h2 class="section-title">
+            <i class="fas fa-pen"></i> Practice Exercises
+          </h2>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              1. Complete the idiom: "John is always _____ of the party because
+              he's so funny and energetic."
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> the life<br />
+              <strong>Explanation:</strong> "The life of the party" means the
+              most entertaining person at a gathering.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              2. Choose the correct modal: "_____ you help me plan the surprise
+              party?"
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> Could / Would<br />
+              <strong>Explanation:</strong> Use "could" or "would" for polite
+              requests.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              3. What does "break the ice" mean?
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> To initiate conversation and make people
+              feel comfortable<br />
+              <strong>Example:</strong> "Let's play a game to break the ice."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOPPING TOPIC -->
+      <div id="shopping" class="topic-content">
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-book"></i> Shopping Idioms
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Shop till you drop</div>
+              <div class="vocab-meaning">
+                To shop for a very long time until you're exhausted
+                <div class="example-box">
+                  "We went to the mall and shopped till we dropped!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">A steal</div>
+              <div class="vocab-meaning">
+                Something bought at an extremely low price; a bargain
+                <div class="example-box">
+                  "I got this designer bag for $50 - it was a steal!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Cost an arm and a leg</div>
+              <div class="vocab-meaning">
+                To be very expensive
+                <div class="example-box">
+                  "That luxury car costs an arm and a leg!"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Idiom</span>
+              <div class="vocab-term">Window shopping</div>
+              <div class="vocab-meaning">
+                Looking at items in store windows without buying anything
+                <div class="example-box">
+                  "We're just window shopping today - not buying anything."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-rocket"></i> Shopping Phrasal Verbs
+          </h2>
+          <div class="vocab-grid">
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Try on</div>
+              <div class="vocab-meaning">
+                To put on clothing to see if it fits
+                <div class="example-box">
+                  "Can I try on this jacket in a different size?"
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Pick out</div>
+              <div class="vocab-meaning">
+                To choose or select something
+                <div class="example-box">
+                  "Help me pick out a gift for my sister."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Pay back</div>
+              <div class="vocab-meaning">
+                To return money that you borrowed
+                <div class="example-box">
+                  "I'll pay you back next week when I get my salary."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+
+            <div class="vocab-card" onclick="this.classList.toggle('revealed')">
+              <span class="vocab-type">Phrasal Verb</span>
+              <div class="vocab-term">Bring back</div>
+              <div class="vocab-meaning">
+                To return an item to a store
+                <div class="example-box">
+                  "These shoes don't fit. I need to bring them back."
+                </div>
+              </div>
+              <div class="hint">Click to reveal meaning</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grammar-section">
+          <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i> Grammar: Comparatives &
+            Superlatives
+          </h2>
+
+          <div class="tense-card">
+            <div class="tense-title">Comparatives (comparing two things)</div>
+            <p><strong>Use:</strong> -er / more + than</p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                "This store is cheaper than that one."
+              </div>
+              <div class="tense-example">
+                "Online shopping is more convenient than going to the mall."
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">
+              Superlatives (comparing three or more)
+            </div>
+            <p><strong>Use:</strong> the -est / the most</p>
+            <div class="tense-examples">
+              <div class="tense-example">
+                "This is the cheapest item in the store."
+              </div>
+              <div class="tense-example">
+                "That's the most expensive handbag I've ever seen!"
+              </div>
+            </div>
+          </div>
+
+          <div class="tense-card">
+            <div class="tense-title">Irregular Forms</div>
+            <div class="tense-examples">
+              <div class="tense-example">
+                good → better → the best<br />
+                bad → worse → the worst<br />
+                far → farther/further → the farthest/furthest
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-section">
+          <h2 class="section-title">
+            <i class="fas fa-pen"></i> Practice Exercises
+          </h2>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              1. Complete with the correct form: "This dress is _____
+              (expensive) than that one."
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> more expensive<br />
+              <strong>Explanation:</strong> Use "more" with longer adjectives in
+              comparatives.
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              2. What does "a steal" mean when shopping?
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> Something bought at an extremely low
+              price; a great bargain<br />
+              <strong>Example:</strong> "At 50% off, this jacket is a steal!"
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-question">
+              3. Complete with superlative: "This is _____ (good) deal in the
+              entire store!"
+            </div>
+            <button class="answer-btn" onclick="showAnswer(this)">
+              Show Answer
+            </button>
+            <div class="answer-box">
+              <strong>Answer:</strong> the best<br />
+              <strong>Explanation:</strong> "Good" has an irregular superlative
+              form: "the best."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showTopic(topicId) {
+        // Hide all topics
+        const topics = document.querySelectorAll(".topic-content");
+        topics.forEach((topic) => topic.classList.remove("active"));
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach((tab) => tab.classList.remove("active"));
+
+        // Show selected topic
+        document.getElementById(topicId).classList.add("active");
+
+        // Add active class to clicked tab
+        event.target.closest(".tab-btn").classList.add("active");
+      }
+
+      function showAnswer(button) {
+        const answerBox = button.nextElementSibling;
+        answerBox.classList.toggle("show");
+
+        if (answerBox.classList.contains("show")) {
+          button.textContent = "Hide Answer";
+        } else {
+          button.textContent = "Show Answer";
+        }
+      }
+    </script>
+  </body>
+</html>
