@@ -84,7 +84,27 @@
     <link rel="stylesheet" href="../css/mobile-footer.css" />
 
     <style>
-      /* CSS Variables for Design System */
+      /* Base responsive improvements */
+      * {
+        box-sizing: border-box;
+      }
+      
+      html {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      
+      body {
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      
+      img {
+        max-width: 100%;
+        height: auto;
+      }
       :root {
         --primary-color: #46bbe5;
         --primary-hover: #05425c;
@@ -154,6 +174,9 @@
       .page-header-content {
         position: relative;
         z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
       }
 
       .page-header h1 {
@@ -161,15 +184,17 @@
         font-size: clamp(2.5rem, 5vw, 3.5rem);
         font-weight: 800;
         margin-bottom: 1rem;
+        line-height: 1.2;
       }
 
       .page-header p {
-        font-size: 1.25rem;
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
         margin-bottom: 2rem;
         opacity: 0.9;
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
+        line-height: 1.5;
       }
 
       .breadcrumb {
@@ -195,19 +220,76 @@
       /* Main Content */
       .main-content {
         padding: 4rem 0;
+        width: 100%;
+        overflow-x: hidden;
       }
 
       .content-grid {
         display: grid;
         grid-template-columns: 300px 1fr;
         gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        align-items: start;
+        position: relative;
+        z-index: 1;
+        isolation: isolate;
+      }
+
+      /* Intermediate screen size adjustments */
+      @media (max-width: 1200px) {
+        .content-grid {
+          grid-template-columns: 280px 1fr;
+          gap: 2rem;
+        }
+        
+        .sidebar {
+          top: 100px;
+          max-width: 280px;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .content-grid {
+          grid-template-columns: 260px 1fr;
+          gap: 1.5rem;
+        }
+        
+        .sidebar {
+          max-width: 260px;
+        }
       }
 
       /* Sidebar */
       .sidebar {
         position: sticky;
-        top: 100px;
+        top: 120px;
         height: fit-content;
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
+        z-index: 1;
+        padding-right: 1rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-color) transparent;
+        align-self: start;
+      }
+
+      .sidebar::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .sidebar::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+      }
+
+      .sidebar::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-color);
       }
 
       .sidebar-section {
@@ -217,6 +299,10 @@
         padding: 2rem;
         margin-bottom: 2rem;
         box-shadow: var(--shadow-sm);
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .sidebar-title {
@@ -224,31 +310,44 @@
         font-weight: 600;
         margin-bottom: 1rem;
         color: var(--text-primary);
+        position: relative;
+        z-index: 1;
       }
 
       .toc-list {
         list-style: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        z-index: 1;
       }
 
       .toc-item {
         margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
       }
 
       .toc-link {
         display: block;
-        padding: 0.5rem 0.75rem;
+        padding: 0.75rem 1rem;
         color: var(--text-secondary);
         text-decoration: none;
         border-radius: 8px;
         transition: all 0.3s ease;
         font-size: 0.9rem;
+        position: relative;
+        z-index: 1;
+        background: transparent;
       }
 
       .toc-link:hover,
       .toc-link.active {
         background: var(--bg-secondary);
         color: var(--primary-color);
-        padding-left: 1rem;
+        transform: translateX(4px);
+        border-left: 3px solid var(--primary-color);
+        padding-left: 1.25rem;
       }
 
       .progress-bar {
@@ -258,6 +357,8 @@
         border-radius: 3px;
         overflow: hidden;
         margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
       }
 
       .progress-fill {
@@ -265,9 +366,19 @@
         background: var(--gradient-primary);
         width: 0%;
         transition: width 0.3s ease;
+        position: relative;
+        z-index: 1;
       }
 
       /* Grammar Sections */
+      .grammar-content {
+        min-width: 0; /* Prevent overflow */
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        overflow: visible;
+      }
+
       .grammar-section {
         background: var(--bg-primary);
         border: 1px solid var(--border-color);
@@ -275,6 +386,9 @@
         padding: 3rem;
         margin-bottom: 3rem;
         box-shadow: var(--shadow-sm);
+        position: relative;
+        z-index: 1;
+        width: 100%;
       }
 
       .section-header {
@@ -637,18 +751,25 @@
         padding: 2rem;
         border-radius: 16px;
         margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+        box-shadow: var(--shadow-md);
       }
 
       .quick-reference h3 {
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
       }
 
       .reference-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
+        position: relative;
+        z-index: 1;
       }
 
       .reference-item {
@@ -656,11 +777,21 @@
         padding: 1rem;
         border-radius: 8px;
         backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+      }
+
+      .reference-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
       }
 
       .reference-item strong {
         display: block;
         margin-bottom: 0.5rem;
+        font-weight: 600;
       }
 
       /* Back to Top */
@@ -735,10 +866,11 @@
         font-weight: 700;
         margin-bottom: 1rem;
         letter-spacing: 0.01em;
+        line-height: 1.2;
       }
 
       .hero-subtitle {
-        font-size: 1.25rem;
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
         font-weight: 400;
         opacity: 0.95;
         margin-bottom: 0;
@@ -747,39 +879,452 @@
         margin-right: auto;
         color: #f3f4f6;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        line-height: 1.5;
+      }
+      
+      /* Container responsive design */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        overflow-x: hidden;
       }
 
-      /* Hide sidebar on mobile screens */
+      /* Ensure all main sections don't overlap */
+      main {
+        position: relative;
+        z-index: 1;
+        min-height: calc(100vh - 80px);
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      /* Fix any potential overlay issues */
+      .main-content {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      /* Additional containment fix */
+      .content-grid > * {
+        min-width: 0;
+        overflow: visible;
+      }
+
+      .grammar-content {
+        grid-column: 2;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .sidebar {
+        grid-column: 1;
+        min-width: 0;
+        width: 100%;
+      }
+
+      /* Smooth scrolling behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Prevent layout shift */
+      .grammar-topic-card,
+      .grammar-section {
+        contain: layout style paint;
+      }
+
+      /* Ensure proper spacing between sections */
+      .grammar-topic-card + .grammar-topic-card,
+      .grammar-section + .grammar-section {
+        margin-top: 0;
+      }
+
+      /* Mobile Optimization Styles */
       @media (max-width: 900px) {
+        /* Hide sidebar on mobile screens */
         .sidebar {
           display: none;
         }
+        
         .content-grid {
           grid-template-columns: 1fr;
+          gap: 1rem;
+          padding: 0 0.75rem;
         }
-      }
-
-      /* Mobile main content alignment fix */
-      @media (max-width: 900px) {
-        .hero {
-          padding-top: 70px !important;
-        }
-        .main-content {
-          padding: 2rem 0 1rem 0;
-        }
-        .container {
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
-          max-width: 100%;
-        }
+        
+        /* Grammar content takes full width on mobile */
         .grammar-content {
           width: 100%;
           margin: 0;
           padding: 0;
         }
+        
+        /* Hero section mobile optimization */
+        .hero {
+          padding-top: 70px !important;
+          min-height: 280px;
+        }
+        
+        .hero-title {
+          font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
+          margin-bottom: 0.75rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 1rem !important;
+          padding: 0 1rem;
+        }
+        
+        /* Main content mobile spacing */
+        .main-content {
+          padding: 1.5rem 0 1rem 0;
+        }
+        
+        .container {
+          padding-left: 0.75rem;
+          padding-right: 0.75rem;
+          max-width: 100%;
+        }
+        
+        /* Grammar content mobile optimization */
+        .grammar-content {
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        
         .grammar-section {
-          padding: 1.5rem 0.5rem;
-          margin-bottom: 2rem;
+          padding: 1.5rem 1rem;
+          margin-bottom: 1.5rem;
+          border-radius: 12px;
+        }
+        
+        /* Grammar topic cards mobile optimization */
+        .grammar-topic-card {
+          padding: 1.5rem 1rem;
+          margin-bottom: 1.5rem;
+          border-radius: 12px;
+        }
+        
+        .topic-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+          text-align: left;
+        }
+        
+        .topic-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 1.25rem;
+        }
+        
+        .topic-title {
+          font-size: 1.5rem;
+          line-height: 1.3;
+        }
+        
+        .topic-description {
+          font-size: 0.95rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+        
+        /* Example sections mobile optimization */
+        .topic-example {
+          padding: 1rem;
+          margin-bottom: 1rem;
+          border-radius: 6px;
+        }
+        
+        .example-text {
+          font-size: 0.9rem;
+        }
+        
+        .example-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+          padding: 0.75rem;
+        }
+        
+        .example-icon {
+          align-self: flex-start;
+          margin-top: 0;
+        }
+        
+        .example-sentence {
+          font-size: 0.9rem;
+        }
+        
+        .example-note {
+          font-size: 0.8rem;
+        }
+        
+        /* Rule cards mobile optimization */
+        .rule-card {
+          padding: 1.25rem 1rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .rule-title {
+          font-size: 1.25rem;
+          margin-bottom: 0.75rem;
+        }
+        
+        .rule-explanation {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+        
+        /* Section headers mobile optimization */
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .section-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 1.25rem;
+        }
+        
+        .section-header h2 {
+          font-size: 1.75rem;
+          line-height: 1.3;
+        }
+        
+        /* Exercise sections mobile optimization */
+        .exercise-section {
+          padding: 1.5rem 1rem;
+          margin-top: 1.5rem;
+          border-radius: 12px;
+        }
+        
+        .exercise-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+          margin-bottom: 1.25rem;
+        }
+        
+        .exercise-title {
+          font-size: 1.25rem;
+        }
+        
+        .question {
+          padding: 1.25rem 1rem;
+          margin-bottom: 1rem;
+          border-radius: 8px;
+        }
+        
+        .question-text {
+          font-size: 1rem;
+          margin-bottom: 1rem;
+        }
+        
+        .option {
+          padding: 0.75rem;
+          margin-bottom: 0.5rem;
+          border-radius: 6px;
+        }
+        
+        /* Button mobile optimization */
+        .btn {
+          width: 100%;
+          justify-content: center;
+          padding: 0.875rem 1.5rem;
+          font-size: 0.95rem;
+          min-height: 48px; /* Touch-friendly size */
+          touch-action: manipulation;
+        }
+        
+        .topic-link {
+          width: 100%;
+          justify-content: center;
+          padding: 0.875rem 1.5rem;
+          font-size: 0.9rem;
+          text-align: center;
+          min-height: 48px; /* Touch-friendly size */
+          touch-action: manipulation;
+        }
+        
+        /* Option buttons touch-friendly */
+        .option {
+          padding: 0.875rem;
+          margin-bottom: 0.5rem;
+          border-radius: 6px;
+          min-height: 48px; /* Touch-friendly size */
+          touch-action: manipulation;
+        }
+        
+        .option input[type="radio"] {
+          width: 20px;
+          height: 20px;
+          margin-right: 0.75rem;
+        }
+        
+        /* Quick reference mobile optimization */
+        .quick-reference {
+          padding: 1.5rem 1rem;
+          margin-bottom: 1.5rem;
+          border-radius: 12px;
+        }
+        
+        .reference-grid {
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+        }
+        
+        .reference-item {
+          padding: 0.75rem;
+          border-radius: 6px;
+        }
+        
+        /* Back to top button mobile */
+        .back-to-top {
+          bottom: 1rem;
+          right: 1rem;
+          width: 45px;
+          height: 45px;
+        }
+        
+        /* Difficulty badge mobile */
+        .difficulty-badge {
+          margin-left: 0;
+          margin-top: 0.5rem;
+          align-self: flex-start;
+        }
+        
+        /* Coming soon badge mobile */
+        .coming-soon-badge {
+          top: 0.75rem;
+          right: 0.75rem;
+          font-size: 0.7rem;
+          padding: 0.2rem 0.6rem;
+        }
+        
+        /* Ad sections mobile optimization */
+        .adsbygoogle {
+          margin: 1.5rem auto !important;
+          max-width: 100% !important;
+        }
+        
+        /* Related links mobile optimization */
+        .related-links {
+          margin: 1.5rem 0 !important;
+          padding: 1rem !important;
+          border-radius: 6px !important;
+        }
+        
+        .related-links h3 {
+          font-size: 1.1rem !important;
+          margin-bottom: 0.75rem !important;
+        }
+        
+        .related-links a {
+          padding: 0.75rem !important;
+          border-radius: 6px !important;
+        }
+        
+        .related-links strong {
+          font-size: 0.9rem !important;
+        }
+        
+        .related-links p {
+          font-size: 0.8rem !important;
+        }
+      }
+      
+      /* Extra small mobile devices */
+      @media (max-width: 480px) {
+        .container {
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+        
+        .grammar-section,
+        .grammar-topic-card {
+          padding: 1rem 0.75rem;
+          margin-bottom: 1.25rem;
+        }
+        
+        .rule-card {
+          padding: 1rem 0.75rem;
+          margin-bottom: 1.25rem;
+        }
+        
+        .exercise-section {
+          padding: 1.25rem 0.75rem;
+        }
+        
+        .hero {
+          min-height: 240px;
+        }
+        
+        .hero-title {
+          font-size: clamp(1.5rem, 7vw, 2rem) !important;
+          margin-bottom: 0.5rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 0.9rem !important;
+          padding: 0 0.5rem;
+        }
+        
+        .topic-title {
+          font-size: 1.3rem;
+          line-height: 1.2;
+        }
+        
+        .section-header h2 {
+          font-size: 1.5rem;
+          line-height: 1.2;
+        }
+        
+        .rule-title {
+          font-size: 1.1rem;
+        }
+        
+        .topic-description,
+        .rule-explanation {
+          font-size: 0.85rem;
+          line-height: 1.4;
+        }
+        
+        .example-sentence {
+          font-size: 0.85rem;
+        }
+        
+        .example-note {
+          font-size: 0.75rem;
+        }
+        
+        .question-text {
+          font-size: 0.9rem;
+        }
+        
+        .btn,
+        .topic-link {
+          font-size: 0.85rem;
+          padding: 0.75rem 1.25rem;
+        }
+        
+        .back-to-top {
+          width: 40px;
+          height: 40px;
+          bottom: 0.75rem;
+          right: 0.75rem;
         }
       }
     </style>
@@ -1067,7 +1612,8 @@
           <!-- Grammar Content -->
           <div class="grammar-content">
             <!-- Parts of Speech Section -->
-            <section id="parts-of-speech" class="grammar-topic-card">
+            <section id="parts-of-speech" class="grammar-topic-card coming-soon">
+              <div class="coming-soon-badge">Coming Soon</div>
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-shapes"></i>
@@ -1082,15 +1628,14 @@
                 <div class="example-text">"The <strong>beautiful</strong> (adjective) <strong>cat</strong> (noun) <strong>quickly</strong> (adverb) <strong>ran</strong> (verb) <strong>away</strong> (adverb)."</div>
                 <div class="example-note">Each word has a specific grammatical role</div>
               </div>
-              <a href="parts-of-speech.html" class="topic-link">
-                <i class="fas fa-arrow-right"></i>
-                Learn All Parts of Speech
+              <a href="#" class="topic-link">
+                <i class="fas fa-clock"></i>
+                Coming Soon
               </a>
             </section>
 
             <!-- Word Forms Section -->
-            <section id="word-forms" class="grammar-topic-card coming-soon">
-              <div class="coming-soon-badge">Coming Soon</div>
+            <section id="word-forms" class="grammar-topic-card">
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-magic"></i>
@@ -1105,15 +1650,14 @@
                 <div class="example-text"><strong>Beauty</strong> (noun) → <strong>Beautiful</strong> (adjective) → <strong>Beautifully</strong> (adverb)</div>
                 <div class="example-note">Same root word, different functions</div>
               </div>
-              <a href="#" class="topic-link">
-                <i class="fas fa-clock"></i>
-                Coming Soon
+              <a href="wordforms.html" class="topic-link">
+                <i class="fas fa-arrow-right"></i>
+                Learn Word Forms
               </a>
             </section>
 
             <!-- Prefixes & Suffixes Section -->
-            <section id="prefixes-suffixes" class="grammar-topic-card coming-soon">
-              <div class="coming-soon-badge">Coming Soon</div>
+            <section id="prefixes-suffixes" class="grammar-topic-card">
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-puzzle-piece"></i>
@@ -1128,15 +1672,14 @@
                 <div class="example-text"><strong>Un-</strong>happy, <strong>Pre-</strong>view, Wonder<strong>-ful</strong>, Care<strong>-less</strong></div>
                 <div class="example-note">Prefixes come before, suffixes come after</div>
               </div>
-              <a href="#" class="topic-link">
-                <i class="fas fa-clock"></i>
-                Coming Soon
+              <a href="prefixessuffixes.html" class="topic-link">
+                <i class="fas fa-arrow-right"></i>
+                Learn Prefixes & Suffixes
               </a>
             </section>
 
             <!-- Word Families Section -->
-            <section id="word-families" class="grammar-topic-card coming-soon">
-              <div class="coming-soon-badge">Coming Soon</div>
+            <section id="word-families" class="grammar-topic-card">
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-sitemap"></i>
@@ -1151,15 +1694,14 @@
                 <div class="example-text"><strong>Act</strong> family: act, action, active, activity, actor, activate</div>
                 <div class="example-note">All related words from one root</div>
               </div>
-              <a href="#" class="topic-link">
-                <i class="fas fa-clock"></i>
-                Coming Soon
+              <a href="wordfamilies.html" class="topic-link">
+                <i class="fas fa-arrow-right"></i>
+                Learn Word Families
               </a>
             </section>
 
             <!-- Sentence Structure Section -->
-            <section id="sentence-structure" class="grammar-topic-card coming-soon">
-              <div class="coming-soon-badge">Coming Soon</div>
+            <section id="sentence-structure" class="grammar-topic-card">
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-sitemap"></i>
@@ -1174,15 +1716,14 @@
                 <div class="example-text"><strong>Subject</strong> + <strong>Verb</strong> + <strong>Object</strong>: "She reads books."</div>
                 <div class="example-note">Basic sentence pattern in English</div>
               </div>
-              <a href="#" class="topic-link">
-                <i class="fas fa-clock"></i>
-                Coming Soon
+              <a href="strucuture.html" class="topic-link">
+                <i class="fas fa-arrow-right"></i>
+                Learn Sentence Structure
               </a>
             </section>
 
             <!-- Clauses & Phrases Section -->
-            <section id="clauses-phrases" class="grammar-topic-card coming-soon">
-              <div class="coming-soon-badge">Coming Soon</div>
+            <section id="clauses-phrases" class="grammar-topic-card">
               <div class="topic-header">
                 <div class="topic-icon">
                   <i class="fas fa-link"></i>
@@ -1197,9 +1738,9 @@
                 <div class="example-text">"<strong>When it rains</strong> (clause), <strong>I stay inside</strong> (clause)."</div>
                 <div class="example-note">Dependent clause + independent clause</div>
               </div>
-              <a href="#" class="topic-link">
-                <i class="fas fa-clock"></i>
-                Coming Soon
+              <a href="clauses.html" class="topic-link">
+                <i class="fas fa-arrow-right"></i>
+                Learn Clauses & Phrases
               </a>
             </section>
 
@@ -3497,31 +4038,50 @@
           const targetSection = document.querySelector(targetId);
 
           if (targetSection) {
-            targetSection.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
+            // Calculate offset for fixed header
+            const headerHeight = 120; // Account for fixed header
+            const elementPosition = targetSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
             });
+
+            // Update active state immediately
+            document.querySelectorAll(".toc-link").forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
           }
         });
       });
 
       // Update active section in sidebar
       function updateActiveSection() {
-        const sections = document.querySelectorAll(".grammar-section");
+        const sections = document.querySelectorAll(".grammar-topic-card, .grammar-section");
         const tocLinks = document.querySelectorAll(".toc-link");
 
         let activeSection = null;
-
+        const windowHeight = window.innerHeight;
+        const scrollPosition = window.pageYOffset;
+        
+        // Find the currently visible section
         sections.forEach((section) => {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
+          const sectionTop = scrollPosition + rect.top;
+          const sectionBottom = sectionTop + rect.height;
+          
+          // Section is considered active if it's in the upper portion of the viewport
+          if (sectionTop <= scrollPosition + windowHeight * 0.3 && 
+              sectionBottom > scrollPosition + windowHeight * 0.1) {
             activeSection = section.id;
           }
         });
 
+        // Update TOC links
         tocLinks.forEach((link) => {
           link.classList.remove("active");
-          if (link.getAttribute("href") === `#${activeSection}`) {
+          const href = link.getAttribute("href");
+          if (href && href === `#${activeSection}`) {
             link.classList.add("active");
           }
         });
@@ -3633,12 +4193,28 @@
         }
       }
 
-      // Event listeners
-      window.addEventListener("scroll", () => {
+      // Throttle function for performance
+      function throttle(func, limit) {
+        let inThrottle;
+        return function() {
+          const args = arguments;
+          const context = this;
+          if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+          }
+        }
+      }
+
+      // Event listeners with throttling
+      const throttledScrollHandler = throttle(() => {
         updateActiveSection();
         updateProgress();
         toggleBackToTop();
-      });
+      }, 100);
+
+      window.addEventListener("scroll", throttledScrollHandler);
 
       // Initialize
       document.addEventListener("DOMContentLoaded", () => {
