@@ -235,6 +235,8 @@
         position: relative;
         z-index: 1;
         isolation: isolate;
+        width: 100%;
+        overflow: hidden;
       }
 
       /* Intermediate screen size adjustments */
@@ -252,12 +254,29 @@
 
       @media (max-width: 1024px) {
         .content-grid {
-          grid-template-columns: 260px 1fr;
+          grid-template-columns: 1fr !important;
           gap: 1.5rem;
+          display: block !important;
         }
         
-        .sidebar {
-          max-width: 260px;
+        .sidebar,
+        .sidebar-section,
+        .sidebar-title,
+        .toc-list,
+        .quick-reference {
+          display: none !important;
+          visibility: hidden !important;
+          max-width: 0;
+          width: 0 !important;
+          height: 0 !important;
+          overflow: hidden !important;
+          position: absolute !important;
+          left: -9999px !important;
+        }
+        
+        .grammar-content {
+          width: 100% !important;
+          max-width: 100% !important;
         }
       }
 
@@ -273,6 +292,10 @@
         scrollbar-width: thin;
         scrollbar-color: var(--border-color) transparent;
         align-self: start;
+        width: 100%;
+        max-width: 300px;
+        flex-shrink: 0;
+        contain: layout style;
       }
 
       .sidebar::-webkit-scrollbar {
@@ -303,6 +326,9 @@
         z-index: 1;
         width: 100%;
         box-sizing: border-box;
+        max-width: 100%;
+        overflow: hidden;
+        contain: layout style;
       }
 
       .sidebar-title {
@@ -377,6 +403,8 @@
         z-index: 2;
         width: 100%;
         overflow: visible;
+        max-width: 100%;
+        contain: layout style;
       }
 
       .grammar-section {
@@ -949,22 +977,53 @@
       /* Mobile Optimization Styles */
       @media (max-width: 900px) {
         /* Hide sidebar on mobile screens */
-        .sidebar {
-          display: none;
+        .sidebar,
+        .sidebar-section,
+        .sidebar-title,
+        .toc-list,
+        .quick-reference {
+          display: none !important;
+          visibility: hidden !important;
+          width: 0 !important;
+          height: 0 !important;
+          overflow: hidden !important;
+          position: absolute !important;
+          left: -9999px !important;
         }
         
         .content-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr !important;
           gap: 1rem;
           padding: 0 0.75rem;
+          display: block !important;
         }
         
         /* Grammar content takes full width on mobile */
         .grammar-content {
-          width: 100%;
-          margin: 0;
-          padding: 0;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          grid-column: unset !important;
         }
+      }
+      
+      /* Additional mobile breakpoint for tablets */
+      @media (max-width: 1024px) {
+        .sidebar {
+          display: none !important;
+          visibility: hidden !important;
+        }
+        
+        .content-grid {
+          grid-template-columns: 1fr !important;
+          display: block !important;
+        }
+        
+        .grammar-content {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+      }
         
         /* Hero section mobile optimization */
         .hero {
@@ -995,9 +1054,10 @@
         
         /* Grammar content mobile optimization */
         .grammar-content {
-          width: 100%;
-          margin: 0;
-          padding: 0;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          max-width: 100% !important;
         }
         
         .grammar-section {
@@ -1244,7 +1304,7 @@
         .related-links p {
           font-size: 0.8rem !important;
         }
-      }
+      
       
       /* Extra small mobile devices */
       @media (max-width: 480px) {
