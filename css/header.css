@@ -96,6 +96,7 @@ body {
    HEADER COMPONENT
    ============================================== */
 
+/* Ensure header and dropdowns always appear above page content */
 header {
   position: fixed;
   top: 0;
@@ -105,9 +106,17 @@ header {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--border-color);
-  z-index: 1000;
+  z-index: 10000;
   transition: all var(--transition-normal);
   will-change: transform, background-color;
+}
+
+/* Force hero sections and page content to stay below header */
+.hero,
+.page-header,
+section.hero {
+  position: relative;
+  z-index: 1 !important;
 }
 
 /* Enhanced backdrop for better browser support */
@@ -322,7 +331,7 @@ header.hidden {
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + 0.25rem);
   left: 50%;
   transform: translateX(-50%) translateY(-10px);
   min-width: 280px;
@@ -334,27 +343,78 @@ header.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: all var(--transition-normal);
-  z-index: 1001;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
   overflow: hidden;
   backdrop-filter: blur(20px);
 }
 
-/* Enhanced dropdown animation - Smooth hover like other pages */
-.nav-item:hover .dropdown,
-.nav-item:focus-within .dropdown,
-.nav-item.desktop-open .dropdown,
-.nav-item.desktop-hover .dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
+/* Create an invisible bridge between nav item and dropdown to prevent gaps */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background: transparent;
+  z-index: 9998;
+  pointer-events: none;
 }
 
-/* Ensure dropdown stays open when hovering over it */
-.dropdown:hover {
-  opacity: 1;
-  visibility: visible;
+/* Enhanced dropdown animation - Smooth hover for desktop, click for mobile */
+/* Desktop: hover triggers dropdown with delay */
+@media (min-width: 769px) {
+  .nav-item:hover .dropdown,
+  .nav-item:focus-within .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+    transition-delay: 0s, 0s, 0s;
+  }
+
+  /* Enable bridge zone when hovering nav item */
+  .nav-item:hover::after,
+  .nav-item:focus-within::after {
+    pointer-events: auto;
+  }
+
+  /* Add delay before hiding dropdown to prevent accidental closure */
+  .dropdown {
+    transition-delay: 0s, 0.15s, 0s;
+  }
+
+  /* Ensure dropdown stays open when hovering over it */
+  .dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s, 0s, 0s;
+  }
+
+  /* Also ensure parent nav-item stays highlighted when hovering dropdown */
+  .nav-item:hover > .nav-link,
+  .nav-item:focus-within > .nav-link {
+    color: var(--primary-color);
+    background: var(--primary-light);
+  }
+}
+
+/* Mobile: click/tap only (handled by JavaScript) */
+@media (max-width: 768px) {
+  /* Disable hover on mobile - rely on JavaScript */
+  .nav-item:hover .dropdown,
+  .nav-item:focus-within .dropdown {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Remove bridge on mobile */
+  .nav-item::after {
+    display: none;
+  }
 }
 
 /* Dropdown arrow */
@@ -1898,6 +1958,7 @@ footer > .container {
   .hero {
     padding-top: calc(var(--header-height-mobile) + 2rem);
     min-height: calc(100vh - var(--header-height-mobile));
+    z-index: 1;
   }
 
   .hero-content {
@@ -1911,6 +1972,7 @@ footer > .container {
   .page-header {
     padding: calc(var(--header-height-mobile) + 3rem) 0 3rem;
     min-height: auto;
+    z-index: 1;
   }
 
   /* Ensure all sections align properly */
