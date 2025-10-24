@@ -77,6 +77,10 @@
         "description": "Match vocabulary words with definitions and improve your memory! ESL learning game with multiple categories and difficulty levels.",
         "url": "https://eslfunonline.com/games/memory-match.html",
         "image": "https://eslfunonline.com/images/image copy 13.png",
+        "author": {
+          "@type": "Organization",
+          "name": "ESL Fun Online"
+        },
         "publisher": {
           "@type": "Organization",
           "name": "ESL Fun Online",
@@ -90,23 +94,11 @@
         },
         "educationalUse": "Vocabulary Building and Memory Training",
         "interactivityType": "active",
-        "learningResourceType": "game"
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "isFamilyFriendly": true
       }
-    </script>
-    />
-
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-9G9RD6BHLN");
     </script>
 
     <link
@@ -541,6 +533,139 @@
         border-radius: 4px;
       }
 
+      /* Focus states for keyboard navigation */
+      .selector-btn:focus,
+      .btn:focus,
+      .memory-card:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      /* Screen reader only class */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Animations */
+      @keyframes cardFlip {
+        0% {
+          transform: perspective(600px) rotateY(0deg);
+        }
+        100% {
+          transform: perspective(600px) rotateY(180deg);
+        }
+      }
+
+      @keyframes matchPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(0.95);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .memory-card {
+        animation: fadeIn 0.3s ease-out;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+      }
+
+      .memory-card.flipped {
+        animation: cardFlip 0.6s ease-out forwards;
+      }
+
+      .memory-card.matched {
+        animation: matchPulse 0.6s ease-out forwards;
+      }
+
+      /* Combo indicator */
+      .combo-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--secondary-color);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 2000;
+        animation: comboAppear 1s ease-out;
+      }
+
+      @keyframes comboAppear {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.2);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* Improved card back design */
+      .card-back {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--purple-color)
+        );
+        border-radius: 15px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        backface-visibility: hidden;
+      }
+
+      .card-front {
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 15px;
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
       @media (max-width: 768px) {
         .game-container {
           padding: 1rem;
@@ -598,94 +723,226 @@
     </style>
   </head>
   <body>
-    <div class="game-container">
-      <div class="game-header">
-        <h1><i class="fas fa-brain"></i> Memory Match ESL</h1>
+    <div
+      class="game-container"
+      role="main"
+      aria-label="Memory Match ESL game container"
+    >
+      <header class="game-header">
+        <h1>
+          <i class="fas fa-brain" aria-hidden="true"></i> Memory Match ESL
+        </h1>
         <p>Match pairs of words and definitions to improve your vocabulary!</p>
-      </div>
+      </header>
 
-      <div class="game-controls">
+      <div class="game-controls" role="region" aria-label="Game settings">
         <div class="control-group">
-          <div class="control-label">Difficulty</div>
-          <div class="difficulty-selector">
-            <button class="selector-btn active" data-difficulty="easy">
+          <div class="control-label" id="difficulty-label">Difficulty</div>
+          <div
+            class="difficulty-selector"
+            role="radiogroup"
+            aria-labelledby="difficulty-label"
+          >
+            <button
+              class="selector-btn active"
+              data-difficulty="easy"
+              role="radio"
+              aria-checked="true"
+            >
               Easy (8 pairs)
             </button>
-            <button class="selector-btn" data-difficulty="medium">
+            <button
+              class="selector-btn"
+              data-difficulty="medium"
+              role="radio"
+              aria-checked="false"
+            >
               Medium (18 pairs)
             </button>
-            <button class="selector-btn" data-difficulty="hard">
+            <button
+              class="selector-btn"
+              data-difficulty="hard"
+              role="radio"
+              aria-checked="false"
+            >
               Hard (32 pairs)
             </button>
           </div>
         </div>
 
         <div class="control-group">
-          <div class="control-label">Category</div>
-          <div class="category-selector">
-            <button class="selector-btn active" data-category="animals">
+          <div class="control-label" id="category-label">Category</div>
+          <div
+            class="category-selector"
+            role="radiogroup"
+            aria-labelledby="category-label"
+          >
+            <button
+              class="selector-btn active"
+              data-category="animals"
+              role="radio"
+              aria-checked="true"
+            >
               Animals
             </button>
-            <button class="selector-btn" data-category="food">Food</button>
-            <button class="selector-btn" data-category="objects">
+            <button
+              class="selector-btn"
+              data-category="food"
+              role="radio"
+              aria-checked="false"
+            >
+              Food
+            </button>
+            <button
+              class="selector-btn"
+              data-category="objects"
+              role="radio"
+              aria-checked="false"
+            >
               Objects
             </button>
-            <button class="selector-btn" data-category="actions">
+            <button
+              class="selector-btn"
+              data-category="actions"
+              role="radio"
+              aria-checked="false"
+            >
               Actions
             </button>
-            <button class="selector-btn" data-category="emotions">
+            <button
+              class="selector-btn"
+              data-category="emotions"
+              role="radio"
+              aria-checked="false"
+            >
               Emotions
             </button>
           </div>
         </div>
       </div>
 
-      <div class="game-stats">
+      <div class="game-stats" role="region" aria-label="Game statistics">
         <div class="stat-card">
-          <div class="stat-value timer" id="timeValue">00:00</div>
+          <div
+            class="stat-value timer"
+            id="timeValue"
+            aria-label="Time elapsed"
+          >
+            00:00
+          </div>
           <div class="stat-label">Time</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value moves" id="movesValue">0</div>
+          <div
+            class="stat-value moves"
+            id="movesValue"
+            aria-label="Number of moves"
+          >
+            0
+          </div>
           <div class="stat-label">Moves</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value matches" id="matchesValue">0</div>
+          <div
+            class="stat-value matches"
+            id="matchesValue"
+            aria-label="Matched pairs"
+          >
+            0
+          </div>
           <div class="stat-label">Matches</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value accuracy" id="accuracyValue">100%</div>
+          <div
+            class="stat-value accuracy"
+            id="accuracyValue"
+            aria-label="Accuracy percentage"
+          >
+            100%
+          </div>
           <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-card">
+          <div
+            class="stat-value"
+            id="scoreValue"
+            aria-label="Current score"
+            style="color: var(--secondary-color)"
+          >
+            0
+          </div>
+          <div class="stat-label">Score</div>
+        </div>
+        <div class="stat-card">
+          <div
+            class="stat-value"
+            id="streakValue"
+            aria-label="Current streak"
+            style="color: var(--primary-color)"
+          >
+            0
+          </div>
+          <div class="stat-label">Streak</div>
         </div>
       </div>
 
-      <div class="progress-bar">
+      <div
+        class="progress-bar"
+        role="progressbar"
+        aria-label="Game progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
         <div class="progress-fill" id="progressFill" style="width: 0%"></div>
       </div>
 
-      <div class="game-board" id="gameBoard">
+      <div
+        class="game-board"
+        id="gameBoard"
+        role="grid"
+        aria-label="Memory card game board"
+      >
         <!-- Cards will be generated by JavaScript -->
       </div>
 
-      <div class="game-actions">
-        <button class="btn btn-primary" id="newGameBtn">
-          <i class="fas fa-refresh"></i> New Game
+      <div class="game-actions" role="region" aria-label="Game actions">
+        <button
+          class="btn btn-primary"
+          id="newGameBtn"
+          aria-label="Start a new game"
+        >
+          <i class="fas fa-refresh" aria-hidden="true"></i> New Game
         </button>
-        <button class="btn btn-hint" id="hintBtn">
-          <i class="fas fa-lightbulb"></i> Hint
+        <button
+          class="btn btn-hint"
+          id="hintBtn"
+          aria-label="Get a hint to reveal a card"
+        >
+          <i class="fas fa-lightbulb" aria-hidden="true"></i> Hint
         </button>
-        <button class="btn btn-secondary" id="pauseBtn">
-          <i class="fas fa-pause"></i> Pause
+        <button
+          class="btn btn-secondary"
+          id="pauseBtn"
+          aria-label="Pause or resume the game"
+        >
+          <i class="fas fa-pause" aria-hidden="true"></i> Pause
         </button>
         <button
           class="btn btn-secondary"
           onclick="window.location.href='games.html'"
+          aria-label="Return to games page"
         >
-          <i class="fas fa-arrow-left"></i> Back to Games
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
         </button>
       </div>
 
-      <div class="game-message" id="gameMessage"></div>
+      <div
+        class="game-message"
+        id="gameMessage"
+        role="alert"
+        aria-live="polite"
+      ></div>
     </div>
 
     <div class="completion-modal" id="completionModal">
@@ -752,6 +1009,11 @@
           this.timerInterval = null;
           this.gameActive = false;
           this.hints = 0;
+          this.currentStreak = 0;
+          this.bestStreak = 0;
+          this.score = 0;
+          this.isPaused = false;
+          this.pausedTime = 0;
 
           this.vocabularyData = {
             animals: [
@@ -1585,8 +1847,12 @@
               btn.onclick = () => {
                 document
                   .querySelectorAll(".difficulty-selector .selector-btn")
-                  .forEach((b) => b.classList.remove("active"));
+                  .forEach((b) => {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-checked", "false");
+                  });
                 btn.classList.add("active");
+                btn.setAttribute("aria-checked", "true");
                 this.difficulty = btn.dataset.difficulty;
                 this.startNewGame();
               };
@@ -1599,8 +1865,12 @@
               btn.onclick = () => {
                 document
                   .querySelectorAll(".category-selector .selector-btn")
-                  .forEach((b) => b.classList.remove("active"));
+                  .forEach((b) => {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-checked", "false");
+                  });
                 btn.classList.add("active");
+                btn.setAttribute("aria-checked", "true");
                 this.category = btn.dataset.category;
                 this.startNewGame();
               };
@@ -1612,6 +1882,27 @@
           document.getElementById("hintBtn").onclick = () => this.showHint();
           document.getElementById("pauseBtn").onclick = () =>
             this.togglePause();
+
+          // Keyboard support
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "h" || e.key === "H") {
+              e.preventDefault();
+              this.showHint();
+            } else if (e.key === " " || e.key === "p" || e.key === "P") {
+              e.preventDefault();
+              this.togglePause();
+            } else if (e.key === "n" || e.key === "N") {
+              e.preventDefault();
+              if (confirm("Start a new game? Current progress will be lost.")) {
+                this.startNewGame();
+              }
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              if (this.gameActive && !this.isPaused) {
+                this.togglePause();
+              }
+            }
+          });
         }
 
         startNewGame() {
@@ -1630,6 +1921,10 @@
           this.matchedPairs = 0;
           this.moves = 0;
           this.hints = 0;
+          this.currentStreak = 0;
+          this.score = 0;
+          this.isPaused = false;
+          this.pausedTime = 0;
           this.startTime = Date.now();
 
           if (this.timerInterval) {
@@ -1637,7 +1932,15 @@
           }
 
           this.updateStats();
+          const progressBar = document.querySelector(".progress-bar");
+          if (progressBar) {
+            progressBar.setAttribute("aria-valuenow", "0");
+          }
           document.getElementById("progressFill").style.width = "0%";
+
+          const pauseBtn = document.getElementById("pauseBtn");
+          pauseBtn.innerHTML =
+            '<i class="fas fa-pause" aria-hidden="true"></i> Pause';
         }
 
         generateCards() {
@@ -1698,6 +2001,9 @@
             const cardElement = document.createElement("div");
             cardElement.className = "memory-card";
             cardElement.dataset.index = index;
+            cardElement.setAttribute("role", "button");
+            cardElement.setAttribute("aria-label", `Card ${index + 1}, hidden`);
+            cardElement.setAttribute("tabindex", "0");
 
             cardElement.innerHTML = `
                         <div class="card-back">
@@ -1710,12 +2016,18 @@
                     `;
 
             cardElement.onclick = () => this.flipCard(index);
+            cardElement.onkeypress = (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                this.flipCard(index);
+              }
+            };
             board.appendChild(cardElement);
           });
         }
 
         flipCard(index) {
-          if (!this.gameActive) return;
+          if (!this.gameActive || this.isPaused) return;
 
           const card = this.cards[index];
           const cardElement = document.querySelector(`[data-index="${index}"]`);
@@ -1728,7 +2040,16 @@
           // Flip the card
           card.flipped = true;
           cardElement.classList.add("flipped");
+          cardElement.setAttribute(
+            "aria-label",
+            `Card ${index + 1}, showing ${
+              card.type === "word" ? card.content : "definition"
+            }`
+          );
           this.flippedCards.push(index);
+
+          // Play flip sound
+          this.playSound("flip");
 
           // Check for matches when 2 cards are flipped
           if (this.flippedCards.length === 2) {
@@ -1739,6 +2060,60 @@
               this.checkMatch();
             }, 1000);
           }
+        }
+
+        playSound(type) {
+          try {
+            const audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            if (type === "flip") {
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                audioContext.currentTime
+              );
+            } else if (type === "match") {
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                audioContext.currentTime
+              );
+              oscillator.frequency.setValueAtTime(
+                783.99,
+                audioContext.currentTime + 0.1
+              );
+            } else if (type === "nomatch") {
+              oscillator.frequency.setValueAtTime(
+                220,
+                audioContext.currentTime
+              );
+            }
+
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.2
+            );
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+          } catch (e) {
+            // Audio not supported
+          }
+        }
+
+        announceToScreenReader(message) {
+          const announcement = document.createElement("div");
+          announcement.setAttribute("role", "status");
+          announcement.setAttribute("aria-live", "polite");
+          announcement.className = "sr-only";
+          announcement.textContent = message;
+          document.body.appendChild(announcement);
+          setTimeout(() => announcement.remove(), 1000);
         }
 
         checkMatch() {
@@ -1772,12 +2147,50 @@
           secondCard.matched = true;
           firstElement.classList.add("matched");
           secondElement.classList.add("matched");
+          firstElement.setAttribute(
+            "aria-label",
+            `Card ${firstIndex + 1}, matched`
+          );
+          secondElement.setAttribute(
+            "aria-label",
+            `Card ${secondIndex + 1}, matched`
+          );
 
           this.matchedPairs++;
+          this.currentStreak++;
+
+          // Update best streak
+          if (this.currentStreak > this.bestStreak) {
+            this.bestStreak = this.currentStreak;
+          }
+
+          // Calculate score with streak bonus
+          const basePoints = 100;
+          const streakBonus = this.currentStreak * 10;
+          this.score += basePoints + streakBonus;
+
           this.updateStats();
           this.updateProgress();
 
-          this.showMessage("✅ Great match!", "success");
+          // Play match sound
+          this.playSound("match");
+
+          // Show combo if streak >= 3
+          if (this.currentStreak >= 3) {
+            this.showCombo(this.currentStreak);
+          }
+
+          this.showMessage(
+            `✅ Great match! ${
+              this.currentStreak > 1
+                ? `🔥 ${this.currentStreak}x Streak! +${streakBonus} bonus`
+                : ""
+            }`,
+            "success"
+          );
+          this.announceToScreenReader(
+            `Match found! Current streak: ${this.currentStreak}`
+          );
 
           // Check if game is complete
           if (
@@ -1787,6 +2200,17 @@
               this.completeGame();
             }, 1000);
           }
+        }
+
+        showCombo(streak) {
+          const combo = document.createElement("div");
+          combo.className = "combo-indicator";
+          combo.textContent = `🔥 ${streak}x COMBO!`;
+          document.body.appendChild(combo);
+
+          setTimeout(() => {
+            combo.remove();
+          }, 1000);
         }
 
         handleNoMatch(firstIndex, secondIndex) {
@@ -1804,8 +2228,23 @@
           secondCard.flipped = false;
           firstElement.classList.remove("flipped");
           secondElement.classList.remove("flipped");
+          firstElement.setAttribute(
+            "aria-label",
+            `Card ${firstIndex + 1}, hidden`
+          );
+          secondElement.setAttribute(
+            "aria-label",
+            `Card ${secondIndex + 1}, hidden`
+          );
+
+          // Reset streak
+          this.currentStreak = 0;
+
+          // Play no match sound
+          this.playSound("nomatch");
 
           this.updateStats();
+          this.announceToScreenReader("No match. Streak reset.");
         }
 
         showHint() {
@@ -1845,16 +2284,26 @@
         togglePause() {
           const pauseBtn = document.getElementById("pauseBtn");
 
-          if (this.gameActive) {
-            this.gameActive = false;
+          if (this.gameActive && !this.isPaused) {
+            this.isPaused = true;
+            this.pausedTime = Date.now();
             clearInterval(this.timerInterval);
-            pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+            pauseBtn.innerHTML =
+              '<i class="fas fa-play" aria-hidden="true"></i> Resume';
+            pauseBtn.setAttribute("aria-label", "Resume the game");
             this.showMessage("⏸️ Game paused", "info");
-          } else {
-            this.gameActive = true;
+            this.announceToScreenReader("Game paused");
+          } else if (this.gameActive && this.isPaused) {
+            this.isPaused = false;
+            // Adjust start time to account for pause duration
+            const pauseDuration = Date.now() - this.pausedTime;
+            this.startTime += pauseDuration;
             this.startTimer();
-            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            pauseBtn.innerHTML =
+              '<i class="fas fa-pause" aria-hidden="true"></i> Pause';
+            pauseBtn.setAttribute("aria-label", "Pause the game");
             this.showMessage("▶️ Game resumed", "info");
+            this.announceToScreenReader("Game resumed");
           }
         }
 
@@ -1883,12 +2332,24 @@
               ? Math.round((this.matchedPairs / this.moves) * 100)
               : 100;
           document.getElementById("accuracyValue").textContent = `${accuracy}%`;
+
+          document.getElementById("scoreValue").textContent = this.score;
+          document.getElementById("streakValue").textContent =
+            this.currentStreak;
         }
 
         updateProgress() {
           const totalPairs = this.difficultySettings[this.difficulty].pairs;
           const progress = (this.matchedPairs / totalPairs) * 100;
           document.getElementById("progressFill").style.width = `${progress}%`;
+
+          const progressBar = document.querySelector(".progress-bar");
+          if (progressBar) {
+            progressBar.setAttribute(
+              "aria-valuenow",
+              Math.round(progress).toString()
+            );
+          }
         }
 
         completeGame() {
@@ -1903,9 +2364,10 @@
           );
           const accuracyBonus = accuracy * 10;
           const hintPenalty = this.hints * 50;
+          const streakBonus = this.bestStreak * 50;
           const finalScore = Math.max(
             0,
-            timeBonus + accuracyBonus - hintPenalty
+            this.score + timeBonus + accuracyBonus - hintPenalty + streakBonus
           );
 
           // Update modal
@@ -1926,6 +2388,11 @@
 
           // Save stats
           this.saveGameStats(timeElapsed, accuracy, finalScore);
+
+          // Announce completion
+          this.announceToScreenReader(
+            `Congratulations! Game completed in ${minutes} minutes and ${seconds} seconds with ${accuracy}% accuracy. Final score: ${finalScore}`
+          );
         }
 
         updateStarRating(accuracy, timeElapsed) {

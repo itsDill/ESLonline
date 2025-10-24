@@ -76,8 +76,8 @@
       {
         "@context": "https://schema.org",
         "@type": "Game",
-        "name": "English UNO Card Game",
-        "description": "Play UNO with English word challenges! Master card strategy while building vocabulary through fun gameplay.",
+        "name": "English UNO Card Game - Vocabulary & Strategy",
+        "description": "Play UNO with English word challenges! Master card strategy while building vocabulary. Fun educational game with speaking prompts, perfect for ESL learners of all levels.",
         "url": "https://eslfunonline.com/games/uno.html",
         "image": "https://eslfunonline.com/images/image copy 12.png",
         "publisher": {
@@ -85,15 +85,35 @@
           "name": "ESL Fun Online",
           "url": "https://eslfunonline.com"
         },
-        "genre": ["Educational", "Card Game", "Vocabulary"],
+        "genre": ["Educational", "Card Game", "Vocabulary", "Strategy"],
         "audience": {
           "@type": "EducationalAudience",
           "educationalRole": "student",
-          "audienceType": "ESL Learners"
+          "audienceType": "ESL Learners of All Levels"
         },
-        "educationalUse": "Vocabulary Building",
+        "educationalLevel": "All Levels",
+        "educationalUse": [
+          "vocabulary building",
+          "strategic thinking",
+          "speaking practice",
+          "turn-based gameplay"
+        ],
         "interactivityType": "active",
-        "learningResourceType": "game"
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "fullKeyboardControl",
+          "screenReaderSupport"
+        ],
+        "accessibilityControl": ["fullKeyboardControl", "fullMouseControl"],
+        "accessibilityHazard": [
+          "noFlashingHazard",
+          "noMotionSimulationHazard",
+          "noSoundHazard"
+        ],
+        "keywords": "English UNO, ESL card game, vocabulary game, strategy game, educational UNO, word challenge"
       }
     </script>
 
@@ -1088,89 +1108,198 @@
           transform: translateX(0);
         }
       }
+
+      /* Accessibility Styles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Focus Styles for Keyboard Navigation */
+      .card:focus-visible,
+      .control-btn:focus-visible,
+      .action-btn:focus-visible,
+      .message-btn:focus-visible,
+      .color-option:focus-visible {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      /* Reduced Motion Support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* High Contrast Support */
+      @media (prefers-contrast: high) {
+        .card {
+          border-width: 4px;
+          font-weight: 900;
+        }
+
+        .control-btn,
+        .action-btn,
+        .message-btn {
+          border: 3px solid currentColor;
+        }
+      }
     </style>
     <link rel="canonical" href="https://eslfunonline.com/games/uno.html" />
   </head>
   <body>
-    <header class="game-header">
+    <!-- Screen reader announcements -->
+    <div
+      id="announcements"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <header class="game-header" role="banner">
       <div class="header-content">
         <h1 class="game-title">🎮 English UNO</h1>
         <div class="game-controls">
-          <button class="control-btn" onclick="newGame()">
-            <i class="fas fa-plus"></i>
+          <button
+            class="control-btn"
+            onclick="newGame()"
+            aria-label="Start a new game"
+          >
+            <i class="fas fa-plus" aria-hidden="true"></i>
             New Game
           </button>
-          <button class="control-btn secondary" onclick="showSettings()">
-            <i class="fas fa-cog"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showSettings()"
+            aria-label="Open settings"
+          >
+            <i class="fas fa-cog" aria-hidden="true"></i>
             Settings
           </button>
-          <button class="control-btn secondary" onclick="showRules()">
-            <i class="fas fa-question-circle"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showRules()"
+            aria-label="View game rules"
+          >
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
             Rules
           </button>
-          <button class="control-btn secondary" onclick="showStats()">
-            <i class="fas fa-chart-bar"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showStats()"
+            aria-label="View statistics"
+          >
+            <i class="fas fa-chart-bar" aria-hidden="true"></i>
             Stats
           </button>
-          <button class="control-btn secondary" onclick="showAchievements()">
-            <i class="fas fa-trophy"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showAchievements()"
+            aria-label="View achievements"
+          >
+            <i class="fas fa-trophy" aria-hidden="true"></i>
             Achievements
           </button>
-          <button class="control-btn secondary" onclick="showVocabularyQuiz()">
-            <i class="fas fa-book"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showVocabularyQuiz()"
+            aria-label="Take vocabulary quiz"
+          >
+            <i class="fas fa-book" aria-hidden="true"></i>
             Vocab Quiz
           </button>
-          <button class="control-btn secondary" onclick="showWordProgress()">
-            <i class="fas fa-chart-line"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showWordProgress()"
+            aria-label="View word progress"
+          >
+            <i class="fas fa-chart-line" aria-hidden="true"></i>
             Progress
           </button>
-          <button class="control-btn secondary" onclick="showDailyChallenges()">
-            <i class="fas fa-calendar-check"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showDailyChallenges()"
+            aria-label="View daily challenges"
+          >
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
             Challenges
           </button>
-          <button class="control-btn secondary" onclick="showPowerUps()">
-            <i class="fas fa-magic"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showPowerUps()"
+            aria-label="View power-ups"
+          >
+            <i class="fas fa-magic" aria-hidden="true"></i>
             Power-Ups
           </button>
         </div>
       </div>
     </header>
 
-    <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">
-      <i class="fas fa-volume-up"></i>
+    <button
+      class="sound-toggle"
+      id="soundToggle"
+      onclick="toggleSound()"
+      aria-label="Toggle sound effects"
+    >
+      <i class="fas fa-volume-up" aria-hidden="true"></i>
     </button>
 
-    <div class="game-container">
+    <div class="game-container" role="main">
       <!-- Game Status -->
-      <div class="game-status">
+      <div class="game-status" role="status" aria-live="polite">
         <div class="status-item">
-          <div class="status-icon player-icon">
+          <div class="status-icon player-icon" aria-hidden="true">
             <i class="fas fa-user"></i>
           </div>
           <div>
             <div>You</div>
-            <div id="playerCardCount">7 cards</div>
+            <div id="playerCardCount" aria-label="Your card count">7 cards</div>
             <div
               id="playerCombo"
               style="font-size: 0.7rem; color: var(--success-color)"
+              aria-label="Your combo count"
             >
               Combo: 0
             </div>
           </div>
         </div>
 
-        <div class="turn-indicator" id="turnIndicator">Your Turn</div>
+        <div
+          class="turn-indicator"
+          id="turnIndicator"
+          role="status"
+          aria-live="assertive"
+        >
+          Your Turn
+        </div>
 
         <div class="status-item">
-          <div class="status-icon computer-icon">
+          <div class="status-icon computer-icon" aria-hidden="true">
             <i class="fas fa-robot"></i>
           </div>
           <div>
             <div>Computer</div>
-            <div id="computerCardCount">7 cards</div>
+            <div id="computerCardCount" aria-label="Computer card count">
+              7 cards
+            </div>
             <div
               id="difficultyDisplay"
               style="font-size: 0.7rem; color: var(--warning-color)"
+              aria-label="Computer difficulty level"
             >
               Beginner
             </div>
@@ -1179,25 +1308,37 @@
       </div>
 
       <!-- Game Board -->
-      <div class="game-board">
+      <div class="game-board" role="region" aria-label="UNO game board">
         <!-- Computer Hand -->
-        <div class="computer-hand" id="computerHand">
+        <div
+          class="computer-hand"
+          id="computerHand"
+          role="region"
+          aria-label="Computer's hand"
+        >
           <!-- Computer cards will be generated here -->
         </div>
 
         <!-- Draw Deck -->
         <div class="deck-area">
-          <div class="draw-deck" onclick="drawCard()">
+          <div
+            class="draw-deck"
+            onclick="drawCard()"
+            role="button"
+            tabindex="0"
+            aria-label="Draw a card from deck"
+            onkeypress="if(event.key==='Enter'||event.key===' ')drawCard()"
+          >
             <div class="card card-back">
               <div class="card-number">UNO</div>
               <div class="card-icon">
-                <i class="fas fa-layer-group"></i>
+                <i class="fas fa-layer-group" aria-hidden="true"></i>
               </div>
             </div>
             <div class="card card-back"></div>
             <div class="card card-back"></div>
           </div>
-          <div class="game-stats">
+          <div class="game-stats" aria-live="polite">
             <div>Draw Pile</div>
             <div id="deckCount">Cards: 94</div>
           </div>
@@ -1205,10 +1346,15 @@
 
         <!-- Center Area -->
         <div class="center-area">
-          <div class="card current-card" id="currentCard">
+          <div
+            class="card current-card"
+            id="currentCard"
+            role="img"
+            aria-label="Current card in play"
+          >
             <!-- Current card will be displayed here -->
           </div>
-          <div class="game-stats">
+          <div class="game-stats" aria-live="polite">
             <div>Current Card</div>
             <div id="currentColor">Color: Red</div>
           </div>
@@ -1221,8 +1367,9 @@
               class="action-btn draw-btn"
               id="drawBtn"
               onclick="drawCard()"
+              aria-label="Draw a card"
             >
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-plus" aria-hidden="true"></i>
               Draw
             </button>
             <button
@@ -1230,50 +1377,110 @@
               id="unoBtn"
               onclick="callUno()"
               style="display: none"
+              aria-label="Call UNO when you have one card left"
             >
-              <i class="fas fa-exclamation"></i>
+              <i class="fas fa-exclamation" aria-hidden="true"></i>
               UNO!
             </button>
           </div>
-          <div class="game-stats">
+          <div class="game-stats" aria-live="polite">
             <div id="gameTimer">Time: 0:00</div>
             <div id="moveCount">Moves: 0</div>
           </div>
         </div>
 
         <!-- Player Hand -->
-        <div class="player-hand" id="playerHand">
+        <div
+          class="player-hand"
+          id="playerHand"
+          role="region"
+          aria-label="Your hand"
+        >
           <!-- Player cards will be generated here -->
         </div>
       </div>
     </div>
 
     <!-- Color Picker Modal -->
-    <div class="color-picker" id="colorPicker">
-      <div class="color-options">
-        <button class="color-option red" onclick="selectColor('red')">R</button>
-        <button class="color-option blue" onclick="selectColor('blue')">
+    <div
+      class="color-picker"
+      id="colorPicker"
+      role="dialog"
+      aria-labelledby="colorPickerTitle"
+      aria-modal="true"
+    >
+      <div id="colorPickerTitle" class="sr-only">
+        Choose a color for wild card
+      </div>
+      <div
+        class="color-options"
+        role="radiogroup"
+        aria-label="Select card color"
+      >
+        <button
+          class="color-option red"
+          onclick="selectColor('red')"
+          role="radio"
+          aria-label="Red"
+        >
+          R
+        </button>
+        <button
+          class="color-option blue"
+          onclick="selectColor('blue')"
+          role="radio"
+          aria-label="Blue"
+        >
           B
         </button>
-        <button class="color-option green" onclick="selectColor('green')">
+        <button
+          class="color-option green"
+          onclick="selectColor('green')"
+          role="radio"
+          aria-label="Green"
+        >
           G
         </button>
-        <button class="color-option yellow" onclick="selectColor('yellow')">
+        <button
+          class="color-option yellow"
+          onclick="selectColor('yellow')"
+          role="radio"
+          aria-label="Yellow"
+        >
           Y
         </button>
       </div>
     </div>
 
     <!-- Game Message Modal -->
-    <div class="game-message" id="gameMessage">
+    <div
+      class="game-message"
+      id="gameMessage"
+      role="dialog"
+      aria-labelledby="messageTitle"
+      aria-modal="true"
+    >
       <div class="message-title" id="messageTitle">Game Over!</div>
       <div class="message-text" id="messageText">Congratulations! You won!</div>
-      <button class="message-btn" onclick="closeMessage()">Continue</button>
+      <button
+        class="message-btn"
+        onclick="closeMessage()"
+        aria-label="Close message and continue"
+      >
+        Continue
+      </button>
     </div>
 
     <!-- Settings Modal -->
-    <div class="game-message" id="settingsModal" style="max-width: 500px">
-      <div class="message-title">Game Settings</div>
+    <div
+      class="game-message"
+      id="settingsModal"
+      style="max-width: 500px"
+      role="dialog"
+      aria-labelledby="settingsTitle"
+      aria-modal="true"
+    >
+      <div class="message-title" id="settingsTitle">Game Settings</div>
       <div style="text-align: left; margin: 1rem 0">
         <div style="margin-bottom: 1rem">
           <label style="display: block; margin-bottom: 0.5rem; font-weight: 600"
@@ -1705,6 +1912,200 @@
       // Difficulty levels
       let difficultyLevel = localStorage.getItem("unodifficulty") || "beginner";
 
+      // Web Audio API Sound Effects
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      function playSound(frequency, duration, type = "sine") {
+        if (!gameState.soundEnabled) return;
+
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = frequency;
+        oscillator.type = type;
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioContext.currentTime + duration
+        );
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + duration);
+      }
+
+      function playCardSound() {
+        playSound(400, 0.1);
+      }
+
+      function playDrawSound() {
+        playSound(300, 0.15);
+      }
+
+      function playUnoSound() {
+        playSound(600, 0.2);
+        setTimeout(() => playSound(800, 0.2), 100);
+      }
+
+      function playWinSound() {
+        playSound(523, 0.15);
+        setTimeout(() => playSound(659, 0.15), 100);
+        setTimeout(() => playSound(784, 0.3), 200);
+      }
+
+      function playLoseSound() {
+        playSound(400, 0.15);
+        setTimeout(() => playSound(300, 0.3), 100);
+      }
+
+      function playSkipSound() {
+        playSound(350, 0.1);
+        setTimeout(() => playSound(250, 0.1), 80);
+      }
+
+      function playReverseSound() {
+        playSound(500, 0.1);
+        setTimeout(() => playSound(400, 0.1), 80);
+        setTimeout(() => playSound(300, 0.1), 160);
+      }
+
+      // Screen Reader Announcements
+      function announceToScreenReader(message) {
+        const announcements = document.getElementById("announcements");
+        if (announcements) {
+          announcements.textContent = message;
+          setTimeout(() => {
+            announcements.textContent = "";
+          }, 1000);
+        }
+      }
+
+      // Keyboard Navigation
+      document.addEventListener("keydown", (e) => {
+        // Escape key - close modals
+        if (e.key === "Escape") {
+          const colorPicker = document.getElementById("colorPicker");
+          const gameMessage = document.getElementById("gameMessage");
+          const settingsModal = document.getElementById("settingsModal");
+
+          if (colorPicker?.style.display === "flex") {
+            colorPicker.style.display = "none";
+          }
+          if (gameMessage?.style.display === "flex") {
+            closeMessage();
+          }
+          if (settingsModal?.style.display === "flex") {
+            closeSettings();
+          }
+          return;
+        }
+
+        // Number keys 1-4 for color selection when picker is open
+        if (["1", "2", "3", "4"].includes(e.key)) {
+          const colorPicker = document.getElementById("colorPicker");
+          if (colorPicker?.style.display === "flex") {
+            const colors = ["red", "blue", "green", "yellow"];
+            selectColor(colors[parseInt(e.key) - 1]);
+            e.preventDefault();
+            return;
+          }
+        }
+
+        // D key - draw card
+        if (e.key === "d" || e.key === "D") {
+          const drawBtn = document.getElementById("drawBtn");
+          if (
+            drawBtn &&
+            !drawBtn.disabled &&
+            gameState.playerTurn &&
+            !gameState.gameOver
+          ) {
+            drawCard();
+            e.preventDefault();
+          }
+          return;
+        }
+
+        // U key - call UNO
+        if (e.key === "u" || e.key === "U") {
+          const unoBtn = document.getElementById("unoBtn");
+          if (unoBtn && unoBtn.style.display !== "none") {
+            callUno();
+            e.preventDefault();
+          }
+          return;
+        }
+
+        // N key - new game
+        if (e.key === "n" || e.key === "N") {
+          if (
+            !gameState.gameOver &&
+            !document.querySelector('[style*="display: flex"]')
+          ) {
+            if (confirm("Start a new game? Current progress will be lost.")) {
+              newGame();
+            }
+            e.preventDefault();
+          }
+          return;
+        }
+
+        // S key - toggle sound
+        if (e.key === "s" || e.key === "S") {
+          if (!e.ctrlKey && !e.metaKey) {
+            toggleSound();
+            e.preventDefault();
+          }
+          return;
+        }
+
+        // Arrow keys - navigate player's cards
+        if (gameState.playerTurn && !gameState.gameOver) {
+          const playerCards = document.querySelectorAll(
+            ".player-hand .card.playable"
+          );
+          const focused = document.activeElement;
+
+          if (e.key === "ArrowRight" && playerCards.length > 0) {
+            const index = Array.from(playerCards).indexOf(focused);
+            const nextIndex = (index + 1) % playerCards.length;
+            playerCards[nextIndex]?.focus();
+            e.preventDefault();
+          }
+
+          if (e.key === "ArrowLeft" && playerCards.length > 0) {
+            const index = Array.from(playerCards).indexOf(focused);
+            const nextIndex = index <= 0 ? playerCards.length - 1 : index - 1;
+            playerCards[nextIndex]?.focus();
+            e.preventDefault();
+          }
+        }
+      });
+
+      // Streak tracking
+      let currentStreak =
+        parseInt(localStorage.getItem("uno_currentStreak")) || 0;
+      let bestStreak = parseInt(localStorage.getItem("uno_bestStreak")) || 0;
+
+      function updateStreak(won) {
+        if (won) {
+          currentStreak++;
+          if (currentStreak > bestStreak) {
+            bestStreak = currentStreak;
+            localStorage.setItem("uno_bestStreak", bestStreak.toString());
+            announceToScreenReader(`New best streak: ${bestStreak} wins!`);
+          }
+          localStorage.setItem("uno_currentStreak", currentStreak.toString());
+        } else {
+          currentStreak = 0;
+          localStorage.setItem("uno_currentStreak", "0");
+        }
+      }
+
       // Achievement system
       const achievements = {
         firstWin: {
@@ -1946,11 +2347,28 @@
           if (isCardPlayable(card)) {
             cardDiv.classList.add("playable");
             cardDiv.onclick = () => playCard(index);
+            cardDiv.tabIndex = 0;
+            cardDiv.setAttribute("role", "button");
+            cardDiv.setAttribute(
+              "aria-label",
+              `Play ${card.value} ${card.color} card`
+            );
+            cardDiv.onkeypress = (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                playCard(index);
+                e.preventDefault();
+              }
+            };
 
             // Add tooltip for card hints
             if (gameState.showHints) {
               cardDiv.title = `Click to play this ${card.color} ${card.value}`;
             }
+          } else {
+            cardDiv.setAttribute(
+              "aria-label",
+              `${card.value} ${card.color} card - not playable`
+            );
           }
         }
 
@@ -2088,7 +2506,10 @@
 
         // Play the card
         executeCardPlay(card);
-        playSound("cardPlay");
+        playCardSound();
+        announceToScreenReader(
+          `Played ${card.value} ${card.color} card. ${gameState.playerHand.length} cards remaining.`
+        );
 
         // Check card shark achievement
         if (gameState.cardsPlayed >= 100) {
@@ -2137,10 +2558,14 @@
       function handleActionCard(card) {
         switch (card.value) {
           case "skip":
-            playSound("skip");
+            playSkipSound();
+            announceToScreenReader(
+              "Skip card played. Computer's turn skipped."
+            );
             break;
           case "reverse":
-            playSound("reverse");
+            playReverseSound();
+            announceToScreenReader("Reverse card played.");
             break;
           case "draw2":
             // Computer draws 2 cards
@@ -2148,7 +2573,10 @@
               if (gameState.deck.length === 0) reshuffleDeck();
               gameState.computerHand.push(gameState.deck.pop());
             }
-            playSound("draw");
+            playDrawSound();
+            announceToScreenReader(
+              "Draw 2 card played. Computer draws 2 cards."
+            );
             break;
         }
       }
@@ -2384,7 +2812,10 @@
         gameState.playerHand.push(drawnCard);
         gameState.moveCount++;
 
-        playSound("draw");
+        playDrawSound();
+        announceToScreenReader(
+          `Drew ${drawnCard.value} ${drawnCard.color} card. ${gameState.playerHand.length} cards in hand.`
+        );
         updateDisplay();
 
         // Check if drawn card is playable
@@ -2402,6 +2833,7 @@
         } else {
           // End turn
           gameState.playerTurn = false;
+          announceToScreenReader("No playable card. Computer's turn.");
           setTimeout(computerTurn, 1000);
         }
       }
@@ -2558,7 +2990,8 @@
         if (gameState.playerHand.length === 1) {
           gameState.playerCalledUno = true;
           showMessage("UNO!", "You called UNO with one card left!");
-          playSound("uno");
+          playUnoSound();
+          announceToScreenReader("UNO! You have one card left!");
           updateUnoButton();
         }
       }
@@ -2572,6 +3005,7 @@
 
         if (playerWon) {
           gameState.stats.gamesWon++;
+          updateStreak(true);
 
           // Update challenges
           updateChallengeProgress("win_games");
@@ -2602,16 +3036,23 @@
             unlockAchievement("unoMaster");
           }
 
+          const streakText =
+            currentStreak > 1 ? ` Win streak: ${currentStreak}!` : "";
           showMessage(
             "🎉 Congratulations!",
             `You won in ${Math.round(gameTime / 1000)}s with ${
               gameState.moveCount
-            } moves!`
+            } moves!${streakText}`
           );
-          playSound("win");
+          playWinSound();
+          announceToScreenReader(
+            `You won! Win streak: ${currentStreak}. Best streak: ${bestStreak}.`
+          );
         } else {
+          updateStreak(false);
           showMessage("😞 Game Over", "Computer wins this time. Try again! 🤖");
-          playSound("lose");
+          playLoseSound();
+          announceToScreenReader("Computer won. Streak reset. Try again!");
         }
 
         // Update statistics
@@ -2846,6 +3287,10 @@
                 • Games Won: ${gameState.stats.gamesWon}
                 • Win Rate: ${winRate}%
                 • Average Game Time: ${avgTime}s
+                • Current Win Streak: ${currentStreak}
+                • Best Win Streak: ${bestStreak}
+                • Max Combo: ${gameState.maxCombo}
+                • Cards Played: ${gameState.cardsPlayed}
             `;
         showMessage("Your Stats", statsText);
       }

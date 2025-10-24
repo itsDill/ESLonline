@@ -56,6 +56,52 @@
       href="https://eslfunonline.com/games/story-builder.html"
     />
 
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "Story Builder - Collaborative Creative Writing Game",
+        "description": "Create amazing collaborative stories! Practice creative writing, improve grammar, and develop storytelling skills through interactive gameplay.",
+        "url": "https://eslfunonline.com/games/story-builder.html",
+        "image": "https://eslfunonline.com/images/image copy 9.png",
+        "publisher": {
+          "@type": "Organization",
+          "name": "ESL Fun Online",
+          "url": "https://eslfunonline.com"
+        },
+        "genre": ["Educational", "Creative Writing", "Storytelling"],
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student",
+          "audienceType": "ESL Learners and Creative Writers"
+        },
+        "educationalLevel": "Intermediate to Advanced",
+        "educationalUse": [
+          "creative writing practice",
+          "grammar improvement",
+          "storytelling skills",
+          "collaborative learning"
+        ],
+        "interactivityType": "active",
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "fullKeyboardControl",
+          "screenReaderSupport"
+        ],
+        "accessibilityControl": ["fullKeyboardControl", "fullMouseControl"],
+        "accessibilityHazard": [
+          "noFlashingHazard",
+          "noMotionSimulationHazard",
+          "noSoundHazard"
+        ],
+        "keywords": "story builder, creative writing, ESL writing, collaborative storytelling, grammar practice, writing skills, creative game"
+      }
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -532,67 +578,211 @@
           gap: 0.5rem;
         }
       }
+
+      /* Accessibility */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      .mode-btn:focus-visible,
+      .theme-option:focus-visible,
+      .suggestion:focus-visible {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="game-container">
-      <div class="game-header">
-        <h1><i class="fas fa-feather-alt"></i> Story Builder</h1>
+      <div class="game-header" role="banner">
+        <h1>
+          <i class="fas fa-feather-alt" aria-hidden="true"></i> Story Builder
+        </h1>
         <p>Create collaborative stories and practice creative writing!</p>
       </div>
 
-      <div class="story-modes">
-        <button class="mode-btn active" data-mode="solo">Solo Story</button>
-        <button class="mode-btn" data-mode="collaborative">
+      <div class="story-modes" role="tablist" aria-label="Story mode selection">
+        <button
+          class="mode-btn active"
+          data-mode="solo"
+          role="tab"
+          aria-selected="true"
+          aria-controls="storyContent"
+        >
+          Solo Story
+        </button>
+        <button
+          class="mode-btn"
+          data-mode="collaborative"
+          role="tab"
+          aria-selected="false"
+          aria-controls="storyContent"
+        >
           Collaborative
         </button>
-        <button class="mode-btn" data-mode="prompt">Prompt Challenge</button>
+        <button
+          class="mode-btn"
+          data-mode="prompt"
+          role="tab"
+          aria-selected="false"
+          aria-controls="storyContent"
+        >
+          Prompt Challenge
+        </button>
       </div>
 
-      <div class="genre-selector">
-        <button class="genre-btn active" data-genre="adventure">
+      <div
+        class="genre-selector"
+        role="radiogroup"
+        aria-label="Story genre selection"
+      >
+        <button
+          class="genre-btn active"
+          data-genre="adventure"
+          role="radio"
+          aria-checked="true"
+        >
           Adventure
         </button>
-        <button class="genre-btn" data-genre="mystery">Mystery</button>
-        <button class="genre-btn" data-genre="romance">Romance</button>
-        <button class="genre-btn" data-genre="fantasy">Fantasy</button>
-        <button class="genre-btn" data-genre="scifi">Sci-Fi</button>
-        <button class="genre-btn" data-genre="comedy">Comedy</button>
+        <button
+          class="genre-btn"
+          data-genre="mystery"
+          role="radio"
+          aria-checked="false"
+        >
+          Mystery
+        </button>
+        <button
+          class="genre-btn"
+          data-genre="romance"
+          role="radio"
+          aria-checked="false"
+        >
+          Romance
+        </button>
+        <button
+          class="genre-btn"
+          data-genre="fantasy"
+          role="radio"
+          aria-checked="false"
+        >
+          Fantasy
+        </button>
+        <button
+          class="genre-btn"
+          data-genre="scifi"
+          role="radio"
+          aria-checked="false"
+        >
+          Sci-Fi
+        </button>
+        <button
+          class="genre-btn"
+          data-genre="comedy"
+          role="radio"
+          aria-checked="false"
+        >
+          Comedy
+        </button>
       </div>
 
-      <div class="story-setup" id="storySetup">
-        <h3><i class="fas fa-cog"></i> Choose Your Story Elements</h3>
+      <div
+        class="story-setup"
+        id="storySetup"
+        role="region"
+        aria-label="Story setup"
+      >
+        <h3>
+          <i class="fas fa-cog" aria-hidden="true"></i> Choose Your Story
+          Elements
+        </h3>
         <div class="setup-grid" id="setupGrid">
           <!-- Setup cards will be populated by JavaScript -->
         </div>
         <div class="game-controls">
-          <button class="btn btn-primary" id="startStoryBtn">
-            <i class="fas fa-play"></i> Start Story
+          <button
+            class="btn btn-primary"
+            id="startStoryBtn"
+            aria-label="Start creating your story"
+          >
+            <i class="fas fa-play" aria-hidden="true"></i> Start Story
           </button>
         </div>
       </div>
 
-      <div class="story-stats">
+      <div
+        class="story-stats"
+        role="status"
+        aria-live="polite"
+        aria-label="Story statistics"
+      >
         <div class="stat-card">
-          <div class="stat-value" id="paragraphCount">0</div>
+          <div
+            class="stat-value"
+            id="paragraphCount"
+            aria-label="Number of paragraphs"
+          >
+            0
+          </div>
           <div class="stat-label">Paragraphs</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="wordCount">0</div>
+          <div class="stat-value" id="wordCount" aria-label="Total word count">
+            0
+          </div>
           <div class="stat-label">Total Words</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="storyScore">0</div>
+          <div
+            class="stat-value"
+            id="storyScore"
+            aria-label="Current story score"
+          >
+            0
+          </div>
           <div class="stat-label">Score</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="genreDisplay">Adventure</div>
+          <div class="stat-value" id="genreDisplay" aria-label="Selected genre">
+            Adventure
+          </div>
           <div class="stat-label">Genre</div>
         </div>
       </div>
 
-      <div class="story-area">
-        <div class="story-display" id="storyDisplay">
+      <div
+        class="story-area"
+        role="main"
+        aria-label="Story creation area"
+        id="storyContent"
+      >
+        <div
+          class="story-display"
+          id="storyDisplay"
+          role="article"
+          aria-live="polite"
+        >
           <p
             style="
               text-align: center;
@@ -605,72 +795,142 @@
         </div>
 
         <div class="input-section">
-          <div class="prompt-display" id="promptDisplay">
+          <div
+            class="prompt-display"
+            id="promptDisplay"
+            role="status"
+            aria-live="polite"
+          >
             Click "Start Story" to begin your creative journey!
           </div>
 
           <textarea
             class="story-input"
             id="storyInput"
+            aria-label="Write your story contribution here"
             placeholder="Write the next part of your story here..."
             disabled
           ></textarea>
 
           <div class="input-help">
-            <span class="word-count" id="inputWordCount">0 words</span>
-            <span class="writing-tip" id="writingTip"
+            <span class="word-count" id="inputWordCount" aria-live="polite"
+              >0 words</span
+            >
+            <span class="writing-tip" id="writingTip" role="status"
               >Tip: Use descriptive language!</span
             >
           </div>
 
-          <div class="suggestion-chips" id="suggestionChips">
+          <div
+            class="suggestion-chips"
+            id="suggestionChips"
+            role="group"
+            aria-label="Writing suggestions"
+          >
             <!-- Writing suggestions will appear here -->
           </div>
         </div>
       </div>
 
-      <div class="game-controls">
-        <button class="btn btn-primary" id="addParagraphBtn" disabled>
-          <i class="fas fa-plus"></i> Add to Story
+      <div
+        class="game-controls"
+        role="group"
+        aria-label="Story control buttons"
+      >
+        <button
+          class="btn btn-primary"
+          id="addParagraphBtn"
+          disabled
+          aria-label="Add your paragraph to the story"
+        >
+          <i class="fas fa-plus" aria-hidden="true"></i> Add to Story
         </button>
-        <button class="btn btn-hint" id="hintBtn">
-          <i class="fas fa-lightbulb"></i> Writing Hint
+        <button
+          class="btn btn-hint"
+          id="hintBtn"
+          aria-label="Get a writing hint"
+        >
+          <i class="fas fa-lightbulb" aria-hidden="true"></i> Writing Hint
         </button>
-        <button class="btn btn-secondary" id="undoBtn" disabled>
-          <i class="fas fa-undo"></i> Undo Last
+        <button
+          class="btn btn-secondary"
+          id="undoBtn"
+          disabled
+          aria-label="Undo the last paragraph"
+        >
+          <i class="fas fa-undo" aria-hidden="true"></i> Undo Last
         </button>
-        <button class="btn btn-success" id="finishStoryBtn" disabled>
-          <i class="fas fa-check"></i> Finish Story
+        <button
+          class="btn btn-success"
+          id="finishStoryBtn"
+          disabled
+          aria-label="Finish and complete your story"
+        >
+          <i class="fas fa-check" aria-hidden="true"></i> Finish Story
         </button>
       </div>
 
-      <div class="story-sharing" id="storySharing">
-        <h3><i class="fas fa-share"></i> Share Your Story</h3>
+      <div
+        class="story-sharing"
+        id="storySharing"
+        role="region"
+        aria-label="Story sharing options"
+      >
+        <h3>
+          <i class="fas fa-share" aria-hidden="true"></i> Share Your Story
+        </h3>
         <p>Great job completing your story! Here are your sharing options:</p>
         <div class="sharing-options">
-          <button class="btn btn-primary" id="copyStoryBtn">
-            <i class="fas fa-copy"></i> Copy Text
+          <button
+            class="btn btn-primary"
+            id="copyStoryBtn"
+            aria-label="Copy story text to clipboard"
+          >
+            <i class="fas fa-copy" aria-hidden="true"></i> Copy Text
           </button>
-          <button class="btn btn-secondary" id="saveStoryBtn">
-            <i class="fas fa-save"></i> Save Story
+          <button
+            class="btn btn-secondary"
+            id="saveStoryBtn"
+            aria-label="Save story to file"
+          >
+            <i class="fas fa-save" aria-hidden="true"></i> Save Story
           </button>
-          <button class="btn btn-hint" id="printStoryBtn">
-            <i class="fas fa-print"></i> Print Story
+          <button
+            class="btn btn-hint"
+            id="printStoryBtn"
+            aria-label="Print your story"
+          >
+            <i class="fas fa-print" aria-hidden="true"></i> Print Story
           </button>
         </div>
       </div>
 
-      <div class="game-message" id="gameMessage" style="display: none"></div>
+      <div
+        class="game-message"
+        id="gameMessage"
+        style="display: none"
+        role="alert"
+        aria-live="assertive"
+      ></div>
 
-      <div class="game-controls">
-        <button class="btn btn-success" id="newStoryBtn">
-          <i class="fas fa-file-alt"></i> New Story
+      <div
+        class="game-controls"
+        role="navigation"
+        aria-label="Navigation buttons"
+      >
+        <button
+          class="btn btn-success"
+          id="newStoryBtn"
+          aria-label="Start a new story"
+        >
+          <i class="fas fa-file-alt" aria-hidden="true"></i> New Story
         </button>
         <button
           class="btn btn-secondary"
           onclick="window.location.href='games.html'"
+          aria-label="Go back to games menu"
         >
-          <i class="fas fa-arrow-left"></i> Back to Games
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
         </button>
       </div>
     </div>
@@ -687,6 +947,28 @@
           this.score = 0;
           this.currentPrompt = "";
           this.isStoryStarted = false;
+          this.currentStreak = 0;
+          this.bestStreak = parseInt(
+            localStorage.getItem("sb_bestStreak") || "0"
+          );
+
+          // Stats tracking
+          this.stats = {
+            storiesCompleted: parseInt(
+              localStorage.getItem("sb_storiesCompleted") || "0"
+            ),
+            totalParagraphs: parseInt(
+              localStorage.getItem("sb_totalParagraphs") || "0"
+            ),
+            totalWords: parseInt(localStorage.getItem("sb_totalWords") || "0"),
+            bestStreak: parseInt(localStorage.getItem("sb_bestStreak") || "0"),
+          };
+
+          // Audio context for sound effects
+          this.audioContext = null;
+          this.soundEnabled = true;
+
+          this.initAudio();
 
           this.storySetups = {
             adventure: {
@@ -917,6 +1199,131 @@
           this.init();
         }
 
+        // Initialize audio context
+        initAudio() {
+          if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+          }
+        }
+
+        // Play sound effect
+        playSound(type) {
+          if (!this.soundEnabled || !this.audioContext) return;
+
+          const oscillator = this.audioContext.createOscillator();
+          const gainNode = this.audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(this.audioContext.destination);
+
+          switch (type) {
+            case "success":
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                this.audioContext.currentTime
+              );
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                this.audioContext.currentTime + 0.1
+              );
+              gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.2
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.2);
+              break;
+            case "add":
+              oscillator.frequency.setValueAtTime(
+                440,
+                this.audioContext.currentTime
+              );
+              gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.15
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.15);
+              break;
+            case "complete":
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                this.audioContext.currentTime
+              );
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                this.audioContext.currentTime + 0.15
+              );
+              oscillator.frequency.setValueAtTime(
+                783.99,
+                this.audioContext.currentTime + 0.3
+              );
+              oscillator.frequency.setValueAtTime(
+                1046.5,
+                this.audioContext.currentTime + 0.45
+              );
+              gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.6
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.6);
+              break;
+          }
+        }
+
+        // Screen reader announcements
+        announceToScreenReader(message) {
+          const announcement = document.createElement("div");
+          announcement.className = "sr-only";
+          announcement.setAttribute("role", "status");
+          announcement.setAttribute("aria-live", "polite");
+          announcement.textContent = message;
+          document.body.appendChild(announcement);
+          setTimeout(() => announcement.remove(), 1000);
+        }
+
+        // Save stats to localStorage
+        saveStats() {
+          localStorage.setItem(
+            "sb_storiesCompleted",
+            this.stats.storiesCompleted.toString()
+          );
+          localStorage.setItem(
+            "sb_totalParagraphs",
+            this.stats.totalParagraphs.toString()
+          );
+          localStorage.setItem(
+            "sb_totalWords",
+            this.stats.totalWords.toString()
+          );
+          localStorage.setItem(
+            "sb_bestStreak",
+            this.stats.bestStreak.toString()
+          );
+        }
+
+        // Update streak tracking
+        updateStreak(added) {
+          if (added) {
+            this.currentStreak++;
+            if (this.currentStreak > this.bestStreak) {
+              this.bestStreak = this.currentStreak;
+              this.stats.bestStreak = this.bestStreak;
+              this.saveStats();
+              this.announceToScreenReader(
+                `New best streak: ${this.bestStreak} paragraphs!`
+              );
+            }
+          } else {
+            this.currentStreak = 0;
+          }
+        }
+
         init() {
           this.setupEventListeners();
           this.showSetup();
@@ -927,25 +1334,33 @@
           // Mode selection
           document.querySelectorAll(".mode-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".mode-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".mode-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-selected", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-selected", "true");
               this.currentMode = btn.dataset.mode;
               this.showSetup();
+              this.announceToScreenReader(`Mode changed to ${btn.textContent}`);
             };
           });
 
           // Genre selection
           document.querySelectorAll(".genre-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".genre-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".genre-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-checked", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-checked", "true");
               this.currentGenre = btn.dataset.genre;
               this.showSetup();
               this.updateStats();
+              this.announceToScreenReader(
+                `Genre changed to ${btn.textContent}`
+              );
             };
           });
 
@@ -970,7 +1385,42 @@
           );
           storyInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter" && e.ctrlKey) {
+              e.preventDefault();
               this.addParagraph();
+            }
+          });
+
+          // Keyboard shortcuts
+          document.addEventListener("keydown", (e) => {
+            // Ctrl+Enter to add paragraph
+            if (
+              e.ctrlKey &&
+              e.key === "Enter" &&
+              !document.getElementById("addParagraphBtn").disabled
+            ) {
+              e.preventDefault();
+              this.addParagraph();
+            }
+            // Ctrl+H for hint
+            if (e.ctrlKey && e.key === "h") {
+              e.preventDefault();
+              this.showWritingHint();
+            }
+            // Ctrl+Z for undo
+            if (
+              e.ctrlKey &&
+              e.key === "z" &&
+              !document.getElementById("undoBtn").disabled
+            ) {
+              e.preventDefault();
+              this.undoLastParagraph();
+            }
+            // Escape to finish story
+            if (
+              e.key === "Escape" &&
+              !document.getElementById("finishStoryBtn").disabled
+            ) {
+              this.finishStory();
             }
           });
 
@@ -1008,6 +1458,13 @@
 
           Object.keys(setupData).forEach((category) => {
             const categoryDiv = document.createElement("div");
+            categoryDiv.setAttribute("role", "radiogroup");
+            categoryDiv.setAttribute(
+              "aria-label",
+              `${
+                category.charAt(0).toUpperCase() + category.slice(1)
+              } selection`
+            );
             categoryDiv.innerHTML = `
                         <h4 style="margin-bottom: 1rem; text-align: center; color: var(--primary-color);">
                             ${
@@ -1020,12 +1477,22 @@
             setupData[category].forEach((item) => {
               const card = document.createElement("div");
               card.className = "setup-card";
+              card.setAttribute("role", "radio");
+              card.setAttribute("aria-checked", "false");
+              card.setAttribute("aria-label", item);
+              card.setAttribute("tabindex", "0");
               card.innerHTML = `
                             <h4>${item}</h4>
                             <p>Click to select</p>
                         `;
               card.onclick = () =>
                 this.selectStoryElement(category, item, card);
+              card.onkeypress = (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  this.selectStoryElement(category, item, card);
+                }
+              };
               categoryDiv.appendChild(card);
             });
 
@@ -1037,11 +1504,16 @@
           // Deselect other cards in the same category
           const categoryCards =
             cardElement.parentElement.querySelectorAll(".setup-card");
-          categoryCards.forEach((card) => card.classList.remove("selected"));
+          categoryCards.forEach((card) => {
+            card.classList.remove("selected");
+            card.setAttribute("aria-checked", "false");
+          });
 
           // Select this card
           cardElement.classList.add("selected");
+          cardElement.setAttribute("aria-checked", "true");
           this.storyElements[category] = item;
+          this.announceToScreenReader(`Selected ${item} for ${category}`);
         }
 
         startStory() {
@@ -1061,6 +1533,7 @@
           }
 
           this.isStoryStarted = true;
+          this.currentStreak = 0;
           document.getElementById("storySetup").classList.remove("active");
           document.getElementById("storyInput").disabled = false;
           document.getElementById("addParagraphBtn").disabled = false;
@@ -1071,6 +1544,10 @@
           this.showMessage(
             "🎉 Story started! Begin writing your opening paragraph.",
             "success"
+          );
+          this.playSound("success");
+          this.announceToScreenReader(
+            "Story started! You can now write your first paragraph. Press Ctrl+Enter to add it to the story."
           );
         }
 
@@ -1129,9 +1606,15 @@
           const points = Math.min(paragraph.wordCount * 2, 100);
           this.score += points;
           this.updateStats();
+          this.updateStreak(true);
+
+          this.playSound("add");
+          this.announceToScreenReader(
+            `Paragraph added! ${paragraph.wordCount} words. Score increased by ${points} points. Current streak: ${this.currentStreak}`
+          );
 
           this.showMessage(
-            `Great! Added ${paragraph.wordCount} words. (+${points} points)`,
+            `Great! Added ${paragraph.wordCount} words. (+${points} points) Streak: ${this.currentStreak}`,
             "success"
           );
         }
@@ -1272,6 +1755,17 @@
 
           const bonusPoints = this.story.length * 50;
           this.score += bonusPoints;
+
+          // Update global stats
+          this.stats.storiesCompleted++;
+          this.stats.totalParagraphs += this.story.length;
+          const storyWords = this.story.reduce(
+            (sum, p) => sum + p.wordCount,
+            0
+          );
+          this.stats.totalWords += storyWords;
+          this.saveStats();
+
           this.updateStats();
 
           document.getElementById("storySharing").classList.add("show");
@@ -1279,8 +1773,13 @@
           document.getElementById("finishStoryBtn").disabled = true;
           document.getElementById("storyInput").disabled = true;
 
+          this.playSound("complete");
+          this.announceToScreenReader(
+            `Story completed! ${this.story.length} paragraphs, ${storyWords} words. Final score: ${this.score}. Best streak: ${this.bestStreak}`
+          );
+
           this.showMessage(
-            `🎉 Story completed! Bonus: ${bonusPoints} points for finishing!`,
+            `🎉 Story completed! Bonus: ${bonusPoints} points. Total: ${this.score}! Best streak: ${this.bestStreak}`,
             "success"
           );
         }
@@ -1291,6 +1790,7 @@
           this.paragraphCount = 0;
           this.totalWords = 0;
           this.score = 0;
+          this.currentStreak = 0;
           this.isStoryStarted = false;
 
           this.updateStoryDisplay();
@@ -1308,6 +1808,9 @@
           document.getElementById("storyInput").value = "";
           this.updateInputWordCount();
 
+          this.announceToScreenReader(
+            "New story started. Select your story elements to begin."
+          );
           this.showMessage("✨ Ready to create a new story!", "info");
         }
 
@@ -1323,9 +1826,13 @@
             .writeText(fullText)
             .then(() => {
               this.showMessage("📋 Story copied to clipboard!", "success");
+              this.announceToScreenReader(
+                "Story copied to clipboard successfully"
+              );
             })
             .catch(() => {
               this.showMessage("Could not copy story to clipboard.", "warning");
+              this.announceToScreenReader("Failed to copy story to clipboard");
             });
         }
 
@@ -1346,6 +1853,7 @@
           URL.revokeObjectURL(url);
 
           this.showMessage("💾 Story downloaded!", "success");
+          this.announceToScreenReader("Story file downloaded successfully");
         }
 
         printStory() {

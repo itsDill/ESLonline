@@ -51,6 +51,32 @@
       href="https://eslfunonline.com/games/balanceman.html"
     />
 
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "BalanceMan - ESL Hangman Word Game",
+        "description": "Play BalanceMan - an exciting ESL hangman-style word guessing game! Improve vocabulary across categories like animals, food, objects with progressive difficulty levels.",
+        "url": "https://eslfunonline.com/games/balanceman.html",
+        "image": "https://eslfunonline.com/images/image copy 10.png",
+        "author": {
+          "@type": "Organization",
+          "name": "ESL Fun Online"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ESL Fun Online"
+        },
+        "genre": "Educational Game",
+        "educationalUse": "Vocabulary Building",
+        "learningResourceType": "Game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "isFamilyFriendly": true
+      }
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -967,6 +993,19 @@
         outline-offset: 2px;
       }
 
+      /* Screen reader only class */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
       /* Enhanced hint button */
       .btn-hint {
         background: linear-gradient(
@@ -1019,9 +1058,15 @@
     </style>
   </head>
   <body>
-    <div class="game-container">
-      <div class="game-header">
-        <h1><i class="fas fa-balance-scale"></i> BalanceMan</h1>
+    <div
+      class="game-container"
+      role="main"
+      aria-label="BalanceMan word guessing game"
+    >
+      <header class="game-header">
+        <h1>
+          <i class="fas fa-balance-scale" aria-hidden="true"></i> BalanceMan
+        </h1>
         <p>Help BalanceMan stay balanced by guessing the English word!</p>
         <p
           style="
@@ -1029,85 +1074,252 @@
             color: var(--text-secondary);
             margin-top: 0.5rem;
           "
+          role="note"
+          aria-label="Keyboard shortcuts"
         >
           💡 Use keyboard: A-Z to guess, H for hint, Enter for new game, Esc to
           exit
         </p>
-      </div>
+      </header>
 
-      <div class="difficulty-selector" id="difficultySelector">
-        <h3>Choose Difficulty:</h3>
-        <button class="difficulty-btn active" data-difficulty="easy">
+      <div
+        class="difficulty-selector"
+        id="difficultySelector"
+        role="radiogroup"
+        aria-label="Select difficulty level"
+      >
+        <h3 id="difficulty-label">Choose Difficulty:</h3>
+        <button
+          class="difficulty-btn active"
+          data-difficulty="easy"
+          role="radio"
+          aria-checked="true"
+          aria-labelledby="difficulty-label"
+        >
           Easy (4-6 letters)
         </button>
-        <button class="difficulty-btn" data-difficulty="medium">
+        <button
+          class="difficulty-btn"
+          data-difficulty="medium"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="difficulty-label"
+        >
           Medium (7-9 letters)
         </button>
-        <button class="difficulty-btn" data-difficulty="hard">
+        <button
+          class="difficulty-btn"
+          data-difficulty="hard"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="difficulty-label"
+        >
           Hard (10+ letters)
         </button>
       </div>
 
-      <div class="category-selector" id="categorySelector">
-        <h3>Choose Category:</h3>
-        <button class="category-btn active" data-category="general">
+      <div
+        class="category-selector"
+        id="categorySelector"
+        role="radiogroup"
+        aria-label="Select word category"
+      >
+        <h3 id="category-label">Choose Category:</h3>
+        <button
+          class="category-btn active"
+          data-category="general"
+          role="radio"
+          aria-checked="true"
+          aria-labelledby="category-label"
+        >
           General
         </button>
-        <button class="category-btn" data-category="animals">Animals</button>
-        <button class="category-btn" data-category="food">Food</button>
-        <button class="category-btn" data-category="colors">Colors</button>
-        <button class="category-btn" data-category="family">Family</button>
-        <button class="category-btn" data-category="school">School</button>
-        <button class="category-btn" data-category="weather">Weather</button>
+        <button
+          class="category-btn"
+          data-category="animals"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          Animals
+        </button>
+        <button
+          class="category-btn"
+          data-category="food"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          Food
+        </button>
+        <button
+          class="category-btn"
+          data-category="colors"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          Colors
+        </button>
+        <button
+          class="category-btn"
+          data-category="family"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          Family
+        </button>
+        <button
+          class="category-btn"
+          data-category="school"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          School
+        </button>
+        <button
+          class="category-btn"
+          data-category="weather"
+          role="radio"
+          aria-checked="false"
+          aria-labelledby="category-label"
+        >
+          Weather
+        </button>
       </div>
 
-      <div class="balance-area">
-        <div class="balanceman safe" id="balancemanFigure">⚖️</div>
-        <div class="balance-status" id="balanceStatus">
+      <div class="balance-area" role="region" aria-label="Game status area">
+        <div class="balanceman safe" id="balancemanFigure" aria-hidden="true">
+          ⚖️
+        </div>
+        <div
+          class="balance-status"
+          id="balanceStatus"
+          role="status"
+          aria-live="polite"
+        >
           BalanceMan is stable!
         </div>
-        <div class="progress-bar">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-label="Wrong guesses progress"
+          aria-valuemin="0"
+          aria-valuemax="6"
+          aria-valuenow="0"
+        >
           <div class="progress-fill" id="progressFill" style="width: 0%"></div>
         </div>
-        <div class="word-display" id="wordDisplay"></div>
-        <div class="word-hint" id="wordHint"></div>
+        <div
+          class="word-display"
+          id="wordDisplay"
+          role="status"
+          aria-live="polite"
+          aria-label="Current word progress"
+        ></div>
+        <div class="word-hint" id="wordHint" role="note"></div>
       </div>
 
-      <div class="game-stats">
+      <div class="game-stats" role="region" aria-label="Game statistics">
         <div class="stat">
-          <div class="stat-value" id="correctGuesses">0</div>
+          <div
+            class="stat-value"
+            id="correctGuesses"
+            aria-label="Correct guesses"
+          >
+            0
+          </div>
           <div class="stat-label">Correct</div>
         </div>
         <div class="stat">
-          <div class="stat-value" id="wrongGuesses">0</div>
+          <div class="stat-value" id="wrongGuesses" aria-label="Wrong guesses">
+            0
+          </div>
           <div class="stat-label">Wrong</div>
         </div>
         <div class="stat">
-          <div class="stat-value" id="wordsCompleted">0</div>
+          <div
+            class="stat-value"
+            id="wordsCompleted"
+            aria-label="Words completed"
+          >
+            0
+          </div>
           <div class="stat-label">Words</div>
         </div>
         <div class="stat">
-          <div class="stat-value" id="gameScore">0</div>
+          <div class="stat-value" id="gameScore" aria-label="Current score">
+            0
+          </div>
           <div class="stat-label">Score</div>
+        </div>
+        <div class="stat">
+          <div
+            class="stat-value"
+            id="currentStreak"
+            aria-label="Current winning streak"
+          >
+            0
+          </div>
+          <div class="stat-label">Streak</div>
+        </div>
+        <div class="stat">
+          <div
+            class="stat-value"
+            id="bestStreak"
+            aria-label="Best winning streak"
+          >
+            0
+          </div>
+          <div class="stat-label">Best</div>
         </div>
       </div>
 
-      <div class="alphabet-grid" id="alphabetGrid"></div>
+      <div
+        class="alphabet-grid"
+        id="alphabetGrid"
+        role="group"
+        aria-label="Letter selection buttons"
+      ></div>
 
-      <div class="game-message" id="gameMessage" style="display: none"></div>
+      <div
+        class="game-message"
+        id="gameMessage"
+        style="display: none"
+        role="alert"
+        aria-live="assertive"
+      ></div>
 
       <div class="game-controls">
-        <button class="btn btn-primary" id="newGameBtn">
-          <i class="fas fa-play"></i> New Game
+        <button
+          class="btn btn-primary"
+          id="newGameBtn"
+          aria-label="Start a new game"
+        >
+          <i class="fas fa-play" aria-hidden="true"></i> New Game
         </button>
-        <button class="btn btn-hint" id="hintBtn">
-          <i class="fas fa-lightbulb"></i> Get Hint (-5 pts)
+        <button
+          class="btn btn-hint"
+          id="hintBtn"
+          aria-label="Get a hint for 5 points penalty"
+        >
+          <i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint (-5 pts)
+        </button>
+        <button
+          class="btn btn-secondary"
+          id="skipWordBtn"
+          aria-label="Skip current word"
+        >
+          <i class="fas fa-forward" aria-hidden="true"></i> Skip Word
         </button>
         <button
           class="btn btn-secondary"
           onclick="window.location.href='../games.html'"
+          aria-label="Return to games page"
         >
-          <i class="fas fa-arrow-left"></i> Back to Games
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
         </button>
       </div>
     </div>
@@ -1126,6 +1338,12 @@
           this.wordsCompleted = 0;
           this.score = 0;
           this.hintUsed = false;
+          this.currentStreak = 0;
+          this.bestStreak = 0;
+          this.usedWords = new Set();
+
+          // Load stats from localStorage
+          this.loadStats();
 
           this.wordLists = {
             general: {
@@ -1138,6 +1356,13 @@
                 { word: "SMILE", hint: "Happy expression on your face" },
                 { word: "DANCE", hint: "Move your body to music" },
                 { word: "BOOK", hint: "You read this to learn" },
+                { word: "PHONE", hint: "Device to call people" },
+                { word: "TIME", hint: "Minutes and hours" },
+                { word: "LIGHT", hint: "Opposite of dark" },
+                { word: "HEART", hint: "Symbol of love" },
+                { word: "DREAM", hint: "What you see when you sleep" },
+                { word: "STAR", hint: "Shines in the night sky" },
+                { word: "TREE", hint: "Tall plant with leaves" },
               ],
               medium: [
                 { word: "BEAUTIFUL", hint: "Very pretty or attractive" },
@@ -1153,6 +1378,11 @@
                 },
                 { word: "DELICIOUS", hint: "Very tasty food" },
                 { word: "DIFFERENT", hint: "Not the same as something else" },
+                { word: "EXERCISE", hint: "Physical activity for health" },
+                { word: "BIRTHDAY", hint: "Day you were born" },
+                { word: "VACATION", hint: "Time off from work or school" },
+                { word: "ADVENTURE", hint: "Exciting experience" },
+                { word: "MOUNTAIN", hint: "Very tall natural landform" },
               ],
               hard: [
                 { word: "UNDERSTANDING", hint: "Knowing what something means" },
@@ -1166,6 +1396,8 @@
                 },
                 { word: "ENCYCLOPEDIA", hint: "Book with lots of information" },
                 { word: "PRONUNCIATION", hint: "How to say words correctly" },
+                { word: "EXTRAORDINARY", hint: "Very unusual or remarkable" },
+                { word: "UNFORGETTABLE", hint: "Impossible to forget" },
               ],
             },
             animals: {
@@ -1176,6 +1408,10 @@
                 { word: "FISH", hint: "Animal that swims in water" },
                 { word: "HORSE", hint: "Large animal people can ride" },
                 { word: "MOUSE", hint: "Small animal that cats chase" },
+                { word: "LION", hint: "King of the jungle" },
+                { word: "BEAR", hint: "Large furry animal" },
+                { word: "TIGER", hint: "Orange cat with black stripes" },
+                { word: "SNAKE", hint: "Long animal with no legs" },
               ],
               medium: [
                 {
@@ -1188,6 +1424,12 @@
                   word: "PENGUIN",
                   hint: "Black and white bird that cannot fly",
                 },
+                { word: "DOLPHIN", hint: "Smart ocean mammal" },
+                { word: "GIRAFFE", hint: "Tallest animal with long neck" },
+                {
+                  word: "MONKEY",
+                  hint: "Playful animal that swings from trees",
+                },
               ],
               hard: [
                 { word: "HIPPOPOTAMUS", hint: "Large African water animal" },
@@ -1195,6 +1437,7 @@
                   word: "CHIMPANZEE",
                   hint: "Intelligent ape similar to humans",
                 },
+                { word: "RHINOCEROS", hint: "Large animal with horn on nose" },
               ],
             },
             food: {
@@ -1204,12 +1447,20 @@
                 { word: "MILK", hint: "White drink from cows" },
                 { word: "RICE", hint: "Small white grains people eat" },
                 { word: "PIZZA", hint: "Round food with cheese and toppings" },
+                { word: "CAKE", hint: "Sweet dessert for birthdays" },
+                { word: "CHEESE", hint: "Yellow dairy product" },
+                { word: "CARROT", hint: "Orange vegetable rabbits love" },
               ],
               medium: [
                 { word: "SANDWICH", hint: "Food between two pieces of bread" },
                 { word: "CHOCOLATE", hint: "Sweet brown candy" },
                 { word: "HAMBURGER", hint: "Meat in a round bun" },
                 { word: "SPAGHETTI", hint: "Long thin pasta" },
+                {
+                  word: "BROCCOLI",
+                  hint: "Green vegetable that looks like a tree",
+                },
+                { word: "STRAWBERRY", hint: "Red berry with seeds outside" },
               ],
               hard: [
                 {
@@ -1220,6 +1471,7 @@
                   word: "CAULIFLOWER",
                   hint: "White vegetable that looks like a tree",
                 },
+                { word: "POMEGRANATE", hint: "Red fruit with many seeds" },
               ],
             },
             colors: {
@@ -1230,17 +1482,21 @@
                 { word: "YELLOW", hint: "Color of the sun and bananas" },
                 { word: "BLACK", hint: "Darkest color" },
                 { word: "WHITE", hint: "Lightest color" },
+                { word: "PINK", hint: "Light red color" },
+                { word: "BROWN", hint: "Color of wood and chocolate" },
               ],
               medium: [
                 { word: "PURPLE", hint: "Mix of red and blue" },
                 { word: "ORANGE", hint: "Mix of red and yellow" },
                 { word: "SILVER", hint: "Shiny gray color" },
+                { word: "GOLDEN", hint: "Color of gold and treasure" },
               ],
               hard: [
                 {
                   word: "TURQUOISE",
                   hint: "Blue-green color like tropical water",
                 },
+                { word: "LAVENDER", hint: "Light purple color" },
               ],
             },
             family: {
@@ -1250,13 +1506,20 @@
                 { word: "SISTER", hint: "Female sibling" },
                 { word: "BROTHER", hint: "Male sibling" },
                 { word: "BABY", hint: "Very young child" },
+                { word: "UNCLE", hint: "Brother of your parent" },
+                { word: "AUNT", hint: "Sister of your parent" },
               ],
               medium: [
                 { word: "DAUGHTER", hint: "Female child" },
                 { word: "GRANDSON", hint: "Son of your child" },
                 { word: "COUSIN", hint: "Child of your aunt or uncle" },
+                { word: "NEPHEW", hint: "Son of your sibling" },
+                { word: "PARENTS", hint: "Mother and father together" },
               ],
-              hard: [{ word: "GRANDMOTHER", hint: "Mother of your parent" }],
+              hard: [
+                { word: "GRANDMOTHER", hint: "Mother of your parent" },
+                { word: "GRANDFATHER", hint: "Father of your parent" },
+              ],
             },
             school: {
               easy: [
@@ -1265,12 +1528,16 @@
                 { word: "DESK", hint: "Table where students sit" },
                 { word: "CHAIR", hint: "Furniture you sit on" },
                 { word: "PAPER", hint: "White sheets for writing" },
+                { word: "RULER", hint: "Tool to measure and draw lines" },
+                { word: "ERASER", hint: "Removes pencil marks" },
               ],
               medium: [
                 { word: "TEACHER", hint: "Person who helps you learn" },
                 { word: "STUDENT", hint: "Person who goes to school" },
                 { word: "HOMEWORK", hint: "Work you do at home" },
                 { word: "CLASSROOM", hint: "Room where lessons happen" },
+                { word: "BACKPACK", hint: "Bag to carry school supplies" },
+                { word: "LIBRARY", hint: "Place with many books" },
               ],
               hard: [
                 { word: "CALCULATOR", hint: "Machine that helps with math" },
@@ -1278,6 +1545,7 @@
                   word: "DICTIONARY",
                   hint: "Book that explains word meanings",
                 },
+                { word: "GRADUATION", hint: "Ceremony when you finish school" },
               ],
             },
             weather: {
@@ -1287,13 +1555,20 @@
                 { word: "SNOW", hint: "White flakes in winter" },
                 { word: "WIND", hint: "Moving air" },
                 { word: "CLOUD", hint: "White or gray in the sky" },
+                { word: "STORM", hint: "Very bad weather" },
+                { word: "COLD", hint: "Low temperature" },
               ],
               medium: [
                 { word: "RAINBOW", hint: "Colorful arc in the sky after rain" },
                 { word: "THUNDER", hint: "Loud sound during storms" },
                 { word: "LIGHTNING", hint: "Bright flash in the sky" },
+                { word: "HURRICANE", hint: "Very strong circular storm" },
+                { word: "TORNADO", hint: "Spinning funnel of wind" },
               ],
-              hard: [{ word: "TEMPERATURE", hint: "How hot or cold it is" }],
+              hard: [
+                { word: "TEMPERATURE", hint: "How hot or cold it is" },
+                { word: "METEOROLOGY", hint: "Science of studying weather" },
+              ],
             },
           };
 
@@ -1303,7 +1578,45 @@
         init() {
           this.createAlphabetGrid();
           this.setupEventListeners();
+          this.updateStats();
           this.startNewGame();
+        }
+
+        loadStats() {
+          try {
+            const savedStats = localStorage.getItem("balancemanStats");
+            if (savedStats) {
+              const stats = JSON.parse(savedStats);
+              this.score = stats.score || 0;
+              this.wordsCompleted = stats.wordsCompleted || 0;
+              this.bestStreak = stats.bestStreak || 0;
+            }
+          } catch (e) {
+            console.warn("Could not load stats from localStorage", e);
+          }
+        }
+
+        saveStats() {
+          try {
+            const stats = {
+              score: this.score,
+              wordsCompleted: this.wordsCompleted,
+              bestStreak: this.bestStreak,
+              lastPlayed: new Date().toISOString(),
+            };
+            localStorage.setItem("balancemanStats", JSON.stringify(stats));
+          } catch (e) {
+            console.warn("Could not save stats to localStorage", e);
+          }
+        }
+
+        updateStats() {
+          this.updateStatWithAnimation("correctGuesses", this.correctGuesses);
+          this.updateStatWithAnimation("wrongGuesses", this.wrongGuesses);
+          this.updateStatWithAnimation("wordsCompleted", this.wordsCompleted);
+          this.updateStatWithAnimation("gameScore", this.score);
+          this.updateStatWithAnimation("currentStreak", this.currentStreak);
+          this.updateStatWithAnimation("bestStreak", this.bestStreak);
         }
 
         createAlphabetGrid() {
@@ -1315,6 +1628,7 @@
             const button = document.createElement("button");
             button.className = "letter-btn";
             button.textContent = letter;
+            button.setAttribute("aria-label", `Letter ${letter}`);
             button.onclick = () => this.guessLetter(letter);
             grid.appendChild(button);
           }
@@ -1325,14 +1639,22 @@
             this.startNewGame();
           document.getElementById("hintBtn").onclick = () => this.showHint();
 
+          const skipBtn = document.getElementById("skipWordBtn");
+          if (skipBtn) {
+            skipBtn.onclick = () => this.skipWord();
+          }
+
           // Difficulty selector
           document.querySelectorAll(".difficulty-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".difficulty-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".difficulty-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-checked", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-checked", "true");
               this.difficulty = btn.dataset.difficulty;
+              this.usedWords.clear(); // Reset used words when changing difficulty
               this.startNewGame();
             };
           });
@@ -1340,11 +1662,14 @@
           // Category selector
           document.querySelectorAll(".category-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".category-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".category-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-checked", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-checked", "true");
               this.currentCategory = btn.dataset.category;
+              this.usedWords.clear(); // Reset used words when changing category
               this.startNewGame();
             };
           });
@@ -1358,7 +1683,12 @@
               !this.guessedLetters.has(letter)
             ) {
               e.preventDefault();
-              this.guessLetter(letter);
+              const letterBtn = Array.from(
+                document.querySelectorAll(".letter-btn")
+              ).find((btn) => btn.textContent === letter && !btn.disabled);
+              if (letterBtn) {
+                this.guessLetter(letter);
+              }
             } else if (e.key === "Enter") {
               e.preventDefault();
               if (document.getElementById("newGameBtn").offsetParent !== null) {
@@ -1369,9 +1699,17 @@
               if (!document.getElementById("hintBtn").disabled) {
                 this.showHint();
               }
+            } else if (e.key === "s" || e.key === "S") {
+              e.preventDefault();
+              const skipBtn = document.getElementById("skipWordBtn");
+              if (skipBtn && !skipBtn.disabled) {
+                this.skipWord();
+              }
             } else if (e.key === "Escape") {
               e.preventDefault();
-              window.location.href = "../games.html";
+              if (confirm("Are you sure you want to exit the game?")) {
+                window.location.href = "../games.html";
+              }
             }
           });
         }
@@ -1379,16 +1717,36 @@
         startNewGame() {
           this.guessedLetters.clear();
           this.wrongGuesses = 0;
+          this.correctGuesses = 0;
           this.hintUsed = false;
 
           // Get random word from selected category and difficulty
           const wordList =
             this.wordLists[this.currentCategory][this.difficulty];
-          const randomIndex = Math.floor(Math.random() * wordList.length);
-          const selectedWord = wordList[randomIndex];
+
+          // Filter out already used words
+          const availableWords = wordList.filter(
+            (item) => !this.usedWords.has(item.word)
+          );
+
+          // If all words have been used, reset the used words
+          if (availableWords.length === 0) {
+            this.usedWords.clear();
+            this.showMessage(
+              "🎉 You completed all words in this category! Starting over...",
+              "success"
+            );
+            setTimeout(() => this.hideMessage(), 2000);
+          }
+
+          const wordsToUse =
+            availableWords.length > 0 ? availableWords : wordList;
+          const randomIndex = Math.floor(Math.random() * wordsToUse.length);
+          const selectedWord = wordsToUse[randomIndex];
 
           this.currentWord = selectedWord.word;
           this.currentHint = selectedWord.hint;
+          this.usedWords.add(this.currentWord);
 
           this.updateDisplay();
           this.resetAlphabetGrid();
@@ -1399,7 +1757,22 @@
           const hintBtn = document.getElementById("hintBtn");
           hintBtn.disabled = false;
           hintBtn.innerHTML =
-            '<i class="fas fa-lightbulb"></i> Get Hint (-5 pts)';
+            '<i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint (-5 pts)';
+
+          // Update progress bar
+          const progressBar = document.querySelector(".progress-bar");
+          if (progressBar) {
+            progressBar.setAttribute("aria-valuenow", "0");
+          }
+        }
+
+        skipWord() {
+          this.currentStreak = 0;
+          this.showMessage("⏭️ Word skipped. Streak reset!", "danger");
+          this.updateStats();
+          setTimeout(() => {
+            this.startNewGame();
+          }, 1500);
         }
 
         guessLetter(letter) {
@@ -1407,8 +1780,14 @@
 
           this.guessedLetters.add(letter);
 
-          const letterBtn = document.querySelector(`[onclick*="${letter}"]`);
+          const letterBtn = Array.from(
+            document.querySelectorAll(".letter-btn")
+          ).find((btn) => btn.textContent === letter);
+
+          if (!letterBtn) return;
+
           letterBtn.disabled = true;
+          letterBtn.setAttribute("aria-pressed", "true");
 
           // Add loading state
           letterBtn.classList.add("loading");
@@ -1425,6 +1804,11 @@
               // Play success sound effect (if available)
               this.playSound("correct");
 
+              // Announce to screen readers
+              this.announceToScreenReader(
+                `Correct! Letter ${letter} is in the word.`
+              );
+
               if (this.isWordComplete()) {
                 this.handleWordComplete();
               }
@@ -1435,6 +1819,13 @@
               // Play error sound effect (if available)
               this.playSound("incorrect");
 
+              // Announce to screen readers
+              this.announceToScreenReader(
+                `Incorrect. Letter ${letter} is not in the word. ${
+                  this.maxWrongGuesses - this.wrongGuesses
+                } guesses remaining.`
+              );
+
               if (this.wrongGuesses >= this.maxWrongGuesses) {
                 this.handleGameOver();
               }
@@ -1443,6 +1834,16 @@
             this.updateDisplay();
             this.updateBalanceMan();
           }, 200);
+        }
+
+        announceToScreenReader(message) {
+          const announcement = document.createElement("div");
+          announcement.setAttribute("role", "status");
+          announcement.setAttribute("aria-live", "polite");
+          announcement.className = "sr-only";
+          announcement.textContent = message;
+          document.body.appendChild(announcement);
+          setTimeout(() => announcement.remove(), 1000);
         }
 
         animateScoreIncrease() {
@@ -1507,20 +1908,42 @@
 
         handleWordComplete() {
           this.wordsCompleted++;
+          this.currentStreak++;
+
+          // Update best streak
+          if (this.currentStreak > this.bestStreak) {
+            this.bestStreak = this.currentStreak;
+          }
+
           const bonusScore = this.hintUsed ? 25 : 50;
-          this.score += bonusScore;
+          const streakBonus =
+            this.currentStreak > 1 ? this.currentStreak * 5 : 0;
+          const totalBonus = bonusScore + streakBonus;
+          this.score += totalBonus;
+
+          // Save stats
+          this.saveStats();
 
           // Create celebration effect
           this.createCelebrationEffect();
 
-          const message = this.hintUsed
-            ? `🎉 Great job! BalanceMan is safe! (+${bonusScore} points)`
-            : `🌟 Perfect! No hints needed! (+${bonusScore} points)`;
+          let message = this.hintUsed
+            ? `🎉 Great job! BalanceMan is safe! (+${totalBonus} points)`
+            : `🌟 Perfect! No hints needed! (+${totalBonus} points)`;
+
+          if (streakBonus > 0) {
+            message += ` | 🔥 ${this.currentStreak} win streak! (+${streakBonus} bonus)`;
+          }
 
           this.showMessage(message, "success");
 
           // Add confetti animation
           this.showConfetti();
+
+          // Announce to screen readers
+          this.announceToScreenReader(
+            `Congratulations! You completed the word ${this.currentWord}. ${message}`
+          );
 
           setTimeout(() => {
             this.startNewGame();
@@ -1576,9 +1999,18 @@
         }
 
         handleGameOver() {
+          this.currentStreak = 0;
           this.showMessage(
-            `💔 BalanceMan fell! The word was "${this.currentWord}". Try again!`,
+            `💔 BalanceMan fell! The word was "${this.currentWord}". Streak reset!`,
             "danger"
+          );
+
+          // Save stats
+          this.saveStats();
+
+          // Announce to screen readers
+          this.announceToScreenReader(
+            `Game over. The word was ${this.currentWord}. Your streak has been reset.`
           );
 
           // Disable all letter buttons with animation
@@ -1591,8 +2023,13 @@
 
           // Auto-restart after delay
           setTimeout(() => {
-            if (confirm("Would you like to try again with a new word?")) {
+            const shouldRestart = confirm(
+              "Would you like to try again with a new word?"
+            );
+            if (shouldRestart) {
               this.startNewGame();
+            } else {
+              window.location.href = "../games.html";
             }
           }, 3000);
         }
@@ -1614,10 +2051,7 @@
           document.getElementById("wordDisplay").innerHTML = display;
 
           // Update stats with smooth transitions
-          this.updateStatWithAnimation("correctGuesses", this.correctGuesses);
-          this.updateStatWithAnimation("wrongGuesses", this.wrongGuesses);
-          this.updateStatWithAnimation("wordsCompleted", this.wordsCompleted);
-          this.updateStatWithAnimation("gameScore", this.score);
+          this.updateStats();
         }
 
         updateStatWithAnimation(elementId, newValue) {
@@ -1716,11 +2150,18 @@
             const hintBtn = document.getElementById("hintBtn");
             hintBtn.disabled = true;
             hintBtn.textContent = "Hint Used";
-            hintBtn.innerHTML = '<i class="fas fa-check"></i> Hint Used';
+            hintBtn.innerHTML =
+              '<i class="fas fa-check" aria-hidden="true"></i> Hint Used';
+            hintBtn.setAttribute("aria-label", "Hint has been used");
 
             this.score = Math.max(0, this.score - 5); // Small penalty for using hint
             this.updateDisplay();
             this.animateScoreDecrease();
+
+            // Announce to screen readers
+            this.announceToScreenReader(
+              `Hint revealed: ${this.currentHint}. 5 points deducted.`
+            );
           }
         }
 

@@ -94,9 +94,23 @@
           "educationalRole": "student",
           "audienceType": "ESL Learners of All Ages"
         },
-        "educationalUse": "Grammar Practice",
+        "educationalLevel": "All Levels",
+        "educationalUse": [
+          "grammar practice",
+          "vocabulary building",
+          "family learning"
+        ],
         "interactivityType": "active",
-        "learningResourceType": "game"
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "keyboardNavigation",
+          "ariaLabels",
+          "highContrast"
+        ],
+        "keywords": "ESL board game, snakes and ladders, English learning, family game"
       }
     </script>
     <link
@@ -1297,6 +1311,7 @@
           var(--primary-color),
           var(--accent-color)
         );
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -1473,6 +1488,41 @@
           grid-template-columns: repeat(2, 1fr);
         }
       }
+
+      /* Accessibility Styles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Focus visible styles for keyboard navigation */
+      button:focus-visible,
+      .board-option:focus-visible,
+      .player-option:focus-visible,
+      .content-option:focus-visible,
+      .answer-option:focus-visible {
+        outline: 3px solid #4caf50;
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(76, 175, 80, 0.3);
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
     <link
       rel="canonical"
@@ -1480,22 +1530,34 @@
     />
   </head>
   <body>
-    <div class="particles" id="particles"></div>
+    <div class="particles" id="particles" aria-hidden="true"></div>
 
-    <header class="game-header">
+    <header class="game-header" role="banner">
       <div class="header-content">
         <h1 class="game-title">🐍🪜 Super Fun English Snakes & Ladders</h1>
-        <div class="game-controls">
-          <button class="control-btn" onclick="newGame()">
-            <i class="fas fa-plus"></i>
+        <div class="game-controls" role="navigation" aria-label="Game controls">
+          <button
+            class="control-btn"
+            onclick="newGame()"
+            aria-label="Start a new game adventure"
+          >
+            <i class="fas fa-plus" aria-hidden="true"></i>
             New Adventure
           </button>
-          <button class="control-btn secondary" onclick="showRules()">
-            <i class="fas fa-question-circle"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showRules()"
+            aria-label="Show game rules and instructions"
+          >
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
             How to Play
           </button>
-          <button class="control-btn secondary" onclick="showStats()">
-            <i class="fas fa-trophy"></i>
+          <button
+            class="control-btn secondary"
+            onclick="showStats()"
+            aria-label="View your game statistics"
+          >
+            <i class="fas fa-trophy" aria-hidden="true"></i>
             My Stats
           </button>
         </div>
@@ -1503,14 +1565,26 @@
     </header>
 
     <!-- Setup Screen -->
-    <div class="setup-screen" id="setupScreen">
+    <div
+      class="setup-screen"
+      id="setupScreen"
+      role="main"
+      aria-label="Game setup"
+    >
       <div class="setup-container">
-        <h2 class="setup-title">� Start Your English Learning Adventure! 🌟</h2>
+        <h2 class="setup-title">
+          🚀 Start Your English Learning Adventure! 🌟
+        </h2>
 
         <!-- Board Selection -->
         <div class="setup-section">
           <h3><i class="fas fa-map"></i> Choose Your Adventure Board</h3>
-          <div class="board-selection" id="boardSelection">
+          <div
+            class="board-selection"
+            id="boardSelection"
+            role="radiogroup"
+            aria-label="Board selection"
+          >
             <!-- Board options will be populated here -->
           </div>
         </div>
@@ -1518,7 +1592,12 @@
         <!-- Player Selection -->
         <div class="setup-section">
           <h3><i class="fas fa-user-astronaut"></i> Pick Your Character</h3>
-          <div class="player-selection" id="playerSelection">
+          <div
+            class="player-selection"
+            id="playerSelection"
+            role="radiogroup"
+            aria-label="Character selection"
+          >
             <!-- Player options will be populated here -->
           </div>
         </div>
@@ -1526,14 +1605,34 @@
         <!-- Content Type Selection -->
         <div class="setup-section">
           <h3><i class="fas fa-brain"></i> What Do You Want to Learn?</h3>
-          <div class="content-selection" id="contentSelection">
-            <button class="content-option" data-content="vocabulary">
+          <div
+            class="content-selection"
+            id="contentSelection"
+            role="radiogroup"
+            aria-label="Learning topic selection"
+          >
+            <button
+              class="content-option"
+              data-content="vocabulary"
+              role="radio"
+              aria-checked="false"
+            >
               <i class="fas fa-book-open"></i> Fun Vocabulary
             </button>
-            <button class="content-option" data-content="conversation">
+            <button
+              class="content-option"
+              data-content="conversation"
+              role="radio"
+              aria-checked="false"
+            >
               <i class="fas fa-comments"></i> Cool Conversations
             </button>
-            <button class="content-option" data-content="grammar">
+            <button
+              class="content-option"
+              data-content="grammar"
+              role="radio"
+              aria-checked="false"
+            >
               <i class="fas fa-spell-check"></i> Grammar Games
             </button>
           </div>
@@ -1544,6 +1643,7 @@
           id="startGameBtn"
           onclick="startGame()"
           disabled
+          aria-label="Start the game with selected options"
         >
           <i class="fas fa-rocket"></i> Start My Adventure!
         </button>
@@ -1551,17 +1651,34 @@
     </div>
 
     <!-- Game Screen -->
-    <div class="game-screen" id="gameScreen">
+    <div
+      class="game-screen"
+      id="gameScreen"
+      role="main"
+      aria-label="Game board"
+    >
       <!-- Game Status -->
-      <div class="game-status">
+      <div class="game-status" role="status" aria-live="polite">
         <div class="status-item">
-          <div class="player-avatar" id="playerAvatar"></div>
+          <div class="player-avatar" id="playerAvatar" aria-hidden="true"></div>
           <div>
             <div style="font-size: 1.1rem; font-weight: 700">Your Progress</div>
             <div>
-              Square: <span id="playerPosition" class="info-value">1</span>/100
+              Square:
+              <span
+                id="playerPosition"
+                class="info-value"
+                aria-label="Current position"
+                >1</span
+              >/100
             </div>
-            <div class="progress-bar">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="1"
+              aria-valuemin="1"
+              aria-valuemax="100"
+            >
               <div
                 class="progress-fill"
                 id="progressFill"
@@ -1571,7 +1688,7 @@
           </div>
         </div>
 
-        <div class="turn-indicator" id="turnIndicator">
+        <div class="turn-indicator" id="turnIndicator" aria-live="polite">
           🎲 Roll the Magic Dice! ✨
         </div>
 
@@ -1581,10 +1698,24 @@
               Vocabulary Fun
             </div>
             <div>
-              Stars: <span id="playerScore" class="info-value">0</span> ⭐
+              Stars:
+              <span
+                id="playerScore"
+                class="info-value"
+                aria-label="Current score"
+                >0</span
+              >
+              ⭐
             </div>
             <div>
-              Streak: <span id="correctStreak" class="info-value">0</span> 🔥
+              Streak:
+              <span
+                id="correctStreak"
+                class="info-value"
+                aria-label="Current correct streak"
+                >0</span
+              >
+              🔥
             </div>
           </div>
         </div>
@@ -1594,39 +1725,73 @@
       <div class="game-board-container">
         <!-- Game Board -->
         <div class="board-area">
-          <div class="game-board" id="gameBoard">
-            <div class="board-grid" id="boardGrid">
+          <div
+            class="game-board"
+            id="gameBoard"
+            role="region"
+            aria-label="Game board"
+          >
+            <div class="board-grid" id="boardGrid" role="grid">
               <!-- Board cells will be generated here -->
             </div>
-            <div class="player-piece" id="playerPiece"></div>
+            <div class="player-piece" id="playerPiece" aria-hidden="true"></div>
           </div>
         </div>
 
         <!-- Game Controls -->
-        <div class="game-controls-panel">
+        <div
+          class="game-controls-panel"
+          role="region"
+          aria-label="Game controls"
+        >
           <!-- Dice Control -->
           <div class="control-panel">
             <h4>🎲 Magic Dice</h4>
             <div class="dice-container">
-              <div class="dice" id="dice">
+              <div
+                class="dice"
+                id="dice"
+                role="img"
+                aria-label="Dice showing six"
+              >
                 <i class="fas fa-dice-six"></i>
               </div>
-              <button class="roll-btn" id="rollBtn" onclick="rollDice()">
+              <button
+                class="roll-btn"
+                id="rollBtn"
+                onclick="rollDice()"
+                aria-label="Roll the dice to move forward"
+              >
                 🎲 Roll the Dice!
               </button>
             </div>
           </div>
 
           <!-- Question Panel -->
-          <div class="control-panel question-panel" id="questionPanel">
+          <div
+            class="control-panel question-panel"
+            id="questionPanel"
+            role="region"
+            aria-label="Question panel"
+          >
             <div class="question-title" id="questionTitle">
               <i class="fas fa-star"></i> Learning Challenge
               <i class="fas fa-star"></i>
             </div>
-            <div class="question-content" id="questionContent">
+            <div
+              class="question-content"
+              id="questionContent"
+              role="heading"
+              aria-level="3"
+            >
               <!-- Question will be displayed here -->
             </div>
-            <div class="question-options" id="questionOptions">
+            <div
+              class="question-options"
+              id="questionOptions"
+              role="group"
+              aria-label="Answer options"
+            >
               <!-- Options will be displayed here -->
             </div>
             <button
@@ -1634,6 +1799,7 @@
               id="continueBtn"
               onclick="continueGame()"
               style="display: none"
+              aria-label="Continue to next turn"
             >
               ✨ Continue Adventure ✨
             </button>
@@ -1641,15 +1807,22 @@
 
           <!-- Game Info -->
           <div class="control-panel">
-            <h4>� Your Stats</h4>
+            <h4>🎯 Your Stats</h4>
             <div class="game-info">
               <div class="info-item">
                 <span><i class="fas fa-footsteps"></i> Moves:</span>
-                <span id="moveCount" class="info-value">0</span>
+                <span
+                  id="moveCount"
+                  class="info-value"
+                  aria-label="Number of moves"
+                  >0</span
+                >
               </div>
               <div class="info-item">
                 <span><i class="fas fa-clock"></i> Time:</span>
-                <span id="gameTime" class="info-value">0:00</span>
+                <span id="gameTime" class="info-value" aria-label="Game time"
+                  >0:00</span
+                >
               </div>
               <div class="info-item">
                 <span><i class="fas fa-check-circle"></i> Correct:</span>
@@ -1690,12 +1863,209 @@
         currentQuestion: null,
         isMoving: false,
         gameOver: false,
+        currentStreak: 0,
+        bestStreak: parseInt(localStorage.getItem("sl_bestStreak") || "0"),
         stats: {
           gamesPlayed: parseInt(localStorage.getItem("sl_gamesPlayed") || "0"),
           gamesWon: parseInt(localStorage.getItem("sl_gamesWon") || "0"),
           totalTime: parseInt(localStorage.getItem("sl_totalTime") || "0"),
+          bestStreak: parseInt(localStorage.getItem("sl_bestStreak") || "0"),
         },
       };
+
+      // Audio Context for sound effects
+      let audioContext;
+      let soundEnabled = true;
+
+      // Initialize audio on first user interaction
+      function initAudio() {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        }
+      }
+
+      // Play sound effect
+      function playSound(type) {
+        if (!soundEnabled || !audioContext) return;
+
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        switch (type) {
+          case "success":
+            oscillator.frequency.setValueAtTime(
+              523.25,
+              audioContext.currentTime
+            ); // C5
+            oscillator.frequency.setValueAtTime(
+              659.25,
+              audioContext.currentTime + 0.1
+            ); // E5
+            oscillator.frequency.setValueAtTime(
+              783.99,
+              audioContext.currentTime + 0.2
+            ); // G5
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.3
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+            break;
+          case "error":
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.2
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+            break;
+          case "dice":
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(
+              880,
+              audioContext.currentTime + 0.05
+            );
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.15
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+            break;
+          case "ladder":
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(
+              600,
+              audioContext.currentTime + 0.1
+            );
+            oscillator.frequency.setValueAtTime(
+              800,
+              audioContext.currentTime + 0.2
+            );
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.3
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+            break;
+          case "snake":
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(
+              400,
+              audioContext.currentTime + 0.1
+            );
+            oscillator.frequency.setValueAtTime(
+              200,
+              audioContext.currentTime + 0.2
+            );
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.3
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+            break;
+          case "win":
+            oscillator.frequency.setValueAtTime(
+              523.25,
+              audioContext.currentTime
+            ); // C5
+            oscillator.frequency.setValueAtTime(
+              659.25,
+              audioContext.currentTime + 0.15
+            ); // E5
+            oscillator.frequency.setValueAtTime(
+              783.99,
+              audioContext.currentTime + 0.3
+            ); // G5
+            oscillator.frequency.setValueAtTime(
+              1046.5,
+              audioContext.currentTime + 0.45
+            ); // C6
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.6
+            );
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.6);
+            break;
+        }
+      }
+
+      // Screen reader announcements
+      function announceToScreenReader(message) {
+        const announcement = document.createElement("div");
+        announcement.className = "sr-only";
+        announcement.setAttribute("role", "status");
+        announcement.setAttribute("aria-live", "polite");
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+      }
+
+      // Load stats from localStorage
+      function loadStats() {
+        gameState.stats.gamesPlayed = parseInt(
+          localStorage.getItem("sl_gamesPlayed") || "0"
+        );
+        gameState.stats.gamesWon = parseInt(
+          localStorage.getItem("sl_gamesWon") || "0"
+        );
+        gameState.stats.totalTime = parseInt(
+          localStorage.getItem("sl_totalTime") || "0"
+        );
+        gameState.stats.bestStreak = parseInt(
+          localStorage.getItem("sl_bestStreak") || "0"
+        );
+        gameState.bestStreak = gameState.stats.bestStreak;
+      }
+
+      // Save stats to localStorage
+      function saveStats() {
+        localStorage.setItem(
+          "sl_gamesPlayed",
+          gameState.stats.gamesPlayed.toString()
+        );
+        localStorage.setItem(
+          "sl_gamesWon",
+          gameState.stats.gamesWon.toString()
+        );
+        localStorage.setItem(
+          "sl_totalTime",
+          gameState.stats.totalTime.toString()
+        );
+        localStorage.setItem(
+          "sl_bestStreak",
+          gameState.stats.bestStreak.toString()
+        );
+      }
+
+      // Update streak tracking
+      function updateStreak(correct) {
+        if (correct) {
+          gameState.currentStreak++;
+          if (gameState.currentStreak > gameState.bestStreak) {
+            gameState.bestStreak = gameState.currentStreak;
+            gameState.stats.bestStreak = gameState.bestStreak;
+            saveStats();
+          }
+        } else {
+          gameState.currentStreak = 0;
+        }
+      }
 
       // Board configurations
       const boards = [
@@ -1895,8 +2265,74 @@
 
       // Initialize game
       document.addEventListener("DOMContentLoaded", function () {
+        loadStats();
         initializeSetup();
         updateStats();
+
+        // Initialize audio on first user interaction
+        document.body.addEventListener("click", initAudio, { once: true });
+        document.body.addEventListener("keydown", initAudio, { once: true });
+
+        // Keyboard navigation
+        document.addEventListener("keydown", function (e) {
+          // Space for dice roll
+          if (
+            e.code === "Space" &&
+            !gameState.isMoving &&
+            !gameState.gameOver
+          ) {
+            const rollBtn = document.getElementById("rollBtn");
+            if (
+              rollBtn &&
+              !rollBtn.disabled &&
+              document.getElementById("gameScreen").classList.contains("active")
+            ) {
+              e.preventDefault();
+              rollDice();
+            }
+          }
+
+          // Enter for continue button
+          if (e.code === "Enter") {
+            const continueBtn = document.getElementById("continueBtn");
+            if (continueBtn && continueBtn.style.display === "block") {
+              e.preventDefault();
+              continueGame();
+            }
+          }
+
+          // Escape to exit game
+          if (
+            e.code === "Escape" &&
+            document.getElementById("gameScreen").classList.contains("active")
+          ) {
+            if (confirm("Are you sure you want to exit the game?")) {
+              exitGame();
+            }
+          }
+
+          // Number keys 1-4 for answer selection
+          if (e.key >= "1" && e.key <= "4") {
+            const questionPanel = document.getElementById("questionPanel");
+            if (questionPanel && questionPanel.classList.contains("active")) {
+              const optionBtns = document.querySelectorAll(".option-btn");
+              const index = parseInt(e.key) - 1;
+              if (optionBtns[index] && !optionBtns[index].disabled) {
+                e.preventDefault();
+                selectAnswer(index);
+              }
+            }
+          }
+
+          // H for help/instructions
+          if (e.code === "KeyH") {
+            const instructions = document.getElementById("instructions");
+            if (instructions) {
+              instructions.style.display =
+                instructions.style.display === "none" ? "block" : "none";
+            }
+          }
+        });
       });
 
       function initializeSetup() {
@@ -1907,7 +2343,17 @@
           boardOption.className = "board-option";
           boardOption.style.backgroundImage = `url("${board.image}")`;
           boardOption.dataset.board = board.id;
+          boardOption.setAttribute("role", "radio");
+          boardOption.setAttribute("aria-checked", "false");
+          boardOption.setAttribute("aria-label", board.name);
+          boardOption.setAttribute("tabindex", "0");
           boardOption.onclick = () => selectBoard(board.id);
+          boardOption.onkeypress = (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectBoard(board.id);
+            }
+          };
 
           const label = document.createElement("div");
           label.className = "board-label";
@@ -1924,7 +2370,17 @@
           playerOption.className = "player-option";
           playerOption.style.backgroundImage = `url("${player.image}")`;
           playerOption.dataset.player = player.id;
+          playerOption.setAttribute("role", "radio");
+          playerOption.setAttribute("aria-checked", "false");
+          playerOption.setAttribute("aria-label", player.name);
+          playerOption.setAttribute("tabindex", "0");
           playerOption.onclick = () => selectPlayer(player.id);
+          playerOption.onkeypress = (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectPlayer(player.id);
+            }
+          };
           playerSelection.appendChild(playerOption);
         });
 
@@ -1936,35 +2392,47 @@
 
       function selectBoard(boardId) {
         gameState.selectedBoard = boardId;
-        document
-          .querySelectorAll(".board-option")
-          .forEach((opt) => opt.classList.remove("selected"));
-        document
-          .querySelector(`[data-board="${boardId}"]`)
-          .classList.add("selected");
+        document.querySelectorAll(".board-option").forEach((opt) => {
+          opt.classList.remove("selected");
+          opt.setAttribute("aria-checked", "false");
+        });
+        const selected = document.querySelector(`[data-board="${boardId}"]`);
+        selected.classList.add("selected");
+        selected.setAttribute("aria-checked", "true");
         checkCanStart();
+        announceToScreenReader(
+          `Board selected: ${boards.find((b) => b.id === boardId).name}`
+        );
       }
 
       function selectPlayer(playerId) {
         gameState.selectedPlayer = playerId;
-        document
-          .querySelectorAll(".player-option")
-          .forEach((opt) => opt.classList.remove("selected"));
-        document
-          .querySelector(`[data-player="${playerId}"]`)
-          .classList.add("selected");
+        document.querySelectorAll(".player-option").forEach((opt) => {
+          opt.classList.remove("selected");
+          opt.setAttribute("aria-checked", "false");
+        });
+        const selected = document.querySelector(`[data-player="${playerId}"]`);
+        selected.classList.add("selected");
+        selected.setAttribute("aria-checked", "true");
         checkCanStart();
+        announceToScreenReader(
+          `Character selected: ${players.find((p) => p.id === playerId).name}`
+        );
       }
 
       function selectContent(contentType) {
         gameState.selectedContent = contentType;
-        document
-          .querySelectorAll(".content-option")
-          .forEach((opt) => opt.classList.remove("selected"));
-        document
-          .querySelector(`[data-content="${contentType}"]`)
-          .classList.add("selected");
+        document.querySelectorAll(".content-option").forEach((opt) => {
+          opt.classList.remove("selected");
+          opt.setAttribute("aria-checked", "false");
+        });
+        const selected = document.querySelector(
+          `[data-content="${contentType}"]`
+        );
+        selected.classList.add("selected");
+        selected.setAttribute("aria-checked", "true");
         checkCanStart();
+        announceToScreenReader(`Learning topic selected: ${contentType}`);
       }
 
       function checkCanStart() {
@@ -1985,6 +2453,7 @@
         gameState.playerScore = 0;
         gameState.moveCount = 0;
         gameState.correctAnswers = 0;
+        gameState.currentStreak = 0;
         gameState.gameStartTime = Date.now();
         gameState.gameOver = false;
 
@@ -1993,6 +2462,9 @@
         updatePlayerPosition();
         updateGameStatus();
         startGameTimer();
+
+        announceToScreenReader("Game started! Press Space to roll the dice.");
+        playSound("success");
       }
 
       function setupGameBoard() {
@@ -2054,11 +2526,13 @@
 
         dice.classList.add("rolling");
         rollBtn.disabled = true;
+        playSound("dice");
 
         setTimeout(() => {
           const diceValue = Math.floor(Math.random() * 6) + 1;
           dice.innerHTML = getDiceIcon(diceValue);
           dice.classList.remove("rolling");
+          announceToScreenReader(`You rolled a ${diceValue}`);
 
           movePlayer(diceValue);
         }, 1000);
@@ -2144,6 +2618,18 @@
         document.getElementById("moveCount").textContent = gameState.moveCount;
         document.getElementById("correctAnswers").textContent =
           gameState.correctAnswers;
+        document.getElementById("correctStreak").textContent =
+          gameState.currentStreak;
+
+        // Update progress bar
+        const progressBar = document.getElementById("progressFill");
+        if (progressBar) {
+          progressBar.style.width = `${gameState.playerPosition}%`;
+          progressBar.parentElement.setAttribute(
+            "aria-valuenow",
+            gameState.playerPosition
+          );
+        }
       }
 
       function checkSpecialSquares() {
@@ -2153,6 +2639,10 @@
         const position = gameState.playerPosition;
 
         if (selectedBoard.snakes[position]) {
+          playSound("snake");
+          announceToScreenReader(
+            `Snake bite! You slid down from ${position} to ${selectedBoard.snakes[position]}`
+          );
           showMessage(
             "Snake Bite! 🐍",
             `Oh no! You slid down from ${position} to ${selectedBoard.snakes[position]}!`,
@@ -2163,6 +2653,10 @@
             }
           );
         } else if (selectedBoard.ladders[position]) {
+          playSound("ladder");
+          announceToScreenReader(
+            `Ladder climb! You climbed up from ${position} to ${selectedBoard.ladders[position]}`
+          );
           showMessage(
             "Ladder Climb! 🪜",
             `Great! You climbed up from ${position} to ${selectedBoard.ladders[position]}!`,
@@ -2197,11 +2691,15 @@
           const button = document.createElement("button");
           button.className = "option-btn";
           button.textContent = option;
+          button.setAttribute("aria-label", `Option ${index + 1}: ${option}`);
           button.onclick = () => selectAnswer(index);
           optionsContainer.appendChild(button);
         });
 
         document.getElementById("questionPanel").classList.add("active");
+        announceToScreenReader(
+          `Question: ${randomQuestion.question}. Press 1 through 4 to select an answer.`
+        );
       }
 
       function selectAnswer(selectedIndex) {
@@ -2217,10 +2715,23 @@
           }
         });
 
-        if (selectedIndex === correct) {
+        const isCorrect = selectedIndex === correct;
+
+        if (isCorrect) {
           gameState.playerScore += 10;
           gameState.correctAnswers++;
+          updateStreak(true);
+          playSound("success");
+          announceToScreenReader(
+            `Correct! Your score is now ${gameState.playerScore}. Current streak: ${gameState.currentStreak}`
+          );
           updateGameStatus();
+        } else {
+          updateStreak(false);
+          playSound("error");
+          announceToScreenReader(
+            "Incorrect answer. Your streak has been reset."
+          );
         }
 
         document.getElementById("continueBtn").style.display = "block";
@@ -2262,20 +2773,13 @@
         }
 
         // Save stats
-        localStorage.setItem(
-          "sl_gamesPlayed",
-          gameState.stats.gamesPlayed.toString()
-        );
-        localStorage.setItem(
-          "sl_gamesWon",
-          gameState.stats.gamesWon.toString()
-        );
-        localStorage.setItem(
-          "sl_totalTime",
-          gameState.stats.totalTime.toString()
-        );
+        saveStats();
 
         if (won) {
+          playSound("win");
+          announceToScreenReader(
+            `Congratulations! You won the game! Final score: ${gameState.playerScore}. Best streak: ${gameState.bestStreak}`
+          );
           showMessage(
             "🎉 Congratulations!",
             `You won the game!\nTime: ${Math.floor(gameTime / 60)}:${(
@@ -2286,12 +2790,14 @@
               gameState.playerScore
             }\nCorrect Answers: ${gameState.correctAnswers}/${
               gameState.moveCount
-            }`,
+            }\nBest Streak: ${gameState.bestStreak}`,
             () => {
               newGame();
             }
           );
         }
+
+        updateStats();
       }
 
       function showMessage(title, text, callback) {
@@ -2323,6 +2829,8 @@
           currentQuestion: null,
           isMoving: false,
           gameOver: false,
+          currentStreak: 0,
+          bestStreak: gameState.bestStreak,
           stats: gameState.stats,
         };
 
@@ -2335,6 +2843,19 @@
         document.getElementById("startGameBtn").disabled = true;
         document.getElementById("rollBtn").disabled = false;
         document.getElementById("questionPanel").classList.remove("active");
+      }
+
+      function exitGame() {
+        if (!gameState.gameOver) {
+          // Save incomplete game stats
+          const gameTime = Math.floor(
+            (Date.now() - gameState.gameStartTime) / 1000
+          );
+          gameState.stats.gamesPlayed++;
+          gameState.stats.totalTime += gameTime;
+          saveStats();
+        }
+        newGame();
       }
 
       function showRules() {
@@ -2364,7 +2885,9 @@
             gameState.stats.gamesWon
           }\nWin Rate: ${winRate}%\nAverage Time: ${Math.floor(
             avgTime / 60
-          )}:${(avgTime % 60).toString().padStart(2, "0")}`
+          )}:${(avgTime % 60).toString().padStart(2, "0")}\nBest Streak: ${
+            gameState.stats.bestStreak
+          } correct in a row`
         );
       }
 

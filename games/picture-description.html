@@ -57,11 +57,31 @@
         "@context": "https://schema.org",
         "@type": "Game",
         "name": "Picture Puzzle Challenge",
-        "description": "Interactive picture matching and description game for ESL learners",
+        "description": "Interactive picture matching and description game for ESL learners with visual recognition challenges",
         "url": "https://yoursite.com/games/picture-description.html",
         "genre": "Educational Game",
-        "audience": "ESL Learners",
-        "inLanguage": "en"
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student",
+          "name": "ESL Learners"
+        },
+        "educationalLevel": "Beginner to Advanced",
+        "learningResourceType": "Interactive Game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "keyboardNavigation",
+          "ariaLabels",
+          "timingControl"
+        ],
+        "educationalUse": [
+          "vocabulary building",
+          "visual recognition",
+          "reading comprehension"
+        ],
+        "interactivityType": "active",
+        "keywords": "picture matching, visual learning, ESL game, vocabulary"
       }
     </script>
 
@@ -809,6 +829,39 @@
         }
       }
 
+      /* Accessibility Styles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Focus visible styles for better keyboard navigation */
+      .btn:focus-visible,
+      .option-card:focus-visible,
+      .image-card:focus-visible {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.2);
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
       /* Responsive Design */
       @media (max-width: 1024px) {
         .images-grid {
@@ -897,8 +950,8 @@
   </head>
 
   <body>
-    <div class="game-container">
-      <div class="game-header">
+    <div class="game-container" role="main">
+      <header class="game-header">
         <h1>
           <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
           Picture Puzzle Challenge
@@ -907,41 +960,57 @@
           Match pictures with descriptions, solve visual puzzles, and have fun
           learning!
         </p>
-      </div>
+      </header>
 
       <!-- Game Stats -->
-      <div class="game-stats">
-        <div class="stat-card">
-          <div class="stat-value" id="currentLevel">1</div>
-          <div class="stat-label">Level</div>
+      <div class="game-stats" role="region" aria-label="Game Statistics">
+        <div class="stat-card" aria-labelledby="level-label">
+          <div class="stat-value" id="currentLevel" aria-live="polite">1</div>
+          <div class="stat-label" id="level-label">Level</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalScore">0</div>
-          <div class="stat-label">Score</div>
+        <div class="stat-card" aria-labelledby="score-label">
+          <div class="stat-value" id="totalScore" aria-live="polite">0</div>
+          <div class="stat-label" id="score-label">Score</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="correctAnswers">0</div>
-          <div class="stat-label">Correct</div>
+        <div class="stat-card" aria-labelledby="correct-label">
+          <div class="stat-value" id="correctAnswers" aria-live="polite">0</div>
+          <div class="stat-label" id="correct-label">Correct</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="streak">0</div>
-          <div class="stat-label">Streak</div>
+        <div class="stat-card" aria-labelledby="streak-label">
+          <div class="stat-value" id="streak" aria-live="polite">0</div>
+          <div class="stat-label" id="streak-label">Streak</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="timeRemaining">60</div>
-          <div class="stat-label">Time</div>
+        <div class="stat-card" aria-labelledby="time-label">
+          <div class="stat-value" id="timeRemaining" aria-live="polite">60</div>
+          <div class="stat-label" id="time-label">Time</div>
         </div>
       </div>
 
       <!-- Challenge Area -->
-      <div class="challenge-area">
+      <div
+        class="challenge-area"
+        role="region"
+        aria-label="Game Challenge Area"
+      >
         <div class="challenge-content">
-          <div class="challenge-title" id="challengeTitle">
-            <i class="fas fa-star"></i>
+          <div
+            class="challenge-title"
+            id="challengeTitle"
+            role="heading"
+            aria-level="2"
+          >
+            <i class="fas fa-star" aria-hidden="true"></i>
             Match the Picture to Its Description!
           </div>
 
-          <div class="progress-bar">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Game Progress"
+          >
             <div
               class="progress-fill"
               id="progressFill"
@@ -953,6 +1022,7 @@
             class="challenge-timer"
             id="challengeTimer"
             style="display: none"
+            aria-live="polite"
           >
             ⏰ 60
           </div>
@@ -961,7 +1031,12 @@
             Click 'Start Challenge' to begin your picture puzzle adventure!
           </div>
 
-          <div class="images-grid" id="imagesGrid">
+          <div
+            class="images-grid"
+            id="imagesGrid"
+            role="list"
+            aria-label="Picture options"
+          >
             <!-- Images will be populated by JavaScript -->
           </div>
 
@@ -969,6 +1044,8 @@
             class="challenge-options"
             id="challengeOptions"
             style="display: none"
+            role="radiogroup"
+            aria-label="Answer choices"
           >
             <!-- Options will be populated by JavaScript -->
           </div>
@@ -976,43 +1053,66 @@
       </div>
 
       <!-- Game Controls -->
-      <div class="game-controls">
-        <button class="btn btn-primary" onclick="startGame()" id="startBtn">
-          <i class="fas fa-play"></i> Start Challenge
+      <div class="game-controls" role="region" aria-label="Game Controls">
+        <button
+          class="btn btn-primary"
+          onclick="startGame()"
+          id="startBtn"
+          aria-label="Start the picture puzzle challenge"
+        >
+          <i class="fas fa-play" aria-hidden="true"></i> Start Challenge
         </button>
         <button
           class="btn btn-secondary"
           onclick="nextChallenge()"
           id="nextBtn"
           style="display: none"
+          aria-label="Move to next challenge"
         >
-          <i class="fas fa-forward"></i> Next Challenge
+          <i class="fas fa-forward" aria-hidden="true"></i> Next Challenge
         </button>
         <button
           class="btn btn-hint"
           onclick="getHint()"
           id="hintBtn"
           style="display: none"
+          aria-label="Get a hint for the current challenge"
         >
-          <i class="fas fa-lightbulb"></i> Hint
+          <i class="fas fa-lightbulb" aria-hidden="true"></i> Hint (−25 pts)
         </button>
-        <button class="btn btn-success" onclick="resetGame()" id="resetBtn">
-          <i class="fas fa-refresh"></i> Reset Game
+        <button
+          class="btn btn-success"
+          onclick="resetGame()"
+          id="resetBtn"
+          aria-label="Reset the game and start over"
+        >
+          <i class="fas fa-refresh" aria-hidden="true"></i> Reset Game
         </button>
       </div>
 
       <!-- Feedback Section -->
-      <div class="feedback-section" id="feedbackSection">
+      <div
+        class="feedback-section"
+        id="feedbackSection"
+        role="region"
+        aria-label="Game Results and Feedback"
+        aria-live="polite"
+      >
         <div class="feedback-title">
-          <i class="fas fa-trophy"></i> Challenge Results
+          <i class="fas fa-trophy" aria-hidden="true"></i> Challenge Results
         </div>
-        <div class="feedback-grid" id="feedbackGrid">
+        <div class="feedback-grid" id="feedbackGrid" role="list">
           <!-- Feedback cards will be populated by JavaScript -->
         </div>
       </div>
 
-      <!-- Game Messages -->
-      <div id="gameMessage" class="game-message" style="display: none"></div>
+      <div
+        id="gameMessage"
+        class="game-message"
+        style="display: none"
+        role="alert"
+        aria-live="assertive"
+      ></div>
     </div>
 
     <script>
@@ -1022,6 +1122,7 @@
         totalScore: 0,
         correctAnswers: 0,
         streak: 0,
+        bestStreak: 0,
         timeRemaining: 60,
         gameActive: false,
         currentChallenge: null,
@@ -1190,36 +1291,69 @@
             totalScore: gameState.totalScore,
             correctAnswers: gameState.correctAnswers,
             streak: gameState.streak,
+            bestStreak: gameState.bestStreak,
           })
         );
       }
 
-      // Sound effects
-      const playSound = (frequency, duration = 200) => {
-        if (
-          typeof AudioContext !== "undefined" ||
-          typeof webkitAudioContext !== "undefined"
-        ) {
-          const audioContext = new (AudioContext || webkitAudioContext)();
+      // Enhanced sound effects with chords
+      const playSound = (type) => {
+        try {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
           const oscillator = audioContext.createOscillator();
           const gainNode = audioContext.createGain();
 
           oscillator.connect(gainNode);
           gainNode.connect(audioContext.destination);
 
-          oscillator.frequency.value = frequency;
-          oscillator.type = "sine";
+          if (type === "success") {
+            oscillator.frequency.setValueAtTime(
+              523.25,
+              audioContext.currentTime
+            );
+            oscillator.frequency.setValueAtTime(
+              659.25,
+              audioContext.currentTime + 0.1
+            );
+            oscillator.frequency.setValueAtTime(
+              783.99,
+              audioContext.currentTime + 0.2
+            );
+          } else if (type === "error") {
+            oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(
+              196,
+              audioContext.currentTime + 0.1
+            );
+          } else if (type === "hint") {
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+          }
 
-          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          oscillator.type = "sine";
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
           gainNode.gain.exponentialRampToValueAtTime(
             0.01,
-            audioContext.currentTime + duration / 1000
+            audioContext.currentTime + 0.3
           );
 
           oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + duration / 1000);
+          oscillator.stop(audioContext.currentTime + 0.3);
+        } catch (e) {
+          // Audio not supported
         }
       };
+
+      // Screen reader announcements
+      function announceToScreenReader(message) {
+        const announcement = document.createElement("div");
+        announcement.setAttribute("role", "status");
+        announcement.setAttribute("aria-live", "polite");
+        announcement.className = "sr-only";
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+      }
 
       // Timer functions
       function startTimer() {
@@ -1535,7 +1669,17 @@
         const card = document.createElement("div");
         card.className = "image-card";
         card.dataset.index = index;
+        card.setAttribute("role", "radio");
+        card.setAttribute("aria-checked", "false");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `${image.name}: ${image.alt}`);
         card.onclick = () => selectImage(index);
+        card.onkeypress = (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            selectImage(index);
+          }
+        };
 
         card.innerHTML = `
           <img src="${image.src}" alt="${image.alt}" class="card-image" loading="lazy">
@@ -1549,7 +1693,16 @@
         const card = document.createElement("div");
         card.className = "option-card";
         card.dataset.index = index;
+        card.setAttribute("role", "radio");
+        card.setAttribute("aria-checked", "false");
+        card.setAttribute("tabindex", "0");
         card.onclick = () => selectOption(index);
+        card.onkeypress = (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            selectOption(index);
+          }
+        };
         card.textContent = option;
 
         return card;
@@ -1559,22 +1712,30 @@
         if (!gameState.gameActive) return;
 
         const cards = document.querySelectorAll(".image-card");
-        cards.forEach((card) => card.classList.remove("selected"));
+        cards.forEach((card) => {
+          card.classList.remove("selected");
+          card.setAttribute("aria-checked", "false");
+        });
         cards[index].classList.add("selected");
+        cards[index].setAttribute("aria-checked", "true");
 
         setTimeout(() => checkImageAnswer(index), 500);
-        playSound(700, 100);
+        playSound("success");
       }
 
       function selectOption(index) {
         if (!gameState.gameActive) return;
 
         const cards = document.querySelectorAll(".option-card");
-        cards.forEach((card) => card.classList.remove("selected"));
+        cards.forEach((card) => {
+          card.classList.remove("selected");
+          card.setAttribute("aria-checked", "false");
+        });
         cards[index].classList.add("selected");
+        cards[index].setAttribute("aria-checked", "true");
 
         setTimeout(() => checkOptionAnswer(index), 500);
-        playSound(700, 100);
+        playSound("success");
       }
 
       function checkImageAnswer(selectedIndex) {
@@ -1627,15 +1788,31 @@
         gameState.correctAnswers++;
         gameState.streak++;
 
-        const points =
-          100 + gameState.streak * 10 + gameState.currentLevel * 20;
+        if (gameState.streak > gameState.bestStreak) {
+          gameState.bestStreak = gameState.streak;
+        }
+
+        const basePoints = 100;
+        const timeBonus = gameState.timeRemaining * 2;
+        const streakBonus = gameState.streak * 50;
+        const hintPenalty = gameState.hintsUsed * 25;
+        const points = Math.max(
+          0,
+          basePoints + timeBonus + streakBonus - hintPenalty
+        );
+
         gameState.totalScore += points;
 
         updateDisplay();
-        playSound(800, 300);
-        showMessage(
-          `🎉 Correct! +${points} points! Streak: ${gameState.streak}`,
-          "success"
+        playSound("success");
+
+        let message = `🎉 Correct! +${points} points`;
+        if (gameState.streak > 1) {
+          message += ` | 🔥 ${gameState.streak}x Streak!`;
+        }
+        showMessage(message, "success");
+        announceToScreenReader(
+          `Correct! You earned ${points} points. Current streak: ${gameState.streak}`
         );
 
         if (gameState.streak % 5 === 0) {
@@ -1645,16 +1822,22 @@
             "success"
           );
         }
+
+        saveGameState();
       }
 
       function handleIncorrectAnswer() {
         gameState.streak = 0;
         updateDisplay();
-        playSound(400, 300);
+        playSound("error");
         showMessage(
           "❌ Not quite right. The correct answer is highlighted!",
           "danger"
         );
+        announceToScreenReader(
+          "Incorrect answer. Streak reset. The correct answer is now highlighted."
+        );
+        saveGameState();
       }
 
       function nextChallenge() {
@@ -1671,13 +1854,26 @@
       function updateProgressBar() {
         const progress =
           (gameState.challengeIndex / gameState.challenges.length) * 100;
-        document.getElementById("progressFill").style.width = progress + "%";
+        const progressFill = document.getElementById("progressFill");
+        const progressBar = progressFill.parentElement;
+
+        progressFill.style.width = progress + "%";
+        if (progressBar) {
+          progressBar.setAttribute(
+            "aria-valuenow",
+            Math.round(progress).toString()
+          );
+        }
       }
 
       function getHint() {
         if (!gameState.gameActive || !gameState.currentChallenge) return;
 
         gameState.hintsUsed++;
+        gameState.totalScore = Math.max(0, gameState.totalScore - 25);
+        updateDisplay();
+        playSound("hint");
+
         const challenge = gameState.currentChallenge;
 
         if (challenge.type === "match") {
@@ -1686,8 +1882,11 @@
             (img) => img.id === challenge.correctAnswer
           );
           showMessage(
-            `💡 Hint: Look for something related to "${correctImage.category}"`,
+            `💡 Hint: Look for something related to "${correctImage.category}" (−25 pts)`,
             "info"
+          );
+          announceToScreenReader(
+            `Hint: Look for something related to ${correctImage.category}. 25 points deducted.`
           );
         } else if (challenge.type === "describe") {
           // Give partial description
@@ -1701,10 +1900,16 @@
             randomWrong.style.opacity = "0.5";
             randomWrong.style.pointerEvents = "none";
           }
-          showMessage(`💡 Hint: One wrong answer has been eliminated!`, "info");
+          showMessage(
+            `💡 Hint: One wrong answer has been eliminated! (−25 pts)`,
+            "info"
+          );
+          announceToScreenReader(
+            "Hint: One wrong answer has been eliminated. 25 points deducted."
+          );
         }
 
-        playSound(600, 200);
+        saveGameState();
       }
 
       function createConfetti() {
@@ -1782,6 +1987,39 @@
           "info"
         );
       }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "h" || e.key === "H") {
+          if (gameState.gameActive) {
+            e.preventDefault();
+            getHint();
+          }
+        } else if (e.key === " " && !gameState.gameActive) {
+          e.preventDefault();
+          startGame();
+        } else if (
+          e.key === "Enter" &&
+          document.getElementById("nextBtn").style.display !== "none"
+        ) {
+          e.preventDefault();
+          nextChallenge();
+        } else if (e.key >= "1" && e.key <= "4" && gameState.gameActive) {
+          e.preventDefault();
+          const options = document.querySelectorAll(
+            ".option-card, .image-card"
+          );
+          const index = parseInt(e.key) - 1;
+          if (options[index]) {
+            options[index].click();
+          }
+        } else if (e.key === "Escape" && gameState.gameActive) {
+          e.preventDefault();
+          if (confirm("Are you sure you want to reset the game?")) {
+            resetGame();
+          }
+        }
+      });
 
       // Initialize game on page load
       document.addEventListener("DOMContentLoaded", function () {

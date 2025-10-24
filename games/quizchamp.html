@@ -95,9 +95,24 @@
           "educationalRole": "student",
           "audienceType": "ESL Learners"
         },
-        "educationalUse": "Grammar and Vocabulary Testing",
+        "educationalLevel": "Beginner to Advanced",
+        "educationalUse": [
+          "grammar practice",
+          "vocabulary testing",
+          "reading comprehension"
+        ],
         "interactivityType": "active",
-        "learningResourceType": "game"
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "keyboardNavigation",
+          "ariaLabels",
+          "timingControl",
+          "highContrast"
+        ],
+        "keywords": "ESL quiz, English grammar, vocabulary test, timed quiz, educational game"
       }
     </script>
     <style>
@@ -879,20 +894,61 @@
         margin: 1rem 0;
         color: #ffd700;
       }
+
+      /* Accessibility Styles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Focus visible styles for keyboard navigation */
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      .letter-tile:focus-visible {
+        outline: 3px solid #4caf50;
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(76, 175, 80, 0.3);
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="game-container">
+    <div class="game-container" role="main">
       <button
         class="sound-toggle"
         onclick="toggleSound()"
         title="Toggle Sound Effects"
+        aria-label="Toggle sound effects on or off"
+        aria-pressed="true"
       >
         🔊
       </button>
 
       <!-- Team Setup Screen -->
-      <div id="team-setup-screen" class="team-setup-screen">
+      <div
+        id="team-setup-screen"
+        class="team-setup-screen"
+        role="region"
+        aria-label="Team Setup"
+      >
         <h1>⚔️ ESL Team Countdown Championship</h1>
 
         <div class="instructions">
@@ -912,6 +968,7 @@
                 class="form-input"
                 placeholder="Enter Team 1 name"
                 maxlength="20"
+                aria-required="false"
               />
             </div>
 
@@ -923,12 +980,17 @@
                 class="form-input"
                 placeholder="Enter Team 2 name"
                 maxlength="20"
+                aria-required="false"
               />
             </div>
 
             <div class="form-group">
               <label for="num-rounds">Number of Rounds:</label>
-              <select id="num-rounds" class="form-input">
+              <select
+                id="num-rounds"
+                class="form-input"
+                aria-label="Select number of rounds"
+              >
                 <option value="3">3 Rounds (Quick Match)</option>
                 <option value="5" selected>5 Rounds (Standard)</option>
                 <option value="7">7 Rounds (Championship)</option>
@@ -938,7 +1000,11 @@
 
             <div class="form-group">
               <label for="letter-type">Letter Generation:</label>
-              <select id="letter-type" class="form-input">
+              <select
+                id="letter-type"
+                class="form-input"
+                aria-label="Select letter generation type"
+              >
                 <option value="random" selected>Random Letters</option>
                 <option value="vowel-heavy">
                   More Vowels (4 vowels, 5 consonants)
@@ -1271,20 +1337,39 @@
       </div>
 
       <!-- Game Screen -->
-      <div id="game-screen" class="game-screen">
-        <div class="team-vs-display">
+      <div
+        id="game-screen"
+        class="game-screen"
+        role="region"
+        aria-label="Game Play Area"
+      >
+        <div class="team-vs-display" role="region" aria-label="Team Scoreboard">
           <div class="team-box" id="team1-box">
             <div class="team-name" id="team1-display">Team 1</div>
-            <div class="team-score" id="team1-score">0</div>
+            <div
+              class="team-score"
+              id="team1-score"
+              aria-live="polite"
+              aria-label="Team 1 score"
+            >
+              0
+            </div>
           </div>
-          <div class="vs-text">VS</div>
+          <div class="vs-text" aria-hidden="true">VS</div>
           <div class="team-box" id="team2-box">
             <div class="team-name" id="team2-display">Team 2</div>
-            <div class="team-score" id="team2-score">0</div>
+            <div
+              class="team-score"
+              id="team2-score"
+              aria-live="polite"
+              aria-label="Team 2 score"
+            >
+              0
+            </div>
           </div>
         </div>
 
-        <div class="round-info">
+        <div class="round-info" role="status" aria-live="polite">
           <div>
             <strong
               >Round <span id="current-round">1</span> of
@@ -1297,7 +1382,14 @@
           <div><strong>Letters Challenge</strong></div>
         </div>
 
-        <div class="progress-bar">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="20"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="Round progress"
+        >
           <div
             class="progress-fill"
             id="round-progress"
@@ -1306,8 +1398,15 @@
         </div>
 
         <h1>🔤 Both Teams: Find Words Together!</h1>
-        <div class="timer" id="timer">30</div>
-        <div class="letters-display" id="letters-container">
+        <div class="timer" id="timer" aria-live="assertive" aria-atomic="true">
+          30
+        </div>
+        <div
+          class="letters-display"
+          id="letters-container"
+          role="list"
+          aria-label="Available letters"
+        >
           <!-- Letters will be populated as individual tiles -->
         </div>
 
@@ -1651,8 +1750,8 @@
 
     <script>
       let gameState = {
-        team1: { name: "Player 1", score: 0, roundScores: [] },
-        team2: { name: "Player 2", score: 0, roundScores: [] },
+        team1: { name: "Player 1", score: 0, roundScores: [], bestStreak: 0 },
+        team2: { name: "Player 2", score: 0, roundScores: [], bestStreak: 0 },
         currentTeam: 1,
         currentRound: 1,
         totalRounds: 5,
@@ -1679,13 +1778,104 @@
         bothWordsSubmitted: false,
       };
 
-      // Sound effects
+      // Load stats from localStorage
+      function loadStats() {
+        try {
+          const saved = localStorage.getItem("quizChampStats");
+          if (saved) {
+            const stats = JSON.parse(saved);
+            if (stats.team1BestStreak)
+              gameState.team1.bestStreak = stats.team1BestStreak;
+            if (stats.team2BestStreak)
+              gameState.team2.bestStreak = stats.team2BestStreak;
+          }
+        } catch (e) {
+          console.warn("Could not load stats", e);
+        }
+      }
+
+      // Save stats to localStorage
+      function saveStats() {
+        try {
+          const stats = {
+            team1BestStreak: gameState.team1.bestStreak,
+            team2BestStreak: gameState.team2.bestStreak,
+            lastPlayed: new Date().toISOString(),
+          };
+          localStorage.setItem("quizChampStats", JSON.stringify(stats));
+        } catch (e) {
+          console.warn("Could not save stats", e);
+        }
+      }
+
+      // Enhanced sound effects
       const sounds = {
         tick: () => gameState.soundEnabled && playBeep(800, 100),
-        success: () => gameState.soundEnabled && playBeep(1000, 200),
+        success: () => gameState.soundEnabled && playSuccessSound(),
+        error: () => gameState.soundEnabled && playErrorSound(),
         warning: () => gameState.soundEnabled && playBeep(400, 300),
         victory: () => gameState.soundEnabled && playVictorySound(),
       };
+
+      function playSuccessSound() {
+        try {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(
+            659.25,
+            audioContext.currentTime + 0.1
+          );
+          oscillator.frequency.setValueAtTime(
+            783.99,
+            audioContext.currentTime + 0.2
+          );
+
+          oscillator.type = "sine";
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.3
+          );
+
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.3);
+        } catch (e) {}
+      }
+
+      function playErrorSound() {
+        try {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(
+            196,
+            audioContext.currentTime + 0.1
+          );
+
+          oscillator.type = "sine";
+          gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.2
+          );
+
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.2);
+        } catch (e) {}
+      }
 
       function playBeep(frequency, duration) {
         try {
@@ -2239,6 +2429,9 @@
         gameState.team2.score += player2Result.points;
         gameState.team2.roundScores.push(player2Result.points);
 
+        // Save stats
+        saveStats();
+
         // Announce winner
         const announcement = document.getElementById(
           "round-winner-announcement"
@@ -2246,11 +2439,18 @@
         if (player1Result.points > player2Result.points) {
           announcement.innerHTML = `<h3>🏆 ${gameState.team1.name} wins this round!</h3>`;
           sounds.victory();
+          announceToScreenReader(
+            `${gameState.team1.name} wins this round with ${player1Result.points} points`
+          );
         } else if (player2Result.points > player1Result.points) {
           announcement.innerHTML = `<h3>🏆 ${gameState.team2.name} wins this round!</h3>`;
           sounds.victory();
+          announceToScreenReader(
+            `${gameState.team2.name} wins this round with ${player2Result.points} points`
+          );
         } else {
           announcement.innerHTML = `<h3>🤝 It's a tie this round!</h3>`;
+          announceToScreenReader("It's a tie this round");
         }
 
         // Add word facts if available
@@ -2425,8 +2625,14 @@
           if (gameState.timeLeft <= 10) {
             timerElement.classList.add("timer-critical");
             sounds.warning();
+            if (gameState.timeLeft === 10) {
+              announceToScreenReader("10 seconds remaining");
+            }
           } else if (gameState.timeLeft <= 5) {
             sounds.tick();
+            if (gameState.timeLeft === 5) {
+              announceToScreenReader("5 seconds remaining");
+            }
           }
 
           if (gameState.timeLeft <= 0) {
@@ -2448,6 +2654,10 @@
           hintContainer.style.display = "block";
           document.getElementById("show-hints-btn").style.display = "none";
           gameState.hintsShown = true;
+
+          announceToScreenReader(
+            `Hints shown. Suggested words: ${hints.join(", ")}`
+          );
         }
       }
 
@@ -3227,12 +3437,54 @@
         }, 2000);
       }
 
+      // Screen reader announcements
+      function announceToScreenReader(message) {
+        const announcement = document.createElement("div");
+        announcement.setAttribute("role", "status");
+        announcement.setAttribute("aria-live", "polite");
+        announcement.className = "sr-only";
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (e) {
+        if (gameState.gamePhase === "setup" && e.key === " ") {
+          e.preventDefault();
+          startGame();
+        } else if (gameState.gamePhase === "playing") {
+          if (e.key === "h" || e.key === "H") {
+            e.preventDefault();
+            if (!gameState.hintsShown) {
+              showHints();
+            }
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            if (confirm("Are you sure you want to end the game early?")) {
+              endGameEarly();
+            }
+          }
+        } else if (e.key === "Enter") {
+          // Submit forms or continue actions
+          const submitBtn = document.querySelector('button[onclick*="submit"]');
+          if (submitBtn && submitBtn.style.display !== "none") {
+            e.preventDefault();
+            submitBtn.click();
+          }
+        }
+      });
+
       // Initialize
       document.addEventListener("DOMContentLoaded", function () {
+        loadStats();
         showTeamSetup();
         showFeedback(
           "🏆 Welcome to ESL Quiz Championship! Press SPACE for quick start or set up your teams below.",
           "success"
+        );
+        announceToScreenReader(
+          "Welcome to ESL Quiz Championship. Press Space to start or customize your teams."
         );
       });
     </script>

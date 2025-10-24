@@ -94,9 +94,19 @@
           "educationalRole": "student",
           "audienceType": "ESL Learners"
         },
-        "educationalUse": "Grammar Practice",
+        "educationalLevel": "Beginner to Intermediate",
+        "educationalUse": ["grammar practice", "parts of speech", "sentence structure"],
         "interactivityType": "active",
-        "learningResourceType": "game"
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "keyboardNavigation",
+          "ariaLabels",
+          "highContrast"
+        ],
+        "keywords": "grammar game, ESL slingshot, action learning, parts of speech"
       }
     </script>
     <style>
@@ -927,41 +937,73 @@
                 transform: translateX(10px);
               }
             }
+
+      /* Accessibility Styles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Focus visible styles for keyboard navigation */
+      button:focus-visible,
+      .option:focus-visible {
+        outline: 3px solid #ff6347;
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(255, 99, 71, 0.3);
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="game-container">
-      <div class="clouds">
+    <div class="game-container" role="main">
+      <div class="clouds" aria-hidden="true">
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
       </div>
 
-      <div class="ui-panel">
-        <div class="score">Score: <span id="score">0</span></div>
-        <div class="level">Level: <span id="level">1</span></div>
+      <div class="ui-panel" role="region" aria-label="Game Statistics">
+        <div class="score">Score: <span id="score" aria-live="polite">0</span></div>
+        <div class="level">Level: <span id="level" aria-live="polite">1</span></div>
       </div>
 
-      <div class="question-panel">
-        <div class="question" id="question">
+      <div class="question-panel" role="region" aria-label="Question and Answer Options">
+        <div class="question" id="question" role="heading" aria-level="1">
           Choose the correct word to complete the sentence:
         </div>
-        <div class="options" id="options"></div>
+        <div class="options" id="options" role="radiogroup" aria-label="Answer choices"></div>
       </div>
 
-      <div class="slingshot">
+      <div class="slingshot" aria-hidden="true">
         <div class="slingshot-frame">
           <div class="slingshot-band"></div>
         </div>
         <div class="projectile" id="projectile"></div>
       </div>
 
-      <div id="targets-container"></div>
+      <div id="targets-container" aria-hidden="true"></div>
 
-      <button class="fire-button" id="fire-button" onclick="fireProjectile()">
+      <button class="fire-button" id="fire-button" onclick="fireProjectile()" aria-label="Fire the slingshot at selected target">
         FIRE!
       </button>
 
-      <div class="feedback" id="feedback"></div>
+      <div class="feedback" id="feedback" role="alert" aria-live="assertive"></div>
     </div>
 
     <script>
@@ -972,8 +1014,46 @@
       let targets = [];
       let isAnimating = false;
       let consecutiveCorrect = 0;
+      let bestStreak = 0;
       let totalQuestions = 0;
       let accuracy = 100;
+
+      // Load stats from localStorage
+      function loadStats() {
+        try {
+          const saved = localStorage.getItem('slingshotStats');
+          if (saved) {
+            const stats = JSON.parse(saved);
+            bestStreak = stats.bestStreak || 0;
+          }
+        } catch (e) {
+          console.warn('Could not load stats', e);
+        }
+      }
+
+      // Save stats to localStorage
+      function saveStats() {
+        try {
+          const stats = {
+            bestStreak: bestStreak,
+            lastPlayed: new Date().toISOString()
+          };
+          localStorage.setItem('slingshotStats', JSON.stringify(stats));
+        } catch (e) {
+          console.warn('Could not save stats', e);
+        }
+      }
+
+      // Screen reader announcements
+      function announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
+      }
 
       // Sound system
       const audioContext = (() => {
@@ -1063,9 +1143,11 @@
       ];
 
       function initGame() {
+        loadStats();
         loadQuestion();
         createTargets();
         positionProjectile();
+        announceToScreenReader("Grammar Slingshot Challenge started. Use number keys 1-4 or arrow keys to select answers, then press Enter or Space to fire.");
       }
 
       function loadQuestion() {
@@ -1100,6 +1182,9 @@
             div.className = "option";
             div.textContent = option;
             div.tabIndex = 0; // Make focusable for keyboard navigation
+            div.setAttribute('role', 'radio');
+            div.setAttribute('aria-checked', 'false');
+            div.setAttribute('aria-label', `Option ${index + 1}: ${option}`);
             div.onclick = () => selectOption(index);
 
             // Keyboard support
@@ -1125,16 +1210,22 @@
         selectedAnswer = null;
         updateFireButton();
         updateAccuracy();
+        announceToScreenReader(`Question: ${q.question}`);
       }
 
       function selectOption(index) {
         selectedAnswer = index;
         const options = document.querySelectorAll(".option");
-        options.forEach((opt) => opt.classList.remove("selected"));
+        options.forEach((opt) => {
+          opt.classList.remove("selected");
+          opt.setAttribute('aria-checked', 'false');
+        });
         options[index].classList.add("selected");
+        options[index].setAttribute('aria-checked', 'true');
 
         playSound('select');
         updateFireButton();
+        announceToScreenReader(`Selected option ${index + 1}: ${options[index].textContent}`);
       }
 
       function updateFireButton() {
@@ -1225,7 +1316,66 @@
         }, 300);
       }
 
-            function positionProjectile() {\n        const projectile = document.getElementById(\"projectile\");\n        const slingshot = document.querySelector('.slingshot');\n        const slingshotRect = slingshot.getBoundingClientRect();\n        \n        // Position relative to slingshot for better responsiveness\n        projectile.style.left = (slingshotRect.left + slingshotRect.width + 15) + \"px\";\n        projectile.style.bottom = (window.innerHeight - slingshotRect.top - 30) + \"px\";\n        projectile.style.transform = \"scale(1)\";\n        projectile.style.transition = \"all 0.3s ease\";\n        projectile.style.filter = 'none';\n      }\n      \n      // Keyboard controls\n      document.addEventListener('keydown', (e) => {\n        if (isAnimating) return;\n        \n        const options = document.querySelectorAll('.option');\n        const currentSelected = document.querySelector('.option.selected');\n        \n        switch(e.key) {\n          case '1':\n          case '2':\n          case '3':\n          case '4':\n            const optionIndex = parseInt(e.key) - 1;\n            if (options[optionIndex]) {\n              selectOption(optionIndex);\n            }\n            break;\n            \n          case 'ArrowUp':\n          case 'ArrowDown':\n            e.preventDefault();\n            if (options.length > 0) {\n              let newIndex = 0;\n              if (currentSelected) {\n                const currentIndex = Array.from(options).indexOf(currentSelected);\n                newIndex = e.key === 'ArrowUp' \n                  ? (currentIndex - 1 + options.length) % options.length\n                  : (currentIndex + 1) % options.length;\n              }\n              selectOption(newIndex);\n              options[newIndex].focus();\n            }\n            break;\n            \n          case 'Enter':\n          case ' ':\n            e.preventDefault();\n            if (selectedAnswer !== null && !isAnimating) {\n              fireProjectile();\n            }\n            break;\n            \n          case 'Escape':\n            window.location.href = '../games.html';\n            break;\n        }\n      });
+      function positionProjectile() {
+        const projectile = document.getElementById("projectile");
+        const slingshot = document.querySelector('.slingshot');
+        const slingshotRect = slingshot.getBoundingClientRect();
+        
+        // Position relative to slingshot for better responsiveness
+        projectile.style.left = (slingshotRect.left + slingshotRect.width + 15) + "px";
+        projectile.style.bottom = (window.innerHeight - slingshotRect.top - 30) + "px";
+        projectile.style.transform = "scale(1)";
+        projectile.style.transition = "all 0.3s ease";
+        projectile.style.filter = 'none';
+      }
+      
+      // Keyboard controls
+      document.addEventListener('keydown', (e) => {
+        if (isAnimating) return;
+        
+        const options = document.querySelectorAll('.option');
+        const currentSelected = document.querySelector('.option.selected');
+        
+        switch(e.key) {
+          case '1':
+          case '2':
+          case '3':
+          case '4':
+            const optionIndex = parseInt(e.key) - 1;
+            if (options[optionIndex]) {
+              selectOption(optionIndex);
+            }
+            break;
+            
+          case 'ArrowUp':
+          case 'ArrowDown':
+            e.preventDefault();
+            if (options.length > 0) {
+              let newIndex = 0;
+              if (currentSelected) {
+                const currentIndex = Array.from(options).indexOf(currentSelected);
+                newIndex = e.key === 'ArrowUp' 
+                  ? (currentIndex - 1 + options.length) % options.length
+                  : (currentIndex + 1) % options.length;
+              }
+              selectOption(newIndex);
+              options[newIndex].focus();
+            }
+            break;
+            
+          case 'Enter':
+          case ' ':
+            e.preventDefault();
+            if (selectedAnswer !== null && !isAnimating) {
+              fireProjectile();
+            }
+            break;
+            
+          case 'Escape':
+            window.location.href = '../games.html';
+            break;
+        }
+      });
 
       function fireProjectile() {
         if (selectedAnswer === null || isAnimating) return;
@@ -1313,6 +1463,13 @@
 
         if (isCorrect) {
           consecutiveCorrect++;
+          
+          // Update best streak
+          if (consecutiveCorrect > bestStreak) {
+            bestStreak = consecutiveCorrect;
+            saveStats();
+          }
+
           const baseScore = 10;
           const levelMultiplier = level;
           const streakBonus = Math.min(consecutiveCorrect * 2, 20);
@@ -1321,6 +1478,12 @@
           score += scoreGained;
           animateScoreIncrease(scoreGained);
           playSound('correct');
+
+          let message = `🎯 Correct! +${scoreGained} points`;
+          if (consecutiveCorrect > 1) {
+            message += ` | 🔥 ${consecutiveCorrect}x Streak!`;
+          }
+          announceToScreenReader(message);
 
           // Remove hit target with enhanced explosion effect
           const hitTarget = targets[selectedAnswer];
@@ -1340,6 +1503,7 @@
           consecutiveCorrect = 0;
           playSound('incorrect');
           showFeedback('TRY AGAIN! 💥', 'incorrect');
+          announceToScreenReader(`Incorrect. Streak reset. The correct answer was ${q.options[q.correct]}`);
 
           // Shake wrong target
           const wrongTarget = targets[selectedAnswer];

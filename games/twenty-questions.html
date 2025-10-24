@@ -56,6 +56,52 @@
       href="https://eslfunonline.com/games/twenty-questions.html"
     />
 
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "20 Questions ESL - Vocabulary & Question Practice Game",
+        "description": "Play 20 Questions ESL - practice asking yes/no questions and improve conversation skills! Guess mystery objects with vocabulary from 6 different categories.",
+        "url": "https://eslfunonline.com/games/twenty-questions.html",
+        "image": "https://eslfunonline.com/images/image copy 11.png",
+        "publisher": {
+          "@type": "Organization",
+          "name": "ESL Fun Online",
+          "url": "https://eslfunonline.com"
+        },
+        "genre": ["Educational", "Vocabulary", "Question Formation"],
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student",
+          "audienceType": "ESL Learners of All Levels"
+        },
+        "educationalLevel": "All Levels",
+        "educationalUse": [
+          "question formation",
+          "vocabulary building",
+          "conversation practice",
+          "critical thinking"
+        ],
+        "interactivityType": "active",
+        "learningResourceType": "game",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": [
+          "alternativeText",
+          "fullKeyboardControl",
+          "screenReaderSupport"
+        ],
+        "accessibilityControl": ["fullKeyboardControl", "fullMouseControl"],
+        "accessibilityHazard": [
+          "noFlashingHazard",
+          "noMotionSimulationHazard",
+          "noSoundHazard"
+        ],
+        "keywords": "20 questions, ESL game, question formation, vocabulary practice, conversation skills, guessing game"
+      }
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -550,68 +596,215 @@
           gap: 0.5rem;
         }
       }
+
+      /* Accessibility */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      .mode-btn:focus-visible,
+      .category-btn:focus-visible,
+      .difficulty-btn:focus-visible {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="game-container">
-      <div class="game-header">
-        <h1><i class="fas fa-question-circle"></i> 20 Questions ESL</h1>
+      <div class="game-header" role="banner">
+        <h1>
+          <i class="fas fa-question-circle" aria-hidden="true"></i> 20 Questions
+          ESL
+        </h1>
         <p>Guess the mystery object by asking yes/no questions!</p>
       </div>
 
-      <div class="game-modes">
-        <button class="mode-btn active" data-mode="classic">
+      <div class="game-modes" role="tablist" aria-label="Game mode selection">
+        <button
+          class="mode-btn active"
+          data-mode="classic"
+          role="tab"
+          aria-selected="true"
+          aria-controls="gameContent"
+        >
           Classic Mode
         </button>
-        <button class="mode-btn" data-mode="category">Category Mode</button>
-        <button class="mode-btn" data-mode="reverse">Reverse Mode</button>
+        <button
+          class="mode-btn"
+          data-mode="category"
+          role="tab"
+          aria-selected="false"
+          aria-controls="gameContent"
+        >
+          Category Mode
+        </button>
+        <button
+          class="mode-btn"
+          data-mode="reverse"
+          role="tab"
+          aria-selected="false"
+          aria-controls="gameContent"
+        >
+          Reverse Mode
+        </button>
       </div>
 
-      <div class="category-selector" id="categorySelector">
-        <button class="category-btn active" data-category="animals">
+      <div
+        class="category-selector"
+        id="categorySelector"
+        role="radiogroup"
+        aria-label="Category selection"
+      >
+        <button
+          class="category-btn active"
+          data-category="animals"
+          role="radio"
+          aria-checked="true"
+        >
           Animals
         </button>
-        <button class="category-btn" data-category="food">Food</button>
-        <button class="category-btn" data-category="objects">Objects</button>
-        <button class="category-btn" data-category="places">Places</button>
-        <button class="category-btn" data-category="people">People</button>
-        <button class="category-btn" data-category="nature">Nature</button>
+        <button
+          class="category-btn"
+          data-category="food"
+          role="radio"
+          aria-checked="false"
+        >
+          Food
+        </button>
+        <button
+          class="category-btn"
+          data-category="objects"
+          role="radio"
+          aria-checked="false"
+        >
+          Objects
+        </button>
+        <button
+          class="category-btn"
+          data-category="places"
+          role="radio"
+          aria-checked="false"
+        >
+          Places
+        </button>
+        <button
+          class="category-btn"
+          data-category="people"
+          role="radio"
+          aria-checked="false"
+        >
+          People
+        </button>
+        <button
+          class="category-btn"
+          data-category="nature"
+          role="radio"
+          aria-checked="false"
+        >
+          Nature
+        </button>
       </div>
 
-      <div class="question-counter">
-        <div class="counter-display" id="questionCounter">20</div>
+      <div class="question-counter" role="status" aria-live="polite">
+        <div
+          class="counter-display"
+          id="questionCounter"
+          aria-label="Questions remaining"
+        >
+          20
+        </div>
         <div class="counter-label">Questions Remaining</div>
       </div>
 
-      <div class="game-stats">
+      <div
+        class="game-stats"
+        role="status"
+        aria-live="polite"
+        aria-label="Game statistics"
+      >
         <div class="stat-card">
-          <div class="stat-value" id="gamesPlayed">0</div>
+          <div
+            class="stat-value"
+            id="gamesPlayed"
+            aria-label="Total games played"
+          >
+            0
+          </div>
           <div class="stat-label">Games Played</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="gamesWon">0</div>
+          <div class="stat-value" id="gamesWon" aria-label="Games won">0</div>
           <div class="stat-label">Games Won</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="averageQuestions">0</div>
+          <div
+            class="stat-value"
+            id="averageQuestions"
+            aria-label="Average questions used"
+          >
+            0
+          </div>
           <div class="stat-label">Avg Questions</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="currentStreak">0</div>
+          <div
+            class="stat-value"
+            id="currentStreak"
+            aria-label="Current win streak"
+          >
+            0
+          </div>
           <div class="stat-label">Win Streak</div>
         </div>
       </div>
 
-      <div class="mystery-object">
-        <div class="mystery-display" id="mysteryDisplay">❓</div>
+      <div
+        class="mystery-object"
+        role="region"
+        aria-label="Mystery object display"
+      >
+        <div class="mystery-display" id="mysteryDisplay" aria-hidden="true">
+          ❓
+        </div>
         <div class="mystery-category" id="mysteryCategory">Mystery Object</div>
-        <div class="mystery-hints" id="mysteryHints">
+        <div
+          class="mystery-hints"
+          id="mysteryHints"
+          role="status"
+          aria-live="polite"
+        >
           I'm thinking of something... Ask yes/no questions to figure out what
           it is!
         </div>
       </div>
 
-      <div class="question-area">
+      <div
+        class="question-area"
+        role="main"
+        aria-label="Question and answer area"
+        id="gameContent"
+      >
         <div class="question-input-section">
           <input
             type="text"
@@ -619,26 +812,55 @@
             id="questionInput"
             placeholder="Type your yes/no question here..."
             maxlength="100"
+            aria-label="Type your yes or no question"
           />
 
-          <div class="question-suggestions" id="questionSuggestions">
+          <div
+            class="question-suggestions"
+            id="questionSuggestions"
+            role="group"
+            aria-label="Question suggestions"
+          >
             <!-- Suggestions will be populated by JavaScript -->
           </div>
 
-          <div class="question-buttons">
-            <button class="btn btn-primary" id="askQuestionBtn">
-              <i class="fas fa-paper-plane"></i> Ask Question
+          <div
+            class="question-buttons"
+            role="group"
+            aria-label="Game action buttons"
+          >
+            <button
+              class="btn btn-primary"
+              id="askQuestionBtn"
+              aria-label="Ask your question"
+            >
+              <i class="fas fa-paper-plane" aria-hidden="true"></i> Ask Question
             </button>
-            <button class="btn btn-hint" id="hintBtn">
-              <i class="fas fa-lightbulb"></i> Get Hint
+            <button
+              class="btn btn-hint"
+              id="hintBtn"
+              aria-label="Get a helpful hint"
+            >
+              <i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint
             </button>
-            <button class="btn btn-success" id="makeGuessBtn">
-              <i class="fas fa-bullseye"></i> Make Final Guess
+            <button
+              class="btn btn-success"
+              id="makeGuessBtn"
+              aria-label="Make your final guess"
+            >
+              <i class="fas fa-bullseye" aria-hidden="true"></i> Make Final
+              Guess
             </button>
           </div>
         </div>
 
-        <div class="question-history" id="questionHistory">
+        <div
+          class="question-history"
+          id="questionHistory"
+          role="log"
+          aria-live="polite"
+          aria-label="Question and answer history"
+        >
           <p
             style="
               text-align: center;
@@ -651,44 +873,88 @@
         </div>
       </div>
 
-      <div class="guess-section" id="guessSection">
-        <h3><i class="fas fa-bullseye"></i> Final Guess Time!</h3>
+      <div
+        class="guess-section"
+        id="guessSection"
+        role="dialog"
+        aria-label="Final guess dialog"
+      >
+        <h3>
+          <i class="fas fa-bullseye" aria-hidden="true"></i> Final Guess Time!
+        </h3>
         <p>What do you think the mystery object is?</p>
         <input
           type="text"
           class="guess-input"
           id="guessInput"
           placeholder="Enter your guess..."
+          aria-label="Enter your final guess"
         />
         <div style="display: flex; gap: 1rem; justify-content: center">
-          <button class="btn btn-success" id="submitGuessBtn">
-            <i class="fas fa-check"></i> Submit Guess
+          <button
+            class="btn btn-success"
+            id="submitGuessBtn"
+            aria-label="Submit your final guess"
+          >
+            <i class="fas fa-check" aria-hidden="true"></i> Submit Guess
           </button>
-          <button class="btn btn-secondary" id="cancelGuessBtn">
-            <i class="fas fa-times"></i> Keep Asking
+          <button
+            class="btn btn-secondary"
+            id="cancelGuessBtn"
+            aria-label="Cancel and continue asking questions"
+          >
+            <i class="fas fa-times" aria-hidden="true"></i> Keep Asking
           </button>
         </div>
       </div>
 
-      <div class="reveal-section" id="revealSection">
-        <div class="reveal-object" id="revealObject"></div>
-        <div class="reveal-description" id="revealDescription"></div>
-        <button class="btn btn-primary" id="playAgainBtn">
-          <i class="fas fa-play"></i> Play Again
+      <div
+        class="reveal-section"
+        id="revealSection"
+        role="region"
+        aria-label="Game result"
+      >
+        <div class="reveal-object" id="revealObject" aria-live="polite"></div>
+        <div
+          class="reveal-description"
+          id="revealDescription"
+          aria-live="polite"
+        ></div>
+        <button
+          class="btn btn-primary"
+          id="playAgainBtn"
+          aria-label="Start a new game"
+        >
+          <i class="fas fa-play" aria-hidden="true"></i> Play Again
         </button>
       </div>
 
-      <div class="game-message" id="gameMessage" style="display: none"></div>
+      <div
+        class="game-message"
+        id="gameMessage"
+        style="display: none"
+        role="alert"
+        aria-live="assertive"
+      ></div>
 
-      <div class="game-controls">
-        <button class="btn btn-secondary" id="newGameBtn">
-          <i class="fas fa-refresh"></i> New Game
+      <div
+        class="game-controls"
+        role="navigation"
+        aria-label="Navigation buttons"
+      >
+        <button
+          class="btn btn-secondary"
+          id="newGameBtn"
+          aria-label="Start a new game"
+        >
+          <i class="fas fa-refresh" aria-hidden="true"></i> New Game
         </button>
         <button
           class="btn btn-secondary"
           onclick="window.location.href='games.html'"
+          aria-label="Return to games menu"
         >
-          <i class="fas fa-arrow-left"></i> Back to Games
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
         </button>
       </div>
     </div>
@@ -701,12 +967,27 @@
           this.questionsRemaining = 20;
           this.questionHistory = [];
           this.currentObject = null;
+          this.bestStreak = parseInt(
+            localStorage.getItem("tq_bestStreak") || "0"
+          );
+
           this.gameStats = {
-            gamesPlayed: 0,
-            gamesWon: 0,
-            totalQuestions: 0,
+            gamesPlayed: parseInt(
+              localStorage.getItem("tq_gamesPlayed") || "0"
+            ),
+            gamesWon: parseInt(localStorage.getItem("tq_gamesWon") || "0"),
+            totalQuestions: parseInt(
+              localStorage.getItem("tq_totalQuestions") || "0"
+            ),
             currentStreak: 0,
+            bestStreak: parseInt(localStorage.getItem("tq_bestStreak") || "0"),
           };
+
+          // Audio context for sound effects
+          this.audioContext = null;
+          this.soundEnabled = true;
+
+          this.initAudio();
 
           this.objects = {
             animals: [
@@ -1072,6 +1353,127 @@
           this.init();
         }
 
+        // Initialize audio context
+        initAudio() {
+          if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+          }
+        }
+
+        // Play sound effect
+        playSound(type) {
+          if (!this.soundEnabled || !this.audioContext) return;
+
+          const oscillator = this.audioContext.createOscillator();
+          const gainNode = this.audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(this.audioContext.destination);
+
+          switch (type) {
+            case "correct":
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                this.audioContext.currentTime
+              );
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                this.audioContext.currentTime + 0.1
+              );
+              gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.2
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.2);
+              break;
+            case "wrong":
+              oscillator.frequency.setValueAtTime(
+                200,
+                this.audioContext.currentTime
+              );
+              gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.2
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.2);
+              break;
+            case "win":
+              oscillator.frequency.setValueAtTime(
+                523.25,
+                this.audioContext.currentTime
+              );
+              oscillator.frequency.setValueAtTime(
+                659.25,
+                this.audioContext.currentTime + 0.15
+              );
+              oscillator.frequency.setValueAtTime(
+                783.99,
+                this.audioContext.currentTime + 0.3
+              );
+              oscillator.frequency.setValueAtTime(
+                1046.5,
+                this.audioContext.currentTime + 0.45
+              );
+              gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.6
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.6);
+              break;
+            case "hint":
+              oscillator.frequency.setValueAtTime(
+                440,
+                this.audioContext.currentTime
+              );
+              gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                this.audioContext.currentTime + 0.15
+              );
+              oscillator.start(this.audioContext.currentTime);
+              oscillator.stop(this.audioContext.currentTime + 0.15);
+              break;
+          }
+        }
+
+        // Screen reader announcements
+        announceToScreenReader(message) {
+          const announcement = document.createElement("div");
+          announcement.className = "sr-only";
+          announcement.setAttribute("role", "status");
+          announcement.setAttribute("aria-live", "polite");
+          announcement.textContent = message;
+          document.body.appendChild(announcement);
+          setTimeout(() => announcement.remove(), 1000);
+        }
+
+        // Save stats to localStorage
+        saveStats() {
+          localStorage.setItem(
+            "tq_gamesPlayed",
+            this.gameStats.gamesPlayed.toString()
+          );
+          localStorage.setItem(
+            "tq_gamesWon",
+            this.gameStats.gamesWon.toString()
+          );
+          localStorage.setItem(
+            "tq_totalQuestions",
+            this.gameStats.totalQuestions.toString()
+          );
+          localStorage.setItem(
+            "tq_bestStreak",
+            this.gameStats.bestStreak.toString()
+          );
+        }
+
         init() {
           this.setupEventListeners();
           this.startNewGame();
@@ -1083,24 +1485,32 @@
           // Mode selection
           document.querySelectorAll(".mode-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".mode-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".mode-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-selected", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-selected", "true");
               this.currentMode = btn.dataset.mode;
               this.startNewGame();
+              this.announceToScreenReader(`Mode changed to ${btn.textContent}`);
             };
           });
 
           // Category selection
           document.querySelectorAll(".category-btn").forEach((btn) => {
             btn.onclick = () => {
-              document
-                .querySelectorAll(".category-btn")
-                .forEach((b) => b.classList.remove("active"));
+              document.querySelectorAll(".category-btn").forEach((b) => {
+                b.classList.remove("active");
+                b.setAttribute("aria-checked", "false");
+              });
               btn.classList.add("active");
+              btn.setAttribute("aria-checked", "true");
               this.currentCategory = btn.dataset.category;
               this.startNewGame();
+              this.announceToScreenReader(
+                `Category changed to ${btn.textContent}`
+              );
             };
           });
 
@@ -1123,7 +1533,29 @@
           const questionInput = document.getElementById("questionInput");
           questionInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
+              e.preventDefault();
               this.askQuestion();
+            }
+          });
+
+          // Keyboard shortcuts
+          document.addEventListener("keydown", (e) => {
+            // Ctrl+H for hint
+            if (e.ctrlKey && e.key === "h") {
+              e.preventDefault();
+              this.showHint();
+            }
+            // Ctrl+G for guess
+            if (e.ctrlKey && e.key === "g") {
+              e.preventDefault();
+              this.showGuessSection();
+            }
+            // Escape to cancel guess
+            if (
+              e.key === "Escape" &&
+              document.getElementById("guessSection").classList.contains("show")
+            ) {
+              this.hideGuessSection();
             }
           });
 
@@ -1156,6 +1588,9 @@
           this.showMessage(
             "🎮 New game started! Ask your first question.",
             "info"
+          );
+          this.announceToScreenReader(
+            `New game started in ${this.currentCategory} category. You have 20 questions to guess the mystery object.`
           );
         }
 
@@ -1203,6 +1638,11 @@
           questionInput.value = "";
           this.updateSuggestions();
 
+          this.playSound("correct");
+          this.announceToScreenReader(
+            `Question asked. Answer: ${answer}. ${this.questionsRemaining} questions remaining.`
+          );
+
           if (this.questionsRemaining === 0) {
             setTimeout(() => {
               this.showMessage(
@@ -1210,6 +1650,9 @@
                 "info"
               );
               this.showGuessSection();
+              this.announceToScreenReader(
+                "No questions remaining. Time to make your final guess."
+              );
             }, 1000);
           }
         }
@@ -1493,16 +1936,23 @@
 
             // Update mystery hints display
             document.getElementById("mysteryHints").textContent = hint;
+
+            this.playSound("hint");
+            this.announceToScreenReader(`Hint: ${hint}`);
           }
         }
 
         showGuessSection() {
           document.getElementById("guessSection").classList.add("show");
           document.getElementById("guessInput").focus();
+          this.announceToScreenReader("Enter your final guess");
         }
 
         hideGuessSection() {
           document.getElementById("guessSection").classList.remove("show");
+          this.announceToScreenReader(
+            "Guess cancelled. Continue asking questions."
+          );
         }
 
         submitGuess() {
@@ -1525,12 +1975,26 @@
           if (won) {
             this.gameStats.gamesWon++;
             this.gameStats.currentStreak++;
+
+            if (this.gameStats.currentStreak > this.gameStats.bestStreak) {
+              this.gameStats.bestStreak = this.gameStats.currentStreak;
+              this.bestStreak = this.gameStats.bestStreak;
+            }
+
+            this.playSound("win");
+            this.announceToScreenReader(
+              `Congratulations! You guessed correctly! The answer was ${this.currentObject.name}. Current streak: ${this.gameStats.currentStreak}`
+            );
             this.showMessage(
               "🎉 Congratulations! You guessed correctly!",
               "success"
             );
           } else {
             this.gameStats.currentStreak = 0;
+            this.playSound("wrong");
+            this.announceToScreenReader(
+              `Incorrect. The answer was ${this.currentObject.name}. Streak reset.`
+            );
             this.showMessage(
               `❌ ${guess ? "Wrong guess!" : "Game over!"} The answer was ${
                 this.currentObject.name
