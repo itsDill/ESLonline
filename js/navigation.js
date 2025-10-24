@@ -140,7 +140,7 @@ function initializeNavigation() {
       }
     });
 
-    // Dropdown functionality for mobile
+    // Dropdown functionality for mobile ONLY
     navItems.forEach((item) => {
       const link = item.querySelector(".nav-link");
       const dropdown = item.querySelector(".dropdown");
@@ -154,21 +154,20 @@ function initializeNavigation() {
         const freshLink = item.querySelector(".nav-link");
         const freshChevron = freshLink.querySelector(".fa-chevron-down");
 
-        // Handle dropdown toggle
+        // Handle dropdown toggle - MOBILE ONLY
         freshLink.addEventListener("click", function (e) {
           // Only handle dropdown links (with chevron)
           if (!freshChevron) return;
 
-          e.preventDefault();
-          e.stopPropagation();
-
           const isMobile = window.innerWidth <= 768;
 
+          // Only prevent default and handle clicks on mobile
           if (isMobile) {
+            e.preventDefault();
+            e.stopPropagation();
             toggleMobileDropdown(item, freshChevron);
-          } else {
-            toggleDesktopDropdown(item, freshChevron);
           }
+          // On desktop, let CSS :hover handle the dropdown display
         });
 
         // Add touch event for better mobile support
@@ -207,32 +206,6 @@ function initializeNavigation() {
       }
     }
 
-    // Desktop dropdown toggle function with stability improvements
-    function toggleDesktopDropdown(item, chevron) {
-      const isOpen = item.classList.contains("desktop-open");
-
-      // Close all other dropdowns
-      navItems.forEach((otherItem) => {
-        if (otherItem !== item) {
-          resetDropdown(otherItem);
-        }
-      });
-
-      // Toggle current dropdown with stability delay
-      if (isOpen) {
-        resetDropdown(item);
-      } else {
-        item.classList.add("desktop-open");
-        chevron.style.transform = "rotate(180deg)";
-
-        // Add temporary protection class to prevent immediate closing
-        item.classList.add("dropdown-protected");
-        setTimeout(() => {
-          item.classList.remove("dropdown-protected");
-        }, 300);
-      }
-    }
-
     // Reset dropdown to closed state
     function resetDropdown(item) {
       item.classList.remove("mobile-open", "desktop-open");
@@ -242,28 +215,21 @@ function initializeNavigation() {
       }
     }
 
-    // Close menu when clicking outside (with protection for recently opened dropdowns)
+    // Close menu when clicking outside - MOBILE ONLY
     document.addEventListener("click", function (e) {
-      // Check for mobile menu
-      if (
-        isMenuOpen &&
-        !freshMobileToggle.contains(e.target) &&
-        !freshNavLinks.contains(e.target)
-      ) {
-        closeMenu();
-        return;
-      }
+      const isMobile = window.innerWidth <= 768;
 
-      // Check for desktop dropdowns (but protect recently opened ones)
-      if (window.innerWidth > 768) {
-        navItems.forEach((item) => {
-          const isOpen = item.classList.contains("desktop-open");
-          const isProtected = item.classList.contains("dropdown-protected");
-
-          if (isOpen && !isProtected && !item.contains(e.target)) {
-            resetDropdown(item);
-          }
-        });
+      // Only handle clicks outside on mobile
+      if (isMobile) {
+        // Check for mobile menu
+        if (
+          isMenuOpen &&
+          !freshMobileToggle.contains(e.target) &&
+          !freshNavLinks.contains(e.target)
+        ) {
+          closeMenu();
+          return;
+        }
       }
     });
 
