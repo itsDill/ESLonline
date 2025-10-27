@@ -3257,11 +3257,14 @@
         border-radius: var(--radius);
         background: var(--bg-primary);
         color: var(--text-primary);
-        font-size: 1rem;
+        font-size: 16px; /* Prevents zoom on iOS */
         font-family: var(--font-family-primary);
         transition: all var(--transition-normal);
         width: 100%;
         box-sizing: border-box;
+        min-height: 44px;
+        -webkit-appearance: none;
+        appearance: none;
       }
 
       .form-field input:focus,
@@ -3286,14 +3289,23 @@
           padding: 0.875rem;
           font-size: 16px; /* Prevent zoom on iOS */
           border-radius: 8px;
+          min-height: 48px;
         }
 
         .form-field textarea {
-          min-height: 80px;
+          min-height: 100px;
         }
 
         .form-field label {
           font-size: 0.95rem;
+        }
+
+        .form-header h3 {
+          font-size: 1.5rem;
+        }
+
+        .form-header p {
+          font-size: 1rem;
         }
       }
 
@@ -3302,10 +3314,19 @@
         .form-field select,
         .form-field textarea {
           padding: 0.75rem;
+          font-size: 16px;
         }
 
         .form-field textarea {
-          min-height: 70px;
+          min-height: 80px;
+        }
+
+        .form-header h3 {
+          font-size: 1.25rem;
+        }
+
+        .form-header p {
+          font-size: 0.9rem;
         }
       }
 
@@ -3322,29 +3343,40 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem 1rem;
+        padding: 0.875rem 1rem;
         background: var(--bg-secondary);
         border: 2px solid var(--border-color);
         border-radius: var(--radius);
         cursor: pointer;
         transition: all var(--transition-normal);
         flex: 1;
-        min-width: 200px;
+        min-width: 180px;
+        min-height: 44px;
       }
 
       .checkbox-item:hover,
       .radio-item:hover {
         border-color: var(--primary-color);
         background: var(--primary-light);
+        transform: translateY(-1px);
       }
 
       .checkbox-item input[type="checkbox"],
       .radio-item input[type="radio"] {
         margin: 0;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
       }
 
-      .checkbox-item input[type="checkbox"]:checked + label,
-      .radio-item input[type="radio"]:checked + label {
+      .checkbox-item label,
+      .radio-item label {
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .checkbox-item input[type="checkbox"]:checked ~ label,
+      .radio-item input[type="radio"]:checked ~ label {
         color: var(--primary-color);
         font-weight: var(--font-weight-semibold);
       }
@@ -3352,7 +3384,7 @@
       /* Time Slot Selection */
       .time-slots {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 1rem;
       }
 
@@ -3364,11 +3396,16 @@
         text-align: center;
         cursor: pointer;
         transition: all var(--transition-normal);
+        min-height: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
 
       .time-slot:hover {
         border-color: var(--primary-color);
         background: var(--primary-light);
+        transform: translateY(-2px);
       }
 
       .time-slot.selected {
@@ -3407,6 +3444,8 @@
         justify-content: center;
         gap: 0.75rem;
         margin-top: 2rem;
+        min-height: 56px;
+        -webkit-tap-highlight-color: transparent;
       }
 
       .submit-application:hover {
@@ -3418,35 +3457,27 @@
         transform: translateY(0);
       }
 
-      .submit-application:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-        transform: none;
-      }
-
       /* Mobile Submit Button */
       @media (max-width: 768px) {
         .submit-application {
-          padding: 1rem 2rem;
+          padding: 1rem 1.5rem;
           font-size: 1rem;
-          position: sticky;
-          bottom: 0;
-          z-index: 10;
-          box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-          border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-          margin-top: 1.5rem;
-        }
-
-        .submit-application:hover {
-          transform: none;
+          min-height: 52px;
         }
       }
 
       @media (max-width: 480px) {
         .submit-application {
-          padding: 0.875rem 1.5rem;
-          font-size: 0.95rem;
+          padding: 0.875rem 1.25rem;
+          font-size: 16px;
+          min-height: 48px;
         }
+      }
+
+      .submit-application:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
       }
 
       /* Success Message */
@@ -3502,8 +3533,11 @@
         border-radius: 16px;
         max-width: 500px;
         width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
         position: relative;
         color: var(--text-primary);
+        -webkit-overflow-scrolling: touch;
       }
 
       .close-modal {
@@ -3513,6 +3547,19 @@
         font-size: 1.5rem;
         cursor: pointer;
         color: var(--text-secondary);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .close-modal:hover {
+        background: var(--bg-secondary);
+        color: var(--primary-color);
       }
 
       .modal h3 {
@@ -3545,7 +3592,10 @@
         border-radius: 8px;
         background: var(--bg-primary);
         color: var(--text-primary);
-        font-size: 1rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+        min-height: 44px;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .form-group input:focus,
@@ -3553,6 +3603,7 @@
       .form-group textarea:focus {
         outline: none;
         border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(70, 187, 229, 0.1);
       }
 
       .contact-methods {
@@ -3578,12 +3629,19 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 16px;
         margin-top: 1rem;
+        min-height: 48px;
+        width: 100%;
       }
 
       .submit-booking:hover {
         background: var(--primary-hover);
+        transform: translateY(-2px);
+      }
+
+      .submit-booking:active {
+        transform: translateY(0);
       }
 
       /* Mobile Responsive Styles for Booking Modal */
@@ -3646,6 +3704,135 @@
         .modal h3 {
           font-size: 1.25rem;
           margin-bottom: 0.75rem;
+        }
+      }
+
+      /* Additional Mobile Optimizations */
+      @media (max-width: 768px) {
+        body {
+          font-size: 16px;
+        }
+
+        .container {
+          padding: 0 1rem;
+        }
+
+        .hero {
+          min-height: 300px;
+        }
+
+        .hero-content {
+          padding: 3rem 1rem 2rem;
+        }
+
+        .hero-title {
+          font-size: clamp(2rem, 6vw, 2.5rem);
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+
+        .teacher-flags {
+          gap: 1rem;
+        }
+
+        .flag-icon {
+          font-size: 1.5rem;
+        }
+
+        .flag-name {
+          font-size: 0.8rem;
+        }
+
+        /* Better button touch targets on mobile */
+        button,
+        .btn,
+        .cta-button,
+        a.button {
+          min-height: 44px;
+          min-width: 44px;
+        }
+
+        /* Improve card layouts */
+        .lesson-card,
+        .pricing-card {
+          margin-bottom: 1rem;
+        }
+
+        /* Better spacing */
+        section {
+          padding: 2rem 0;
+        }
+
+        .section-title {
+          font-size: 1.75rem;
+          margin-bottom: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero {
+          min-height: 250px;
+        }
+
+        .hero-content {
+          padding: 2rem 0.75rem 1.5rem;
+        }
+
+        .hero-title {
+          font-size: 1.75rem;
+        }
+
+        .hero-subtitle {
+          font-size: 0.9rem;
+        }
+
+        .teacher-flags {
+          gap: 0.75rem;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+        }
+
+        /* Ensure proper touch spacing */
+        .checkbox-item,
+        .radio-item,
+        .time-slot {
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      /* Prevent zoom on form inputs (iOS) */
+      @media screen and (max-width: 768px) {
+        select,
+        textarea,
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="password"] {
+          font-size: 16px !important;
+        }
+      }
+
+      /* Better touch device support */
+      @media (hover: none) and (pointer: coarse) {
+        .stat-card:hover,
+        .lesson-card:hover,
+        .pricing-card:hover {
+          transform: none;
+        }
+
+        button:hover,
+        .btn:hover {
+          transform: none;
+        }
+
+        button:active,
+        .btn:active {
+          transform: scale(0.97);
         }
       }
     </style>
