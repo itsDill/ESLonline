@@ -355,13 +355,13 @@
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-primary: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
+        --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
         --gradient-hero: linear-gradient(
           135deg,
-          #667eea 0%,
-          #764ba2 50%,
-          #f093fb 100%
+          #46bbe5 0%,
+          #2d9cdb 50%,
+          #10b981 100%
         );
         --radius-sm: 4px;
         --radius: 8px;
@@ -486,12 +486,32 @@
         font-weight: 800;
         margin-bottom: 1.5rem;
         letter-spacing: -0.02em;
-        color: #1a202c;
-        text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9),
-          0 4px 16px rgba(255, 255, 255, 0.6);
+        background: linear-gradient(
+          135deg,
+          #00d4ff 0%,
+          #46bbe5 25%,
+          #2d9cdb 50%,
+          #10b981 75%,
+          #0ea97a 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: none;
         opacity: 0;
         transform: translateY(30px);
-        animation: fadeInUp 1s ease 0.5s forwards;
+        animation: fadeInUp 1s ease 0.5s forwards, gradientFlow 6s ease infinite;
+        background-size: 300% 300%;
+      }
+
+      @keyframes gradientFlow {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
       }
 
       .hero-subtitle {
@@ -949,7 +969,7 @@
         padding: 2.5rem;
         border-radius: 20px;
         box-shadow: var(--shadow-lg);
-        border: 2px solid transparent;
+        border: 2px solid var(--primary-color);
         background-clip: padding-box;
         position: relative;
         overflow: hidden;
@@ -968,30 +988,43 @@
           var(--primary-color),
           var(--secondary-color)
         );
-        z-index: -1;
-        margin: -2px;
+        opacity: 0.1;
+        z-index: 0;
         border-radius: inherit;
       }
 
       .word-card {
-        background: white;
+        background: var(--bg-primary);
         padding: 2rem;
         border-radius: 15px;
         font-size: 1.5rem;
         font-weight: 600;
         text-align: center;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 4px 12px rgba(70, 187, 229, 0.2);
         border: 3px solid var(--primary-color);
         position: relative;
         transform: translateY(0);
         transition: all 0.3s ease;
         color: var(--text-primary);
+        z-index: 1;
+      }
+
+      /* Dark mode support for quiz */
+      .dark-mode .word-card {
+        background: var(--bg-secondary);
+        box-shadow: 0 4px 12px rgba(70, 187, 229, 0.3);
+        border-color: #46bbe5;
+      }
+
+      .dark-mode .vocabulary-game {
+        border-color: #46bbe5;
+        box-shadow: 0 8px 24px rgba(70, 187, 229, 0.15);
       }
 
       .word-card:hover {
         transform: translateY(-3px);
-        box-shadow: var(--shadow-xl);
+        box-shadow: 0 8px 20px rgba(70, 187, 229, 0.3);
       }
 
       /* Enhanced question display styling */
@@ -1069,6 +1102,13 @@
         border-left: 4px solid var(--primary-color);
       }
 
+      /* Dark mode support for context */
+      .dark-mode .context-sentence {
+        background: rgba(70, 187, 229, 0.15);
+        border-left-color: #46bbe5;
+        color: var(--text-secondary);
+      }
+
       .question-prompt {
         font-weight: 600;
         color: var(--text-primary);
@@ -1079,6 +1119,11 @@
         color: var(--primary-color);
         font-weight: 700;
         margin-right: 0.5rem;
+      }
+
+      /* Dark mode support for option letters */
+      .dark-mode .option-letter {
+        color: #46bbe5;
       }
 
       /* Game results styling */
@@ -1378,8 +1423,8 @@
       }
 
       .option-btn {
-        background: white;
-        border: 2px solid var(--border-color);
+        background: var(--bg-primary);
+        border: 2px solid var(--primary-color);
         padding: 1.2rem 1.5rem;
         border-radius: 12px;
         cursor: pointer;
@@ -1389,6 +1434,14 @@
         text-align: left;
         position: relative;
         overflow: hidden;
+        color: var(--text-primary);
+      }
+
+      /* Dark mode support for option buttons */
+      .dark-mode .option-btn {
+        background: var(--bg-secondary);
+        border-color: #46bbe5;
+        box-shadow: 0 2px 8px rgba(70, 187, 229, 0.15);
       }
 
       .option-btn::before {
@@ -1401,7 +1454,7 @@
         background: linear-gradient(
           90deg,
           transparent,
-          rgba(70, 187, 229, 0.1),
+          rgba(70, 187, 229, 0.2),
           transparent
         );
         transition: left 0.5s;
@@ -1412,7 +1465,7 @@
         background: var(--primary-color);
         color: white;
         transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.3);
+        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.4);
       }
 
       .option-btn:hover::before {
@@ -1927,7 +1980,7 @@
       .ai-bot-button {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
         color: white;
         border: none;
         border-radius: 50%;
@@ -1935,7 +1988,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 20px rgba(70, 187, 229, 0.4);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
         visibility: hidden;
@@ -1952,7 +2005,7 @@
 
       .ai-bot-button:hover {
         transform: scale(1.1);
-        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 8px 30px rgba(70, 187, 229, 0.6);
       }
 
       .ai-bot-button::before {
@@ -1997,7 +2050,7 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
         opacity: 0;
         animation: pulse 2s ease-out infinite;
       }
@@ -2037,7 +2090,7 @@
       }
 
       .ai-bot-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
         color: white;
         padding: 1.2rem 1.5rem;
         display: flex;
@@ -2134,7 +2187,7 @@
       }
 
       .ai-bot-messages::-webkit-scrollbar-thumb {
-        background: #667eea;
+        background: #46bbe5;
         border-radius: 3px;
       }
 
@@ -2158,7 +2211,7 @@
       .bot-message-avatar {
         width: 30px;
         height: 30px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -2187,7 +2240,7 @@
       }
 
       .quick-action-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #46bbe5 0%, #2d9cdb 100%);
         color: white;
         border: none;
         padding: 0.5rem 1rem;
@@ -2200,7 +2253,7 @@
 
       .quick-action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 12px rgba(70, 187, 229, 0.4);
       }
 
       .typing-indicator {
@@ -2212,7 +2265,7 @@
       .typing-dot {
         width: 8px;
         height: 8px;
-        background: #667eea;
+        background: #46bbe5;
         border-radius: 50%;
         animation: typing 1.4s infinite;
       }
@@ -2805,13 +2858,13 @@
         </div>
 
         <div class="hero-cta">
-          <a href="lessons.html" class="cta-primary">
-            <i class="fas fa-play"></i>
-            Start Learning Now
+          <a href="english/grammar.html" class="cta-primary">
+            <i class="fas fa-book"></i>
+            Learn Grammar
           </a>
-          <a href="#features" class="cta-secondary">
-            <i class="fas fa-info-circle"></i>
-            Explore Features
+          <a href="games/games.html" class="cta-secondary">
+            <i class="fas fa-gamepad"></i>
+            Play Games
           </a>
         </div>
       </div>
@@ -2879,17 +2932,16 @@
       </div>
     </section>
 
-    <!-- Play Our ESL Games Section -->
+    <!-- Explore English Paths Section -->
     <section
       class="games-showcase"
       style="padding: 4rem 0; background: var(--bg-secondary)"
     >
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Play Our ESL Games</h2>
+          <h2 class="section-title">Explore English Paths</h2>
           <p class="section-subtitle">
-            Interactive games designed to make English learning fun and
-            effective
+            Choose your learning path and master English for your goals
           </p>
         </div>
 
@@ -2919,7 +2971,7 @@
               style="
                 width: 60px;
                 height: 60px;
-                background: linear-gradient(45deg, #10b981, #34d399);
+                background: linear-gradient(45deg, #46bbe5, #2d9cdb);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
@@ -2929,7 +2981,7 @@
                 margin: 0 auto 1rem;
               "
             >
-              <i class="fas fa-book-open"></i>
+              <i class="fas fa-briefcase"></i>
             </div>
             <h3
               style="
@@ -2939,7 +2991,7 @@
                 color: var(--text-primary);
               "
             >
-              Vocabulary Games
+              Business English
             </h3>
             <p
               style="
@@ -2948,11 +3000,11 @@
                 line-height: 1.6;
               "
             >
-              Master new words with interactive vocabulary challenges and word
-              puzzles.
+              Master professional English for the workplace, meetings,
+              presentations, and business communication.
             </p>
             <a
-              href="/games/vocabulary-games.html"
+              href="/english/business.html"
               class="game-link"
               style="
                 color: var(--primary-color);
@@ -2964,7 +3016,7 @@
                 transition: color 0.3s ease;
               "
             >
-              Play free vocabulary ESL games online
+              Start Business Path
               <i class="fas fa-arrow-right"></i>
             </a>
           </div>
@@ -2986,7 +3038,7 @@
               style="
                 width: 60px;
                 height: 60px;
-                background: linear-gradient(45deg, #f59e0b, #fbbf24);
+                background: linear-gradient(45deg, #10b981, #059669);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
@@ -2996,7 +3048,7 @@
                 margin: 0 auto 1rem;
               "
             >
-              <i class="fas fa-spell-check"></i>
+              <i class="fas fa-graduation-cap"></i>
             </div>
             <h3
               style="
@@ -3006,7 +3058,7 @@
                 color: var(--text-primary);
               "
             >
-              Grammar Practice
+              Test Preparation
             </h3>
             <p
               style="
@@ -3015,11 +3067,11 @@
                 line-height: 1.6;
               "
             >
-              Improve your grammar skills with fun, interactive practice
-              exercises.
+              Prepare for IELTS, TOEIC, TOEFL, and other English proficiency
+              exams with expert guidance.
             </p>
             <a
-              href="/games/grammar-games.html"
+              href="/english/test.html"
               class="game-link"
               style="
                 color: var(--primary-color);
@@ -3031,7 +3083,8 @@
                 transition: color 0.3s ease;
               "
             >
-              Try our grammar practice games <i class="fas fa-arrow-right"></i>
+              Explore Test Prep
+              <i class="fas fa-arrow-right"></i>
             </a>
           </div>
         </div>
@@ -3418,6 +3471,351 @@
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
+
+    <!-- Featured Tools Section -->
+    <section
+      class="featured-tools-section"
+      style="padding: 6rem 0; background: var(--bg-primary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Featured Tools</h2>
+          <p class="section-subtitle">
+            Powerful resources to enhance your English learning journey
+          </p>
+        </div>
+
+        <div
+          class="tools-grid"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+          "
+        >
+          <!-- Tool 1: Grammar Ladder -->
+          <div
+            class="tool-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              cursor: pointer;
+            "
+            onclick="window.location.href='english/grammar.html'"
+          >
+            <div
+              class="tool-icon"
+              style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, #46bbe5, #2d9cdb);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 1rem;
+              "
+            >
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3
+              style="
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: var(--text-primary);
+              "
+            >
+              Grammar Ladder
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+              "
+            >
+              Climb to grammar mastery with progressive difficulty levels
+            </p>
+          </div>
+
+          <!-- Tool 2: Vocabulary Builder -->
+          <div
+            class="tool-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              cursor: pointer;
+            "
+            onclick="window.location.href='english/vocabguide.html'"
+          >
+            <div
+              class="tool-icon"
+              style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, #10b981, #059669);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 1rem;
+              "
+            >
+              <i class="fas fa-book"></i>
+            </div>
+            <h3
+              style="
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: var(--text-primary);
+              "
+            >
+              Vocab Builder
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+              "
+            >
+              Expand your word bank with flashcards and quizzes
+            </p>
+          </div>
+
+          <!-- Tool 3: Writing Wizard -->
+          <div
+            class="tool-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              cursor: pointer;
+            "
+            onclick="window.location.href='english/writingf.html'"
+          >
+            <div
+              class="tool-icon"
+              style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 1rem;
+              "
+            >
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3
+              style="
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: var(--text-primary);
+              "
+            >
+              Writing Wizard
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+              "
+            >
+              Generate creative writing prompts and story ideas instantly
+            </p>
+          </div>
+
+          <!-- Tool 4: Custom Dice -->
+          <div
+            class="tool-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              cursor: pointer;
+            "
+            onclick="window.location.href='tools/dice.html'"
+          >
+            <div
+              class="tool-icon"
+              style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, #f59e0b, #fbbf24);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 1rem;
+              "
+            >
+              <i class="fas fa-dice"></i>
+            </div>
+            <h3
+              style="
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: var(--text-primary);
+              "
+            >
+              Custom Dice
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+              "
+            >
+              Create custom dice for classroom games and activities
+            </p>
+          </div>
+
+          <!-- Tool 5 (Center - Advertisement) -->
+          <div
+            class="tool-card ad-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 250px;
+            "
+          >
+            <!-- Google AdSense -->
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+              crossorigin="anonymous"
+            ></script>
+            <!-- ad boxes -->
+            <ins
+              class="adsbygoogle"
+              style="display: block"
+              data-ad-client="ca-pub-2456627863532019"
+              data-ad-slot="7015224277"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+
+          <!-- Tool 6: Random Generator -->
+          <div
+            class="tool-card"
+            style="
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-xl);
+              padding: 2rem;
+              text-align: center;
+              transition: all 0.3s ease;
+              box-shadow: var(--shadow-md);
+              cursor: pointer;
+            "
+            onclick="window.location.href='tools/random.html'"
+          >
+            <div
+              class="tool-icon"
+              style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, #ef4444, #dc2626);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 1rem;
+              "
+            >
+              <i class="fas fa-random"></i>
+            </div>
+            <h3
+              style="
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: var(--text-primary);
+              "
+            >
+              Random Generator
+            </h3>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.95rem;
+                line-height: 1.5;
+              "
+            >
+              Generate random students, topics, and classroom selections
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .tool-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        border-color: var(--primary-color) !important;
+      }
+
+      .tool-card:not(.ad-card):hover .tool-icon {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      @media (max-width: 768px) {
+        .tools-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
 
     <!-- FAQ Section with Schema -->
     <section
