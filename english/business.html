@@ -983,6 +983,7 @@
       .hero {
         position: relative;
         min-height: 340px;
+        margin-top: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -992,6 +993,13 @@
           linear-gradient(135deg, #19a5b2 0%, #004966 50%, #4ba2c4 100%)
         );
         overflow: hidden;
+      }
+      
+      @media (max-width: 768px) {
+        .hero {
+          margin-top: 70px;
+          min-height: 280px;
+        }
       }
 
       .hero-bg {
@@ -1078,6 +1086,85 @@
 
       .transition {
         transition: all 0.3s ease;
+      }
+
+      /* Hero Stats */
+      .hero-stats {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      /* Interactive Tools Styles */
+      .practice-widget {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .quiz-question {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+      }
+
+      .quiz-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      @media (max-width: 640px) {
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .quiz-option {
+        padding: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .quiz-option:hover {
+        border-color: var(--primary-color);
+        background: var(--bg-secondary);
+        transform: translateY(-2px);
+      }
+
+      .quiz-option.correct {
+        background: var(--secondary-color);
+        color: white;
+        border-color: var(--secondary-color);
+      }
+
+      .quiz-option.incorrect {
+        background: #fef2f2;
+        border-color: #dc2626;
+        color: #dc2626;
+      }
+
+      #quiz-result {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        display: none;
+      }
+
+      #quiz-result.show {
+        display: block;
       }
 
       /* Dark Theme */
@@ -1343,16 +1430,16 @@
           Advance your career with professional communication skills, templates,
           and resources for every business situation.
         </p>
-        <div class="hero-stats" style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-          <div class="stat-item" style="text-align: center;">
+        <div class="hero-stats">
+          <div class="stat-item">
             <div style="font-size: 2rem; font-weight: bold; color: #fff;">50+</div>
             <div style="font-size: 0.9rem; opacity: 0.9;">Templates</div>
           </div>
-          <div class="stat-item" style="text-align: center;">
+          <div class="stat-item">
             <div style="font-size: 2rem; font-weight: bold; color: #fff;">1000+</div>
             <div style="font-size: 0.9rem; opacity: 0.9;">Vocabulary Terms</div>
           </div>
-          <div class="stat-item" style="text-align: center;">
+          <div class="stat-item">
             <div style="font-size: 2rem; font-weight: bold; color: #fff;">100%</div>
             <div style="font-size: 0.9rem; opacity: 0.9;">Free Resources</div>
           </div>
@@ -1533,29 +1620,29 @@
           </p>
 
           <!-- Mini Quiz Widget -->
-          <div class="practice-widget" style="background: white; border-radius: 16px; padding: 2rem; margin: 2rem 0; box-shadow: var(--shadow-lg);">
+          <div class="practice-widget">
             <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">
               <i class="fas fa-brain"></i> Quick Business Vocabulary Quiz
             </h3>
             <div id="quiz-container">
-              <div class="quiz-question" id="quiz-question" style="font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 500;">
+              <div class="quiz-question" id="quiz-question">
                 What does "ROI" stand for in business?
               </div>
-              <div class="quiz-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <button class="quiz-option" onclick="selectAnswer(this, false)" style="padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+              <div class="quiz-options">
+                <button class="quiz-option" onclick="selectAnswer(this, false)">
                   Return of Investment
                 </button>
-                <button class="quiz-option" onclick="selectAnswer(this, true)" style="padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                <button class="quiz-option" onclick="selectAnswer(this, true)">
                   Return on Investment
                 </button>
-                <button class="quiz-option" onclick="selectAnswer(this, false)" style="padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                <button class="quiz-option" onclick="selectAnswer(this, false)">
                   Rate of Interest
                 </button>
-                <button class="quiz-option" onclick="selectAnswer(this, false)" style="padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s ease;">
+                <button class="quiz-option" onclick="selectAnswer(this, false)">
                   Risk of Investment
                 </button>
               </div>
-              <div id="quiz-result" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+              <div id="quiz-result"></div>
               <button id="next-question" onclick="nextQuestion()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--gradient-primary); color: white; border: none; border-radius: 8px; cursor: pointer; display: none;">
                 Next Question <i class="fas fa-arrow-right"></i>
               </button>
