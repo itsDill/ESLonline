@@ -856,6 +856,7 @@
       }
 
       .game-card {
+        opacity: 1 !important;
         animation: cardFadeIn 0.6s ease-out forwards;
       }
 
@@ -2140,13 +2141,6 @@
               <span class="stat-label">Skill Areas</span>
             </div>
             <div class="stat-item stat">
-              <div class="stat-icon"><i class="fas fa-users"></i></div>
-              <span class="stat-number" id="totalPlays" data-target="20000"
-                >20K+</span
-              >
-              <span class="stat-label">Total Plays</span>
-            </div>
-            <div class="stat-item stat">
               <div class="stat-icon"><i class="fas fa-heart"></i></div>
               <span class="stat-number">100%</span>
               <span class="stat-label">Free to Play</span>
@@ -2546,99 +2540,6 @@
               through.
             </p>
           </div>
-
-          <div
-            class="tip-card"
-            style="
-              background: var(--bg-card);
-              border: 2px solid var(--border-light);
-              border-radius: var(--radius-lg);
-              padding: 2rem;
-              box-shadow: var(--shadow-sm);
-              transition: var(--transition);
-            "
-          >
-            <div
-              class="tip-icon"
-              style="
-                width: 60px;
-                height: 60px;
-                background: linear-gradient(135deg, #f59e0b, #f97316);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 1.5rem;
-              "
-            >
-              <i
-                class="fas fa-book"
-                style="font-size: 1.5rem; color: white"
-              ></i>
-            </div>
-            <h3
-              style="
-                font-size: 1.3rem;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 1rem;
-              "
-            >
-              Take Notes
-            </h3>
-            <p style="color: var(--text-secondary); line-height: 1.6">
-              Keep a notebook or digital document to jot down new words,
-              phrases, or grammar rules you learn from the games. Review these
-              notes regularly to reinforce your learning outside of game time.
-            </p>
-          </div>
-
-          <div
-            class="tip-card"
-            style="
-              background: var(--bg-card);
-              border: 2px solid var(--border-light);
-              border-radius: var(--radius-lg);
-              padding: 2rem;
-              box-shadow: var(--shadow-sm);
-              transition: var(--transition);
-            "
-          >
-            <div
-              class="tip-icon"
-              style="
-                width: 60px;
-                height: 60px;
-                background: linear-gradient(135deg, #10b981, #059669);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 1.5rem;
-              "
-            >
-              <i
-                class="fas fa-users"
-                style="font-size: 1.5rem; color: white"
-              ></i>
-            </div>
-            <h3
-              style="
-                font-size: 1.3rem;
-                font-weight: 600;
-                color: var(--text-primary);
-                margin-bottom: 1rem;
-              "
-            >
-              Combine with Real Practice
-            </h3>
-            <p style="color: var(--text-secondary); line-height: 1.6">
-              Use games as a fun supplement to traditional learning methods.
-              Practice speaking the words you learn in games, use new vocabulary
-              in conversations, and apply grammar rules in your writing for
-              comprehensive skill development.
-            </p>
-          </div>
         </div>
       </div>
     </section>
@@ -2829,18 +2730,28 @@
       let currentSort = "default";
       let favorites = JSON.parse(localStorage.getItem("gameFavorites") || "[]");
 
-      // DOM elements
-      const gamesGrid = document.getElementById("gamesGrid");
-      const noResults = document.getElementById("noResults");
-      const searchInput = document.getElementById("searchInput");
-      const clearSearch = document.getElementById("clearSearch");
-      const sortSelect = document.getElementById("sortSelect");
-      const filterButtons = document.querySelectorAll(".filter-btn");
-      const activeFiltersContainer = document.getElementById("activeFilters");
-      const themeToggle = document.getElementById("themeToggle");
+      // DOM elements - will be initialized after DOM loads
+      let gamesGrid,
+        noResults,
+        searchInput,
+        clearSearch,
+        sortSelect,
+        filterButtons,
+        activeFiltersContainer,
+        themeToggle;
 
       // Initialize the page
       document.addEventListener("DOMContentLoaded", function () {
+        // Initialize DOM elements
+        gamesGrid = document.getElementById("gamesGrid");
+        noResults = document.getElementById("noResults");
+        searchInput = document.getElementById("searchInput");
+        clearSearch = document.getElementById("clearSearch");
+        sortSelect = document.getElementById("sortSelect");
+        filterButtons = document.querySelectorAll(".filter-btn");
+        activeFiltersContainer = document.getElementById("activeFilters");
+        themeToggle = document.getElementById("themeToggle");
+
         updateQuickStats();
         renderGames(games);
         setupEventListeners();
@@ -2962,11 +2873,11 @@
       // Update quick stats with real data
       function updateQuickStats() {
         const totalGames = games.length;
-        const totalPlays = games.reduce((sum, game) => sum + game.plays, 0);
+        const totalGamesElement = document.getElementById("totalGames");
 
-        document.getElementById("totalGames").textContent = totalGames;
-        document.getElementById("totalPlays").textContent =
-          formatNumber(totalPlays);
+        if (totalGamesElement) {
+          totalGamesElement.textContent = totalGames;
+        }
       }
 
       // Show welcome message for new users
@@ -3220,25 +3131,29 @@
 
       // Render games
       function renderGames(gamesToRender) {
+        if (!gamesGrid) {
+          console.error("gamesGrid element not found!");
+          return;
+        }
+
         if (gamesToRender.length === 0) {
           gamesGrid.style.display = "none";
-          noResults.style.display = "block";
+          if (noResults) noResults.style.display = "block";
           return;
         }
 
         gamesGrid.style.display = "grid";
-        noResults.style.display = "none";
+        if (noResults) noResults.style.display = "none";
 
-        // Calculate where to insert the ad (after 6 games, or middle if less than 12)
-        const adPosition = Math.min(6, Math.floor(gamesToRender.length / 2));
-        let gameCards = "";
+        let html = "";
 
+        console.log("About to render", gamesToRender.length, "games");
+
+        // Render each game
         gamesToRender.forEach((game, index) => {
-          const isFavorite = favorites.includes(game.id);
-
-          // Insert ad box after certain number of games
-          if (index === adPosition) {
-            gameCards += `
+          // Add ad box as 5th card (after first 4 games)
+          if (index === 4) {
+            html += `
               <div class="game-card ad-card" style="
                 background: var(--bg-secondary);
                 border: 2px solid var(--primary-color);
@@ -3258,7 +3173,8 @@
             `;
           }
 
-          gameCards += `
+          // Add game card
+          html += `
             <div class="game-card" data-skill="${
               game.skill
             }" onclick="handleCardClick(event, '${game.link}')">
@@ -3280,9 +3196,15 @@
           `;
         });
 
-        gamesGrid.innerHTML = gameCards;
+        console.log("Generated HTML length:", html.length);
+        console.log("First 200 chars:", html.substring(0, 200));
+        gamesGrid.innerHTML = html;
+        console.log(
+          "Set innerHTML, children count:",
+          gamesGrid.children.length
+        );
 
-        // Initialize the ad after rendering - use setTimeout to ensure DOM is ready
+        // Initialize the ad after rendering
         setTimeout(() => {
           try {
             (adsbygoogle = window.adsbygoogle || []).push({});
