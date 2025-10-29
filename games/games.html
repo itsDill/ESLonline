@@ -2097,22 +2097,6 @@
         </nav>
       </div>
     </header>
-
-    <!-- AdSense Placement - Header Banner -->
-    <div style="text-align: center; margin: 1rem 0; padding: 0.5rem">
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-
     <!-- Hero Section -->
     <section class="hero hero-section">
       <!-- WebP Hero Background -->
@@ -2284,6 +2268,21 @@
                 <option value="rating">Popularity</option>
               </select>
             </div>
+          </div>
+
+          <!-- AdSense Placement - After Search -->
+          <div style="text-align: center; margin: 2rem 0; padding: 1rem">
+            <ins
+              class="adsbygoogle"
+              style="display: block"
+              data-ad-client="ca-pub-2456627863532019"
+              data-ad-slot="1718707782"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
           </div>
 
           <!-- Active Filters Display -->
@@ -2643,77 +2642,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Google AdSense - Bottom Content Ad (Centered) -->
-    <div
-      style="
-        text-align: center;
-        margin: 3rem 0;
-        padding: 1rem;
-        background: var(--bg-secondary);
-        border-radius: 12px;
-      "
-    >
-      <ins
-        class="adsbygoogle"
-        style="display: block; margin: 0 auto"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-
-    <!-- Google AdSense - Premium Native Ad Unit -->
-    <div
-      style="
-        text-align: center;
-        margin: 3rem 0;
-        padding: 1rem;
-        background: var(--bg-secondary);
-        border-radius: 12px;
-      "
-    >
-      <ins
-        class="adsbygoogle"
-        style="display: block; margin: 0 auto"
-        data-ad-format="autorelaxed"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="9876543210"
-        data-matched-content-ui-type="image_stacked"
-        data-matched-content-rows-num="2,2"
-        data-matched-content-columns-num="1,3"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-
-    <!-- Additional Google AdSense - Pre-Footer Ad -->
-    <div
-      style="
-        text-align: center;
-        margin: 2rem auto;
-        padding: 1.5rem;
-        max-width: 1200px;
-      "
-    >
-      <ins
-        class="adsbygoogle"
-        style="display: block; margin: 0 auto"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-        data-ad-format="rectangle"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
 
     <script>
       // Game data with additional metadata - Updated with correct game files
@@ -3301,32 +3229,67 @@
         gamesGrid.style.display = "grid";
         noResults.style.display = "none";
 
-        gamesGrid.innerHTML = gamesToRender
-          .map((game, index) => {
-            const isFavorite = favorites.includes(game.id);
+        // Calculate where to insert the ad (after 6 games, or middle if less than 12)
+        const adPosition = Math.min(6, Math.floor(gamesToRender.length / 2));
+        let gameCards = "";
 
-            return `
-              <div class="game-card" data-skill="${
-                game.skill
-              }" onclick="handleCardClick(event, '${game.link}')">
-                <div class="game-image-container">
-                  ${
-                    game.image
-                      ? `<img src="${game.image}" alt="${game.title}" class="game-image" loading="lazy">`
-                      : `<i class="${game.icon} game-fallback-icon"></i>`
-                  }
-                </div>
-                <div class="game-content">
-                  <h3 class="game-title">${game.title}</h3>
-                  <p class="game-description">${game.description}</p>
-                  <div class="game-footer">
-                    <span class="game-skill">${game.skill}</span>
-                  </div>
-                </div>
+        gamesToRender.forEach((game, index) => {
+          const isFavorite = favorites.includes(game.id);
+
+          // Insert ad box after certain number of games
+          if (index === adPosition) {
+            gameCards += `
+              <div class="game-card ad-card" style="
+                background: var(--bg-secondary);
+                border: 2px solid var(--primary-color);
+                border-radius: var(--radius-xl);
+                padding: 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 350px;
+              ">
+                <ins class="adsbygoogle"
+                     style="display: block; width: 100%; max-width: 336px; min-height: 280px;"
+                     data-ad-client="ca-pub-2456627863532019"
+                     data-ad-slot="7015224277"
+                     data-ad-format="rectangle"></ins>
               </div>
             `;
-          })
-          .join("");
+          }
+
+          gameCards += `
+            <div class="game-card" data-skill="${
+              game.skill
+            }" onclick="handleCardClick(event, '${game.link}')">
+              <div class="game-image-container">
+                ${
+                  game.image
+                    ? `<img src="${game.image}" alt="${game.title}" class="game-image" loading="lazy">`
+                    : `<i class="${game.icon} game-fallback-icon"></i>`
+                }
+              </div>
+              <div class="game-content">
+                <h3 class="game-title">${game.title}</h3>
+                <p class="game-description">${game.description}</p>
+                <div class="game-footer">
+                  <span class="game-skill">${game.skill}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        gamesGrid.innerHTML = gameCards;
+
+        // Initialize the ad after rendering - use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+          try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.log("AdSense error:", e);
+          }
+        }, 100);
       }
 
       // Generate star rating
