@@ -2903,6 +2903,15 @@
               function handleDropdownClick(e) {
                 if (window.innerWidth > 768) return; // Only on mobile
 
+                // Don't interfere with dropdown item clicks
+                if (
+                  e.target.closest(".dropdown-item") ||
+                  e.target.closest(".dropdown a")
+                ) {
+                  console.log("Dropdown item clicked - allowing navigation");
+                  return; // Let the link work normally
+                }
+
                 const now = Date.now();
                 // Prevent double-firing within 300ms
                 if (now - lastDropdownToggle < 300) {
@@ -3067,6 +3076,15 @@
           display: block !important;
           visibility: visible !important;
           opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+
+        /* Ensure dropdown items are clickable */
+        .dropdown-item,
+        .dropdown > a {
+          pointer-events: auto !important;
+          cursor: pointer !important;
+          touch-action: manipulation !important;
         }
 
         /* Override any conflicting hover states */
