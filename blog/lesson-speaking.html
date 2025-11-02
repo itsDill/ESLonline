@@ -698,6 +698,263 @@
       </div>
     </header>
 
+    <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
+    <script>
+      (function () {
+        "use strict";
+
+        function initMobileMenu() {
+          const mobileToggle = document.getElementById("mobileToggle");
+          const navLinks = document.getElementById("navLinks");
+          const body = document.body;
+
+          if (!mobileToggle || !navLinks) {
+            console.warn("Mobile menu elements not found");
+            return;
+          }
+
+          console.log("Immediate mobile menu initialized");
+
+          let isMenuOpen = false;
+
+          function toggleMenu(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (e && e.stopPropagation) e.stopPropagation();
+
+            isMenuOpen = !isMenuOpen;
+            const icon = mobileToggle.querySelector("i");
+
+            if (isMenuOpen) {
+              navLinks.classList.add("active");
+              body.classList.add("mobile-menu-open");
+              body.style.overflow = "hidden";
+              if (icon) icon.className = "fas fa-times";
+              console.log("Menu opened");
+            } else {
+              navLinks.classList.remove("active");
+              body.classList.remove("mobile-menu-open");
+              body.style.overflow = "";
+              if (icon) icon.className = "fas fa-bars";
+              console.log("Menu closed");
+
+              // Close all dropdowns
+              document.querySelectorAll(".nav-item").forEach((item) => {
+                item.classList.remove("mobile-open", "mobile-dropdown-open");
+                const chevron = item.querySelector(".fa-chevron-down");
+                if (chevron) chevron.style.transform = "rotate(0deg)";
+              });
+            }
+          }
+
+          // Simple unified handler - works for both touch and click
+          let lastToggleTime = 0;
+          
+          function handleToggleClick(e) {
+            const now = Date.now();
+            // Prevent double-firing within 300ms
+            if (now - lastToggleTime < 300) {
+              console.log("Toggle ignored - too fast");
+              return;
+            }
+            lastToggleTime = now;
+            
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Hamburger clicked/tapped");
+            toggleMenu(e);
+          }
+
+          mobileToggle.addEventListener("click", handleToggleClick);
+          mobileToggle.addEventListener("touchend", handleToggleClick);
+
+          // Handle dropdown toggles on mobile
+          document.querySelectorAll(".nav-item").forEach((item) => {
+            const link = item.querySelector(".nav-link");
+            const dropdown = item.querySelector(".dropdown");
+            const chevron = link?.querySelector(".fa-chevron-down");
+
+            // Only add special handling for links WITH dropdowns
+            if (link && dropdown && chevron) {
+              // Simple unified dropdown handler
+              let lastDropdownToggle = 0;
+              
+              function handleDropdownClick(e) {
+                if (window.innerWidth > 768) return; // Only on mobile
+                
+                const now = Date.now();
+                // Prevent double-firing within 300ms
+                if (now - lastDropdownToggle < 300) {
+                  console.log("Dropdown toggle ignored - too fast");
+                  return;
+                }
+                lastDropdownToggle = now;
+                
+                e.preventDefault();
+                e.stopPropagation();
+
+                const isOpen = item.classList.contains("mobile-open");
+                console.log("Dropdown clicked:", isOpen ? "closing" : "opening");
+
+                // Close other dropdowns
+                document.querySelectorAll(".nav-item").forEach((otherItem) => {
+                  if (otherItem !== item) {
+                    otherItem.classList.remove("mobile-open", "mobile-dropdown-open");
+                    const otherChevron = otherItem.querySelector(".fa-chevron-down");
+                    if (otherChevron) otherChevron.style.transform = "rotate(0deg)";
+                  }
+                });
+
+                // Toggle current dropdown
+                if (isOpen) {
+                  item.classList.remove("mobile-open", "mobile-dropdown-open");
+                  chevron.style.transform = "rotate(0deg)";
+                  link.setAttribute("aria-expanded", "false");
+                } else {
+                  item.classList.add("mobile-open", "mobile-dropdown-open");
+                  chevron.style.transform = "rotate(180deg)";
+                  link.setAttribute("aria-expanded", "true");
+                }
+              }
+
+              // Remove href="#" behavior on mobile
+              if (link.getAttribute("href") === "#") {
+                link.style.cursor = "pointer";
+              }
+
+              // Attach handlers for both click and touch
+              link.addEventListener("click", handleDropdownClick);
+              link.addEventListener("touchend", handleDropdownClick);
+            }
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener("click", function (e) {
+            if (window.innerWidth <= 768 && isMenuOpen) {
+              if (
+                !mobileToggle.contains(e.target) &&
+                !navLinks.contains(e.target)
+              ) {
+                toggleMenu(null);
+              }
+            }
+          });
+
+          // Close menu on escape key
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && isMenuOpen) {
+              toggleMenu(null);
+              mobileToggle.focus();
+            }
+          });
+
+          // Close menu on window resize to desktop
+          window.addEventListener("resize", function () {
+            if (window.innerWidth > 768 && isMenuOpen) {
+              toggleMenu(null);
+            }
+          });
+
+          // Close menu after dropdown link click
+          document.querySelectorAll(".dropdown a").forEach((link) => {
+            link.addEventListener("click", function () {
+              if (window.innerWidth <= 768 && isMenuOpen) {
+                setTimeout(() => {
+                  toggleMenu(null);
+                }, 100);
+              }
+            });
+          });
+        }
+
+        // Initialize immediately if DOM is ready, otherwise wait
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initMobileMenu);
+        } else {
+          initMobileMenu();
+        }
+      })();
+    </script>
+
+    <!-- Additional Mobile Dropdown Fixes -->
+    <style>
+      /* Ensure mobile dropdowns work properly */
+      @media (max-width: 768px) {
+        /* FORCE mobile menu to display full width */
+        .nav-links,
+        #navLinks,
+        ul.nav-links {
+          display: flex !important;
+          position: fixed !important;
+          top: 70px !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: auto !important;
+          min-height: calc(100vh - 70px) !important;
+        }
+
+        .nav-links.active,
+        #navLinks.active,
+        ul.nav-links.active {
+          display: flex !important;
+          max-height: calc(100vh - 70px) !important;
+          height: auto !important;
+        }
+
+        /* Make sure nav links with dropdowns are clearly tappable */
+        .nav-item .nav-link {
+          position: relative;
+          user-select: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: rgba(70, 187, 229, 0.2);
+          cursor: pointer;
+        }
+
+        /* Ensure chevron is visible and clickable */
+        .nav-link .fa-chevron-down {
+          transition: transform 0.3s ease !important;
+          opacity: 1 !important;
+          pointer-events: none; /* Let clicks go through to parent link */
+        }
+
+        /* Visual feedback when dropdown is open */
+        .nav-item.mobile-open > .nav-link,
+        .nav-item.mobile-dropdown-open > .nav-link {
+          background: rgba(70, 187, 229, 0.15) !important;
+          border-color: var(--primary-color, #46bbe5) !important;
+        }
+
+        /* Make dropdowns smoother */
+        .dropdown {
+          transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            padding 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* Ensure dropdown items are visible when parent is open */
+        .nav-item.mobile-open .dropdown,
+        .nav-item.mobile-dropdown-open .dropdown {
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+
+        /* Override any conflicting hover states */
+        .nav-item:hover .dropdown {
+          max-height: 0 !important;
+          padding: 0 !important;
+        }
+
+        .nav-item.mobile-open:hover .dropdown,
+        .nav-item.mobile-dropdown-open:hover .dropdown {
+          max-height: 600px !important;
+          padding: 0.75rem 0.5rem !important;
+        }
+      }
+    </style>
+
+
+
     <div class="lesson-container">
       <!-- Lesson Header -->
       <div class="lesson-header">
