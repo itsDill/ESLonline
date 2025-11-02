@@ -1,6 +1,6 @@
 /**
- * Enhanced Navigation Support
- * ESL Fun Online - Clean mobile menu and theme functionality
+ * Enhanced Navigation Support v2.0
+ * ESL Fun Online - Improved mobile menu with smooth animations
  * CRITICAL: This is the PRIMARY navigation handler - all other scripts defer to this
  */
 
@@ -123,20 +123,25 @@ function initializeNavigation() {
       }
     });
 
-    // Touch support for mobile toggle
-    freshMobileToggle.addEventListener("touchend", function (e) {
+    // Touch support for mobile toggle with better handling
+    let touchHandled = false;
+    freshMobileToggle.addEventListener("touchstart", function (e) {
       if (window.innerWidth <= 768) {
+        touchHandled = false;
+      }
+    });
+
+    freshMobileToggle.addEventListener("touchend", function (e) {
+      if (window.innerWidth <= 768 && !touchHandled) {
         e.preventDefault();
         e.stopPropagation();
+        touchHandled = true;
 
-        // Prevent double-triggering with click event
-        setTimeout(() => {
-          if (!isMenuOpen) {
-            openMenu();
-          } else {
-            closeMenu();
-          }
-        }, 50);
+        if (isMenuOpen) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
       }
     });
 
@@ -172,14 +177,22 @@ function initializeNavigation() {
 
         // Add touch event for better mobile support
         if (freshChevron) {
-          freshLink.addEventListener("touchend", function (e) {
+          let dropdownTouchHandled = false;
+
+          freshLink.addEventListener("touchstart", function (e) {
             const isMobile = window.innerWidth <= 768;
             if (isMobile) {
+              dropdownTouchHandled = false;
+            }
+          });
+
+          freshLink.addEventListener("touchend", function (e) {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile && !dropdownTouchHandled) {
               e.preventDefault();
               e.stopPropagation();
-              setTimeout(() => {
-                toggleMobileDropdown(item, freshChevron);
-              }, 50);
+              dropdownTouchHandled = true;
+              toggleMobileDropdown(item, freshChevron);
             }
           });
         }

@@ -1,0 +1,483 @@
+/**
+ * MOBILE MENU IMPROVEMENTS - ESL Fun Online
+ * Enhanced mobile menu with smooth animations and better UX
+ * Version: 2.0
+ */
+
+/* ==============================================
+   MOBILE MENU - CORE STYLES
+   ============================================== */
+
+@media (max-width: 768px) {
+  /* Ensure body doesn't scroll when menu is open */
+  body.mobile-menu-open {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+  }
+
+  /* Header positioning and appearance */
+  header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    border-bottom: 1px solid var(--border-color, #e5e7eb) !important;
+  }
+
+  .dark-mode header {
+    background: rgba(31, 41, 55, 0.98) !important;
+    border-bottom-color: rgba(55, 65, 81, 0.5) !important;
+  }
+
+  /* Navbar layout */
+  .navbar {
+    height: 70px !important;
+    padding: 0.5rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  /* Logo styling */
+  .logo-container {
+    padding: 0.25rem !important;
+    gap: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 10001 !important;
+  }
+
+  .logo-image {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .logo-text {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+  }
+
+  /* Control buttons container */
+  .controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    z-index: 10001 !important;
+  }
+
+  .control-btn {
+    padding: 0.5rem !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: 1px solid var(--border-color, #e5e7eb) !important;
+    color: var(--text-primary, #1f2937) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .dark-mode .control-btn {
+    border-color: var(--border-color, #374151) !important;
+    color: var(--text-primary, #f9fafb) !important;
+  }
+
+  .control-btn:hover,
+  .control-btn:active {
+    background: var(--bg-secondary, #f3f4f6) !important;
+    transform: scale(0.95) !important;
+  }
+
+  .dark-mode .control-btn:hover,
+  .dark-mode .control-btn:active {
+    background: var(--bg-tertiary, #374151) !important;
+  }
+
+  .control-btn i {
+    font-size: 1.1rem !important;
+  }
+
+  .control-btn span {
+    display: none !important;
+  }
+
+  /* Mobile toggle button - special styling */
+  .mobile-toggle,
+  #mobileToggle,
+  button.mobile-toggle,
+  .control-btn.mobile-toggle {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: var(--primary-color, #46bbe5) !important;
+    color: white !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+
+  .mobile-toggle:hover,
+  .mobile-toggle:active {
+    background: var(--primary-hover, #3aa8d1) !important;
+  }
+
+  /* Mobile navigation menu */
+  .nav-links,
+  #navLinks,
+  ul.nav-links {
+    position: fixed !important;
+    top: 70px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: var(--bg-primary, #ffffff) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 1.5rem 1rem !important;
+    gap: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-20px) !important;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s !important;
+    max-height: calc(100vh - 70px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 9999 !important;
+    list-style: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .dark-mode .nav-links,
+  .dark-mode #navLinks {
+    background: var(--bg-secondary, #1f2937) !important;
+  }
+
+  /* Active/open menu state */
+  .nav-links.active,
+  #navLinks.active,
+  ul.nav-links.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+
+  /* Custom scrollbar for mobile menu */
+  .nav-links::-webkit-scrollbar,
+  #navLinks::-webkit-scrollbar {
+    width: 6px !important;
+  }
+
+  .nav-links::-webkit-scrollbar-track,
+  #navLinks::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .nav-links::-webkit-scrollbar-thumb,
+  #navLinks::-webkit-scrollbar-thumb {
+    background: var(--border-color, #e5e7eb) !important;
+    border-radius: 3px !important;
+  }
+
+  .dark-mode .nav-links::-webkit-scrollbar-thumb,
+  .dark-mode #navLinks::-webkit-scrollbar-thumb {
+    background: var(--border-color, #374151) !important;
+  }
+
+  /* Navigation items */
+  .nav-item,
+  .nav-links > li {
+    width: 100% !important;
+    margin-bottom: 0.75rem !important;
+    position: relative !important;
+    list-style: none !important;
+  }
+
+  .nav-item:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Navigation links */
+  .nav-link,
+  .nav-item > a {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: 12px !important;
+    background: var(--bg-secondary, #f9fafb) !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    border: 2px solid transparent !important;
+    transition: all 0.2s ease !important;
+    color: var(--text-primary, #1f2937) !important;
+    text-decoration: none !important;
+    gap: 0.75rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    cursor: pointer !important;
+  }
+
+  .dark-mode .nav-link,
+  .dark-mode .nav-item > a {
+    background: var(--bg-tertiary, #374151) !important;
+    color: var(--text-primary, #f9fafb) !important;
+  }
+
+  .nav-link i:first-child,
+  .nav-item > a i:first-child {
+    font-size: 1.1rem !important;
+    width: 24px !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Chevron icon styling */
+  .nav-link .fa-chevron-down {
+    margin-left: auto !important;
+    transition: transform 0.3s ease !important;
+    font-size: 0.875rem !important;
+  }
+
+  /* Hover and active states */
+  .nav-link:hover,
+  .nav-link:active,
+  .nav-link:focus {
+    background: var(--primary-light, rgba(70, 187, 229, 0.1)) !important;
+    border-color: var(--primary-color, #46bbe5) !important;
+    color: var(--primary-color, #46bbe5) !important;
+    transform: translateX(4px) !important;
+    box-shadow: 0 2px 8px rgba(70, 187, 229, 0.2) !important;
+  }
+
+  /* Current page indicator */
+  .nav-item.current .nav-link,
+  .nav-item.current > a {
+    background: var(--primary-color, #46bbe5) !important;
+    color: white !important;
+    border-color: var(--primary-color, #46bbe5) !important;
+    font-weight: 700 !important;
+  }
+
+  .nav-item.current .nav-link i {
+    color: white !important;
+  }
+
+  /* Remove desktop effects */
+  .nav-link::before {
+    display: none !important;
+  }
+
+  /* Dropdown menus */
+  .dropdown {
+    position: static !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-radius: 10px !important;
+    margin-top: 0.5rem !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.3s ease, padding 0.3s ease !important;
+    width: 100% !important;
+    min-width: unset !important;
+    left: unset !important;
+    right: unset !important;
+    padding: 0 !important;
+  }
+
+  .dark-mode .dropdown {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .dropdown::before,
+  .dropdown::after {
+    display: none !important;
+  }
+
+  /* Open dropdown state */
+  .nav-item.mobile-dropdown-open .dropdown,
+  .nav-item.mobile-open .dropdown {
+    max-height: 600px !important;
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  /* Disable hover behavior on mobile */
+  .nav-item:hover .dropdown,
+  .nav-item:focus-within .dropdown {
+    max-height: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Override hover when mobile-open class is present */
+  .nav-item.mobile-dropdown-open:hover .dropdown,
+  .nav-item.mobile-open:hover .dropdown {
+    max-height: 600px !important;
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  /* Dropdown items */
+  .dropdown-item,
+  .dropdown > a {
+    padding: 0.875rem 1rem !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+    margin: 0.25rem 0 !important;
+    background: var(--bg-primary, #ffffff) !important;
+    border: 1px solid transparent !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    color: var(--text-secondary, #6b7280) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+  }
+
+  .dark-mode .dropdown-item,
+  .dark-mode .dropdown > a {
+    background: var(--bg-secondary, #1f2937) !important;
+    color: var(--text-secondary, #d1d5db) !important;
+  }
+
+  .dropdown-item i,
+  .dropdown > a i {
+    font-size: 1rem !important;
+    width: 20px !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dropdown-item:hover,
+  .dropdown-item:active,
+  .dropdown-item:focus {
+    transform: translateX(4px) !important;
+    background: var(--primary-light, rgba(70, 187, 229, 0.1)) !important;
+    border-color: var(--primary-color, #46bbe5) !important;
+    color: var(--primary-color, #46bbe5) !important;
+    box-shadow: 0 1px 4px rgba(70, 187, 229, 0.15) !important;
+  }
+
+  /* Parent nav link state when dropdown is open */
+  .nav-item.mobile-dropdown-open > .nav-link,
+  .nav-item.mobile-open > .nav-link {
+    background: var(--primary-light, rgba(70, 187, 229, 0.1)) !important;
+    color: var(--primary-color, #46bbe5) !important;
+    border-color: var(--primary-color, #46bbe5) !important;
+  }
+
+  /* Chevron rotation for open dropdowns */
+  .nav-item.mobile-dropdown-open .fa-chevron-down,
+  .nav-item.mobile-open .fa-chevron-down {
+    transform: rotate(180deg) !important;
+  }
+
+  /* Overlay for mobile menu (optional) */
+  .mobile-menu-overlay {
+    position: fixed !important;
+    top: 70px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.3s ease, visibility 0.3s !important;
+    z-index: 9998 !important;
+  }
+
+  body.mobile-menu-open .mobile-menu-overlay {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+/* ==============================================
+   TABLET & SMALL DESKTOP (769px - 1024px)
+   ============================================== */
+
+@media (min-width: 769px) {
+  /* Ensure desktop menu is visible and properly positioned */
+  .nav-links,
+  #navLinks {
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .nav-item {
+    width: auto !important;
+    margin-bottom: 0 !important;
+  }
+
+  .nav-link {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.75rem 1rem !important;
+    width: auto !important;
+  }
+
+  .dropdown {
+    position: absolute !important;
+  }
+
+  /* Hide mobile toggle on desktop */
+  .mobile-toggle,
+  #mobileToggle {
+    display: none !important;
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY & PERFORMANCE
+   ============================================== */
+
+@media (max-width: 768px) {
+  /* Focus styles for accessibility */
+  .nav-link:focus-visible,
+  .dropdown-item:focus-visible,
+  .control-btn:focus-visible {
+    outline: 3px solid var(--primary-color, #46bbe5) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-links,
+    .dropdown,
+    .nav-link,
+    .dropdown-item,
+    .fa-chevron-down {
+      transition: none !important;
+    }
+  }
+
+  /* Performance optimization */
+  .nav-links,
+  .dropdown {
+    will-change: transform, opacity !important;
+  }
+}

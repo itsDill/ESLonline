@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Colour Magic - Creative Coloring Game | ESL Fun Online</title>
+    <meta
+      name="description"
+      content="Express your creativity with Colour Magic! A fun interactive coloring game with multiple pictures to color. Perfect for all ages."
+    />
+    <meta
+      name="keywords"
+      content="coloring game, color magic, art game, creative game, drawing game, ESL games"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        overscroll-behavior: none;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-family: "Comic Sans MS", "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      #gameContainer {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      #header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 20px 20px 0 0;
+        text-align: center;
+        position: relative;
+      }
+
+      #header h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      #header p {
+        font-size: 16px;
+        opacity: 0.95;
+      }
+
+      .header-controls {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .header-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .header-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      #pictureSelect {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 30px;
+        flex-wrap: wrap;
+        background: #f8f9fa;
+      }
+
+      .pictureOption {
+        background: white;
+        border: 3px solid #ddd;
+        border-radius: 15px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        width: 150px;
+      }
+
+      .pictureOption:hover {
+        transform: translateY(-5px);
+        border-color: #667eea;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .pictureOption.selected {
+        border-color: #667eea;
+        background: #e8eaf6;
+      }
+
+      .pictureOption svg {
+        width: 100px;
+        height: 100px;
+      }
+
+      .pictureOption p {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      #coloringArea {
+        display: none;
+        padding: 20px;
+      }
+
+      #toolbar {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .toolSection {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .toolSection label {
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .colorPalette {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 8px;
+      }
+
+      .colorBtn {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .colorBtn:hover {
+        transform: scale(1.1);
+      }
+
+      .colorBtn.active {
+        border-color: #333;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      }
+
+      .toolBtn {
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toolBtn:hover {
+        background: #f0f0f0;
+        border-color: #667eea;
+      }
+
+      .toolBtn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .toolBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .brush-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .brush-option {
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .brush-option:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .brush-option.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .brush-option .brush-icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+
+      .brush-preview {
+        width: 100%;
+        height: 30px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+
+      .feature-toggle {
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .feature-toggle:hover {
+        border-color: #667eea;
+      }
+
+      .feature-toggle.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .slider-container input[type="range"] {
+        flex: 1;
+      }
+
+      .pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .pattern-btn {
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 24px;
+        text-align: center;
+        transition: all 0.2s;
+      }
+
+      .pattern-btn:hover {
+        border-color: #667eea;
+        transform: scale(1.1);
+      }
+
+      .pattern-btn.active {
+        border-color: #667eea;
+        background: #e8eaf6;
+      }
+
+      #brushSize {
+        width: 150px;
+      }
+
+      #colorPicker {
+        width: 50px;
+        height: 40px;
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #333;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s;
+        z-index: 1000;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: slideUp 0.3s ease;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-header h2 {
+        color: #667eea;
+        font-size: 24px;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.2s;
+      }
+
+      .close-modal:hover {
+        color: #333;
+      }
+
+      .help-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .help-item h3 {
+        color: #764ba2;
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+
+      .help-item p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          transform: scale(1) rotate(0deg);
+          filter: brightness(1);
+        }
+        50% {
+          transform: scale(1.2) rotate(180deg);
+          filter: brightness(1.5);
+        }
+      }
+
+      .sparkle-btn {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sparkle-btn::after {
+        content: "✨";
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        font-size: 16px;
+        animation: sparkle 2s infinite;
+      }
+
+      #canvasContainer {
+        display: flex;
+        justify-content: center;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        position: relative;
+      }
+
+      .canvas-overlay {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(102, 126, 234, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+
+      .canvas-overlay.show {
+        opacity: 1;
+      }
+
+      #canvas {
+        border: 3px solid #333;
+        background: white;
+        cursor: crosshair;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      #backBtn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s;
+      }
+
+      #backBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .sizeLabel {
+        font-size: 14px;
+        color: #666;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 0;
+        }
+
+        #gameContainer {
+          border-radius: 0;
+        }
+
+        #header {
+          padding: 15px 10px;
+          border-radius: 0;
+        }
+
+        #header h1 {
+          font-size: 24px;
+          margin-top: 40px;
+          margin-bottom: 8px;
+        }
+
+        #header p {
+          font-size: 14px;
+        }
+
+        .header-controls {
+          top: 10px;
+          right: 10px;
+          gap: 5px;
+          z-index: 10;
+        }
+
+        .header-btn {
+          padding: 6px 10px;
+          font-size: 12px;
+          gap: 3px;
+        }
+
+        #pictureSelect {
+          padding: 15px;
+          gap: 12px;
+        }
+
+        .pictureOption {
+          width: 100px;
+          padding: 10px;
+        }
+
+        .pictureOption svg {
+          width: 70px;
+          height: 70px;
+        }
+
+        .pictureOption p {
+          font-size: 12px;
+          margin-top: 5px;
+        }
+
+        #toolbar {
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .toolSection {
+          width: 100%;
+          padding: 12px;
+        }
+
+        .toolSection label {
+          font-size: 13px;
+        }
+
+        .colorPalette {
+          grid-template-columns: repeat(6, 1fr);
+          gap: 6px;
+        }
+
+        .colorBtn {
+          width: 35px;
+          height: 35px;
+        }
+
+        .toolBtn {
+          font-size: 13px;
+          padding: 10px 12px;
+          width: 100%;
+          justify-content: center;
+        }
+
+        .brush-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+        }
+
+        .brush-option {
+          padding: 10px;
+          font-size: 11px;
+        }
+
+        .brush-option .brush-icon {
+          font-size: 20px;
+        }
+
+        .pattern-grid {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 6px;
+        }
+
+        .pattern-btn {
+          width: 35px;
+          height: 35px;
+          font-size: 18px;
+        }
+
+        .slider-container {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .slider-container label {
+          font-size: 12px;
+        }
+
+        #opacitySlider {
+          width: 100%;
+        }
+
+        .feature-toggle {
+          font-size: 13px;
+          padding: 10px 15px;
+        }
+
+        #canvasContainer {
+          padding: 15px;
+        }
+
+        #canvas {
+          max-width: 100%;
+          height: auto;
+          touch-action: none;
+        }
+
+        .modal-content {
+          margin: 10px;
+          max-width: calc(100% - 20px);
+          max-height: calc(100vh - 20px);
+          padding: 20px;
+        }
+
+        .modal-content h2 {
+          font-size: 22px;
+        }
+
+        .help-grid {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+
+        .help-item h3 {
+          font-size: 16px;
+        }
+
+        .help-item p {
+          font-size: 13px;
+        }
+
+        #sizeSlider {
+          width: 100%;
+        }
+      }
+
+      .fade-in {
+        animation: fadeInUp 0.6s ease forwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <div id="header">
+        <div class="header-controls">
+          <a href="../index.html" class="header-btn">🏠 Home</a>
+          <a href="games.html" class="header-btn">🎮 Games</a>
+        </div>
+        <h1>🎨 Colour Magic 🎨</h1>
+        <p>Choose a picture and unleash your creativity!</p>
+      </div>
+
+      <div id="pictureSelect">
+        <div class="pictureOption" onclick="selectPicture('cat')">
+          <svg viewBox="0 0 200 200">
+            <circle
+              cx="100"
+              cy="90"
+              r="50"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle cx="85" cy="80" r="8" fill="black" />
+            <circle cx="115" cy="80" r="8" fill="black" />
+            <path
+              d="M 90 100 Q 100 110 110 100"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <polygon
+              points="60,50 50,20 70,40"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <polygon
+              points="140,50 150,20 130,40"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="60"
+              y1="90"
+              x2="30"
+              y2="85"
+              stroke="black"
+              stroke-width="2"
+            />
+            <line
+              x1="60"
+              y1="100"
+              x2="30"
+              y2="100"
+              stroke="black"
+              stroke-width="2"
+            />
+            <line
+              x1="140"
+              y1="90"
+              x2="170"
+              y2="85"
+              stroke="black"
+              stroke-width="2"
+            />
+            <line
+              x1="140"
+              y1="100"
+              x2="170"
+              y2="100"
+              stroke="black"
+              stroke-width="2"
+            />
+          </svg>
+          <p>Cat</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('house')">
+          <svg viewBox="0 0 200 200">
+            <polygon
+              points="100,40 40,90 40,160 160,160 160,90"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <polygon
+              points="100,40 40,90 160,90"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <rect
+              x="70"
+              y="110"
+              width="30"
+              height="50"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <rect
+              x="120"
+              y="100"
+              width="25"
+              height="25"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="132.5"
+              y1="100"
+              x2="132.5"
+              y2="125"
+              stroke="black"
+              stroke-width="2"
+            />
+            <line
+              x1="120"
+              y1="112.5"
+              x2="145"
+              y2="112.5"
+              stroke="black"
+              stroke-width="2"
+            />
+          </svg>
+          <p>House</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('flower')">
+          <svg viewBox="0 0 200 200">
+            <circle
+              cx="100"
+              cy="80"
+              r="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="100"
+              cy="50"
+              rx="15"
+              ry="25"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="100"
+              cy="110"
+              rx="15"
+              ry="25"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="70"
+              cy="80"
+              rx="25"
+              ry="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="130"
+              cy="80"
+              rx="25"
+              ry="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="100"
+              y1="95"
+              x2="100"
+              y2="170"
+              stroke="black"
+              stroke-width="4"
+            />
+            <path
+              d="M 100 130 Q 80 140 70 150"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 100 145 Q 120 155 130 165"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Flower</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('tree')">
+          <svg viewBox="0 0 200 200">
+            <rect
+              x="85"
+              y="120"
+              width="30"
+              height="60"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="100"
+              cy="100"
+              r="45"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="75"
+              cy="85"
+              r="35"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="125"
+              cy="85"
+              r="35"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Tree</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('sun')">
+          <svg viewBox="0 0 200 200">
+            <circle
+              cx="100"
+              cy="100"
+              r="40"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="100"
+              y1="30"
+              x2="100"
+              y2="50"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="100"
+              y1="150"
+              x2="100"
+              y2="170"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="30"
+              y1="100"
+              x2="50"
+              y2="100"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="150"
+              y1="100"
+              x2="170"
+              y2="100"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="45"
+              y1="45"
+              x2="60"
+              y2="60"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="140"
+              y1="140"
+              x2="155"
+              y2="155"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="155"
+              y1="45"
+              x2="140"
+              y2="60"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="60"
+              y1="140"
+              x2="45"
+              y2="155"
+              stroke="black"
+              stroke-width="4"
+            />
+          </svg>
+          <p>Sun</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('car')">
+          <svg viewBox="0 0 200 200">
+            <rect
+              x="40"
+              y="90"
+              width="120"
+              height="50"
+              rx="10"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 60 90 L 70 60 L 130 60 L 140 90"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="70"
+              y1="60"
+              x2="70"
+              y2="90"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="130"
+              y1="60"
+              x2="130"
+              y2="90"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="65"
+              cy="140"
+              r="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="135"
+              cy="140"
+              r="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Car</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('butterfly')">
+          <svg viewBox="0 0 200 200">
+            <ellipse
+              cx="70"
+              cy="80"
+              rx="30"
+              ry="40"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="130"
+              cy="80"
+              rx="30"
+              ry="40"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="70"
+              cy="140"
+              rx="25"
+              ry="35"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <ellipse
+              cx="130"
+              cy="140"
+              rx="25"
+              ry="35"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="100"
+              y1="40"
+              x2="100"
+              y2="180"
+              stroke="black"
+              stroke-width="4"
+            />
+            <circle cx="100" cy="50" r="8" fill="black" />
+            <line
+              x1="90"
+              y1="35"
+              x2="80"
+              y2="25"
+              stroke="black"
+              stroke-width="3"
+            />
+            <line
+              x1="110"
+              y1="35"
+              x2="120"
+              y2="25"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Butterfly</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('rainbow')">
+          <svg viewBox="0 0 200 200">
+            <path
+              d="M 20 180 Q 100 20 180 180"
+              fill="none"
+              stroke="black"
+              stroke-width="6"
+            />
+            <path
+              d="M 30 175 Q 100 35 170 175"
+              fill="none"
+              stroke="black"
+              stroke-width="6"
+            />
+            <path
+              d="M 40 170 Q 100 50 160 170"
+              fill="none"
+              stroke="black"
+              stroke-width="6"
+            />
+            <path
+              d="M 50 165 Q 100 65 150 165"
+              fill="none"
+              stroke="black"
+              stroke-width="6"
+            />
+            <path
+              d="M 60 160 Q 100 80 140 160"
+              fill="none"
+              stroke="black"
+              stroke-width="6"
+            />
+            <circle
+              cx="20"
+              cy="130"
+              r="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="180"
+              cy="130"
+              r="15"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Rainbow</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('rocket')">
+          <svg viewBox="0 0 200 200">
+            <path
+              d="M 100 20 L 80 60 L 120 60 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <rect
+              x="80"
+              y="60"
+              width="40"
+              height="80"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="100"
+              cy="90"
+              r="13"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 80 140 L 60 170 L 80 160 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 120 140 L 140 170 L 120 160 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 90 160 Q 100 180 110 160"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+          </svg>
+          <p>Rocket</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('fish')">
+          <svg viewBox="0 0 200 200">
+            <ellipse
+              cx="117"
+              cy="100"
+              rx="50"
+              ry="30"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 67 100 L 40 80 L 47 100 L 40 120 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="143"
+              cy="90"
+              r="7"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle cx="143" cy="90" r="3" fill="black" />
+            <path
+              d="M 117 80 Q 133 73 150 80"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+            <path
+              d="M 117 120 Q 133 127 150 120"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+          </svg>
+          <p>Fish</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('icecream')">
+          <svg viewBox="0 0 200 200">
+            <path
+              d="M 80 100 L 100 180 L 120 100 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="100"
+              cy="100"
+              r="30"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="80"
+              cy="90"
+              r="23"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="120"
+              cy="90"
+              r="23"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="100"
+              cy="60"
+              r="20"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle cx="100" cy="50" r="4" fill="black" />
+          </svg>
+          <p>Ice Cream</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('heart')">
+          <svg viewBox="0 0 200 200">
+            <path
+              d="M 100 150 Q 50 100 50 70 Q 50 40 75 40 Q 90 40 100 60 Q 110 40 125 40 Q 150 40 150 70 Q 150 100 100 150 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="80"
+              cy="73"
+              r="8"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+            <circle
+              cx="120"
+              cy="73"
+              r="8"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+          </svg>
+          <p>Heart</p>
+        </div>
+
+        <div class="pictureOption" onclick="selectPicture('dinosaur')">
+          <svg viewBox="0 0 200 200">
+            <ellipse
+              cx="100"
+              cy="120"
+              rx="40"
+              ry="30"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="133"
+              cy="100"
+              r="27"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="150"
+              cy="90"
+              r="17"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <circle
+              cx="157"
+              cy="83"
+              r="5"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+            <circle cx="157" cy="83" r="3" fill="black" />
+            <path
+              d="M 60 120 L 50 100 Q 40 80 30 100 L 40 110 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="3"
+            />
+            <path
+              d="M 127 60 L 130 50 L 133 60 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+            <path
+              d="M 137 57 L 140 47 L 143 57 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+            <path
+              d="M 147 55 L 150 45 L 153 55 Z"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+            />
+          </svg>
+          <p>Dinosaur</p>
+        </div>
+      </div>
+
+      <div id="coloringArea">
+        <div id="toolbar">
+          <button id="backBtn" onclick="backToSelect()">← Back</button>
+
+          <div class="toolSection">
+            <label>Drawing Tools:</label>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <button class="toolBtn active" onclick="setTool('brush')">
+                🖌️ Brush
+              </button>
+              <button class="toolBtn" onclick="setTool('fill')">🪣 Fill</button>
+              <button class="toolBtn" onclick="setTool('eraser')">
+                🧹 Eraser
+              </button>
+              <button class="toolBtn" id="undoBtn" onclick="undo()" disabled>
+                ↶ Undo
+              </button>
+              <button class="toolBtn" id="redoBtn" onclick="redo()" disabled>
+                ↷ Redo
+              </button>
+            </div>
+          </div>
+
+          <div class="toolSection">
+            <label
+              >Brush Size:
+              <span class="sizeLabel" id="sizeValue">10</span></label
+            >
+            <input
+              type="range"
+              id="brushSize"
+              min="5"
+              max="50"
+              value="10"
+              oninput="updateBrushSize(this.value)"
+            />
+          </div>
+
+          <div class="toolSection" id="brushStyleSection" style="display: none">
+            <label>🎨 Brush Styles:</label>
+            <div class="brush-grid">
+              <div
+                class="brush-option active"
+                onclick="setBrushStyle('normal')"
+              >
+                <div class="brush-icon">✏️</div>
+                <div>Normal</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('spray')">
+                <div class="brush-icon">💨</div>
+                <div>Spray</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('marker')">
+                <div class="brush-icon">🖊️</div>
+                <div>Marker</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('crayon')">
+                <div class="brush-icon">🖍️</div>
+                <div>Crayon</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('calligraphy')">
+                <div class="brush-icon">🖋️</div>
+                <div>Calligraphy</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('glitter')">
+                <div class="brush-icon">✨</div>
+                <div>Glitter</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('neon')">
+                <div class="brush-icon">💡</div>
+                <div>Neon</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('watercolor')">
+                <div class="brush-icon">💧</div>
+                <div>Watercolor</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('sketch')">
+                <div class="brush-icon">📝</div>
+                <div>Sketch</div>
+              </div>
+              <div class="brush-option" onclick="setBrushStyle('rainbow')">
+                <div class="brush-icon">🌈</div>
+                <div>Rainbow</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="toolSection">
+            <label>Colors:</label>
+            <div class="colorPalette">
+              <div
+                class="colorBtn active"
+                style="background: #ff6b6b"
+                onclick="selectColor('#FF6B6B')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #4ecdc4"
+                onclick="selectColor('#4ECDC4')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #45b7d1"
+                onclick="selectColor('#45B7D1')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #ffa07a"
+                onclick="selectColor('#FFA07A')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #98d8c8"
+                onclick="selectColor('#98D8C8')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #f7dc6f"
+                onclick="selectColor('#F7DC6F')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #bb8fce"
+                onclick="selectColor('#BB8FCE')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #f8b739"
+                onclick="selectColor('#F8B739')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #52b788"
+                onclick="selectColor('#52B788')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #e63946"
+                onclick="selectColor('#E63946')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #06ffa5"
+                onclick="selectColor('#06FFA5')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #3a86ff"
+                onclick="selectColor('#3A86FF')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #fb5607"
+                onclick="selectColor('#FB5607')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #ffbe0b"
+                onclick="selectColor('#FFBE0B')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #ff006e"
+                onclick="selectColor('#FF006E')"
+              ></div>
+              <div
+                class="colorBtn"
+                style="background: #8338ec"
+                onclick="selectColor('#8338EC')"
+              ></div>
+              <input
+                type="color"
+                id="colorPicker"
+                onchange="selectColor(this.value)"
+                title="Custom Color"
+              />
+            </div>
+          </div>
+
+          <div class="toolSection">
+            <label>🎛️ Advanced Features:</label>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 10px;
+              "
+            >
+              <button
+                class="feature-toggle"
+                id="symmetryBtn"
+                onclick="toggleSymmetry()"
+              >
+                🪞 Symmetry
+              </button>
+              <button
+                class="feature-toggle"
+                id="patternsBtn"
+                onclick="togglePatterns()"
+              >
+                🎭 Patterns
+              </button>
+            </div>
+          </div>
+
+          <div class="toolSection" id="opacitySection">
+            <label
+              >Opacity:
+              <span class="sizeLabel" id="opacityValue">100</span>%</label
+            >
+            <div class="slider-container">
+              <input
+                type="range"
+                id="opacitySlider"
+                min="10"
+                max="100"
+                value="100"
+                oninput="updateOpacity(this.value)"
+              />
+            </div>
+          </div>
+
+          <div class="toolSection" id="patternsSection" style="display: none">
+            <label>📐 Pattern Stamps:</label>
+            <div class="pattern-grid">
+              <div
+                class="pattern-btn"
+                onclick="setPattern('circle')"
+                title="Circle"
+              >
+                ⭕
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('square')"
+                title="Square"
+              >
+                ⬜
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('star')"
+                title="Star"
+              >
+                ⭐
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('heart')"
+                title="Heart"
+              >
+                ❤️
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('flower')"
+                title="Flower"
+              >
+                🌸
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('triangle')"
+                title="Triangle"
+              >
+                🔺
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('hexagon')"
+                title="Hexagon"
+              >
+                ⬡
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('diamond')"
+                title="Diamond"
+              >
+                💎
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('cloud')"
+                title="Cloud"
+              >
+                ☁️
+              </div>
+              <div
+                class="pattern-btn"
+                onclick="setPattern('none')"
+                title="No Pattern"
+              >
+                ✖️
+              </div>
+            </div>
+          </div>
+
+          <button class="toolBtn" onclick="clearCanvas()">🗑️ Clear</button>
+          <button class="toolBtn sparkle-btn" onclick="saveDrawing()">
+            💾 Save
+          </button>
+          <button class="toolBtn" onclick="openHelp()">❓ Help</button>
+        </div>
+
+        <div id="canvasContainer">
+          <div class="canvas-overlay" id="canvasOverlay">Tool: Brush</div>
+          <canvas id="canvas" width="600" height="600"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal" id="helpModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🎨 How to Use Colour Magic</h2>
+          <button class="close-modal" onclick="closeHelp()">&times;</button>
+        </div>
+        <div class="help-item">
+          <h3>🖌️ Brush Tool & Styles</h3>
+          <p>
+            Click and drag to draw freely on the canvas. Choose from 10 amazing
+            brush styles:<br />
+            <strong>✏️ Normal</strong> - Classic smooth brush<br />
+            <strong>💨 Spray</strong> - Airbrush effect<br />
+            <strong>🖊️ Marker</strong> - Bold marker strokes<br />
+            <strong>🖍️ Crayon</strong> - Textured crayon look<br />
+            <strong>🖋️ Calligraphy</strong> - Elegant angled strokes<br />
+            <strong>✨ Glitter</strong> - Sparkly star effects<br />
+            <strong>💡 Neon</strong> - Glowing neon lines<br />
+            <strong>💧 Watercolor</strong> - Soft watercolor blending<br />
+            <strong>📝 Sketch</strong> - Rough sketchy lines<br />
+            <strong>🌈 Rainbow</strong> - Automatic rainbow colors!
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>🪣 Fill Tool</h3>
+          <p>
+            Click on any area to fill it with the selected color. Perfect for
+            coloring large areas quickly!
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>🧹 Eraser</h3>
+          <p>
+            Remove colors by clicking and dragging. Adjust the eraser size just
+            like the brush.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>↶↷ Undo/Redo</h3>
+          <p>
+            Made a mistake? Use undo to go back. Changed your mind? Use redo to
+            restore your work.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>🎨 Color Picker</h3>
+          <p>
+            Choose from 16 preset colors or click the color input to create your
+            own custom colors!
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>🎭 Pattern Stamps</h3>
+          <p>
+            Click the Patterns button (🎭) to choose fun shapes to stamp:
+            circles, squares, stars, hearts, flowers, and more! Perfect for
+            adding decorative elements.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>🪞 Symmetry Mode</h3>
+          <p>
+            Toggle the Symmetry button (🪞) to draw mirrored designs! Everything
+            you draw will be reflected across the center, creating beautiful
+            symmetrical patterns.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>💧 Opacity Control</h3>
+          <p>
+            Adjust the opacity slider (10-100%) to make your strokes transparent
+            or solid. Great for layering colors and creating depth!
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>💾 Save Your Art</h3>
+          <p>
+            Click the Save button to download your masterpiece as a PNG image
+            file.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>📱 Touch Support</h3>
+          <p>
+            Works perfectly on tablets and phones! Just tap and drag with your
+            finger.
+          </p>
+        </div>
+        <div class="help-item">
+          <h3>⌨️ Keyboard Shortcuts</h3>
+          <p>
+            <strong>B</strong> - Brush | <strong>F</strong> - Fill |
+            <strong>E</strong> - Eraser<br />
+            <strong>Ctrl+Z</strong> - Undo | <strong>Ctrl+Shift+Z</strong> -
+            Redo<br />
+            <strong>Ctrl+S</strong> - Save | <strong>H</strong> - Help<br />
+            <strong>Esc</strong> - Close Help
+          </p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      let currentColor = "#FF6B6B";
+      let currentTool = "brush";
+      let brushSize = 10;
+      let brushStyle = "normal";
+      let isDrawing = false;
+      let currentPicture = "";
+      let undoStack = [];
+      let redoStack = [];
+      const MAX_UNDO = 20;
+      let strokeCount = 0;
+      let colorHistory = [];
+      let rainbowHue = 0;
+      let lastX = 0;
+      let lastY = 0;
+      let symmetryMode = false;
+      let currentOpacity = 1.0;
+      let currentPattern = "none";
+
+      const pictures = {
+        cat: [
+          { type: "circle", x: 300, y: 270, r: 150 },
+          { type: "circle", x: 255, y: 240, r: 24 },
+          { type: "circle", x: 345, y: 240, r: 24 },
+          { type: "circle", x: 255, y: 240, r: 12 },
+          { type: "circle", x: 345, y: 240, r: 12 },
+          { type: "path", d: "M 270 300 Q 300 330 330 300" },
+          { type: "circle", x: 300, y: 315, r: 8 },
+          {
+            type: "polygon",
+            points: [
+              [180, 150],
+              [150, 60],
+              [210, 120],
+            ],
+          },
+          {
+            type: "polygon",
+            points: [
+              [420, 150],
+              [450, 60],
+              [390, 120],
+            ],
+          },
+          { type: "line", x1: 180, y1: 270, x2: 90, y2: 255 },
+          { type: "line", x1: 180, y1: 285, x2: 90, y2: 270 },
+          { type: "line", x1: 180, y1: 300, x2: 90, y2: 300 },
+          { type: "line", x1: 420, y1: 270, x2: 510, y2: 255 },
+          { type: "line", x1: 420, y1: 285, x2: 510, y2: 270 },
+          { type: "line", x1: 420, y1: 300, x2: 510, y2: 300 },
+          { type: "path", d: "M 240 200 Q 230 210 240 220" },
+          { type: "path", d: "M 360 200 Q 370 210 360 220" },
+        ],
+        house: [
+          {
+            type: "polygon",
+            points: [
+              [300, 120],
+              [120, 270],
+              [120, 480],
+              [480, 480],
+              [480, 270],
+            ],
+          },
+          {
+            type: "polygon",
+            points: [
+              [300, 120],
+              [120, 270],
+              [480, 270],
+            ],
+          },
+          { type: "rect", x: 210, y: 330, w: 90, h: 150 },
+          { type: "circle", x: 270, y: 390, r: 8 },
+          { type: "rect", x: 360, y: 300, w: 75, h: 75 },
+          { type: "line", x1: 397.5, y1: 300, x2: 397.5, y2: 375 },
+          { type: "line", x1: 360, y1: 337.5, x2: 435, y2: 337.5 },
+          { type: "rect", x: 150, y: 320, w: 50, h: 50 },
+          { type: "line", x1: 175, y1: 320, x2: 175, y2: 370 },
+          { type: "line", x1: 150, y1: 345, x2: 200, y2: 345 },
+          { type: "rect", x: 285, y: 120, w: 30, h: 60 },
+          { type: "rect", x: 275, y: 110, w: 50, h: 15 },
+          { type: "path", d: "M 60 480 L 60 510 L 540 510 L 540 480" },
+        ],
+        flower: [
+          { type: "circle", x: 300, y: 240, r: 45 },
+          { type: "ellipse", cx: 300, cy: 150, rx: 45, ry: 75 },
+          { type: "ellipse", cx: 300, cy: 330, rx: 45, ry: 75 },
+          { type: "ellipse", cx: 210, cy: 240, rx: 75, ry: 45 },
+          { type: "ellipse", cx: 390, cy: 240, rx: 75, ry: 45 },
+          { type: "ellipse", cx: 245, cy: 175, rx: 50, ry: 60, rotation: -0.8 },
+          { type: "ellipse", cx: 355, cy: 175, rx: 50, ry: 60, rotation: 0.8 },
+          { type: "ellipse", cx: 245, cy: 305, rx: 50, ry: 60, rotation: 0.8 },
+          { type: "ellipse", cx: 355, cy: 305, rx: 50, ry: 60, rotation: -0.8 },
+          { type: "line", x1: 300, y1: 285, x2: 300, y2: 510 },
+          { type: "path", d: "M 300 390 Q 240 420 210 450" },
+          { type: "path", d: "M 300 435 Q 360 465 390 495" },
+          { type: "ellipse", cx: 195, cy: 465, rx: 30, ry: 20, rotation: -0.5 },
+          { type: "ellipse", cx: 405, cy: 510, rx: 30, ry: 20, rotation: 0.3 },
+        ],
+        tree: [
+          { type: "rect", x: 255, y: 360, w: 90, h: 180 },
+          { type: "circle", x: 300, y: 300, r: 135 },
+          { type: "circle", x: 225, y: 255, r: 105 },
+          { type: "circle", x: 375, y: 255, r: 105 },
+        ],
+        sun: [
+          { type: "circle", x: 300, y: 300, r: 120 },
+          { type: "line", x1: 300, y1: 90, x2: 300, y2: 150 },
+          { type: "line", x1: 300, y1: 450, x2: 300, y2: 510 },
+          { type: "line", x1: 90, y1: 300, x2: 150, y2: 300 },
+          { type: "line", x1: 450, y1: 300, x2: 510, y2: 300 },
+          { type: "line", x1: 135, y1: 135, x2: 180, y2: 180 },
+          { type: "line", x1: 420, y1: 420, x2: 465, y2: 465 },
+          { type: "line", x1: 465, y1: 135, x2: 420, y2: 180 },
+          { type: "line", x1: 180, y1: 420, x2: 135, y2: 465 },
+        ],
+        car: [
+          { type: "rect", x: 120, y: 270, w: 360, h: 150, rx: 30 },
+          { type: "path", d: "M 180 270 L 210 180 L 390 180 L 420 270" },
+          { type: "line", x1: 210, y1: 180, x2: 210, y2: 270 },
+          { type: "line", x1: 390, y1: 180, x2: 390, y2: 270 },
+          { type: "circle", x: 195, y: 420, r: 45 },
+          { type: "circle", x: 405, y: 420, r: 45 },
+        ],
+        butterfly: [
+          { type: "ellipse", cx: 210, cy: 240, rx: 90, ry: 120 },
+          { type: "ellipse", cx: 390, cy: 240, rx: 90, ry: 120 },
+          { type: "ellipse", cx: 210, cy: 420, rx: 75, ry: 105 },
+          { type: "ellipse", cx: 390, cy: 420, rx: 75, ry: 105 },
+          { type: "line", x1: 300, y1: 120, x2: 300, y2: 540 },
+          { type: "circle", x: 300, y: 150, r: 24 },
+          { type: "line", x1: 270, y1: 105, x2: 240, y2: 75 },
+          { type: "line", x1: 330, y1: 105, x2: 360, y2: 75 },
+        ],
+        rainbow: [
+          { type: "path", d: "M 60 540 Q 300 60 540 540" },
+          { type: "path", d: "M 90 525 Q 300 105 510 525" },
+          { type: "path", d: "M 120 510 Q 300 150 480 510" },
+          { type: "path", d: "M 150 495 Q 300 195 450 495" },
+          { type: "path", d: "M 180 480 Q 300 240 420 480" },
+          { type: "circle", x: 60, y: 390, r: 45 },
+          { type: "circle", x: 540, y: 390, r: 45 },
+        ],
+        rocket: [
+          { type: "path", d: "M 300 60 L 240 180 L 360 180 Z" },
+          { type: "rect", x: 240, y: 180, w: 120, h: 240 },
+          { type: "circle", x: 300, y: 270, r: 40 },
+          { type: "rect", x: 285, y: 250, w: 30, h: 60 },
+          { type: "path", d: "M 240 420 L 180 510 L 240 480 Z" },
+          { type: "path", d: "M 360 420 L 420 510 L 360 480 Z" },
+          { type: "path", d: "M 270 480 Q 300 540 330 480" },
+          { type: "circle", x: 300, y: 300, r: 8 },
+          { type: "rect", x: 275, y: 340, w: 50, h: 15 },
+          { type: "rect", x: 275, y: 370, w: 50, h: 15 },
+        ],
+        fish: [
+          { type: "ellipse", cx: 350, cy: 300, rx: 150, ry: 90 },
+          { type: "path", d: "M 200 300 L 120 240 L 140 300 L 120 360 Z" },
+          { type: "circle", x: 430, y: 270, r: 20 },
+          { type: "circle", x: 430, y: 270, r: 10 },
+          { type: "path", d: "M 350 240 Q 400 220 450 240" },
+          { type: "path", d: "M 350 360 Q 400 380 450 360" },
+          { type: "ellipse", cx: 300, cy: 250, rx: 30, ry: 40 },
+          { type: "ellipse", cx: 380, cy: 280, rx: 25, ry: 35 },
+          { type: "ellipse", cx: 300, cy: 350, rx: 30, ry: 40 },
+          { type: "path", d: "M 250 280 Q 270 300 250 320" },
+          { type: "line", x1: 230, y1: 300, x2: 250, y2: 300 },
+        ],
+        icecream: [
+          { type: "path", d: "M 240 300 L 300 540 L 360 300 Z" },
+          { type: "circle", x: 300, y: 300, r: 90 },
+          { type: "circle", x: 240, y: 270, r: 70 },
+          { type: "circle", x: 360, y: 270, r: 70 },
+          { type: "circle", x: 300, y: 180, r: 60 },
+          { type: "path", d: "M 250 340 Q 260 360 270 340" },
+          { type: "path", d: "M 280 380 Q 290 400 300 380" },
+          { type: "path", d: "M 310 420 Q 320 440 330 420" },
+          { type: "circle", x: 300, y: 150, r: 12 },
+        ],
+        heart: [
+          {
+            type: "path",
+            d: "M 300 450 Q 150 300 150 210 Q 150 120 225 120 Q 270 120 300 180 Q 330 120 375 120 Q 450 120 450 210 Q 450 300 300 450 Z",
+          },
+          { type: "circle", x: 240, y: 220, r: 25 },
+          { type: "circle", x: 360, y: 220, r: 25 },
+          { type: "path", d: "M 200 260 Q 220 280 240 260" },
+        ],
+        dinosaur: [
+          { type: "ellipse", cx: 300, cy: 360, rx: 120, ry: 90 },
+          { type: "circle", x: 400, y: 300, r: 80 },
+          { type: "circle", x: 450, y: 270, r: 50 },
+          { type: "path", d: "M 250 450 L 250 540 L 280 540 L 280 480" },
+          { type: "path", d: "M 320 450 L 320 540 L 350 540 L 350 480" },
+          { type: "circle", x: 470, y: 250, r: 15 },
+          { type: "circle", x: 470, y: 250, r: 8 },
+          {
+            type: "path",
+            d: "M 180 360 L 150 300 Q 120 240 90 300 L 120 330 Z",
+          },
+          { type: "path", d: "M 380 180 L 390 150 L 400 180 Z" },
+          { type: "path", d: "M 410 170 L 420 140 L 430 170 Z" },
+          { type: "path", d: "M 440 165 L 450 135 L 460 165 Z" },
+          { type: "path", d: "M 450 290 Q 480 300 470 310" },
+        ],
+      };
+
+      function selectPicture(pic) {
+        currentPicture = pic;
+        document.getElementById("pictureSelect").style.display = "none";
+        document.getElementById("coloringArea").style.display = "block";
+        undoStack = [];
+        redoStack = [];
+        updateUndoRedoButtons();
+        drawPicture();
+        saveState();
+      }
+
+      function backToSelect() {
+        document.getElementById("pictureSelect").style.display = "flex";
+        document.getElementById("coloringArea").style.display = "none";
+        clearCanvas();
+      }
+
+      function drawPicture() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 6;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        const shapes = pictures[currentPicture];
+        shapes.forEach((shape) => {
+          ctx.beginPath();
+          switch (shape.type) {
+            case "circle":
+              ctx.arc(shape.x, shape.y, shape.r, 0, Math.PI * 2);
+              ctx.stroke();
+              break;
+            case "rect":
+              if (shape.rx) {
+                ctx.roundRect(shape.x, shape.y, shape.w, shape.h, shape.rx);
+              } else {
+                ctx.rect(shape.x, shape.y, shape.w, shape.h);
+              }
+              ctx.stroke();
+              break;
+            case "ellipse":
+              ctx.ellipse(
+                shape.cx,
+                shape.cy,
+                shape.rx,
+                shape.ry,
+                shape.rotation || 0,
+                0,
+                Math.PI * 2
+              );
+              ctx.stroke();
+              break;
+            case "polygon":
+              ctx.moveTo(shape.points[0][0], shape.points[0][1]);
+              for (let i = 1; i < shape.points.length; i++) {
+                ctx.lineTo(shape.points[i][0], shape.points[i][1]);
+              }
+              ctx.closePath();
+              ctx.stroke();
+              break;
+            case "line":
+              ctx.moveTo(shape.x1, shape.y1);
+              ctx.lineTo(shape.x2, shape.y2);
+              ctx.stroke();
+              break;
+            case "path":
+              const path = new Path2D(shape.d);
+              ctx.stroke(path);
+              break;
+          }
+        });
+      }
+
+      function selectColor(color) {
+        currentColor = color;
+        document
+          .querySelectorAll(".colorBtn")
+          .forEach((btn) => btn.classList.remove("active"));
+        if (
+          event.target.classList &&
+          event.target.classList.contains("colorBtn")
+        ) {
+          event.target.classList.add("active");
+        }
+        if (currentTool === "eraser") {
+          setTool("brush");
+        }
+
+        // Add to color history
+        if (!colorHistory.includes(color)) {
+          colorHistory.unshift(color);
+          if (colorHistory.length > 5) {
+            colorHistory.pop();
+          }
+        }
+      }
+
+      function setTool(tool) {
+        currentTool = tool;
+        document
+          .querySelectorAll(".toolBtn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Show/hide brush style selector
+        const brushStyleSection = document.getElementById("brushStyleSection");
+        if (tool === "brush") {
+          brushStyleSection.style.display = "block";
+          canvas.style.cursor = "crosshair";
+          showCanvasOverlay("Tool: Brush 🖌️");
+        } else if (tool === "fill") {
+          brushStyleSection.style.display = "none";
+          canvas.style.cursor = "pointer";
+          showCanvasOverlay("Tool: Fill 🪣");
+        } else if (tool === "eraser") {
+          brushStyleSection.style.display = "none";
+          canvas.style.cursor = "grab";
+          showCanvasOverlay("Tool: Eraser 🧹");
+        }
+      }
+
+      function setBrushStyle(style) {
+        brushStyle = style;
+        document
+          .querySelectorAll(".brush-option")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.closest(".brush-option").classList.add("active");
+        showCanvasOverlay(
+          `Brush: ${style.charAt(0).toUpperCase() + style.slice(1)}`
+        );
+      }
+
+      function showCanvasOverlay(message) {
+        const overlay = document.getElementById("canvasOverlay");
+        overlay.textContent = message;
+        overlay.classList.add("show");
+        setTimeout(() => overlay.classList.remove("show"), 2000);
+      }
+
+      function openHelp() {
+        document.getElementById("helpModal").classList.add("show");
+      }
+
+      function closeHelp() {
+        document.getElementById("helpModal").classList.remove("show");
+      }
+
+      // Close modal when clicking outside
+      document
+        .getElementById("helpModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeHelp();
+          }
+        });
+
+      function updateBrushSize(value) {
+        brushSize = value;
+        document.getElementById("sizeValue").textContent = value;
+      }
+
+      function updateOpacity(value) {
+        currentOpacity = value / 100;
+        document.getElementById("opacityValue").textContent = value;
+      }
+
+      function toggleSymmetry() {
+        symmetryMode = !symmetryMode;
+        const btn = document.getElementById("symmetryBtn");
+        if (symmetryMode) {
+          btn.classList.add("active");
+          showToast("Symmetry Mode ON 🪞");
+        } else {
+          btn.classList.remove("active");
+          showToast("Symmetry Mode OFF");
+        }
+      }
+
+      function togglePatterns() {
+        const section = document.getElementById("patternsSection");
+        const btn = document.getElementById("patternsBtn");
+        if (section.style.display === "none") {
+          section.style.display = "block";
+          btn.classList.add("active");
+        } else {
+          section.style.display = "none";
+          btn.classList.remove("active");
+          currentPattern = "none";
+        }
+      }
+
+      function setPattern(pattern) {
+        currentPattern = pattern;
+        document
+          .querySelectorAll(".pattern-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+        showCanvasOverlay(`Pattern: ${pattern}`);
+      }
+
+      function clearCanvas() {
+        if (currentPicture) {
+          drawPicture();
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      function floodFill(startX, startY, fillColor) {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+        const startPos = (startY * canvas.width + startX) * 4;
+        const startR = pixels[startPos];
+        const startG = pixels[startPos + 1];
+        const startB = pixels[startPos + 2];
+
+        const fillRGB = hexToRgb(fillColor);
+
+        if (
+          startR === fillRGB.r &&
+          startG === fillRGB.g &&
+          startB === fillRGB.b
+        )
+          return;
+
+        const stack = [[startX, startY]];
+        const visited = new Set();
+
+        while (stack.length > 0) {
+          const [x, y] = stack.pop();
+          const key = `${x},${y}`;
+
+          if (visited.has(key)) continue;
+          if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height)
+            continue;
+
+          const pos = (y * canvas.width + x) * 4;
+          const r = pixels[pos];
+          const g = pixels[pos + 1];
+          const b = pixels[pos + 2];
+
+          if (
+            Math.abs(r - startR) > 10 ||
+            Math.abs(g - startG) > 10 ||
+            Math.abs(b - startB) > 10
+          )
+            continue;
+
+          visited.add(key);
+          pixels[pos] = fillRGB.r;
+          pixels[pos + 1] = fillRGB.g;
+          pixels[pos + 2] = fillRGB.b;
+          pixels[pos + 3] = 255;
+
+          stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        drawPicture();
+      }
+
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+            }
+          : null;
+      }
+
+      // Mouse and touch events
+      canvas.addEventListener("mousedown", handleStart);
+      canvas.addEventListener("mousemove", handleMove);
+      canvas.addEventListener("mouseup", handleEnd);
+      canvas.addEventListener("mouseout", handleEnd);
+
+      canvas.addEventListener("touchstart", handleStart);
+      canvas.addEventListener("touchmove", handleMove);
+      canvas.addEventListener("touchend", handleEnd);
+
+      function handleStart(e) {
+        e.preventDefault();
+        const pos = getEventPosition(e);
+
+        if (currentTool === "fill") {
+          floodFill(Math.floor(pos.x), Math.floor(pos.y), currentColor);
+          saveState();
+        } else {
+          isDrawing = true;
+          ctx.beginPath();
+          ctx.moveTo(pos.x, pos.y);
+          lastX = pos.x;
+          lastY = pos.y;
+        }
+      }
+
+      function handleMove(e) {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const pos = getEventPosition(e);
+        draw(pos.x, pos.y);
+        lastX = pos.x;
+        lastY = pos.y;
+      }
+
+      function handleEnd(e) {
+        if (isDrawing) {
+          isDrawing = false;
+          ctx.beginPath();
+          saveState();
+          strokeCount++;
+        }
+      }
+
+      function getEventPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        return {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+        };
+      }
+
+      function draw(x, y) {
+        if (currentTool === "eraser") {
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.lineWidth = brushSize;
+          ctx.lineTo(x, y);
+          ctx.stroke();
+          ctx.moveTo(x, y);
+
+          if (symmetryMode) {
+            const mirrorX = canvas.width - x;
+            ctx.lineTo(mirrorX, y);
+            ctx.stroke();
+            ctx.moveTo(mirrorX, y);
+          }
+          return;
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+
+        // Apply pattern if selected
+        if (currentPattern !== "none") {
+          drawPattern(x, y);
+          if (symmetryMode) {
+            drawPattern(canvas.width - x, y);
+          }
+          return;
+        }
+
+        // Draw at main position
+        switch (brushStyle) {
+          case "normal":
+            drawNormal(x, y);
+            break;
+          case "spray":
+            drawSpray(x, y);
+            break;
+          case "marker":
+            drawMarker(x, y);
+            break;
+          case "crayon":
+            drawCrayon(x, y);
+            break;
+          case "calligraphy":
+            drawCalligraphy(x, y);
+            break;
+          case "glitter":
+            drawGlitter(x, y);
+            break;
+          case "neon":
+            drawNeon(x, y);
+            break;
+          case "watercolor":
+            drawWatercolor(x, y);
+            break;
+          case "sketch":
+            drawSketch(x, y);
+            break;
+          case "rainbow":
+            drawRainbow(x, y);
+            break;
+          default:
+            drawNormal(x, y);
+        }
+
+        // Draw mirrored if symmetry is on
+        if (symmetryMode) {
+          const mirrorX = canvas.width - x;
+          switch (brushStyle) {
+            case "normal":
+              drawNormal(mirrorX, y);
+              break;
+            case "spray":
+              drawSpray(mirrorX, y);
+              break;
+            case "marker":
+              drawMarker(mirrorX, y);
+              break;
+            case "crayon":
+              drawCrayon(mirrorX, y);
+              break;
+            case "calligraphy":
+              drawCalligraphy(mirrorX, y);
+              break;
+            case "glitter":
+              drawGlitter(mirrorX, y);
+              break;
+            case "neon":
+              drawNeon(mirrorX, y);
+              break;
+            case "watercolor":
+              drawWatercolor(mirrorX, y);
+              break;
+            case "sketch":
+              drawSketch(mirrorX, y);
+              break;
+            case "rainbow":
+              drawRainbow(mirrorX, y);
+              break;
+          }
+        }
+      }
+
+      function drawPattern(x, y) {
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        ctx.fillStyle = currentColor;
+        ctx.strokeStyle = currentColor;
+        const size = brushSize * 2;
+
+        ctx.beginPath();
+        switch (currentPattern) {
+          case "circle":
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+            break;
+          case "square":
+            ctx.fillRect(x - size / 2, y - size / 2, size, size);
+            break;
+          case "star":
+            drawStar(x, y, 5, size / 2, size / 4);
+            ctx.fill();
+            break;
+          case "heart":
+            drawHeart(x, y, size / 2);
+            ctx.fill();
+            break;
+          case "flower":
+            drawFlowerPattern(x, y, size / 3);
+            ctx.fill();
+            break;
+          case "triangle":
+            ctx.moveTo(x, y - size / 2);
+            ctx.lineTo(x - size / 2, y + size / 2);
+            ctx.lineTo(x + size / 2, y + size / 2);
+            ctx.closePath();
+            ctx.fill();
+            break;
+          case "hexagon":
+            drawHexagon(x, y, size / 2);
+            ctx.fill();
+            break;
+          case "diamond":
+            ctx.moveTo(x, y - size / 2);
+            ctx.lineTo(x + size / 2, y);
+            ctx.lineTo(x, y + size / 2);
+            ctx.lineTo(x - size / 2, y);
+            ctx.closePath();
+            ctx.fill();
+            break;
+          case "cloud":
+            drawCloud(x, y, size / 2);
+            ctx.fill();
+            break;
+        }
+        ctx.restore();
+      }
+
+      function drawStar(x, y, points, outer, inner) {
+        ctx.moveTo(x, y - outer);
+        for (let i = 0; i < points * 2; i++) {
+          const radius = i % 2 === 0 ? outer : inner;
+          const angle = (Math.PI * i) / points - Math.PI / 2;
+          ctx.lineTo(
+            x + radius * Math.cos(angle),
+            y + radius * Math.sin(angle)
+          );
+        }
+        ctx.closePath();
+      }
+
+      function drawHeart(x, y, size) {
+        ctx.moveTo(x, y + size / 4);
+        ctx.bezierCurveTo(x, y, x - size / 2, y - size / 2, x - size / 2, y);
+        ctx.bezierCurveTo(
+          x - size / 2,
+          y + size / 3,
+          x,
+          y + size / 2,
+          x,
+          y + size
+        );
+        ctx.bezierCurveTo(
+          x,
+          y + size / 2,
+          x + size / 2,
+          y + size / 3,
+          x + size / 2,
+          y
+        );
+        ctx.bezierCurveTo(x + size / 2, y - size / 2, x, y, x, y + size / 4);
+      }
+
+      function drawFlowerPattern(x, y, size) {
+        for (let i = 0; i < 6; i++) {
+          const angle = (Math.PI * 2 * i) / 6;
+          ctx.moveTo(x, y);
+          ctx.arc(
+            x + Math.cos(angle) * size,
+            y + Math.sin(angle) * size,
+            size / 2,
+            0,
+            Math.PI * 2
+          );
+        }
+      }
+
+      function drawHexagon(x, y, size) {
+        for (let i = 0; i < 6; i++) {
+          const angle = (Math.PI * i) / 3;
+          const px = x + size * Math.cos(angle);
+          const py = y + size * Math.sin(angle);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+      }
+
+      function drawCloud(x, y, size) {
+        ctx.arc(x - size / 2, y, size / 2, 0, Math.PI * 2);
+        ctx.arc(x, y - size / 3, size / 2, 0, Math.PI * 2);
+        ctx.arc(x + size / 2, y, size / 2, 0, Math.PI * 2);
+      }
+
+      function drawNormal(x, y) {
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = brushSize;
+        ctx.strokeStyle = currentColor;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.moveTo(x, y);
+        ctx.restore();
+      }
+
+      function drawSpray(x, y) {
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        const density = brushSize * 2;
+        for (let i = 0; i < density; i++) {
+          const offsetX = (Math.random() - 0.5) * brushSize * 2;
+          const offsetY = (Math.random() - 0.5) * brushSize * 2;
+          ctx.fillStyle = currentColor;
+          ctx.fillRect(x + offsetX, y + offsetY, 1, 1);
+        }
+        ctx.restore();
+      }
+
+      function drawMarker(x, y) {
+        ctx.save();
+        ctx.lineCap = "square";
+        ctx.lineJoin = "miter";
+        ctx.lineWidth = brushSize;
+        ctx.globalAlpha = 0.6 * currentOpacity;
+        ctx.strokeStyle = currentColor;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.moveTo(x, y);
+        ctx.restore();
+      }
+
+      function drawCrayon(x, y) {
+        ctx.save();
+        const density = Math.floor(brushSize / 2);
+        for (let i = 0; i < density; i++) {
+          const offsetX = (Math.random() - 0.5) * brushSize;
+          const offsetY = (Math.random() - 0.5) * brushSize;
+          ctx.globalAlpha = (Math.random() * 0.3 + 0.3) * currentOpacity;
+          ctx.fillStyle = currentColor;
+          ctx.fillRect(x + offsetX, y + offsetY, 2, 2);
+        }
+        ctx.restore();
+      }
+
+      function drawCalligraphy(x, y) {
+        const angle = Math.atan2(y - lastY, x - lastX);
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.fillStyle = currentColor;
+        ctx.fillRect(-brushSize / 2, -brushSize / 4, brushSize, brushSize / 2);
+        ctx.restore();
+      }
+
+      function drawGlitter(x, y) {
+        const sparkles = Math.floor(brushSize / 2);
+        for (let i = 0; i < sparkles; i++) {
+          const offsetX = (Math.random() - 0.5) * brushSize * 1.5;
+          const offsetY = (Math.random() - 0.5) * brushSize * 1.5;
+          const sparkleSize = Math.random() * 3 + 1;
+
+          ctx.save();
+          ctx.globalAlpha = (Math.random() * 0.8 + 0.2) * currentOpacity;
+          ctx.fillStyle = currentColor;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = currentColor;
+
+          // Draw star shape
+          ctx.beginPath();
+          for (let j = 0; j < 5; j++) {
+            const angle = (j * 4 * Math.PI) / 5;
+            const px = x + offsetX + Math.cos(angle) * sparkleSize;
+            const py = y + offsetY + Math.sin(angle) * sparkleSize;
+            if (j === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawNeon(x, y) {
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        ctx.shadowBlur = brushSize;
+        ctx.shadowColor = currentColor;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = brushSize / 2;
+        ctx.strokeStyle = currentColor;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.moveTo(x, y);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+
+      function drawWatercolor(x, y) {
+        ctx.save();
+        const layers = 3;
+        for (let i = 0; i < layers; i++) {
+          const offset = (brushSize * (i + 1)) / layers;
+          ctx.globalAlpha = 0.1 * currentOpacity;
+          ctx.beginPath();
+          ctx.arc(x, y, offset, 0, Math.PI * 2);
+          ctx.fillStyle = currentColor;
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawSketch(x, y) {
+        ctx.save();
+        const lines = 3;
+        for (let i = 0; i < lines; i++) {
+          const offsetX = (Math.random() - 0.5) * 3;
+          const offsetY = (Math.random() - 0.5) * 3;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.lineWidth = Math.max(1, brushSize / 4);
+          ctx.globalAlpha = 0.4 * currentOpacity;
+          ctx.strokeStyle = currentColor;
+          ctx.beginPath();
+          ctx.moveTo(lastX + offsetX, lastY + offsetY);
+          ctx.lineTo(x + offsetX, y + offsetY);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawRainbow(x, y) {
+        ctx.save();
+        ctx.globalAlpha = currentOpacity;
+        rainbowHue = (rainbowHue + 2) % 360;
+        const rainbowColor = `hsl(${rainbowHue}, 100%, 50%)`;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = brushSize;
+        ctx.strokeStyle = rainbowColor;
+        ctx.shadowBlur = brushSize / 2;
+        ctx.shadowColor = rainbowColor;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.moveTo(x, y);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+
+      function saveState() {
+        if (undoStack.length >= MAX_UNDO) {
+          undoStack.shift();
+        }
+        undoStack.push(canvas.toDataURL());
+        redoStack = [];
+        updateUndoRedoButtons();
+      }
+
+      function undo() {
+        if (undoStack.length > 0) {
+          redoStack.push(canvas.toDataURL());
+          const imageData = undoStack.pop();
+          restoreCanvas(imageData);
+          updateUndoRedoButtons();
+        }
+      }
+
+      function redo() {
+        if (redoStack.length > 0) {
+          undoStack.push(canvas.toDataURL());
+          const imageData = redoStack.pop();
+          restoreCanvas(imageData);
+          updateUndoRedoButtons();
+        }
+      }
+
+      function restoreCanvas(imageData) {
+        const img = new Image();
+        img.onload = function () {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+        };
+        img.src = imageData;
+      }
+
+      function updateUndoRedoButtons() {
+        document.getElementById("undoBtn").disabled = undoStack.length === 0;
+        document.getElementById("redoBtn").disabled = redoStack.length === 0;
+      }
+
+      function saveDrawing() {
+        const link = document.createElement("a");
+        link.download = `colour-magic-${currentPicture}-${Date.now()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        showToast("Drawing saved! 🎨");
+      }
+
+      function showToast(message) {
+        let toast = document.querySelector(".toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.className = "toast";
+          document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", function (e) {
+        // Don't trigger shortcuts in modals
+        if (document.getElementById("helpModal").classList.contains("show")) {
+          if (e.key === "Escape") closeHelp();
+          return;
+        }
+
+        // Only enable shortcuts when coloring
+        if (document.getElementById("coloringArea").style.display === "none")
+          return;
+
+        switch (e.key.toLowerCase()) {
+          case "z":
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              if (e.shiftKey) {
+                redo();
+              } else {
+                undo();
+              }
+            }
+            break;
+          case "y":
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              redo();
+            }
+            break;
+          case "s":
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              saveDrawing();
+            }
+            break;
+          case "b":
+            e.preventDefault();
+            document.querySelector('.toolBtn[onclick*="brush"]').click();
+            break;
+          case "f":
+            e.preventDefault();
+            document.querySelector('.toolBtn[onclick*="fill"]').click();
+            break;
+          case "e":
+            e.preventDefault();
+            document.querySelector('.toolBtn[onclick*="eraser"]').click();
+            break;
+          case "c":
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              if (confirm("Clear the canvas?")) {
+                clearCanvas();
+                showToast("Canvas cleared");
+              }
+            }
+            break;
+          case "h":
+          case "?":
+            e.preventDefault();
+            openHelp();
+            break;
+          case "escape":
+            closeHelp();
+            break;
+        }
+      });
+
+      // Add animation to picture options on load
+      window.addEventListener("load", function () {
+        const options = document.querySelectorAll(".pictureOption");
+        options.forEach((option, index) => {
+          option.style.opacity = "0";
+          option.classList.add("fade-in");
+          option.style.animationDelay = `${index * 0.1}s`;
+          setTimeout(() => {
+            option.style.opacity = "1";
+          }, index * 100);
+        });
+      });
+
+      clearCanvas();
+    </script>
+  </body>
+</html>
