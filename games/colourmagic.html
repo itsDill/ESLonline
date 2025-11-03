@@ -30,12 +30,15 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
 
       html,
       body {
         overscroll-behavior: none;
         overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
       }
 
       body {
@@ -46,6 +49,7 @@
         align-items: center;
         min-height: 100vh;
         padding: 20px;
+        touch-action: manipulation;
       }
 
       #gameContainer {
@@ -923,18 +927,55 @@
         text-align: center;
       }
 
+      /* Tablet styles */
+      @media (max-width: 1024px) and (min-width: 769px) {
+        #pictureSelect {
+          padding: 20px;
+          gap: 15px;
+        }
+
+        .pictureOption {
+          width: 140px;
+          padding: 12px;
+        }
+
+        .pictureOption img {
+          max-width: 120px;
+          max-height: 120px;
+        }
+
+        #toolbar {
+          gap: 15px;
+          padding: 20px;
+        }
+
+        .toolSection {
+          padding: 15px;
+        }
+
+        #canvas {
+          touch-action: none;
+          -webkit-user-select: none;
+          user-select: none;
+        }
+      }
+
+      /* Mobile styles */
       @media (max-width: 768px) {
         body {
           padding: 0;
+          overflow-x: hidden;
         }
 
         #gameContainer {
           border-radius: 0;
+          min-height: 100vh;
         }
 
         #header {
           padding: 15px 10px;
           border-radius: 0;
+          position: relative;
         }
 
         #header h1 {
@@ -948,42 +989,55 @@
         }
 
         .header-controls {
+          position: fixed;
           top: 10px;
           right: 10px;
           gap: 5px;
-          z-index: 10;
+          z-index: 1000;
         }
 
         .header-btn {
-          padding: 6px 10px;
-          font-size: 12px;
-          gap: 3px;
+          padding: 8px 12px;
+          font-size: 13px;
+          gap: 4px;
+          min-width: 44px;
+          min-height: 44px;
         }
 
         #pictureSelect {
           padding: 15px;
           gap: 12px;
+          justify-content: center;
         }
 
         .pictureOption {
-          width: 100px;
-          padding: 10px;
+          width: calc(50% - 10px);
+          min-width: 120px;
+          max-width: 150px;
+          padding: 12px;
+          min-height: 120px;
         }
 
-        .pictureOption svg {
-          width: 70px;
-          height: 70px;
+        .pictureOption img {
+          width: 100% !important;
+          height: auto !important;
+          max-width: 100px;
+          max-height: 100px;
         }
 
         .pictureOption p {
-          font-size: 12px;
-          margin-top: 5px;
+          font-size: 13px;
+          margin-top: 8px;
+          font-weight: 500;
         }
 
         #toolbar {
           flex-direction: column;
-          gap: 15px;
-          padding: 15px;
+          gap: 12px;
+          padding: 15px 10px;
+          max-height: 70vh;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         .toolSection {
@@ -992,89 +1046,126 @@
         }
 
         .toolSection label {
-          font-size: 13px;
+          font-size: 14px;
+          font-weight: 500;
         }
 
         .colorPalette {
-          grid-template-columns: repeat(6, 1fr);
-          gap: 6px;
+          grid-template-columns: repeat(8, 1fr);
+          gap: 8px;
+          padding: 5px;
         }
 
         .colorBtn {
-          width: 35px;
-          height: 35px;
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          min-height: 40px;
+          border-width: 3px;
         }
 
         .toolBtn {
-          font-size: 13px;
-          padding: 10px 12px;
+          font-size: 14px;
+          padding: 12px 15px;
           width: 100%;
           justify-content: center;
+          min-height: 48px;
+          font-weight: 500;
         }
 
         .brush-grid {
           grid-template-columns: repeat(2, 1fr);
-          gap: 8px;
+          gap: 10px;
         }
 
         .brush-option {
-          padding: 10px;
-          font-size: 11px;
+          padding: 12px;
+          font-size: 12px;
+          min-height: 60px;
         }
 
         .brush-option .brush-icon {
-          font-size: 20px;
+          font-size: 24px;
+          margin-bottom: 4px;
         }
 
         .pattern-grid {
-          grid-template-columns: repeat(5, 1fr);
-          gap: 6px;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 8px;
         }
 
         .pattern-btn {
-          width: 35px;
-          height: 35px;
-          font-size: 18px;
+          width: 42px;
+          height: 42px;
+          min-width: 42px;
+          min-height: 42px;
+          font-size: 20px;
         }
 
         .slider-container {
           flex-direction: column;
           align-items: flex-start;
-          gap: 8px;
-        }
-
-        .slider-container label {
-          font-size: 12px;
-        }
-
-        #opacitySlider {
+          gap: 10px;
           width: 100%;
         }
 
+        .slider-container label {
+          font-size: 14px;
+          width: 100%;
+        }
+
+        #sizeSlider,
+        #opacitySlider {
+          width: 100%;
+          height: 8px;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        #sizeSlider::-webkit-slider-thumb,
+        #opacitySlider::-webkit-slider-thumb {
+          width: 24px;
+          height: 24px;
+        }
+
         .feature-toggle {
-          font-size: 13px;
-          padding: 10px 15px;
+          font-size: 14px;
+          padding: 12px 18px;
+          min-height: 48px;
+          font-weight: 500;
         }
 
         #canvasContainer {
-          padding: 15px;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 400px;
         }
 
         #canvas {
           max-width: 100%;
+          max-height: 500px;
+          width: 100%;
           height: auto;
           touch-action: none;
+          -webkit-user-select: none;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .modal-content {
           margin: 10px;
           max-width: calc(100% - 20px);
-          max-height: calc(100vh - 20px);
+          max-height: calc(100vh - 40px);
           padding: 20px;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
         .modal-content h2 {
           font-size: 22px;
+          margin-bottom: 15px;
         }
 
         .help-grid {
@@ -1082,16 +1173,24 @@
           gap: 15px;
         }
 
+        .help-item {
+          padding: 15px;
+        }
+
         .help-item h3 {
-          font-size: 16px;
+          font-size: 17px;
+          margin-bottom: 8px;
         }
 
         .help-item p {
-          font-size: 13px;
+          font-size: 14px;
+          line-height: 1.5;
         }
 
-        #sizeSlider {
-          width: 100%;
+        #backBtn {
+          min-height: 48px;
+          font-size: 15px;
+          padding: 12px 20px;
         }
       }
 
@@ -2398,9 +2497,19 @@
       canvas.addEventListener("mouseup", handleEnd);
       canvas.addEventListener("mouseout", handleEnd);
 
-      canvas.addEventListener("touchstart", handleStart);
-      canvas.addEventListener("touchmove", handleMove);
-      canvas.addEventListener("touchend", handleEnd);
+      canvas.addEventListener("touchstart", handleStart, { passive: false });
+      canvas.addEventListener("touchmove", handleMove, { passive: false });
+      canvas.addEventListener("touchend", handleEnd, { passive: false });
+      canvas.addEventListener("touchcancel", handleEnd, { passive: false });
+
+      // Prevent pull-to-refresh and scrolling on the canvas
+      document.getElementById("canvasContainer").addEventListener(
+        "touchmove",
+        function (e) {
+          e.preventDefault();
+        },
+        { passive: false }
+      );
 
       // Visual feedback for cursor position
       let cursorCheckThrottle = 0;
