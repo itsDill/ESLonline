@@ -2557,10 +2557,16 @@
       function getEventPosition(e) {
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches ? e.touches[0] : e;
-        return {
-          x: touch.clientX - rect.left,
-          y: touch.clientY - rect.top,
-        };
+
+        // Calculate the scale between canvas internal size and displayed size
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        // Get position relative to canvas and scale to internal coordinates
+        const x = (touch.clientX - rect.left) * scaleX;
+        const y = (touch.clientY - rect.top) * scaleY;
+
+        return { x, y };
       }
 
       function draw(x, y) {
