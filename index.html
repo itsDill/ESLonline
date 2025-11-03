@@ -1874,51 +1874,6 @@
         max-width: 100%;
       }
 
-      /* Sticky Sidebar Ad Layout */
-      .content-with-sidebar {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 1rem;
-      }
-
-      @media (min-width: 1100px) {
-        .content-with-sidebar {
-          grid-template-columns: 1fr 340px;
-        }
-
-        .sidebar-ads {
-          display: block !important;
-        }
-
-        .sticky-ad-container {
-          position: sticky;
-          top: 80px;
-          padding: 1.25rem;
-          background: #f9fafb;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-          border: 1px solid #e5e7eb;
-        }
-
-        .ad-label {
-          font-size: 0.75rem;
-          color: #9ca3af;
-          text-align: center;
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-      }
-
-      @media (max-width: 1099px) {
-        .sidebar-ads {
-          display: none !important;
-        }
-      }
-
       /* Mobile touch optimizations */
       @media (hover: none) and (pointer: coarse) {
         .feature-card:hover,
@@ -3461,53 +3416,18 @@
       </div>
     </section>
 
-    <!-- Google AdSense - Standard Display -->
-    <div style="text-align: center; margin: 2rem auto; padding: 1rem 0">
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-
-    <!-- Multiplex/Matched Content Ad -->
-    <div
-      style="
-        text-align: center;
-        margin: 4rem auto;
-        padding: 2rem 1rem;
-        background: #f9fafb;
-        border-radius: 12px;
-      "
-    >
-      <div
-        style="
-          font-size: 0.875rem;
-          color: #9ca3af;
-          margin-bottom: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        "
-      >
-        Recommended for You
-      </div>
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-format="autorelaxed"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
+    <!-- Google AdSense -->
+    <ins
+      class="adsbygoogle"
+      style="display: block; text-align: center; margin: 2rem auto"
+      data-ad-client="ca-pub-2456627863532019"
+      data-ad-slot="1718707782"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 
     <!-- Interactive Activity Section -->
     <section class="activity-section" id="activity">
@@ -3864,19 +3784,18 @@
       </div>
     </section>
 
-    <!-- Google AdSense - Lazy Loaded -->
-    <div style="text-align: center; margin: 2rem auto; min-height: 250px">
-      <ins
-        class="adsbygoogle"
-        data-lazy="true"
-        style="display: block"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="1718707782"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <!-- Note: Script will be called by lazy loader when ad is near viewport -->
-    </div>
+    <!-- Google AdSense -->
+    <ins
+      class="adsbygoogle"
+      style="display: block; text-align: center; margin: 2rem auto"
+      data-ad-client="ca-pub-2456627863532019"
+      data-ad-slot="1718707782"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 
     <!-- Featured Tools Section -->
     <section
@@ -5814,60 +5733,6 @@
       // Call hero optimization on load
       document.addEventListener("DOMContentLoaded", initHeroOptimization);
       window.addEventListener("resize", initHeroOptimization);
-
-      // Lazy Loading for Ads Below the Fold
-      function initAdLazyLoading() {
-        // Only initialize if IntersectionObserver is supported
-        if (!("IntersectionObserver" in window)) {
-          // Fallback: load all ads immediately on older browsers
-          document
-            .querySelectorAll('.adsbygoogle[data-lazy="true"]')
-            .forEach((ad) => {
-              ad.removeAttribute("data-lazy");
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            });
-          return;
-        }
-
-        // Create observer for lazy ads
-        const lazyAdObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const lazyAd = entry.target;
-
-                // Remove lazy attribute and initialize ad
-                if (lazyAd.getAttribute("data-lazy") === "true") {
-                  lazyAd.removeAttribute("data-lazy");
-                  (adsbygoogle = window.adsbygoogle || []).push({});
-
-                  // Stop observing this ad
-                  lazyAdObserver.unobserve(lazyAd);
-                }
-              }
-            });
-          },
-          {
-            // Start loading 400px before ad comes into view
-            rootMargin: "400px 0px",
-            threshold: 0.01,
-          }
-        );
-
-        // Observe all lazy ads
-        document
-          .querySelectorAll('.adsbygoogle[data-lazy="true"]')
-          .forEach((ad) => {
-            lazyAdObserver.observe(ad);
-          });
-      }
-
-      // Initialize lazy loading after DOM is ready
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initAdLazyLoading);
-      } else {
-        initAdLazyLoading();
-      }
     </script>
   </body>
 </html>
