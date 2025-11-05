@@ -418,26 +418,6 @@ SITEMAP_PAGES = [
         "lastmod": CURRENT_DATE
     },
     
-    # Music Pages (NEW)
-    {
-        "loc": "/music/fundamentals.html",
-        "priority": "0.7",
-        "changefreq": "monthly",
-        "lastmod": CURRENT_DATE
-    },
-    {
-        "loc": "/music/guitar.html",
-        "priority": "0.7",
-        "changefreq": "monthly",
-        "lastmod": CURRENT_DATE
-    },
-    {
-        "loc": "/music/bass.html",
-        "priority": "0.7",
-        "changefreq": "monthly",
-        "lastmod": CURRENT_DATE
-    },
-    
     # Tools Pages
     {
         "loc": "/tools/dice.html",
