@@ -4438,69 +4438,44 @@
         data-ad-format="autorelaxed"
         data-full-width-responsive="true"
       ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
 
     <!-- Initialize All AdSense Ads -->
     <script>
-      // Initialize all ads after page load
+      // Detect ad blockers and log ad status
       window.addEventListener("load", function () {
-        // Add small delay to ensure AdSense script is loaded
         setTimeout(function () {
-          // Check if AdSense script loaded
-          if (typeof adsbygoogle === "undefined") {
-            console.warn(
-              "⚠️ AdSense script not loaded. Possible ad blocker or network issue."
-            );
-            return;
-          }
-
-          // Push all ad units to AdSense
           const adElements = document.querySelectorAll(".adsbygoogle");
           console.log("📢 Found " + adElements.length + " ad slots on page");
 
           adElements.forEach(function (ad, index) {
-            if (!ad.hasAttribute("data-adsbygoogle-status")) {
-              try {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                console.log("✅ Initialized ad slot " + (index + 1));
-              } catch (e) {
-                console.error(
-                  "❌ Error initializing ad slot " + (index + 1) + ":",
-                  e
-                );
-              }
-            } else {
-              console.log("ℹ️ Ad slot " + (index + 1) + " already initialized");
+            const status = ad.getAttribute("data-adsbygoogle-status");
+            const height = ad.clientHeight;
+
+            if (status === "done" && height > 0) {
+              console.log("✅ Ad " + (index + 1) + " loaded successfully");
+            } else if (height === 0 || !status) {
+              console.warn(
+                "⚠️ Ad " + (index + 1) + " not showing - possible causes:"
+              );
+              console.warn("   • Ad blocker is active");
+              console.warn("   • AdSense account not approved yet");
+              console.warn("   • Testing on localhost or unapproved domain");
+              console.warn("   • Account may need 24-48 hours for approval");
             }
           });
 
-          // Check ad status after a short delay
-          setTimeout(function () {
-            adElements.forEach(function (ad, index) {
-              const status = ad.getAttribute("data-adsbygoogle-status");
-              if (status === "done") {
-                console.log("✅ Ad " + (index + 1) + " loaded successfully");
-              } else if (status === "error") {
-                console.warn("⚠️ Ad " + (index + 1) + " failed to load");
-              } else {
-                console.log(
-                  "⏳ Ad " + (index + 1) + " status: " + (status || "pending")
-                );
-              }
-            });
-          }, 2000);
-        }, 100);
+          // Check if adsbygoogle script loaded
+          if (typeof adsbygoogle === "undefined") {
+            console.error(
+              "❌ AdSense script not loaded - check ad blocker or network"
+            );
+          }
+        }, 3000);
       });
-
-      // Detect ad blockers
-      setTimeout(function () {
-        const testAd = document.querySelector(".adsbygoogle");
-        if (testAd && testAd.clientHeight === 0) {
-          console.warn(
-            "⚠️ Ads might be blocked by an ad blocker or haven't loaded yet"
-          );
-        }
-      }, 3000);
     </script>
 
     <style>
