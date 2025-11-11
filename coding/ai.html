@@ -52,14 +52,39 @@
     <title>
       AI Basics | ESL Fun Online - Learn Artificial Intelligence Simply
     </title>
-        <!-- Favicon and Icons - Optimized for Google Search -->
+    <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48x48.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="../images/favicon-48x48.png"
+    />
     <link rel="apple-touch-icon" sizes="180x180" href="../images/1.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon-512x512.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../images/favicon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="../images/favicon-512x512.png"
+    />
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -1121,6 +1146,619 @@
         ]
       }
     </script>
+
+    <!-- Additional Styles for New Interactive Sections -->
+    <style>
+      /* AI Playground Styles */
+      .ai-playground {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .playground-tabs {
+        display: flex;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        overflow-x: auto;
+      }
+
+      .playground-tab {
+        flex: 1;
+        padding: var(--space-4) var(--space-6);
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        border-bottom: 3px solid transparent;
+      }
+
+      .playground-tab:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--ai-primary);
+      }
+
+      .playground-tab.active {
+        background: white;
+        color: var(--ai-primary);
+        border-bottom-color: var(--ai-primary);
+      }
+
+      .playground-content {
+        padding: var(--space-8);
+      }
+
+      .demo-panel {
+        display: none;
+      }
+
+      .demo-panel.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .demo-panel h3 {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-4);
+        color: var(--text-primary);
+      }
+
+      .demo-panel p {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-6);
+      }
+
+      .pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: var(--space-2);
+        margin-bottom: var(--space-6);
+        max-width: 400px;
+      }
+
+      .pattern-cell {
+        aspect-ratio: 1;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        border: 2px solid var(--border-color);
+        background: white;
+      }
+
+      .pattern-cell:hover {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-md);
+      }
+
+      .pattern-cell.red {
+        background: #ef4444;
+        border-color: #dc2626;
+      }
+      .pattern-cell.blue {
+        background: #3b82f6;
+        border-color: #2563eb;
+      }
+      .pattern-cell.green {
+        background: #10b981;
+        border-color: #059669;
+      }
+      .pattern-cell.yellow {
+        background: #f59e0b;
+        border-color: #d97706;
+      }
+      .pattern-cell.purple {
+        background: #8b5cf6;
+        border-color: #7c3aed;
+      }
+
+      #sentimentText,
+      #predictionText {
+        width: 100%;
+        padding: var(--space-4);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        font-family: var(--font-family-base);
+        font-size: 1rem;
+        margin-bottom: var(--space-6);
+        resize: vertical;
+        transition: border-color var(--transition-normal);
+      }
+
+      #sentimentText:focus,
+      #predictionText:focus {
+        outline: none;
+        border-color: var(--ai-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+
+      .demo-controls {
+        display: flex;
+        gap: var(--space-4);
+        margin-bottom: var(--space-6);
+        flex-wrap: wrap;
+      }
+
+      .demo-result {
+        padding: var(--space-6);
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        min-height: 80px;
+        display: none;
+        animation: slideDown 0.3s ease;
+      }
+
+      .demo-result.show {
+        display: block;
+      }
+
+      .result-emoji {
+        font-size: 2rem;
+        margin-bottom: var(--space-2);
+      }
+
+      /* AI Timeline Styles */
+      .ai-timeline {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: var(--space-4) 0;
+      }
+
+      .ai-timeline::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3px;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          var(--ai-primary),
+          var(--ai-accent)
+        );
+      }
+
+      .timeline-item {
+        display: flex;
+        margin-bottom: var(--space-12);
+        position: relative;
+      }
+
+      .timeline-item:nth-child(odd) {
+        flex-direction: row;
+      }
+
+      .timeline-item:nth-child(even) {
+        flex-direction: row-reverse;
+      }
+
+      .timeline-marker {
+        width: 60px;
+        height: 60px;
+        background: var(--ai-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        box-shadow: 0 0 0 8px var(--bg-primary);
+      }
+
+      .timeline-content {
+        width: calc(50% - 50px);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-6);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-normal);
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content {
+        margin-right: auto;
+        margin-left: var(--space-4);
+      }
+
+      .timeline-item:nth-child(even) .timeline-content {
+        margin-left: auto;
+        margin-right: var(--space-4);
+      }
+
+      .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--ai-primary);
+      }
+
+      .timeline-content h3 {
+        color: var(--ai-primary);
+        font-size: 1.25rem;
+        margin-bottom: var(--space-3);
+      }
+
+      .timeline-content p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* Quiz Styles */
+      .ai-quiz {
+        max-width: 700px;
+        margin: 0 auto;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: var(--space-8);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .quiz-question {
+        display: none;
+      }
+
+      .quiz-question.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .quiz-question h3 {
+        color: var(--ai-primary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: var(--space-4);
+      }
+
+      .question-text {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-8);
+        line-height: 1.4;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+
+      .quiz-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        padding: var(--space-4) var(--space-6);
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        text-align: left;
+        width: 100%;
+      }
+
+      .quiz-option:hover {
+        background: rgba(99, 102, 241, 0.05);
+        border-color: var(--ai-primary);
+        transform: translateX(5px);
+      }
+
+      .quiz-option.selected {
+        background: var(--ai-primary);
+        border-color: var(--ai-primary);
+        color: white;
+      }
+
+      .quiz-option.correct {
+        background: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+      }
+
+      .quiz-option.incorrect {
+        background: var(--error-color);
+        border-color: var(--error-color);
+        color: white;
+      }
+
+      .quiz-option.disabled {
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
+      .option-letter {
+        width: 36px;
+        height: 36px;
+        background: white;
+        color: var(--ai-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: var(--font-weight-bold);
+        flex-shrink: 0;
+      }
+
+      .quiz-option.selected .option-letter,
+      .quiz-option.correct .option-letter,
+      .quiz-option.incorrect .option-letter {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+      }
+
+      .option-text {
+        font-size: 1.05rem;
+        font-weight: var(--font-weight-medium);
+      }
+
+      .quiz-feedback {
+        margin-top: var(--space-6);
+        padding: var(--space-6);
+        border-radius: var(--radius-lg);
+        display: none;
+        animation: slideDown 0.3s ease;
+      }
+
+      .quiz-feedback.show {
+        display: block;
+      }
+
+      .quiz-feedback.correct {
+        background: rgba(16, 185, 129, 0.1);
+        border: 2px solid var(--success-color);
+        color: var(--success-color);
+      }
+
+      .quiz-feedback.incorrect {
+        background: rgba(239, 68, 68, 0.1);
+        border: 2px solid var(--error-color);
+        color: var(--error-color);
+      }
+
+      .quiz-feedback strong {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: var(--space-2);
+      }
+
+      .quiz-results {
+        display: none;
+        text-align: center;
+      }
+
+      .quiz-results.show {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .quiz-results h3 {
+        font-size: 2rem;
+        color: var(--text-primary);
+        margin-bottom: var(--space-4);
+      }
+
+      .results-score {
+        font-size: 3rem;
+        font-weight: var(--font-weight-bold);
+        color: var(--ai-primary);
+        margin: var(--space-6) 0;
+      }
+
+      .results-message {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-8);
+      }
+
+      /* Resources Grid */
+      .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-6);
+      }
+
+      .resource-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-8);
+        text-decoration: none;
+        color: inherit;
+        transition: all var(--transition-normal);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .resource-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--ai-primary);
+      }
+
+      .resource-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--ai-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: var(--space-6);
+      }
+
+      .resource-card h3 {
+        font-size: 1.25rem;
+        color: var(--text-primary);
+        margin-bottom: var(--space-3);
+      }
+
+      .resource-card p {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-4);
+        line-height: 1.6;
+      }
+
+      .resource-tag {
+        display: inline-block;
+        padding: var(--space-1) var(--space-3);
+        background: var(--ai-primary);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: var(--font-weight-semibold);
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+      }
+
+      /* Video Grid */
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--space-8);
+      }
+
+      .video-card {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: all var(--transition-normal);
+        cursor: pointer;
+      }
+
+      .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      .video-thumbnail {
+        position: relative;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 4rem;
+        transition: all var(--transition-normal);
+      }
+
+      .video-card:hover .video-thumbnail {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+
+      .video-thumbnail i {
+        opacity: 0.9;
+      }
+
+      .video-duration {
+        position: absolute;
+        bottom: var(--space-3);
+        right: var(--space-3);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--radius-md);
+        font-size: 0.85rem;
+        font-weight: var(--font-weight-semibold);
+      }
+
+      .video-info {
+        padding: var(--space-6);
+      }
+
+      .video-info h3 {
+        font-size: 1.125rem;
+        color: var(--text-primary);
+        margin-bottom: var(--space-3);
+        line-height: 1.4;
+      }
+
+      .video-info p {
+        color: var(--text-secondary);
+        margin-bottom: var(--space-4);
+        line-height: 1.5;
+      }
+
+      .video-tag {
+        display: inline-block;
+        padding: var(--space-1) var(--space-3);
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--ai-primary);
+        font-size: 0.75rem;
+        font-weight: var(--font-weight-semibold);
+        border-radius: var(--radius-full);
+      }
+
+      /* Mobile responsive - extended */
+      @media (max-width: 768px) {
+        .playground-tabs {
+          flex-direction: column;
+        }
+
+        .playground-tab {
+          border-bottom: 1px solid var(--border-color);
+          border-left: 3px solid transparent;
+        }
+
+        .playground-tab.active {
+          border-left-color: var(--ai-primary);
+          border-bottom-color: var(--border-color);
+        }
+
+        .pattern-grid {
+          grid-template-columns: repeat(5, 1fr);
+          max-width: 100%;
+        }
+
+        .ai-timeline::before {
+          left: 30px;
+        }
+
+        .timeline-marker {
+          left: 30px;
+          width: 50px;
+          height: 50px;
+          font-size: 1.25rem;
+        }
+
+        .timeline-item {
+          flex-direction: row !important;
+        }
+
+        .timeline-content {
+          width: calc(100% - 80px);
+          margin-left: 80px !important;
+          margin-right: 0 !important;
+        }
+
+        .resources-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .video-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
 
   <body class="loaded">
@@ -1201,7 +1839,7 @@
                 </a>
               </div>
             </li>
-            
+
             <li class="nav-item">
               <a href="../games/games.html" class="nav-link">
                 <i class="fas fa-dice"></i>
@@ -1300,7 +1938,7 @@
 
           // Simple unified handler - works for both touch and click
           let lastToggleTime = 0;
-          
+
           function handleToggleClick(e) {
             const now = Date.now();
             // Prevent double-firing within 300ms
@@ -1309,7 +1947,7 @@
               return;
             }
             lastToggleTime = now;
-            
+
             e.preventDefault();
             e.stopPropagation();
             console.log("Hamburger clicked/tapped");
@@ -1329,10 +1967,10 @@
             if (link && dropdown && chevron) {
               // Simple unified dropdown handler
               let lastDropdownToggle = 0;
-              
+
               function handleDropdownClick(e) {
                 if (window.innerWidth > 768) return; // Only on mobile
-                
+
                 const now = Date.now();
                 // Prevent double-firing within 300ms
                 if (now - lastDropdownToggle < 300) {
@@ -1340,19 +1978,27 @@
                   return;
                 }
                 lastDropdownToggle = now;
-                
+
                 e.preventDefault();
                 e.stopPropagation();
 
                 const isOpen = item.classList.contains("mobile-open");
-                console.log("Dropdown clicked:", isOpen ? "closing" : "opening");
+                console.log(
+                  "Dropdown clicked:",
+                  isOpen ? "closing" : "opening"
+                );
 
                 // Close other dropdowns
                 document.querySelectorAll(".nav-item").forEach((otherItem) => {
                   if (otherItem !== item) {
-                    otherItem.classList.remove("mobile-open", "mobile-dropdown-open");
-                    const otherChevron = otherItem.querySelector(".fa-chevron-down");
-                    if (otherChevron) otherChevron.style.transform = "rotate(0deg)";
+                    otherItem.classList.remove(
+                      "mobile-open",
+                      "mobile-dropdown-open"
+                    );
+                    const otherChevron =
+                      otherItem.querySelector(".fa-chevron-down");
+                    if (otherChevron)
+                      otherChevron.style.transform = "rotate(0deg)";
                   }
                 });
 
@@ -1924,6 +2570,566 @@
           </div>
         </section>
 
+        <!-- Interactive AI Demo Playground -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">🎮 Try AI Yourself!</h2>
+          <p class="section-subtitle">
+            Experience AI in action! Try these simple demonstrations to see how
+            AI works.
+          </p>
+
+          <div class="ai-playground">
+            <div class="playground-tabs">
+              <button class="playground-tab active" data-demo="pattern">
+                <i class="fas fa-th"></i> Pattern Recognition
+              </button>
+              <button class="playground-tab" data-demo="sentiment">
+                <i class="fas fa-smile"></i> Sentiment Analysis
+              </button>
+              <button class="playground-tab" data-demo="prediction">
+                <i class="fas fa-crystal-ball"></i> Smart Predictions
+              </button>
+            </div>
+
+            <div class="playground-content">
+              <!-- Pattern Recognition Demo -->
+              <div class="demo-panel active" id="pattern-demo">
+                <h3><i class="fas fa-th"></i> Pattern Recognition</h3>
+                <p>
+                  Click the colored boxes to create a pattern. AI will try to
+                  predict what comes next!
+                </p>
+                <div class="pattern-grid" id="patternGrid"></div>
+                <div class="demo-controls">
+                  <button class="btn btn-primary" onclick="predictPattern()">
+                    <i class="fas fa-magic"></i> Predict Next
+                  </button>
+                  <button class="btn btn-secondary" onclick="resetPattern()">
+                    <i class="fas fa-redo"></i> Reset
+                  </button>
+                </div>
+                <div class="demo-result" id="patternResult"></div>
+              </div>
+
+              <!-- Sentiment Analysis Demo -->
+              <div class="demo-panel" id="sentiment-demo">
+                <h3><i class="fas fa-smile"></i> Sentiment Analysis</h3>
+                <p>
+                  Type a sentence and AI will detect if it's positive, negative,
+                  or neutral!
+                </p>
+                <textarea
+                  id="sentimentText"
+                  placeholder="Type something like 'I love sunny days!' or 'I'm feeling sad today.'"
+                  rows="3"
+                ></textarea>
+                <div class="demo-controls">
+                  <button class="btn btn-primary" onclick="analyzeSentiment()">
+                    <i class="fas fa-search"></i> Analyze Sentiment
+                  </button>
+                </div>
+                <div class="demo-result" id="sentimentResult"></div>
+              </div>
+
+              <!-- Smart Predictions Demo -->
+              <div class="demo-panel" id="prediction-demo">
+                <h3><i class="fas fa-crystal-ball"></i> Smart Predictions</h3>
+                <p>
+                  Type the beginning of a sentence and AI will try to complete
+                  it!
+                </p>
+                <input
+                  type="text"
+                  id="predictionText"
+                  placeholder="Start typing like 'The weather today is...'"
+                />
+                <div class="demo-controls">
+                  <button class="btn btn-primary" onclick="makePrediction()">
+                    <i class="fas fa-lightbulb"></i> Complete Sentence
+                  </button>
+                </div>
+                <div class="demo-result" id="predictionResult"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Timeline Section -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">📅 The Evolution of AI</h2>
+          <p class="section-subtitle">
+            Travel through time and see how AI developed from simple ideas to
+            today's amazing technology!
+          </p>
+
+          <div class="ai-timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>1950s - The Birth of AI</h3>
+                <p>
+                  Alan Turing asked "Can machines think?" and created the famous
+                  Turing Test. The term "Artificial Intelligence" was coined at
+                  a conference at Dartmouth College.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>1960s-70s - Early AI Programs</h3>
+                <p>
+                  Scientists created programs that could play checkers and
+                  chess, solve algebra problems, and even understand simple
+                  conversations in English!
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>1980s-90s - Neural Networks</h3>
+                <p>
+                  Researchers developed neural networks inspired by the human
+                  brain. Expert systems started being used in businesses and
+                  hospitals.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-gamepad"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>1997 - Deep Blue Beats Chess Champion</h3>
+                <p>
+                  IBM's Deep Blue computer defeated world chess champion Garry
+                  Kasparov, showing that AI could beat humans at complex
+                  strategic games!
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>2011 - Siri Arrives</h3>
+                <p>
+                  Apple introduced Siri, bringing voice-activated AI assistants
+                  to millions of people's pockets. Talking to AI became normal!
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-car"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>2010s - Self-Driving Cars</h3>
+                <p>
+                  Companies like Tesla and Google started testing cars that can
+                  drive themselves using AI and sensors. The future of
+                  transportation began!
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-comment-dots"></i>
+              </div>
+              <div class="timeline-content">
+                <h3>2020s - ChatGPT & Modern AI</h3>
+                <p>
+                  Advanced AI like ChatGPT can write, create art, code programs,
+                  and have natural conversations. AI is everywhere and helping
+                  everyone!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Quiz Section -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">🧠 Test Your AI Knowledge!</h2>
+          <p class="section-subtitle">
+            Take this fun quiz to see how much you've learned about AI!
+          </p>
+
+          <div class="ai-quiz">
+            <div class="quiz-question active" data-question="1">
+              <h3>Question 1 of 5</h3>
+              <p class="question-text">What does AI stand for?</p>
+              <div class="quiz-options">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Automated Internet</span>
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Artificial Intelligence</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Advanced Integration</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Automatic Instructions</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-question="2">
+              <h3>Question 2 of 5</h3>
+              <p class="question-text">What is Machine Learning?</p>
+              <div class="quiz-options">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Teaching robots to move</span>
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >When computers learn from examples</span
+                  >
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">A type of computer game</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Programming in machine code</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-question="3">
+              <h3>Question 3 of 5</h3>
+              <p class="question-text">Which of these uses AI?</p>
+              <div class="quiz-options">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">A regular calculator</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">A basic alarm clock</span>
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Netflix recommendations</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">A light switch</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-question="4">
+              <h3>Question 4 of 5</h3>
+              <p class="question-text">Neural networks are inspired by:</p>
+              <div class="quiz-options">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Spiderwebs</span>
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">The human brain</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Computer circuits</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">The internet</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-question="5">
+              <h3>Question 5 of 5</h3>
+              <p class="question-text">
+                Can AI understand human emotions perfectly?
+              </p>
+              <div class="quiz-options">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Yes, AI understands all emotions</span
+                  >
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >No, AI can detect patterns but doesn't truly "feel"</span
+                  >
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >AI has better emotions than humans</span
+                  >
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    >AI doesn't interact with emotions at all</span
+                  >
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-results" id="quizResults">
+              <h3>🎉 Quiz Complete!</h3>
+              <p class="results-score">
+                You scored: <span id="score">0</span>/5
+              </p>
+              <p class="results-message" id="resultsMessage"></p>
+              <button class="btn btn-primary" onclick="restartQuiz()">
+                <i class="fas fa-redo"></i> Try Again
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Ethics and Future Section -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">🌍 AI Ethics & The Future</h2>
+          <p class="section-subtitle">
+            As AI becomes more powerful, we need to think about using it
+            responsibly!
+          </p>
+
+          <div class="grid grid-responsive">
+            <div class="ai-card">
+              <div class="ai-card-header">
+                <div class="ai-icon ethics">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="ai-card-info">
+                  <h3>AI Ethics ⚖️</h3>
+                  <span class="ai-card-level">Important</span>
+                </div>
+              </div>
+              <p class="ai-card-description">
+                AI should be fair, transparent, and helpful to everyone!
+                Scientists and companies work to make sure AI doesn't
+                discriminate, respects privacy, and is used for good purposes.
+              </p>
+              <ul class="ai-card-features">
+                <li>
+                  <i class="fas fa-check-circle"></i> Fairness for all people
+                </li>
+                <li><i class="fas fa-check-circle"></i> Protecting privacy</li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Being transparent about
+                  how AI works
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Human oversight and
+                  control
+                </li>
+              </ul>
+            </div>
+
+            <div class="ai-card">
+              <div class="ai-card-header">
+                <div class="ai-icon future">
+                  <i class="fas fa-rocket"></i>
+                </div>
+                <div class="ai-card-info">
+                  <h3>Future of AI 🚀</h3>
+                  <span class="ai-card-level">Exciting</span>
+                </div>
+              </div>
+              <p class="ai-card-description">
+                The future with AI is incredibly exciting! We'll see AI helping
+                doctors save lives, creating personalized education, solving
+                climate change, and making technology accessible to everyone.
+              </p>
+              <ul class="ai-card-features">
+                <li>
+                  <i class="fas fa-check-circle"></i> Advanced medical
+                  treatments
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Personalized learning for
+                  students
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Cleaner energy and
+                  environment
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> More creative and helpful
+                  tools
+                </li>
+              </ul>
+            </div>
+
+            <div class="ai-card">
+              <div class="ai-card-header">
+                <div class="ai-icon learning">
+                  <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="ai-card-info">
+                  <h3>AI Careers 💼</h3>
+                  <span class="ai-card-level">Opportunity</span>
+                </div>
+              </div>
+              <p class="ai-card-description">
+                Want to work with AI? There are so many cool jobs! From training
+                AI models to making sure AI is ethical, from designing AI
+                products to teaching others about AI.
+              </p>
+              <ul class="ai-card-features">
+                <li>
+                  <i class="fas fa-check-circle"></i> AI Engineer/Developer
+                </li>
+                <li><i class="fas fa-check-circle"></i> Data Scientist</li>
+                <li>
+                  <i class="fas fa-check-circle"></i> AI Ethics Specialist
+                </li>
+                <li><i class="fas fa-check-circle"></i> AI Product Designer</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Resources Section -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">📚 Learn More About AI</h2>
+          <p class="section-subtitle">
+            Check out these awesome resources to continue your AI journey!
+          </p>
+
+          <div class="resources-grid">
+            <a href="ai/beginner-guide.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-book-open"></i>
+              </div>
+              <h3>Complete Beginner's Guide</h3>
+              <p>Step-by-step introduction to AI concepts</p>
+              <span class="resource-tag">Free</span>
+            </a>
+
+            <a href="ai/machine-learning.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3>Machine Learning Basics</h3>
+              <p>Learn how machines learn from data</p>
+              <span class="resource-tag">Beginner</span>
+            </a>
+
+            <a href="ai/ai-tools.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-tools"></i>
+              </div>
+              <h3>Try AI Tools</h3>
+              <p>Hands-on experience with real AI tools</p>
+              <span class="resource-tag">Interactive</span>
+            </a>
+
+            <a href="ai/ai-projects.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+              <h3>AI Projects</h3>
+              <p>Build your first AI projects</p>
+              <span class="resource-tag">Hands-on</span>
+            </a>
+
+            <a href="ai/careers.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <h3>AI Careers Guide</h3>
+              <p>Explore jobs in the AI field</p>
+              <span class="resource-tag">Career</span>
+            </a>
+
+            <a href="ai/glossary.html" class="resource-card">
+              <div class="resource-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <h3>AI Glossary</h3>
+              <p>Understand AI terminology</p>
+              <span class="resource-tag">Reference</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Video Tutorials Section -->
+        <section class="section animate-on-scroll">
+          <h2 class="section-title">🎥 Video Tutorials</h2>
+          <p class="section-subtitle">
+            Watch and learn! Video explanations make AI concepts super easy to
+            understand.
+          </p>
+
+          <div class="video-grid">
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <i class="fas fa-play-circle"></i>
+                <div class="video-duration">5:30</div>
+              </div>
+              <div class="video-info">
+                <h3>What is AI? (For Complete Beginners)</h3>
+                <p>A simple, fun introduction to artificial intelligence</p>
+                <span class="video-tag">Beginner Friendly</span>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <i class="fas fa-play-circle"></i>
+                <div class="video-duration">8:15</div>
+              </div>
+              <div class="video-info">
+                <h3>How Machine Learning Works</h3>
+                <p>See how computers learn from examples</p>
+                <span class="video-tag">Visual Guide</span>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <i class="fas fa-play-circle"></i>
+                <div class="video-duration">6:45</div>
+              </div>
+              <div class="video-info">
+                <h3>AI in Your Daily Life</h3>
+                <p>Discover where AI is hiding all around you</p>
+                <span class="video-tag">Real Examples</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Google AdSense -->
         <!-- Call to Action -->
         <section class="cta-section animate-on-scroll">
@@ -2112,7 +3318,303 @@
             item.classList.toggle("active", !isActive);
           });
         });
+
+        // Initialize interactive demos
+        initPlayground();
+        initQuiz();
       });
+
+      // AI Playground Functions
+      function initPlayground() {
+        // Tab switching
+        const tabs = document.querySelectorAll(".playground-tab");
+        const demos = document.querySelectorAll(".demo-panel");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const demoName = tab.dataset.demo;
+            tabs.forEach((t) => t.classList.remove("active"));
+            demos.forEach((d) => d.classList.remove("active"));
+            tab.classList.add("active");
+            document.getElementById(`${demoName}-demo`).classList.add("active");
+          });
+        });
+
+        // Initialize pattern grid
+        const patternGrid = document.getElementById("patternGrid");
+        const colors = ["red", "blue", "green", "yellow", "purple"];
+        window.patternSequence = [];
+
+        for (let i = 0; i < 15; i++) {
+          const cell = document.createElement("div");
+          cell.className = "pattern-cell";
+          cell.addEventListener("click", function () {
+            // Cycle through colors
+            const currentIndex = colors.indexOf(this.classList[1] || "");
+            const nextColor = colors[(currentIndex + 1) % colors.length];
+            this.className = "pattern-cell " + nextColor;
+            updatePatternSequence();
+          });
+          patternGrid.appendChild(cell);
+        }
+      }
+
+      function updatePatternSequence() {
+        const cells = document.querySelectorAll(".pattern-cell");
+        window.patternSequence = Array.from(cells).map((cell) => {
+          const classList = Array.from(cell.classList);
+          return classList.find((c) => c !== "pattern-cell") || "none";
+        });
+      }
+
+      function predictPattern() {
+        updatePatternSequence();
+        const result = document.getElementById("patternResult");
+        const filledCells = window.patternSequence.filter(
+          (c) => c !== "none"
+        ).length;
+
+        if (filledCells < 3) {
+          result.innerHTML =
+            '<div class="result-emoji">🤔</div><p><strong>Need more data!</strong><br>Create a pattern with at least 3 colors so AI can learn!</p>';
+        } else {
+          const colorCounts = {};
+          window.patternSequence.forEach((c) => {
+            if (c !== "none") colorCounts[c] = (colorCounts[c] || 0) + 1;
+          });
+          const mostCommon = Object.keys(colorCounts).reduce((a, b) =>
+            colorCounts[a] > colorCounts[b] ? a : b
+          );
+          result.innerHTML = `<div class="result-emoji">🎯</div><p><strong>AI Prediction:</strong><br>Based on your pattern, AI thinks <strong>${mostCommon}</strong> is the most likely next color! AI learned by counting which colors you use most often.</p>`;
+        }
+        result.classList.add("show");
+      }
+
+      function resetPattern() {
+        const cells = document.querySelectorAll(".pattern-cell");
+        cells.forEach((cell) => {
+          cell.className = "pattern-cell";
+        });
+        const result = document.getElementById("patternResult");
+        result.classList.remove("show");
+        window.patternSequence = [];
+      }
+
+      function analyzeSentiment() {
+        const text = document.getElementById("sentimentText").value.trim();
+        const result = document.getElementById("sentimentResult");
+
+        if (!text) {
+          result.innerHTML =
+            '<div class="result-emoji">💭</div><p><strong>Please type something!</strong><br>Enter a sentence so AI can analyze the sentiment.</p>';
+          result.classList.add("show");
+          return;
+        }
+
+        // Simple sentiment analysis
+        const positiveWords = [
+          "love",
+          "great",
+          "awesome",
+          "happy",
+          "wonderful",
+          "excellent",
+          "amazing",
+          "good",
+          "best",
+          "beautiful",
+          "fantastic",
+          "perfect",
+          "joy",
+        ];
+        const negativeWords = [
+          "hate",
+          "bad",
+          "terrible",
+          "sad",
+          "awful",
+          "horrible",
+          "worst",
+          "angry",
+          "upset",
+          "disappointed",
+          "poor",
+          "sick",
+        ];
+
+        const lowerText = text.toLowerCase();
+        let positiveScore = positiveWords.filter((word) =>
+          lowerText.includes(word)
+        ).length;
+        let negativeScore = negativeWords.filter((word) =>
+          lowerText.includes(word)
+        ).length;
+
+        let sentiment, emoji, explanation;
+        if (positiveScore > negativeScore) {
+          sentiment = "Positive";
+          emoji = "😊";
+          explanation = "AI detected positive words and emotions in your text!";
+        } else if (negativeScore > positiveScore) {
+          sentiment = "Negative";
+          emoji = "😔";
+          explanation = "AI detected negative words and emotions in your text.";
+        } else {
+          sentiment = "Neutral";
+          emoji = "😐";
+          explanation =
+            "AI couldn't find strong positive or negative emotions.";
+        }
+
+        result.innerHTML = `<div class="result-emoji">${emoji}</div><p><strong>Sentiment: ${sentiment}</strong><br>${explanation}</p>`;
+        result.classList.add("show");
+      }
+
+      function makePrediction() {
+        const text = document.getElementById("predictionText").value.trim();
+        const result = document.getElementById("predictionResult");
+
+        if (!text) {
+          result.innerHTML =
+            '<div class="result-emoji">💭</div><p><strong>Please type something!</strong><br>Start a sentence so AI can complete it.</p>';
+          result.classList.add("show");
+          return;
+        }
+
+        // Simple text prediction based on common patterns
+        const predictions = {
+          "the weather today is": " beautiful and sunny! ☀️",
+          "i love": " learning new things! 📚",
+          "ai is": " really fascinating and useful! 🤖",
+          "computers can": " help us solve complex problems! 💻",
+          "in the future": " AI will be everywhere! 🚀",
+          "i think": " this is very interesting! 💭",
+          "today i": " learned something amazing! ✨",
+        };
+
+        const lowerText = text.toLowerCase();
+        let completion = "";
+
+        for (const [key, value] of Object.entries(predictions)) {
+          if (lowerText.includes(key)) {
+            completion = value;
+            break;
+          }
+        }
+
+        if (!completion) {
+          completion =
+            " something amazing will happen! ✨ (AI makes educated guesses based on patterns it learned!)";
+        }
+
+        result.innerHTML = `<div class="result-emoji">💡</div><p><strong>AI Completion:</strong><br>"${text}${completion}"</p><p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">AI used pattern recognition to complete your sentence!</p>`;
+        result.classList.add("show");
+      }
+
+      // Quiz Functions
+      let currentQuestion = 1;
+      let score = 0;
+      const totalQuestions = 5;
+
+      function initQuiz() {
+        const options = document.querySelectorAll(".quiz-option");
+        options.forEach((option) => {
+          option.addEventListener("click", function () {
+            if (this.classList.contains("disabled")) return;
+
+            const isCorrect = this.dataset.correct === "true";
+            const questionEl = this.closest(".quiz-question");
+            const feedback = questionEl.querySelector(".quiz-feedback");
+            const allOptions = questionEl.querySelectorAll(".quiz-option");
+
+            // Disable all options
+            allOptions.forEach((opt) => opt.classList.add("disabled"));
+
+            // Show result
+            if (isCorrect) {
+              this.classList.add("correct");
+              score++;
+              feedback.innerHTML = "<strong>✓ Correct!</strong> Great job! 🎉";
+              feedback.classList.add("correct");
+            } else {
+              this.classList.add("incorrect");
+              // Show correct answer
+              allOptions.forEach((opt) => {
+                if (opt.dataset.correct === "true") {
+                  opt.classList.add("correct");
+                }
+              });
+              feedback.innerHTML =
+                "<strong>✗ Not quite!</strong> Don't worry, keep learning! 💪";
+              feedback.classList.add("incorrect");
+            }
+
+            feedback.classList.add("show");
+
+            // Move to next question after delay
+            setTimeout(() => {
+              if (currentQuestion < totalQuestions) {
+                questionEl.classList.remove("active");
+                currentQuestion++;
+                document
+                  .querySelector(`[data-question="${currentQuestion}"]`)
+                  .classList.add("active");
+              } else {
+                // Show results
+                showQuizResults();
+              }
+            }, 2000);
+          });
+        });
+      }
+
+      function showQuizResults() {
+        document
+          .querySelector(".quiz-question.active")
+          .classList.remove("active");
+        const results = document.getElementById("quizResults");
+        const scoreEl = document.getElementById("score");
+        const messageEl = document.getElementById("resultsMessage");
+
+        scoreEl.textContent = score;
+
+        if (score === 5) {
+          messageEl.textContent = "Perfect! You're an AI expert! 🌟";
+        } else if (score >= 3) {
+          messageEl.textContent = "Great job! You know a lot about AI! 🎉";
+        } else {
+          messageEl.textContent =
+            "Keep learning! You're on the right track! 📚";
+        }
+
+        results.classList.add("show");
+      }
+
+      function restartQuiz() {
+        currentQuestion = 1;
+        score = 0;
+
+        // Reset all questions
+        document.querySelectorAll(".quiz-question").forEach((q, index) => {
+          q.classList.remove("active");
+          if (index === 0) q.classList.add("active");
+
+          const options = q.querySelectorAll(".quiz-option");
+          options.forEach((opt) => {
+            opt.classList.remove(
+              "disabled",
+              "correct",
+              "incorrect",
+              "selected"
+            );
+          });
+
+          const feedback = q.querySelector(".quiz-feedback");
+          feedback.classList.remove("show", "correct", "incorrect");
+        });
+
+        document.getElementById("quizResults").classList.remove("show");
+      }
     </script>
   </body>
 </html>

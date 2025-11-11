@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-9G9RD6BHLN");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Learn to build a working calculator with HTML, CSS, and JavaScript. Complete step-by-step tutorial with source code for beginners." />
+    <meta name="keywords" content="calculator project, JavaScript calculator, HTML CSS calculator, coding tutorial, beginner project, web development" />
+    <title>Build a Calculator - Step-by-Step Project | ESL Fun Online</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/Online.png" />
+    <link rel="icon" type="image/png" href="../../images/Online.png" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/mobile-optimized.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #f5576c;
+        --primary-dark: #e63946;
+        --gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: "Inter", sans-serif; line-height: 1.6; color: var(--text-primary); }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+      .hero { margin-top: 80px; padding: 4rem 0; text-align: center; background: var(--gradient); color: white; }
+      .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 0.5rem; font-family: "Poppins", sans-serif; }
+      .hero .badge { display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 20px; margin-bottom: 1rem; font-weight: 600; }
+      .hero p { font-size: 1.1rem; opacity: 0.95; }
+      .section { padding: 4rem 0; }
+      .section-alt { background: var(--bg-secondary); }
+      .section-title { font-family: "Poppins", sans-serif; font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+      .demo-container { background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; margin: 2rem auto; }
+      .calculator { background: linear-gradient(145deg, #1e293b, #0f172a); padding: 1.5rem; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+      .calculator-display { background: #0f172a; color: #10b981; font-size: 2rem; padding: 1.5rem; border-radius: 12px; text-align: right; margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: flex-end; font-family: 'Courier New', monospace; border: 2px solid #1e293b; overflow: hidden; }
+      .calculator-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+      .calc-btn { background: #475569; border: none; padding: 1.5rem; font-size: 1.3rem; border-radius: 12px; cursor: pointer; transition: all 0.2s; color: white; font-weight: 600; }
+      .calc-btn:hover { background: #64748b; transform: scale(1.05); }
+      .calc-btn:active { transform: scale(0.95); }
+      .calc-btn.operator { background: var(--gradient); color: white; }
+      .calc-btn.equals { background: #10b981; grid-column: span 2; }
+      .calc-btn.clear { background: #ef4444; }
+      .code-block { background: #1e293b; color: #e2e8f0; padding: 1.5rem; border-radius: 12px; overflow-x: auto; margin: 1.5rem 0; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+      .step { background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 4px solid var(--primary); }
+      .step h3 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+      .step-number { width: 35px; height: 35px; background: var(--gradient); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+      .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 2rem; }
+      .meta { display: flex; gap: 2rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+      .meta-item { display: flex; align-items: center; gap: 0.5rem; opacity: 0.9; }
+      ul.features { list-style: none; padding: 0; }
+      ul.features li { padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.75rem; }
+      ul.features li i { color: var(--primary); margin-top: 0.3rem; }
+      @media (max-width: 768px) {
+        .hero { margin-top: 70px; padding: 3rem 0; }
+        .section { padding: 3rem 0; }
+        .demo-container { padding: 2rem; }
+        .calculator { padding: 1rem; }
+        .calc-btn { padding: 1.2rem; font-size: 1.1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../../index.html" class="logo-container">
+            <img src="../../images/logo-optimized.png" alt="ESL Fun Online Logo" class="logo-image" />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item"><a href="../../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"><i class="fas fa-code"></i> Coding <i class="fas fa-chevron-down"></i></a>
+              <div class="dropdown">
+                <a href="../computerbasics.html" class="dropdown-item"><i class="fas fa-desktop"></i> Computer Basics</a>
+                <a href="../codingresources.html" class="dropdown-item"><i class="fas fa-code"></i> Coding Resources</a>
+              </div>
+            </li>
+          </ul>
+          <div class="controls">
+            <button class="control-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+            <a class="control-btn admin-toggle" href="../../login.html"><i class="fas fa-user-shield"></i></a>
+          </div>
+          <button class="control-btn mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="badge"><i class="fas fa-signal"></i> Beginner Level</div>
+        <h1><i class="fas fa-calculator"></i> Build a Calculator</h1>
+        <p>Create a fully functional calculator with HTML, CSS & JavaScript</p>
+        <div class="meta">
+          <div class="meta-item"><i class="fas fa-clock"></i> 2-3 hours</div>
+          <div class="meta-item"><i class="fas fa-code"></i> HTML, CSS, JavaScript</div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../codingresources.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Coding Resources</a>
+          
+          <h2 class="section-title">Try the Calculator</h2>
+          <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Here's what you'll build in this tutorial</p>
+
+          <div class="demo-container">
+            <div class="calculator">
+              <div class="calculator-display" id="display">0</div>
+              <div class="calculator-buttons">
+                <button class="calc-btn clear" onclick="clearDisplay()">AC</button>
+                <button class="calc-btn operator" onclick="deleteLast()">DEL</button>
+                <button class="calc-btn operator" onclick="appendOperator('/')">÷</button>
+                <button class="calc-btn operator" onclick="appendOperator('*')">×</button>
+                
+                <button class="calc-btn" onclick="appendNumber('7')">7</button>
+                <button class="calc-btn" onclick="appendNumber('8')">8</button>
+                <button class="calc-btn" onclick="appendNumber('9')">9</button>
+                <button class="calc-btn operator" onclick="appendOperator('-')">−</button>
+                
+                <button class="calc-btn" onclick="appendNumber('4')">4</button>
+                <button class="calc-btn" onclick="appendNumber('5')">5</button>
+                <button class="calc-btn" onclick="appendNumber('6')">6</button>
+                <button class="calc-btn operator" onclick="appendOperator('+')">+</button>
+                
+                <button class="calc-btn" onclick="appendNumber('1')">1</button>
+                <button class="calc-btn" onclick="appendNumber('2')">2</button>
+                <button class="calc-btn" onclick="appendNumber('3')">3</button>
+                <button class="calc-btn equals" onclick="calculate()">=</button>
+                
+                <button class="calc-btn" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+                <button class="calc-btn" onclick="appendNumber('.')">.</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container">
+          <h2 class="section-title">What You'll Learn</h2>
+          <ul class="features" style="max-width: 600px; margin: 2rem auto;">
+            <li><i class="fas fa-check-circle"></i> How to structure HTML for a calculator layout</li>
+            <li><i class="fas fa-check-circle"></i> CSS Grid for button arrangement</li>
+            <li><i class="fas fa-check-circle"></i> JavaScript event handling and DOM manipulation</li>
+            <li><i class="fas fa-check-circle"></i> Working with strings and mathematical operations</li>
+            <li><i class="fas fa-check-circle"></i> Implementing clear, delete, and equals functions</li>
+            <li><i class="fas fa-check-circle"></i> Making a responsive, mobile-friendly design</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Step-by-Step Tutorial</h2>
+
+          <div class="step">
+            <h3><span class="step-number">1</span> Create the HTML Structure</h3>
+            <p>Start by creating the basic HTML structure for the calculator. We need a display area and buttons for numbers and operations.</p>
+            <div class="code-block">&lt;div class="calculator"&gt;
+  &lt;div class="calculator-display" id="display"&gt;0&lt;/div&gt;
+  &lt;div class="calculator-buttons"&gt;
+    &lt;button class="calc-btn clear" onclick="clearDisplay()"&gt;AC&lt;/button&gt;
+    &lt;button class="calc-btn operator" onclick="deleteLast()"&gt;DEL&lt;/button&gt;
+    &lt;!-- Add more buttons... --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">2</span> Style with CSS</h3>
+            <p>Use CSS Grid to arrange buttons and create an attractive dark theme design.</p>
+            <div class="code-block">.calculator {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  padding: 1.5rem;
+  border-radius: 16px;
+  max-width: 400px;
+}
+
+.calculator-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.calc-btn {
+  padding: 1.5rem;
+  font-size: 1.3rem;
+  border-radius: 12px;
+  cursor: pointer;
+}</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">3</span> Add JavaScript Functionality</h3>
+            <p>Create functions to handle number input, operations, and calculations.</p>
+            <div class="code-block">let currentInput = '0';
+
+function appendNumber(num) {
+  if (currentInput === '0') {
+    currentInput = num;
+  } else {
+    currentInput += num;
+  }
+  updateDisplay();
+}
+
+function appendOperator(op) {
+  currentInput += ' ' + op + ' ';
+  updateDisplay();
+}
+
+function calculate() {
+  try {
+    currentInput = eval(currentInput).toString();
+    updateDisplay();
+  } catch {
+    currentInput = 'Error';
+    updateDisplay();
+  }
+}</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">4</span> Implement Clear and Delete</h3>
+            <p>Add functions to clear the display and delete the last character.</p>
+            <div class="code-block">function clearDisplay() {
+  currentInput = '0';
+  updateDisplay();
+}
+
+function deleteLast() {
+  if (currentInput.length > 1) {
+    currentInput = currentInput.slice(0, -1);
+  } else {
+    currentInput = '0';
+  }
+  updateDisplay();
+}
+
+function updateDisplay() {
+  document.getElementById('display').textContent = currentInput;
+}</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">5</span> Test Your Calculator</h3>
+            <p>Open your HTML file in a browser and test all functions:</p>
+            <ul class="features">
+              <li><i class="fas fa-check"></i> Try basic addition, subtraction, multiplication, division</li>
+              <li><i class="fas fa-check"></i> Test decimal numbers</li>
+              <li><i class="fas fa-check"></i> Verify the AC (clear) button resets to 0</li>
+              <li><i class="fas fa-check"></i> Check that DEL removes the last character</li>
+              <li><i class="fas fa-check"></i> Make sure it works on mobile devices</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="container" style="margin: 3rem auto; text-align: center;">
+        <ins class="adsbygoogle" style="display: block" data-ad-client="ca-pub-2456627863532019" data-ad-slot="AUTO" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <section class="section section-alt">
+        <div class="container">
+          <h2 class="section-title">Complete Source Code</h2>
+          <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Copy and paste this complete code to create your calculator</p>
+          
+          <div class="code-block" style="max-height: 400px; overflow-y: auto;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My Calculator&lt;/title&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .calculator {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .calculator-display {
+      background: #0f172a;
+      color: #10b981;
+      font-size: 2rem;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: right;
+      margin-bottom: 1rem;
+      min-height: 80px;
+      font-family: 'Courier New';
+    }
+    .calculator-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+    .calc-btn {
+      background: #475569;
+      border: none;
+      padding: 1.5rem;
+      font-size: 1.3rem;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+    }
+    .calc-btn:hover { background: #64748b; }
+    .calc-btn.operator { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .calc-btn.equals { background: #10b981; grid-column: span 2; }
+    .calc-btn.clear { background: #ef4444; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="calculator"&gt;
+    &lt;div class="calculator-display" id="display"&gt;0&lt;/div&gt;
+    &lt;div class="calculator-buttons"&gt;
+      &lt;button class="calc-btn clear" onclick="clearDisplay()"&gt;AC&lt;/button&gt;
+      &lt;button class="calc-btn operator" onclick="deleteLast()"&gt;DEL&lt;/button&gt;
+      &lt;button class="calc-btn operator" onclick="appendOperator('/')"&gt;÷&lt;/button&gt;
+      &lt;button class="calc-btn operator" onclick="appendOperator('*')"&gt;×&lt;/button&gt;
+      
+      &lt;button class="calc-btn" onclick="appendNumber('7')"&gt;7&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('8')"&gt;8&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('9')"&gt;9&lt;/button&gt;
+      &lt;button class="calc-btn operator" onclick="appendOperator('-')"&gt;−&lt;/button&gt;
+      
+      &lt;button class="calc-btn" onclick="appendNumber('4')"&gt;4&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('5')"&gt;5&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('6')"&gt;6&lt;/button&gt;
+      &lt;button class="calc-btn operator" onclick="appendOperator('+')"&gt;+&lt;/button&gt;
+      
+      &lt;button class="calc-btn" onclick="appendNumber('1')"&gt;1&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('2')"&gt;2&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('3')"&gt;3&lt;/button&gt;
+      &lt;button class="calc-btn equals" onclick="calculate()"&gt;=&lt;/button&gt;
+      
+      &lt;button class="calc-btn" onclick="appendNumber('0')" style="grid-column: span 2;"&gt;0&lt;/button&gt;
+      &lt;button class="calc-btn" onclick="appendNumber('.')"&gt;.&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    let currentInput = '0';
+
+    function updateDisplay() {
+      document.getElementById('display').textContent = currentInput;
+    }
+
+    function appendNumber(num) {
+      if (currentInput === '0') {
+        currentInput = num;
+      } else {
+        currentInput += num;
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      currentInput += ' ' + op + ' ';
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = '0';
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      if (currentInput.length > 1) {
+        currentInput = currentInput.slice(0, -1);
+      } else {
+        currentInput = '0';
+      }
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        currentInput = eval(currentInput).toString();
+        updateDisplay();
+      } catch {
+        currentInput = 'Error';
+        updateDisplay();
+        setTimeout(() => {
+          currentInput = '0';
+          updateDisplay();
+        }, 1500);
+      }
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Next Steps</h2>
+          <ul class="features" style="max-width: 600px; margin: 2rem auto;">
+            <li><i class="fas fa-star"></i> Add keyboard support so users can type numbers</li>
+            <li><i class="fas fa-star"></i> Implement memory functions (M+, M-, MR, MC)</li>
+            <li><i class="fas fa-star"></i> Add scientific calculator features (sin, cos, sqrt)</li>
+            <li><i class="fas fa-star"></i> Create a history feature to show past calculations</li>
+            <li><i class="fas fa-star"></i> Add theme switcher for light/dark mode</li>
+            <li><i class="fas fa-star"></i> Make it installable as a Progressive Web App (PWA)</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer style="background: var(--text-primary); color: white; padding: 3rem 0; margin-top: 4rem;">
+      <div class="container">
+        <div style="text-align: center;">
+          <h3 style="margin-bottom: 1rem;">ESL Fun Online</h3>
+          <p style="color: #d1d5db;">© 2025 ESL Fun Online. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../js/navigation.js"></script>
+    <script>
+      // Calculator functionality
+      let currentInput = '0';
+
+      function updateDisplay() {
+        document.getElementById('display').textContent = currentInput;
+      }
+
+      function appendNumber(num) {
+        if (currentInput === '0') {
+          currentInput = num;
+        } else {
+          currentInput += num;
+        }
+        updateDisplay();
+      }
+
+      function appendOperator(op) {
+        currentInput += ' ' + op + ' ';
+        updateDisplay();
+      }
+
+      function clearDisplay() {
+        currentInput = '0';
+        updateDisplay();
+      }
+
+      function deleteLast() {
+        if (currentInput.length > 1) {
+          currentInput = currentInput.slice(0, -1);
+        } else {
+          currentInput = '0';
+        }
+        updateDisplay();
+      }
+
+      function calculate() {
+        try {
+          currentInput = eval(currentInput).toString();
+          updateDisplay();
+        } catch {
+          currentInput = 'Error';
+          updateDisplay();
+          setTimeout(() => {
+            currentInput = '0';
+            updateDisplay();
+          }, 1500);
+        }
+      }
+
+      // Mobile menu
+      (function () {
+        const mobileToggle = document.getElementById("mobileToggle");
+        const navLinks = document.getElementById("navLinks");
+        if (!mobileToggle || !navLinks) return;
+        mobileToggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          navLinks.classList.toggle("active");
+          document.body.style.overflow = navLinks.classList.contains("active") ? "hidden" : "";
+        });
+      })();
+    </script>
+  </body>
+</html>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        margin: 0;
+      }
+
+      .coming-soon-container {
+        max-width: 700px;
+        background: white;
+        border-radius: 24px;
+        padding: 4rem 3rem;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .icon-wrapper {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 3rem;
+        color: white;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #1f2937;
+        margin-bottom: 1rem;
+      }
+
+      .difficulty-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background: #10b981;
+        color: white;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+        color: #6b7280;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+      }
+
+      .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+      }
+
+      .features-list {
+        text-align: left;
+        margin: 2rem 0;
+        padding: 2rem;
+        background: #f9fafb;
+        border-radius: 16px;
+      }
+
+      .features-list h3 {
+        color: #1f2937;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+      }
+
+      .features-list ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .features-list li {
+        padding: 0.75rem 0;
+        color: #4b5563;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .features-list li i {
+        color: #f5576c;
+        font-size: 1.2rem;
+      }
+
+      .project-meta {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6b7280;
+        font-weight: 500;
+      }
+
+      .meta-item i {
+        color: #f5576c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="coming-soon-container">
+      <div class="icon-wrapper">
+        <i class="fas fa-calculator"></i>
+      </div>
+      <span class="difficulty-badge">Beginner</span>
+      <h1>Project Coming Soon!</h1>
+      <p>
+        We're creating a complete step-by-step guide to build your very own
+        calculator!
+      </p>
+
+      <div class="project-meta">
+        <div class="meta-item">
+          <i class="fas fa-clock"></i>
+          <span>2-3 hours</span>
+        </div>
+        <div class="meta-item">
+          <i class="fas fa-code"></i>
+          <span>HTML, CSS, JavaScript</span>
+        </div>
+      </div>
+
+      <div class="features-list">
+        <h3>What You'll Build:</h3>
+        <ul>
+          <li>
+            <i class="fas fa-check-circle"></i> A working calculator with all
+            basic operations
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i> Beautiful, responsive design
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i> Number buttons and display
+            screen
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i> Clear and delete functions
+          </li>
+          <li>
+            <i class="fas fa-check-circle"></i> Learn about event handling and
+            DOM manipulation
+          </li>
+        </ul>
+      </div>
+
+      <a href="../codingresources.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Coding Resources
+      </a>
+    </div>
+  </body>
+</html>
