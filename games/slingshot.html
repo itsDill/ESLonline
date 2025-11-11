@@ -142,7 +142,7 @@
 
       body {
         font-family: "Inter", "Segoe UI", sans-serif;
-        background: var(--gradient-sky);
+        background: linear-gradient(180deg, #87ceeb 0%, #b0e57c 40%, #98fb98 70%, #90ee90 100%);
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
@@ -155,8 +155,32 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+        background: 
+          radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 1;
+        animation: backgroundPulse 10s ease-in-out infinite;
+      }
+
+      @keyframes backgroundPulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30%;
+        background: linear-gradient(180deg, transparent 0%, rgba(34, 139, 34, 0.2) 100%);
         pointer-events: none;
         z-index: 1;
       }
@@ -386,11 +410,34 @@
       .slingshot-frame {
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #8b4513, #654321);
+        background: linear-gradient(135deg, #8b4513, #654321, #3e2723);
         clip-path: polygon(20% 100%, 45% 0%, 55% 0%, 80% 100%);
         position: relative;
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         transition: all 0.3s ease;
+      }
+
+      .slingshot-frame::before {
+        content: '';
+        position: absolute;
+        top: 5%;
+        left: 46%;
+        width: 8%;
+        height: 15%;
+        background: linear-gradient(135deg, #a0522d, #654321);
+        border-radius: 50%;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .slingshot-frame::after {
+        content: '';
+        position: absolute;
+        top: 15%;
+        left: 25%;
+        width: 50%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #654321, transparent);
+        border-radius: 1px;
       }
 
       .slingshot:hover .slingshot-frame {
@@ -400,69 +447,110 @@
 
       .slingshot-band {
         position: absolute;
-        top: 0;
-        left: 45%;
-        width: 3px;
+        top: 5%;
+        left: 48%;
+        width: 4px;
         height: 60px;
-        background: linear-gradient(180deg, #654321, #8b4513);
-        transform-origin: bottom;
-        border-radius: 1px;
+        background: linear-gradient(180deg, #d2691e, #8b4513, #654321);
+        transform-origin: top center;
+        border-radius: 2px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+      }
+
+      .slingshot-band::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background: #654321;
+        border-radius: 50%;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .slingshot:active .slingshot-band {
+        transform: scaleY(0.9);
+        background: linear-gradient(180deg, #cd853f, #a0522d);
       }
 
       .projectile {
         position: absolute;
-        width: clamp(18px, 4vw, 24px);
-        height: clamp(18px, 4vw, 24px);
-        background: radial-gradient(circle at 30% 30%, #ff6b47, #ff4757, #dc143c);
+        width: clamp(20px, 4vw, 26px);
+        height: clamp(20px, 4vw, 26px);
+        background: radial-gradient(circle at 35% 35%, #ff8566, #ff6b47, #ff4757, #dc143c);
         border-radius: 50%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 10px rgba(220, 20, 60, 0.4), 
+                    inset -2px -2px 6px rgba(0, 0, 0, 0.3),
+                    inset 3px 3px 6px rgba(255, 255, 255, 0.4);
         transition: all 0.1s ease;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         position: relative;
         animation: projectileIdle 2s ease-in-out infinite;
+        cursor: pointer;
       }
 
       @keyframes projectileIdle {
         0%, 100% {
           transform: translateY(0) scale(1);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 4px 10px rgba(220, 20, 60, 0.4), 
+                      inset -2px -2px 6px rgba(0, 0, 0, 0.3),
+                      inset 3px 3px 6px rgba(255, 255, 255, 0.4);
         }
         50% {
-          transform: translateY(-2px) scale(1.05);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 3px 6px rgba(255, 255, 255, 0.4);
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 8px 16px rgba(220, 20, 60, 0.5), 
+                      inset -3px -3px 8px rgba(0, 0, 0, 0.4),
+                      inset 4px 4px 8px rgba(255, 255, 255, 0.5);
         }
       }
 
       .projectile::before {
         content: '';
         position: absolute;
-        top: 20%;
-        left: 25%;
-        width: 30%;
-        height: 30%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+        top: 25%;
+        left: 30%;
+        width: 35%;
+        height: 35%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent 70%);
         border-radius: 50%;
         animation: shine 3s ease-in-out infinite;
       }
 
       @keyframes shine {
         0%, 100% {
-          opacity: 0.6;
+          opacity: 0.7;
+          transform: scale(1);
         }
         50% {
           opacity: 1;
+          transform: scale(1.1);
         }
+      }
+
+      .projectile::after {
+        content: '';
+        position: absolute;
+        bottom: 15%;
+        right: 20%;
+        width: 20%;
+        height: 20%;
+        background: radial-gradient(circle, rgba(139, 0, 0, 0.4), transparent);
+        border-radius: 50%;
+        filter: blur(2px);
       }
 
       .target {
         position: absolute;
-        width: clamp(80px, 15vw, 110px);
-        height: clamp(80px, 15vw, 110px);
+        width: clamp(85px, 15vw, 115px);
+        height: clamp(85px, 15vw, 115px);
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         animation: targetFloat 3s ease-in-out infinite;
         z-index: 40;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
       }
 
       @keyframes targetFloat {
@@ -470,10 +558,10 @@
           transform: translateY(0) rotate(0deg);
         }
         33% {
-          transform: translateY(-8px) rotate(2deg);
+          transform: translateY(-10px) rotate(3deg);
         }
         66% {
-          transform: translateY(-4px) rotate(-1deg);
+          transform: translateY(-5px) rotate(-2deg);
         }
       }
 
@@ -481,15 +569,18 @@
         width: 100%;
         height: 100%;
         background: radial-gradient(
-          circle at 30% 30%,
-          #ff6b6b 0%,
-          #ff4757 40%,
-          #ff3742 70%,
-          #dc2626 100%
+          circle at 35% 35%,
+          #ff8a80 0%,
+          #ff6b6b 20%,
+          #ff4757 50%,
+          #e53e3e 80%,
+          #c53030 100%
         );
         border-radius: 50%;
-        border: 4px solid white;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        border: 5px solid white;
+        box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4), 
+                    inset 0 3px 8px rgba(255, 255, 255, 0.3),
+                    inset 0 -3px 8px rgba(0, 0, 0, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -501,6 +592,8 @@
         overflow: hidden;
         backdrop-filter: blur(2px);
         transition: all 0.3s ease;
+        padding: 8px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
       }
 
       .target-circle::before {
@@ -510,7 +603,12 @@
         left: -50%;
         width: 200%;
         height: 200%;
-        background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        background: conic-gradient(
+          from 0deg,
+          transparent,
+          rgba(255, 255, 255, 0.15),
+          transparent 30%
+        );
         animation: targetSpin 4s linear infinite;
         border-radius: 50%;
       }
@@ -521,20 +619,42 @@
         }
       }
 
+      .target-circle::after {
+        content: '';
+        position: absolute;
+        top: 15%;
+        left: 20%;
+        width: 30%;
+        height: 30%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.4) 0%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        filter: blur(2px);
+      }
+
       .target:hover {
         z-index: 45;
+        filter: drop-shadow(0 8px 20px rgba(255, 71, 87, 0.5));
       }
 
       .target:hover .target-circle {
         transform: scale(1.15) rotate(5deg);
-        box-shadow: 0 10px 30px rgba(255, 71, 87, 0.5), inset 0 3px 6px rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 30px rgba(255, 71, 87, 0.6), 
+                    inset 0 4px 10px rgba(255, 255, 255, 0.4),
+                    inset 0 -4px 10px rgba(0, 0, 0, 0.25);
         background: radial-gradient(
-          circle at 30% 30%,
-          #ff8a80 0%,
-          #ff5722 40%,
-          #e53935 70%,
+          circle at 35% 35%,
+          #ffa794 0%,
+          #ff8a80 20%,
+          #ff5722 50%,
+          #e53935 80%,
           #c62828 100%
         );
+        border-width: 6px;
       }
 
       .target.hit {
@@ -544,9 +664,15 @@
       @keyframes targetHit {
         0% {
           transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        25% {
+          transform: scale(1.2) rotate(90deg);
+          opacity: 0.8;
         }
         50% {
           transform: scale(1.3) rotate(180deg);
+          opacity: 0.5;
         }
         100% {
           transform: scale(0) rotate(360deg);
@@ -559,50 +685,96 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
+        overflow: hidden;
       }
 
       .cloud {
         position: absolute;
-        background: white;
-        border-radius: 50px;
-        opacity: 0.8;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        border-radius: 100px;
+        opacity: 0.85;
         animation: float 20s infinite linear;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
       .cloud:before {
         content: "";
         position: absolute;
-        background: white;
-        border-radius: 50px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.75));
+        border-radius: 100px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      .cloud:after {
+        content: "";
+        position: absolute;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        border-radius: 100px;
       }
 
       .cloud1 {
-        width: 80px;
-        height: 40px;
-        top: 20%;
-        left: -80px;
+        width: 100px;
+        height: 45px;
+        top: 15%;
+        left: -120px;
       }
 
       .cloud1:before {
-        width: 50px;
-        height: 50px;
-        top: -25px;
-        left: 10px;
+        width: 55px;
+        height: 55px;
+        top: -28px;
+        left: 12px;
+      }
+
+      .cloud1:after {
+        width: 45px;
+        height: 45px;
+        top: -20px;
+        right: 15px;
       }
 
       .cloud2 {
-        width: 60px;
-        height: 30px;
-        top: 40%;
-        left: -60px;
+        width: 75px;
+        height: 35px;
+        top: 35%;
+        left: -90px;
         animation-delay: -10s;
       }
 
       .cloud2:before {
+        width: 45px;
+        height: 45px;
+        top: -22px;
+        left: 10px;
+      }
+
+      .cloud2:after {
+        width: 35px;
+        height: 35px;
+        top: -15px;
+        right: 12px;
+      }
+
+      .cloud3 {
+        width: 85px;
+        height: 40px;
+        top: 60%;
+        left: -100px;
+        animation-delay: -5s;
+      }
+
+      .cloud3:before {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        left: 15px;
+      }
+
+      .cloud3:after {
         width: 40px;
         height: 40px;
-        top: -20px;
-        left: 8px;
+        top: -18px;
+        right: 18px;
       }
 
       @keyframes float {
@@ -610,12 +782,16 @@
           transform: translateX(0);
         }
         to {
-          transform: translateX(calc(100vw + 100px));
+          transform: translateX(calc(100vw + 150px));
         }
       }
 
       /* Mobile Optimizations */
       @media (max-width: 768px) {
+        body::after {
+          height: 20%;
+        }
+
         .ui-panel {
           top: 10px;
           left: 10px;
@@ -644,16 +820,17 @@
         }
 
         .target {
-          width: 80px;
-          height: 80px;
+          width: 85px;
+          height: 85px;
         }
 
         .target-circle {
           font-size: 11px;
+          padding: 6px;
         }
 
-        .cloud1, .cloud2 {
-          display: none;
+        .cloud1, .cloud2, .cloud3 {
+          opacity: 0.6;
         }
       }
 
@@ -674,6 +851,7 @@
         .question {
           font-size: 14px;
           margin-bottom: 12px;
+          padding-left: 20px;
         }
 
         .option {
@@ -689,13 +867,17 @@
         }
 
         .target {
-          width: 70px;
-          height: 70px;
+          width: 75px;
+          height: 75px;
         }
 
         .projectile {
-          width: 16px;
-          height: 16px;
+          width: 18px;
+          height: 18px;
+        }
+
+        .cloud1, .cloud2, .cloud3 {
+          display: none;
         }
       }
 
@@ -710,12 +892,23 @@
         }
 
         .target {
-          width: 120px;
-          height: 120px;
+          width: 125px;
+          height: 125px;
         }
 
         .target-circle {
           font-size: 16px;
+          padding: 10px;
+        }
+
+        .projectile {
+          width: 28px;
+          height: 28px;
+        }
+
+        .slingshot {
+          width: 95px;
+          height: 140px;
         }
       }
 
@@ -976,6 +1169,7 @@
       <div class="clouds" aria-hidden="true">
         <div class="cloud cloud1"></div>
         <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
       </div>
 
       <div class="ui-panel" role="region" aria-label="Game Statistics">
@@ -1513,28 +1707,7 @@
         }
 
         setTimeout(() => {
-            // Initialize game when page loads
-            window.onload = function () {
-              initGame();
-      
-              // Add keyboard instructions
-              const instructions = document.createElement('div');
-              instructions.innerHTML = `
-                <div style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-                            background: rgba(255,255,255,0.9); padding: 10px; border-radius: 10px;
-                            font-size: 12px; text-align: center; backdrop-filter: blur(5px);
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 90;">
-                  🎮 <strong>Controls:</strong> 1-4 keys or ↑↓ arrows to select • Enter/Space to fire • Esc to exit
-                </div>
-              `;
-              document.body.appendChild(instructions);
-            };
-      
-            // Handle window resize
-            window.onresize = function () {
-              createTargets();
-              positionProjectile();
-            };
+          nextQuestion();
         }, 2500);
       }
 
@@ -1645,71 +1818,79 @@
         }, 2000);
       }
 
-            // Initialize game when page loads\n      window.onload = function () {\n        initGame();\n        \n        // Add keyboard instructions\n        const instructions = document.createElement('div');\n        instructions.innerHTML = `\n          <div style=\"position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); \n                      background: rgba(255,255,255,0.9); padding: 10px; border-radius: 10px; \n                      font-size: 12px; text-align: center; backdrop-filter: blur(5px);\n                      box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 90;\">\n            🎮 <strong>Controls:</strong> 1-4 keys or ↑↓ arrows to select • Enter/Space to fire • Esc to exit\n          </div>\n        `;\n        document.body.appendChild(instructions);\n      };\n\n      // Handle window resize\n      window.onresize = function () {\n        createTargets();\n        positionProjectile();\n      };
-    </script>
-  </body>
-</html>
-      // Position the projectile relative to the slingshot
-      function positionProjectile() {
-        const projectile = document.getElementById("projectile");
-        const slingshot = document.querySelector('.slingshot');
-        const slingshotRect = slingshot.getBoundingClientRect();
+      // Initialize game when page loads
+      window.onload = function () {
+        initGame();
 
-        // Position relative to slingshot for better responsiveness
-        projectile.style.left = (slingshotRect.left + slingshotRect.width + 15) + "px";
-        projectile.style.bottom = (window.innerHeight - slingshotRect.top - 30) + "px";
-        projectile.style.transform = "scale(1)";
-        projectile.style.transition = "all 0.3s ease";
-        projectile.style.filter = 'none';
-      }
+        // Add keyboard instructions
+        const instructions = document.createElement('div');
+        instructions.innerHTML = `
+          <div style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); 
+                      background: rgba(255,255,255,0.95); padding: 12px 20px; border-radius: 15px; 
+                      font-size: 13px; text-align: center; backdrop-filter: blur(10px);
+                      box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 90; border: 2px solid rgba(255,255,255,0.5);
+                      animation: fadeInUp 1s ease-out 0.5s both;">
+            🎮 <strong>Controls:</strong> 1-4 keys or ↑↓ arrows • Enter/Space to fire • Esc to exit
+          </div>
+        `;
+        document.body.appendChild(instructions);
 
-      // Keyboard controls
-      document.addEventListener('keydown', (e) => {
-        if (isAnimating) return;
+        // Add sun
+        const sun = document.createElement('div');
+        sun.style.cssText = `
+          position: fixed;
+          top: 60px;
+          right: 80px;
+          width: 80px;
+          height: 80px;
+          background: radial-gradient(circle, #ffeb3b, #ffc107, #ff9800);
+          border-radius: 50%;
+          box-shadow: 0 0 40px rgba(255, 235, 59, 0.6), 0 0 80px rgba(255, 193, 7, 0.4);
+          z-index: 1;
+          animation: sunPulse 4s ease-in-out infinite;
+          pointer-events: none;
+        `;
+        document.body.insertBefore(sun, document.body.firstChild);
 
-        const options = document.querySelectorAll('.option');
-        const currentSelected = document.querySelector('.option.selected');
-
-        switch(e.key) {
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-            const optionIndex = parseInt(e.key) - 1;
-            if (options[optionIndex]) {
-              selectOption(optionIndex);
-            }
-            break;
-
-          case 'ArrowUp':
-          case 'ArrowDown':
-            e.preventDefault();
-            if (options.length > 0) {
-              let newIndex = 0;
-              if (currentSelected) {
-                const currentIndex = Array.from(options).indexOf(currentSelected);
-                newIndex = e.key === 'ArrowUp'
-                  ? (currentIndex - 1 + options.length) % options.length
-                  : (currentIndex + 1) % options.length;
-              }
-              selectOption(newIndex);
-              options[newIndex].focus();
-            }
-            break;
-
-          case 'Enter':
-          case ' ':
-            e.preventDefault();
-            if (selectedAnswer !== null && !isAnimating) {
-              fireProjectile();
-            }
-            break;
-
-          case 'Escape':
-            window.location.href = '../games.html';
-            break;
+        // Sun rays
+        for (let i = 0; i < 8; i++) {
+          const ray = document.createElement('div');
+          ray.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 3px;
+            height: 30px;
+            background: linear-gradient(180deg, #ffeb3b, transparent);
+            transform-origin: center;
+            transform: translate(-50%, -50%) rotate(${i * 45}deg) translateY(-55px);
+            opacity: 0.6;
+          `;
+          sun.appendChild(ray);
         }
-      });
+      };
+
+      // Sun pulse animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes sunPulse {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 40px rgba(255, 235, 59, 0.6), 0 0 80px rgba(255, 193, 7, 0.4);
+          }
+          50% {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(255, 235, 59, 0.8), 0 0 100px rgba(255, 193, 7, 0.5);
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Handle window resize
+      window.onresize = function () {
+        createTargets();
+        positionProjectile();
+      };
     </script>
   
     <!-- Google AdSense -->

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESL Escape Room - Library Mystery</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", serif;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .game-container {
+        max-width: 900px;
+        width: 100%;
+        background: #f9f6f0;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .timer {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ffd700;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .story {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border-left: 5px solid #8b4513;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .story p {
+        line-height: 1.8;
+        color: #333;
+        font-size: 1.1em;
+      }
+
+      .puzzle {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+
+      .puzzle.active {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .puzzle h2 {
+        color: #8b4513;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
+
+      .puzzle-description {
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 1.1em;
+        line-height: 1.6;
+      }
+
+      .options {
+        display: grid;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .option {
+        background: #f0e6d2;
+        padding: 15px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+        font-size: 1.05em;
+      }
+
+      .option:hover {
+        background: #e6dcc8;
+        transform: translateX(5px);
+        border-color: #8b4513;
+      }
+
+      .input-group {
+        margin-top: 20px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.1em;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+        font-weight: bold;
+      }
+
+      .feedback.correct {
+        background: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+        display: block;
+      }
+
+      .feedback.incorrect {
+        background: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+        display: block;
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #ddd;
+        border-radius: 10px;
+        margin: 20px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #8b4513, #ffd700);
+        width: 0%;
+        transition: width 0.5s;
+      }
+
+      .start-screen,
+      .win-screen {
+        text-align: center;
+      }
+
+      .win-screen {
+        display: none;
+      }
+
+      .win-screen.active {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      .win-screen h2 {
+        color: #8b4513;
+        font-size: 3em;
+        margin-bottom: 20px;
+      }
+
+      .stats {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        display: inline-block;
+      }
+
+      .stat-item {
+        margin: 10px 0;
+        font-size: 1.2em;
+      }
+
+      .word-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .word-item {
+        background: #f0e6d2;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+      }
+
+      .word-item:hover {
+        border-color: #8b4513;
+        transform: scale(1.05);
+      }
+
+      .word-item.selected {
+        background: #8b4513;
+        color: white;
+      }
+
+      .hint {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #ffc107;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="header">
+        <h1>🔐 The Library Mystery</h1>
+        <div class="timer">Time: <span id="timer">20:00</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress"></div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="start-screen" id="startScreen">
+          <div class="story">
+            <h2 style="color: #8b4513; margin-bottom: 15px">
+              Welcome, Detective!
+            </h2>
+            <p>
+              The ancient library has been locked, and a precious manuscript is
+              trapped inside! The head librarian left a series of English
+              language puzzles as clues. You have 20 minutes to solve all the
+              puzzles and escape with the manuscript.
+            </p>
+            <p style="margin-top: 15px">
+              <strong>Are you ready to begin?</strong>
+            </p>
+          </div>
+          <button class="btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <!-- Puzzle 1: Synonyms -->
+        <div class="puzzle" id="puzzle1">
+          <h2>Puzzle 1: The Synonym Shelf</h2>
+          <p class="puzzle-description">
+            The first clue is hidden among the books. Match each word with its
+            synonym to unlock the next puzzle.
+          </p>
+          <div class="hint">
+            💡 Hint: Synonyms are words with similar meanings.
+          </div>
+
+          <div style="margin: 20px 0">
+            <strong>Word:</strong>
+            <span id="currentWord" style="font-size: 1.3em; color: #8b4513"
+              >ANCIENT</span
+            >
+          </div>
+
+          <div class="options" id="synonymOptions"></div>
+          <div class="feedback" id="feedback1"></div>
+        </div>
+
+        <!-- Puzzle 2: Sentence Order -->
+        <div class="puzzle" id="puzzle2">
+          <h2>Puzzle 2: The Scattered Pages</h2>
+          <p class="puzzle-description">
+            The wind scattered the pages of a story! Put the sentences in the
+            correct order to reveal the next clue.
+          </p>
+          <div class="hint">
+            💡 Hint: Read each sentence carefully and think about what makes
+            sense first, then next, and so on.
+          </div>
+
+          <div class="word-grid" id="sentenceGrid"></div>
+          <div style="margin-top: 20px">
+            <strong>Your Order:</strong>
+            <div
+              id="selectedOrder"
+              style="margin: 10px 0; min-height: 40px; font-size: 1.1em"
+            ></div>
+          </div>
+          <button class="btn" onclick="checkSentenceOrder()">
+            Check Order
+          </button>
+          <button
+            class="btn"
+            style="background: #6c757d; margin-left: 10px"
+            onclick="resetSentences()"
+          >
+            Reset
+          </button>
+          <div class="feedback" id="feedback2"></div>
+        </div>
+
+        <!-- Puzzle 3: Fill in the Blank -->
+        <div class="puzzle" id="puzzle3">
+          <h2>Puzzle 3: The Missing Words</h2>
+          <p class="puzzle-description">
+            Complete the sentences with the correct words to find the final
+            clue!
+          </p>
+          <div class="hint">
+            💡 Hint: Think about grammar and context. What word fits best?
+          </div>
+
+          <div style="line-height: 2; font-size: 1.1em">
+            <p>1. She has been studying English _____ three years.</p>
+            <input type="text" id="blank1" placeholder="Your answer" />
+
+            <p style="margin-top: 20px">
+              2. If I _____ rich, I would travel the world.
+            </p>
+            <input type="text" id="blank2" placeholder="Your answer" />
+
+            <p style="margin-top: 20px">
+              3. The book _____ by a famous author is on the shelf.
+            </p>
+            <input type="text" id="blank3" placeholder="Your answer" />
+          </div>
+
+          <button class="btn" style="margin-top: 20px" onclick="checkBlanks()">
+            Submit Answers
+          </button>
+          <div class="feedback" id="feedback3"></div>
+        </div>
+
+        <!-- Win Screen -->
+        <div class="win-screen" id="winScreen">
+          <h2>🎉 Congratulations!</h2>
+          <p style="font-size: 1.3em; margin: 20px 0">
+            You've solved all the puzzles and escaped the library with the
+            manuscript!
+          </p>
+          <div class="stats">
+            <div class="stat-item">
+              ⏱️ Time: <strong id="finalTime"></strong>
+            </div>
+            <div class="stat-item">✅ Puzzles Solved: <strong>3/3</strong></div>
+          </div>
+          <button class="btn" style="margin-top: 30px" onclick="resetGame()">
+            Play Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentPuzzle = 0;
+      let timeLeft = 1200;
+      let timerInterval;
+      let startTime;
+
+      const synonymPairs = [
+        {
+          word: "ANCIENT",
+          options: ["Old", "New", "Modern", "Fresh"],
+          correct: "Old",
+        },
+        {
+          word: "DIFFICULT",
+          options: ["Easy", "Hard", "Simple", "Clear"],
+          correct: "Hard",
+        },
+        {
+          word: "HAPPY",
+          options: ["Sad", "Angry", "Joyful", "Tired"],
+          correct: "Joyful",
+        },
+        {
+          word: "SMART",
+          options: ["Foolish", "Intelligent", "Lazy", "Slow"],
+          correct: "Intelligent",
+        },
+      ];
+
+      let currentSynonymIndex = 0;
+      let selectedSentences = [];
+
+      const sentences = [
+        { id: 1, text: "Once upon a time, there was a brave knight." },
+        { id: 2, text: "The knight decided to go on a quest." },
+        { id: 3, text: "He traveled through forests and mountains." },
+        { id: 4, text: "Finally, he found the treasure he was looking for." },
+        { id: 5, text: "He returned home as a hero." },
+      ];
+
+      function startGame() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("puzzle1").classList.add("active");
+        startTimer();
+        loadSynonymPuzzle();
+        startTime = Date.now();
+      }
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+          document.getElementById("timer").textContent = `${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Time is up! Try again.");
+            resetGame();
+          }
+        }, 1000);
+      }
+
+      function loadSynonymPuzzle() {
+        const pair = synonymPairs[currentSynonymIndex];
+        document.getElementById("currentWord").textContent = pair.word;
+
+        const optionsContainer = document.getElementById("synonymOptions");
+        optionsContainer.innerHTML = "";
+
+        pair.options.forEach((option) => {
+          const div = document.createElement("div");
+          div.className = "option";
+          div.textContent = option;
+          div.onclick = () => checkSynonym(option, pair.correct);
+          optionsContainer.appendChild(div);
+        });
+      }
+
+      function checkSynonym(selected, correct) {
+        const feedback = document.getElementById("feedback1");
+
+        if (selected === correct) {
+          feedback.className = "feedback correct";
+          feedback.textContent = "✓ Correct!";
+
+          currentSynonymIndex++;
+
+          if (currentSynonymIndex < synonymPairs.length) {
+            setTimeout(() => {
+              feedback.style.display = "none";
+              loadSynonymPuzzle();
+            }, 1000);
+          } else {
+            setTimeout(() => {
+              nextPuzzle();
+            }, 1500);
+          }
+        } else {
+          feedback.className = "feedback incorrect";
+          feedback.textContent = "✗ Try again!";
+        }
+      }
+
+      function nextPuzzle() {
+        currentPuzzle++;
+        updateProgress();
+
+        document
+          .querySelectorAll(".puzzle")
+          .forEach((p) => p.classList.remove("active"));
+
+        if (currentPuzzle === 1) {
+          document.getElementById("puzzle2").classList.add("active");
+          loadSentencePuzzle();
+        } else if (currentPuzzle === 2) {
+          document.getElementById("puzzle3").classList.add("active");
+        } else if (currentPuzzle === 3) {
+          winGame();
+        }
+      }
+
+      function loadSentencePuzzle() {
+        const grid = document.getElementById("sentenceGrid");
+        grid.innerHTML = "";
+
+        const shuffled = [...sentences].sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((sentence) => {
+          const div = document.createElement("div");
+          div.className = "word-item";
+          div.textContent = sentence.text;
+          div.onclick = () => selectSentence(sentence, div);
+          div.dataset.id = sentence.id;
+          grid.appendChild(div);
+        });
+      }
+
+      function selectSentence(sentence, element) {
+        if (element.classList.contains("selected")) {
+          element.classList.remove("selected");
+          selectedSentences = selectedSentences.filter(
+            (s) => s.id !== sentence.id
+          );
+        } else {
+          element.classList.add("selected");
+          selectedSentences.push(sentence);
+        }
+
+        document.getElementById("selectedOrder").textContent = selectedSentences
+          .map((s, i) => `${i + 1}. ${s.text}`)
+          .join(" ");
+      }
+
+      function checkSentenceOrder() {
+        const feedback = document.getElementById("feedback2");
+        const correct = selectedSentences.every((s, i) => s.id === i + 1);
+
+        if (selectedSentences.length !== sentences.length) {
+          feedback.className = "feedback incorrect";
+          feedback.textContent = "✗ Please select all sentences!";
+          return;
+        }
+
+        if (correct) {
+          feedback.className = "feedback correct";
+          feedback.textContent = "✓ Perfect! The story makes sense now!";
+          setTimeout(() => nextPuzzle(), 2000);
+        } else {
+          feedback.className = "feedback incorrect";
+          feedback.textContent =
+            "✗ Not quite right. Think about the logical order of events!";
+        }
+      }
+
+      function resetSentences() {
+        selectedSentences = [];
+        document
+          .querySelectorAll(".word-item")
+          .forEach((el) => el.classList.remove("selected"));
+        document.getElementById("selectedOrder").textContent = "";
+        document.getElementById("feedback2").style.display = "none";
+      }
+
+      function checkBlanks() {
+        const answers = [
+          document.getElementById("blank1").value.trim().toLowerCase(),
+          document.getElementById("blank2").value.trim().toLowerCase(),
+          document.getElementById("blank3").value.trim().toLowerCase(),
+        ];
+
+        const correct = ["for", "were", "written"];
+        const feedback = document.getElementById("feedback3");
+
+        const allCorrect = answers.every((ans, i) => ans === correct[i]);
+
+        if (allCorrect) {
+          feedback.className = "feedback correct";
+          feedback.textContent = "✓ Excellent! You found the final clue!";
+          setTimeout(() => nextPuzzle(), 2000);
+        } else {
+          feedback.className = "feedback incorrect";
+          let hint = "✗ Not quite. Check: ";
+          answers.forEach((ans, i) => {
+            if (ans !== correct[i]) hint += `Question ${i + 1} `;
+          });
+          feedback.textContent = hint;
+        }
+      }
+
+      function updateProgress() {
+        const progress = (currentPuzzle / 3) * 100;
+        document.getElementById("progress").style.width = progress + "%";
+      }
+
+      function winGame() {
+        clearInterval(timerInterval);
+        const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = Math.floor(elapsedTime / 60);
+        const seconds = elapsedTime % 60;
+
+        document
+          .querySelectorAll(".puzzle")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("winScreen").classList.add("active");
+        document.getElementById("finalTime").textContent = `${minutes}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+
+        updateProgress();
+        document.getElementById("progress").style.width = "100%";
+      }
+
+      function resetGame() {
+        location.reload();
+      }
+    </script>
+  </body>
+</html>

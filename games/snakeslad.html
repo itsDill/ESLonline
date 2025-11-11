@@ -440,12 +440,12 @@
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
-        background: var(--bg-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         gap: 0.5rem;
+        padding: 1rem;
       }
 
       .board-option:hover {
@@ -460,11 +460,21 @@
       }
 
       .board-preview {
-        width: 80%;
-        height: 60%;
+        width: 100%;
+        height: 70%;
         border-radius: 10px;
         position: relative;
         overflow: hidden;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 2px;
+        padding: 8px;
+      }
+
+      .board-preview-cell {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
       }
 
       .board-label {
@@ -472,6 +482,22 @@
         text-align: center;
         color: var(--text-primary);
         font-size: 1.1rem;
+      }
+
+      .board-option[data-board="classic"] .board-preview {
+        background: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 100%);
+      }
+
+      .board-option[data-board="jungle"] .board-preview {
+        background: linear-gradient(135deg, #c8e6c9 0%, #81c784 100%);
+      }
+
+      .board-option[data-board="ocean"] .board-preview {
+        background: linear-gradient(135deg, #90caf9 0%, #42a5f5 100%);
+      }
+
+      .board-option[data-board="space"] .board-preview {
+        background: linear-gradient(135deg, #5c6bc0 0%, #3949ab 100%);
       }
 
       .player-selection {
@@ -489,7 +515,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3rem;
+        font-size: 3.5rem;
         background: var(--bg-primary);
         box-shadow: var(--card-shadow);
         position: relative;
@@ -523,7 +549,21 @@
         border-color: var(--secondary-color);
         box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.4);
         transform: scale(1.1);
+        animation: playerSelected 0.6s ease-out;
       }
+
+      @keyframes playerSelected {
+        0%, 100% { transform: scale(1.1) rotate(0deg); }
+        25% { transform: scale(1.15) rotate(-5deg); }
+        75% { transform: scale(1.15) rotate(5deg); }
+      }
+
+      .player-option[data-player="boy"] { background: linear-gradient(135deg, #4ade80, #86efac); }
+      .player-option[data-player="girl"] { background: linear-gradient(135deg, #f472b6, #f9a8d4); }
+      .player-option[data-player="cat"] { background: linear-gradient(135deg, #fbbf24, #fcd34d); }
+      .player-option[data-player="dog"] { background: linear-gradient(135deg, #fb7185, #fda4af); }
+      .player-option[data-player="robot"] { background: linear-gradient(135deg, #6366f1, #818cf8); }
+      .player-option[data-player="alien"] { background: linear-gradient(135deg, #34d399, #6ee7b7); }
 
       .content-selection {
         display: flex;
@@ -738,9 +778,10 @@
         height: 100%;
         position: relative;
         min-height: 500px;
-        background: var(--bg-secondary);
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         border-radius: 15px;
         overflow: hidden;
+        border: 3px solid var(--accent-color);
       }
 
       .board-grid {
@@ -754,6 +795,7 @@
         grid-template-rows: repeat(10, 1fr);
         gap: 2px;
         padding: 10px;
+        background: transparent;
       }
 
       .board-cell {
@@ -762,46 +804,177 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: var(--text-primary);
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
-        border: 2px solid transparent;
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid rgba(226, 232, 240, 0.8);
         min-height: var(--board-cell-size);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08),
+                    0 1px 2px rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(4px);
       }
 
       .board-cell:hover {
-        background: rgba(255, 107, 157, 0.1);
-        transform: scale(1.1);
+        background: rgba(255, 107, 157, 0.15);
+        transform: scale(1.08);
         z-index: 10;
+        border-color: var(--primary-color);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08),
+                    0 4px 8px rgba(255, 107, 157, 0.3);
       }
 
       .board-cell.snake-head {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
         color: white;
         animation: wiggle 2s ease-in-out infinite;
+        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        border-color: #dc2626;
+      }
+
+      .board-cell.snake-head::before {
+        content: '🐍';
+        position: absolute;
+        font-size: 1.5rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
       }
 
       .board-cell.snake-tail {
-        background: linear-gradient(135deg, #ff9999, #ffaaaa);
+        background: linear-gradient(135deg, #ff9999 0%, #ffaaaa 100%);
         color: var(--text-primary);
+        border-color: #fca5a5;
+        box-shadow: 0 1px 4px rgba(255, 107, 107, 0.2);
+      }
+
+      .board-cell.snake-tail::before {
+        content: '🎯';
+        position: absolute;
+        font-size: 1.2rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.6;
       }
 
       .board-cell.ladder-top {
-        background: linear-gradient(135deg, #4ecdc4, #96ceb4);
+        background: linear-gradient(135deg, #4ecdc4 0%, #96ceb4 100%);
         color: white;
         animation: climb 3s ease-in-out infinite;
+        box-shadow: 0 2px 8px rgba(78, 205, 196, 0.4);
+        border-color: #14b8a6;
+      }
+
+      .board-cell.ladder-top::before {
+        content: '🪜';
+        position: absolute;
+        font-size: 1.5rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
       }
 
       .board-cell.ladder-bottom {
-        background: linear-gradient(135deg, #96ceb4, #4ecdc4);
+        background: linear-gradient(135deg, #96ceb4 0%, #4ecdc4 100%);
         color: white;
+        border-color: #5eead4;
+        box-shadow: 0 1px 4px rgba(78, 205, 196, 0.2);
+      }
+
+      .board-cell.ladder-bottom::before {
+        content: '⬆️';
+        position: absolute;
+        font-size: 1.2rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.7;
       }
 
       .board-cell.special {
-        background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
         animation: sparkle 2s ease-in-out infinite;
+        border-color: #fbbf24;
+      }
+
+      .board-cell.start {
+        background: linear-gradient(145deg, #86efac 0%, #4ade80 100%);
+        color: white;
+        font-weight: 800;
+        font-size: 1rem;
+        border: 3px solid #22c55e;
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.6),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        animation: startPulse 2s ease-in-out infinite;
+      }
+
+      .board-cell.start::before {
+        content: '🏁';
+        position: absolute;
+        font-size: 1.8rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
+      @keyframes startPulse {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 4px 12px rgba(74, 222, 128, 0.6),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 6px 16px rgba(74, 222, 128, 0.8),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .board-cell.finish {
+        background: linear-gradient(145deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+        font-weight: 800;
+        font-size: 1rem;
+        border: 3px solid #d97706;
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        animation: finishGlow 2s ease-in-out infinite;
+      }
+
+      .board-cell.finish::before {
+        content: '🏆';
+        position: absolute;
+        font-size: 2rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        animation: trophySpin 3s linear infinite;
+      }
+
+      @keyframes trophySpin {
+        0%, 80%, 100% {
+          transform: translate(-50%, -50%) rotateY(0deg);
+        }
+        85%, 95% {
+          transform: translate(-50%, -50%) rotateY(180deg);
+        }
+      }
+
+      @keyframes finishGlow {
+        0%, 100% {
+          box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        50% {
+          box-shadow: 0 6px 20px rgba(251, 191, 36, 0.9),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
       }
 
       @keyframes wiggle {
@@ -845,36 +1018,77 @@
       }
 
       .snake-path {
-        background: var(--snake-color);
-        border-radius: 10px;
-        opacity: 0.7;
+        stroke: #dc2626;
+        stroke-width: 6;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.8;
+        filter: drop-shadow(0 2px 4px rgba(220, 38, 38, 0.3));
+        animation: snakeWiggle 3s ease-in-out infinite;
       }
 
       .ladder-path {
-        background: var(--ladder-color);
-        border-radius: 5px;
-        opacity: 0.8;
+        stroke: #14b8a6;
+        stroke-width: 5;
+        fill: none;
+        stroke-linecap: round;
+        opacity: 0.85;
+        filter: drop-shadow(0 2px 4px rgba(20, 184, 166, 0.3));
+      }
+
+      .ladder-rung {
+        stroke: #0d9488;
+        stroke-width: 3;
+        opacity: 0.9;
+      }
+
+      @keyframes snakeWiggle {
+        0%, 100% { 
+          stroke-width: 6;
+          opacity: 0.8;
+        }
+        50% { 
+          stroke-width: 7;
+          opacity: 0.9;
+        }
       }
 
       .player-piece {
         position: absolute;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         border: 3px solid white;
-        box-shadow: var(--card-shadow);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
+                    0 0 0 4px rgba(255, 255, 255, 0.3);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 20;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.8rem;
-        background: var(--bg-primary);
+        font-size: 2rem;
+        background: white;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
       }
 
       .player-piece.moving {
-        animation: bounce 0.8s ease-in-out;
+        animation: bounce 0.5s ease-in-out;
         z-index: 30;
+        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
+      }
+
+      .player-piece.climbing {
+        animation: climbUp 1s ease-in-out;
+        z-index: 30;
+        filter: drop-shadow(0 8px 12px rgba(52, 211, 153, 0.6));
+      }
+
+      .player-piece.sliding {
+        animation: slideDown 1s ease-in-out;
+        z-index: 30;
+        filter: drop-shadow(0 8px 12px rgba(239, 68, 68, 0.6));
       }
 
       @keyframes bounce {
@@ -890,6 +1104,36 @@
         }
         60% {
           transform: translateY(-5px) scale(1.1);
+        }
+      }
+
+      @keyframes climbUp {
+        0%, 100% {
+          transform: scale(1) rotate(0deg);
+        }
+        25% {
+          transform: scale(1.15) rotate(-5deg);
+        }
+        50% {
+          transform: scale(1.2) rotate(5deg);
+        }
+        75% {
+          transform: scale(1.15) rotate(-3deg);
+        }
+      }
+
+      @keyframes slideDown {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(0.8) rotate(180deg);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1) rotate(360deg);
+          opacity: 1;
         }
       }
 
@@ -1428,6 +1672,10 @@
           flex: 1;
           min-width: 250px;
         }
+
+        .board-cell {
+          font-size: 0.7rem;
+        }
       }
 
       @media (max-width: 768px) {
@@ -1445,6 +1693,10 @@
 
         .player-selection {
           grid-template-columns: repeat(3, 1fr);
+        }
+
+        .player-option {
+          font-size: 2.5rem;
         }
 
         .content-selection {
@@ -1470,6 +1722,21 @@
         .control-panel {
           min-width: auto;
         }
+
+        .board-cell {
+          font-size: 0.6rem;
+        }
+
+        .board-cell.snake-head::before,
+        .board-cell.ladder-top::before {
+          font-size: 1.2rem;
+        }
+
+        .player-piece {
+          width: 35px;
+          height: 35px;
+          font-size: 1.5rem;
+        }
       }
 
       @media (max-width: 480px) {
@@ -1484,6 +1751,21 @@
 
         .player-selection {
           grid-template-columns: repeat(2, 1fr);
+        }
+
+        .game-board {
+          min-height: 400px;
+        }
+
+        .board-cell {
+          font-size: 0.5rem;
+          border-width: 1px;
+        }
+
+        .player-piece {
+          width: 30px;
+          height: 30px;
+          font-size: 1.3rem;
         }
       }
 
@@ -2327,76 +2609,42 @@
       const boards = [
         {
           id: "classic",
-          name: "Classic Board",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f0f8ff"/><g stroke="%23333" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23333">Classic Board</text></svg>',
+          name: "🎲 Classic Board",
+          theme: "classic",
           snakes: { 91: 75, 87: 24, 93: 73, 95: 56, 88: 36 },
           ladders: { 4: 56, 12: 50, 14: 55, 22: 58, 41: 79, 54: 88 },
         },
         {
           id: "jungle",
-          name: "Jungle Adventure",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%2334d399"/><g stroke="%23059669" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23065f46">Jungle Board</text></svg>',
+          name: "🌴 Jungle Adventure",
+          theme: "jungle",
           snakes: { 89: 53, 90: 48, 76: 63, 95: 24, 92: 51 },
           ladders: { 8: 52, 6: 42, 21: 82, 28: 77, 36: 57, 71: 92 },
         },
         {
           id: "ocean",
-          name: "Ocean Quest",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%2360a5fa"/><g stroke="%232563eb" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%231e40af">Ocean Board</text></svg>',
+          name: "🌊 Ocean Quest",
+          theme: "ocean",
           snakes: { 83: 19, 90: 48, 76: 63, 98: 79, 85: 23 },
           ladders: { 1: 40, 9: 89, 16: 25, 51: 67, 65: 85, 68: 91 },
         },
         {
           id: "space",
-          name: "Space Explorer",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23312e81"/><g stroke="%236366f1" stroke-width="2" fill="none"><rect x="0" y="0" width="400" height="400"/></g><text x="200" y="200" text-anchor="middle" font-size="20" fill="%23c7d2fe">Space Board</text></svg>',
+          name: "🚀 Space Explorer",
+          theme: "space",
           snakes: { 97: 78, 92: 53, 83: 27, 69: 33, 64: 16 },
           ladders: { 3: 39, 10: 12, 27: 53, 40: 62, 43: 84, 74: 92 },
         },
       ];
 
-      // Player options
+      // Player options with emoji representations
       const players = [
-        {
-          id: "boy",
-          name: "Boy",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%234ade80"/><circle cx="50" cy="35" r="15" fill="%23fbbf24"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👦</text></svg>',
-        },
-        {
-          id: "girl",
-          name: "Girl",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f472b6"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👧</text></svg>',
-        },
-        {
-          id: "cat",
-          name: "Cat",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23fbbf24"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🐱</text></svg>',
-        },
-        {
-          id: "dog",
-          name: "Dog",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23fb7185"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🐶</text></svg>',
-        },
-        {
-          id: "robot",
-          name: "Robot",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%236366f1"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">🤖</text></svg>',
-        },
-        {
-          id: "alien",
-          name: "Alien",
-          image:
-            'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%2334d399"/><text x="50" y="60" text-anchor="middle" font-size="20" fill="white">👽</text></svg>',
-        },
+        { id: "boy", name: "Boy", emoji: "👦", color: "#4ade80" },
+        { id: "girl", name: "Girl", emoji: "👧", color: "#f472b6" },
+        { id: "cat", name: "Cat", emoji: "🐱", color: "#fbbf24" },
+        { id: "dog", name: "Dog", emoji: "🐶", color: "#fb7185" },
+        { id: "robot", name: "Robot", emoji: "🤖", color: "#6366f1" },
+        { id: "alien", name: "Alien", emoji: "👽", color: "#34d399" },
       ];
 
       // Question banks
@@ -2529,6 +2777,19 @@
         document.body.addEventListener("click", initAudio, { once: true });
         document.body.addEventListener("keydown", initAudio, { once: true });
 
+        // Reposition player piece on window resize
+        let resizeTimeout;
+        window.addEventListener("resize", function() {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(function() {
+            if (gameState.playerPosition > 0 && document.getElementById("gameScreen").classList.contains("active")) {
+              positionPlayerPiece(gameState.playerPosition);
+              // Redraw snakes and ladders to match new board size
+              drawSnakesAndLadders();
+            }
+          }, 100);
+        });
+
         // Keyboard navigation
         document.addEventListener("keydown", function (e) {
           // Space for dice roll
@@ -2597,7 +2858,6 @@
         boards.forEach((board) => {
           const boardOption = document.createElement("div");
           boardOption.className = "board-option";
-          boardOption.style.backgroundImage = `url("${board.image}")`;
           boardOption.dataset.board = board.id;
           boardOption.setAttribute("role", "radio");
           boardOption.setAttribute("aria-checked", "false");
@@ -2610,6 +2870,19 @@
               selectBoard(board.id);
             }
           };
+
+          // Create mini board preview
+          const preview = document.createElement("div");
+          preview.className = "board-preview";
+          
+          // Add mini cells to preview
+          for (let i = 0; i < 25; i++) {
+            const miniCell = document.createElement("div");
+            miniCell.className = "board-preview-cell";
+            preview.appendChild(miniCell);
+          }
+          
+          boardOption.appendChild(preview);
 
           const label = document.createElement("div");
           label.className = "board-label";
@@ -2624,8 +2897,8 @@
         players.forEach((player) => {
           const playerOption = document.createElement("div");
           playerOption.className = "player-option";
-          playerOption.style.backgroundImage = `url("${player.image}")`;
           playerOption.dataset.player = player.id;
+          playerOption.textContent = player.emoji;
           playerOption.setAttribute("role", "radio");
           playerOption.setAttribute("aria-checked", "false");
           playerOption.setAttribute("aria-label", player.name);
@@ -2715,8 +2988,13 @@
 
         // Setup game board
         setupGameBoard();
-        updatePlayerPosition();
-        updateGameStatus();
+        
+        // Position player piece after a brief delay to ensure board is fully rendered
+        setTimeout(() => {
+          updatePlayerPosition();
+          updateGameStatus();
+        }, 50);
+        
         startGameTimer();
 
         announceToScreenReader("Game started! Press Space to roll the dice.");
@@ -2731,18 +3009,24 @@
           (p) => p.id === gameState.selectedPlayer
         );
 
-        // Set board background
-        document.getElementById(
-          "gameBoard"
-        ).style.backgroundImage = `url("${selectedBoard.image}")`;
+        // Set board theme
+        const gameBoard = document.getElementById("gameBoard");
+        const themes = {
+          classic: "linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 100%)",
+          jungle: "linear-gradient(135deg, #c8e6c9 0%, #81c784 100%)",
+          ocean: "linear-gradient(135deg, #90caf9 0%, #42a5f5 100%)",
+          space: "linear-gradient(135deg, #5c6bc0 0%, #3949ab 100%)"
+        };
+        gameBoard.style.background = themes[selectedBoard.theme] || themes.classic;
 
         // Set player avatar
-        document.getElementById(
-          "playerAvatar"
-        ).style.backgroundImage = `url("${selectedPlayer.image}")`;
-        document.getElementById(
-          "playerPiece"
-        ).style.backgroundImage = `url("${selectedPlayer.image}")`;
+        const playerAvatar = document.getElementById("playerAvatar");
+        playerAvatar.textContent = selectedPlayer.emoji;
+        playerAvatar.style.background = selectedPlayer.color;
+        
+        const playerPiece = document.getElementById("playerPiece");
+        playerPiece.textContent = selectedPlayer.emoji;
+        playerPiece.style.background = selectedPlayer.color;
 
         // Set content type display
         document.getElementById("contentType").textContent =
@@ -2751,11 +3035,18 @@
 
         // Generate board grid
         generateBoardGrid();
+        
+        // Draw snakes and ladders
+        drawSnakesAndLadders();
       }
 
       function generateBoardGrid() {
         const boardGrid = document.getElementById("boardGrid");
         boardGrid.innerHTML = "";
+
+        const selectedBoard = boards.find(
+          (b) => b.id === gameState.selectedBoard
+        );
 
         for (let i = 100; i >= 1; i--) {
           const cell = document.createElement("div");
@@ -2763,15 +3054,146 @@
           cell.dataset.position = i;
           cell.id = `cell-${i}`;
 
-          // Add cell number for reference (can be styled to be invisible)
+          // Mark special cells
+          if (i === 1) {
+            cell.classList.add("start");
+          } else if (i === 100) {
+            cell.classList.add("finish");
+          } else if (selectedBoard.snakes[i]) {
+            cell.classList.add("snake-head");
+          } else if (Object.values(selectedBoard.snakes).includes(i)) {
+            cell.classList.add("snake-tail");
+          } else if (selectedBoard.ladders[i]) {
+            cell.classList.add("ladder-bottom");
+          } else if (Object.values(selectedBoard.ladders).includes(i)) {
+            cell.classList.add("ladder-top");
+          }
+
+          // Add cell number
           const cellNumber = document.createElement("span");
           cellNumber.textContent = i;
-          cellNumber.style.fontSize = "0.6rem";
-          cellNumber.style.opacity = "0.3";
+          cellNumber.style.fontSize = "0.65rem";
+          cellNumber.style.opacity = "0.5";
+          cellNumber.style.fontWeight = "700";
+          cellNumber.style.position = "absolute";
+          cellNumber.style.top = "2px";
+          cellNumber.style.left = "2px";
           cell.appendChild(cellNumber);
 
           boardGrid.appendChild(cell);
         }
+      }
+
+      function drawSnakesAndLadders() {
+        const selectedBoard = boards.find(
+          (b) => b.id === gameState.selectedBoard
+        );
+        const gameBoard = document.getElementById("gameBoard");
+        
+        // Remove existing SVG if any
+        const existingSvg = gameBoard.querySelector("svg.connections");
+        if (existingSvg) existingSvg.remove();
+
+        // Create SVG for drawing connections
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("connections");
+        svg.style.position = "absolute";
+        svg.style.top = "0";
+        svg.style.left = "0";
+        svg.style.width = "100%";
+        svg.style.height = "100%";
+        svg.style.pointerEvents = "none";
+        svg.style.zIndex = "5";
+
+        // Draw snakes
+        Object.entries(selectedBoard.snakes).forEach(([start, end]) => {
+          const path = createCurvedPath(parseInt(start), parseInt(end), "snake");
+          svg.appendChild(path);
+        });
+
+        // Draw ladders
+        Object.entries(selectedBoard.ladders).forEach(([start, end]) => {
+          const ladder = createLadder(parseInt(start), parseInt(end));
+          ladder.forEach(element => svg.appendChild(element));
+        });
+
+        gameBoard.appendChild(svg);
+      }
+
+      function getCellCenter(position) {
+        const cell = document.getElementById(`cell-${position}`);
+        if (!cell) return { x: 0, y: 0 };
+        
+        const boardRect = document.getElementById("gameBoard").getBoundingClientRect();
+        const cellRect = cell.getBoundingClientRect();
+        
+        return {
+          x: cellRect.left - boardRect.left + cellRect.width / 2,
+          y: cellRect.top - boardRect.top + cellRect.height / 2
+        };
+      }
+
+      function createCurvedPath(start, end, type) {
+        const startPos = getCellCenter(start);
+        const endPos = getCellCenter(end);
+        
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        
+        // Create a smooth curve
+        const midX = (startPos.x + endPos.x) / 2;
+        const midY = (startPos.y + endPos.y) / 2;
+        const curve = startPos.x < endPos.x ? -30 : 30;
+        
+        const d = `M ${startPos.x} ${startPos.y} Q ${midX + curve} ${midY} ${endPos.x} ${endPos.y}`;
+        
+        path.setAttribute("d", d);
+        path.classList.add(type === "snake" ? "snake-path" : "ladder-path");
+        
+        return path;
+      }
+
+      function createLadder(start, end) {
+        const elements = [];
+        const startPos = getCellCenter(start);
+        const endPos = getCellCenter(end);
+        
+        // Left rail
+        const leftRail = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        leftRail.setAttribute("x1", startPos.x - 8);
+        leftRail.setAttribute("y1", startPos.y);
+        leftRail.setAttribute("x2", endPos.x - 8);
+        leftRail.setAttribute("y2", endPos.y);
+        leftRail.classList.add("ladder-path");
+        elements.push(leftRail);
+        
+        // Right rail
+        const rightRail = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        rightRail.setAttribute("x1", startPos.x + 8);
+        rightRail.setAttribute("y1", startPos.y);
+        rightRail.setAttribute("x2", endPos.x + 8);
+        rightRail.setAttribute("y2", endPos.y);
+        rightRail.classList.add("ladder-path");
+        elements.push(rightRail);
+        
+        // Rungs
+        const distance = Math.sqrt(Math.pow(endPos.x - startPos.x, 2) + Math.pow(endPos.y - startPos.y, 2));
+        const numRungs = Math.max(3, Math.floor(distance / 30));
+        
+        for (let i = 1; i < numRungs; i++) {
+          const t = i / numRungs;
+          const x = startPos.x + (endPos.x - startPos.x) * t;
+          const y = startPos.y + (endPos.y - startPos.y) * t;
+          
+          const rung = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          rung.setAttribute("x1", x - 8);
+          rung.setAttribute("y1", y);
+          rung.setAttribute("x2", x + 8);
+          rung.setAttribute("y2", y);
+          rung.classList.add("ladder-rung");
+          elements.push(rung);
+        }
+        
+        return elements;
       }
 
       function rollDice() {
@@ -2831,35 +3253,44 @@
         piece.classList.add("moving");
 
         let current = from;
-        const interval = setInterval(() => {
-          current++;
-          positionPlayerPiece(current);
-
+        const stepDelay = 250; // Slightly slower for smoother movement
+        
+        const moveNext = () => {
           if (current >= to) {
-            clearInterval(interval);
             piece.classList.remove("moving");
             setTimeout(callback, 300);
+            return;
           }
-        }, 200);
+          
+          current++;
+          positionPlayerPiece(current);
+          
+          setTimeout(moveNext, stepDelay);
+        };
+        
+        moveNext();
       }
 
       function positionPlayerPiece(position) {
         const cell = document.getElementById(`cell-${position}`);
         const piece = document.getElementById("playerPiece");
+        
+        if (!cell || !piece) return;
 
-        if (cell) {
-          const rect = cell.getBoundingClientRect();
-          const boardRect = document
-            .getElementById("gameBoard")
-            .getBoundingClientRect();
+        const gameBoard = document.getElementById("gameBoard");
+        if (!gameBoard) return;
 
-          piece.style.left = `${
-            rect.left - boardRect.left + rect.width / 2 - 15
-          }px`;
-          piece.style.top = `${
-            rect.top - boardRect.top + rect.height / 2 - 15
-          }px`;
-        }
+        // Get positions relative to the game board (which is the parent of the piece)
+        const cellRect = cell.getBoundingClientRect();
+        const boardRect = gameBoard.getBoundingClientRect();
+
+        // Calculate center position relative to game board
+        // The piece has transform: translate(-50%, -50%) so we position at the center
+        const centerX = cellRect.left - boardRect.left + cellRect.width / 2;
+        const centerY = cellRect.top - boardRect.top + cellRect.height / 2;
+
+        piece.style.left = `${centerX}px`;
+        piece.style.top = `${centerY}px`;
       }
 
       function updatePlayerPosition() {
@@ -2877,6 +3308,12 @@
         document.getElementById("correctStreak").textContent =
           gameState.currentStreak;
 
+        // Update accuracy rate
+        const accuracy = gameState.moveCount > 0 
+          ? Math.round((gameState.correctAnswers / gameState.moveCount) * 100)
+          : 0;
+        document.getElementById("accuracyRate").textContent = `${accuracy}%`;
+
         // Update progress bar
         const progressBar = document.getElementById("progressFill");
         if (progressBar) {
@@ -2893,8 +3330,11 @@
           (b) => b.id === gameState.selectedBoard
         );
         const position = gameState.playerPosition;
+        const piece = document.getElementById("playerPiece");
 
         if (selectedBoard.snakes[position]) {
+          piece.classList.add("sliding");
+          setTimeout(() => piece.classList.remove("sliding"), 1000);
           playSound("snake");
           announceToScreenReader(
             `Snake bite! You slid down from ${position} to ${selectedBoard.snakes[position]}`
@@ -2909,6 +3349,8 @@
             }
           );
         } else if (selectedBoard.ladders[position]) {
+          piece.classList.add("climbing");
+          setTimeout(() => piece.classList.remove("climbing"), 1000);
           playSound("ladder");
           announceToScreenReader(
             `Ladder climb! You climbed up from ${position} to ${selectedBoard.ladders[position]}`
