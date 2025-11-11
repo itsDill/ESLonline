@@ -3,205 +3,1070 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project: To-Do List App - Coming Soon | ESL Fun Online</title>
+    <title>
+      Build a To-Do List App - JavaScript Project Tutorial | ESL Fun Online
+    </title>
     <meta
       name="description"
-      content="Learn to build a task management app! Step-by-step beginner project coming soon."
+      content="Learn to build a fully functional to-do list app with JavaScript! Add, edit, delete, and filter tasks. Includes localStorage persistence and complete source code."
+    />
+    <meta
+      name="keywords"
+      content="to-do list app, JavaScript project, task manager, localStorage tutorial, beginner coding project, web development, JavaScript arrays"
+    />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="Build a To-Do List App - JavaScript Project Tutorial"
+    />
+    <meta
+      property="og:description"
+      content="Complete tutorial to build a task management app with JavaScript. Includes working demo and full source code."
+    />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://eslfunonline.com/coding/projects/to-do-list.html"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Build a To-Do List App - JavaScript Tutorial"
+    />
+    <meta
+      name="twitter:description"
+      content="Learn to build a fully functional to-do list with JavaScript and localStorage."
+    />
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="icon" href="../../favicon.ico" sizes="any" />
+
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-9G9RD6BHLN");
+    </script>
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Build a To-Do List App - JavaScript Project Tutorial",
+        "description": "Complete tutorial to build a task management app with JavaScript, localStorage, and filtering.",
+        "author": {
+          "@type": "Organization",
+          "name": "ESL Fun Online"
+        },
+        "datePublished": "2025-01-15",
+        "proficiencyLevel": "Beginner"
+      }
+    </script>
+
     <style>
-      body {
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
+      :root {
+        --primary: #a8edea;
+        --secondary: #fed6e3;
+        --gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        --dark: #1e293b;
+        --gray: #64748b;
+        --light: #f1f5f9;
+        --white: #ffffff;
+        --success: #10b981;
+        --danger: #ef4444;
+      }
+
+      * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      .coming-soon-container {
-        max-width: 700px;
-        background: white;
-        border-radius: 24px;
-        padding: 4rem 3rem;
-        text-align: center;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
       }
 
-      .icon-wrapper {
-        width: 120px;
-        height: 120px;
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        border-radius: 50%;
+      /* Header */
+      header {
+        background: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        margin: 0 auto 2rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        font-family: "Poppins", sans-serif;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        align-items: center;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: var(--dark);
+        margin: 3px 0;
+        transition: 0.3s;
+      }
+
+      /* Hero */
+      .hero {
+        background: var(--gradient);
+        padding: 4rem 2rem;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-family: "Poppins", sans-serif;
         font-size: 3rem;
-        color: white;
-        animation: pulse 2s ease-in-out infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        color: #1f2937;
+        color: var(--white);
         margin-bottom: 1rem;
       }
 
-      .difficulty-badge {
+      .hero p {
+        font-size: 1.3rem;
+        color: var(--white);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .badge {
         display: inline-block;
         padding: 0.5rem 1.5rem;
-        background: #10b981;
-        color: white;
+        background: var(--success);
+        color: var(--white);
         border-radius: 50px;
         font-weight: 600;
         margin-bottom: 1rem;
       }
 
-      p {
-        font-size: 1.2rem;
-        color: #6b7280;
-        line-height: 1.7;
+      /* Main Content */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+      }
+
+      /* Demo Section */
+      .demo-section {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 3rem;
+      }
+
+      .demo-section h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      /* To-Do App Styles */
+      .todo-app {
+        max-width: 600px;
+        margin: 0 auto;
+        background: var(--light);
+        border-radius: 15px;
+        padding: 2rem;
+      }
+
+      .todo-header {
+        display: flex;
+        gap: 1rem;
         margin-bottom: 2rem;
       }
 
-      .back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
+      #taskInput {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: "Inter", sans-serif;
+      }
+
+      #taskInput:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      #addBtn {
         padding: 1rem 2rem;
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        color: #1f2937;
-        text-decoration: none;
-        border-radius: 50px;
+        background: var(--gradient);
+        color: var(--dark);
+        border: none;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(168, 237, 234, 0.4);
+        cursor: pointer;
+        transition: transform 0.2s;
       }
 
-      .back-btn:hover {
+      #addBtn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(168, 237, 234, 0.6);
       }
 
-      .features-list {
-        text-align: left;
+      .filters {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        justify-content: center;
+      }
+
+      .filter-btn {
+        padding: 0.5rem 1.5rem;
+        background: var(--white);
+        border: 2px solid #e2e8f0;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .filter-btn.active {
+        background: var(--gradient);
+        border-color: var(--primary);
+      }
+
+      .task-list {
+        list-style: none;
+      }
+
+      .task-item {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        animation: slideIn 0.3s;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .task-item.completed .task-text {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+
+      .task-checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .task-text {
+        flex: 1;
+        font-size: 1rem;
+      }
+
+      .task-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .edit-btn,
+      .delete-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+      }
+
+      .edit-btn {
+        background: #3b82f6;
+        color: var(--white);
+      }
+
+      .delete-btn {
+        background: var(--danger);
+        color: var(--white);
+      }
+
+      .edit-btn:hover,
+      .delete-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--gray);
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      /* Tutorial Sections */
+      .tutorial-section {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .tutorial-section h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: var(--dark);
+      }
+
+      .tutorial-section h3 {
+        font-size: 1.5rem;
+        margin: 2rem 0 1rem;
+        color: var(--dark);
+      }
+
+      .step {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--primary);
+      }
+
+      .step h4 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+      }
+
+      code {
+        background: var(--dark);
+        color: #10b981;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+      }
+
+      pre {
+        background: var(--dark);
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 10px;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
         margin: 2rem 0;
-        padding: 2rem;
-        background: #f9fafb;
-        border-radius: 16px;
       }
 
-      .features-list h3 {
-        color: #1f2937;
-        font-size: 1.3rem;
+      .feature-card {
+        background: var(--light);
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .feature-card i {
+        font-size: 2.5rem;
+        color: var(--primary);
         margin-bottom: 1rem;
       }
 
-      .features-list ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      .features-list li {
-        padding: 0.75rem 0;
-        color: #4b5563;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-
-      .features-list li i {
-        color: #a8edea;
+      .feature-card h4 {
         font-size: 1.2rem;
+        margin-bottom: 0.5rem;
       }
 
-      .project-meta {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin: 2rem 0;
-        flex-wrap: wrap;
+      ul {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+      li {
+        margin-bottom: 0.5rem;
       }
 
-      .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #6b7280;
-        font-weight: 500;
+      /* AdSense */
+      .ad-container {
+        margin: 3rem 0;
+        text-align: center;
+        min-height: 100px;
       }
 
-      .meta-item i {
-        color: #a8edea;
+      /* Mobile */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+        }
+        .nav-links {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: var(--white);
+          flex-direction: column;
+          padding: 2rem;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          display: none;
+        }
+        .nav-links.active {
+          display: flex;
+        }
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .hero p {
+          font-size: 1.1rem;
+        }
+        .todo-header {
+          flex-direction: column;
+        }
+        .filters {
+          flex-wrap: wrap;
+        }
+        .task-actions {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="coming-soon-container">
-      <div class="icon-wrapper">
-        <i class="fas fa-list-check"></i>
-      </div>
-      <span class="difficulty-badge">Beginner</span>
-      <h1>Project Coming Soon!</h1>
-      <p>
-        We're creating a comprehensive guide to build a fully functional to-do
-        list app!
-      </p>
-
-      <div class="project-meta">
-        <div class="meta-item">
-          <i class="fas fa-clock"></i>
-          <span>2-3 hours</span>
+    <!-- Header -->
+    <header>
+      <nav>
+        <div class="logo">ESL Fun Online</div>
+        <div class="hamburger" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-        <div class="meta-item">
-          <i class="fas fa-code"></i>
-          <span>HTML, CSS, JavaScript</span>
-        </div>
-      </div>
-
-      <div class="features-list">
-        <h3>What You'll Build:</h3>
-        <ul>
+        <ul class="nav-links" id="navLinks">
           <li>
-            <i class="fas fa-check-circle"></i> Add, edit, and delete tasks
-          </li>
-          <li><i class="fas fa-check-circle"></i> Mark tasks as complete</li>
-          <li>
-            <i class="fas fa-check-circle"></i> Save tasks to browser storage
+            <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
           </li>
           <li>
-            <i class="fas fa-check-circle"></i> Filter tasks (all, active,
-            completed)
+            <a href="../../lessons.html"><i class="fas fa-book"></i> Lessons</a>
           </li>
           <li>
-            <i class="fas fa-check-circle"></i> Learn about arrays and local
-            storage
+            <a href="../codingresources.html"
+              ><i class="fas fa-code"></i> Coding</a
+            >
+          </li>
+          <li>
+            <a href="../../contact.html"
+              ><i class="fas fa-envelope"></i> Contact</a
+            >
           </li>
         </ul>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <span class="badge">Beginner Project</span>
+      <h1>Build a To-Do List App</h1>
+      <p>
+        Learn to create a fully functional task management app with JavaScript,
+        localStorage, and filtering!
+      </p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Demo Section -->
+      <section class="demo-section">
+        <h2><i class="fas fa-list-check"></i> Try the To-Do List App</h2>
+        <div class="todo-app">
+          <div class="todo-header">
+            <input
+              type="text"
+              id="taskInput"
+              placeholder="Enter a new task..."
+            />
+            <button id="addBtn"><i class="fas fa-plus"></i> Add Task</button>
+          </div>
+
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">
+              Completed
+            </button>
+          </div>
+
+          <ul class="task-list" id="taskList">
+            <div class="empty-state">
+              <i class="fas fa-clipboard-list"></i>
+              <p>No tasks yet. Add your first task above!</p>
+            </div>
+          </ul>
+        </div>
+      </section>
+
+      <!-- AdSense -->
+      <div class="ad-container">
+        <ins
+          class="adsbygoogle"
+          style="display: block"
+          data-ad-client="ca-pub-2456627863532019"
+          data-ad-slot="AUTO"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
       </div>
 
-      <a href="../codingresources.html" class="back-btn">
-        <i class="fas fa-arrow-left"></i>
-        Back to Coding Resources
-      </a>
+      <!-- Features -->
+      <section class="tutorial-section">
+        <h2>What You'll Learn</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <i class="fas fa-plus-circle"></i>
+            <h4>Add Tasks</h4>
+            <p>Create new tasks dynamically</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-edit"></i>
+            <h4>Edit Tasks</h4>
+            <p>Update task text inline</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-trash-alt"></i>
+            <h4>Delete Tasks</h4>
+            <p>Remove completed tasks</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-check-circle"></i>
+            <h4>Mark Complete</h4>
+            <p>Toggle task completion</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-filter"></i>
+            <h4>Filter Tasks</h4>
+            <p>View all, active, or completed</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-save"></i>
+            <h4>Persistence</h4>
+            <p>Save tasks with localStorage</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tutorial -->
+      <section class="tutorial-section">
+        <h2>Step-by-Step Tutorial</h2>
+
+        <div class="step">
+          <h4>Step 1: HTML Structure</h4>
+          <p>
+            Create the input field, add button, filters, and task list
+            container:
+          </p>
+          <pre><code>&lt;div class="todo-app"&gt;
+  &lt;div class="todo-header"&gt;
+    &lt;input type="text" id="taskInput" placeholder="Enter task..." /&gt;
+    &lt;button id="addBtn"&gt;Add Task&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;div class="filters"&gt;
+    &lt;button class="filter-btn active" data-filter="all"&gt;All&lt;/button&gt;
+    &lt;button class="filter-btn" data-filter="active"&gt;Active&lt;/button&gt;
+    &lt;button class="filter-btn" data-filter="completed"&gt;Completed&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;ul class="task-list" id="taskList"&gt;&lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="step">
+          <h4>Step 2: Initialize JavaScript</h4>
+          <p>Set up the tasks array and load from localStorage:</p>
+          <pre><code>let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let currentFilter = 'all';
+
+const taskInput = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+const taskList = document.getElementById('taskList');
+
+// Load tasks on page load
+renderTasks();</code></pre>
+        </div>
+
+        <div class="step">
+          <h4>Step 3: Add Task Function</h4>
+          <p>Create function to add new tasks with unique IDs:</p>
+          <pre><code>function addTask() {
+    const taskText = taskInput.value.trim();
+    if (taskText === '') return;
+    
+    const task = {
+        id: Date.now(),
+        text: taskText,
+        completed: false
+    };
+    
+    tasks.push(task);
+    saveTasks();
+    renderTasks();
+    taskInput.value = '';
+}
+
+addBtn.addEventListener('click', addTask);
+taskInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addTask();
+});</code></pre>
+        </div>
+
+        <div class="step">
+          <h4>Step 4: Render Tasks Function</h4>
+          <p>Display tasks with filtering and event handlers:</p>
+          <pre><code>function renderTasks() {
+    const filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'active') return !task.completed;
+        if (currentFilter === 'completed') return task.completed;
+        return true;
+    });
+    
+    if (filteredTasks.length === 0) {
+        taskList.innerHTML = '&lt;div class="empty-state"&gt;No tasks!&lt;/div&gt;';
+        return;
+    }
+    
+    taskList.innerHTML = filteredTasks.map(task => `
+        &lt;li class="task-item ${task.completed ? 'completed' : ''}"&gt;
+            &lt;input type="checkbox" 
+                   class="task-checkbox" 
+                   ${task.completed ? 'checked' : ''} 
+                   onchange="toggleTask(${task.id})"&gt;
+            &lt;span class="task-text"&gt;${task.text}&lt;/span&gt;
+            &lt;div class="task-actions"&gt;
+                &lt;button class="edit-btn" onclick="editTask(${task.id})"&gt;Edit&lt;/button&gt;
+                &lt;button class="delete-btn" onclick="deleteTask(${task.id})"&gt;Delete&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/li&gt;
+    `).join('');
+}</code></pre>
+        </div>
+
+        <div class="step">
+          <h4>Step 5: Task Actions</h4>
+          <p>Implement toggle, edit, delete, and filter functions:</p>
+          <pre><code>function toggleTask(id) {
+    tasks = tasks.map(task => 
+        task.id === id ? { ...task, completed: !task.completed } : task
+    );
+    saveTasks();
+    renderTasks();
+}
+
+function editTask(id) {
+    const task = tasks.find(t => t.id === id);
+    const newText = prompt('Edit task:', task.text);
+    if (newText !== null && newText.trim() !== '') {
+        tasks = tasks.map(t => 
+            t.id === id ? { ...t, text: newText.trim() } : t
+        );
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function deleteTask(id) {
+    tasks = tasks.filter(task => task.id !== id);
+    saveTasks();
+    renderTasks();
+}
+
+function saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => 
+            b.classList.remove('active')
+        );
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderTasks();
+    });
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- Complete Code -->
+      <section class="tutorial-section">
+        <h2>Complete Source Code</h2>
+        <p>Copy and paste this complete code into a new HTML file:</p>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;To-Do List App&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f1f5f9; padding: 2rem; }
+        .todo-app { max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 15px; }
+        .todo-header { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        #taskInput { flex: 1; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; }
+        #addBtn { padding: 1rem 2rem; background: linear-gradient(135deg, #a8edea, #fed6e3); border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: center; }
+        .filter-btn { padding: 0.5rem 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 50px; cursor: pointer; }
+        .filter-btn.active { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .task-list { list-style: none; }
+        .task-item { background: #f1f5f9; padding: 1rem; border-radius: 10px; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; }
+        .task-item.completed .task-text { text-decoration: line-through; opacity: 0.6; }
+        .task-text { flex: 1; }
+        .task-actions { display: flex; gap: 0.5rem; }
+        .edit-btn, .delete-btn { padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; color: white; }
+        .edit-btn { background: #3b82f6; }
+        .delete-btn { background: #ef4444; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="todo-app"&gt;
+        &lt;h1 style="text-align:center; margin-bottom:2rem;"&gt;My To-Do List&lt;/h1&gt;
+        &lt;div class="todo-header"&gt;
+            &lt;input type="text" id="taskInput" placeholder="Enter a new task..." /&gt;
+            &lt;button id="addBtn"&gt;Add Task&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="filters"&gt;
+            &lt;button class="filter-btn active" data-filter="all"&gt;All&lt;/button&gt;
+            &lt;button class="filter-btn" data-filter="active"&gt;Active&lt;/button&gt;
+            &lt;button class="filter-btn" data-filter="completed"&gt;Completed&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;ul class="task-list" id="taskList"&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let currentFilter = 'all';
+        const taskInput = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText === '') return;
+            tasks.push({ id: Date.now(), text: taskText, completed: false });
+            saveTasks();
+            renderTasks();
+            taskInput.value = '';
+        }
+
+        function renderTasks() {
+            const filtered = tasks.filter(t => {
+                if (currentFilter === 'active') return !t.completed;
+                if (currentFilter === 'completed') return t.completed;
+                return true;
+            });
+            taskList.innerHTML = filtered.length === 0 ? '&lt;p style="text-align:center;padding:2rem;color:#64748b;"&gt;No tasks&lt;/p&gt;' :
+                filtered.map(t => `
+                    &lt;li class="task-item ${t.completed ? 'completed' : ''}"&gt;
+                        &lt;input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})"&gt;
+                        &lt;span class="task-text"&gt;${t.text}&lt;/span&gt;
+                        &lt;div class="task-actions"&gt;
+                            &lt;button class="edit-btn" onclick="editTask(${t.id})"&gt;Edit&lt;/button&gt;
+                            &lt;button class="delete-btn" onclick="deleteTask(${t.id})"&gt;Delete&lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/li&gt;
+                `).join('');
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+            saveTasks();
+            renderTasks();
+        }
+
+        function editTask(id) {
+            const task = tasks.find(t => t.id === id);
+            const newText = prompt('Edit task:', task.text);
+            if (newText && newText.trim()) {
+                tasks = tasks.map(t => t.id === id ? { ...t, text: newText.trim() } : t);
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderTasks();
+            });
+        });
+
+        renderTasks();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </section>
+
+      <!-- Enhancement Ideas -->
+      <section class="tutorial-section">
+        <h2>Enhancement Ideas</h2>
+        <ul>
+          <li>
+            <strong>Due Dates:</strong> Add date picker and sort by deadline
+          </li>
+          <li>
+            <strong>Priority Levels:</strong> Color-code tasks (high, medium,
+            low)
+          </li>
+          <li>
+            <strong>Categories:</strong> Group tasks by project or category
+          </li>
+          <li>
+            <strong>Drag and Drop:</strong> Reorder tasks with drag-and-drop
+          </li>
+          <li><strong>Search:</strong> Filter tasks by keyword search</li>
+          <li>
+            <strong>Dark Mode:</strong> Toggle between light and dark themes
+          </li>
+          <li><strong>Export:</strong> Download tasks as JSON or CSV</li>
+          <li>
+            <strong>Animations:</strong> Add smooth transitions and effects
+          </li>
+          <li>
+            <strong>Notifications:</strong> Browser notifications for due tasks
+          </li>
+          <li><strong>Subtasks:</strong> Create nested checklist items</li>
+        </ul>
+      </section>
+
+      <!-- AdSense -->
+      <div class="ad-container">
+        <ins
+          class="adsbygoogle"
+          style="display: block"
+          data-ad-client="ca-pub-2456627863532019"
+          data-ad-slot="AUTO"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
     </div>
+
+    <script>
+      // Mobile menu toggle
+      function toggleMenu() {
+        document.getElementById("navLinks").classList.toggle("active");
+      }
+
+      // To-Do List App
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      let currentFilter = "all";
+
+      const taskInput = document.getElementById("taskInput");
+      const addBtn = document.getElementById("addBtn");
+      const taskList = document.getElementById("taskList");
+
+      function addTask() {
+        const taskText = taskInput.value.trim();
+        if (taskText === "") return;
+
+        const task = {
+          id: Date.now(),
+          text: taskText,
+          completed: false,
+        };
+
+        tasks.push(task);
+        saveTasks();
+        renderTasks();
+        taskInput.value = "";
+      }
+
+      function renderTasks() {
+        const filteredTasks = tasks.filter((task) => {
+          if (currentFilter === "active") return !task.completed;
+          if (currentFilter === "completed") return task.completed;
+          return true;
+        });
+
+        if (filteredTasks.length === 0) {
+          taskList.innerHTML =
+            '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No tasks yet. Add your first task above!</p></div>';
+          return;
+        }
+
+        taskList.innerHTML = filteredTasks
+          .map(
+            (task) => `
+                <li class="task-item ${task.completed ? "completed" : ""}">
+                    <input type="checkbox" 
+                           class="task-checkbox" 
+                           ${task.completed ? "checked" : ""} 
+                           onchange="toggleTask(${task.id})">
+                    <span class="task-text">${task.text}</span>
+                    <div class="task-actions">
+                        <button class="edit-btn" onclick="editTask(${
+                          task.id
+                        })"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-btn" onclick="deleteTask(${
+                          task.id
+                        })"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </li>
+            `
+          )
+          .join("");
+      }
+
+      function toggleTask(id) {
+        tasks = tasks.map((task) =>
+          task.id === id ? { ...task, completed: !task.completed } : task
+        );
+        saveTasks();
+        renderTasks();
+      }
+
+      function editTask(id) {
+        const task = tasks.find((t) => t.id === id);
+        const newText = prompt("Edit task:", task.text);
+        if (newText !== null && newText.trim() !== "") {
+          tasks = tasks.map((t) =>
+            t.id === id ? { ...t, text: newText.trim() } : t
+          );
+          saveTasks();
+          renderTasks();
+        }
+      }
+
+      function deleteTask(id) {
+        if (confirm("Delete this task?")) {
+          tasks = tasks.filter((task) => task.id !== id);
+          saveTasks();
+          renderTasks();
+        }
+      }
+
+      function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      addBtn.addEventListener("click", addTask);
+      taskInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") addTask();
+      });
+
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.dataset.filter;
+          renderTasks();
+        });
+      });
+
+      renderTasks();
+    </script>
   </body>
 </html>

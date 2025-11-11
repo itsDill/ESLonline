@@ -1,18 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-9G9RD6BHLN");
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project: Number Guessing Game - Coming Soon | ESL Fun Online</title>
-    <meta
-      name="description"
-      content="Learn to build an interactive guessing game! Step-by-step beginner project coming soon."
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="icon" href="../../favicon.ico" sizes="any" />
+    <meta name="description" content="Learn to build a number guessing game with JavaScript. Complete tutorial with source code, hints, and score tracking for beginners." />
+    <meta name="keywords" content="guessing game, JavaScript game, coding tutorial, beginner project, web game, learn JavaScript" />
+    <title>Build a Number Guessing Game | ESL Fun Online</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/Online.png" />
+    <link rel="icon" type="image/png" href="../../images/Online.png" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/mobile-optimized.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #4facfe;
+        --primary-dark: #00b4d8;
+        --gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: "Inter", sans-serif; line-height: 1.6; color: var(--text-primary); }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+      .hero { margin-top: 80px; padding: 4rem 0; text-align: center; background: var(--gradient); color: white; }
+      .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 0.5rem; font-family: "Poppins", sans-serif; }
+      .hero .badge { display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 20px; margin-bottom: 1rem; font-weight: 600; }
+      .hero p { font-size: 1.1rem; opacity: 0.95; }
+      .section { padding: 4rem 0; }
+      .section-alt { background: var(--bg-secondary); }
+      .section-title { font-family: "Poppins", sans-serif; font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+      .game-container { background: white; border-radius: 20px; padding: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; margin: 2rem auto; text-align: center; }
+      .game-title { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; font-family: "Poppins", sans-serif; }
+      .game-info { display: flex; justify-content: space-around; margin: 1.5rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 12px; }
+      .info-item { text-align: center; }
+      .info-label { font-size: 0.9rem; color: var(--text-secondary); }
+      .info-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+      .guess-input { width: 100%; padding: 1rem; font-size: 1.5rem; border: 3px solid var(--primary); border-radius: 12px; text-align: center; margin: 1rem 0; outline: none; }
+      .guess-input:focus { box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2); }
+      .game-btn { background: var(--gradient); color: white; border: none; padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s; margin: 0.5rem; }
+      .game-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4); }
+      .game-btn.secondary { background: #6b7280; }
+      .message { margin: 1.5rem 0; padding: 1rem; border-radius: 12px; font-size: 1.1rem; font-weight: 600; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+      .message.success { background: #d1fae5; color: #065f46; }
+      .message.error { background: #fee2e2; color: #991b1b; }
+      .message.info { background: #dbeafe; color: #1e40af; }
+      .message.warning { background: #fef3c7; color: #92400e; }
+      .code-block { background: #1e293b; color: #e2e8f0; padding: 1.5rem; border-radius: 12px; overflow-x: auto; margin: 1.5rem 0; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+      .step { background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 4px solid var(--primary); }
+      .step h3 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+      .step-number { width: 35px; height: 35px; background: var(--gradient); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+      .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 2rem; }
+      .meta { display: flex; gap: 2rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+      .meta-item { display: flex; align-items: center; gap: 0.5rem; opacity: 0.9; }
+      ul.features { list-style: none; padding: 0; }
+      ul.features li { padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.75rem; }
+      ul.features li i { color: var(--primary); margin-top: 0.3rem; }
+      @media (max-width: 768px) {
+        .hero { margin-top: 70px; padding: 3rem 0; }
+        .section { padding: 3rem 0; }
+        .game-container { padding: 2rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../../index.html" class="logo-container">
+            <img src="../../images/logo-optimized.png" alt="ESL Fun Online Logo" class="logo-image" />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item"><a href="../../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"><i class="fas fa-code"></i> Coding <i class="fas fa-chevron-down"></i></a>
+              <div class="dropdown">
+                <a href="../computerbasics.html" class="dropdown-item"><i class="fas fa-desktop"></i> Computer Basics</a>
+                <a href="../codingresources.html" class="dropdown-item"><i class="fas fa-code"></i> Coding Resources</a>
+              </div>
+            </li>
+          </ul>
+          <div class="controls">
+            <button class="control-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+            <a class="control-btn admin-toggle" href="../../login.html"><i class="fas fa-user-shield"></i></a>
+          </div>
+          <button class="control-btn mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></button>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="badge"><i class="fas fa-signal"></i> Beginner Level</div>
+        <h1><i class="fas fa-dice"></i> Number Guessing Game</h1>
+        <p>Build an interactive game with JavaScript</p>
+        <div class="meta">
+          <div class="meta-item"><i class="fas fa-clock"></i> 1-2 hours</div>
+          <div class="meta-item"><i class="fas fa-code"></i> HTML, CSS, JavaScript</div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <a href="../codingresources.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Coding Resources</a>
+          
+          <h2 class="section-title" style="text-align: center;">Play the Game</h2>
+          <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Try the game you'll build in this tutorial</p>
+
+          <div class="game-container">
+            <h2 class="game-title">🎲 Guess the Number!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">I'm thinking of a number between 1 and 100</p>
+            
+            <div class="game-info">
+              <div class="info-item">
+                <div class="info-label">Attempts</div>
+                <div class="info-value" id="attempts">0</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">High Score</div>
+                <div class="info-value" id="highScore">-</div>
+              </div>
+            </div>
+
+            <input type="number" class="guess-input" id="guessInput" placeholder="Enter your guess" min="1" max="100" />
+            
+            <div>
+              <button class="game-btn" onclick="checkGuess()">Submit Guess</button>
+              <button class="game-btn secondary" onclick="resetGame()">New Game</button>
+            </div>
+
+            <div class="message info" id="message">Make your first guess!</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container">
+          <h2 class="section-title">What You'll Learn</h2>
+          <ul class="features" style="max-width: 600px; margin: 2rem auto;">
+            <li><i class="fas fa-check-circle"></i> Generate random numbers with Math.random()</li>
+            <li><i class="fas fa-check-circle"></i> Handle user input and validation</li>
+            <li><i class="fas fa-check-circle"></i> Use conditional statements (if/else)</li>
+            <li><i class="fas fa-check-circle"></i> Update the DOM dynamically</li>
+            <li><i class="fas fa-check-circle"></i> Track game state with variables</li>
+            <li><i class="fas fa-check-circle"></i> Implement a scoring system</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Step-by-Step Tutorial</h2>
+
+          <div class="step">
+            <h3><span class="step-number">1</span> Create the HTML Structure</h3>
+            <p>Build the game interface with an input field, buttons, and display areas.</p>
+            <div class="code-block">&lt;div class="game-container"&gt;
+  &lt;h2&gt;Guess the Number!&lt;/h2&gt;
+  &lt;p&gt;I'm thinking of a number between 1 and 100&lt;/p&gt;
+  
+  &lt;div class="game-info"&gt;
+    &lt;div&gt;Attempts: &lt;span id="attempts"&gt;0&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;High Score: &lt;span id="highScore"&gt;-&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;input type="number" id="guessInput" placeholder="Enter guess" /&gt;
+  &lt;button onclick="checkGuess()"&gt;Submit&lt;/button&gt;
+  &lt;button onclick="resetGame()"&gt;New Game&lt;/button&gt;
+  
+  &lt;div id="message"&gt;Make your first guess!&lt;/div&gt;
+&lt;/div&gt;</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">2</span> Initialize Game Variables</h3>
+            <p>Set up variables to track the secret number, attempts, and high score.</p>
+            <div class="code-block">let secretNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+let highScore = localStorage.getItem('highScore') || '-';
+
+// Update high score display
+document.getElementById('highScore').textContent = highScore;</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">3</span> Create the Check Guess Function</h3>
+            <p>Write logic to compare user's guess with the secret number.</p>
+            <div class="code-block">function checkGuess() {
+  const guess = parseInt(document.getElementById('guessInput').value);
+  const messageEl = document.getElementById('message');
+  
+  // Validate input
+  if (!guess || guess < 1 || guess > 100) {
+    messageEl.textContent = '⚠️ Please enter a number between 1 and 100';
+    messageEl.className = 'message warning';
+    return;
+  }
+  
+  attempts++;
+  document.getElementById('attempts').textContent = attempts;
+  
+  // Check if correct
+  if (guess === secretNumber) {
+    messageEl.textContent = `🎉 Correct! You got it in ${attempts} attempts!`;
+    messageEl.className = 'message success';
+    updateHighScore();
+  } else if (guess < secretNumber) {
+    messageEl.textContent = '📈 Too low! Try a higher number';
+    messageEl.className = 'message info';
+  } else {
+    messageEl.textContent = '📉 Too high! Try a lower number';
+    messageEl.className = 'message error';
+  }
+  
+  // Clear input
+  document.getElementById('guessInput').value = '';
+}</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">4</span> Implement High Score Tracking</h3>
+            <p>Save and update the best score using localStorage.</p>
+            <div class="code-block">function updateHighScore() {
+  const currentHighScore = localStorage.getItem('highScore');
+  
+  if (!currentHighScore || attempts < parseInt(currentHighScore)) {
+    localStorage.setItem('highScore', attempts);
+    document.getElementById('highScore').textContent = attempts;
+  }
+}</div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">5</span> Add Reset Game Function</h3>
+            <p>Allow players to start a new game with a new random number.</p>
+            <div class="code-block">function resetGame() {
+  secretNumber = Math.floor(Math.random() * 100) + 1;
+  attempts = 0;
+  
+  document.getElementById('attempts').textContent = '0';
+  document.getElementById('guessInput').value = '';
+  
+  const messageEl = document.getElementById('message');
+  messageEl.textContent = 'New game started! Make your first guess.';
+  messageEl.className = 'message info';
+}</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container" style="margin: 3rem auto; text-align: center;">
+        <ins class="adsbygoogle" style="display: block" data-ad-client="ca-pub-2456627863532019" data-ad-slot="AUTO" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <section class="section section-alt">
+        <div class="container">
+          <h2 class="section-title">Complete Source Code</h2>
+          <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Full working code - copy and paste to create your game</p>
+          
+          <div class="code-block" style="max-height: 500px; overflow-y: auto;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Number Guessing Game&lt;/title&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .game-container {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 { color: #4facfe; font-size: 2rem; margin-bottom: 1rem; }
+    .game-info {
+      display: flex;
+      justify-content: space-around;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 12px;
+    }
+    .info-value { font-size: 1.8rem; font-weight: 700; color: #4facfe; }
+    input {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.5rem;
+      border: 3px solid #4facfe;
+      border-radius: 12px;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    button {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+    button:hover { opacity: 0.9; }
+    .message {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .success { background: #d1fae5; color: #065f46; }
+    .error { background: #fee2e2; color: #991b1b; }
+    .info { background: #dbeafe; color: #1e40af; }
+    .warning { background: #fef3c7; color: #92400e; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="game-container"&gt;
+    &lt;h2&gt;🎲 Guess the Number!&lt;/h2&gt;
+    &lt;p&gt;I'm thinking of a number between 1 and 100&lt;/p&gt;
+    
+    &lt;div class="game-info"&gt;
+      &lt;div&gt;&lt;div&gt;Attempts&lt;/div&gt;&lt;div class="info-value" id="attempts"&gt;0&lt;/div&gt;&lt;/div&gt;
+      &lt;div&gt;&lt;div&gt;High Score&lt;/div&gt;&lt;div class="info-value" id="highScore"&gt;-&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100" /&gt;
+    &lt;div&gt;
+      &lt;button onclick="checkGuess()"&gt;Submit Guess&lt;/button&gt;
+      &lt;button onclick="resetGame()"&gt;New Game&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="message info" id="message"&gt;Make your first guess!&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let highScore = localStorage.getItem('highScore') || '-';
+    document.getElementById('highScore').textContent = highScore;
+
+    function checkGuess() {
+      const guess = parseInt(document.getElementById('guessInput').value);
+      const messageEl = document.getElementById('message');
+      
+      if (!guess || guess &lt; 1 || guess &gt; 100) {
+        messageEl.textContent = '⚠️ Please enter a number between 1 and 100';
+        messageEl.className = 'message warning';
+        return;
+      }
+      
+      attempts++;
+      document.getElementById('attempts').textContent = attempts;
+      
+      if (guess === secretNumber) {
+        messageEl.textContent = `🎉 Correct! You got it in ${attempts} attempts!`;
+        messageEl.className = 'message success';
+        updateHighScore();
+      } else if (guess &lt; secretNumber) {
+        messageEl.textContent = '📈 Too low! Try a higher number';
+        messageEl.className = 'message info';
+      } else {
+        messageEl.textContent = '📉 Too high! Try a lower number';
+        messageEl.className = 'message error';
+      }
+      
+      document.getElementById('guessInput').value = '';
+    }
+
+    function updateHighScore() {
+      const currentHighScore = localStorage.getItem('highScore');
+      if (!currentHighScore || attempts &lt; parseInt(currentHighScore)) {
+        localStorage.setItem('highScore', attempts);
+        document.getElementById('highScore').textContent = attempts;
+      }
+    }
+
+    function resetGame() {
+      secretNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      document.getElementById('attempts').textContent = '0';
+      document.getElementById('guessInput').value = '';
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = 'New game started! Make your first guess.';
+      messageEl.className = 'message info';
+    }
+
+    // Allow Enter key to submit
+    document.getElementById('guessInput').addEventListener('keypress', (e) =&gt; {
+      if (e.key === 'Enter') checkGuess();
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Enhance Your Game</h2>
+          <ul class="features" style="max-width: 600px; margin: 2rem auto;">
+            <li><i class="fas fa-star"></i> Add difficulty levels (easy: 1-50, hard: 1-200)</li>
+            <li><i class="fas fa-star"></i> Display number of guesses remaining</li>
+            <li><i class="fas fa-star"></i> Add sound effects for wins and losses</li>
+            <li><i class="fas fa-star"></i> Show hint after 5 wrong guesses</li>
+            <li><i class="fas fa-star"></i> Create a guess history list</li>
+            <li><i class="fas fa-star"></i> Add animations and transitions</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer style="background: var(--text-primary); color: white; padding: 3rem 0; margin-top: 4rem;">
+      <div class="container">
+        <div style="text-align: center;">
+          <h3 style="margin-bottom: 1rem;">ESL Fun Online</h3>
+          <p style="color: #d1d5db;">© 2025 ESL Fun Online. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../js/navigation.js"></script>
+    <script>
+      // Game logic
+      let secretNumber = Math.floor(Math.random() * 100) + 1;
+      let attempts = 0;
+      let highScore = localStorage.getItem('highScore') || '-';
+      document.getElementById('highScore').textContent = highScore;
+
+      function checkGuess() {
+        const guess = parseInt(document.getElementById('guessInput').value);
+        const messageEl = document.getElementById('message');
+        
+        if (!guess || guess < 1 || guess > 100) {
+          messageEl.textContent = '⚠️ Please enter a number between 1 and 100';
+          messageEl.className = 'message warning';
+          return;
+        }
+        
+        attempts++;
+        document.getElementById('attempts').textContent = attempts;
+        
+        if (guess === secretNumber) {
+          messageEl.textContent = `🎉 Correct! You got it in ${attempts} attempts!`;
+          messageEl.className = 'message success';
+          updateHighScore();
+        } else if (guess < secretNumber) {
+          messageEl.textContent = '📈 Too low! Try a higher number';
+          messageEl.className = 'message info';
+        } else {
+          messageEl.textContent = '📉 Too high! Try a lower number';
+          messageEl.className = 'message error';
+        }
+        
+        document.getElementById('guessInput').value = '';
+      }
+
+      function updateHighScore() {
+        const currentHighScore = localStorage.getItem('highScore');
+        if (!currentHighScore || attempts < parseInt(currentHighScore)) {
+          localStorage.setItem('highScore', attempts);
+          document.getElementById('highScore').textContent = attempts;
+        }
+      }
+
+      function resetGame() {
+        secretNumber = Math.floor(Math.random() * 100) + 1;
+        attempts = 0;
+        document.getElementById('attempts').textContent = '0';
+        document.getElementById('guessInput').value = '';
+        const messageEl = document.getElementById('message');
+        messageEl.textContent = 'New game started! Make your first guess.';
+        messageEl.className = 'message info';
+      }
+
+      document.getElementById('guessInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkGuess();
+      });
+
+      // Mobile menu
+      (function () {
+        const mobileToggle = document.getElementById("mobileToggle");
+        const navLinks = document.getElementById("navLinks");
+        if (!mobileToggle || !navLinks) return;
+        mobileToggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          navLinks.classList.toggle("active");
+          document.body.style.overflow = navLinks.classList.contains("active") ? "hidden" : "";
+        });
+      })();
+    </script>
+  </body>
+</html>
     <style>
       body {
         font-family: "Poppins", sans-serif;
