@@ -1,26 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: white; height: 80px; }
-.nav-item { position: relative; display: inline-block; padding: 20px; }
-.dropdown { position: absolute; top: 100%; left: 0; background: white; border: 1px solid black; z-index: 10001; min-width: 200px; display: none; }
-.nav-item:hover .dropdown { display: block; }
-.hero { position: relative; margin-top: 80px; height: 400px; background: blue; }
-.hero img { position: absolute; width: 100%; height: 100%; z-index: 0; }
-</style>
-    <link rel="stylesheet" href="css/mobile-optimized.css" />
-
-<body>
-    <!-- Scroll Progress Indicator -->
+#!/usr/bin/env python3
+"""
+Script to update headers across all HTML files in the ESL Online website
+to match the index.html header structure with proper mobile menu functionality.
+"""
+
+import os
+import re
+from pathlib import Path
+
+# Base directory
+BASE_DIR = Path("/Users/dillchalisas/ESLonline")
+
+# Files to skip (backups, templates, etc.)
+SKIP_PATTERNS = [
+    'mobile-menu-fix-backups',
+    'SECURITY_TEMPLATE.html',
+    'debug-theme.html',
+    'seo-fix-script.html',
+    'idioms-grid-section.html',
+    'idioms-compact.html',
+    'header-template.html',
+    'ad-snippets.html',
+    '-old.html',
+    'performance-optimization.html',
+    'brand-monitoring-dashboard.html'
+]
+
+def should_skip_file(file_path):
+    """Check if file should be skipped"""
+    file_str = str(file_path)
+    return any(pattern in file_str for pattern in SKIP_PATTERNS)
+
+def get_relative_path(from_file):
+    """Get relative path prefix based on file location"""
+    rel_path = os.path.relpath(BASE_DIR, from_file.parent)
+    if rel_path == '.':
+        return ''
+    return rel_path + '/'
+
+def get_header_html(prefix=''):
+    """Generate header HTML with proper path prefix"""
+    return f'''    <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
     <!-- Header & Navigation -->
     <header>
       <div class="container">
         <nav class="navbar">
-          <a href="index.html" class="logo-container">
+          <a href="{prefix}index.html" class="logo-container">
             <img
-              src="images/1.png"
+              src="{prefix}images/1.png"
               alt="ESL Fun Online Logo"
               class="logo-image"
               width="40"
@@ -36,7 +64,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
             aria-label="Main navigation"
           >
             <li class="nav-item" role="none">
-              <a href="index.html" class="nav-link" role="menuitem">
+              <a href="{prefix}index.html" class="nav-link" role="menuitem">
                 <i class="fas fa-home"></i>
                 Home
               </a>
@@ -54,27 +82,27 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
                 <i class="fas fa-chevron-down"></i>
               </a>
               <div class="dropdown" role="menu" aria-label="English submenu">
-                <a href="english/grammar.html" class="dropdown-item">
+                <a href="{prefix}english/grammar.html" class="dropdown-item">
                   <i class="fas fa-spell-check"></i>
                   Grammar Guides
                 </a>
-                <a href="english/vocabguide.html" class="dropdown-item">
+                <a href="{prefix}english/vocabguide.html" class="dropdown-item">
                   <i class="fas fa-book-open"></i>
                   Vocabulary Building
                 </a>
-                <a href="english/worksheets.html" class="dropdown-item">
+                <a href="{prefix}english/worksheets.html" class="dropdown-item">
                   <i class="fas fa-file-alt"></i>
                   Worksheets
                 </a>
-                <a href="english/writingf.html" class="dropdown-item">
+                <a href="{prefix}english/writingf.html" class="dropdown-item">
                   <i class="fas fa-pen"></i>
                   Writing for Success
                 </a>
-                <a href="english/business.html" class="dropdown-item">
+                <a href="{prefix}english/business.html" class="dropdown-item">
                   <i class="fas fa-briefcase"></i>
                   Business English
                 </a>
-                <a href="english/test.html" class="dropdown-item">
+                <a href="{prefix}english/test.html" class="dropdown-item">
                   <i class="fas fa-graduation-cap"></i>
                   Test Preparation
                 </a>
@@ -87,15 +115,15 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
                 <i class="fas fa-chevron-down"></i>
               </a>
               <div class="dropdown">
-                <a href="coding/computerbasics.html" class="dropdown-item">
+                <a href="{prefix}coding/computerbasics.html" class="dropdown-item">
                   <i class="fas fa-desktop"></i>
                   Computer Basics
                 </a>
-                <a href="coding/ai.html" class="dropdown-item">
+                <a href="{prefix}coding/ai.html" class="dropdown-item">
                   <i class="fas fa-robot"></i>
                   AI Basics
                 </a>
-                <a href="coding/codingresources.html" class="dropdown-item">
+                <a href="{prefix}coding/codingresources.html" class="dropdown-item">
                   <i class="fas fa-code"></i>
                   Coding Basics
                 </a>
@@ -103,19 +131,19 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
             </li>
 
             <li class="nav-item">
-              <a href="games/games.html" class="nav-link">
+              <a href="{prefix}games/games.html" class="nav-link">
                 <i class="fas fa-dice"></i>
                 Games
               </a>
             </li>
             <li class="nav-item">
-              <a href="tools/tools.html" class="nav-link">
+              <a href="{prefix}tools/tools.html" class="nav-link">
                 <i class="fas fa-tools"></i>
                 Toolkit
               </a>
             </li>
             <li class="nav-item">
-              <a href="blog/blog.html" class="nav-link">
+              <a href="{prefix}blog/blog.html" class="nav-link">
                 <i class="fas fa-book-open"></i>
                 Blog
               </a>
@@ -134,7 +162,7 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
               class="control-btn admin-toggle"
               id="adminToggle"
               aria-label="Admin"
-              href="login.html"
+              href="{prefix}login.html"
             >
               <i class="fas fa-user-shield"></i>
             </a>
@@ -148,7 +176,11 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
           </button>
         </nav>
       </div>
-    </header>
+    </header>'''
+
+def get_mobile_menu_script():
+    """Get the complete mobile menu script"""
+    return '''
     <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
     <script>
       (function () {
@@ -417,9 +449,82 @@ header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background:
           -webkit-user-select: none;
         }
       }
-    </style>
-<div class="hero">
-  <img src="images/hero.webp" alt="Hero">
-</div>
-</body>
-</html>
+    </style>'''
+
+def update_header_in_file(file_path):
+    """Update header in a single HTML file"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Calculate relative path prefix
+        prefix = get_relative_path(file_path)
+        
+        # Pattern to match header section (from <header> to </header>)
+        header_pattern = r'<header>.*?</header>'
+        
+        # Pattern to match mobile menu script if it exists
+        mobile_script_pattern = r'<!--\s*Immediate Mobile Menu Script.*?</style>'
+        
+        # Get new header and script
+        new_header = get_header_html(prefix)
+        new_script = get_mobile_menu_script()
+        
+        # Replace header
+        if re.search(header_pattern, content, re.DOTALL):
+            content = re.sub(header_pattern, new_header, content, flags=re.DOTALL, count=1)
+            print(f"✓ Updated header in: {file_path.relative_to(BASE_DIR)}")
+        else:
+            print(f"✗ No header found in: {file_path.relative_to(BASE_DIR)}")
+            return False
+        
+        # Replace or add mobile menu script
+        if re.search(mobile_script_pattern, content, re.DOTALL):
+            content = re.sub(mobile_script_pattern, new_script, content, flags=re.DOTALL, count=1)
+            print(f"  ↳ Updated mobile menu script")
+        else:
+            # Try to add after header
+            content = content.replace('</header>', f'</header>{new_script}', 1)
+            print(f"  ↳ Added mobile menu script")
+        
+        # Write updated content
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        return True
+        
+    except Exception as e:
+        print(f"✗ Error updating {file_path.relative_to(BASE_DIR)}: {e}")
+        return False
+
+def main():
+    """Main function to update all HTML files"""
+    print("Starting header update process...")
+    print("=" * 60)
+    
+    # Find all HTML files
+    html_files = list(BASE_DIR.rglob('*.html'))
+    
+    # Filter out files to skip
+    html_files = [f for f in html_files if not should_skip_file(f)]
+    
+    print(f"\nFound {len(html_files)} HTML files to update\n")
+    
+    updated_count = 0
+    failed_count = 0
+    
+    for html_file in sorted(html_files):
+        if update_header_in_file(html_file):
+            updated_count += 1
+        else:
+            failed_count += 1
+    
+    print("\n" + "=" * 60)
+    print(f"Update complete!")
+    print(f"✓ Successfully updated: {updated_count} files")
+    if failed_count > 0:
+        print(f"✗ Failed: {failed_count} files")
+    print("=" * 60)
+
+if __name__ == "__main__":
+    main()
