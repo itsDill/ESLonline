@@ -34,17 +34,52 @@
     <title>
       Typing Speed Test | ESL Fun Online - Improve Your Typing Skills
     </title>
-        <!-- Favicon and Icons - Optimized for Google Search -->
+    <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48x48.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="../images/favicon-48x48.png"
+    />
     <link rel="apple-touch-icon" sizes="180x180" href="../images/1.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon-512x512.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../images/favicon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="../images/favicon-512x512.png"
+    />
 
+    <!-- Stylesheets -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/mobile-optimized.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/mobile-footer.css" />
+  </head>
+  <body>
     <!-- Header -->
-        <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
     <!-- Header & Navigation -->
     <header>
@@ -182,7 +217,6 @@
       </div>
     </header>
 
-    
     <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
     <script>
       (function () {
@@ -451,22 +485,359 @@
           -webkit-user-select: none;
         }
       }
+
+      /* Typing Test Specific Styles */
+      .typing-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+      }
+
+      .typing-text {
+        font-family: "Courier New", monospace;
+        font-size: 1.3rem;
+        line-height: 2;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        min-height: 150px;
+        user-select: none;
+      }
+
+      .typing-text .correct {
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+      }
+
+      .typing-text .incorrect {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.2);
+        text-decoration: underline;
+      }
+
+      .typing-text .current {
+        background: #46bbe5;
+        color: white;
+        border-radius: 2px;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      #typingInput {
+        width: 100%;
+        padding: 1rem;
+        font-family: "Courier New", monospace;
+        font-size: 1.2rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        transition: border-color 0.3s;
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      #typingInput:focus {
+        outline: none;
+        border-color: #46bbe5;
+        box-shadow: 0 0 0 3px rgba(70, 187, 229, 0.1);
+      }
+
+      #typingInput:disabled {
+        background: #f3f4f6;
+        cursor: not-allowed;
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #46bbe5, #10b981);
+        transition: width 0.3s ease;
+        border-radius: 10px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        border: 2px solid #e5e7eb;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #46bbe5;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(70, 187, 229, 0.4);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-secondary {
+        background: #f3f4f6;
+        color: #374151;
+        border: 2px solid #e5e7eb;
+      }
+
+      .btn-secondary:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+      }
+
+      .difficulty-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .difficulty-selector h3 {
+        margin: 0;
+        color: #374151;
+      }
+
+      .difficulty-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .difficulty-btn:hover {
+        border-color: #46bbe5;
+        transform: translateY(-2px);
+      }
+
+      .difficulty-btn.active {
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        color: white;
+        border-color: transparent;
+      }
+
+      .results-container {
+        display: none;
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+        animation: slideIn 0.5s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .results-title {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+
+      .result-item {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+      }
+
+      .result-item h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+      }
+
+      /* Main Layout */
+      main {
+        padding-top: 100px;
+        padding-bottom: 3rem;
+        min-height: calc(100vh - 200px);
+      }
+
+      main .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      @media (max-width: 768px) {
+        main {
+          padding-top: 90px;
+        }
+
+        main .container > div:first-of-type h1 {
+          font-size: 2rem !important;
+        }
+
+        main .container > div:first-of-type p {
+          font-size: 1rem !important;
+        }
+
+        main .container > div:first-of-type {
+          padding: 1.5rem 1rem !important;
+        }
+
+        .typing-text {
+          font-size: 1.1rem;
+          padding: 1.5rem;
+        }
+
+        #typingInput {
+          font-size: 1rem;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .controls {
+          flex-direction: column;
+        }
+
+        .btn {
+          min-width: 100%;
+        }
+
+        .difficulty-selector {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
     </style>
 
     <main>
       <div class="container">
-        <div style="text-align: center; margin: 2rem 0">
+        <!-- Page Header -->
+        <div
+          style="
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 1rem;
+            background: linear-gradient(
+              135deg,
+              rgba(70, 187, 229, 0.1),
+              rgba(16, 185, 129, 0.1)
+            );
+            border-radius: 20px;
+          "
+        >
           <h1
             style="
               font-size: 3rem;
               font-weight: 700;
-              color: var(--text-primary);
+              background: linear-gradient(135deg, #46bbe5, #10b981);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
               margin-bottom: 1rem;
             "
           >
-            <i class="fas fa-keyboard"></i> Typing Speed Test
+            <i class="fas fa-keyboard" style="color: #46bbe5"></i> Typing Speed
+            Test
           </h1>
-          <p style="font-size: 1.2rem; color: var(--text-secondary)">
+          <p
+            style="
+              font-size: 1.2rem;
+              color: #6b7280;
+              max-width: 600px;
+              margin: 0 auto;
+            "
+          >
             Test your typing speed and accuracy. Challenge yourself to type
             faster and more accurately!
           </p>
@@ -488,22 +859,16 @@
             Click "Start Test" to begin your typing challenge!
           </div>
 
-          <div
-            style="
-              width: 100%;
-              height: 150px;
-              background: #f8f9fa;
-              border: 2px dashed #dee2e6;
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: #6c757d;
-              font-style: italic;
-            "
-          >
-            Typing input temporarily disabled
-          </div>
+          <textarea
+            id="typingInput"
+            placeholder="Type here when the test starts..."
+            disabled
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            rows="4"
+          ></textarea>
 
           <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
@@ -579,8 +944,228 @@
             </div>
           </div>
         </div>
+
+        <!-- Tips Section -->
+        <div
+          style="
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h3
+            style="
+              color: #374151;
+              margin-bottom: 1.5rem;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            "
+          >
+            <i class="fas fa-lightbulb" style="color: #f59e0b"></i>
+            Tips to Improve Your Typing Speed
+          </h3>
+          <div style="display: grid; gap: 1rem">
+            <div style="display: flex; gap: 1rem; align-items: start">
+              <div
+                style="
+                  flex-shrink: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: linear-gradient(135deg, #46bbe5, #10b981);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                1
+              </div>
+              <div>
+                <strong style="color: #374151"
+                  >Practice proper finger placement:</strong
+                >
+                <p style="color: #6b7280; margin: 0.5rem 0 0 0">
+                  Keep your fingers on the home row (ASDF JKL;) and use the
+                  correct finger for each key.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: start">
+              <div
+                style="
+                  flex-shrink: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: linear-gradient(135deg, #46bbe5, #10b981);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                2
+              </div>
+              <div>
+                <strong style="color: #374151"
+                  >Look at the screen, not the keyboard:</strong
+                >
+                <p style="color: #6b7280; margin: 0.5rem 0 0 0">
+                  Train yourself to type without looking down at your hands.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: start">
+              <div
+                style="
+                  flex-shrink: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: linear-gradient(135deg, #46bbe5, #10b981);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                3
+              </div>
+              <div>
+                <strong style="color: #374151">Focus on accuracy first:</strong>
+                <p style="color: #6b7280; margin: 0.5rem 0 0 0">
+                  Speed will naturally improve as you make fewer mistakes.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: start">
+              <div
+                style="
+                  flex-shrink: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: linear-gradient(135deg, #46bbe5, #10b981);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                4
+              </div>
+              <div>
+                <strong style="color: #374151">Practice consistently:</strong>
+                <p style="color: #6b7280; margin: 0.5rem 0 0 0">
+                  Regular practice, even just 10-15 minutes a day, will show
+                  significant improvement.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
+
+    <!-- Footer -->
+    <footer
+      style="
+        background: #1f2937;
+        color: white;
+        padding: 3rem 0 1rem;
+        margin-top: 4rem;
+      "
+    >
+      <div
+        class="container"
+        style="max-width: 1200px; margin: 0 auto; padding: 0 1rem"
+      >
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+          "
+        >
+          <div>
+            <h3 style="color: #46bbe5; margin-bottom: 1rem">ESL Fun Online</h3>
+            <p style="color: #9ca3af; line-height: 1.6">
+              Your comprehensive resource for learning English as a Second
+              Language.
+            </p>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 1rem">Quick Links</h4>
+            <ul style="list-style: none; padding: 0">
+              <li style="margin-bottom: 0.5rem">
+                <a
+                  href="../index.html"
+                  style="color: #9ca3af; text-decoration: none"
+                  >Home</a
+                >
+              </li>
+              <li style="margin-bottom: 0.5rem">
+                <a
+                  href="../english/grammar.html"
+                  style="color: #9ca3af; text-decoration: none"
+                  >Grammar</a
+                >
+              </li>
+              <li style="margin-bottom: 0.5rem">
+                <a
+                  href="../games/games.html"
+                  style="color: #9ca3af; text-decoration: none"
+                  >Games</a
+                >
+              </li>
+              <li style="margin-bottom: 0.5rem">
+                <a
+                  href="tools.html"
+                  style="color: #9ca3af; text-decoration: none"
+                  >Tools</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 1rem">Connect With Us</h4>
+            <div style="display: flex; gap: 1rem">
+              <a href="#" style="color: #46bbe5; font-size: 1.5rem"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <a href="#" style="color: #46bbe5; font-size: 1.5rem"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="#" style="color: #46bbe5; font-size: 1.5rem"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="#" style="color: #46bbe5; font-size: 1.5rem"
+                ><i class="fab fa-youtube"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+        <div
+          style="
+            border-top: 1px solid #374151;
+            padding-top: 1rem;
+            text-align: center;
+            color: #9ca3af;
+          "
+        >
+          <p>&copy; 2024 ESL Fun Online. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
 
     <script>
       // Typing test texts for different difficulties
@@ -725,13 +1310,25 @@
         document.getElementById("finalErrors").textContent = errors;
 
         // Performance rating
-        let rating = "Needs Practice";
-        if (wpm >= 80 && accuracy >= 95) rating = "Excellent!";
-        else if (wpm >= 60 && accuracy >= 90) rating = "Very Good!";
-        else if (wpm >= 40 && accuracy >= 85) rating = "Good!";
-        else if (wpm >= 25 && accuracy >= 80) rating = "Fair";
+        let rating = "Needs Practice 📚";
+        let emoji = "💪";
+        if (wpm >= 80 && accuracy >= 95) {
+          rating = "Excellent!";
+          emoji = "🏆";
+        } else if (wpm >= 60 && accuracy >= 90) {
+          rating = "Very Good!";
+          emoji = "⭐";
+        } else if (wpm >= 40 && accuracy >= 85) {
+          rating = "Good!";
+          emoji = "👍";
+        } else if (wpm >= 25 && accuracy >= 80) {
+          rating = "Fair";
+          emoji = "📈";
+        }
 
-        document.getElementById("performanceRating").textContent = rating;
+        document.getElementById(
+          "performanceRating"
+        ).innerHTML = `${emoji} ${rating}`;
       }
 
       function showResults() {
@@ -821,7 +1418,58 @@
 
       // Initialize
       loadNewText();
+
+      // Add keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        // Escape to reset
+        if (e.key === "Escape" && isTestActive) {
+          resetTest();
+        }
+        // Enter to start (when not active)
+        if (e.key === "Enter" && !isTestActive && !typingInput.disabled) {
+          startTest();
+        }
+      });
+
+      // Show helpful hint on first load
+      setTimeout(() => {
+        if (!isTestActive) {
+          const hint = document.createElement("div");
+          hint.style.cssText =
+            "position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #46bbe5, #10b981); color: white; padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: slideInUp 0.5s ease; z-index: 1000; max-width: 300px;";
+          hint.innerHTML =
+            '<strong>💡 Tip:</strong> Press <kbd style="background: rgba(255,255,255,0.2); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace;">Enter</kbd> to start!';
+          document.body.appendChild(hint);
+          setTimeout(() => {
+            hint.style.animation = "slideOutDown 0.5s ease";
+            setTimeout(() => hint.remove(), 500);
+          }, 3000);
+        }
+      }, 1000);
     </script>
+
+    <style>
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideOutDown {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+      }
+    </style>
 
     <script src="../js/navigation.js"></script>
   </body>
