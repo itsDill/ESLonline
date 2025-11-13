@@ -16,8 +16,6 @@ if (document.readyState === "loading") {
 }
 
 function initializeNavigation() {
-  console.log("ESL Navigation: Primary initialization starting...");
-
   // Function to completely reset mobile navigation
   function resetMobileNavigation() {
     // Clear any body classes
@@ -63,8 +61,6 @@ function initializeNavigation() {
       if (icon) {
         icon.className = isDark ? "fas fa-sun" : "fas fa-moon";
       }
-
-      console.log("Theme toggled to:", theme);
     });
   }
 
@@ -74,8 +70,6 @@ function initializeNavigation() {
   const navItems = document.querySelectorAll(".nav-item");
 
   if (mobileToggle && navLinks) {
-    console.log("ESL Navigation: Mobile elements found, setting up...");
-
     // Remove existing listeners by cloning the mobile toggle
     const newMobileToggle = mobileToggle.cloneNode(true);
     mobileToggle.parentNode.replaceChild(newMobileToggle, mobileToggle);
@@ -93,7 +87,6 @@ function initializeNavigation() {
       if (mobileIcon) mobileIcon.className = "fas fa-times";
       body.style.overflow = "hidden";
       body.classList.add("mobile-menu-open");
-      console.log("ESL Navigation: Menu opened");
     }
 
     function closeMenu() {
@@ -104,17 +97,12 @@ function initializeNavigation() {
       body.classList.remove("mobile-menu-open");
       // Close all dropdowns when closing menu
       navItems.forEach(resetDropdown);
-      console.log("ESL Navigation: Menu closed");
     }
 
     // Mobile menu toggle - MAIN HANDLER
     freshMobileToggle.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log(
-        "ESL Navigation: Mobile toggle clicked, current state:",
-        isMenuOpen
-      );
 
       if (isMenuOpen) {
         closeMenu();
@@ -278,13 +266,8 @@ function initializeNavigation() {
         });
       }
     });
-
-    console.log("ESL Navigation: Mobile menu setup complete");
   } else {
-    console.warn("ESL Navigation: Mobile toggle or nav links not found!", {
-      mobileToggle: !!mobileToggle,
-      navLinks: !!navLinks,
-    });
+    // Mobile toggle or nav links not found - may not be needed on this page
   }
 
   // Scroll behavior for header
@@ -310,8 +293,6 @@ function initializeNavigation() {
       lastScrollY = currentScrollY;
     });
   }
-
-  console.log("ESL Navigation initialized successfully!");
 }
 
 // Utility functions for backward compatibility
@@ -357,7 +338,6 @@ window.ESLUtils = window.ESLUtils || {
 
 // Global reset function for troubleshooting
 window.resetMobileNavigation = function () {
-  console.log("ESL Navigation: Manual reset triggered");
   if (window.eslNavigationInitialized) {
     initializeNavigation();
   }

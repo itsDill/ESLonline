@@ -2,8 +2,6 @@
 
 // Initialize ads when page loads
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Game ads script loaded");
-
   // Check if AdSense is available
   if (typeof adsbygoogle !== "undefined") {
     // Push ads that might not have been loaded
@@ -13,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
           (adsbygoogle = window.adsbygoogle || []).push({});
         } catch (e) {
-          console.error("Error loading ad:", e);
+          // Ad failed to load - silent handling
         }
       }
     });
@@ -24,9 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function refreshGameAds() {
   if (typeof adsbygoogle !== "undefined") {
     try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
+      refreshAds();
     } catch (e) {
-      console.error("Error refreshing ads:", e);
+      // Ad refresh failed - silent handling
     }
   }
 }
