@@ -408,22 +408,6 @@ header.hidden {
   }
 }
 
-/* Mobile: click/tap only (handled by JavaScript) */
-@media (max-width: 768px) {
-  /* Disable hover on mobile - rely on JavaScript */
-  .nav-item:hover .dropdown,
-  .nav-item:focus-within .dropdown {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  /* Remove bridge on mobile */
-  .nav-item::after {
-    display: none;
-  }
-}
-
 /* Dropdown arrow */
 .dropdown::before {
   content: "";
@@ -1440,23 +1424,38 @@ footer > .container {
     background: rgba(255, 255, 255, 0.03) !important;
   }
 
-  /* DISABLE hover behavior completely on mobile */
+  /* Mobile dropdown behavior - disable hover, enable click via JavaScript */
   .nav-item:hover .dropdown,
   .nav-item:focus-within .dropdown {
     max-height: 0 !important;
     padding: 0 !important;
     border: none !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
-  /* ENSURE mobile-open state always works */
+  /* Mobile-open state overrides hover behavior */
+  .nav-item.mobile-open .dropdown,
   .nav-item.mobile-dropdown-open .dropdown,
-  .nav-item.mobile-open .dropdown {
+  .nav-item.mobile-open:hover .dropdown,
+  .nav-item.mobile-dropdown-open:hover .dropdown,
+  .nav-item.mobile-open:focus-within .dropdown,
+  .nav-item.mobile-dropdown-open:focus-within .dropdown {
     max-height: 500px !important;
     padding: 0.5rem 0 !important;
     border: 1px solid var(--border-color) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
 
-  /* FORCE dropdown item styling - Enhanced */
+  /* Remove bridge on mobile */
+  .nav-item::after {
+    display: none;
+  }
+
+  /* Dropdown item styling */
   .dropdown-item {
     padding: 0.875rem 1rem !important;
     font-size: 0.95rem !important;
