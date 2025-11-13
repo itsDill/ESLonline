@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Critical CSS - Prevent FOUC (Flash of Unstyled Content) -->
+    <style>
+      /* Hide body until styles are loaded */
+      html {
+        visibility: hidden;
+        opacity: 0;
+      }
+      html.loaded {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+    </style>
+
     <!-- Google AdSense - Auto Ads Enabled -->
     <script
       async
@@ -439,6 +453,13 @@
         background: var(--bg-primary);
         transition: all 0.3s ease;
         overflow-x: hidden;
+        padding-top: 80px; /* Account for fixed header */
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding-top: 70px; /* Smaller header on mobile */
+        }
       }
 
       /* Smooth scroll indicator */
@@ -2849,6 +2870,17 @@
         transform: scaleX(1);
       }
     </style>
+
+    <!-- Script to show content once styles are loaded -->
+    <script>
+      // Show content immediately after head is parsed
+      document.documentElement.classList.add("loaded");
+
+      // Fallback: ensure content shows even if styles fail to load
+      window.addEventListener("DOMContentLoaded", function () {
+        document.documentElement.classList.add("loaded");
+      });
+    </script>
   </head>
 
   <body>
@@ -2885,7 +2917,7 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
     <!-- Header & Navigation -->
-        <!-- Scroll Progress Indicator -->
+    <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
     <!-- Header & Navigation -->
     <header>
@@ -3023,7 +3055,6 @@
       </div>
     </header>
 
-    
     <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
     <script>
       (function () {
