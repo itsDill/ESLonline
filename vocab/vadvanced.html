@@ -65,10 +65,18 @@
       Advanced Vocabulary | ESL Fun Online - Sophisticated English Flashcards
     </title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../images/Online.png" />
+    <!-- Favicon and Icons -->
+    <link rel="icon" href="../favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/1.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon-512x512.png" />
 
     <!-- External Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -183,26 +191,57 @@
         background-clip: text;
       }
 
-      /* Page Header */
-      .page-header {
-        background: var(--gradient-primary);
-        color: white;
+      /* Hero Section */
+      .hero {
+        position: relative;
+        min-height: 340px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        padding: 4rem 0 3rem;
+        background: none;
+        overflow: hidden;
       }
 
-      .page-title {
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.92;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 2rem 1.5rem;
+        color: #fff;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-title {
         font-family: "Poppins", sans-serif;
-        font-size: 2.5rem;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
         font-weight: 700;
         margin-bottom: 1rem;
+        letter-spacing: 0.01em;
       }
 
-      .page-subtitle {
-        font-size: 1.2rem;
-        opacity: 0.9;
+      .hero-subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        opacity: 0.95;
+        margin-bottom: 0;
         max-width: 600px;
-        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
+        color: #f3f4f6;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
       }
 
       /* Main Content */
@@ -505,9 +544,21 @@
         transform: translateY(-50%) scale(1.1);
       }
 
+      /* Scroll Progress Indicator */
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+        z-index: 9999;
+        transition: width 0.2s ease;
+      }
+
       /* Responsive Design */
       @media (max-width: 768px) {
-        .page-title {
+        .hero-title {
           font-size: 2rem;
         }
 
@@ -963,11 +1014,16 @@
       }
     </style>
 
-    <!-- Page Header -->
-    <section class="page-header">
-      <div class="container">
-        <h1 class="page-title">Advanced Vocabulary</h1>
-        <p class="page-subtitle">
+    <!-- Hero Section -->
+    <section class="hero">
+      <img
+        src="../images/hero.webp"
+        alt="ESL Fun Online Background"
+        class="hero-bg"
+      />
+      <div class="hero-content">
+        <h1 class="hero-title">Advanced Vocabulary Flashcards</h1>
+        <p class="hero-subtitle">
           Master sophisticated English words and expressions for academic and
           professional communication!
         </p>
@@ -1507,6 +1563,18 @@
 
       // Initialize theme on page load
       loadTheme();
+
+      // Scroll progress indicator
+      window.addEventListener('scroll', function() {
+        const scrollProgress = document.getElementById('scrollProgress');
+        if (scrollProgress) {
+          const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (window.scrollY / windowHeight) * 100;
+          scrollProgress.style.width = scrolled + '%';
+        }
+      });
     </script>
+
+    <script src="../js/navigation.js"></script>
   </body>
 </html>
