@@ -459,8 +459,6 @@
             return;
           }
 
-          console.log("Immediate mobile menu initialized");
-
           let isMenuOpen = false;
 
           function toggleMenu(e) {
@@ -475,13 +473,11 @@
               body.classList.add("mobile-menu-open");
               body.style.overflow = "hidden";
               if (icon) icon.className = "fas fa-times";
-              console.log("Menu opened");
             } else {
               navLinks.classList.remove("active");
               body.classList.remove("mobile-menu-open");
               body.style.overflow = "";
               if (icon) icon.className = "fas fa-bars";
-              console.log("Menu closed");
 
               // Close all dropdowns
               document.querySelectorAll(".nav-item").forEach((item) => {
@@ -499,14 +495,12 @@
             const now = Date.now();
             // Prevent double-firing within 300ms
             if (now - lastToggleTime < 300) {
-              console.log("Toggle ignored - too fast");
               return;
             }
             lastToggleTime = now;
 
             e.preventDefault();
             e.stopPropagation();
-            console.log("Hamburger clicked/tapped");
             toggleMenu(e);
           }
 
@@ -532,14 +526,12 @@
                   e.target.closest(".dropdown-item") ||
                   e.target.closest(".dropdown a")
                 ) {
-                  console.log("Dropdown item clicked - allowing navigation");
                   return; // Let the link work normally
                 }
 
                 const now = Date.now();
                 // Prevent double-firing within 300ms
                 if (now - lastDropdownToggle < 300) {
-                  console.log("Dropdown toggle ignored - too fast");
                   return;
                 }
                 lastDropdownToggle = now;
@@ -548,10 +540,6 @@
                 e.stopPropagation();
 
                 const isOpen = item.classList.contains("mobile-open");
-                console.log(
-                  "Dropdown clicked:",
-                  isOpen ? "closing" : "opening"
-                );
 
                 // Close other dropdowns
                 document.querySelectorAll(".nav-item").forEach((otherItem) => {
@@ -662,23 +650,14 @@
       </div>
 
       <div class="hero-content">
+        <span class="hero-badge">
+          <i class="fas fa-star"></i> Free Learning Platform
+        </span>
         <h1 class="hero-title">Fun ESL Games & Online English Learning</h1>
-        <p
-          class="hero-intro"
-          style="
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.95);
-          "
-        >
-          ESL Fun Online offers free, interactive games and activities for
-          English learners of all levels.
-        </p>
         <p class="hero-subtitle">
-          Transform your career with comprehensive online courses, expert
-          teachers, and interactive learning experiences. Join thousands of
-          successful learners worldwide.
+          ESL Fun Online offers free, interactive games and activities for
+          English learners of all levels. Transform your skills with expert
+          lessons and engaging content.
         </p>
 
         <div class="hero-stats">
@@ -697,13 +676,20 @@
         </div>
 
         <div class="hero-cta">
-          <a href="english/grammar.html" class="cta-primary">
-            <i class="fas fa-book"></i>
-            Learn Grammar
+          <a href="lessons.html" class="cta-primary cta-featured">
+            <i class="fas fa-chalkboard-teacher"></i>
+            Browse Lessons
           </a>
-          <a href="games/games.html" class="cta-secondary">
+          <a href="games/games.html" class="cta-primary">
             <i class="fas fa-gamepad"></i>
             Play Games
+          </a>
+        </div>
+
+        <div class="hero-cta hero-cta-secondary">
+          <a href="english/grammar.html" class="cta-secondary">
+            <i class="fas fa-book"></i>
+            Grammar
           </a>
           <a href="english/test.html" class="cta-secondary">
             <i class="fas fa-graduation-cap"></i>
@@ -711,13 +697,14 @@
           </a>
           <a href="coding/codingresources.html" class="cta-secondary">
             <i class="fas fa-code"></i>
-            Coding Path
+            Coding
           </a>
         </div>
       </div>
 
       <div class="scroll-indicator" onclick="scrollToSection('features')">
-        <i class="fas fa-chevron-down fa-2x"></i>
+        <span class="scroll-text">Explore More</span>
+        <i class="fas fa-chevron-down"></i>
       </div>
     </section>
 
@@ -1736,8 +1723,8 @@
     </div>
 
     <!-- Load scripts with cache busting -->
-    <script src="js/utilities.js?v=" defer></script>
-    <script src="js/hero.js?v=" defer></script>
+    <script src="js/utilities.js?v=202511261" defer></script>
+    <script src="js/hero.js?v=202511261" defer></script>
     <script src="js/navigation.js?v=202511032145" defer></script>
 
     <!-- Final Cache Control Script (Invisible to Users) -->
@@ -2264,11 +2251,6 @@
         currentQuestion = 0;
         score = 0;
         gameActive = true;
-
-        // Show which game set is selected
-        console.log(
-          `Starting Game Set ${currentGameSet + 1} of ${allGameSets.length}`
-        );
 
         loadQuestion();
       }

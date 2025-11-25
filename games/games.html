@@ -426,8 +426,6 @@
             return;
           }
 
-          console.log("Immediate mobile menu initialized");
-
           let isMenuOpen = false;
 
           function toggleMenu(e) {
@@ -442,13 +440,11 @@
               body.classList.add("mobile-menu-open");
               body.style.overflow = "hidden";
               if (icon) icon.className = "fas fa-times";
-              console.log("Menu opened");
             } else {
               navLinks.classList.remove("active");
               body.classList.remove("mobile-menu-open");
               body.style.overflow = "";
               if (icon) icon.className = "fas fa-bars";
-              console.log("Menu closed");
 
               // Close all dropdowns
               document.querySelectorAll(".nav-item").forEach((item) => {
@@ -466,14 +462,12 @@
             const now = Date.now();
             // Prevent double-firing within 300ms
             if (now - lastToggleTime < 300) {
-              console.log("Toggle ignored - too fast");
               return;
             }
             lastToggleTime = now;
 
             e.preventDefault();
             e.stopPropagation();
-            console.log("Hamburger clicked/tapped");
             toggleMenu(e);
           }
 
@@ -499,14 +493,12 @@
                   e.target.closest(".dropdown-item") ||
                   e.target.closest(".dropdown a")
                 ) {
-                  console.log("Dropdown item clicked - allowing navigation");
                   return; // Let the link work normally
                 }
 
                 const now = Date.now();
                 // Prevent double-firing within 300ms
                 if (now - lastDropdownToggle < 300) {
-                  console.log("Dropdown toggle ignored - too fast");
                   return;
                 }
                 lastDropdownToggle = now;
@@ -515,10 +507,6 @@
                 e.stopPropagation();
 
                 const isOpen = item.classList.contains("mobile-open");
-                console.log(
-                  "Dropdown clicked:",
-                  isOpen ? "closing" : "opening"
-                );
 
                 // Close other dropdowns
                 document.querySelectorAll(".nav-item").forEach((otherItem) => {
