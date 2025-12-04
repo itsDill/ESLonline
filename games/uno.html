@@ -148,12 +148,911 @@
     
     <!-- CSS Files -->
     <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/header.css" />
     <link rel="stylesheet" href="../css/uno-page.css" />
     <link rel="stylesheet" href="../css/mobile-optimized.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
+    <!-- Enhanced Game Styles -->
+    <style>
+      /* Dynamic Animated Background */
+      body {
+        background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(229, 62, 62, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(49, 130, 206, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(56, 161, 105, 0.1) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 60% 60%,
+            rgba(214, 158, 46, 0.1) 0%,
+            transparent 40%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Floating UNO cards in background */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='90' viewBox='0 0 60 90' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='90' rx='8' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
+        background-size: 80px 120px;
+        opacity: 0.5;
+        pointer-events: none;
+        z-index: 0;
+        animation: floatCards 60s linear infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes floatCards {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(-100px) rotate(5deg);
+        }
+      }
+
+      /* Ensure content is above background */
+      header,
+      .game-container,
+      .game-header,
+      main {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Enhanced Card Flip Animation */
+      .card {
+        transform-style: preserve-3d;
+        perspective: 1000px;
+      }
+
+      .card.dealing {
+        animation: dealCard 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      @keyframes dealCard {
+        0% {
+          transform: translateX(-200px) translateY(-100px) rotateY(180deg)
+            scale(0.5);
+          opacity: 0;
+        }
+        50% {
+          transform: translateX(0) translateY(-20px) rotateY(90deg) scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(0) translateY(0) rotateY(0) scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Card Play Animation */
+      .card.playing {
+        animation: playCard 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      @keyframes playCard {
+        0% {
+          transform: scale(1) translateY(0);
+        }
+        30% {
+          transform: scale(1.2) translateY(-30px) rotate(5deg);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        100% {
+          transform: scale(1) translateY(0) rotate(0);
+        }
+      }
+
+      /* Card Draw Animation */
+      .card.drawing {
+        animation: drawCard 0.4s ease-out;
+      }
+
+      @keyframes drawCard {
+        0% {
+          transform: translateX(-100px) scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0) scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Enhanced Playable Card Glow */
+      .card.playable {
+        animation: playableGlow 2s infinite alternate;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .card.playable::before {
+        content: "▶";
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #1a202c;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        z-index: 10;
+        animation: playIndicator 1s infinite;
+      }
+
+      @keyframes playIndicator {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+      }
+
+      @keyframes playableGlow {
+        0% {
+          box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+            0 8px 25px rgba(0, 0, 0, 0.3);
+          transform: translateY(0);
+        }
+        100% {
+          box-shadow: 0 0 25px rgba(255, 215, 0, 0.9),
+            0 0 40px rgba(255, 215, 0, 0.4), 0 12px 30px rgba(0, 0, 0, 0.4);
+          transform: translateY(-5px);
+        }
+      }
+
+      .card.playable:hover {
+        transform: translateY(-15px) scale(1.08) rotateX(-5deg);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+          0 0 30px rgba(255, 215, 0, 0.8);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .card.playable:hover::before {
+        background: linear-gradient(135deg, #10b981, #059669);
+        content: "✓";
+      }
+
+      /* Card Hover 3D Effect */
+      .card:not(.card-back):hover {
+        transform: translateY(-12px) scale(1.05) rotateX(-5deg) rotateY(5deg);
+      }
+
+      /* Enhanced Score Display */
+      .game-stats {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Smooth Turn Transitions */
+      .turn-indicator {
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        box-shadow: 0 4px 15px rgba(70, 187, 229, 0.3);
+      }
+
+      .turn-indicator.thinking-indicator {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
+      /* Combo Indicator */
+      .combo-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        font-weight: bold;
+        color: #fbbf24;
+        text-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+        z-index: 9999;
+        animation: comboAppear 0.5s ease-out forwards,
+          comboFade 1.5s ease-in 0.5s forwards;
+        pointer-events: none;
+      }
+
+      @keyframes comboAppear {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes comboFade {
+        to {
+          transform: translate(-50%, -100%) scale(1.5);
+          opacity: 0;
+        }
+      }
+
+      /* Achievement Notification */
+      .achievement-notification {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #1a202c;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(251, 191, 36, 0.4);
+        z-index: 10000;
+        animation: slideInRight 0.5s ease-out,
+          fadeOut 0.5s ease-in 3.5s forwards;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(120%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          transform: translateX(120%);
+          opacity: 0;
+        }
+      }
+
+      /* Hint Overlay */
+      .hint-overlay {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        z-index: 100;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Modal Show Animation */
+      .game-message.show,
+      #colorPicker.show {
+        display: flex !important;
+        animation: modalAppear 0.3s ease-out;
+      }
+
+      @keyframes modalAppear {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* Enhanced Button Styles */
+      .action-btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .draw-btn {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      }
+
+      .draw-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+
+      .draw-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Wild Card Enhanced Animation */
+      .card.wild .wild-bg {
+        animation: wildRotate 3s linear infinite,
+          wildPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes wildPulse {
+        0%,
+        100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* Current Card Entrance */
+      .current-card {
+        animation: currentCardPlace 0.5s ease-out;
+      }
+
+      @keyframes currentCardPlace {
+        0% {
+          transform: scale(1.3) rotate(10deg);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(1.1) rotate(-5deg);
+        }
+        100% {
+          transform: scale(1) rotate(0);
+          opacity: 1;
+        }
+      }
+
+      /* Deck Hover Effect */
+      .draw-deck:hover .card {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+      }
+
+      .draw-deck:hover .card:nth-child(1) {
+        transform: rotate(-5deg) translate(5px, -8px);
+      }
+
+      .draw-deck:hover .card:nth-child(2) {
+        transform: rotate(3deg) translate(-2px, -5px);
+      }
+
+      /* Game Status Glass Effect */
+      .game-status {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+      }
+
+      .game-status .status-item,
+      .game-status .turn-indicator {
+        color: white;
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .status-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+
+      .player-icon {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      }
+
+      .computer-icon {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      }
+
+      /* Enhanced Game Stats */
+      .game-stats {
+        background: rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      /* Ad Container Styling - Minimized */
+      .game-ad-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin: 0.5rem auto;
+        max-width: 728px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+      }
+
+      .game-ad-container:hover {
+        opacity: 1;
+      }
+
+      .game-ad-container .ad-label {
+        font-size: 0.6rem;
+        color: rgba(255, 255, 255, 0.35);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+      }
+
+      /* Enhanced Game Container */
+      .game-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+
+      /* Better Card Fanning */
+      .player-hand {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1rem;
+        min-height: 160px;
+      }
+
+      .player-hand .card {
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .player-hand .card:hover {
+        z-index: 100;
+      }
+
+      /* Enhanced Deck Styling */
+      .draw-deck {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .draw-deck:hover {
+        transform: scale(1.05);
+      }
+
+      .draw-deck:active {
+        transform: scale(0.95);
+      }
+
+      /* UNO Button Enhanced */
+      .uno-btn {
+        animation: unoPulse 1s infinite, shake 0.5s;
+        background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+        font-size: 1.1rem !important;
+        padding: 1rem 2rem !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-radius: 50px !important;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .uno-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        100% {
+          left: 100%;
+        }
+      }
+
+      @keyframes unoPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 10px rgba(239, 68, 68, 0.5),
+            0 0 30px rgba(239, 68, 68, 0.3);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(239, 68, 68, 0.8),
+            0 0 50px rgba(239, 68, 68, 0.5);
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px) rotate(-2deg);
+        }
+        75% {
+          transform: translateX(5px) rotate(2deg);
+        }
+      }
+
+      /* Victory Celebration */
+      .celebration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        animation: confettiFall 3s ease-out forwards;
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Game Header Enhanced */
+      .game-header {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .game-header .game-title {
+        color: white;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .game-header .control-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .game-header .control-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      /* Color Picker Enhanced */
+      .color-picker {
+        background: rgba(0, 0, 0, 0.9) !important;
+        backdrop-filter: blur(20px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .color-options {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 2rem;
+        border-radius: 20px;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .color-options::before {
+        content: "Choose a Color";
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .color-options-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .color-option {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .color-option.red {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+      .color-option.blue {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+      }
+      .color-option.green {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+      .color-option.yellow {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #1a202c;
+        text-shadow: none;
+      }
+
+      .color-option:hover {
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        border-color: white;
+      }
+
+      .color-option:active {
+        transform: scale(0.95);
+      }
+
+      /* Modal Enhanced */
+      .game-message {
+        background: linear-gradient(
+          135deg,
+          rgba(30, 41, 59, 0.98),
+          rgba(15, 23, 42, 0.98)
+        ) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+        max-width: 90%;
+        width: 400px;
+      }
+
+      .game-message .message-title {
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .game-message .message-text {
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        white-space: pre-line;
+      }
+
+      .message-btn {
+        background: linear-gradient(135deg, #46bbe5, #10b981);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .message-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.4);
+      }
+
+      /* Word Learning Modal Enhanced */
+      #wordModal .message-title {
+        font-size: 1.8rem;
+      }
+
+      #wordContent {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      /* Sound Toggle Enhanced */
+      .sound-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.15),
+          rgba(255, 255, 255, 0.05)
+        ) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .sound-toggle:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.25),
+          rgba(255, 255, 255, 0.1)
+        ) !important;
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .sound-toggle:active {
+        transform: scale(0.95);
+      }
+
+      .sound-toggle .keyboard-hint {
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.6rem;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .sound-toggle:hover .keyboard-hint {
+        opacity: 1;
+      }
+
+      /* Particle Effects Enhanced */
+      .particle {
+        border-radius: 50%;
+        animation: particleExplode 1s ease-out forwards;
+      }
+
+      @keyframes particleExplode {
+        0% {
+          opacity: 1;
+          transform: scale(1) translate(0, 0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0) translate(var(--tx, 50px), var(--ty, -50px));
+        }
+      }
+    </style>
   </head>
 
   <body>
@@ -166,7 +1065,173 @@
       aria-atomic="true"
     ></div>
 
-    <header class="game-header" role="banner">
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Site Navigation Header -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <!-- Logo Section -->
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+              loading="eager"
+              decoding="async"
+              width="40"
+              height="40"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <!-- Navigation Links -->
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="../english/grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
+                </a>
+                <a href="../english/vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+                <a href="../english/worksheets.html" class="dropdown-item">
+                  <i class="fas fa-file-alt"></i>
+                  Worksheets
+                </a>
+                <a href="../english/business.html" class="dropdown-item">
+                  <i class="fas fa-briefcase"></i>
+                  Business English
+                </a>
+              </div>
+            </li>
+            <li class="nav-item current">
+              <a href="games.html" class="nav-link">
+                <i class="fas fa-dice"></i>
+                Games
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../tools/tools.html" class="nav-link">
+                <i class="fas fa-tools"></i>
+                Toolkit
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../blog/blog.html" class="nav-link">
+                <i class="fas fa-blog"></i>
+                Blog
+              </a>
+            </li>
+          </ul>
+
+          <!-- Control Buttons -->
+          <div class="controls">
+            <button
+              class="control-btn theme-toggle"
+              id="themeToggle"
+              aria-label="Toggle dark mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+          <button
+            class="control-btn mobile-toggle"
+            id="mobileToggle"
+            aria-label="Toggle mobile menu"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Game Header with Controls -->
+    <div
+      class="game-header"
+      role="banner"
+      style="position: relative; top: 0; margin-top: 80px"
+    >
+      <style>
+        .game-header .header-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+        }
+        .game-header .game-title {
+          font-size: 1.8rem;
+          font-weight: 700;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .game-header .game-controls {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        .game-header .control-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.5rem 1rem;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          transition: all 0.3s ease;
+        }
+        .game-header .control-btn.secondary {
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .game-header .control-btn:not(.secondary) {
+          background: linear-gradient(135deg, #10b981, #059669);
+          border: none;
+        }
+        .game-header .control-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .keyboard-hint {
+          font-size: 0.65rem;
+          background: rgba(0, 0, 0, 0.3);
+          padding: 0.15rem 0.4rem;
+          border-radius: 4px;
+          margin-left: 0.3rem;
+        }
+        @media (max-width: 768px) {
+          .game-header .game-controls {
+            gap: 0.4rem;
+          }
+          .game-header .control-btn span {
+            display: none;
+          }
+          .game-header .control-btn {
+            padding: 0.6rem;
+          }
+          .keyboard-hint {
+            display: none;
+          }
+        }
+      </style>
       <div class="header-content">
         <h1 class="game-title">🎮 English UNO</h1>
         <div class="game-controls">
@@ -176,7 +1241,8 @@
             aria-label="Start a new game"
           >
             <i class="fas fa-plus" aria-hidden="true"></i>
-            New Game
+            <span>New Game</span>
+            <span class="keyboard-hint">N</span>
           </button>
           <button
             class="control-btn secondary"
@@ -184,7 +1250,7 @@
             aria-label="Open settings"
           >
             <i class="fas fa-cog" aria-hidden="true"></i>
-            Settings
+            <span>Settings</span>
           </button>
           <button
             class="control-btn secondary"
@@ -192,7 +1258,7 @@
             aria-label="View game rules"
           >
             <i class="fas fa-question-circle" aria-hidden="true"></i>
-            Rules
+            <span>Rules</span>
           </button>
           <button
             class="control-btn secondary"
@@ -200,7 +1266,7 @@
             aria-label="View statistics"
           >
             <i class="fas fa-chart-bar" aria-hidden="true"></i>
-            Stats
+            <span>Stats</span>
           </button>
           <button
             class="control-btn secondary"
@@ -208,7 +1274,7 @@
             aria-label="View achievements"
           >
             <i class="fas fa-trophy" aria-hidden="true"></i>
-            Achievements
+            <span>Achievements</span>
           </button>
           <button
             class="control-btn secondary"
@@ -216,15 +1282,7 @@
             aria-label="Take vocabulary quiz"
           >
             <i class="fas fa-book" aria-hidden="true"></i>
-            Vocab Quiz
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showWordProgress()"
-            aria-label="View word progress"
-          >
-            <i class="fas fa-chart-line" aria-hidden="true"></i>
-            Progress
+            <span>Quiz</span>
           </button>
           <button
             class="control-btn secondary"
@@ -232,7 +1290,7 @@
             aria-label="View daily challenges"
           >
             <i class="fas fa-calendar-check" aria-hidden="true"></i>
-            Challenges
+            <span>Challenges</span>
           </button>
           <button
             class="control-btn secondary"
@@ -240,11 +1298,11 @@
             aria-label="View power-ups"
           >
             <i class="fas fa-magic" aria-hidden="true"></i>
-            Power-Ups
+            <span>Power-Ups</span>
           </button>
         </div>
       </div>
-    </header>
+    </div>
 
     <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
     <script>
@@ -422,7 +1480,23 @@
 
     <!-- Additional Mobile Dropdown Fixes -->
 
-    <!-- Google AdSense -->
+    <!-- Horizontal Ad Banner - Neatly placed below header -->
+    <div class="game-ad-container" id="topAdContainer">
+      <div class="ad-label">Advertisement</div>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="auto"
+        data-ad-format="horizontal"
+        data-full-width-responsive="true"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Sound Toggle Button -->
     <button
       class="sound-toggle"
       id="soundToggle"
@@ -430,9 +1504,10 @@
       aria-label="Toggle sound effects"
     >
       <i class="fas fa-volume-up" aria-hidden="true"></i>
+      <span class="keyboard-hint">S</span>
     </button>
 
-    <div class="game-container" role="main">
+    <div class="game-container" role="main" id="main-content">
       <!-- Game Status -->
       <div class="game-status" role="status" aria-live="polite">
         <div class="status-item">
@@ -536,6 +1611,53 @@
 
         <!-- Action Area -->
         <div class="action-area">
+          <style>
+            .action-area {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 1rem;
+            }
+            .action-buttons {
+              display: flex;
+              gap: 1rem;
+              flex-wrap: wrap;
+              justify-content: center;
+            }
+            .action-btn {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              padding: 0.8rem 1.5rem;
+              border: none;
+              border-radius: 12px;
+              font-weight: 600;
+              font-size: 0.95rem;
+              cursor: pointer;
+              transition: all 0.3s ease;
+            }
+            .draw-btn {
+              background: linear-gradient(135deg, #3b82f6, #2563eb);
+              color: white;
+              box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            }
+            .draw-btn:hover:not(:disabled) {
+              transform: translateY(-3px);
+              box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+            }
+            .draw-btn:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+              transform: none;
+            }
+            .draw-btn .keyboard-hint {
+              font-size: 0.65rem;
+              background: rgba(255, 255, 255, 0.2);
+              padding: 0.15rem 0.4rem;
+              border-radius: 4px;
+              margin-left: 0.3rem;
+            }
+          </style>
           <div class="action-buttons">
             <button
               class="action-btn draw-btn"
@@ -544,7 +1666,8 @@
               aria-label="Draw a card"
             >
               <i class="fas fa-plus" aria-hidden="true"></i>
-              Draw
+              Draw Card
+              <span class="keyboard-hint">D</span>
             </button>
             <button
               class="action-btn uno-btn"
@@ -555,6 +1678,9 @@
             >
               <i class="fas fa-exclamation" aria-hidden="true"></i>
               UNO!
+              <span class="keyboard-hint" style="background: rgba(0, 0, 0, 0.2)"
+                >U</span
+              >
             </button>
           </div>
           <div class="game-stats" aria-live="polite">
@@ -903,7 +2029,7 @@
       const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       const actions = ["skip", "reverse", "draw2"];
 
-      // Enhanced vocabulary words with difficulty levels
+      // Enhanced vocabulary words with difficulty levels and categories
       const vocabularyWords = {
         red: [
           {
@@ -911,42 +2037,70 @@
             pronunciation: "/ˈæpəl/",
             level: "beginner",
             definition: "a round fruit",
+            category: "food",
           },
           {
             word: "fire",
             pronunciation: "/faɪər/",
             level: "beginner",
             definition: "hot flames",
+            category: "nature",
           },
           {
             word: "rose",
             pronunciation: "/roʊz/",
             level: "beginner",
             definition: "a beautiful flower",
+            category: "nature",
+          },
+          {
+            word: "heart",
+            pronunciation: "/hɑːrt/",
+            level: "beginner",
+            definition: "organ that pumps blood",
+            category: "body",
           },
           {
             word: "cherry",
             pronunciation: "/ˈtʃeri/",
             level: "intermediate",
             definition: "small red fruit",
+            category: "food",
           },
           {
             word: "tomato",
             pronunciation: "/təˈmeɪtoʊ/",
             level: "intermediate",
             definition: "red vegetable for salads",
+            category: "food",
+          },
+          {
+            word: "passion",
+            pronunciation: "/ˈpæʃən/",
+            level: "intermediate",
+            definition: "strong emotion or enthusiasm",
+            category: "emotion",
           },
           {
             word: "crimson",
             pronunciation: "/ˈkrɪmzən/",
             level: "advanced",
             definition: "deep red color",
+            category: "color",
           },
           {
             word: "scarlet",
             pronunciation: "/ˈskɑrlət/",
             level: "advanced",
             definition: "bright red color",
+            category: "color",
+          },
+          {
+            word: "cardinal",
+            pronunciation: "/ˈkɑːrdɪnəl/",
+            level: "advanced",
+            definition: "red bird or important official",
+            category: "animal",
           },
         ],
         blue: [
@@ -955,42 +2109,70 @@
             pronunciation: "/skaɪ/",
             level: "beginner",
             definition: "what we see above us",
+            category: "nature",
           },
           {
             word: "ocean",
             pronunciation: "/ˈoʊʃən/",
             level: "beginner",
             definition: "large body of water",
+            category: "nature",
           },
           {
             word: "ice",
             pronunciation: "/aɪs/",
             level: "beginner",
             definition: "frozen water",
+            category: "nature",
+          },
+          {
+            word: "water",
+            pronunciation: "/ˈwɔːtər/",
+            level: "beginner",
+            definition: "clear liquid we drink",
+            category: "nature",
           },
           {
             word: "whale",
             pronunciation: "/weɪl/",
             level: "intermediate",
             definition: "large sea mammal",
+            category: "animal",
           },
           {
             word: "blueberry",
             pronunciation: "/ˈbluˌberi/",
             level: "intermediate",
             definition: "small blue fruit",
+            category: "food",
+          },
+          {
+            word: "peaceful",
+            pronunciation: "/ˈpiːsfəl/",
+            level: "intermediate",
+            definition: "calm and quiet",
+            category: "emotion",
           },
           {
             word: "sapphire",
             pronunciation: "/ˈsæfaɪər/",
             level: "advanced",
             definition: "blue precious stone",
+            category: "object",
           },
           {
             word: "azure",
             pronunciation: "/ˈæʒər/",
             level: "advanced",
             definition: "bright blue color",
+            category: "color",
+          },
+          {
+            word: "melancholy",
+            pronunciation: "/ˈmelənkɒli/",
+            level: "advanced",
+            definition: "deep sadness",
+            category: "emotion",
           },
         ],
         green: [
@@ -999,42 +2181,70 @@
             pronunciation: "/ɡræs/",
             level: "beginner",
             definition: "plants in the yard",
+            category: "nature",
           },
           {
             word: "tree",
             pronunciation: "/tri/",
             level: "beginner",
             definition: "tall plant with leaves",
+            category: "nature",
           },
           {
             word: "leaf",
             pronunciation: "/lif/",
             level: "beginner",
             definition: "part of a plant",
+            category: "nature",
           },
           {
             word: "frog",
             pronunciation: "/frɔɡ/",
-            level: "intermediate",
+            level: "beginner",
             definition: "jumping amphibian",
+            category: "animal",
+          },
+          {
+            word: "forest",
+            pronunciation: "/ˈfɔːrɪst/",
+            level: "intermediate",
+            definition: "area with many trees",
+            category: "nature",
           },
           {
             word: "broccoli",
             pronunciation: "/ˈbrɑkəli/",
             level: "intermediate",
             definition: "green vegetable",
+            category: "food",
+          },
+          {
+            word: "jealousy",
+            pronunciation: "/ˈdʒeləsi/",
+            level: "intermediate",
+            definition: "feeling of envy",
+            category: "emotion",
           },
           {
             word: "emerald",
             pronunciation: "/ˈemərəld/",
             level: "advanced",
             definition: "green precious stone",
+            category: "object",
           },
           {
             word: "verdant",
             pronunciation: "/ˈvɜrdənt/",
             level: "advanced",
             definition: "green and lush",
+            category: "color",
+          },
+          {
+            word: "chlorophyll",
+            pronunciation: "/ˈklɔːrəfɪl/",
+            level: "advanced",
+            definition: "green pigment in plants",
+            category: "science",
           },
         ],
         yellow: [
@@ -1043,42 +2253,70 @@
             pronunciation: "/sʌn/",
             level: "beginner",
             definition: "star that gives us light",
+            category: "nature",
           },
           {
             word: "banana",
             pronunciation: "/bəˈnænə/",
             level: "beginner",
             definition: "yellow curved fruit",
+            category: "food",
           },
           {
             word: "gold",
             pronunciation: "/ɡoʊld/",
             level: "beginner",
             definition: "valuable metal",
+            category: "object",
+          },
+          {
+            word: "bee",
+            pronunciation: "/biː/",
+            level: "beginner",
+            definition: "insect that makes honey",
+            category: "animal",
           },
           {
             word: "star",
             pronunciation: "/stɑr/",
             level: "intermediate",
             definition: "bright light in the sky",
+            category: "nature",
           },
           {
             word: "lemon",
             pronunciation: "/ˈlemən/",
             level: "intermediate",
             definition: "sour yellow fruit",
+            category: "food",
+          },
+          {
+            word: "sunshine",
+            pronunciation: "/ˈsʌnʃaɪn/",
+            level: "intermediate",
+            definition: "light from the sun",
+            category: "nature",
           },
           {
             word: "amber",
             pronunciation: "/ˈæmbər/",
             level: "advanced",
             definition: "yellowish fossil resin",
+            category: "object",
           },
           {
             word: "canary",
             pronunciation: "/kəˈneri/",
             level: "advanced",
             definition: "small yellow bird",
+            category: "animal",
+          },
+          {
+            word: "optimism",
+            pronunciation: "/ˈɒptɪmɪzəm/",
+            level: "advanced",
+            definition: "hopeful attitude",
+            category: "emotion",
           },
         ],
       };
@@ -1572,7 +2810,7 @@
         return null;
       }
 
-      // Show word learning modal
+      // Show word learning modal with enhanced display
       function showWordLearning(word) {
         if (!gameState.showHints || gameState.learnedWords.has(word)) return;
 
@@ -1580,11 +2818,36 @@
         if (!wordDetails) return;
 
         const wordContent = document.getElementById("wordContent");
+        const categoryEmojis = {
+          food: "🍎",
+          nature: "🌿",
+          animal: "🐾",
+          body: "💪",
+          emotion: "💭",
+          color: "🎨",
+          object: "💎",
+          science: "🔬",
+        };
+        const categoryEmoji = categoryEmojis[wordDetails.category] || "📚";
+
         wordContent.innerHTML = `
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">${wordDetails.word}</div>
-          <div style="color: var(--primary-color); margin-bottom: 0.5rem;">${wordDetails.pronunciation}</div>
-          <div style="color: var(--text-secondary); margin-bottom: 1rem;">${wordDetails.definition}</div>
-          <div style="font-size: 0.8rem; color: var(--warning-color);">Level: ${wordDetails.level}</div>
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(70, 187, 229, 0.5);">${
+            wordDetails.word
+          }</div>
+          <div style="color: #46bbe5; margin-bottom: 0.75rem; font-size: 1.1rem;">${
+            wordDetails.pronunciation
+          }</div>
+          <div style="color: rgba(255, 255, 255, 0.9); margin-bottom: 1rem; font-size: 1rem; line-height: 1.5;">${
+            wordDetails.definition
+          }</div>
+          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <span style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem;">
+              ${wordDetails.level.toUpperCase()}
+            </span>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem;">
+              ${categoryEmoji} ${wordDetails.category}
+            </span>
+          </div>
         `;
 
         gameState.currentLearningWord = word;
@@ -2181,6 +3444,9 @@
           gameState.stats.gamesWon++;
           updateStreak(true);
 
+          // Create celebration effect
+          createCelebration();
+
           // Update challenges
           updateChallengeProgress("win_games");
           if (gameTime < 90000) {
@@ -2265,11 +3531,27 @@
           gameStartTime: null,
           moveCount: 0,
           soundEnabled: gameState.soundEnabled,
+          animationsEnabled: gameState.animationsEnabled,
+          showHints: gameState.showHints,
+          learnedWords: gameState.learnedWords,
+          cardsPlayed: gameState.cardsPlayed,
+          combo: 0,
+          maxCombo: gameState.maxCombo,
+          quiz: gameState.quiz,
+          wordProgress: gameState.wordProgress,
+          streak: gameState.streak,
+          dailyGoal: gameState.dailyGoal,
+          wordsLearnedToday: gameState.wordsLearnedToday,
+          powerUps: gameState.powerUps,
+          dailyChallenges: gameState.dailyChallenges,
           stats: gameState.stats,
         };
 
         closeMessage();
         initGame();
+
+        // Add dealing animation
+        setTimeout(dealCardsWithAnimation, 100);
       }
 
       // Game timer
@@ -2421,26 +3703,37 @@
           : "fas fa-volume-mute";
       }
 
-      // Show rules
+      // Show rules with better formatting
       function showRules() {
-        const rulesText = `
-                UNO Rules:
-                • Match the color or number of the current card
-                • Taew says no cheating!
-                • Action cards: Skip, Reverse, Draw Two
-                • Wild cards can be played anytime
-                • Call UNO when you have one card left
-                • First to play all cards wins!
+        const rulesText = `🃏 HOW TO PLAY:
+• Match the color OR number of the current card
+• Wild cards can be played anytime - choose any color!
+• Call UNO when you have one card left
 
-                ESL Features:
-                • Learn vocabulary with each card
-                • Practice pronunciation
-                • Improve English while playing!
-            `;
-        showMessage("Game Rules", rulesText);
+🎴 ACTION CARDS:
+• Skip ⊘ - Computer skips their turn
+• Reverse ↻ - Direction changes (acts like skip in 2-player)
+• Draw 2 (+2) - Opponent draws 2 cards
+
+🌈 WILD CARDS:
+• Wild - Play anytime, pick any color
+• Wild Draw 4 (+4) - Opponent draws 4, you pick color
+
+⌨️ KEYBOARD SHORTCUTS:
+• D - Draw a card
+• U - Call UNO
+• N - New game
+• S - Toggle sound
+• Arrow keys - Navigate cards
+
+📚 LEARN WHILE PLAYING:
+• Each card shows vocabulary words
+• Match colors to learn word associations
+• Complete quizzes to reinforce learning!`;
+        showMessage("📖 Game Rules", rulesText);
       }
 
-      // Show statistics
+      // Show statistics with better formatting
       function showStats() {
         const winRate =
           gameState.stats.gamesPlayed > 0
@@ -2454,19 +3747,28 @@
                 gameState.stats.totalTime / gameState.stats.gamesPlayed / 1000
               )
             : 0;
+        const fastestWin =
+          gameState.stats.fastestWin === Infinity
+            ? "N/A"
+            : Math.round(gameState.stats.fastestWin / 1000) + "s";
 
-        const statsText = `
-                Your Statistics:
-                • Games Played: ${gameState.stats.gamesPlayed}
-                • Games Won: ${gameState.stats.gamesWon}
-                • Win Rate: ${winRate}%
-                • Average Game Time: ${avgTime}s
-                • Current Win Streak: ${currentStreak}
-                • Best Win Streak: ${bestStreak}
-                • Max Combo: ${gameState.maxCombo}
-                • Cards Played: ${gameState.cardsPlayed}
-            `;
-        showMessage("Your Stats", statsText);
+        const statsText = `📊 GAME STATISTICS
+
+🎮 Games Played: ${gameState.stats.gamesPlayed}
+🏆 Games Won: ${gameState.stats.gamesWon}
+📈 Win Rate: ${winRate}%
+
+⏱️ Average Game Time: ${avgTime}s
+⚡ Fastest Win: ${fastestWin}
+
+🔥 Current Win Streak: ${currentStreak}
+👑 Best Win Streak: ${bestStreak}
+💥 Max Combo: ${gameState.maxCombo}
+🃏 Total Cards Played: ${gameState.cardsPlayed}
+
+📚 Words Learned: ${gameState.learnedWords.size}
+📖 Words Today: ${gameState.wordsLearnedToday}`;
+        showMessage("📈 Your Stats", statsText);
       }
 
       // Save statistics
@@ -2491,35 +3793,9 @@
         }, 2000);
       }
 
-      // Create particle effects
+      // Create particle effects - using enhanced version
       function createParticles(element) {
-        if (!element) return;
-
-        const rect = element.getBoundingClientRect();
-        const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#f9ca24"];
-
-        for (let i = 0; i < 8; i++) {
-          const particle = document.createElement("div");
-          particle.className = "particle";
-          particle.style.position = "fixed";
-          particle.style.left = rect.left + rect.width / 2 + "px";
-          particle.style.top = rect.top + rect.height / 2 + "px";
-          particle.style.width = "8px";
-          particle.style.height = "8px";
-          particle.style.background =
-            colors[Math.floor(Math.random() * colors.length)];
-          particle.style.transform = `translate(${
-            Math.random() * 100 - 50
-          }px, ${Math.random() * 100 - 50}px)`;
-
-          document.body.appendChild(particle);
-
-          setTimeout(() => {
-            if (particle.parentNode) {
-              document.body.removeChild(particle);
-            }
-          }, 1000);
-        }
+        createEnhancedParticles(element);
       }
 
       // Show play hints
@@ -3363,6 +4639,106 @@
         playSound("achievement");
       }
 
+      // Enhanced confetti celebration
+      function createCelebration() {
+        const celebration = document.createElement("div");
+        celebration.className = "celebration";
+        document.body.appendChild(celebration);
+
+        const colors = [
+          "#ff6b6b",
+          "#4ecdc4",
+          "#45b7d1",
+          "#f9ca24",
+          "#6c5ce7",
+          "#00b894",
+          "#fd79a8",
+        ];
+
+        for (let i = 0; i < 100; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + "vw";
+          confetti.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 2 + "s";
+          confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          confetti.style.width = Math.random() * 10 + 5 + "px";
+          confetti.style.height = Math.random() * 10 + 5 + "px";
+          confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+          celebration.appendChild(confetti);
+        }
+
+        setTimeout(() => {
+          celebration.remove();
+        }, 5000);
+      }
+
+      // Enhanced particle effects for card play
+      function createEnhancedParticles(element) {
+        if (!element || !gameState.animationsEnabled) return;
+
+        const rect = element.getBoundingClientRect();
+        const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#f9ca24"];
+
+        for (let i = 0; i < 12; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.cssText = `
+            position: fixed;
+            left: ${rect.left + rect.width / 2}px;
+            top: ${rect.top + rect.height / 2}px;
+            width: ${Math.random() * 8 + 4}px;
+            height: ${Math.random() * 8 + 4}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            --tx: ${(Math.random() - 0.5) * 150}px;
+            --ty: ${(Math.random() - 0.5) * 150}px;
+          `;
+          document.body.appendChild(particle);
+
+          setTimeout(() => particle.remove(), 1000);
+        }
+      }
+
+      // Card dealing animation
+      function dealCardsWithAnimation() {
+        const playerCards = document.querySelectorAll("#playerHand .card");
+        playerCards.forEach((card, index) => {
+          card.classList.add("dealing");
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        setTimeout(() => {
+          playerCards.forEach((card) => card.classList.remove("dealing"));
+        }, 1500);
+      }
+
+      // Theme toggle functionality
+      function initThemeToggle() {
+        const themeToggle = document.getElementById("themeToggle");
+        if (themeToggle) {
+          // Check saved theme preference
+          const savedTheme = localStorage.getItem("theme");
+          if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            themeToggle.querySelector("i").className = "fas fa-sun";
+          }
+
+          themeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            themeToggle.querySelector("i").className = isDark
+              ? "fas fa-sun"
+              : "fas fa-moon";
+          });
+        }
+      }
+
       // Initialize game when page loads
       window.addEventListener("load", () => {
         // Load saved settings
@@ -3376,6 +4752,9 @@
         icon.className = gameState.soundEnabled
           ? "fas fa-volume-up"
           : "fas fa-volume-mute";
+
+        // Initialize theme toggle
+        initThemeToggle();
 
         // Initialize daily challenges
         generateDailyChallenges();
@@ -3397,6 +4776,9 @@
         }
 
         initGame();
+
+        // Add dealing animation after init
+        setTimeout(dealCardsWithAnimation, 100);
       });
 
       // Keyboard shortcuts
@@ -3423,6 +4805,73 @@
     </script>
 
     <script src="../js/game-ads.js"></script>
+
+    <!-- Footer Section -->
+    <footer class="game-footer">
+      <style>
+        .game-footer {
+          background: linear-gradient(
+            135deg,
+            rgba(30, 41, 59, 0.95),
+            rgba(15, 23, 42, 0.98)
+          );
+          backdrop-filter: blur(20px);
+          padding: 2rem 1.5rem;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.8);
+          margin-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          position: relative;
+          z-index: 1;
+        }
+        .game-footer .footer-links {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        .game-footer .footer-links a {
+          color: #46bbe5;
+          text-decoration: none;
+          transition: color 0.3s ease, transform 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+        }
+        .game-footer .footer-links a:hover {
+          color: #10b981;
+          transform: translateY(-2px);
+        }
+        .game-footer .footer-copyright {
+          font-size: 0.8rem;
+          color: rgba(255, 255, 255, 0.4);
+          margin-top: 0.75rem;
+        }
+        .game-footer .footer-tagline {
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.6);
+          margin-top: 0.5rem;
+        }
+      </style>
+      <div style="max-width: 1200px; margin: 0 auto">
+        <div class="footer-links">
+          <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+          <a href="games.html"><i class="fas fa-gamepad"></i> More Games</a>
+          <a href="../english/grammar.html"
+            ><i class="fas fa-book"></i> Learn English</a
+          >
+          <a href="../privacy.html"
+            ><i class="fas fa-shield-alt"></i> Privacy</a
+          >
+          <a href="../terms.html"><i class="fas fa-file-contract"></i> Terms</a>
+        </div>
+        <p class="footer-tagline">🎮 Learn English while having fun! 📚</p>
+        <p class="footer-copyright">
+          © 2024 ESL Fun Online. All rights reserved.
+        </p>
+      </div>
+    </footer>
 
     <!-- Google AdSense -->
   </body>
