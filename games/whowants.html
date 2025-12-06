@@ -145,18 +145,355 @@
     </script>
 
     
+
     <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/whowants-page.css" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-  </head>
 
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      body {
+        font-family: "Inter", "Poppins", sans-serif;
+        background: linear-gradient(
+          -45deg,
+          #1a1a2e,
+          #16213e,
+          #0f3460,
+          #1a1a2e
+        ) !important;
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        min-height: 100vh;
+        color: #e2e8f0;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Compact Navigation Header */
+      .game-nav-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-left {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      .nav-game-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-game-title i {
+        color: #fbbf24;
+      }
+
+      /* Ad Wrapper */
+      .ad-wrapper {
+        max-width: 800px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+        text-align: center;
+      }
+
+      /* Footer */
+      .game-footer {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      .footer-copyright {
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+
+      /* Dark theme overrides for game elements */
+      .game-container {
+        background: transparent !important;
+      }
+
+      .title-screen {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+      }
+
+      .main-title {
+        color: #ffd700 !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+      }
+
+      .subtitle {
+        color: #94a3b8 !important;
+      }
+
+      .instructions {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .instructions h3 {
+        color: #ffd700 !important;
+      }
+
+      .instructions p,
+      .instructions li {
+        color: #94a3b8 !important;
+      }
+
+      .level-card {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .level-number {
+        color: #e2e8f0 !important;
+      }
+
+      .level-reward {
+        color: #ffd700 !important;
+      }
+
+      .difficulty-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .difficulty-btn:hover,
+      .difficulty-btn.selected {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .start-btn {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+        color: white !important;
+      }
+
+      .back-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      /* Game screen dark theme */
+      .game-screen {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+      }
+
+      .question-container {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .question-text {
+        color: #e2e8f0 !important;
+      }
+
+      .answer-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .answer-btn:hover:not(.disabled) {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .answer-btn.selected {
+        background: rgba(99, 102, 241, 0.4) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .answer-btn.correct {
+        background: rgba(16, 185, 129, 0.4) !important;
+        border-color: #10b981 !important;
+      }
+
+      .answer-btn.wrong {
+        background: rgba(239, 68, 68, 0.4) !important;
+        border-color: #ef4444 !important;
+      }
+
+      .lifeline-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .lifeline-btn:hover:not(.used) {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .progress-container {
+        background: rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .progress-level {
+        color: #94a3b8 !important;
+      }
+
+      .progress-level.current {
+        color: #ffd700 !important;
+        background: rgba(255, 215, 0, 0.2) !important;
+      }
+
+      .progress-level.completed {
+        color: #10b981 !important;
+        background: rgba(16, 185, 129, 0.2) !important;
+      }
+
+      /* Results screen */
+      .results-screen {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+      }
+
+      .results-title {
+        color: #ffd700 !important;
+      }
+
+      .score-display {
+        color: #e2e8f0 !important;
+      }
+
+      /* Stats screen */
+      .stats-screen {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .stats-card {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+    </style>
+  </head>
   <body>
-    <!-- Google AdSense -->
+    <!-- Compact Navigation Header -->
+    <nav class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="nav-game-title">
+        <i class="fas fa-trophy"></i> Who Wants to Be Fluent?
+      </div>
+    </nav>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <!-- Screen reader announcements -->
     <div
       id="announcements"
@@ -1666,6 +2003,36 @@
       });
     </script>
 
-    <!-- Google AdSense -->
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div class="footer-links">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="games.html"><i class="fas fa-gamepad"></i> Games</a>
+        <a href="../lessons.html"><i class="fas fa-book"></i> Lessons</a>
+        <a href="../contact.html"><i class="fas fa-envelope"></i> Contact</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2024 ESL Fun Online. All rights reserved.
+      </p>
+    </footer>
+
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </body>
 </html>

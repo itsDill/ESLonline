@@ -89,17 +89,517 @@
       rel="stylesheet"
     />
     
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/main.css" />
+    <!-- CSS Files - Removed main.css to prevent conflicts -->
     <link rel="stylesheet" href="../css/balanceman-page.css" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
+    <style>
+      /* Dark Theme Overrides */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body {
+        background: linear-gradient(
+          -45deg,
+          #1a1a2e,
+          #16213e,
+          #0f3460,
+          #1a1a2e
+        ) !important;
+        background-size: 400% 400% !important;
+        animation: gradientShift 15s ease infinite !important;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: white;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Compact Game Header */
+      .game-nav-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .game-nav-header .nav-left {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .game-nav-header .nav-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .game-nav-header .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .game-nav-header .game-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Ad Styling */
+      .ad-wrapper {
+        max-width: 800px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+      }
+
+      /* Game Container Override */
+      .game-container {
+        max-width: 900px;
+        margin: 0 auto !important;
+        padding: 1.5rem !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .game-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: white;
+      }
+
+      .game-header h1 {
+        color: white !important;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .game-header p {
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+
+      /* Difficulty and Category Selectors */
+      .difficulty-selector,
+      .category-selector {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .difficulty-selector h3,
+      .category-selector h3 {
+        color: white !important;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .difficulty-btn,
+      .category-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.25rem;
+        font-size: 0.9rem;
+      }
+
+      .difficulty-btn:hover,
+      .category-btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .difficulty-btn.active,
+      .category-btn.active {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        ) !important;
+        border-color: transparent !important;
+      }
+
+      /* Balance Area */
+      .balance-area {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      .balanceman {
+        font-size: 4rem;
+      }
+
+      .balance-status {
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin: 0.5rem 0;
+      }
+
+      .progress-bar {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px;
+        height: 10px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+
+      .progress-fill {
+        background: linear-gradient(
+          90deg,
+          #10b981,
+          #f59e0b,
+          #ef4444
+        ) !important;
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+
+      .word-display {
+        font-size: 2rem;
+        letter-spacing: 0.5rem;
+        color: white !important;
+        margin: 1rem 0;
+      }
+
+      .word-hint {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-style: italic;
+      }
+
+      /* Game Stats */
+      .game-stats {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        min-width: 70px;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea !important;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7) !important;
+        text-transform: uppercase;
+      }
+
+      /* Alphabet Grid */
+      .alphabet-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .letter-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .letter-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-2px);
+      }
+
+      .letter-btn.correct {
+        background: #10b981 !important;
+        border-color: #10b981 !important;
+      }
+
+      .letter-btn.incorrect {
+        background: #ef4444 !important;
+        border-color: #ef4444 !important;
+        opacity: 0.6;
+      }
+
+      .letter-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      /* Game Controls */
+      .game-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .btn {
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        border: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        ) !important;
+        color: white !important;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .btn-hint {
+        background: linear-gradient(
+          135deg,
+          #f59e0b 0%,
+          #d97706 100%
+        ) !important;
+        color: white !important;
+      }
+
+      .btn-hint:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-hint:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Game Message */
+      .game-message {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-weight: 600;
+      }
+
+      .message-success {
+        background: rgba(16, 185, 129, 0.2) !important;
+        border: 1px solid #10b981;
+        color: #10b981 !important;
+      }
+
+      .message-error {
+        background: rgba(239, 68, 68, 0.2) !important;
+        border: 1px solid #ef4444;
+        color: #ef4444 !important;
+      }
+
+      /* Footer */
+      .game-footer {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .game-footer a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        margin: 0 1rem;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .game-footer a:hover {
+        color: #667eea;
+      }
+
+      .game-footer .copyright {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .game-container {
+          margin: 0.5rem !important;
+          padding: 1rem !important;
+          border-radius: 12px;
+        }
+
+        .game-header h1 {
+          font-size: 1.5rem;
+        }
+
+        .word-display {
+          font-size: 1.5rem;
+          letter-spacing: 0.3rem;
+        }
+
+        .letter-btn {
+          width: 35px;
+          height: 35px;
+          font-size: 0.9rem;
+        }
+
+        .btn {
+          padding: 0.6rem 1rem;
+          font-size: 0.85rem;
+        }
+
+        .stat {
+          min-width: 55px;
+          padding: 0.5rem;
+        }
+
+        .stat-value {
+          font-size: 1.2rem;
+        }
+
+        .game-nav-header .game-title {
+          display: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .letter-btn {
+          width: 30px;
+          height: 30px;
+          font-size: 0.8rem;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          justify-content: center;
+        }
+      }
+    </style>
   </head>
 
   <body>
+    <!-- Compact Game Header -->
+    <header class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="../games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="game-title">
+        <i class="fas fa-balance-scale"></i> BalanceMan
+      </div>
+    </header>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div
       class="game-container"
       role="main"
@@ -113,7 +613,7 @@
         <p
           style="
             font-size: 0.8rem;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.6);
             margin-top: 0.5rem;
           "
           role="note"
@@ -124,199 +624,6 @@
         </p>
       </header>
 
-      <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
-      <script>
-        (function () {
-          "use strict";
-
-          function initMobileMenu() {
-            const mobileToggle = document.getElementById("mobileToggle");
-            const navLinks = document.getElementById("navLinks");
-            const body = document.body;
-
-            if (!mobileToggle || !navLinks) {
-              console.warn("Mobile menu elements not found");
-              return;
-            }
-
-            console.log("Immediate mobile menu initialized");
-
-            let isMenuOpen = false;
-
-            function toggleMenu(e) {
-              if (e && e.preventDefault) e.preventDefault();
-              if (e && e.stopPropagation) e.stopPropagation();
-
-              isMenuOpen = !isMenuOpen;
-              const icon = mobileToggle.querySelector("i");
-
-              if (isMenuOpen) {
-                navLinks.classList.add("active");
-                body.classList.add("mobile-menu-open");
-                body.style.overflow = "hidden";
-                if (icon) icon.className = "fas fa-times";
-                console.log("Menu opened");
-              } else {
-                navLinks.classList.remove("active");
-                body.classList.remove("mobile-menu-open");
-                body.style.overflow = "";
-                if (icon) icon.className = "fas fa-bars";
-                console.log("Menu closed");
-
-                // Close all dropdowns
-                document.querySelectorAll(".nav-item").forEach((item) => {
-                  item.classList.remove("mobile-open", "mobile-dropdown-open");
-                  const chevron = item.querySelector(".fa-chevron-down");
-                  if (chevron) chevron.style.transform = "rotate(0deg)";
-                });
-              }
-            }
-
-            // Simple unified handler - works for both touch and click
-            let lastToggleTime = 0;
-
-            function handleToggleClick(e) {
-              const now = Date.now();
-              // Prevent double-firing within 300ms
-              if (now - lastToggleTime < 300) {
-                console.log("Toggle ignored - too fast");
-                return;
-              }
-              lastToggleTime = now;
-
-              e.preventDefault();
-              e.stopPropagation();
-              console.log("Hamburger clicked/tapped");
-              toggleMenu(e);
-            }
-
-            mobileToggle.addEventListener("click", handleToggleClick);
-            mobileToggle.addEventListener("touchend", handleToggleClick);
-
-            // Handle dropdown toggles on mobile
-            document.querySelectorAll(".nav-item").forEach((item) => {
-              const link = item.querySelector(".nav-link");
-              const dropdown = item.querySelector(".dropdown");
-              const chevron = link?.querySelector(".fa-chevron-down");
-
-              // Only add special handling for links WITH dropdowns
-              if (link && dropdown && chevron) {
-                // Simple unified dropdown handler
-                let lastDropdownToggle = 0;
-
-                function handleDropdownClick(e) {
-                  if (window.innerWidth > 768) return; // Only on mobile
-
-                  const now = Date.now();
-                  // Prevent double-firing within 300ms
-                  if (now - lastDropdownToggle < 300) {
-                    console.log("Dropdown toggle ignored - too fast");
-                    return;
-                  }
-                  lastDropdownToggle = now;
-
-                  e.preventDefault();
-                  e.stopPropagation();
-
-                  const isOpen = item.classList.contains("mobile-open");
-                  console.log(
-                    "Dropdown clicked:",
-                    isOpen ? "closing" : "opening"
-                  );
-
-                  // Close other dropdowns
-                  document
-                    .querySelectorAll(".nav-item")
-                    .forEach((otherItem) => {
-                      if (otherItem !== item) {
-                        otherItem.classList.remove(
-                          "mobile-open",
-                          "mobile-dropdown-open"
-                        );
-                        const otherChevron =
-                          otherItem.querySelector(".fa-chevron-down");
-                        if (otherChevron)
-                          otherChevron.style.transform = "rotate(0deg)";
-                      }
-                    });
-
-                  // Toggle current dropdown
-                  if (isOpen) {
-                    item.classList.remove(
-                      "mobile-open",
-                      "mobile-dropdown-open"
-                    );
-                    chevron.style.transform = "rotate(0deg)";
-                    link.setAttribute("aria-expanded", "false");
-                  } else {
-                    item.classList.add("mobile-open", "mobile-dropdown-open");
-                    chevron.style.transform = "rotate(180deg)";
-                    link.setAttribute("aria-expanded", "true");
-                  }
-                }
-
-                // Remove href="#" behavior on mobile
-                if (link.getAttribute("href") === "#") {
-                  link.style.cursor = "pointer";
-                }
-
-                // Attach handlers for both click and touch
-                link.addEventListener("click", handleDropdownClick);
-                link.addEventListener("touchend", handleDropdownClick);
-              }
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener("click", function (e) {
-              if (window.innerWidth <= 768 && isMenuOpen) {
-                if (
-                  !mobileToggle.contains(e.target) &&
-                  !navLinks.contains(e.target)
-                ) {
-                  toggleMenu(null);
-                }
-              }
-            });
-
-            // Close menu on escape key
-            document.addEventListener("keydown", function (e) {
-              if (e.key === "Escape" && isMenuOpen) {
-                toggleMenu(null);
-                mobileToggle.focus();
-              }
-            });
-
-            // Close menu on window resize to desktop
-            window.addEventListener("resize", function () {
-              if (window.innerWidth > 768 && isMenuOpen) {
-                toggleMenu(null);
-              }
-            });
-
-            // Close menu after dropdown link click
-            document.querySelectorAll(".dropdown a").forEach((link) => {
-              link.addEventListener("click", function () {
-                if (window.innerWidth <= 768 && isMenuOpen) {
-                  setTimeout(() => {
-                    toggleMenu(null);
-                  }, 100);
-                }
-              });
-            });
-          }
-
-          // Initialize immediately if DOM is ready, otherwise wait
-          if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", initMobileMenu);
-          } else {
-            initMobileMenu();
-          }
-        })();
-      </script>
-
-      <!-- Additional Mobile Dropdown Fixes -->
-
-      <!-- Google AdSense -->
       <div
         class="difficulty-selector"
         id="difficultySelector"
@@ -1431,8 +1738,35 @@
         new BalanceManGame();
       });
     </script>
-    <script src="../js/game-ads.js"></script>
 
-    <!-- Google AdSense -->
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div>
+        <a href="../index.html">Home</a>
+        <a href="../games.html">Games</a>
+        <a href="../lessons.html">Lessons</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <p class="copyright">© 2024 ESL Fun Online. All rights reserved.</p>
+    </footer>
   </body>
 </html>

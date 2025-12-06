@@ -141,17 +141,243 @@
 
     
     <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/quizchamp-page.css" />
     <link rel="stylesheet" href="../css/mobile-optimized.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
+    <!-- Enhanced Game Styles -->
+    <style>
+      /* Reset and base styles */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      body {
+        background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        min-height: 100vh;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Game header */
+      .game-header {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      .header-content {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: #ffd700;
+        text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+      }
+
+      /* Ad styling */
+      .ad-wrapper {
+        width: 100%;
+        max-width: 728px;
+        margin: 0.5rem auto;
+        text-align: center;
+        padding: 0.25rem;
+      }
+
+      @media (max-width: 768px) {
+        .ad-wrapper {
+          max-width: 100%;
+          padding: 0.25rem;
+        }
+        .page-title {
+          font-size: 1.2rem;
+        }
+        .nav-btn span {
+          display: none;
+        }
+        .nav-btn {
+          padding: 0.5rem;
+        }
+      }
+
+      /* Screen reader only */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      /* Enhanced game container override */
+      .game-container {
+        background: rgba(255, 255, 255, 0.08) !important;
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 1.5rem;
+        max-width: 900px;
+        width: 95%;
+        margin: 1rem auto;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 1rem;
+          margin: 0.5rem auto;
+          width: 98%;
+          border-radius: 15px;
+        }
+      }
+
+      /* Footer styles */
+      .game-footer {
+        width: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(30, 41, 59, 0.95),
+          rgba(15, 23, 42, 0.98)
+        );
+        backdrop-filter: blur(20px);
+        padding: 1.5rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .footer-links a {
+        color: #46bbe5;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.9rem;
+      }
+
+      .footer-links a:hover {
+        color: #10b981;
+      }
+
+      .footer-copyright {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+    </style>
   </head>
 
   <body>
-    <!-- Google AdSense -->
+    <!-- Game Header -->
+    <div class="game-header">
+      <div class="header-content">
+        <a href="../index.html" class="nav-btn" aria-label="Go to home page">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <h1 class="page-title">🏆 ESL Quiz Championship</h1>
+        <a href="games.html" class="nav-btn" aria-label="Go to games page">
+          <i class="fas fa-gamepad"></i>
+          <span>Games</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div class="game-container" role="main">
       <button
         class="sound-toggle"
@@ -2710,6 +2936,39 @@
       });
     </script>
 
-    <!-- Google AdSense -->
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper" style="margin-top: 1.5rem">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div class="footer-links">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="games.html"><i class="fas fa-gamepad"></i> More Games</a>
+        <a href="../english/grammar.html"
+          ><i class="fas fa-book"></i> Learn English</a
+        >
+        <a href="../privacy.html"><i class="fas fa-shield-alt"></i> Privacy</a>
+        <a href="../terms.html"><i class="fas fa-file-contract"></i> Terms</a>
+      </div>
+      <p class="footer-copyright">
+        © 2024 ESL Fun Online. All rights reserved.
+      </p>
+    </footer>
   </body>
 </html>

@@ -7,28 +7,467 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
     <title>Floating Market Adventure - Enhanced Edition</title>
-        <!-- Favicon and Icons - Optimized for Google Search -->
+    <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48x48.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="../images/favicon-48x48.png"
+    />
     <link rel="apple-touch-icon" sizes="180x180" href="../images/1.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon-512x512.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../images/favicon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="../images/favicon-512x512.png"
+    />
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/main.css" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- CSS Files - Removed main.css to prevent conflicts -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* Dark Theme Base */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #1a1a2e;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: white;
+      }
+
+      /* Compact Game Header */
+      .game-nav-header {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      .game-nav-header .nav-left {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .game-nav-header .nav-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .game-nav-header .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .game-nav-header .game-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Canvas positioning */
+      #canvas {
+        position: fixed;
+        top: 45px;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 45px);
+      }
+
+      /* Game UI overlay */
+      #gameContainer {
+        position: fixed;
+        top: 45px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      #gameContainer > * {
+        pointer-events: auto;
+      }
+
+      /* HUD Elements */
+      #hud {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      #hud div {
+        margin: 5px 0;
+        color: white;
+      }
+
+      /* Minimap */
+      #minimap {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      /* Power-up indicator */
+      #powerUpIndicator {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+
+      /* Combo display */
+      #combo {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        display: none;
+      }
+
+      /* Time bar */
+      #timeBar {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        max-width: 80vw;
+        height: 20px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+      }
+
+      #timeBarFill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: width 0.3s ease;
+      }
+
+      #timeBarFill.warning {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+
+      #timeBarFill.danger {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+        animation: pulse 0.5s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* Screens */
+      #startScreen,
+      #gameOver,
+      #pauseScreen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        z-index: 100;
+      }
+
+      #startScreen h1,
+      #gameOver h1,
+      #pauseScreen h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #667eea;
+      }
+
+      #startScreen p,
+      #gameOver p,
+      #pauseScreen p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        max-width: 500px;
+      }
+
+      .game-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+      }
+
+      .game-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .game-btn.secondary {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      /* Game Over specific */
+      #finalScore {
+        font-size: 1.3rem;
+        color: #ffd700;
+        margin: 1rem 0;
+      }
+
+      #foodList {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 1rem 0;
+        max-width: 400px;
+        text-align: left;
+      }
+
+      #foodList h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .food-name {
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      #achievements {
+        margin: 1rem 0;
+      }
+
+      .achievement {
+        background: rgba(255, 215, 0, 0.2);
+        border: 1px solid #ffd700;
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin: 5px;
+        display: inline-block;
+      }
+
+      /* Floating text */
+      .float-text {
+        position: absolute;
+        font-size: 18px;
+        font-weight: bold;
+        pointer-events: none;
+        animation: floatUp 1s ease-out forwards;
+        text-shadow: 0 0 10px currentColor;
+        z-index: 50;
+      }
+
+      @keyframes floatUp {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+      }
+
+      /* Mobile responsive */
+      @media (max-width: 768px) {
+        .game-nav-header {
+          padding: 0.4rem 0.75rem;
+        }
+
+        .game-nav-header .game-title {
+          display: none;
+        }
+
+        #hud {
+          font-size: 12px;
+          padding: 8px 10px;
+        }
+
+        #minimap {
+          width: 120px;
+          height: 96px;
+        }
+
+        #timeBar {
+          width: 200px;
+        }
+
+        #startScreen h1,
+        #gameOver h1 {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Compact Game Header -->
+    <header class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="../games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="game-title"><i class="fas fa-ship"></i> Floating Market</div>
+    </header>
+
+    <!-- Canvas element for game -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Minimap -->
+    <canvas id="minimap"></canvas>
+
+    <!-- Game Container with UI elements -->
+    <div id="gameContainer">
+      <!-- HUD -->
+      <div id="hud">
+        <div id="score">Score: 0</div>
+        <div id="timer">Time: 90s</div>
+        <div id="level">Level: 1</div>
+        <div id="collected">Remaining: 0/15</div>
+        <div id="highScore">High Score: 0</div>
+      </div>
+
+      <!-- Power-up indicator -->
+      <div id="powerUpIndicator"></div>
+
+      <!-- Combo display -->
+      <div id="combo"></div>
+
+      <!-- Time bar -->
+      <div id="timeBar">
+        <div id="timeBarFill"></div>
+      </div>
+
+      <!-- Start Screen -->
+      <div id="startScreen">
+        <h1>🛶 Floating Market Adventure</h1>
+        <p>
+          Navigate your boat through the floating market! Collect fruits and
+          seafood while avoiding obstacles. Use arrow keys or touch/click to
+          move.
+        </p>
+        <button class="game-btn" onclick="startGame()">Start Game</button>
+      </div>
+
+      <!-- Pause Screen -->
+      <div id="pauseScreen" style="display: none">
+        <h1>⏸️ Game Paused</h1>
+        <p>Press P or ESC to resume</p>
+        <button class="game-btn" onclick="togglePause()">Resume</button>
+        <button class="game-btn secondary" onclick="quitToMenu()">
+          Quit to Menu
+        </button>
+      </div>
+
+      <!-- Game Over Screen -->
+      <div id="gameOver" style="display: none">
+        <h1>🏁 Game Over!</h1>
+        <div id="finalScore"></div>
+        <div id="highScoreMessage"></div>
+        <div id="foodList"></div>
+        <div id="achievements"></div>
+        <button class="game-btn" onclick="restartGame()">Play Again</button>
+        <button class="game-btn secondary" onclick="quitToMenu()">
+          Main Menu
+        </button>
+      </div>
+    </div>
 
     <script>
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
 
-      // Make canvas fullscreen
+      // Make canvas fullscreen (accounting for header)
       function resizeCanvas() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.height = window.innerHeight - 45; // Account for header
       }
       resizeCanvas();
       window.addEventListener("resize", resizeCanvas);

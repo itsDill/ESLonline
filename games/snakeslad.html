@@ -145,17 +145,290 @@
       href="https://eslfunonline.com/games/snakeslad.html"
     />
     
+
     <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/snakeslad-page.css" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-  </head>
 
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      body {
+        font-family: "Inter", "Poppins", sans-serif;
+        background: linear-gradient(
+          -45deg,
+          #1a1a2e,
+          #16213e,
+          #0f3460,
+          #1a1a2e
+        ) !important;
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        min-height: 100vh;
+        color: #e2e8f0;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Compact Navigation Header */
+      .game-nav-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-left {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      .nav-game-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-game-title i {
+        color: #fbbf24;
+      }
+
+      /* Ad Wrapper */
+      .ad-wrapper {
+        max-width: 800px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+        text-align: center;
+      }
+
+      /* Footer */
+      .game-footer {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      .footer-copyright {
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+
+      /* Override game header for dark theme */
+      .game-header {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .game-title {
+        color: #e2e8f0 !important;
+      }
+
+      .control-btn {
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+
+      .control-btn:hover {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .control-btn.secondary {
+        background: rgba(255, 255, 255, 0.1) !important;
+      }
+
+      /* Setup screen dark theme */
+      .setup-screen {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .setup-title {
+        color: #e2e8f0 !important;
+      }
+
+      .player-option {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .player-option:hover,
+      .player-option.selected {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .category-option {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .category-option:hover,
+      .category-option.selected {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      /* Game screen dark theme */
+      .game-screen {
+        background: transparent !important;
+      }
+
+      .info-panel {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .question-panel {
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .question-text {
+        color: #e2e8f0 !important;
+      }
+
+      .answer-option {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .answer-option:hover {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #6366f1 !important;
+      }
+
+      .message-modal {
+        background: rgba(30, 41, 59, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #e2e8f0 !important;
+      }
+
+      .particles {
+        opacity: 0.3;
+      }
+    </style>
+  </head>
   <body>
+    <!-- Compact Navigation Header -->
+    <nav class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="nav-game-title">
+        <i class="fas fa-dice"></i> Snakes & Ladders
+      </div>
+    </nav>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div class="particles" id="particles" aria-hidden="true"></div>
 
     <header class="game-header" role="banner">
@@ -1891,6 +2164,36 @@
     </script>
     <script src="../js/game-ads.js"></script>
 
-    <!-- Google AdSense -->
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div class="footer-links">
+        <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="games.html"><i class="fas fa-gamepad"></i> Games</a>
+        <a href="../lessons.html"><i class="fas fa-book"></i> Lessons</a>
+        <a href="../contact.html"><i class="fas fa-envelope"></i> Contact</a>
+      </div>
+      <p class="footer-copyright">
+        &copy; 2024 ESL Fun Online. All rights reserved.
+      </p>
+    </footer>
+
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </body>
 </html>

@@ -4,20 +4,404 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ESL Escape Room - Library Mystery</title>
-    
-                  <link
+
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="../css/main.css?v=1763019900" />
-    <link rel="stylesheet" href="../css/header.css?v=1763019900" />
-    <link rel="stylesheet" href="../css/hero-unified.css?v=1763019900" />
-    <link rel="stylesheet" href="../css/index-page.css?v=1763019900" />
     <link rel="stylesheet" href="../css/escape-page.css?v=1763019900" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css?v=1763019900" />
-    <link rel="stylesheet" href="../css/layout-fixes.css?v=1763019900" />
-    </head>
+
+    <style>
+      /* Dark Theme Overrides */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body {
+        background: linear-gradient(
+          -45deg,
+          #1a1a2e,
+          #16213e,
+          #0f3460,
+          #1a1a2e
+        ) !important;
+        background-size: 400% 400% !important;
+        animation: gradientShift 15s ease infinite !important;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: white;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Compact Game Header */
+      .game-nav-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .game-nav-header .nav-left {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .game-nav-header .nav-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .game-nav-header .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .game-nav-header .game-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Ad Styling */
+      .ad-wrapper {
+        max-width: 800px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+      }
+
+      /* Game Container Override */
+      .game-container {
+        max-width: 900px;
+        margin: 0 auto !important;
+        padding: 1.5rem !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: white;
+      }
+
+      .header h1 {
+        color: white !important;
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .timer {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .progress-bar {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px;
+        height: 10px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #667eea, #764ba2) !important;
+        height: 100%;
+        transition: width 0.5s ease;
+      }
+
+      /* Start Screen & Puzzles */
+      .start-screen,
+      .puzzle,
+      .win-screen {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 2rem;
+        color: white;
+      }
+
+      .story {
+        color: rgba(255, 255, 255, 0.9) !important;
+      }
+
+      .story h2 {
+        color: #667eea !important;
+      }
+
+      .puzzle h2 {
+        color: #667eea !important;
+        margin-bottom: 1rem;
+      }
+
+      .puzzle-description {
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+
+      .hint {
+        background: rgba(102, 126, 234, 0.2) !important;
+        border: 1px solid rgba(102, 126, 234, 0.3) !important;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        color: rgba(255, 255, 255, 0.9) !important;
+      }
+
+      /* Options */
+      .options .option {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        padding: 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .options .option:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        border-color: #667eea !important;
+      }
+
+      /* Word Grid */
+      .word-grid .sentence-item {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .word-grid .sentence-item:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      .word-grid .sentence-item.selected {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        ) !important;
+        border-color: transparent !important;
+      }
+
+      /* Input fields */
+      input[type="text"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        width: 200px;
+        margin-left: 0.5rem;
+      }
+
+      input[type="text"]::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea !important;
+      }
+
+      /* Buttons */
+      .btn {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        ) !important;
+        border: none !important;
+        color: white !important;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Feedback */
+      .feedback.correct {
+        background: rgba(16, 185, 129, 0.2) !important;
+        border: 1px solid #10b981;
+        color: #10b981 !important;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+      }
+
+      .feedback.incorrect {
+        background: rgba(239, 68, 68, 0.2) !important;
+        border: 1px solid #ef4444;
+        color: #ef4444 !important;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+      }
+
+      /* Win Screen */
+      .win-screen h2 {
+        color: #10b981 !important;
+      }
+
+      .stats {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .stat-item {
+        color: rgba(255, 255, 255, 0.9) !important;
+        padding: 0.5rem 0;
+      }
+
+      /* Footer */
+      .game-footer {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .game-footer a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        margin: 0 1rem;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .game-footer a:hover {
+        color: #667eea;
+      }
+
+      .game-footer .copyright {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+        margin-top: 1rem;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .game-container {
+          margin: 0.5rem !important;
+          padding: 1rem !important;
+          border-radius: 12px;
+        }
+
+        .header h1 {
+          font-size: 1.5rem;
+        }
+
+        .start-screen,
+        .puzzle,
+        .win-screen {
+          padding: 1.25rem;
+        }
+
+        input[type="text"] {
+          width: 150px;
+          margin-top: 0.5rem;
+          display: block;
+          margin-left: 0;
+        }
+
+        .game-nav-header .game-title {
+          display: none;
+        }
+      }
+    </style>
+  </head>
   <body>
+    <!-- Compact Game Header -->
+    <header class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="../games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="game-title"><i class="fas fa-key"></i> ESL Escape Room</div>
+    </header>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div class="game-container">
       <div class="header">
         <h1>🔐 The Library Mystery</h1>
@@ -392,5 +776,35 @@
         location.reload();
       }
     </script>
+
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div>
+        <a href="../index.html">Home</a>
+        <a href="../games.html">Games</a>
+        <a href="../lessons.html">Lessons</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <p class="copyright">© 2024 ESL Fun Online. All rights reserved.</p>
+    </footer>
   </body>
 </html>

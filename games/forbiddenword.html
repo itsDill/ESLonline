@@ -75,28 +75,120 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../css/main.css" />
-    <link rel="stylesheet" href="../css/mobile-optimized.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
 
     <style>
+      /* Dark Theme Base */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body {
+        background: linear-gradient(
+          -45deg,
+          #1a1a2e,
+          #16213e,
+          #0f3460,
+          #1a1a2e
+        ) !important;
+        background-size: 400% 400% !important;
+        animation: gradientShift 15s ease infinite !important;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: white;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
       :root {
         --forbidden-red: #ef4444;
         --success-green: #10b981;
         --warning-yellow: #f59e0b;
       }
 
+      /* Compact Game Header */
+      .game-nav-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .game-nav-header .nav-left {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .game-nav-header .nav-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .game-nav-header .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .game-nav-header .game-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* Ad Styling */
+      .ad-wrapper {
+        max-width: 800px;
+        margin: 1rem auto;
+        padding: 0 1rem;
+      }
+
       .game-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 2rem;
+        max-width: 900px;
+        margin: 1rem auto;
+        padding: 1.5rem;
       }
 
       .game-header {
@@ -106,36 +198,38 @@
 
       .game-header h1 {
         font-size: 2.5rem;
-        color: var(--primary-color);
+        color: #667eea;
         margin-bottom: 0.5rem;
       }
 
       .game-header p {
         font-size: 1.1rem;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.7);
       }
 
       /* Setup Screen */
       .setup-screen,
       .game-screen {
-        background: var(--bg-card);
-        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
         padding: 2rem;
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       }
 
       .instructions {
-        background: var(--bg-light);
-        border-left: 4px solid var(--primary-color);
+        background: rgba(102, 126, 234, 0.1);
+        border-left: 4px solid #667eea;
         padding: 1.5rem;
         margin: 1.5rem 0;
-        border-radius: var(--radius-md);
+        border-radius: 12px;
         text-align: left;
       }
 
       .instructions h3 {
         margin-top: 0;
-        color: var(--primary-color);
+        color: #667eea;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -148,7 +242,7 @@
 
       .instructions li {
         margin: 0.5rem 0;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.8);
       }
 
       .difficulty-selection {
@@ -158,7 +252,7 @@
 
       .difficulty-selection h3 {
         margin-bottom: 1.5rem;
-        color: var(--text-primary);
+        color: white;
       }
 
       .difficulty-buttons {
@@ -170,67 +264,66 @@
 
       .difficulty-btn {
         padding: 1.5rem 2.5rem;
-        border: 3px solid var(--border-color);
-        background: white;
-        border-radius: var(--radius-md);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s;
         min-width: 200px;
+        color: white;
       }
 
       .difficulty-btn:hover {
         transform: translateY(-3px);
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       }
 
       .difficulty-btn.easy:hover,
       .difficulty-btn.easy.selected {
         border-color: var(--success-green);
-        background: rgba(16, 185, 129, 0.1);
+        background: rgba(16, 185, 129, 0.2);
       }
 
       .difficulty-btn.medium:hover,
       .difficulty-btn.medium.selected {
         border-color: var(--warning-yellow);
-        background: rgba(245, 158, 11, 0.1);
+        background: rgba(245, 158, 11, 0.2);
       }
 
       .difficulty-btn.hard:hover,
       .difficulty-btn.hard.selected {
         border-color: var(--forbidden-red);
-        background: rgba(239, 68, 68, 0.1);
+        background: rgba(239, 68, 68, 0.2);
       }
 
       .difficulty-btn h4 {
         margin: 0 0 0.5rem 0;
         font-size: 1.3rem;
+        color: white;
       }
 
       .difficulty-btn p {
         margin: 0;
         font-size: 0.9rem;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.7);
       }
 
       .btn-start {
         margin-top: 2rem;
         padding: 1.25rem 3rem;
-        background: linear-gradient(
-          135deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: 12px;
         font-size: 1.2rem;
         font-weight: 600;
         cursor: pointer;
-        transition: transform 0.3s;
+        transition: all 0.3s;
       }
 
       .btn-start:hover {
         transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
       }
 
       .btn-start:disabled {
@@ -256,22 +349,23 @@
       }
 
       .score-item {
-        background: var(--bg-light);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 1rem 2rem;
-        border-radius: var(--radius-md);
+        border-radius: 12px;
         text-align: center;
       }
 
       .score-label {
         font-size: 0.9rem;
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.7);
         margin-bottom: 0.5rem;
       }
 
       .score-value {
         font-size: 1.8rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: #667eea;
       }
 
       .score-value.correct {
@@ -292,14 +386,15 @@
         height: 120px;
         margin: 0 auto 1rem;
         border-radius: 50%;
-        border: 6px solid var(--primary-color);
+        border: 6px solid #667eea;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 2.5rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: #667eea;
         transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.05);
       }
 
       .timer-circle.warning {
@@ -324,13 +419,14 @@
       }
 
       .card-container {
-        background: white;
-        border: 4px solid var(--primary-color);
-        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 3px solid #667eea;
+        border-radius: 16px;
         padding: 3rem 2rem;
         margin: 2rem auto;
         max-width: 600px;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         position: relative;
       }
 
@@ -338,7 +434,7 @@
         position: absolute;
         top: -15px;
         right: 20px;
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 20px;
@@ -349,7 +445,7 @@
       .target-word {
         font-size: 3rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: #667eea;
         margin-bottom: 2rem;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -380,7 +476,7 @@
         background: var(--forbidden-red);
         color: white;
         padding: 1rem;
-        border-radius: var(--radius-md);
+        border-radius: 10px;
         font-size: 1.2rem;
         font-weight: 500;
         text-transform: lowercase;
@@ -410,7 +506,7 @@
       .btn-control {
         padding: 1rem 2rem;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: 10px;
         font-size: 1.1rem;
         font-weight: 600;
         cursor: pointer;
@@ -430,6 +526,7 @@
       .btn-correct:hover {
         background: #059669;
         transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
       }
 
       .btn-skip {
@@ -442,6 +539,7 @@
       .btn-skip:hover {
         background: #d97706;
         transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
       }
 
       .btn-end {
@@ -451,21 +549,27 @@
 
       .btn-end:hover {
         background: #dc2626;
+        box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
       }
 
       .btn-new-game {
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
       }
 
       .btn-new-game:hover {
-        background: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
       }
 
       .results-screen {
         display: none;
         text-align: center;
         padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
       }
 
       .results-screen.active {
@@ -475,6 +579,7 @@
       .results-header {
         font-size: 2.5rem;
         margin-bottom: 1rem;
+        color: #667eea;
       }
 
       .results-stats {
@@ -485,25 +590,53 @@
       }
 
       .stat-card {
-        background: var(--bg-light);
+        background: rgba(255, 255, 255, 0.1);
         padding: 1.5rem;
-        border-radius: var(--radius-lg);
-        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .stat-value {
         font-size: 2.5rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
+        color: #667eea;
       }
 
       .stat-label {
-        color: var(--text-secondary);
+        color: rgba(255, 255, 255, 0.7);
         font-size: 0.9rem;
       }
 
       .hidden {
         display: none;
+      }
+
+      /* Footer */
+      .game-footer {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .game-footer a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        margin: 0 1rem;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .game-footer a:hover {
+        color: #667eea;
+      }
+
+      .game-footer .copyright {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+        margin-top: 1rem;
       }
 
       @media (max-width: 768px) {
@@ -531,11 +664,49 @@
           flex: 1;
           min-width: 120px;
         }
+
+        .game-nav-header .game-title {
+          display: none;
+        }
       }
     </style>
   </head>
 
   <body>
+    <!-- Compact Game Header -->
+    <header class="game-nav-header">
+      <div class="nav-left">
+        <a href="../index.html" class="nav-btn"
+          ><i class="fas fa-home"></i> Home</a
+        >
+        <a href="../games.html" class="nav-btn"
+          ><i class="fas fa-gamepad"></i> Games</a
+        >
+      </div>
+      <div class="game-title">
+        <i class="fas fa-ban"></i> The Forbidden Word
+      </div>
+    </header>
+
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div class="game-container">
       <header class="game-header">
         <h1><i class="fas fa-ban"></i> The Forbidden Word</h1>
@@ -1182,5 +1353,35 @@
         }
       });
     </script>
+
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+      <div>
+        <a href="../index.html">Home</a>
+        <a href="../games.html">Games</a>
+        <a href="../lessons.html">Lessons</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <p class="copyright">© 2024 ESL Fun Online. All rights reserved.</p>
+    </footer>
   </body>
 </html>
