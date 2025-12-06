@@ -158,6 +158,60 @@
 
     <!-- Enhanced Game Styles -->
     <style>
+      /* Reset body margin/padding - override all external CSS */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+      }
+
+      /* Hide skip link visually but keep for screen readers */
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+      }
+
+      /* Screen reader only class */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      /* Ad styling */
+      .ad-wrapper {
+        width: 100%;
+        max-width: 728px;
+        margin: 0.5rem auto;
+        text-align: center;
+        padding: 0.25rem;
+      }
+
+      @media (max-width: 768px) {
+        .ad-wrapper {
+          max-width: 100%;
+          padding: 0.25rem;
+        }
+      }
+
       /* Dynamic Animated Background */
       body {
         background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
@@ -604,9 +658,29 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 2rem;
-        border-radius: 16px;
-        margin-bottom: 1.5rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .game-status {
+          padding: 0.5rem 0.75rem;
+          margin-bottom: 0.5rem;
+          border-radius: 10px;
+        }
+        .game-status .status-item {
+          font-size: 0.75rem;
+        }
+        .status-icon {
+          width: 32px !important;
+          height: 32px !important;
+          font-size: 0.9rem !important;
+        }
+        .turn-indicator {
+          padding: 0.4rem 0.8rem !important;
+          font-size: 0.75rem !important;
+        }
       }
 
       .game-status .status-item,
@@ -650,37 +724,19 @@
         color: white;
       }
 
-      /* Ad Container Styling - Minimized */
-      .game-ad-container {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(5px);
-        border-radius: 8px;
-        padding: 0.5rem;
-        margin: 0.5rem auto;
-        max-width: 728px;
-        text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        opacity: 0.9;
-        transition: opacity 0.3s ease;
-      }
-
-      .game-ad-container:hover {
-        opacity: 1;
-      }
-
-      .game-ad-container .ad-label {
-        font-size: 0.6rem;
-        color: rgba(255, 255, 255, 0.35);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.25rem;
-      }
-
       /* Enhanced Game Container */
       .game-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 1rem;
+        padding: 0.75rem;
+        padding-bottom: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 0.5rem;
+          padding-bottom: 1.5rem;
+        }
       }
 
       /* Better Card Fanning */
@@ -688,9 +744,55 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        padding: 1rem;
-        min-height: 160px;
+        gap: 0.4rem;
+        padding: 0.75rem;
+        min-height: 140px;
+      }
+
+      @media (max-width: 768px) {
+        .player-hand {
+          gap: 0.25rem;
+          padding: 0.5rem;
+          min-height: 100px;
+        }
+        .player-hand .card {
+          width: 50px !important;
+          height: 75px !important;
+          font-size: 0.7rem;
+        }
+        .player-hand .card .card-number {
+          font-size: 1.2rem !important;
+        }
+        .player-hand .card .card-vocabulary {
+          font-size: 0.5rem !important;
+        }
+        .computer-hand .card {
+          width: 40px !important;
+          height: 60px !important;
+        }
+        .current-card {
+          width: 70px !important;
+          height: 105px !important;
+        }
+        .draw-deck .card {
+          width: 55px !important;
+          height: 82px !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .player-hand .card {
+          width: 42px !important;
+          height: 63px !important;
+        }
+        .computer-hand .card {
+          width: 32px !important;
+          height: 48px !important;
+        }
+        .current-card {
+          width: 60px !important;
+          height: 90px !important;
+        }
       }
 
       .player-hand .card {
@@ -1068,114 +1170,47 @@
     <!-- Skip link for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Site Navigation Header -->
-    <header>
-      <div class="container">
-        <nav class="navbar">
-          <!-- Logo Section -->
-          <a href="../index.html" class="logo-container">
-            <img
-              src="../images/1.png"
-              alt="ESL Fun Online Logo"
-              class="logo-image"
-              loading="eager"
-              decoding="async"
-              width="40"
-              height="40"
-            />
-            <span class="logo-text">ESL Fun Online</span>
-          </a>
-
-          <!-- Navigation Links -->
-          <ul class="nav-links" id="navLinks">
-            <li class="nav-item">
-              <a href="../index.html" class="nav-link">
-                <i class="fas fa-home"></i>
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="fas fa-book"></i>
-                English
-                <i class="fas fa-chevron-down"></i>
-              </a>
-              <div class="dropdown">
-                <a href="../english/grammar.html" class="dropdown-item">
-                  <i class="fas fa-spell-check"></i>
-                  Grammar Guides
-                </a>
-                <a href="../english/vocabguide.html" class="dropdown-item">
-                  <i class="fas fa-book-open"></i>
-                  Vocabulary Building
-                </a>
-                <a href="../english/worksheets.html" class="dropdown-item">
-                  <i class="fas fa-file-alt"></i>
-                  Worksheets
-                </a>
-                <a href="../english/business.html" class="dropdown-item">
-                  <i class="fas fa-briefcase"></i>
-                  Business English
-                </a>
-              </div>
-            </li>
-            <li class="nav-item current">
-              <a href="games.html" class="nav-link">
-                <i class="fas fa-dice"></i>
-                Games
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="../tools/tools.html" class="nav-link">
-                <i class="fas fa-tools"></i>
-                Toolkit
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="../blog/blog.html" class="nav-link">
-                <i class="fas fa-blog"></i>
-                Blog
-              </a>
-            </li>
-          </ul>
-
-          <!-- Control Buttons -->
-          <div class="controls">
-            <button
-              class="control-btn theme-toggle"
-              id="themeToggle"
-              aria-label="Toggle dark mode"
-            >
-              <i class="fas fa-moon"></i>
-            </button>
-          </div>
-          <button
-            class="control-btn mobile-toggle"
-            id="mobileToggle"
-            aria-label="Toggle mobile menu"
-          >
-            <i class="fas fa-bars"></i>
-          </button>
-        </nav>
-      </div>
-    </header>
-
     <!-- Game Header with Controls -->
     <div
       class="game-header"
       role="banner"
-      style="position: relative; top: 0; margin-top: 80px"
+      style="position: relative; top: 0; margin-top: 0"
     >
       <style>
         .game-header .header-content {
           display: flex;
           flex-direction: column;
           align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+        }
+        .game-header .title-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           gap: 1rem;
-          padding: 1rem;
+          width: 100%;
+        }
+        .game-header .home-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.5rem 1rem;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: white;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .game-header .home-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-2px);
         }
         .game-header .game-title {
-          font-size: 1.8rem;
+          font-size: 1.6rem;
           font-weight: 700;
           margin: 0;
           display: flex;
@@ -1186,15 +1221,15 @@
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 0.5rem;
+          gap: 0.4rem;
         }
         .game-header .control-btn {
           display: flex;
           align-items: center;
           gap: 0.4rem;
-          padding: 0.5rem 1rem;
-          border-radius: 10px;
-          font-size: 0.85rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
           font-weight: 500;
           transition: all 0.3s ease;
         }
@@ -1211,21 +1246,33 @@
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         .keyboard-hint {
-          font-size: 0.65rem;
+          font-size: 0.6rem;
           background: rgba(0, 0, 0, 0.3);
-          padding: 0.15rem 0.4rem;
+          padding: 0.1rem 0.3rem;
           border-radius: 4px;
-          margin-left: 0.3rem;
+          margin-left: 0.2rem;
         }
         @media (max-width: 768px) {
+          .game-header .header-content {
+            padding: 0.5rem;
+          }
+          .game-header .game-title {
+            font-size: 1.3rem;
+          }
+          .game-header .home-btn span {
+            display: none;
+          }
+          .game-header .home-btn {
+            padding: 0.5rem;
+          }
           .game-header .game-controls {
-            gap: 0.4rem;
+            gap: 0.3rem;
           }
           .game-header .control-btn span {
             display: none;
           }
           .game-header .control-btn {
-            padding: 0.6rem;
+            padding: 0.5rem;
           }
           .keyboard-hint {
             display: none;
@@ -1233,7 +1280,17 @@
         }
       </style>
       <div class="header-content">
-        <h1 class="game-title">🎮 English UNO</h1>
+        <div class="title-row">
+          <a href="../index.html" class="home-btn" aria-label="Go to home page">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span>Home</span>
+          </a>
+          <h1 class="game-title">🎮 English UNO</h1>
+          <a href="games.html" class="home-btn" aria-label="Go to games page">
+            <i class="fas fa-gamepad" aria-hidden="true"></i>
+            <span>Games</span>
+          </a>
+        </div>
         <div class="game-controls">
           <button
             class="control-btn"
@@ -1304,192 +1361,19 @@
       </div>
     </div>
 
-    <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
-    <script>
-      (function () {
-        "use strict";
-
-        function initMobileMenu() {
-          const mobileToggle = document.getElementById("mobileToggle");
-          const navLinks = document.getElementById("navLinks");
-          const body = document.body;
-
-          if (!mobileToggle || !navLinks) {
-            console.warn("Mobile menu elements not found");
-            return;
-          }
-
-          let isMenuOpen = false;
-
-          function toggleMenu(e) {
-            if (e && e.preventDefault) e.preventDefault();
-            if (e && e.stopPropagation) e.stopPropagation();
-
-            isMenuOpen = !isMenuOpen;
-            const icon = mobileToggle.querySelector("i");
-
-            if (isMenuOpen) {
-              navLinks.classList.add("active");
-              body.classList.add("mobile-menu-open");
-              body.style.overflow = "hidden";
-              if (icon) icon.className = "fas fa-times";
-            } else {
-              navLinks.classList.remove("active");
-              body.classList.remove("mobile-menu-open");
-              body.style.overflow = "";
-              if (icon) icon.className = "fas fa-bars";
-
-              // Close all dropdowns
-              document.querySelectorAll(".nav-item").forEach((item) => {
-                item.classList.remove("mobile-open", "mobile-dropdown-open");
-                const chevron = item.querySelector(".fa-chevron-down");
-                if (chevron) chevron.style.transform = "rotate(0deg)";
-              });
-            }
-          }
-
-          // Simple unified handler - works for both touch and click
-          let lastToggleTime = 0;
-
-          function handleToggleClick(e) {
-            const now = Date.now();
-            // Prevent double-firing within 300ms
-            if (now - lastToggleTime < 300) {
-              return;
-            }
-            lastToggleTime = now;
-
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu(e);
-          }
-
-          mobileToggle.addEventListener("click", handleToggleClick);
-          mobileToggle.addEventListener("touchend", handleToggleClick);
-
-          // Handle dropdown toggles on mobile
-          document.querySelectorAll(".nav-item").forEach((item) => {
-            const link = item.querySelector(".nav-link");
-            const dropdown = item.querySelector(".dropdown");
-            const chevron = link?.querySelector(".fa-chevron-down");
-
-            // Only add special handling for links WITH dropdowns
-            if (link && dropdown && chevron) {
-              // Simple unified dropdown handler
-              let lastDropdownToggle = 0;
-
-              function handleDropdownClick(e) {
-                if (window.innerWidth > 768) return; // Only on mobile
-
-                const now = Date.now();
-                // Prevent double-firing within 300ms
-                if (now - lastDropdownToggle < 300) {
-                  return;
-                }
-                lastDropdownToggle = now;
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                const isOpen = item.classList.contains("mobile-open");
-
-                // Close other dropdowns
-                document.querySelectorAll(".nav-item").forEach((otherItem) => {
-                  if (otherItem !== item) {
-                    otherItem.classList.remove(
-                      "mobile-open",
-                      "mobile-dropdown-open"
-                    );
-                    const otherChevron =
-                      otherItem.querySelector(".fa-chevron-down");
-                    if (otherChevron)
-                      otherChevron.style.transform = "rotate(0deg)";
-                  }
-                });
-
-                // Toggle current dropdown
-                if (isOpen) {
-                  item.classList.remove("mobile-open", "mobile-dropdown-open");
-                  chevron.style.transform = "rotate(0deg)";
-                  link.setAttribute("aria-expanded", "false");
-                } else {
-                  item.classList.add("mobile-open", "mobile-dropdown-open");
-                  chevron.style.transform = "rotate(180deg)";
-                  link.setAttribute("aria-expanded", "true");
-                }
-              }
-
-              // Remove href="#" behavior on mobile
-              if (link.getAttribute("href") === "#") {
-                link.style.cursor = "pointer";
-              }
-
-              // Attach handlers for both click and touch
-              link.addEventListener("click", handleDropdownClick);
-              link.addEventListener("touchend", handleDropdownClick);
-            }
-          });
-
-          // Close menu when clicking outside
-          document.addEventListener("click", function (e) {
-            if (window.innerWidth <= 768 && isMenuOpen) {
-              if (
-                !mobileToggle.contains(e.target) &&
-                !navLinks.contains(e.target)
-              ) {
-                toggleMenu(null);
-              }
-            }
-          });
-
-          // Close menu on escape key
-          document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape" && isMenuOpen) {
-              toggleMenu(null);
-              mobileToggle.focus();
-            }
-          });
-
-          // Close menu on window resize to desktop
-          window.addEventListener("resize", function () {
-            if (window.innerWidth > 768 && isMenuOpen) {
-              toggleMenu(null);
-            }
-          });
-
-          // Close menu after dropdown link click
-          document.querySelectorAll(".dropdown a").forEach((link) => {
-            link.addEventListener("click", function () {
-              if (window.innerWidth <= 768 && isMenuOpen) {
-                setTimeout(() => {
-                  toggleMenu(null);
-                }, 100);
-              }
-            });
-          });
-        }
-
-        // Initialize immediately if DOM is ready, otherwise wait
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initMobileMenu);
-        } else {
-          initMobileMenu();
-        }
-      })();
-    </script>
-
-    <!-- Additional Mobile Dropdown Fixes -->
-
-    <!-- Horizontal Ad Banner - Neatly placed below header -->
-    <div class="game-ad-container" id="topAdContainer">
-      <div class="ad-label">Advertisement</div>
+    <!-- Top Ad -->
+    <div class="ad-wrapper">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
       <ins
         class="adsbygoogle"
         style="display: block"
+        data-ad-format="autorelaxed"
         data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="auto"
-        data-ad-format="horizontal"
-        data-full-width-responsive="true"
+        data-ad-slot="2184713192"
       ></ins>
       <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
@@ -4805,6 +4689,25 @@
     </script>
 
     <script src="../js/game-ads.js"></script>
+
+    <!-- Bottom Ad -->
+    <div class="ad-wrapper" style="margin-top: 1.5rem; margin-bottom: 1rem">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+        crossorigin="anonymous"
+      ></script>
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2184713192"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
 
     <!-- Footer Section -->
     <footer class="game-footer">
