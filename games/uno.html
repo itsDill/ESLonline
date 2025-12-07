@@ -554,7 +554,11 @@
       }
 
       /* Modal Show Animation */
-      .game-message.show,
+      .game-message.show {
+        display: block !important;
+        animation: modalAppear 0.3s ease-out;
+      }
+
       #colorPicker.show {
         display: flex !important;
         animation: modalAppear 0.3s ease-out;
@@ -761,10 +765,10 @@
           font-size: 0.7rem;
         }
         .player-hand .card .card-number {
-          font-size: 1.2rem !important;
+          font-size: 1.6rem !important;
         }
-        .player-hand .card .card-vocabulary {
-          font-size: 0.5rem !important;
+        .player-hand .card .card-icon {
+          font-size: 1.3rem !important;
         }
         .computer-hand .card {
           width: 40px !important;
@@ -773,6 +777,12 @@
         .current-card {
           width: 70px !important;
           height: 105px !important;
+        }
+        .current-card .card-number {
+          font-size: 1.8rem !important;
+        }
+        .current-card .card-icon {
+          font-size: 1.5rem !important;
         }
         .draw-deck .card {
           width: 55px !important;
@@ -785,6 +795,12 @@
           width: 42px !important;
           height: 63px !important;
         }
+        .player-hand .card .card-number {
+          font-size: 1.3rem !important;
+        }
+        .player-hand .card .card-icon {
+          font-size: 1.1rem !important;
+        }
         .computer-hand .card {
           width: 32px !important;
           height: 48px !important;
@@ -792,6 +808,12 @@
         .current-card {
           width: 60px !important;
           height: 90px !important;
+        }
+        .current-card .card-number {
+          font-size: 1.5rem !important;
+        }
+        .current-card .card-icon {
+          font-size: 1.3rem !important;
         }
       }
 
@@ -1024,13 +1046,43 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        padding: 2rem;
+        padding: 1.5rem;
         border-radius: 20px;
         box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
         z-index: 1000;
         display: none;
-        max-width: 90%;
-        width: 400px;
+        max-width: 90vw;
+        max-height: 85vh;
+        width: 450px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .game-message::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .game-message::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+
+      .game-message::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+      }
+
+      .game-message::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      @media (max-width: 480px) {
+        .game-message {
+          width: 95vw;
+          max-height: 80vh;
+          padding: 1rem;
+          border-radius: 16px;
+        }
       }
 
       .game-message .message-title {
@@ -1038,18 +1090,22 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         margin-bottom: 1rem;
         text-align: center;
+        line-height: 1.3;
       }
 
       .game-message .message-text {
         color: rgba(255, 255, 255, 0.85);
-        text-align: center;
-        line-height: 1.6;
+        text-align: left;
+        line-height: 1.5;
         margin-bottom: 1.5rem;
         white-space: pre-line;
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       .message-btn {
@@ -1062,6 +1118,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         width: 100%;
+        font-size: 0.95rem;
       }
 
       .message-btn:hover {
@@ -1069,9 +1126,261 @@
         box-shadow: 0 8px 25px rgba(70, 187, 229, 0.4);
       }
 
+      /* Stats Modal Specific Styling */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin: 1rem 0;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem;
+        border-radius: 12px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #46bbe5;
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Settings Modal Styling */
+      .settings-modal {
+        width: 400px;
+      }
+
+      .settings-content {
+        margin: 1rem 0;
+      }
+
+      .setting-group {
+        margin-bottom: 1rem;
+      }
+
+      .setting-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+      }
+
+      .setting-select {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .setting-select:focus {
+        outline: none;
+        border-color: #46bbe5;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .setting-select option {
+        background: #1e293b;
+        color: white;
+      }
+
+      .setting-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+      }
+
+      .setting-checkbox:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .setting-checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #46bbe5;
+        cursor: pointer;
+      }
+
+      .setting-checkbox span:last-child {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Modal Button Styles */
+      .modal-buttons {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #64748b, #475569) !important;
+      }
+
+      .btn-secondary:hover {
+        box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4) !important;
+      }
+
+      /* Achievements Modal */
+      .achievements-modal {
+        width: 500px;
+      }
+
+      .achievements-list {
+        max-height: 350px;
+        overflow-y: auto;
+        margin: 1rem 0;
+        padding-right: 0.5rem;
+      }
+
+      .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        transition: background 0.2s ease;
+      }
+
+      .achievement-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .achievement-item.unlocked {
+        background: rgba(70, 187, 229, 0.15);
+        border: 1px solid rgba(70, 187, 229, 0.3);
+      }
+
+      .achievement-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        text-align: center;
+      }
+
+      .achievement-info {
+        flex: 1;
+      }
+
+      .achievement-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: white;
+      }
+
+      .achievement-desc {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.25rem;
+      }
+
+      /* Word Modal */
+      .word-modal {
+        width: 380px;
+      }
+
+      .word-content {
+        text-align: center;
+        margin: 1rem 0;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+      }
+
+      .word-display {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #46bbe5;
+        margin-bottom: 0.5rem;
+      }
+
+      .word-definition {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+      }
+
+      /* Quiz Modal */
+      .quiz-modal {
+        width: 450px;
+      }
+
+      .quiz-content {
+        text-align: center;
+        margin: 1rem 0;
+        min-height: 100px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+      }
+
+      .quiz-question {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 1rem;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      .quiz-option {
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .quiz-option:hover {
+        transform: translateX(5px);
+      }
+
+      .quiz-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .quiz-score {
+        font-weight: 600;
+        color: #46bbe5;
+        font-size: 1rem;
+      }
+
+      .quiz-footer .btn-secondary {
+        width: auto;
+        padding: 0.5rem 1rem;
+      }
+
       /* Word Learning Modal Enhanced */
       #wordModal .message-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
       }
 
       #wordContent {
@@ -1119,23 +1428,6 @@
 
       .sound-toggle:active {
         transform: scale(0.95);
-      }
-
-      .sound-toggle .keyboard-hint {
-        position: absolute;
-        bottom: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.6rem;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 0.15rem 0.4rem;
-        border-radius: 4px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .sound-toggle:hover .keyboard-hint {
-        opacity: 1;
       }
 
       /* Particle Effects Enhanced */
@@ -1299,7 +1591,6 @@
           >
             <i class="fas fa-plus" aria-hidden="true"></i>
             <span>New Game</span>
-            <span class="keyboard-hint">N</span>
           </button>
           <button
             class="control-btn secondary"
@@ -1316,46 +1607,6 @@
           >
             <i class="fas fa-question-circle" aria-hidden="true"></i>
             <span>Rules</span>
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showStats()"
-            aria-label="View statistics"
-          >
-            <i class="fas fa-chart-bar" aria-hidden="true"></i>
-            <span>Stats</span>
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showAchievements()"
-            aria-label="View achievements"
-          >
-            <i class="fas fa-trophy" aria-hidden="true"></i>
-            <span>Achievements</span>
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showVocabularyQuiz()"
-            aria-label="Take vocabulary quiz"
-          >
-            <i class="fas fa-book" aria-hidden="true"></i>
-            <span>Quiz</span>
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showDailyChallenges()"
-            aria-label="View daily challenges"
-          >
-            <i class="fas fa-calendar-check" aria-hidden="true"></i>
-            <span>Challenges</span>
-          </button>
-          <button
-            class="control-btn secondary"
-            onclick="showPowerUps()"
-            aria-label="View power-ups"
-          >
-            <i class="fas fa-magic" aria-hidden="true"></i>
-            <span>Power-Ups</span>
           </button>
         </div>
       </div>
@@ -1388,7 +1639,6 @@
       aria-label="Toggle sound effects"
     >
       <i class="fas fa-volume-up" aria-hidden="true"></i>
-      <span class="keyboard-hint">S</span>
     </button>
 
     <div class="game-container" role="main" id="main-content">
@@ -1657,132 +1907,104 @@
 
     <!-- Settings Modal -->
     <div
-      class="game-message"
+      class="game-message settings-modal"
       id="settingsModal"
-      style="max-width: 500px"
       role="dialog"
       aria-labelledby="settingsTitle"
       aria-modal="true"
     >
-      <div class="message-title" id="settingsTitle">Game Settings</div>
-      <div style="text-align: left; margin: 1rem 0">
-        <div style="margin-bottom: 1rem">
-          <label style="display: block; margin-bottom: 0.5rem; font-weight: 600"
-            >Difficulty Level:</label
-          >
-          <select
-            id="difficultySelect"
-            style="
-              width: 100%;
-              padding: 0.5rem;
-              border-radius: 8px;
-              border: 2px solid #e5e7eb;
-            "
-          >
-            <option value="beginner">Beginner - Easy words</option>
-            <option value="intermediate">Intermediate - Medium words</option>
-            <option value="advanced">Advanced - Challenging words</option>
+      <div class="message-title" id="settingsTitle">⚙️ Game Settings</div>
+      <div class="settings-content">
+        <div class="setting-group">
+          <label class="setting-label">Difficulty Level</label>
+          <select id="difficultySelect" class="setting-select">
+            <option value="beginner">Beginner - Easy AI</option>
+            <option value="intermediate">Intermediate - Smarter AI</option>
+            <option value="advanced">Advanced - Expert AI</option>
           </select>
         </div>
-        <div style="margin-bottom: 1rem">
-          <label style="display: flex; align-items: center; gap: 0.5rem">
+        <div class="setting-group">
+          <label class="setting-checkbox">
             <input type="checkbox" id="soundToggleCheck" checked />
+            <span class="checkbox-custom"></span>
             <span>Sound Effects</span>
           </label>
         </div>
-        <div style="margin-bottom: 1rem">
-          <label style="display: flex; align-items: center; gap: 0.5rem">
+        <div class="setting-group">
+          <label class="setting-checkbox">
             <input type="checkbox" id="animationsToggleCheck" checked />
+            <span class="checkbox-custom"></span>
             <span>Animations</span>
           </label>
         </div>
-        <div style="margin-bottom: 1rem">
-          <label style="display: flex; align-items: center; gap: 0.5rem">
+        <div class="setting-group">
+          <label class="setting-checkbox">
             <input type="checkbox" id="hintsToggleCheck" checked />
+            <span class="checkbox-custom"></span>
             <span>Show Hints</span>
           </label>
         </div>
       </div>
-      <div style="display: flex; gap: 0.5rem">
+      <div class="modal-buttons">
         <button class="message-btn" onclick="saveSettings()">Save</button>
-        <button
-          class="message-btn"
-          style="background: #6b7280"
-          onclick="closeSettings()"
-        >
+        <button class="message-btn btn-secondary" onclick="closeSettings()">
           Cancel
         </button>
       </div>
     </div>
 
     <!-- Achievements Modal -->
-    <div class="game-message" id="achievementsModal" style="max-width: 600px">
+    <div class="game-message achievements-modal" id="achievementsModal">
       <div class="message-title">🏆 Achievements</div>
-      <div
-        id="achievementsList"
-        style="
-          text-align: left;
-          margin: 1rem 0;
-          max-height: 300px;
-          overflow-y: auto;
-        "
-      >
+      <div id="achievementsList" class="achievements-list">
         <!-- Achievements will be populated here -->
       </div>
       <button class="message-btn" onclick="closeAchievements()">Close</button>
     </div>
 
     <!-- Word Learning Modal -->
-    <div class="game-message" id="wordModal" style="max-width: 400px">
+    <div class="game-message word-modal" id="wordModal">
       <div class="message-title">📚 Learn This Word!</div>
-      <div id="wordContent" style="text-align: center; margin: 1rem 0">
+      <div id="wordContent" class="word-content">
         <!-- Word content will be populated here -->
       </div>
-      <div style="display: flex; gap: 0.5rem">
+      <div class="modal-buttons">
         <button class="message-btn" onclick="markWordLearned()">
           I Know This!
         </button>
-        <button
-          class="message-btn"
-          style="background: #6b7280"
-          onclick="closeWordModal()"
-        >
+        <button class="message-btn btn-secondary" onclick="closeWordModal()">
           Skip
         </button>
       </div>
     </div>
 
     <!-- Vocabulary Quiz Modal -->
-    <div class="game-message" id="vocabularyQuizModal" style="max-width: 500px">
+    <div class="game-message quiz-modal" id="vocabularyQuizModal">
       <div class="message-title">📝 Vocabulary Quiz</div>
-      <div
-        id="quizContent"
-        style="text-align: center; margin: 1rem 0; min-height: 200px"
-      >
+      <div id="quizContent" class="quiz-content">
         <!-- Quiz content will be populated here -->
       </div>
-      <div style="display: flex; gap: 0.5rem; justify-content: center">
+      <div class="quiz-options">
         <button
-          class="message-btn"
+          class="message-btn quiz-option"
           id="quizOption1"
           onclick="selectQuizAnswer(0)"
         ></button>
         <button
-          class="message-btn"
+          class="message-btn quiz-option"
           id="quizOption2"
           onclick="selectQuizAnswer(1)"
         ></button>
         <button
-          class="message-btn"
+          class="message-btn quiz-option"
           id="quizOption3"
           onclick="selectQuizAnswer(2)"
         ></button>
       </div>
-      <div style="margin-top: 1rem; text-align: center">
-        <span id="quizScore">Score: 0/0</span>
+      <div class="quiz-footer">
+        <span id="quizScore" class="quiz-score">Score: 0/0</span>
         <button
-          class="message-btn"
-          style="background: #6b7280; margin-left: 1rem"
+          class="message-btn btn-secondary"
           onclick="closeVocabularyQuiz()"
         >
           Close Quiz
@@ -2359,6 +2581,15 @@
           return;
         }
 
+        // F key - toggle fullscreen
+        if (e.key === "f" || e.key === "F") {
+          if (!e.ctrlKey && !e.metaKey) {
+            toggleFullscreen();
+            e.preventDefault();
+          }
+          return;
+        }
+
         // Arrow keys - navigate player's cards
         if (gameState.playerTurn && !gameState.gameOver) {
           const playerCards = document.querySelectorAll(
@@ -2563,10 +2794,7 @@
         if (!isPlayer) {
           // Computer card (face down)
           cardDiv.classList.add("card-back");
-          cardDiv.innerHTML = `
-                    <div class="card-number">UNO</div>
-                    <div class="card-icon"><i class="fas fa-question"></i></div>
-                `;
+          // Card back design handled by CSS
         } else {
           // Player card (face up)
           cardDiv.classList.add(card.color);
@@ -2594,15 +2822,8 @@
             "display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;";
 
           if (card.type === "number") {
-            const vocabWord = getVocabularyWord(card.color);
-            const isLearned = gameState.learnedWords.has(vocabWord);
             content.innerHTML = `
                         <div class="card-number">${card.value}</div>
-                        <div class="card-vocabulary" style="color: ${
-                          card.color === "yellow" ? "#1a202c" : "white"
-                        };">
-                          ${vocabWord}${isLearned ? " ✓" : ""}
-                        </div>
                     `;
           } else if (card.type === "action") {
             const actionIcons = {
@@ -2614,7 +2835,6 @@
                         <div class="card-icon"><i class="fas ${
                           actionIcons[card.value]
                         }"></i></div>
-                        <div class="card-vocabulary">${card.value.toUpperCase()}</div>
                     `;
           } else if (card.type === "wild") {
             const wildIcons = {
@@ -2631,9 +2851,6 @@
                         <div class="card-icon"><i class="fas ${
                           wildIcons[card.value]
                         }"></i></div>
-                        <div class="card-vocabulary">${
-                          card.value === "wild" ? "WILD" : "DRAW 4"
-                        }</div>
                     `;
           }
 
@@ -2844,16 +3061,19 @@
         gameState.currentColor = card.color;
         gameState.discardPile.push(card);
 
+        let skipOpponentTurn = false;
+
         // Handle action cards
         if (card.type === "action") {
-          handleActionCard(card);
+          skipOpponentTurn = handleActionCard(card);
         } else if (card.type === "wild" && card.value === "draw4") {
-          // Computer draws 4 cards
+          // Computer draws 4 cards AND loses their turn
           for (let i = 0; i < 4; i++) {
             if (gameState.deck.length === 0) reshuffleDeck();
             gameState.computerHand.push(gameState.deck.pop());
           }
           playSound("draw");
+          skipOpponentTurn = true; // Draw 4 also skips opponent's turn
         }
 
         // Check for UNO
@@ -2867,15 +3087,24 @@
           return;
         }
 
-        // Switch turns
-        gameState.playerTurn = false;
         updateDisplay();
 
-        // Computer's turn
-        setTimeout(computerTurn, 1000);
+        // If skip/reverse/draw2/draw4 was played, player gets another turn
+        if (skipOpponentTurn) {
+          gameState.playerTurn = true;
+          showMessage(
+            "Your Turn Again!",
+            "The computer's turn was skipped. Play another card!"
+          );
+          checkForPlayableCards();
+        } else {
+          // Switch turns - Computer's turn
+          gameState.playerTurn = false;
+          setTimeout(computerTurn, 1000);
+        }
       }
 
-      // Handle action cards
+      // Handle action cards - returns true if opponent's turn should be skipped
       function handleActionCard(card) {
         switch (card.value) {
           case "skip":
@@ -2883,23 +3112,27 @@
             announceToScreenReader(
               "Skip card played. Computer's turn skipped."
             );
-            break;
+            return true; // Skip opponent's turn
           case "reverse":
+            // In 2-player game, reverse acts like skip
             playReverseSound();
-            announceToScreenReader("Reverse card played.");
-            break;
+            announceToScreenReader(
+              "Reverse card played. In 2-player mode, computer's turn is skipped."
+            );
+            return true; // Skip opponent's turn
           case "draw2":
-            // Computer draws 2 cards
+            // Computer draws 2 cards AND loses their turn
             for (let i = 0; i < 2; i++) {
               if (gameState.deck.length === 0) reshuffleDeck();
               gameState.computerHand.push(gameState.deck.pop());
             }
             playDrawSound();
             announceToScreenReader(
-              "Draw 2 card played. Computer draws 2 cards."
+              "Draw 2 card played. Computer draws 2 cards and loses their turn."
             );
-            break;
+            return true; // Skip opponent's turn
         }
+        return false;
       }
 
       // Show color picker
@@ -2978,19 +3211,26 @@
             }
             gameState.discardPile.push(cardToPlay);
 
+            let skipPlayerTurn = false;
+
             // Handle action cards against player
             if (cardToPlay.type === "action") {
-              handleComputerActionCard(cardToPlay);
+              skipPlayerTurn = handleComputerActionCard(cardToPlay);
             } else if (
               cardToPlay.type === "wild" &&
               cardToPlay.value === "draw4"
             ) {
-              // Player draws 4 cards
+              // Player draws 4 cards AND loses their turn
               for (let i = 0; i < 4; i++) {
                 if (gameState.deck.length === 0) reshuffleDeck();
                 gameState.playerHand.push(gameState.deck.pop());
               }
               playSound("draw");
+              showMessage(
+                "Wild Draw 4!",
+                "You drew 4 cards and lost your turn!"
+              );
+              skipPlayerTurn = true;
             }
 
             // Check for computer UNO
@@ -3010,6 +3250,15 @@
             }
 
             playSound("cardPlay");
+
+            // If action card was played, computer gets another turn
+            if (skipPlayerTurn) {
+              gameState.computerThinking = false;
+              updateDisplay();
+              // Computer takes another turn after a delay
+              setTimeout(computerTurn, 1500);
+              return;
+            }
           } else {
             // Draw a card
             if (gameState.deck.length === 0) reshuffleDeck();
@@ -3103,24 +3352,29 @@
         return playableCards[0];
       }
 
-      // Handle computer action cards
+      // Handle computer action cards - returns true if player's turn should be skipped
       function handleComputerActionCard(card) {
         switch (card.value) {
           case "skip":
             playSound("skip");
-            break;
+            showMessage("Skip!", "Your turn was skipped!");
+            return true;
           case "reverse":
+            // In 2-player game, reverse acts like skip
             playSound("reverse");
-            break;
+            showMessage("Reverse!", "In 2-player mode, your turn is skipped!");
+            return true;
           case "draw2":
-            // Player draws 2 cards
+            // Player draws 2 cards AND loses their turn
             for (let i = 0; i < 2; i++) {
               if (gameState.deck.length === 0) reshuffleDeck();
               gameState.playerHand.push(gameState.deck.pop());
             }
             playSound("draw");
-            break;
+            showMessage("Draw 2!", "You drew 2 cards and lost your turn!");
+            return true;
         }
+        return false;
       }
 
       // Draw card
@@ -3209,9 +3463,6 @@
             content = `
                         <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; z-index: 2; position: relative;">
                             <div class="card-number">${card.value}</div>
-                            <div class="card-vocabulary" style="color: ${textColor};">${getVocabularyWord(
-              card.color
-            )}</div>
                         </div>
                     `;
           } else if (card.type === "action") {
@@ -3225,7 +3476,6 @@
                             <div class="card-icon"><i class="fas ${
                               actionIcons[card.value]
                             }"></i></div>
-                            <div class="card-vocabulary" style="color: ${textColor};">${card.value.toUpperCase()}</div>
                         </div>
                     `;
           } else if (card.type === "wild") {
@@ -3239,9 +3489,6 @@
                             <div class="card-icon"><i class="fas ${
                               wildIcons[card.value]
                             }"></i></div>
-                            <div class="card-vocabulary">${
-                              card.value === "wild" ? "WILD" : "DRAW 4"
-                            }</div>
                         </div>
                     `;
           }
@@ -3388,14 +3635,26 @@
 
       // Show message
       function showMessage(title, text) {
-        document.getElementById("messageTitle").textContent = title;
-        document.getElementById("messageText").textContent = text;
-        document.getElementById("gameMessage").classList.add("show");
+        const titleEl = document.getElementById("messageTitle");
+        const textEl = document.getElementById("messageText");
+        const modalEl = document.getElementById("gameMessage");
+
+        titleEl.textContent = title;
+        // Check if text contains HTML
+        if (text.includes("<")) {
+          textEl.innerHTML = text;
+        } else {
+          textEl.textContent = text;
+        }
+        modalEl.classList.add("show");
       }
 
       // Close message
       function closeMessage() {
-        document.getElementById("gameMessage").classList.remove("show");
+        const modalEl = document.getElementById("gameMessage");
+        modalEl.classList.remove("show");
+        // Reset to text content
+        document.getElementById("messageText").innerHTML = "";
       }
 
       // New game
@@ -3587,33 +3846,73 @@
           : "fas fa-volume-mute";
       }
 
+      // Toggle fullscreen mode
+      function toggleFullscreen() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          // Enter fullscreen
+          const elem = document.documentElement;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+          }
+        } else {
+          // Exit fullscreen
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        }
+      }
+
+      // Update fullscreen button icon when fullscreen state changes
+      document.addEventListener("fullscreenchange", updateFullscreenButton);
+      document.addEventListener(
+        "webkitfullscreenchange",
+        updateFullscreenButton
+      );
+
+      function updateFullscreenButton() {
+        const icon = document.getElementById("fullscreenIcon");
+        const text = document.getElementById("fullscreenText");
+        const floatingIcon = document.getElementById("floatingFullscreenIcon");
+
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          if (icon) icon.className = "fas fa-compress";
+          if (text) text.textContent = "Exit";
+          if (floatingIcon) floatingIcon.className = "fas fa-compress";
+        } else {
+          if (icon) icon.className = "fas fa-expand";
+          if (text) text.textContent = "Fullscreen";
+          if (floatingIcon) floatingIcon.className = "fas fa-expand";
+        }
+      }
+
       // Show rules with better formatting
       function showRules() {
         const rulesText = `🃏 HOW TO PLAY:
 • Match the color OR number of the current card
-• Wild cards can be played anytime - choose any color!
+• Wild cards can be played anytime
 • Call UNO when you have one card left
+• First to play all cards wins!
 
 🎴 ACTION CARDS:
-• Skip ⊘ - Computer skips their turn
-• Reverse ↻ - Direction changes (acts like skip in 2-player)
+• Skip ⊘ - Opponent loses their turn
+• Reverse ↻ - Acts like Skip in 2-player
 • Draw 2 (+2) - Opponent draws 2 cards
 
 🌈 WILD CARDS:
 • Wild - Play anytime, pick any color
-• Wild Draw 4 (+4) - Opponent draws 4, you pick color
+• Wild Draw 4 - Opponent draws 4 cards
 
-⌨️ KEYBOARD SHORTCUTS:
-• D - Draw a card
-• U - Call UNO
-• N - New game
-• S - Toggle sound
-• Arrow keys - Navigate cards
-
-📚 LEARN WHILE PLAYING:
-• Each card shows vocabulary words
-• Match colors to learn word associations
-• Complete quizzes to reinforce learning!`;
+💡 TIPS:
+• Save action cards for when opponent has few cards
+• Don't forget to call UNO with one card left!`;
         showMessage("📖 Game Rules", rulesText);
       }
 
@@ -3636,23 +3935,57 @@
             ? "N/A"
             : Math.round(gameState.stats.fastestWin / 1000) + "s";
 
-        const statsText = `📊 GAME STATISTICS
+        // Create HTML content for stats modal
+        const messageEl = document.getElementById("gameMessage");
+        const titleEl = document.getElementById("messageTitle");
+        const textEl = document.getElementById("messageText");
 
-🎮 Games Played: ${gameState.stats.gamesPlayed}
-🏆 Games Won: ${gameState.stats.gamesWon}
-📈 Win Rate: ${winRate}%
+        titleEl.textContent = "📊 Your Statistics";
+        textEl.innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value">${gameState.stats.gamesPlayed}</span>
+              <span class="stat-label">Games Played</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${gameState.stats.gamesWon}</span>
+              <span class="stat-label">Games Won</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${winRate}%</span>
+              <span class="stat-label">Win Rate</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${avgTime}s</span>
+              <span class="stat-label">Avg Game Time</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${fastestWin}</span>
+              <span class="stat-label">Fastest Win</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${currentStreak}</span>
+              <span class="stat-label">Win Streak</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${bestStreak}</span>
+              <span class="stat-label">Best Streak</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${gameState.maxCombo}</span>
+              <span class="stat-label">Max Combo</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">
+              🃏 Cards Played: ${gameState.cardsPlayed} • 📚 Words Learned: ${gameState.learnedWords.size}
+            </div>
+          </div>
+        `;
 
-⏱️ Average Game Time: ${avgTime}s
-⚡ Fastest Win: ${fastestWin}
-
-🔥 Current Win Streak: ${currentStreak}
-👑 Best Win Streak: ${bestStreak}
-💥 Max Combo: ${gameState.maxCombo}
-🃏 Total Cards Played: ${gameState.cardsPlayed}
-
-📚 Words Learned: ${gameState.learnedWords.size}
-📖 Words Today: ${gameState.wordsLearnedToday}`;
-        showMessage("📈 Your Stats", statsText);
+        messageEl.style.display = "flex";
+        messageEl.style.flexDirection = "column";
+        messageEl.classList.add("show");
       }
 
       // Save statistics
@@ -3791,23 +4124,26 @@
 
         Object.entries(achievements).forEach(([key, achievement]) => {
           const achievementDiv = document.createElement("div");
-          achievementDiv.style.cssText =
-            "display: flex; align-items: center; gap: 1rem; padding: 0.8rem; margin-bottom: 0.5rem; background: rgba(79, 70, 229, 0.1); border-radius: 10px;";
+          achievementDiv.className = `achievement-item ${
+            achievement.unlocked ? "unlocked" : ""
+          }`;
 
           const icon = achievement.unlocked ? "🏆" : "🔒";
-          const opacity = achievement.unlocked ? "1" : "0.5";
 
           achievementDiv.innerHTML = `
-            <div style="font-size: 1.5rem; opacity: ${opacity};">${icon}</div>
-            <div style="opacity: ${opacity};">
-              <div style="font-weight: bold; margin-bottom: 0.2rem;">${achievement.name}</div>
-              <div style="font-size: 0.9rem; color: var(--text-secondary);">${achievement.description}</div>
+            <div class="achievement-icon">${icon}</div>
+            <div class="achievement-info">
+              <div class="achievement-name">${achievement.name}</div>
+              <div class="achievement-desc">${achievement.description}</div>
             </div>
           `;
 
           achievementsList.appendChild(achievementDiv);
         });
 
+        document.getElementById("achievementsModal").style.display = "flex";
+        document.getElementById("achievementsModal").style.flexDirection =
+          "column";
         document.getElementById("achievementsModal").classList.add("show");
       }
 

@@ -313,18 +313,46 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .time-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .time-btn:hover::before {
+        left: 100%;
       }
 
       .time-btn:hover {
         border-color: var(--primary-color);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
         background: rgba(70, 187, 229, 0.2);
+        box-shadow: 0 8px 20px rgba(70, 187, 229, 0.3);
       }
 
       .time-btn.selected {
-        background: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
         color: white;
-        border-color: var(--primary-color);
+        border-color: transparent;
+        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.4);
       }
 
       .categories-section {
@@ -378,11 +406,24 @@
         font-size: 1rem;
         font-weight: 500;
         color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-btn::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: transparent;
+        transition: all 0.3s ease;
       }
 
       .category-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         background: rgba(255, 255, 255, 0.15);
       }
 
@@ -391,15 +432,28 @@
         background: rgba(16, 185, 129, 0.2);
       }
 
+      .category-btn.easy:hover::after {
+        background: var(--easy-color);
+      }
+
       .category-btn.hard:hover {
         border-color: var(--hard-color);
         background: rgba(239, 68, 68, 0.2);
+      }
+
+      .category-btn.hard:hover::after {
+        background: var(--hard-color);
       }
 
       .category-btn i {
         font-size: 2rem;
         display: block;
         margin-bottom: 0.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .category-btn:hover i {
+        transform: scale(1.2);
       }
 
       .btn-start {
@@ -442,12 +496,55 @@
         margin: 2rem 0;
       }
 
-      .timer-circle {
-        width: 180px;
-        height: 180px;
+      /* Timer with SVG progress ring */
+      .timer-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
         margin: 0 auto 1rem;
+      }
+
+      .timer-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .timer-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 8;
+      }
+
+      .timer-progress {
+        fill: none;
+        stroke: #667eea;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 565.48;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+      }
+
+      .timer-progress.warning {
+        stroke: var(--timer-warning);
+      }
+
+      .timer-progress.danger {
+        stroke: var(--hard-color);
+      }
+
+      .timer-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 160px;
+        height: 160px;
         border-radius: 50%;
-        border: 8px solid #667eea;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -456,60 +553,174 @@
         color: #667eea;
         transition: all 0.3s;
         background: rgba(255, 255, 255, 0.05);
+        border: none;
       }
 
       .timer-circle.warning {
-        border-color: var(--timer-warning);
         color: var(--timer-warning);
         animation: pulse 1s infinite;
       }
 
       .timer-circle.danger {
-        border-color: var(--hard-color);
         color: var(--hard-color);
+        animation: shake 0.5s infinite;
       }
 
       @keyframes pulse {
         0%,
         100% {
-          transform: scale(1);
+          transform: translate(-50%, -50%) scale(1);
         }
         50% {
-          transform: scale(1.05);
+          transform: translate(-50%, -50%) scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) translateX(0);
+        }
+        25% {
+          transform: translate(-50%, -50%) translateX(-3px);
+        }
+        75% {
+          transform: translate(-50%, -50%) translateX(3px);
         }
       }
 
       .card-display {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.15),
+          rgba(118, 75, 162, 0.15)
+        );
+        backdrop-filter: blur(15px);
         border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: var(--radius-lg);
         padding: 2rem;
         margin: 2rem 0;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        animation: cardAppear 0.5s ease-out;
+      }
+
+      @keyframes cardAppear {
+        0% {
+          opacity: 0;
+          transform: scale(0.9) translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
       }
 
       .category-name {
-        font-size: 1.3rem;
-        font-weight: 600;
+        font-size: 1.4rem;
+        font-weight: 700;
         color: #667eea;
         margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
       }
 
       .words-list {
         list-style: none;
         padding: 0;
+        counter-reset: word-counter;
       }
 
       .words-list li {
-        padding: 1rem;
-        margin: 0.5rem 0;
-        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem 1rem 1rem 3.5rem;
+        margin: 0.75rem 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12),
+          rgba(255, 255, 255, 0.06)
+        );
         border-radius: var(--radius-md);
-        font-size: 1.2rem;
-        font-weight: 500;
+        font-size: 1.3rem;
+        font-weight: 600;
         color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        transition: all 0.3s ease;
+        animation: wordSlide 0.4s ease-out backwards;
+        cursor: pointer;
+      }
+
+      .words-list li:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .words-list li:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .words-list li:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .words-list li:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .words-list li:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      @keyframes wordSlide {
+        0% {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .words-list li::before {
+        content: counter(word-counter);
+        counter-increment: word-counter;
+        position: absolute;
+        left: 1rem;
+        width: 1.8rem;
+        height: 1.8rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: white;
+      }
+
+      .words-list li:hover {
+        transform: translateX(5px);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.18),
+          rgba(255, 255, 255, 0.1)
+        );
+      }
+
+      .words-list li.completed {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.3),
+          rgba(16, 185, 129, 0.15)
+        );
+        border-color: var(--easy-color);
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+
+      .words-list li.completed::after {
+        content: "✓";
+        position: absolute;
+        right: 1rem;
+        color: var(--easy-color);
+        font-size: 1.2rem;
       }
 
       .game-controls {
@@ -528,15 +739,24 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
       .btn-new-card {
-        background: var(--primary-color);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
         color: white;
+        box-shadow: 0 4px 15px rgba(70, 187, 229, 0.4);
       }
 
       .btn-new-card:hover {
-        background: var(--secondary-color);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(70, 187, 229, 0.5);
       }
 
       .btn-change-category {
@@ -548,13 +768,149 @@
       .btn-change-category:hover {
         border-color: var(--primary-color);
         background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-3px);
       }
 
-      .score-display {
+      /* Score panel */
+      .score-panel {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .score-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-md);
         text-align: center;
+        min-width: 100px;
+      }
+
+      .score-item .label {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .score-item .value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #667eea;
+      }
+
+      .score-item.correct .value {
+        color: var(--easy-color);
+      }
+
+      .score-item.rounds .value {
+        color: var(--timer-warning);
+      }
+
+      /* Results overlay */
+      .results-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .results-overlay.show {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .results-card {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.2),
+          rgba(118, 75, 162, 0.2)
+        );
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-lg);
+        padding: 3rem;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        animation: scaleIn 0.4s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .results-card h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #ffd700;
+      }
+
+      .results-card .big-score {
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--easy-color);
+        margin: 1rem 0;
+      }
+
+      .results-card .message {
         font-size: 1.2rem;
         color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Confetti container */
+      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 999;
+        overflow: hidden;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        opacity: 0;
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          opacity: 1;
+          transform: translateY(-100vh) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(100vh) rotate(720deg);
+        }
       }
 
       .instructions {
@@ -584,14 +940,39 @@
           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         }
 
+        .timer-container {
+          width: 160px;
+          height: 160px;
+        }
+
         .timer-circle {
-          width: 140px;
-          height: 140px;
+          width: 120px;
+          height: 120px;
           font-size: 2.5rem;
         }
 
         .words-list li {
-          font-size: 1rem;
+          font-size: 1.1rem;
+          padding: 0.85rem 0.85rem 0.85rem 3rem;
+        }
+
+        .words-list li::before {
+          width: 1.5rem;
+          height: 1.5rem;
+          font-size: 0.8rem;
+        }
+
+        .score-panel {
+          gap: 1rem;
+        }
+
+        .score-item {
+          padding: 0.5rem 1rem;
+          min-width: 80px;
+        }
+
+        .score-item .value {
+          font-size: 1.4rem;
         }
       }
     </style>
@@ -652,15 +1033,33 @@
 
       <!-- Game Screen -->
       <div id="gameScreen" class="game-screen">
-        <div class="score-display">
-          <span id="categoryDisplay"></span> | <span id="timeDisplay"></span>
+        <div class="score-panel">
+          <div class="score-item correct">
+            <div class="label">Words</div>
+            <div class="value" id="correctCount">0</div>
+          </div>
+          <div class="score-item rounds">
+            <div class="label">Rounds</div>
+            <div class="value" id="roundCount">0</div>
+          </div>
         </div>
 
         <div class="timer-display">
-          <div id="timerCircle" class="timer-circle">--</div>
+          <div class="timer-container">
+            <svg class="timer-svg" viewBox="0 0 200 200">
+              <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+              <circle
+                id="timerProgress"
+                class="timer-progress"
+                cx="100"
+                cy="100"
+                r="90"
+              ></circle>
+            </svg>
+            <div id="timerCircle" class="timer-circle">--</div>
+          </div>
           <p style="color: var(--text-secondary); font-size: 0.9rem">
-            <i class="fas fa-lightbulb"></i> Describe the words without saying
-            them!
+            <i class="fas fa-lightbulb"></i> Tap words when guessed correctly!
           </p>
         </div>
 
@@ -674,16 +1073,35 @@
             <i class="fas fa-play"></i> Start Timer
           </button>
           <button id="newCardBtn" class="btn-control btn-new-card hidden">
-            <i class="fas fa-sync-alt"></i> New Card
+            <i class="fas fa-sync-alt"></i> Next Card
           </button>
           <button
             id="changeCategoryBtn"
             class="btn-control btn-change-category"
           >
-            <i class="fas fa-exchange-alt"></i> Change Category
+            <i class="fas fa-arrow-left"></i> Back
           </button>
         </div>
       </div>
+
+      <!-- Results Overlay -->
+      <div id="resultsOverlay" class="results-overlay">
+        <div class="results-card">
+          <h2><i class="fas fa-trophy"></i> Round Complete!</h2>
+          <div class="big-score" id="roundScore">0/5</div>
+          <div class="message" id="roundMessage">Great job!</div>
+          <button
+            id="continueBtn"
+            class="btn-control btn-new-card"
+            style="margin: 0 auto"
+          >
+            <i class="fas fa-arrow-right"></i> Next Round
+          </button>
+        </div>
+      </div>
+
+      <!-- Confetti Container -->
+      <div id="confettiContainer" class="confetti-container"></div>
     </div>
 
     <script>
@@ -921,6 +1339,10 @@
       let timerInterval = null;
       let timeRemaining = 0;
       let timerRunning = false;
+      let totalCorrect = 0;
+      let roundsPlayed = 0;
+      let roundCorrect = 0;
+      let soundEnabled = true;
 
       // DOM elements
       const setupScreen = document.getElementById("setupScreen");
@@ -930,13 +1352,22 @@
       const easyCategoriesGrid = document.getElementById("easyCategoriesGrid");
       const hardCategoriesGrid = document.getElementById("hardCategoriesGrid");
       const timerCircle = document.getElementById("timerCircle");
-      const categoryDisplay = document.getElementById("categoryDisplay");
-      const timeDisplay = document.getElementById("timeDisplay");
+      const timerProgress = document.getElementById("timerProgress");
       const currentCategory = document.getElementById("currentCategory");
       const wordsList = document.getElementById("wordsList");
       const startTimerBtn = document.getElementById("startTimerBtn");
       const newCardBtn = document.getElementById("newCardBtn");
       const changeCategoryBtn = document.getElementById("changeCategoryBtn");
+      const correctCountEl = document.getElementById("correctCount");
+      const roundCountEl = document.getElementById("roundCount");
+      const resultsOverlay = document.getElementById("resultsOverlay");
+      const roundScoreEl = document.getElementById("roundScore");
+      const roundMessageEl = document.getElementById("roundMessage");
+      const continueBtn = document.getElementById("continueBtn");
+      const confettiContainer = document.getElementById("confettiContainer");
+
+      // Timer progress ring constants
+      const CIRCUMFERENCE = 2 * Math.PI * 90; // 565.48
 
       // Initialize categories
       function initializeCategories() {
@@ -976,14 +1407,14 @@
       // Category selection
       function selectCategory(key, difficulty, btn) {
         document.querySelectorAll(".category-btn").forEach((b) => {
-          b.style.background = "white";
-          b.style.borderColor = "var(--border-color)";
+          b.style.background = "rgba(255, 255, 255, 0.1)";
+          b.style.borderColor = "rgba(255, 255, 255, 0.2)";
         });
 
         btn.style.background =
           difficulty === "easy"
-            ? "rgba(16, 185, 129, 0.2)"
-            : "rgba(239, 68, 68, 0.2)";
+            ? "rgba(16, 185, 129, 0.3)"
+            : "rgba(239, 68, 68, 0.3)";
         btn.style.borderColor =
           difficulty === "easy" ? "var(--easy-color)" : "var(--hard-color)";
 
@@ -1003,13 +1434,12 @@
         ];
         shuffleArray(currentCards);
         currentCardIndex = 0;
+        totalCorrect = 0;
+        roundsPlayed = 0;
+        updateScoreDisplay();
 
         setupScreen.classList.add("hidden");
         gameScreen.classList.add("active");
-
-        categoryDisplay.textContent =
-          gameData[selectedDifficulty][selectedCategory].name;
-        timeDisplay.textContent = `${selectedTime} seconds per round`;
 
         loadNewCard();
       });
@@ -1021,20 +1451,74 @@
           shuffleArray(currentCards);
         }
 
+        roundCorrect = 0;
         const words = currentCards[currentCardIndex];
         currentCategory.textContent =
           gameData[selectedDifficulty][selectedCategory].name;
 
         wordsList.innerHTML = "";
-        words.forEach((word) => {
+        words.forEach((word, index) => {
           const li = document.createElement("li");
           li.textContent = word;
+          li.dataset.index = index;
+          li.addEventListener("click", () => markWordCorrect(li));
           wordsList.appendChild(li);
         });
 
         currentCardIndex++;
         resetTimer();
       }
+
+      // Mark word as correct when clicked
+      function markWordCorrect(li) {
+        if (!timerRunning || li.classList.contains("completed")) return;
+
+        li.classList.add("completed");
+        roundCorrect++;
+        totalCorrect++;
+        updateScoreDisplay();
+        playTickSound();
+
+        // Check if all words guessed
+        if (roundCorrect === 5) {
+          stopTimer();
+          showResults(true);
+        }
+      }
+
+      // Update score display
+      function updateScoreDisplay() {
+        correctCountEl.textContent = totalCorrect;
+        roundCountEl.textContent = roundsPlayed;
+      }
+
+      // Show results overlay
+      function showResults(allCorrect) {
+        roundsPlayed++;
+        updateScoreDisplay();
+
+        roundScoreEl.textContent = `${roundCorrect}/5`;
+
+        if (roundCorrect === 5) {
+          roundMessageEl.textContent = "Perfect! You got all 5! 🎉";
+          createConfetti();
+        } else if (roundCorrect >= 3) {
+          roundMessageEl.textContent = "Great job! Keep it up! 👏";
+        } else if (roundCorrect >= 1) {
+          roundMessageEl.textContent = "Good effort! Try again! 💪";
+        } else {
+          roundMessageEl.textContent = "No worries, practice makes perfect! 📚";
+        }
+
+        resultsOverlay.classList.add("show");
+        playResultSound(roundCorrect);
+      }
+
+      // Continue to next round
+      continueBtn.addEventListener("click", () => {
+        resultsOverlay.classList.remove("show");
+        loadNewCard();
+      });
 
       // Timer functions
       function startTimer() {
@@ -1045,16 +1529,17 @@
         startTimerBtn.classList.add("hidden");
 
         updateTimerDisplay();
+        updateProgressRing();
 
         timerInterval = setInterval(() => {
           timeRemaining--;
           updateTimerDisplay();
+          updateProgressRing();
 
           if (timeRemaining <= 0) {
             stopTimer();
-            playSound();
-            alert("Time's up! Did you get all 5 words?");
-            newCardBtn.classList.remove("hidden");
+            playBuzzerSound();
+            showResults(false);
           }
         }, 1000);
       }
@@ -1069,6 +1554,8 @@
         timeRemaining = selectedTime;
         timerCircle.textContent = "--";
         timerCircle.className = "timer-circle";
+        timerProgress.style.strokeDashoffset = "0";
+        timerProgress.classList.remove("warning", "danger");
         startTimerBtn.classList.remove("hidden");
         newCardBtn.classList.add("hidden");
       }
@@ -1077,14 +1564,26 @@
         timerCircle.textContent = timeRemaining;
 
         timerCircle.classList.remove("warning", "danger");
+        timerProgress.classList.remove("warning", "danger");
+
         if (timeRemaining <= 10) {
           timerCircle.classList.add("danger");
+          timerProgress.classList.add("danger");
         } else if (timeRemaining <= selectedTime / 3) {
           timerCircle.classList.add("warning");
+          timerProgress.classList.add("warning");
         }
       }
 
-      function playSound() {
+      function updateProgressRing() {
+        const progress = (selectedTime - timeRemaining) / selectedTime;
+        const offset = CIRCUMFERENCE * progress;
+        timerProgress.style.strokeDashoffset = offset;
+      }
+
+      // Sound functions
+      function playTickSound() {
+        if (!soundEnabled) return;
         const context = new (window.AudioContext ||
           window.webkitAudioContext)();
         const oscillator = context.createOscillator();
@@ -1093,8 +1592,31 @@
         oscillator.connect(gainNode);
         gainNode.connect(context.destination);
 
-        oscillator.frequency.value = 800;
+        oscillator.frequency.value = 1200;
         oscillator.type = "sine";
+
+        gainNode.gain.setValueAtTime(0.15, context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.01,
+          context.currentTime + 0.1
+        );
+
+        oscillator.start(context.currentTime);
+        oscillator.stop(context.currentTime + 0.1);
+      }
+
+      function playBuzzerSound() {
+        if (!soundEnabled) return;
+        const context = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const oscillator = context.createOscillator();
+        const gainNode = context.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(context.destination);
+
+        oscillator.frequency.value = 200;
+        oscillator.type = "sawtooth";
 
         gainNode.gain.setValueAtTime(0.3, context.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(
@@ -1104,6 +1626,64 @@
 
         oscillator.start(context.currentTime);
         oscillator.stop(context.currentTime + 0.5);
+      }
+
+      function playResultSound(score) {
+        if (!soundEnabled) return;
+        const context = new (window.AudioContext ||
+          window.webkitAudioContext)();
+
+        if (score >= 3) {
+          // Success sound - ascending notes
+          const notes = [523, 659, 784];
+          notes.forEach((freq, i) => {
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.connect(gain);
+            gain.connect(context.destination);
+            osc.frequency.value = freq;
+            osc.type = "sine";
+            gain.gain.setValueAtTime(0.2, context.currentTime + i * 0.15);
+            gain.gain.exponentialRampToValueAtTime(
+              0.01,
+              context.currentTime + i * 0.15 + 0.3
+            );
+            osc.start(context.currentTime + i * 0.15);
+            osc.stop(context.currentTime + i * 0.15 + 0.3);
+          });
+        }
+      }
+
+      // Confetti effect
+      function createConfetti() {
+        const colors = [
+          "#ff6b6b",
+          "#4ecdc4",
+          "#45b7d1",
+          "#ffd93d",
+          "#6c5ce7",
+          "#a8e6cf",
+        ];
+
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + "%";
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = Math.random() * 10 + 5 + "px";
+          confetti.style.height = Math.random() * 10 + 5 + "px";
+          confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+          confetti.style.animation = `confetti-fall ${
+            Math.random() * 2 + 2
+          }s linear forwards`;
+          confetti.style.animationDelay = Math.random() * 0.5 + "s";
+
+          confettiContainer.appendChild(confetti);
+
+          // Remove after animation
+          setTimeout(() => confetti.remove(), 3000);
+        }
       }
 
       // Button handlers

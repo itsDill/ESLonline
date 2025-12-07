@@ -101,19 +101,20 @@
 
       body {
         background: linear-gradient(
-          -45deg,
-          #1a1a2e,
-          #16213e,
-          #0f3460,
-          #1a1a2e
+          135deg,
+          #667eea 0%,
+          #764ba2 25%,
+          #f093fb 50%,
+          #f5576c 75%,
+          #4facfe 100%
         ) !important;
         background-size: 400% 400% !important;
-        animation: gradientShift 15s ease infinite !important;
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        animation: rainbowFlow 15s ease infinite !important;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
         color: white;
       }
 
-      @keyframes gradientShift {
+      @keyframes rainbowFlow {
         0% {
           background-position: 0% 50%;
         }
@@ -125,6 +126,66 @@
         }
       }
 
+      /* Floating Elements */
+      .floating-icons {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .float-icon {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.3;
+        animation: floatAround 12s ease-in-out infinite;
+      }
+
+      .float-icon:nth-child(1) {
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+      }
+      .float-icon:nth-child(2) {
+        top: 20%;
+        right: 8%;
+        animation-delay: 2s;
+      }
+      .float-icon:nth-child(3) {
+        top: 60%;
+        left: 3%;
+        animation-delay: 4s;
+      }
+      .float-icon:nth-child(4) {
+        top: 75%;
+        right: 5%;
+        animation-delay: 1s;
+      }
+      .float-icon:nth-child(5) {
+        top: 40%;
+        right: 2%;
+        animation-delay: 3s;
+      }
+      .float-icon:nth-child(6) {
+        bottom: 15%;
+        left: 10%;
+        animation-delay: 5s;
+      }
+
+      @keyframes floatAround {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-30px) rotate(15deg);
+        }
+      }
+
       :root {
         --forbidden-red: #ef4444;
         --success-green: #10b981;
@@ -133,16 +194,23 @@
 
       /* Compact Game Header */
       .game-nav-header {
-        background: rgba(255, 255, 255, 0.1);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.9)
+        );
         backdrop-filter: blur(10px);
         padding: 0.75rem 1.5rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 4px solid;
+        border-image: linear-gradient(90deg, #667eea, #f093fb, #f5576c, #4facfe)
+          1;
         position: sticky;
         top: 0;
         z-index: 100;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       }
 
       .game-nav-header .nav-left {
@@ -151,28 +219,33 @@
       }
 
       .game-nav-header .nav-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
         color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
         text-decoration: none;
         font-size: 0.9rem;
+        font-weight: 600;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
       }
 
       .game-nav-header .nav-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-1px);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
       }
 
       .game-nav-header .game-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f5576c, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -197,138 +270,259 @@
       }
 
       .game-header h1 {
-        font-size: 2.5rem;
-        color: #667eea;
-        margin-bottom: 0.5rem;
+        font-size: 3.2rem;
+        background: linear-gradient(135deg, #fff 0%, #ffeaa7 50%, #fff 100%);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+        text-shadow: none;
+        filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+        animation: titleShimmer 3s ease infinite;
+        letter-spacing: 2px;
+      }
+
+      @keyframes titleShimmer {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
       }
 
       .game-header p {
-        font-size: 1.1rem;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.98);
+        font-weight: 500;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: 0.5px;
       }
 
       /* Setup Screen */
       .setup-screen,
       .game-screen {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(255, 255, 255, 0.92)
+        );
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 30px;
+        padding: 3rem;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        position: relative;
+        z-index: 1;
+        transform-style: preserve-3d;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .setup-screen:hover,
+      .game-screen:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      }
+
+      .setup-screen::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          #667eea,
+          #f093fb,
+          #f5576c,
+          #4facfe,
+          #667eea
+        );
+        background-size: 200% 100%;
+        border-radius: 30px 30px 0 0;
+        animation: borderFlow 4s linear infinite;
+      }
+
+      @keyframes borderFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        100% {
+          background-position: 200% 50%;
+        }
       }
 
       .instructions {
-        background: rgba(102, 126, 234, 0.1);
-        border-left: 4px solid #667eea;
-        padding: 1.5rem;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1),
+          rgba(240, 147, 251, 0.1)
+        );
+        border-left: 5px solid #667eea;
+        padding: 1.75rem;
         margin: 1.5rem 0;
-        border-radius: 12px;
+        border-radius: 0 15px 15px 0;
         text-align: left;
       }
 
       .instructions h3 {
         margin-top: 0;
         color: #667eea;
+        font-size: 1.3rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
       }
 
       .instructions ul {
-        margin: 0.5rem 0;
+        margin: 1rem 0;
         padding-left: 1.5rem;
       }
 
       .instructions li {
-        margin: 0.5rem 0;
-        color: rgba(255, 255, 255, 0.8);
+        margin: 0.75rem 0;
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.6;
       }
 
       .difficulty-selection {
-        margin: 2rem 0;
+        margin: 2.5rem 0;
         text-align: center;
       }
 
       .difficulty-selection h3 {
         margin-bottom: 1.5rem;
-        color: white;
+        color: #4a5568;
+        font-size: 1.4rem;
       }
 
       .difficulty-buttons {
         display: flex;
-        gap: 1rem;
+        gap: 1.25rem;
         justify-content: center;
         flex-wrap: wrap;
       }
 
       .difficulty-btn {
-        padding: 1.5rem 2.5rem;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
+        padding: 1.75rem 2rem;
+        border: 3px solid #e2e8f0;
+        background: white;
+        border-radius: 20px;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         min-width: 200px;
-        color: white;
+        color: #4a5568;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .difficulty-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .difficulty-btn:hover::before {
+        left: 100%;
       }
 
       .difficulty-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
       }
 
       .difficulty-btn.easy:hover,
       .difficulty-btn.easy.selected {
-        border-color: var(--success-green);
-        background: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
       }
 
       .difficulty-btn.medium:hover,
       .difficulty-btn.medium.selected {
-        border-color: var(--warning-yellow);
-        background: rgba(245, 158, 11, 0.2);
+        border-color: #f59e0b;
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
       }
 
       .difficulty-btn.hard:hover,
       .difficulty-btn.hard.selected {
-        border-color: var(--forbidden-red);
-        background: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
       }
 
       .difficulty-btn h4 {
         margin: 0 0 0.5rem 0;
-        font-size: 1.3rem;
-        color: white;
+        font-size: 1.5rem;
+        color: #2d3748;
       }
 
       .difficulty-btn p {
         margin: 0;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        color: #718096;
       }
 
       .btn-start {
         margin-top: 2rem;
-        padding: 1.25rem 3rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.25rem 3.5rem;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        background-size: 200% 200%;
         color: white;
         border: none;
-        border-radius: 12px;
-        font-size: 1.2rem;
-        font-weight: 600;
+        border-radius: 30px;
+        font-size: 1.3rem;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        animation: btnShine 3s ease infinite;
+      }
+
+      @keyframes btnShine {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
       }
 
       .btn-start:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
       }
 
       .btn-start:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
+        transform: none;
+        animation: none;
       }
 
       /* Game Screen */
@@ -342,73 +536,95 @@
 
       .score-board {
         display: flex;
-        justify-content: space-around;
-        margin-bottom: 2rem;
-        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        gap: 1.25rem;
         flex-wrap: wrap;
       }
 
       .score-item {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1rem 2rem;
-        border-radius: 12px;
+        background: linear-gradient(145deg, #ffffff, #f8f9ff);
+        border: 2px solid rgba(102, 126, 234, 0.15);
+        padding: 1.5rem 2.25rem;
+        border-radius: 22px;
         text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
+        min-width: 130px;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .score-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #f093fb);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .score-item:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .score-item:hover::before {
+        opacity: 1;
       }
 
       .score-label {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.85rem;
+        color: #718096;
         margin-bottom: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
       .score-value {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         font-weight: 700;
         color: #667eea;
       }
 
       .score-value.correct {
-        color: var(--success-green);
+        color: #10b981;
       }
 
       .score-value.skipped {
-        color: var(--warning-yellow);
+        color: #f59e0b;
       }
 
-      .timer-display {
+      /* Streak Counter */
+      .streak-display {
         text-align: center;
-        margin: 2rem 0;
+        margin-bottom: 1rem;
       }
 
-      .timer-circle {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 1rem;
-        border-radius: 50%;
-        border: 6px solid #667eea;
-        display: flex;
+      .streak-badge {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
         font-weight: 700;
-        color: #667eea;
-        transition: all 0.3s;
-        background: rgba(255, 255, 255, 0.05);
+        font-size: 1.1rem;
+        box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        animation: streakPulse 1s ease-in-out infinite;
       }
 
-      .timer-circle.warning {
-        border-color: var(--warning-yellow);
-        color: var(--warning-yellow);
-        animation: pulse 1s infinite;
+      .streak-badge.hidden {
+        display: none;
       }
 
-      .timer-circle.danger {
-        border-color: var(--forbidden-red);
-        color: var(--forbidden-red);
-      }
-
-      @keyframes pulse {
+      @keyframes streakPulse {
         0%,
         100% {
           transform: scale(1);
@@ -418,41 +634,228 @@
         }
       }
 
-      .card-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 3px solid #667eea;
-        border-radius: 16px;
-        padding: 3rem 2rem;
-        margin: 2rem auto;
-        max-width: 600px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      .timer-display {
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .timer-circle {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        border-radius: 50%;
+        border: 8px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+          linear-gradient(135deg, #667eea, #f093fb, #f5576c) border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 800;
+        color: #667eea;
+        transition: all 0.3s;
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.35),
+          inset 0 0 20px rgba(102, 126, 234, 0.1);
         position: relative;
+      }
+
+      .timer-circle::before {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.3),
+          rgba(240, 147, 251, 0.3)
+        );
+        z-index: -1;
+        filter: blur(10px);
+      }
+
+      .timer-circle.warning {
+        border-color: #f59e0b;
+        color: #f59e0b;
+        animation: timerPulse 0.5s infinite;
+        box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+      }
+
+      .timer-circle.danger {
+        border-color: #ef4444;
+        color: #ef4444;
+        animation: timerShake 0.3s infinite;
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
+      }
+
+      @keyframes timerPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+
+      @keyframes timerShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-3px);
+        }
+        75% {
+          transform: translateX(3px);
+        }
+      }
+
+      .card-container {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: 30px;
+        padding: 3rem 2.5rem;
+        margin: 2rem auto;
+        max-width: 580px;
+        box-shadow: 0 30px 70px rgba(102, 126, 234, 0.2),
+          0 10px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 1),
+          inset 0 -2px 5px rgba(102, 126, 234, 0.05);
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+        transform-style: preserve-3d;
+      }
+
+      .card-container:hover {
+        transform: translateY(-8px) rotateX(2deg);
+        box-shadow: 0 40px 90px rgba(102, 126, 234, 0.3),
+          0 15px 30px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
+      }
+
+      .card-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: linear-gradient(
+          90deg,
+          #667eea,
+          #f093fb,
+          #f5576c,
+          #4facfe,
+          #667eea
+        );
+        background-size: 200% 100%;
+        animation: borderFlow 3s linear infinite;
+      }
+
+      .card-container::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #f093fb);
+        border-radius: 2px;
+        opacity: 0.5;
+      }
+
+      .card-container.correct-flash {
+        animation: correctFlash 0.5s ease;
+      }
+
+      .card-container.skip-flash {
+        animation: skipFlash 0.5s ease;
+      }
+
+      @keyframes correctFlash {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+        50% {
+          transform: scale(1.02);
+          box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
+          background: #d1fae5;
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+          background: white;
+        }
+      }
+
+      @keyframes skipFlash {
+        0% {
+          transform: scale(1) translateX(0);
+        }
+        25% {
+          transform: scale(0.98) translateX(-10px);
+        }
+        75% {
+          transform: scale(0.98) translateX(10px);
+        }
+        100% {
+          transform: scale(1) translateX(0);
+        }
       }
 
       .card-difficulty {
         position: absolute;
-        top: -15px;
+        top: 20px;
         right: 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
+        padding: 0.5rem 1.25rem;
+        border-radius: 25px;
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
       }
 
       .target-word {
-        font-size: 3rem;
-        font-weight: 700;
-        color: #667eea;
-        margin-bottom: 2rem;
+        font-size: 3.8rem;
+        font-weight: 800;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 25%,
+          #f093fb 50%,
+          #f5576c 75%,
+          #667eea 100%
+        );
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 1.5rem 0 2.5rem;
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 4px;
+        text-align: center;
+        animation: wordGlow 3s ease infinite;
+        filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
+        position: relative;
+      }
+
+      @keyframes wordGlow {
+        0%,
+        100% {
+          background-position: 0% 50%;
+          filter: drop-shadow(0 4px 8px rgba(102, 126, 234, 0.3));
+        }
+        50% {
+          background-position: 100% 50%;
+          filter: drop-shadow(0 4px 15px rgba(240, 147, 251, 0.5));
+        }
       }
 
       .forbidden-section {
-        margin-top: 2rem;
+        margin-top: 1.5rem;
       }
 
       .forbidden-title {
@@ -460,152 +863,390 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        color: var(--forbidden-red);
-        font-weight: 600;
+        color: #ef4444;
+        font-weight: 700;
         font-size: 1.1rem;
         margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
       .forbidden-words {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 0.75rem;
       }
 
       .forbidden-word {
-        background: var(--forbidden-red);
+        background: linear-gradient(
+          135deg,
+          #ef4444 0%,
+          #dc2626 50%,
+          #b91c1c 100%
+        );
         color: white;
-        padding: 1rem;
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 500;
-        text-transform: lowercase;
+        padding: 1rem 1.25rem;
+        border-radius: 15px;
+        font-size: 1.15rem;
+        font-weight: 600;
+        text-align: center;
         position: relative;
-        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .forbidden-word:hover {
+        transform: scale(1.08) translateY(-3px);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
 
       .forbidden-word::before {
-        content: "⛔";
+        content: "🚫";
         position: absolute;
         left: 10px;
-        font-size: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
       }
 
       .forbidden-word-text {
-        margin-left: 2rem;
+        margin-left: 1.5rem;
       }
 
       .game-controls {
         display: flex;
         gap: 1rem;
         justify-content: center;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         flex-wrap: wrap;
       }
 
       .btn-control {
-        padding: 1rem 2rem;
+        padding: 1.1rem 2.5rem;
         border: none;
-        border-radius: 10px;
-        font-size: 1.1rem;
-        font-weight: 600;
+        border-radius: 30px;
+        font-size: 1.15rem;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-control::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .btn-control:hover::before {
+        left: 100%;
       }
 
       .btn-correct {
-        background: var(--success-green);
+        background: linear-gradient(
+          135deg,
+          #10b981 0%,
+          #059669 50%,
+          #047857 100%
+        );
         color: white;
         flex: 1;
         max-width: 200px;
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25),
+          inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
 
       .btn-correct:hover {
-        background: #059669;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        transform: translateY(-6px) scale(1.08);
+        box-shadow: 0 18px 45px rgba(16, 185, 129, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      }
+
+      .btn-correct:active {
+        transform: translateY(-2px) scale(1.02);
       }
 
       .btn-skip {
-        background: var(--warning-yellow);
+        background: linear-gradient(
+          135deg,
+          #f59e0b 0%,
+          #d97706 50%,
+          #b45309 100%
+        );
         color: white;
         flex: 1;
         max-width: 200px;
+        box-shadow: 0 10px 30px rgba(245, 158, 11, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25),
+          inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
 
       .btn-skip:hover {
-        background: #d97706;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        transform: translateY(-6px) scale(1.08);
+        box-shadow: 0 18px 45px rgba(245, 158, 11, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      }
+
+      .btn-skip:active {
+        transform: translateY(-2px) scale(1.02);
       }
 
       .btn-end {
-        background: var(--forbidden-red);
+        background: linear-gradient(135deg, #6b7280, #4b5563);
         color: white;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
       }
 
       .btn-end:hover {
-        background: #dc2626;
-        box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       }
 
       .btn-new-game {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
       }
 
       .btn-new-game:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
       }
 
       .results-screen {
         display: none;
         text-align: center;
-        padding: 2rem;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
+        padding: 3rem;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(255, 255, 255, 0.92)
+        );
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 30px;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .results-screen::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          #10b981,
+          #f59e0b,
+          #667eea,
+          #f093fb,
+          #10b981
+        );
+        background-size: 200% 100%;
+        border-radius: 30px 30px 0 0;
+        animation: borderFlow 4s linear infinite;
+      }
+
+      .results-screen::after {
+        content: "🎉";
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        font-size: 2.5rem;
+        animation: celebrateBounce 1s ease infinite;
+      }
+
+      @keyframes celebrateBounce {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-10px) rotate(10deg);
+        }
       }
 
       .results-screen.active {
         display: block;
+        animation: resultsSlide 0.5s ease;
+      }
+
+      @keyframes resultsSlide {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .results-header {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: #667eea;
+        font-size: 3.5rem;
+        margin-bottom: 2rem;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #f093fb 25%,
+          #f5576c 50%,
+          #f093fb 75%,
+          #667eea 100%
+        );
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: titleShimmer 3s ease infinite;
+        letter-spacing: 2px;
+        text-transform: uppercase;
       }
 
       .results-stats {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1.5rem;
         margin: 2rem 0;
       }
 
       .stat-card {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(145deg, #ffffff, #f8f9ff);
+        padding: 2rem;
+        border-radius: 22px;
+        border: 2px solid rgba(102, 126, 234, 0.1);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
       }
 
-      .stat-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #f093fb);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      .stat-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .stat-card:nth-child(1) .stat-value {
+        color: #10b981;
+      }
+      .stat-card:nth-child(2) .stat-value {
+        color: #f59e0b;
+      }
+      .stat-card:nth-child(3) .stat-value {
         color: #667eea;
       }
 
+      .stat-value {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: inline-block;
+      }
+
       .stat-label {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.9rem;
+        color: #64748b;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+
+      /* Rating Display */
+      .rating-display {
+        margin: 1.5rem 0;
+        font-size: 1.5rem;
+      }
+
+      .rating-stars {
+        font-size: 2.5rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Confetti */
+      .confetti {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        animation: confettiFall 3s ease-out forwards;
+        z-index: 1000;
+        pointer-events: none;
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px) rotate(-2deg);
+        }
+        50% {
+          transform: translateX(10px) rotate(2deg);
+        }
+        75% {
+          transform: translateX(-10px) rotate(-2deg);
+        }
       }
 
       .hidden {
@@ -673,6 +1314,16 @@
   </head>
 
   <body>
+    <!-- Floating Icons -->
+    <div class="floating-icons">
+      <div class="float-icon">🚫</div>
+      <div class="float-icon">💬</div>
+      <div class="float-icon">🎯</div>
+      <div class="float-icon">⏱️</div>
+      <div class="float-icon">🏆</div>
+      <div class="float-icon">✨</div>
+    </div>
+
     <!-- Compact Game Header -->
     <header class="game-nav-header">
       <div class="nav-left">
@@ -683,9 +1334,7 @@
           ><i class="fas fa-gamepad"></i> Games</a
         >
       </div>
-      <div class="game-title">
-        <i class="fas fa-ban"></i> The Forbidden Word
-      </div>
+      <div class="game-title">🚫 The Forbidden Word 💬</div>
     </header>
 
     <!-- Top Ad -->
@@ -709,7 +1358,7 @@
 
     <div class="game-container">
       <header class="game-header">
-        <h1><i class="fas fa-ban"></i> The Forbidden Word</h1>
+        <h1>🚫 The Forbidden Word 💬</h1>
         <p>Describe the target word without using any forbidden terms!</p>
       </header>
 
@@ -777,64 +1426,57 @@
           </div>
         </div>
 
+        <!-- Streak Display -->
+        <div class="streak-display">
+          <div class="streak-badge hidden" id="streakBadge">
+            🔥 <span id="streakCount">0</span> Streak!
+          </div>
+        </div>
+
         <div class="timer-display">
           <div id="timerCircle" class="timer-circle">60</div>
         </div>
 
-        <div class="card-container">
+        <div class="card-container" id="cardContainer">
           <div class="card-difficulty" id="cardDifficulty">EASY</div>
           <div class="target-word" id="targetWord">COMPUTER</div>
           <div class="forbidden-section">
-            <div class="forbidden-title">
-              <i class="fas fa-ban"></i> DO NOT SAY THESE WORDS
-            </div>
+            <div class="forbidden-title">🚫 DO NOT SAY THESE WORDS</div>
             <div class="forbidden-words" id="forbiddenWords"></div>
           </div>
         </div>
 
         <div class="game-controls">
           <button id="correctBtn" class="btn-control btn-correct">
-            <i class="fas fa-check"></i> Correct
+            ✓ Correct!
           </button>
-          <button id="skipBtn" class="btn-control btn-skip">
-            <i class="fas fa-forward"></i> Skip
-          </button>
-          <button id="endGameBtn" class="btn-control btn-end">
-            <i class="fas fa-stop"></i> End Game
-          </button>
+          <button id="skipBtn" class="btn-control btn-skip">→ Skip</button>
+          <button id="endGameBtn" class="btn-control btn-end">⏹ End</button>
         </div>
       </div>
 
       <!-- Results Screen -->
       <div id="resultsScreen" class="results-screen">
-        <div class="results-header">🎉 Game Over!</div>
+        <div class="results-header">🎉 Amazing Job!</div>
+        <div class="rating-display">
+          <div id="performanceText">Great Performance!</div>
+          <div class="rating-stars" id="ratingStars">⭐⭐⭐</div>
+        </div>
         <div class="results-stats">
           <div class="stat-card">
-            <div
-              class="stat-value"
-              style="color: var(--success-green)"
-              id="finalCorrect"
-            >
+            <div class="stat-value" style="color: #10b981" id="finalCorrect">
               0
             </div>
             <div class="stat-label">Words Guessed</div>
           </div>
           <div class="stat-card">
-            <div
-              class="stat-value"
-              style="color: var(--warning-yellow)"
-              id="finalSkipped"
-            >
+            <div class="stat-value" style="color: #f59e0b" id="finalSkipped">
               0
             </div>
             <div class="stat-label">Words Skipped</div>
           </div>
           <div class="stat-card">
-            <div
-              class="stat-value"
-              style="color: var(--primary-color)"
-              id="finalAccuracy"
-            >
+            <div class="stat-value" style="color: #667eea" id="finalAccuracy">
               0%
             </div>
             <div class="stat-label">Accuracy</div>
@@ -1143,6 +1785,8 @@
       let skippedCount = 0;
       let timerInterval = null;
       let timeRemaining = 60;
+      let currentStreak = 0;
+      let bestStreak = 0;
 
       // DOM elements
       const setupScreen = document.getElementById("setupScreen");
@@ -1161,6 +1805,49 @@
       const skipBtn = document.getElementById("skipBtn");
       const endGameBtn = document.getElementById("endGameBtn");
       const newGameBtn = document.getElementById("newGameBtn");
+      const cardContainer = document.getElementById("cardContainer");
+      const streakBadge = document.getElementById("streakBadge");
+      const streakCount = document.getElementById("streakCount");
+
+      // Create confetti
+      function createConfetti() {
+        const colors = [
+          "#667eea",
+          "#f093fb",
+          "#f5576c",
+          "#4facfe",
+          "#10b981",
+          "#f59e0b",
+        ];
+        for (let i = 0; i < 50; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.background =
+              colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+            confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 4000);
+          }, i * 40);
+        }
+      }
+
+      // Update streak display
+      function updateStreak(correct) {
+        if (correct) {
+          currentStreak++;
+          if (currentStreak > bestStreak) bestStreak = currentStreak;
+          if (currentStreak >= 2) {
+            streakBadge.classList.remove("hidden");
+            streakCount.textContent = currentStreak;
+          }
+        } else {
+          currentStreak = 0;
+          streakBadge.classList.add("hidden");
+        }
+      }
 
       // Difficulty selection
       difficultyButtons.forEach((btn) => {
@@ -1239,15 +1926,37 @@
       // Game actions
       correctBtn.addEventListener("click", () => {
         correctCount++;
-        currentCardIndex++;
-        loadCard();
+        streak++;
+        if (streak > maxStreak) maxStreak = streak;
+        updateStreak();
+        showConfetti();
+
+        // Card flip animation
+        const card = document.getElementById("currentCard");
+        card.style.transform = "rotateY(90deg)";
+        setTimeout(() => {
+          currentCardIndex++;
+          loadCard();
+          card.style.transform = "rotateY(0deg)";
+        }, 150);
+
         playSound("success");
       });
 
       skipBtn.addEventListener("click", () => {
         skippedCount++;
-        currentCardIndex++;
-        loadCard();
+        streak = 0;
+        updateStreak();
+
+        // Shake animation for skip
+        const card = document.getElementById("currentCard");
+        card.style.animation = "shake 0.3s ease-in-out";
+        setTimeout(() => {
+          card.style.animation = "";
+          currentCardIndex++;
+          loadCard();
+        }, 300);
+
         playSound("skip");
       });
 
@@ -1286,7 +1995,48 @@
         document.getElementById("finalSkipped").textContent = skippedCount;
         document.getElementById("finalAccuracy").textContent = accuracy + "%";
 
+        // Add best streak and star rating
+        const resultsGrid = document.querySelector(".results-grid");
+
+        // Remove old extra stats if they exist
+        const oldStreak = document.getElementById("streakStat");
+        const oldRating = document.getElementById("ratingStat");
+        if (oldStreak) oldStreak.remove();
+        if (oldRating) oldRating.remove();
+
+        // Add best streak stat
+        const streakStat = document.createElement("div");
+        streakStat.id = "streakStat";
+        streakStat.className = "stat";
+        streakStat.innerHTML = `<span class="stat-value" style="color: #ff6b6b;">🔥 ${maxStreak}</span><span class="stat-label">Best Streak</span>`;
+        resultsGrid.appendChild(streakStat);
+
+        // Add star rating
+        const ratingStat = document.createElement("div");
+        ratingStat.id = "ratingStat";
+        ratingStat.className = "stat";
+        ratingStat.innerHTML = `<span class="stat-value">${getStarRating(
+          accuracy
+        )}</span><span class="stat-label">Rating</span>`;
+        resultsGrid.appendChild(ratingStat);
+
+        // Show confetti for good performance
+        if (correctCount >= 5) {
+          for (let i = 0; i < 3; i++) {
+            setTimeout(() => showConfetti(), i * 500);
+          }
+        }
+
         playSound("end");
+      }
+
+      // Get star rating based on accuracy
+      function getStarRating(accuracy) {
+        if (accuracy >= 90) return "⭐⭐⭐⭐⭐";
+        if (accuracy >= 75) return "⭐⭐⭐⭐";
+        if (accuracy >= 60) return "⭐⭐⭐";
+        if (accuracy >= 40) return "⭐⭐";
+        return "⭐";
       }
 
       // Sound effects
