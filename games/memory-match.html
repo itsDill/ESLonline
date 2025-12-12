@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google AdSense - Auto Ads Enabled -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <meta
+      name="description"
+      content="Play Memory Match - a fun vocabulary game to improve your English skills. Match words with their meanings and test your memory!"
+    />
+    <meta
+      name="keywords"
+      content="memory game, vocabulary game, ESL games, English learning game, word matching"
+    />
+    <meta name="author" content="ESL Fun Online" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="theme-color" content="#46bbe5" />
+
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/games/memory-match.html"
+    />
+
+    <title>Memory Match Game | ESL Fun Online</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/1.png" />
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-9G9RD6BHLN");
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/games-page.css" />
+    <link rel="stylesheet" href="../css/mobile-optimized.css" />
+
+    <style>
+      .game-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .game-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .game-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .game-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat {
+        background: var(--bg-secondary);
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .memory-card {
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, var(--primary-color), #2d9cdb);
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem;
+        text-align: center;
+        user-select: none;
+      }
+
+      .memory-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(70, 187, 229, 0.3);
+      }
+
+      .memory-card.flipped {
+        background: white;
+        color: var(--text-primary);
+        border: 2px solid var(--primary-color);
+      }
+
+      .memory-card.matched {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        cursor: default;
+      }
+
+      .memory-card .card-back {
+        font-size: 2rem;
+      }
+
+      .memory-card .card-front {
+        display: none;
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+
+      .memory-card.flipped .card-back,
+      .memory-card.matched .card-back {
+        display: none;
+      }
+
+      .memory-card.flipped .card-front,
+      .memory-card.matched .card-front {
+        display: block;
+      }
+
+      .game-controls {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .btn-restart {
+        background: linear-gradient(135deg, var(--primary-color), #2d9cdb);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-restart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(70, 187, 229, 0.3);
+      }
+
+      .win-message {
+        display: none;
+        text-align: center;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 2rem;
+        border-radius: 16px;
+        margin-top: 2rem;
+      }
+
+      .win-message.show {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .memory-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.75rem;
+        }
+
+        .memory-card {
+          font-size: 0.8rem;
+        }
+
+        .memory-card .card-front {
+          font-size: 0.75rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header & Navigation -->
+    <header>
+      <div class="container">
+        <nav class="navbar">
+          <a href="../index.html" class="logo-container">
+            <img
+              src="../images/1.png"
+              alt="ESL Fun Online Logo"
+              class="logo-image"
+              width="40"
+              height="40"
+            />
+            <span class="logo-text">ESL Fun Online</span>
+          </a>
+
+          <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+              <a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+              </a>
+              <div class="dropdown">
+                <a href="../english/grammar.html" class="dropdown-item">
+                  <i class="fas fa-spell-check"></i>
+                  Grammar Guides
+                </a>
+                <a href="../english/vocabguide.html" class="dropdown-item">
+                  <i class="fas fa-book-open"></i>
+                  Vocabulary Building
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="games.html" class="nav-link active">
+                <i class="fas fa-dice"></i>
+                Games
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../blog/blog.html" class="nav-link">
+                <i class="fas fa-book-open"></i>
+                Blog
+              </a>
+            </li>
+          </ul>
+
+          <div class="controls">
+            <button
+              class="control-btn theme-toggle"
+              id="themeToggle"
+              aria-label="Toggle dark mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+          <button
+            class="control-btn mobile-toggle"
+            id="mobileToggle"
+            aria-label="Toggle mobile menu"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px">
+      <div class="game-container">
+        <div class="game-header">
+          <h1 class="game-title">🧠 Memory Match</h1>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem">
+            Match English words with their meanings!
+          </p>
+
+          <div class="game-stats">
+            <div class="stat">
+              <i class="fas fa-mouse-pointer"></i> Moves:
+              <span id="moves">0</span>
+            </div>
+            <div class="stat">
+              <i class="fas fa-check-circle"></i> Matches:
+              <span id="matches">0</span>/6
+            </div>
+          </div>
+        </div>
+
+        <div class="memory-grid" id="memoryGrid">
+          <!-- Cards will be generated by JavaScript -->
+        </div>
+
+        <div class="win-message" id="winMessage">
+          <h2 style="font-size: 1.5rem; margin-bottom: 1rem">
+            🎉 Congratulations!
+          </h2>
+          <p>You completed the game in <span id="finalMoves">0</span> moves!</p>
+        </div>
+
+        <div class="game-controls">
+          <button class="btn-restart" onclick="restartGame()">
+            <i class="fas fa-redo"></i> New Game
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <div class="footer-bottom-center">
+            <div class="footer-links">
+              <a href="../privacy.html"
+                ><i class="fas fa-shield-alt"></i>Privacy</a
+              >
+              <a href="../terms.html"
+                ><i class="fas fa-file-contract"></i>Terms</a
+              >
+              <a href="../contact.html"
+                ><i class="fas fa-envelope"></i>Contact</a
+              >
+            </div>
+          </div>
+          <div class="footer-bottom-left">
+            <p>
+              &copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Word pairs for the memory game
+      const wordPairs = [
+        { word: "Happy", meaning: "Feeling joy" },
+        { word: "Brave", meaning: "Without fear" },
+        { word: "Clever", meaning: "Very smart" },
+        { word: "Kind", meaning: "Being nice" },
+        { word: "Honest", meaning: "Tells truth" },
+        { word: "Patient", meaning: "Can wait" },
+      ];
+
+      let cards = [];
+      let flippedCards = [];
+      let matchedPairs = 0;
+      let moves = 0;
+      let canFlip = true;
+
+      function createCards() {
+        const allCards = [];
+
+        wordPairs.forEach((pair, index) => {
+          allCards.push({
+            id: index * 2,
+            pairId: index,
+            content: pair.word,
+            type: "word",
+          });
+          allCards.push({
+            id: index * 2 + 1,
+            pairId: index,
+            content: pair.meaning,
+            type: "meaning",
+          });
+        });
+
+        // Shuffle cards
+        for (let i = allCards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+        }
+
+        return allCards;
+      }
+
+      function renderCards() {
+        const grid = document.getElementById("memoryGrid");
+        grid.innerHTML = "";
+
+        cards.forEach((card) => {
+          const cardEl = document.createElement("div");
+          cardEl.className = "memory-card";
+          cardEl.dataset.id = card.id;
+          cardEl.dataset.pairId = card.pairId;
+          cardEl.innerHTML = `
+            <span class="card-back">❓</span>
+            <span class="card-front">${card.content}</span>
+          `;
+          cardEl.addEventListener("click", () => flipCard(cardEl, card));
+          grid.appendChild(cardEl);
+        });
+      }
+
+      function flipCard(cardEl, card) {
+        if (
+          !canFlip ||
+          cardEl.classList.contains("flipped") ||
+          cardEl.classList.contains("matched")
+        ) {
+          return;
+        }
+
+        cardEl.classList.add("flipped");
+        flippedCards.push({ element: cardEl, card: card });
+
+        if (flippedCards.length === 2) {
+          moves++;
+          document.getElementById("moves").textContent = moves;
+          canFlip = false;
+
+          setTimeout(checkMatch, 800);
+        }
+      }
+
+      function checkMatch() {
+        const [first, second] = flippedCards;
+
+        if (first.card.pairId === second.card.pairId) {
+          first.element.classList.add("matched");
+          second.element.classList.add("matched");
+          matchedPairs++;
+          document.getElementById("matches").textContent = matchedPairs;
+
+          if (matchedPairs === wordPairs.length) {
+            setTimeout(showWinMessage, 500);
+          }
+        } else {
+          first.element.classList.remove("flipped");
+          second.element.classList.remove("flipped");
+        }
+
+        flippedCards = [];
+        canFlip = true;
+      }
+
+      function showWinMessage() {
+        document.getElementById("finalMoves").textContent = moves;
+        document.getElementById("winMessage").classList.add("show");
+      }
+
+      function restartGame() {
+        cards = createCards();
+        flippedCards = [];
+        matchedPairs = 0;
+        moves = 0;
+        canFlip = true;
+
+        document.getElementById("moves").textContent = 0;
+        document.getElementById("matches").textContent = 0;
+        document.getElementById("winMessage").classList.remove("show");
+
+        renderCards();
+      }
+
+      // Initialize game
+      document.addEventListener("DOMContentLoaded", () => {
+        restartGame();
+      });
+    </script>
+
+    <script src="../js/navigation.js"></script>
+  </body>
+</html>
