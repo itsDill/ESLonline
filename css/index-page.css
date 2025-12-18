@@ -98,6 +98,18 @@ section:last-of-type::after {
 .section-header {
   text-align: center;
   margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .section-title {
@@ -107,14 +119,20 @@ section:last-of-type::after {
   color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.section-title:hover {
+  transform: scale(1.02);
 }
 
 .section-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-weight: 400;
 }
 
 .features-grid {
@@ -127,12 +145,13 @@ section:last-of-type::after {
 .feature-card {
   background: var(--bg-secondary);
   border: 2px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  padding: 2.5rem;
+  border-radius: var(--radius-2xl);
+  padding: 3rem 2.5rem;
   text-align: center;
-  transition: all 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .feature-card::before {
@@ -141,7 +160,7 @@ section:last-of-type::after {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 5px;
   background: var(--gradient-primary);
   transform: scaleX(0);
   transition: transform 0.4s ease;
@@ -152,9 +171,11 @@ section:last-of-type::after {
 }
 
 .feature-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(70, 187, 229, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.1);
   border-color: var(--primary-color);
+  background: white;
 }
 
 .feature-card:hover .feature-icon {
@@ -168,34 +189,38 @@ section:last-of-type::after {
 }
 
 .feature-icon {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   background: var(--gradient-primary);
-  border-radius: 50%;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: white;
-  margin: 0 auto 1.5rem;
-  transition: transform 0.3s ease;
+  margin: 0 auto 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(70, 187, 229, 0.3);
 }
 
 .feature-card:hover .feature-icon {
-  transform: scale(1.1) rotate(10deg);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 32px rgba(70, 187, 229, 0.4);
 }
 
 .feature-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.3;
 }
 
 .feature-description {
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
 }
 
 .feature-link {
@@ -205,7 +230,23 @@ section:last-of-type::after {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.feature-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.feature-link:hover::after {
+  width: calc(100% - 1.5rem);
 }
 
 .feature-link:hover {
@@ -226,28 +267,48 @@ section:last-of-type::after {
 /* Interactive Activity Section - Vocabulary Quiz */
 .activity-section {
   padding: 6rem 0;
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   text-align: center;
+  position: relative;
+}
+
+.activity-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at 20% 50%,
+      rgba(70, 187, 229, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(16, 185, 129, 0.1) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
 }
 
 .activity-container {
-  max-width: 800px;
+  max-width: 850px;
   margin: 0 auto;
-  background: var(--bg-primary);
+  background: white;
   border-radius: var(--radius-2xl);
-  padding: 3rem;
-  box-shadow: var(--shadow-lg);
-  border: 2px solid var(--border-color);
+  padding: 3.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(70, 187, 229, 0.1);
+  position: relative;
 }
 
 .activity-title {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 800;
   color: #1e293b;
   margin-bottom: 1.5rem;
   text-align: center;
   position: relative;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .challenge-badge {
@@ -692,14 +753,14 @@ section:last-of-type::after {
 }
 
 .option-btn {
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
   border: 3px solid #e0e7ff;
-  padding: 1.5rem;
+  padding: 1.75rem 1.5rem;
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   text-align: left;
   position: relative;
   overflow: hidden;
@@ -727,8 +788,8 @@ section:last-of-type::after {
   border-color: #3b82f6;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(59, 130, 246, 0.3);
 }
 
 .option-btn:hover::before {
@@ -1083,12 +1144,13 @@ section:last-of-type::after {
 
   .features-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 0 0.5rem;
+    gap: 2.5rem;
+    padding: 0 1rem;
   }
 
   .feature-card {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem;
+    border-radius: var(--radius-xl);
   }
 
   .options-grid {
@@ -1116,17 +1178,18 @@ section:last-of-type::after {
 
   .section-header {
     margin-bottom: 3rem;
-    padding: 0 1rem;
+    padding: 0 1.25rem;
   }
 
   .section-title {
-    font-size: clamp(1.75rem, 5vw, 2.5rem);
-    margin-bottom: 1.25rem;
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
   }
 
   .section-subtitle {
-    font-size: 1.05rem;
-    line-height: 1.65;
+    font-size: 1.1rem;
+    line-height: 1.7;
   }
 
   .vocabulary-game {
@@ -1146,13 +1209,13 @@ section:last-of-type::after {
   }
 
   section {
-    padding: 3.5rem 0;
+    padding: 4rem 0;
   }
 
   .features-showcase,
   .activity-section,
   .blog-preview-section {
-    padding: 4rem 0;
+    padding: 4.5rem 0;
   }
 
   p {
