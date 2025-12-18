@@ -100,10 +100,11 @@
     <style>
       /* Critical above-the-fold styles */
       body {
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
-
+      
       body.loaded {
         opacity: 1;
       }
@@ -121,12 +122,13 @@
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
       }
 
       .loading-overlay.hidden {
         opacity: 0;
         visibility: hidden;
+        pointer-events: none;
       }
 
       .loading-spinner {
@@ -146,6 +148,68 @@
           transform: rotate(360deg);
         }
       }
+
+      /* Strength meter styles */
+      .strength-meter {
+        height: 4px;
+        background: #e5e7eb;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .strength-meter.visible {
+        opacity: 1;
+      }
+
+      .strength-meter-fill {
+        height: 100%;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+      }
+
+      .strength-weak {
+        width: 33%;
+        background: #ef4444;
+      }
+
+      .strength-medium {
+        width: 66%;
+        background: #f59e0b;
+      }
+
+      .strength-strong {
+        width: 100%;
+        background: #10b981;
+      }
+
+      /* Capslock warning */
+      .capslock-warning {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        color: #f59e0b;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      .capslock-warning.visible {
+        display: flex;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
   </head>
 
@@ -157,6 +221,9 @@
 
     <!-- Skip Link for Accessibility -->
     <a href="#loginForm" class="skip-link">Skip to login form</a>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px;"></div>
 
     <!-- Main Login Section -->
     <main class="hero-login" role="main">
@@ -287,19 +354,53 @@
                   <i class="fas fa-eye" id="passwordToggleIcon"></i>
                 </button>
               </div>
+              <!-- Caps Lock Warning -->
+              <div class="capslock-warning" id="capslockWarning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Caps Lock is ON</span>
+              </div>
+              <!-- Password Strength Meter -->
+              <div class="strength-meter" id="strengthMeter">
+                <div class="strength-meter-fill" id="strengthFill"></div>
+              </div>
               <div id="passwordHelp" class="sr-only">Enter your password</div>
             </div>
 
-            <!-- Login Button -->
-            <button
-              type="submit"
-              class="login-btn student-mode"
-              id="loginButton"
-              aria-describedby="loginButtonHelp"
-            >
-              <i class="fas fa-sign-in-alt"></i>
-              <span>Sign In</span>
-            </button>
+            <!-- Remember Me & Forgot Password -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: #374151;">
+                <input type="checkbox" id="rememberMe" style="cursor: pointer; width: 16px; height: 16px; accent-color: #46bbe5;">
+                <span>Remember me</span>
+              </label>
+          <!-- Footer Links -->
+          <div class="login-footer">
+            <a href="contact.html" class="footer-link">
+              <i class="fas fa-question-circle"></i>
+              Need help logging in?
+            </a>
+            <a href="index.html" class="home-link">
+              <i class="fas fa-arrow-left"></i>
+              <span>Back to Homepage</span>
+            </a>
+            
+            <!-- Demo Credentials Info -->
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border-radius: 12px; border-left: 4px solid #46bbe5;">
+              <div style="display: flex; align-items: start; gap: 0.75rem;">
+                <i class="fas fa-info-circle" style="color: #46bbe5; font-size: 1.25rem; margin-top: 2px;"></i>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600; color: #0c4a6e; margin-bottom: 0.5rem; font-size: 0.9rem;">Demo Access</div>
+                  <div style="color: #075985; font-size: 0.85rem; line-height: 1.5;">
+                    <strong>Username:</strong> demo<br>
+                    <strong>Password:</strong> demo
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Google AdSense -->
+      </main>/button>
             <div id="loginButtonHelp" class="sr-only">
               Click to sign in to your account
             </div>
@@ -330,6 +431,20 @@
       let currentUserType = "student";
       let isLoading = false;
 
+      // Immediate initialization - don't wait for anything
+      (function() {
+        // Hide loading overlay ASAP
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        if (loadingOverlay) {
+          loadingOverlay.classList.add("hidden");
+          setTimeout(() => loadingOverlay.remove(), 300);
+        }
+        
+        // Show body immediately
+        document.body.style.opacity = "1";
+        document.body.classList.add("loaded");
+      })();
+
       // Initialize page
       document.addEventListener("DOMContentLoaded", function () {
         // Check if user is already authenticated
@@ -349,7 +464,6 @@
 
         initializePage();
         setupEventListeners();
-        hideLoadingOverlay();
       });
 
       function initializePage() {
@@ -362,21 +476,16 @@
           if (usernameField) {
             usernameField.focus();
           }
-        }, 500);
-
-        // Mark body as loaded for CSS transitions
-        document.body.classList.add("loaded");
+        }, 100);
       }
 
       function hideLoadingOverlay() {
         const loadingOverlay = document.getElementById("loadingOverlay");
         if (loadingOverlay) {
+          loadingOverlay.classList.add("hidden");
           setTimeout(() => {
-            loadingOverlay.classList.add("hidden");
-            setTimeout(() => {
-              loadingOverlay.remove();
-            }, 500);
-          }, 1000);
+            loadingOverlay.remove();
+          }, 300);
         }
       }
 
@@ -397,8 +506,23 @@
         }
 
         if (password) {
-          password.addEventListener("input", clearValidationState);
+          password.addEventListener("input", function () {
+            clearValidationState();
+            updatePasswordStrength();
+          });
           password.addEventListener("blur", validatePassword);
+          password.addEventListener("keyup", checkCapsLock);
+        }
+
+        // Remember me functionality
+        const rememberMe = document.getElementById("rememberMe");
+        if (rememberMe) {
+          // Load saved preference
+          const savedUsername = localStorage.getItem("savedUsername");
+          if (savedUsername) {
+            username.value = savedUsername;
+            rememberMe.checked = true;
+          }
         }
 
         // Enter key navigation
@@ -410,6 +534,59 @@
             }
           }
         });
+
+        // Add input animation on focus
+        document.querySelectorAll(".form-input").forEach((input) => {
+          input.addEventListener("focus", function () {
+            this.parentElement.classList.add("focused");
+          });
+          input.addEventListener("blur", function () {
+            this.parentElement.classList.remove("focused");
+          });
+        });
+      }
+
+      // Check Caps Lock status
+      function checkCapsLock(e) {
+        const capslockWarning = document.getElementById("capslockWarning");
+        if (capslockWarning) {
+          if (e.getModifierState && e.getModifierState("CapsLock")) {
+            capslockWarning.classList.add("visible");
+          } else {
+            capslockWarning.classList.remove("visible");
+          }
+        }
+      }
+
+      // Update password strength meter
+      function updatePasswordStrength() {
+        const password = document.getElementById("password").value;
+        const strengthMeter = document.getElementById("strengthMeter");
+        const strengthFill = document.getElementById("strengthFill");
+
+        if (!password) {
+          strengthMeter.classList.remove("visible");
+          return;
+        }
+
+        strengthMeter.classList.add("visible");
+
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.length >= 10) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+        strengthFill.className = "strength-meter-fill";
+
+        if (strength <= 2) {
+          strengthFill.classList.add("strength-weak");
+        } else if (strength <= 3) {
+          strengthFill.classList.add("strength-medium");
+        } else {
+          strengthFill.classList.add("strength-strong");
+        }
       }
 
       function switchUserType(type) {
@@ -544,15 +721,42 @@
         field.classList.add("error");
         field.setAttribute("aria-invalid", "true");
 
-        // Show tooltip or message (you can enhance this)
-        field.title = message;
+        // Remove existing tooltip if any
+        const existingTooltip = field.parentElement.querySelector(".validation-tooltip");
+        if (existingTooltip) {
+          existingTooltip.remove();
+        }
+
+        // Create and add new tooltip
+        const tooltip = document.createElement("div");
+        tooltip.className = "validation-tooltip";
+        tooltip.textContent = message;
+        tooltip.setAttribute("role", "alert");
+        field.parentElement.appendChild(tooltip);
+
+        // Auto-hide tooltip after 3 seconds
+        setTimeout(() => {
+          if (tooltip.parentElement) {
+            tooltip.style.animation = "tooltipFadeOut 0.3s ease-out";
+            setTimeout(() => tooltip.remove(), 300);
+          }
+        }, 3000);
       }
 
       function setFieldSuccess(field) {
         field.classList.remove("error");
         field.classList.add("success");
         field.setAttribute("aria-invalid", "false");
-        field.removeAttribute("title");
+
+        // Remove tooltip if any
+        const tooltip = field.parentElement.querySelector(".validation-tooltip");
+        if (tooltip) {
+          tooltip.style.animation = "tooltipFadeOut 0.3s ease-out";
+          setTimeout(() => tooltip.remove(), 300);
+        }
+
+        // Show toast notification for successful validation
+        // showToast("Field validated successfully", "success", 1500);
       }
 
       function clearValidationState() {
@@ -562,6 +766,12 @@
           input.classList.remove("error", "success");
           input.removeAttribute("aria-invalid");
           input.removeAttribute("title");
+          
+          // Remove any tooltips
+          const tooltip = input.parentElement.querySelector(".validation-tooltip");
+          if (tooltip) {
+            tooltip.remove();
+          }
         });
       }
 
@@ -571,6 +781,12 @@
           input.classList.remove("error", "success");
           input.removeAttribute("aria-invalid");
           input.removeAttribute("title");
+          
+          // Remove any tooltips
+          const tooltip = input.parentElement.querySelector(".validation-tooltip");
+          if (tooltip) {
+            tooltip.remove();
+          }
         });
       }
 
@@ -597,6 +813,7 @@
 
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value;
+        const rememberMe = document.getElementById("rememberMe").checked;
 
         // Clear previous messages
         clearMessages();
@@ -610,10 +827,20 @@
           return;
         }
 
+        // Save username if remember me is checked
+        if (rememberMe) {
+          localStorage.setItem("savedUsername", username);
+        } else {
+          localStorage.removeItem("savedUsername");
+        }
+
         // Set loading state
         setLoadingState(true);
 
-        // Simulate network delay for better UX
+        // Add ripple effect to button
+        addRippleEffect(event);
+
+        // Simulate network delay for better UX (reduced for faster response)
         setTimeout(() => {
           // Validate credentials using the imported function
           const result = validateCredentials(
@@ -624,9 +851,12 @@
 
           if (result.success) {
             showMessage(
-              "Login successful! Redirecting to your dashboard...",
+              "✓ Login successful! Redirecting to your dashboard...",
               "success"
             );
+
+            // Confetti effect on successful login
+            triggerSuccessAnimation();
 
             // Store user info in sessionStorage for navigation
             sessionStorage.setItem(
@@ -643,8 +873,11 @@
               result.userId
             }_${currentUserType}_${Date.now()}`;
             sessionStorage.setItem("studentPortalAuth", authToken);
+            
             // Also store in localStorage for "remember me" functionality
-            localStorage.setItem("studentPortalAuth", authToken);
+            if (rememberMe) {
+              localStorage.setItem("studentPortalAuth", authToken);
+            }
 
             // Check if user was redirected from a protected page
             const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
@@ -656,10 +889,10 @@
             // Redirect after a brief delay
             setTimeout(() => {
               window.location.href = targetUrl;
-            }, 1500);
+            }, 800);
           } else {
             setLoadingState(false);
-            showMessage(result.message, "error");
+            showMessage("✕ " + result.message, "error");
 
             // Shake effect for failed login
             const loginCard = document.getElementById("loginCard");
@@ -673,7 +906,43 @@
               document.getElementById("username").focus();
             }, 500);
           }
-        }, 1000);
+        }, 600); // Reduced from 1000ms for faster response
+      }
+
+      // Add ripple effect to button
+      function addRippleEffect(event) {
+        const button = event.currentTarget.querySelector(".login-btn");
+        if (!button) return;
+
+        const ripple = document.createElement("span");
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+
+        ripple.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          left: ${x}px;
+          top: ${y}px;
+          pointer-events: none;
+          animation: rippleEffect 0.6s ease-out;
+        `;
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      }
+
+      // Success animation
+      function triggerSuccessAnimation() {
+        const loginCard = document.getElementById("loginCard");
+        loginCard.style.animation = "successPulse 0.6s ease-out";
+        setTimeout(() => {
+          loginCard.style.animation = "";
+        }, 600);
       }
 
       function setLoadingState(loading) {
@@ -779,8 +1048,127 @@
         if ("performance" in window) {
           const loadTime = performance.now();
           console.log(`Login page loaded in ${Math.round(loadTime)}ms`);
+          
+          // Don't show toast on page load to avoid confusion
+          // if (loadTime < 2000) {
+          //   showToast("Page loaded successfully!", "success", 2000);
+          // }
         }
       });
+
+      // Toast notification system
+      function showToast(message, type = "info", duration = 3000) {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+
+        const toast = document.createElement("div");
+        toast.style.cssText = `
+          padding: 12px 20px;
+          border-radius: 8px;
+          color: white;
+          font-size: 0.9rem;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          animation: slideInRight 0.3s ease-out;
+          min-width: 250px;
+          max-width: 350px;
+          position: relative;
+          overflow: hidden;
+        `;
+
+        // Set background color based on type
+        const colors = {
+          success: "linear-gradient(135deg, #10b981, #059669)",
+          error: "linear-gradient(135deg, #ef4444, #dc2626)",
+          info: "linear-gradient(135deg, #46bbe5, #3b9ec5)",
+          warning: "linear-gradient(135deg, #f59e0b, #d97706)",
+        };
+        toast.style.background = colors[type] || colors.info;
+
+        // Add icon based on type
+        const icons = {
+          success: "fa-check-circle",
+          error: "fa-exclamation-circle",
+          info: "fa-info-circle",
+          warning: "fa-exclamation-triangle",
+        };
+        const icon = icons[type] || icons.info;
+
+        toast.innerHTML = `
+          <i class="fas ${icon}"></i>
+          <span>${message}</span>
+        `;
+
+        // Add progress bar
+        const progressBar = document.createElement("div");
+        progressBar.style.cssText = `
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 3px;
+          background: rgba(255, 255, 255, 0.5);
+          animation: progressBar ${duration}ms linear;
+        `;
+        toast.appendChild(progressBar);
+
+        container.appendChild(toast);
+
+        // Auto remove
+        setTimeout(() => {
+          toast.style.animation = "slideOutRight 0.3s ease-out";
+          setTimeout(() => toast.remove(), 300);
+        }, duration);
+
+        // Click to dismiss
+        toast.addEventListener("click", () => {
+          toast.style.animation = "slideOutRight 0.3s ease-out";
+          setTimeout(() => toast.remove(), 300);
+        });
+      }
+
+      // Add CSS for toast animations
+      const toastStyles = document.createElement("style");
+      toastStyles.textContent = `
+        @keyframes slideInRight {
+          from {
+            transform: translateX(400px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        @keyframes slideOutRight {
+          from {
+            transform: translateX(0);
+            opacity: 1;
+          }
+          to {
+            transform: translateX(400px);
+            opacity: 0;
+          }
+        }
+        @keyframes progressBar {
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
+        }
+        #toastContainer > div {
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+        #toastContainer > div:hover {
+          transform: translateX(-5px);
+        }
+      `;
+      document.head.appendChild(toastStyles);
     </script>
   </body>
 </html>
