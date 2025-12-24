@@ -51,6 +51,37 @@ function validateCredentials(username, password, userType) {
     };
   }
 
+  // Accept specific demo student credentials for local testing
+  // Passwords are set to the username for simplicity in this demo environment.
+  const studentCredentials = {
+    bamreview: {
+      password: "bamreview",
+      name: "Bam",
+      dashboard: "students/bamreview.html",
+    },
+    temreview: {
+      password: "temreview",
+      name: "Tem",
+      dashboard: "students/temreview.html",
+    },
+  };
+
+  if (
+    userType === "student" &&
+    Object.prototype.hasOwnProperty.call(studentCredentials, username) &&
+    password === studentCredentials[username].password
+  ) {
+    const u = studentCredentials[username];
+    return {
+      success: true,
+      message: `Welcome ${u.name}!`,
+      userId: username,
+      dashboard: u.dashboard,
+      userName: u.name,
+      userType: userType,
+    };
+  }
+
   // For all other credentials, return a helpful message
   return {
     success: false,
@@ -75,6 +106,24 @@ function getUserInfo(username, userType) {
         userType === "student"
           ? "students/dashboard.html"
           : "teachers/dashboard.html",
+      userType: userType,
+    };
+  }
+  // Support the two demo student accounts
+  username = username && username.toLowerCase && username.toLowerCase();
+  if (username === "bamreview") {
+    return {
+      username: "bamreview",
+      name: "Bam Review",
+      dashboard: "students/bamreview.html",
+      userType: userType,
+    };
+  }
+  if (username === "temreview") {
+    return {
+      username: "temreview",
+      name: "Tem Review",
+      dashboard: "students/temreview.html",
       userType: userType,
     };
   }
