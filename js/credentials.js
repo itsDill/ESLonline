@@ -35,33 +35,23 @@ function validateCredentials(username, password, userType) {
     };
   }
 
-  // Demo mode - accept demo credentials
-  if (username === "demo" && password === "demo") {
-    const dashboard =
-      userType === "student"
-        ? "students/dashboard.html"
-        : "teachers/dashboard.html";
-    return {
-      success: true,
-      message: `Welcome to demo mode!`,
-      userId: username,
-      dashboard: dashboard,
-      userName: "Demo User",
-      userType: userType,
-    };
-  }
-
   // Accept specific demo student credentials for local testing
-  // Passwords are set to the username for simplicity in this demo environment.
+  // Passwords are set to the username (or a known test password) for simplicity.
   const studentCredentials = {
     bamreview: {
       password: "bamreview",
-      name: "Bam",
+      name: "Bam Review",
       dashboard: "students/bamreview.html",
     },
     temreview: {
       password: "temreview",
-      name: "Tem",
+      name: "Tem Review",
+      dashboard: "students/temreview.html",
+    },
+    // Allow the short username `tem` to sign in using the `temreview` password
+    tem: {
+      password: "temreview",
+      name: "Tem Review",
       dashboard: "students/temreview.html",
     },
   };
@@ -85,7 +75,7 @@ function validateCredentials(username, password, userType) {
   // For all other credentials, return a helpful message
   return {
     success: false,
-    message: "Invalid credentials. Use demo/demo for demonstration.",
+    message: "Invalid credentials.",
     userId: null,
     dashboard: null,
   };
@@ -98,18 +88,7 @@ function validateCredentials(username, password, userType) {
  * @returns {Object|null} - User information or null if not found
  */
 function getUserInfo(username, userType) {
-  if (username === "demo") {
-    return {
-      username: "demo",
-      name: "Demo User",
-      dashboard:
-        userType === "student"
-          ? "students/dashboard.html"
-          : "teachers/dashboard.html",
-      userType: userType,
-    };
-  }
-  // Support the two demo student accounts
+  // Support the test student accounts
   username = username && username.toLowerCase && username.toLowerCase();
   if (username === "bamreview") {
     return {
@@ -119,9 +98,9 @@ function getUserInfo(username, userType) {
       userType: userType,
     };
   }
-  if (username === "temreview") {
+  if (username === "temreview" || username === "tem") {
     return {
-      username: "temreview",
+      username: username === "tem" ? "tem" : "temreview",
       name: "Tem Review",
       dashboard: "students/temreview.html",
       userType: userType,
