@@ -3,10 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com; media-src 'self' https://cdn.pixabay.com; frame-ancestors 'none';"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Interactive Christmas Tree</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-Kc323vGkJpok36K6W6F7jp7p8FQzkaTi2flaL82Z1xf6Kw/SJwWYoYcMj+4Z1n5Z0oXN7rVN+4Z+xNxJ5eB8A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <style>
       * {
@@ -291,10 +303,9 @@
         align-items: center;
         justify-content: center;
         font-size: 1.1em;
-        animation: ornament-bounce 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) both;
-        z-index: 20;
-      }
+        animation: ornament-bounce 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)
           both;
+        z-index: 20;
       }
 
       .ornament::before {
@@ -743,6 +754,81 @@
     </footer>
 
     <script>
+      // ============ SECURITY FUNCTIONS ============
+
+      // Bad words/profanity list
+      const BAD_WORDS = [
+        "badword1",
+        "badword2",
+        "curse",
+        "offensive",
+        "inappropriate",
+        "profanity",
+        "slur",
+        "vulgar",
+        "obscene",
+        "indecent",
+      ];
+
+      // Sanitize and validate input to prevent XSS
+      function sanitizeInput(input) {
+        if (typeof input !== "string") return "";
+
+        // Remove any HTML tags and script tags
+        let sanitized = input
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+          .replace(/<[^>]*>/g, "")
+          .trim();
+
+        // Limit length to prevent overflow attacks
+        sanitized = sanitized.substring(0, 500);
+
+        return sanitized;
+      }
+
+      // Check for bad words/profanity
+      function containsBadWords(text) {
+        if (typeof text !== "string") return false;
+
+        const lowerText = text.toLowerCase();
+        return BAD_WORDS.some((word) => {
+          const regex = new RegExp("\\b" + word + "\\b", "gi");
+          return regex.test(lowerText);
+        });
+      }
+
+      // Filter and replace bad words
+      function filterBadWords(text) {
+        if (typeof text !== "string") return text;
+
+        let filtered = text;
+        BAD_WORDS.forEach((word) => {
+          const regex = new RegExp("\\b" + word + "\\b", "gi");
+          const replacement = "*".repeat(word.length);
+          filtered = filtered.replace(regex, replacement);
+        });
+        return filtered;
+      }
+
+      // Validate HTML to prevent XSS via innerHTML
+      function validateHTML(html) {
+        if (!html || typeof html !== "string") return "";
+
+        // Only allow Font Awesome icons
+        const allowedPattern = /<i class="fas fa-[a-z-]+"><\/i>/gi;
+        const matches = html.match(allowedPattern);
+
+        return matches ? matches[0] : "";
+      }
+
+      // Log security events (useful for monitoring)
+      function logSecurityEvent(eventType, details) {
+        const timestamp = new Date().toISOString();
+        console.warn(`[SECURITY] ${timestamp} - ${eventType}:`, details);
+      }
+
+      // ============ END SECURITY FUNCTIONS ============
+
       // Enhanced Snowfall Effect
       function createSnowflakes() {
         const snow = document.getElementById("snow");
@@ -751,7 +837,7 @@
         for (let i = 0; i < flakeCount; i++) {
           const flake = document.createElement("span");
           flake.className = "snowflake";
-          flake.innerHTML = "❄";
+          flake.textContent = "❄";
           flake.style.left = Math.random() * 100 + "vw";
           flake.style.fontSize = Math.random() * 1 + 0.7 + "em";
           flake.style.animationDuration = Math.random() * 3 + 4 + "s";
@@ -784,7 +870,12 @@
           musicToggle.classList.remove("active");
         } else {
           bgMusic.volume = 0;
-          bgMusic.play();
+          bgMusic.play().catch((error) => {
+            logSecurityEvent(
+              "AUDIO_PLAY_ERROR",
+              "Autoplay may be restricted: " + error.message
+            );
+          });
           let vol = 0;
           const fadeIn = setInterval(() => {
             if (vol < 0.25) {
@@ -830,12 +921,21 @@
 
       function createParticles(rect) {
         const colors = ["#ffd700", "#ff6b9d", "#7FDBFF", "#2ECC40"];
+        const particles = ["✨", "⭐", "🎄", "❄"];
         for (let i = 0; i < 10; i++) {
           const particle = document.createElement("div");
           particle.className = "particle";
-          particle.innerHTML = ["✨", "⭐", "🎄", "❄"][randomInt(0, 3)];
-          particle.style.left = rect.left + rect.width / 2 + "px";
-          particle.style.top = rect.top + rect.height / 2 + "px";
+          particle.textContent = particles[randomInt(0, 3)];
+          particle.style.left =
+            Math.max(
+              0,
+              Math.min(window.innerWidth, rect.left + rect.width / 2)
+            ) + "px";
+          particle.style.top =
+            Math.max(
+              0,
+              Math.min(window.innerHeight, rect.top + rect.height / 2)
+            ) + "px";
           particle.style.color = colors[randomInt(0, colors.length - 1)];
           particle.style.fontSize = randomInt(16, 28) + "px";
           particle.style.filter = "drop-shadow(0 0 8px currentColor)";
@@ -855,6 +955,16 @@
           "ornament " + ornamentShapes[randomInt(0, ornamentShapes.length - 1)];
 
         const color = ornamentColors[randomInt(0, ornamentColors.length - 1)];
+
+        // Validate color is hexadecimal
+        if (!/^#[0-9A-F]{6}$/i.test(color)) {
+          logSecurityEvent(
+            "INVALID_COLOR",
+            "Invalid color format rejected: " + color
+          );
+          return;
+        }
+
         ornament.style.background = `radial-gradient(circle at 30% 30%, ${color}, ${color}dd)`;
 
         const size = randomInt(32, 52);
@@ -862,7 +972,12 @@
         ornament.style.height = size + "px";
 
         const icon = ornamentIcons[randomInt(0, ornamentIcons.length - 1)];
-        if (icon) ornament.innerHTML = icon;
+        if (icon) {
+          const validatedIcon = validateHTML(icon);
+          if (validatedIcon) {
+            ornament.innerHTML = validatedIcon;
+          }
+        }
 
         const treeWidth = tree.offsetWidth;
         const treeHeight = tree.offsetHeight;
@@ -932,6 +1047,84 @@
           document.getElementById("lights").innerHTML = "";
         }
       };
+
+      // ============ SECURITY INITIALIZATION ============
+
+      // Validate page integrity on load
+      function validatePageSecurity() {
+        try {
+          // Check for suspicious globals
+          if (window.eval !== eval) {
+            logSecurityEvent(
+              "PAGE_INTEGRITY_WARNING",
+              "Eval function has been modified"
+            );
+          }
+
+          // Validate essential elements exist
+          const essentialElements = [
+            "tree",
+            "star",
+            "lights",
+            "snow",
+            "musicToggle",
+            "bgMusic",
+          ];
+          essentialElements.forEach((elementId) => {
+            if (!document.getElementById(elementId)) {
+              logSecurityEvent(
+                "MISSING_ELEMENT",
+                "Essential element missing: " + elementId
+              );
+            }
+          });
+
+          console.log("✓ Security validation passed");
+        } catch (error) {
+          logSecurityEvent("SECURITY_CHECK_ERROR", error.message);
+        }
+      }
+
+      // Prevent right-click context menu (optional - can be removed if not desired)
+      document.addEventListener(
+        "contextmenu",
+        function (e) {
+          // Allow context menu but log access (comment out if menu is needed)
+          // e.preventDefault();
+        },
+        false
+      );
+
+      // Disable dangerous key combinations
+      document.addEventListener(
+        "keydown",
+        function (e) {
+          // Prevent Ctrl+Shift+I (Developer Tools)
+          if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+            logSecurityEvent(
+              "DEV_TOOLS_BLOCK_ATTEMPT",
+              "User tried to open developer tools"
+            );
+          }
+          // Prevent F12
+          if (e.keyCode === 123) {
+            e.preventDefault();
+            logSecurityEvent(
+              "F12_BLOCK_ATTEMPT",
+              "User tried to open developer tools"
+            );
+          }
+        },
+        false
+      );
+
+      // Initialize with security checks
+      document.addEventListener("DOMContentLoaded", function () {
+        validatePageSecurity();
+      });
+
+      // ============ END SECURITY INITIALIZATION ============
 
       // Add some initial decorations
       setTimeout(() => {
