@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script
@@ -332,7 +332,7 @@
                 const isOpen = item.classList.contains("mobile-open");
                 console.log(
                   "Dropdown clicked:",
-                  isOpen ? "closing" : "opening"
+                  isOpen ? "closing" : "opening",
                 );
 
                 // Close other dropdowns
@@ -340,7 +340,7 @@
                   if (otherItem !== item) {
                     otherItem.classList.remove(
                       "mobile-open",
-                      "mobile-dropdown-open"
+                      "mobile-dropdown-open",
                     );
                     const otherChevron =
                       otherItem.querySelector(".fa-chevron-down");
@@ -666,7 +666,7 @@
     </main>
 
     <!-- Ad Space (Bottom of page) -->
-    <!-- Worksheet Modal with Ad -->
+    <!-- Worksheet Modal -->
     <div
       class="game-modal"
       id="worksheetModal"
@@ -679,8 +679,10 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.8);
         z-index: 9999;
-        padding: 2rem;
+        padding: 1rem;
         overflow-y: auto;
+        align-items: flex-start;
+        justify-content: center;
       "
     >
       <div
@@ -690,21 +692,24 @@
           background: white;
           border-radius: 20px;
           max-width: 900px;
-          margin: 0 auto;
+          width: 100%;
+          margin: 2rem auto;
           position: relative;
+          max-height: none;
         "
       >
         <button
           onclick="closeWorksheetModal()"
           style="
-            position: absolute;
+            position: sticky;
             top: 1rem;
-            right: 1rem;
+            float: right;
+            margin: 1rem;
             background: #ef4444;
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1.5rem;
@@ -718,34 +723,15 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <!-- Ad Section -->
-        <div
-          style="
-            padding: 2rem;
-            text-align: center;
-            border-bottom: 2px solid #e5e7eb;
-          "
-        >
-          <h3
-            style="
-              margin-bottom: 1rem;
-              color: #1f2937;
-              font-family: 'Poppins', sans-serif;
-            "
-          >
-            <i class="fas fa-ad"></i> Advertisement
-          </h3>
-        </div>
-
         <!-- Worksheet Content -->
-        <div id="worksheetContent" style="padding: 2rem">
+        <div id="worksheetContent" style="padding: 2rem; clear: both">
           <!-- Worksheet details will be inserted here -->
         </div>
       </div>
     </div>
 
     <script>
-      // Worksheet Data
+      // Worksheet Data with full interactive content
       const worksheets = [
         {
           id: 1,
@@ -755,9 +741,76 @@
           category: "idioms",
           age: "teens",
           icon: "fa-comments",
-          image: "../images/worksheets/worksheet1.png", // You'll add this image
           color: "#3498db",
-          url: "#worksheet-1",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "He really ___ the beans about the surprise party.",
+              answer: "spilled",
+              hint: "To reveal a secret",
+            },
+            {
+              type: "fill-blank",
+              question: "Don't worry, you'll get the ___ of it soon.",
+              answer: "hang",
+              hint: "To learn how to do something",
+            },
+            {
+              type: "fill-blank",
+              question: "She told a joke to break the ___ at the meeting.",
+              answer: "ice",
+              hint: "To start a conversation",
+            },
+            {
+              type: "fill-blank",
+              question: "The exam was a piece of ___.",
+              answer: "cake",
+              hint: "Very easy",
+            },
+            {
+              type: "fill-blank",
+              question: "I'm feeling under the ___ today.",
+              answer: "weather",
+              hint: "Feeling sick",
+            },
+          ],
+          matching: [
+            { idiom: "Break the ice", meaning: "Start a conversation" },
+            { idiom: "Piece of cake", meaning: "Something very easy" },
+            { idiom: "Hit the nail on the head", meaning: "Be exactly right" },
+            { idiom: "Spill the beans", meaning: "Reveal a secret" },
+            {
+              idiom: "Get the hang of it",
+              meaning: "Learn how to do something",
+            },
+          ],
+          quiz: [
+            {
+              q: "What does 'break the ice' mean?",
+              options: [
+                "Break something cold",
+                "Start a conversation",
+                "Stop talking",
+                "Feel cold",
+              ],
+              correct: 1,
+            },
+            {
+              q: "What does 'piece of cake' mean?",
+              options: [
+                "Delicious food",
+                "Very difficult",
+                "Very easy",
+                "Breakfast",
+              ],
+              correct: 2,
+            },
+            {
+              q: "What does 'under the weather' mean?",
+              options: ["Outside", "Raining", "Feeling sick", "Happy"],
+              correct: 2,
+            },
+          ],
         },
         {
           id: 2,
@@ -767,9 +820,81 @@
           category: "grammar",
           age: "adults",
           icon: "fa-book",
-          image: "../images/worksheets/worksheet2.png",
           color: "#2ecc71",
-          url: "#worksheet-2",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "She ___ to the store yesterday.",
+              answer: "went",
+              hint: "Past tense of 'go'",
+            },
+            {
+              type: "fill-blank",
+              question: "They ___ been waiting for two hours.",
+              answer: "have",
+              hint: "Present perfect auxiliary",
+            },
+            {
+              type: "fill-blank",
+              question: "I ___ studying when you called.",
+              answer: "was",
+              hint: "Past continuous auxiliary",
+            },
+            {
+              type: "fill-blank",
+              question: "By next year, I ___ have finished my degree.",
+              answer: "will",
+              hint: "Future perfect auxiliary",
+            },
+            {
+              type: "fill-blank",
+              question: "She ___ working here since 2020.",
+              answer: "has been",
+              hint: "Present perfect continuous",
+            },
+          ],
+          matching: [
+            { idiom: "Simple Present", meaning: "I work every day" },
+            { idiom: "Present Continuous", meaning: "I am working now" },
+            { idiom: "Simple Past", meaning: "I worked yesterday" },
+            {
+              idiom: "Present Perfect",
+              meaning: "I have worked here for 5 years",
+            },
+            { idiom: "Future Simple", meaning: "I will work tomorrow" },
+          ],
+          quiz: [
+            {
+              q: "Which sentence is in present perfect?",
+              options: [
+                "I go to school",
+                "I went to school",
+                "I have gone to school",
+                "I am going to school",
+              ],
+              correct: 2,
+            },
+            {
+              q: "Choose the correct past tense:",
+              options: [
+                "I eated lunch",
+                "I eaten lunch",
+                "I ate lunch",
+                "I eating lunch",
+              ],
+              correct: 2,
+            },
+            {
+              q: "Which is future continuous?",
+              options: [
+                "I will work",
+                "I will be working",
+                "I worked",
+                "I have worked",
+              ],
+              correct: 1,
+            },
+          ],
         },
         {
           id: 3,
@@ -779,9 +904,63 @@
           category: "vocabulary",
           age: "teens",
           icon: "fa-language",
-          image: "../images/worksheets/worksheet3.png",
           color: "#e74c3c",
-          url: "#worksheet-3",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "The opposite of 'happy' is ___.",
+              answer: "sad",
+              hint: "An emotion",
+            },
+            {
+              type: "fill-blank",
+              question: "A synonym for 'big' is ___.",
+              answer: "large",
+              hint: "Size word",
+            },
+            {
+              type: "fill-blank",
+              question: "The noun form of 'beautiful' is ___.",
+              answer: "beauty",
+              hint: "A quality",
+            },
+            {
+              type: "fill-blank",
+              question: "The adjective form of 'danger' is ___.",
+              answer: "dangerous",
+              hint: "Describes risk",
+            },
+            {
+              type: "fill-blank",
+              question: "We use 'make' with the word ___.",
+              answer: "decision",
+              hint: "A choice",
+            },
+          ],
+          matching: [
+            { idiom: "Happy", meaning: "Joyful, glad, cheerful" },
+            { idiom: "Big", meaning: "Large, huge, enormous" },
+            { idiom: "Fast", meaning: "Quick, rapid, speedy" },
+            { idiom: "Good", meaning: "Great, excellent, wonderful" },
+            { idiom: "Bad", meaning: "Terrible, awful, poor" },
+          ],
+          quiz: [
+            {
+              q: "What is a synonym for 'intelligent'?",
+              options: ["Stupid", "Smart", "Slow", "Lazy"],
+              correct: 1,
+            },
+            {
+              q: "What is the opposite of 'ancient'?",
+              options: ["Old", "Modern", "Historic", "Traditional"],
+              correct: 1,
+            },
+            {
+              q: "Which word means 'very tired'?",
+              options: ["Energetic", "Active", "Exhausted", "Excited"],
+              correct: 2,
+            },
+          ],
         },
         {
           id: 4,
@@ -791,9 +970,63 @@
           category: "grammar",
           age: "teens",
           icon: "fa-check-circle",
-          image: "../images/worksheets/worksheet4.png",
           color: "#9b59b6",
-          url: "#modal-verbs",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "You ___ wear a seatbelt in the car. (obligation)",
+              answer: "must",
+              hint: "Strong obligation",
+            },
+            {
+              type: "fill-blank",
+              question: "___ I borrow your pen, please?",
+              answer: "Could",
+              hint: "Polite request",
+            },
+            {
+              type: "fill-blank",
+              question: "She ___ speak three languages.",
+              answer: "can",
+              hint: "Ability",
+            },
+            {
+              type: "fill-blank",
+              question: "You ___ see a doctor. (advice)",
+              answer: "should",
+              hint: "Recommendation",
+            },
+            {
+              type: "fill-blank",
+              question: "It ___ rain tomorrow.",
+              answer: "might",
+              hint: "Possibility",
+            },
+          ],
+          matching: [
+            { idiom: "Can", meaning: "Ability, permission" },
+            { idiom: "Must", meaning: "Strong obligation" },
+            { idiom: "Should", meaning: "Advice, recommendation" },
+            { idiom: "Might", meaning: "Possibility" },
+            { idiom: "Would", meaning: "Conditional, polite requests" },
+          ],
+          quiz: [
+            {
+              q: "Which modal expresses strong obligation?",
+              options: ["Should", "Could", "Must", "Might"],
+              correct: 2,
+            },
+            {
+              q: "Which modal is used for polite requests?",
+              options: ["Must", "Could", "Have to", "Need"],
+              correct: 1,
+            },
+            {
+              q: "Which modal expresses ability?",
+              options: ["Should", "Must", "Can", "May"],
+              correct: 2,
+            },
+          ],
         },
         {
           id: 5,
@@ -803,9 +1036,73 @@
           category: "phrasal-verbs",
           age: "adults",
           icon: "fa-arrows-alt",
-          image: "../images/worksheets/worksheet5.png",
           color: "#1abc9c",
-          url: "#phrasal-verbs",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "Please turn ___ the lights when you leave.",
+              answer: "off",
+              hint: "Opposite of 'on'",
+            },
+            {
+              type: "fill-blank",
+              question: "I need to look ___ this word in the dictionary.",
+              answer: "up",
+              hint: "To search for information",
+            },
+            {
+              type: "fill-blank",
+              question: "We had to put ___ the meeting until next week.",
+              answer: "off",
+              hint: "To postpone",
+            },
+            {
+              type: "fill-blank",
+              question: "She takes ___ her mother.",
+              answer: "after",
+              hint: "To resemble",
+            },
+            {
+              type: "fill-blank",
+              question: "Don't give ___! Keep trying.",
+              answer: "up",
+              hint: "To stop trying",
+            },
+          ],
+          matching: [
+            { idiom: "Turn off", meaning: "Stop a device or light" },
+            { idiom: "Look up", meaning: "Search for information" },
+            { idiom: "Put off", meaning: "Postpone, delay" },
+            { idiom: "Take after", meaning: "Resemble a family member" },
+            { idiom: "Give up", meaning: "Stop trying" },
+          ],
+          quiz: [
+            {
+              q: "What does 'turn off' mean?",
+              options: ["Start", "Stop", "Change direction", "Repair"],
+              correct: 1,
+            },
+            {
+              q: "What does 'look up' mean?",
+              options: [
+                "Look at the sky",
+                "Search for information",
+                "Stand up",
+                "Admire someone",
+              ],
+              correct: 1,
+            },
+            {
+              q: "What does 'give up' mean?",
+              options: [
+                "Donate",
+                "Surrender/Stop trying",
+                "Rise up",
+                "Present a gift",
+              ],
+              correct: 1,
+            },
+          ],
         },
         {
           id: 6,
@@ -815,9 +1112,68 @@
           category: "tenses",
           age: "teens",
           icon: "fa-clock",
-          image: "../images/worksheets/worksheet6.png",
           color: "#f39c12",
-          url: "#present-perfect",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "I ___ never been to Japan.",
+              answer: "have",
+              hint: "Auxiliary verb for 'I'",
+            },
+            {
+              type: "fill-blank",
+              question: "She ___ just finished her homework.",
+              answer: "has",
+              hint: "Auxiliary verb for 'she'",
+            },
+            {
+              type: "fill-blank",
+              question: "They have ___ here since 2015.",
+              answer: "lived",
+              hint: "Past participle of 'live'",
+            },
+            {
+              type: "fill-blank",
+              question: "Have you ever ___ sushi?",
+              answer: "eaten",
+              hint: "Past participle of 'eat'",
+            },
+            {
+              type: "fill-blank",
+              question: "We have ___ each other for years.",
+              answer: "known",
+              hint: "Past participle of 'know'",
+            },
+          ],
+          matching: [
+            { idiom: "Just", meaning: "Very recently" },
+            { idiom: "Already", meaning: "Before now/expected time" },
+            { idiom: "Yet", meaning: "Until now (questions/negatives)" },
+            { idiom: "Ever", meaning: "At any time in your life" },
+            { idiom: "Never", meaning: "Not at any time" },
+          ],
+          quiz: [
+            {
+              q: "When do we use 'has' vs 'have'?",
+              options: [
+                "Has for I/You, Have for He/She",
+                "Has for He/She/It, Have for I/You/We/They",
+                "They are the same",
+                "Has for past, Have for present",
+              ],
+              correct: 1,
+            },
+            {
+              q: "Which word is used in questions and negatives?",
+              options: ["Already", "Just", "Yet", "Ever"],
+              correct: 2,
+            },
+            {
+              q: "Complete: She ___ visited Paris twice.",
+              options: ["have", "has", "had", "is"],
+              correct: 1,
+            },
+          ],
         },
         {
           id: 7,
@@ -827,9 +1183,87 @@
           category: "grammar",
           age: "adults",
           icon: "fa-code-branch",
-          image: "../images/worksheets/worksheet7.png",
           color: "#34495e",
-          url: "#conditionals",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "If it ___, the ground gets wet. (Zero conditional)",
+              answer: "rains",
+              hint: "Present simple",
+            },
+            {
+              type: "fill-blank",
+              question:
+                "If I study hard, I ___ pass the exam. (First conditional)",
+              answer: "will",
+              hint: "Future result",
+            },
+            {
+              type: "fill-blank",
+              question:
+                "If I ___ rich, I would travel the world. (Second conditional)",
+              answer: "were",
+              hint: "Subjunctive past",
+            },
+            {
+              type: "fill-blank",
+              question:
+                "If I had studied, I ___ have passed. (Third conditional)",
+              answer: "would",
+              hint: "Modal for unreal past",
+            },
+            {
+              type: "fill-blank",
+              question:
+                "If she ___ called, I would have answered. (Third conditional)",
+              answer: "had",
+              hint: "Past perfect auxiliary",
+            },
+          ],
+          matching: [
+            {
+              idiom: "Zero Conditional",
+              meaning: "If + present, present (facts)",
+            },
+            {
+              idiom: "First Conditional",
+              meaning: "If + present, will + verb (likely future)",
+            },
+            {
+              idiom: "Second Conditional",
+              meaning: "If + past, would + verb (unlikely/imaginary)",
+            },
+            {
+              idiom: "Third Conditional",
+              meaning: "If + past perfect, would have + verb (unreal past)",
+            },
+            {
+              idiom: "Mixed Conditional",
+              meaning: "Combines different time references",
+            },
+          ],
+          quiz: [
+            {
+              q: "Which conditional talks about facts?",
+              options: ["First", "Second", "Third", "Zero"],
+              correct: 3,
+            },
+            {
+              q: "Which conditional is for unlikely situations?",
+              options: ["Zero", "First", "Second", "Third"],
+              correct: 2,
+            },
+            {
+              q: "Third conditional talks about:",
+              options: [
+                "Future plans",
+                "Facts",
+                "Unreal past situations",
+                "Present habits",
+              ],
+              correct: 2,
+            },
+          ],
         },
         {
           id: 8,
@@ -839,9 +1273,84 @@
           category: "vocabulary",
           age: "adults",
           icon: "fa-briefcase",
-          image: "../images/worksheets/worksheet8.png",
           color: "#16a085",
-          url: "#business-vocab",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "We need to schedule a ___ with the client.",
+              answer: "meeting",
+              hint: "A formal gathering",
+            },
+            {
+              type: "fill-blank",
+              question: "The company's annual ___ showed a 20% increase.",
+              answer: "revenue",
+              hint: "Income from business",
+            },
+            {
+              type: "fill-blank",
+              question: "Please send me your ___ by Friday.",
+              answer: "report",
+              hint: "A formal document",
+            },
+            {
+              type: "fill-blank",
+              question: "We need to negotiate a better ___.",
+              answer: "deal",
+              hint: "Business agreement",
+            },
+            {
+              type: "fill-blank",
+              question: "The ___ approved the new budget.",
+              answer: "board",
+              hint: "Group of directors",
+            },
+          ],
+          matching: [
+            {
+              idiom: "Deadline",
+              meaning: "The latest time to complete something",
+            },
+            { idiom: "Budget", meaning: "Financial plan for expenses" },
+            { idiom: "Agenda", meaning: "List of topics for a meeting" },
+            { idiom: "Proposal", meaning: "Formal suggestion or plan" },
+            {
+              idiom: "Stakeholder",
+              meaning: "Person with interest in a project",
+            },
+          ],
+          quiz: [
+            {
+              q: "What is an 'agenda'?",
+              options: [
+                "A list of meeting topics",
+                "A financial report",
+                "A business card",
+                "An email",
+              ],
+              correct: 0,
+            },
+            {
+              q: "What does 'deadline' mean?",
+              options: [
+                "A dangerous line",
+                "The latest time to complete something",
+                "A type of contract",
+                "A meeting room",
+              ],
+              correct: 1,
+            },
+            {
+              q: "What is 'ROI'?",
+              options: [
+                "Rate of Interest",
+                "Return on Investment",
+                "Report of Income",
+                "Range of Inventory",
+              ],
+              correct: 1,
+            },
+          ],
         },
         {
           id: 9,
@@ -851,21 +1360,164 @@
           category: "grammar",
           age: "teens",
           icon: "fa-exchange-alt",
-          image: "../images/worksheets/worksheet9.png",
           color: "#c0392b",
-          url: "#passive-voice",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "The cake ___ made by my mom.",
+              answer: "was",
+              hint: "Past simple passive auxiliary",
+            },
+            {
+              type: "fill-blank",
+              question: "English ___ spoken in many countries.",
+              answer: "is",
+              hint: "Present simple passive auxiliary",
+            },
+            {
+              type: "fill-blank",
+              question: "The house is ___ painted.",
+              answer: "being",
+              hint: "Present continuous passive",
+            },
+            {
+              type: "fill-blank",
+              question: "The letter has ___ sent.",
+              answer: "been",
+              hint: "Present perfect passive",
+            },
+            {
+              type: "fill-blank",
+              question: "The window was ___ by the ball.",
+              answer: "broken",
+              hint: "Past participle of 'break'",
+            },
+          ],
+          matching: [
+            {
+              idiom: "Active: She writes a letter",
+              meaning: "Passive: A letter is written by her",
+            },
+            {
+              idiom: "Active: They built the house",
+              meaning: "Passive: The house was built by them",
+            },
+            {
+              idiom: "Active: He is cooking dinner",
+              meaning: "Passive: Dinner is being cooked by him",
+            },
+            {
+              idiom: "Active: I have read the book",
+              meaning: "Passive: The book has been read by me",
+            },
+            {
+              idiom: "Active: They will finish it",
+              meaning: "Passive: It will be finished by them",
+            },
+          ],
+          quiz: [
+            {
+              q: "What is the passive form of 'She writes letters'?",
+              options: [
+                "Letters writes by her",
+                "Letters are written by her",
+                "Letters is written",
+                "She is written letters",
+              ],
+              correct: 1,
+            },
+            {
+              q: "Which sentence is passive?",
+              options: [
+                "I eat pizza",
+                "Pizza is eaten by me",
+                "I am eating pizza",
+                "I ate pizza",
+              ],
+              correct: 1,
+            },
+            {
+              q: "In passive voice, who/what is the focus?",
+              options: [
+                "The doer of the action",
+                "The receiver of the action",
+                "The time of action",
+                "The location",
+              ],
+              correct: 1,
+            },
+          ],
         },
         {
           id: 10,
-          title: "Common Idioms",
+          title: "Common Idioms for Kids",
           description:
-            "Learn 50+ common English idioms with meanings and example sentences.",
+            "Learn 25+ fun English idioms with meanings and example sentences - perfect for young learners!",
           category: "idioms",
           age: "kids",
           icon: "fa-quote-left",
-          image: "../images/worksheets/worksheet10.png",
           color: "#8e44ad",
-          url: "#common-idioms",
+          exercises: [
+            {
+              type: "fill-blank",
+              question: "It's raining cats and ___.",
+              answer: "dogs",
+              hint: "A pet animal",
+            },
+            {
+              type: "fill-blank",
+              question: "He has butterflies in his ___.",
+              answer: "stomach",
+              hint: "Part of your body",
+            },
+            {
+              type: "fill-blank",
+              question: "You're the apple of my ___.",
+              answer: "eye",
+              hint: "You see with this",
+            },
+            {
+              type: "fill-blank",
+              question: "I'm all ___! (I'm listening)",
+              answer: "ears",
+              hint: "You hear with these",
+            },
+            {
+              type: "fill-blank",
+              question: "That's a piece of ___! (Very easy)",
+              answer: "cake",
+              hint: "A sweet dessert",
+            },
+          ],
+          matching: [
+            { idiom: "Raining cats and dogs", meaning: "Raining very hard" },
+            { idiom: "Butterflies in stomach", meaning: "Feeling nervous" },
+            { idiom: "Apple of my eye", meaning: "Someone you love very much" },
+            { idiom: "All ears", meaning: "Listening carefully" },
+            { idiom: "Piece of cake", meaning: "Very easy" },
+          ],
+          quiz: [
+            {
+              q: "What does 'raining cats and dogs' mean?",
+              options: [
+                "Pets falling from sky",
+                "Raining very hard",
+                "Animals playing",
+                "Cloudy weather",
+              ],
+              correct: 1,
+            },
+            {
+              q: "If you have 'butterflies in your stomach', you feel:",
+              options: ["Hungry", "Nervous", "Happy", "Sleepy"],
+              correct: 1,
+            },
+            {
+              q: "What does 'piece of cake' mean?",
+              options: ["A dessert", "Very hard", "Very easy", "A party"],
+              correct: 2,
+            },
+          ],
         },
       ];
 
@@ -886,39 +1538,37 @@
         grid.innerHTML = filteredWorksheets
           .map(
             (worksheet) => `
-          <div class="worksheet-card" data-category="${
-            worksheet.category
-          }" data-age="${worksheet.age}">
-            <div class="worksheet-image-container" style="background: linear-gradient(135deg, ${
-              worksheet.color
-            } 0%, ${adjustColor(worksheet.color, -20)} 100%);">
-              <img src="${worksheet.image}" alt="${
-              worksheet.title
-            }" class="worksheet-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-              <i class="fas ${
-                worksheet.icon
-              } worksheet-placeholder" style="display: none;"></i>
-            </div>
-            <div class="worksheet-content">
-              <h3 class="worksheet-title">${worksheet.title}</h3>
-              <p class="worksheet-description">${worksheet.description}</p>
-              <div class="worksheet-footer">
-                <span class="worksheet-category">${worksheet.category}</span>
-                <a href="${
-                  worksheet.url
-                }" class="btn-view" onclick="openWorksheet(${
-              worksheet.id
-            }); return false;">
-                  <i class="fas fa-eye"></i> View
-                </a>
-              </div>
-            </div>
-          </div>
-        `
+                <div class="worksheet-card" data-category="${
+                  worksheet.category
+                }" data-age="${worksheet.age}">
+                  <div class="worksheet-image-container" style="background: linear-gradient(135deg, ${
+                    worksheet.color
+                  } 0%, ${adjustColor(worksheet.color, -20)} 100%);">
+                    <i class="fas ${worksheet.icon} worksheet-placeholder" style="display: block; font-size: 4rem; color: white;"></i>
+                  </div>
+                  <div class="worksheet-content">
+                    <h3 class="worksheet-title">${worksheet.title}</h3>
+                    <p class="worksheet-description">${worksheet.description}</p>
+                    <div class="worksheet-meta" style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                      <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                        <i class="fas fa-pencil-alt"></i> ${worksheet.exercises.length} Exercises
+                      </span>
+                      <span style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                        <i class="fas fa-question-circle"></i> Quiz Included
+                      </span>
+                    </div>
+                    <div class="worksheet-footer">
+                      <span class="worksheet-category">${worksheet.category}</span>
+                      <a href="#" class="btn-view" onclick="openWorksheet(${worksheet.id}); return false;">
+                        <i class="fas fa-play-circle"></i> Start
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              `,
           )
           .join("");
       }
-
       // Helper function to adjust color brightness
       function adjustColor(color, percent) {
         const num = parseInt(color.replace("#", ""), 16);
@@ -1003,78 +1653,507 @@
             (w) =>
               w.title.toLowerCase().includes(currentSearch) ||
               w.description.toLowerCase().includes(currentSearch) ||
-              w.category.toLowerCase().includes(currentSearch)
+              w.category.toLowerCase().includes(currentSearch),
           );
         }
 
         renderWorksheets(filtered);
       }
 
-      // Open Worksheet Function with Ad
+      // Open Worksheet Function - Full Interactive Version
+      let currentWorksheetId = null;
+      let exerciseAnswers = {};
+      let quizScore = 0;
+      let currentQuizIndex = 0;
+
       function openWorksheet(id) {
         const worksheet = worksheets.find((w) => w.id === id);
+        currentWorksheetId = id;
+        exerciseAnswers = {};
+        quizScore = 0;
+        currentQuizIndex = 0;
+
         const modal = document.getElementById("worksheetModal");
         const content = document.getElementById("worksheetContent");
 
-        // Build worksheet content
+        // Build worksheet-style content that looks like a real printable worksheet
         content.innerHTML = `
-          <div style="text-align: center; margin-bottom: 2rem;">
-            <img src="${worksheet.image}" alt="${
-          worksheet.title
-        }" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); margin-bottom: 1.5rem;" onerror="this.style.display='none';">
-            <h2 style="font-family: 'Poppins', sans-serif; color: #1f2937; margin-bottom: 0.5rem;">
-              <i class="fas ${worksheet.icon}" style="color: ${
-          worksheet.color
-        };"></i> ${worksheet.title}
-            </h2>
-            <p style="color: #6b7280; font-size: 1.1rem; margin-bottom: 1rem;">${
-              worksheet.description
-            }</p>
-            <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
-              <span style="background: linear-gradient(135deg, rgba(70, 187, 229, 0.15), rgba(16, 185, 129, 0.15)); color: var(--primary-color); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 2px solid rgba(70, 187, 229, 0.3);">
-                <i class="fas fa-tag"></i> ${worksheet.category}
-              </span>
-              <span style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15)); color: #f59e0b; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 2px solid rgba(245, 158, 11, 0.3);">
-                <i class="fas fa-user"></i> ${
-                  worksheet.age === "kids"
-                    ? "Kids (6-12)"
-                    : worksheet.age === "teens"
-                    ? "Teens (13-17)"
-                    : "Adults (18+)"
-                }
-              </span>
-            </div>
-          </div>
+                <!-- Worksheet Header - Like a real school worksheet -->
+                <div class="worksheet-paper" style="background: #fff; border: 3px solid #1f2937; border-radius: 0; padding: 0; max-width: 800px; margin: 0 auto; font-family: 'Times New Roman', Georgia, serif;">
 
-          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <button onclick="downloadWorksheet(${
-              worksheet.id
-            })" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; padding: 1rem 2rem; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 6px 20px rgba(70, 187, 229, 0.3); transition: all 0.3s ease;">
-              <i class="fas fa-download"></i> Download PDF
-            </button>
-            <button onclick="printWorksheet(${
-              worksheet.id
-            })" style="background: white; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 1rem 2rem; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;">
-              <i class="fas fa-print"></i> Print
-            </button>
-          </div>
+                  <!-- Top Banner -->
+                  <div style="background: linear-gradient(135deg, ${worksheet.color}, ${adjustColor(worksheet.color, -30)}); padding: 1.5rem 2rem; color: white; text-align: center;">
+                    <h1 style="margin: 0; font-size: 1.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">
+                      <i class="fas ${worksheet.icon}"></i> ${worksheet.title}
+                    </h1>
+                    <p style="margin: 0.5rem 0 0; opacity: 0.9; font-size: 0.95rem;">ESL Fun Online - Practice Worksheet</p>
+                  </div>
 
-          <div style="margin-top: 2rem; padding: 1.5rem; background: #f9fafb; border-radius: 12px; border-left: 4px solid ${
-            worksheet.color
-          };">
-            <h3 style="color: #1f2937; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
-              <i class="fas fa-info-circle"></i> About This Worksheet
-            </h3>
-            <p style="color: #6b7280; line-height: 1.7;">
-              This worksheet is designed to help you master ${worksheet.title.toLowerCase()}.
-              It includes comprehensive explanations, practical examples, and engaging exercises
-              to reinforce your learning. Download or print to practice offline!
-            </p>
-          </div>
-        `;
+                  <!-- Student Info Section -->
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; padding: 1rem 2rem; border-bottom: 2px solid #1f2937; background: #f8f9fa;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <label style="font-weight: bold; color: #1f2937;">Name:</label>
+                      <input type="text" id="student-name" style="flex: 1; border: none; border-bottom: 2px solid #1f2937; background: transparent; padding: 0.25rem; font-family: inherit; font-size: 1rem;" placeholder="________________">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <label style="font-weight: bold; color: #1f2937;">Date:</label>
+                      <input type="text" id="student-date" style="flex: 1; border: none; border-bottom: 2px solid #1f2937; background: transparent; padding: 0.25rem; font-family: inherit; font-size: 1rem;" value="${new Date().toLocaleDateString()}">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <label style="font-weight: bold; color: #1f2937;">Score:</label>
+                      <span style="border: none; border-bottom: 2px solid #1f2937; padding: 0.25rem; min-width: 60px;" id="final-score">___/${worksheet.exercises.length + worksheet.matching.length}</span>
+                    </div>
+                  </div>
+
+                  <!-- Instructions -->
+                  <div style="padding: 1rem 2rem; background: #fffbeb; border-bottom: 1px dashed #d97706;">
+                    <p style="margin: 0; color: #92400e; font-style: italic;">
+                      <i class="fas fa-info-circle"></i> <strong>Instructions:</strong> ${worksheet.description} Complete all exercises below.
+                    </p>
+                  </div>
+
+                  <!-- PART A: Fill in the Blanks -->
+                  <div style="padding: 1.5rem 2rem; border-bottom: 2px solid #e5e7eb;">
+                    <h2 style="margin: 0 0 1rem; color: #1f2937; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid ${worksheet.color}; padding-bottom: 0.5rem;">
+                      <span style="background: ${worksheet.color}; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem;">PART A</span>
+                      Fill in the Blanks
+                    </h2>
+                    <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem;">Write the missing word in each blank. Use the hints provided if needed.</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                      ${worksheet.exercises
+                        .map(
+                          (ex, i) => `
+                        <div style="display: flex; gap: 1rem; align-items: flex-start; padding: 1rem; background: ${i % 2 === 0 ? "#f9fafb" : "#ffffff"}; border-left: 3px solid ${worksheet.color};">
+                          <span style="background: #1f2937; color: white; min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0;">${i + 1}</span>
+                          <div style="flex: 1;">
+                            <p style="margin: 0 0 0.75rem; color: #1f2937; font-size: 1.05rem; line-height: 1.6;">
+                              ${ex.question.replace("___", '<input type="text" id="exercise-' + id + "-" + i + '" class="worksheet-blank" style="border: none; border-bottom: 2px dashed #6b7280; background: transparent; padding: 0.25rem 0.5rem; width: 100px; font-family: inherit; font-size: 1rem; text-align: center;" onkeyup="checkExercise(' + id + ", " + i + ', this.value)">')}
+                            </p>
+                            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                              <button onclick="showHint(${id}, ${i})" style="background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; font-family: inherit;">
+                                <i class="fas fa-lightbulb"></i> Hint
+                              </button>
+                              <span id="hint-${id}-${i}" style="color: #92400e; font-size: 0.85rem; display: none; font-style: italic;">💡 ${ex.hint}</span>
+                              <span id="result-${id}-${i}" style="font-weight: 600; display: none;"></span>
+                            </div>
+                          </div>
+                        </div>
+                      `,
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+
+                  <!-- PART B: Matching -->
+                  <div style="padding: 1.5rem 2rem; border-bottom: 2px solid #e5e7eb;">
+                    <h2 style="margin: 0 0 1rem; color: #1f2937; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid ${worksheet.color}; padding-bottom: 0.5rem;">
+                      <span style="background: ${worksheet.color}; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem;">PART B</span>
+                      Match the Terms
+                    </h2>
+                    <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem;">Draw a line or write the letter to match each term with its definition.</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                      <div>
+                        <h4 style="margin: 0 0 1rem; color: #374151; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #d1d5db; padding-bottom: 0.5rem;">Column A - Terms</h4>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                          ${worksheet.matching
+                            .map(
+                              (m, i) => `
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px;">
+                              <span style="font-weight: bold; color: ${worksheet.color};">${i + 1}.</span>
+                              <span style="flex: 1; color: #1f2937;">${m.idiom}</span>
+                              <input type="text" class="match-input" data-correct="${String.fromCharCode(65 + worksheet.matching.findIndex((x) => x.meaning === m.meaning))}" style="width: 35px; text-align: center; border: 1px solid #d1d5db; border-radius: 4px; padding: 0.25rem; font-weight: bold; text-transform: uppercase;" maxlength="1" placeholder="_">
+                            </div>
+                          `,
+                            )
+                            .join("")}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 style="margin: 0 0 1rem; color: #374151; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #d1d5db; padding-bottom: 0.5rem;">Column B - Definitions</h4>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                          ${shuffleArray([...worksheet.matching])
+                            .map(
+                              (m, i) => `
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px;">
+                              <span style="font-weight: bold; color: #16a34a; background: #dcfce7; padding: 0.2rem 0.5rem; border-radius: 4px;">${String.fromCharCode(65 + i)}</span>
+                              <span style="color: #1f2937; font-size: 0.95rem;">${m.meaning}</span>
+                            </div>
+                          `,
+                            )
+                            .join("")}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PART C: Multiple Choice Quiz -->
+                  <div style="padding: 1.5rem 2rem;">
+                    <h2 style="margin: 0 0 1rem; color: #1f2937; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 2px solid ${worksheet.color}; padding-bottom: 0.5rem;">
+                      <span style="background: ${worksheet.color}; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem;">PART C</span>
+                      Multiple Choice
+                    </h2>
+                    <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem;">Circle or select the correct answer for each question.</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                      ${worksheet.quiz
+                        .map(
+                          (q, i) => `
+                        <div style="padding: 1rem; background: ${i % 2 === 0 ? "#f9fafb" : "#ffffff"}; border-left: 3px solid ${worksheet.color};">
+                          <p style="margin: 0 0 0.75rem; color: #1f2937; font-weight: 600; font-size: 1rem;">
+                            <span style="color: ${worksheet.color};">${i + 1}.</span> ${q.q}
+                          </p>
+                          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding-left: 1.5rem;">
+                            ${q.options
+                              .map(
+                                (opt, j) => `
+                              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#e0f2fe'" onmouseout="this.style.background='transparent'">
+                                <input type="radio" name="quiz-${id}-${i}" value="${j}" data-correct="${q.correct}" style="width: 16px; height: 16px; accent-color: ${worksheet.color};">
+                                <span style="color: #374151;"><strong>${String.fromCharCode(65 + j)})</strong> ${opt}</span>
+                              </label>
+                            `,
+                              )
+                              .join("")}
+                          </div>
+                        </div>
+                      `,
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+
+                  <!-- Answer Key Section (hidden by default, shown on check) -->
+                  <div id="answer-key-${id}" style="display: none; padding: 1.5rem 2rem; background: #fef3c7; border-top: 3px solid #f59e0b;">
+                    <h3 style="margin: 0 0 1rem; color: #92400e;"><i class="fas fa-key"></i> Answer Key</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                      <div>
+                        <strong>Part A:</strong><br>
+                        ${worksheet.exercises.map((ex, i) => `${i + 1}. ${ex.answer}`).join("<br>")}
+                      </div>
+                      <div>
+                        <strong>Part B:</strong><br>
+                        ${worksheet.matching.map((m, i) => `${i + 1}. ${String.fromCharCode(65 + i)}`).join("<br>")}
+                      </div>
+                      <div>
+                        <strong>Part C:</strong><br>
+                        ${worksheet.quiz.map((q, i) => `${i + 1}. ${String.fromCharCode(65 + q.correct)}`).join("<br>")}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Footer with branding -->
+                  <div style="padding: 1rem 2rem; background: #f1f5f9; border-top: 2px solid #e2e8f0; text-align: center;">
+                    <p style="margin: 0; color: #64748b; font-size: 0.85rem;">
+                      <i class="fas fa-globe"></i> ESL Fun Online | eslfunonline.com | Free ESL Resources
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 12px;">
+                  <button onclick="checkAllAnswers(${id})" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                    <i class="fas fa-check-double"></i> Check All Answers
+                  </button>
+                  <button onclick="showAnswerKey(${id})" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+                    <i class="fas fa-key"></i> Show Answer Key
+                  </button>
+                  <button onclick="downloadWorksheet(${id})" style="background: linear-gradient(135deg, ${worksheet.color}, ${adjustColor(worksheet.color, -20)}); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; box-shadow: 0 4px 12px ${worksheet.color}40;">
+                    <i class="fas fa-download"></i> Download Worksheet
+                  </button>
+                  <button onclick="resetWorksheet(${id})" style="background: white; color: #dc2626; border: 2px solid #dc2626; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem;">
+                    <i class="fas fa-redo"></i> Reset
+                  </button>
+                </div>
+              `;
 
         modal.style.display = "flex";
         document.body.style.overflow = "hidden";
+      }
+
+      // Show answer key
+      function showAnswerKey(id) {
+        const keyDiv = document.getElementById("answer-key-" + id);
+        keyDiv.style.display =
+          keyDiv.style.display === "none" ? "block" : "none";
+      }
+
+      // Check all answers
+      function checkAllAnswers(id) {
+        const worksheet = worksheets.find((w) => w.id === id);
+        let totalCorrect = 0;
+        let totalQuestions =
+          worksheet.exercises.length +
+          worksheet.matching.length +
+          worksheet.quiz.length;
+
+        // Check fill in blanks
+        worksheet.exercises.forEach((ex, i) => {
+          const input = document.getElementById("exercise-" + id + "-" + i);
+          const resultSpan = document.getElementById("result-" + id + "-" + i);
+          const value = input.value.toLowerCase().trim();
+          const correctAnswer = ex.answer.toLowerCase();
+
+          if (value === correctAnswer) {
+            input.style.borderColor = "#10b981";
+            input.style.borderStyle = "solid";
+            input.style.color = "#059669";
+            resultSpan.innerHTML =
+              '<i class="fas fa-check" style="color: #10b981;"></i>';
+            resultSpan.style.display = "inline";
+            totalCorrect++;
+          } else {
+            input.style.borderColor = "#ef4444";
+            input.style.borderStyle = "solid";
+            input.style.color = "#dc2626";
+            resultSpan.innerHTML =
+              '<i class="fas fa-times" style="color: #ef4444;"></i> ' +
+              ex.answer;
+            resultSpan.style.display = "inline";
+          }
+        });
+
+        // Check matching
+        document.querySelectorAll(".match-input").forEach((input) => {
+          const correct = input.dataset.correct;
+          if (input.value.toUpperCase() === correct) {
+            input.style.borderColor = "#10b981";
+            input.style.background = "#ecfdf5";
+            totalCorrect++;
+          } else if (input.value) {
+            input.style.borderColor = "#ef4444";
+            input.style.background = "#fef2f2";
+          }
+        });
+
+        // Check quiz
+        worksheet.quiz.forEach((q, i) => {
+          const selected = document.querySelector(
+            'input[name="quiz-' + id + "-" + i + '"]:checked',
+          );
+          const allOptions = document.querySelectorAll(
+            'input[name="quiz-' + id + "-" + i + '"]',
+          );
+
+          allOptions.forEach((opt) => {
+            const label = opt.parentElement;
+            if (parseInt(opt.value) === q.correct) {
+              label.style.background = "#ecfdf5";
+              label.style.border = "2px solid #10b981";
+              label.style.borderRadius = "8px";
+            }
+            if (
+              selected &&
+              opt === selected &&
+              parseInt(selected.value) !== q.correct
+            ) {
+              label.style.background = "#fef2f2";
+              label.style.border = "2px solid #ef4444";
+              label.style.borderRadius = "8px";
+            }
+          });
+
+          if (selected && parseInt(selected.value) === q.correct) {
+            totalCorrect++;
+          }
+        });
+
+        // Update score
+        document.getElementById("final-score").textContent =
+          totalCorrect + "/" + totalQuestions;
+
+        // Show result message
+        const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+        alert(
+          "Your Score: " +
+            totalCorrect +
+            "/" +
+            totalQuestions +
+            " (" +
+            percentage +
+            "%)\n\n" +
+            (percentage >= 80
+              ? "🏆 Excellent work!"
+              : percentage >= 60
+                ? "⭐ Good job!"
+                : "💪 Keep practicing!"),
+        );
+      }
+
+      // Download worksheet as HTML file
+      function downloadWorksheet(id) {
+        const worksheet = worksheets.find((w) => w.id === id);
+        const studentName =
+          document.getElementById("student-name")?.value || "";
+        const studentDate =
+          document.getElementById("student-date")?.value ||
+          new Date().toLocaleDateString();
+
+        const htmlContent = `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>${worksheet.title} - ESL Worksheet</title>
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { font-family: 'Times New Roman', Georgia, serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+          .header { background: ${worksheet.color}; color: white; padding: 20px; text-align: center; }
+          .header h1 { font-size: 24px; margin-bottom: 5px; }
+          .info-row { display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 2px solid #333; background: #f5f5f5; }
+          .info-item { display: flex; gap: 10px; }
+          .info-item label { font-weight: bold; }
+          .info-item span { border-bottom: 1px solid #333; min-width: 100px; }
+          .instructions { padding: 15px 20px; background: #fffbeb; border-bottom: 1px dashed #d97706; font-style: italic; }
+          .section { padding: 20px; border-bottom: 1px solid #ddd; }
+          .section-title { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid ${worksheet.color}; }
+          .section-title span { background: ${worksheet.color}; color: white; padding: 5px 10px; margin-right: 10px; }
+          .exercise { padding: 15px; margin-bottom: 10px; background: #f9f9f9; border-left: 3px solid ${worksheet.color}; }
+          .exercise-num { display: inline-block; width: 25px; height: 25px; background: #333; color: white; border-radius: 50%; text-align: center; line-height: 25px; margin-right: 10px; }
+          .blank { border-bottom: 1px dashed #666; display: inline-block; min-width: 80px; text-align: center; }
+          .matching { display: flex; gap: 40px; }
+          .matching-col { flex: 1; }
+          .matching-item { padding: 10px; margin-bottom: 8px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; gap: 10px; }
+          .matching-letter { font-weight: bold; background: #ddd; padding: 3px 8px; border-radius: 4px; }
+          .quiz-item { padding: 15px; margin-bottom: 15px; background: #f9f9f9; border-left: 3px solid ${worksheet.color}; }
+          .quiz-options { padding-left: 20px; margin-top: 10px; }
+          .quiz-option { display: block; margin: 8px 0; }
+          .quiz-option input { margin-right: 8px; }
+          .footer { padding: 15px 20px; background: #f1f5f9; text-align: center; color: #64748b; font-size: 14px; }
+          @media print { body { padding: 0; } .no-print { display: none; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${worksheet.title}</h1>
+          <p>ESL Fun Online - Practice Worksheet</p>
+        </div>
+
+        <div class="info-row">
+          <div class="info-item"><label>Name:</label><span>${studentName || "________________"}</span></div>
+          <div class="info-item"><label>Date:</label><span>${studentDate}</span></div>
+          <div class="info-item"><label>Score:</label><span>___/${worksheet.exercises.length + worksheet.matching.length}</span></div>
+        </div>
+
+        <div class="instructions">
+          <strong>Instructions:</strong> ${worksheet.description} Complete all exercises below.
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><span>PART A</span> Fill in the Blanks</h2>
+          ${worksheet.exercises
+            .map(
+              (ex, i) => `
+            <div class="exercise">
+              <span class="exercise-num">${i + 1}</span>
+              ${ex.question.replace("___", '<span class="blank">________</span>')}
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><span>PART B</span> Match the Terms</h2>
+          <div class="matching">
+            <div class="matching-col">
+              <h4>Column A - Terms</h4>
+              ${worksheet.matching.map((m, i) => `<div class="matching-item"><strong>${i + 1}.</strong> ${m.idiom} <span style="margin-left:auto;">___</span></div>`).join("")}
+            </div>
+            <div class="matching-col">
+              <h4>Column B - Definitions</h4>
+              ${worksheet.matching.map((m, i) => `<div class="matching-item"><span class="matching-letter">${String.fromCharCode(65 + i)}</span> ${m.meaning}</div>`).join("")}
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title"><span>PART C</span> Multiple Choice</h2>
+          ${worksheet.quiz
+            .map(
+              (q, i) => `
+            <div class="quiz-item">
+              <strong>${i + 1}.</strong> ${q.q}
+              <div class="quiz-options">
+                ${q.options.map((opt, j) => `<label class="quiz-option"><input type="radio" name="q${i}"> ${String.fromCharCode(65 + j)}) ${opt}</label>`).join("")}
+              </div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+
+        <div class="footer">
+          ESL Fun Online | eslfunonline.com | Free ESL Resources
+        </div>
+      </body>
+      </html>`;
+
+        const blob = new Blob([htmlContent], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download =
+          worksheet.title.replace(/[^a-z0-9]/gi, "-").toLowerCase() +
+          "-worksheet.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert(
+          "Worksheet downloaded! Open the file in your browser and use Ctrl+P (or Cmd+P) to print or save as PDF.",
+        );
+      }
+
+      // Shuffle array helper
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      // Exercise functions
+      function showHint(worksheetId, exerciseIndex) {
+        document.getElementById(
+          "hint-" + worksheetId + "-" + exerciseIndex,
+        ).style.display = "inline";
+      }
+
+      function checkExercise(worksheetId, exerciseIndex, value) {
+        const worksheet = worksheets.find((w) => w.id === worksheetId);
+        const correctAnswer =
+          worksheet.exercises[exerciseIndex].answer.toLowerCase();
+        const resultSpan = document.getElementById(
+          "result-" + worksheetId + "-" + exerciseIndex,
+        );
+        const input = document.getElementById(
+          "exercise-" + worksheetId + "-" + exerciseIndex,
+        );
+
+        if (value.toLowerCase().trim() === correctAnswer) {
+          resultSpan.innerHTML =
+            '<i class="fas fa-check" style="color: #10b981;"></i>';
+          resultSpan.style.display = "inline";
+          input.style.borderColor = "#10b981";
+          input.style.borderStyle = "solid";
+          input.style.color = "#059669";
+          exerciseAnswers[exerciseIndex] = true;
+        } else if (value.length > 0) {
+          resultSpan.style.display = "none";
+          input.style.borderColor = "#6b7280";
+          input.style.borderStyle = "dashed";
+          input.style.color = "#1f2937";
+          exerciseAnswers[exerciseIndex] = false;
+        }
+      }
+
+      function resetWorksheet(worksheetId) {
+        exerciseAnswers = {};
+        quizScore = 0;
+        currentQuizIndex = 0;
+        openWorksheet(worksheetId);
       }
 
       function closeWorksheetModal() {
@@ -1082,15 +2161,6 @@
         document.body.style.overflow = "auto";
       }
 
-      function downloadWorksheet(id) {
-        alert(
-          "PDF download will be available soon! For now, please use the Print button and save as PDF."
-        );
-      }
-
-      function printWorksheet(id) {
-        window.print();
-      }
       // Close modal when clicking outside
       document
         .getElementById("worksheetModal")
@@ -1102,7 +2172,6 @@
 
       // Initial render
       renderWorksheets(worksheets);
-      renderWorksheets(worksheets);
 
       // Theme toggle and mobile menu from header.css/main.js
       document.addEventListener("DOMContentLoaded", () => {
@@ -1110,6 +2179,53 @@
       });
     </script>
 
+    <!-- Add styles for worksheet paper look -->
+    <style>
+      .worksheet-paper {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .worksheet-blank:focus {
+        outline: none;
+        border-color: var(--primary-color, #3498db) !important;
+        border-style: solid !important;
+      }
+
+      .match-input:focus {
+        outline: none;
+        border-color: var(--primary-color, #3498db) !important;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        .worksheet-paper,
+        .worksheet-paper * {
+          visibility: visible;
+        }
+        .worksheet-paper {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+        }
+        button {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .worksheet-paper .matching {
+          flex-direction: column !important;
+        }
+        .worksheet-paper .info-row {
+          grid-template-columns: 1fr !important;
+          gap: 0.5rem !important;
+        }
+      }
+    </style>
     <!-- Footer -->
     <footer>
       <div class="container">
