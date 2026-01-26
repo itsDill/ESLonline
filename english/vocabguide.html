@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script
@@ -394,7 +394,7 @@
                 const isOpen = item.classList.contains("mobile-open");
                 console.log(
                   "Dropdown clicked:",
-                  isOpen ? "closing" : "opening"
+                  isOpen ? "closing" : "opening",
                 );
 
                 // Close other dropdowns
@@ -402,7 +402,7 @@
                   if (otherItem !== item) {
                     otherItem.classList.remove(
                       "mobile-open",
-                      "mobile-dropdown-open"
+                      "mobile-dropdown-open",
                     );
                     const otherChevron =
                       otherItem.querySelector(".fa-chevron-down");
@@ -872,22 +872,53 @@
             </div>
           </div>
 
-          <div class="tip-card">
-            <div class="tip-icon">
-              <i class="fas fa-context"></i>
+          <!-- Amazon Affiliate Ad - Vocabulary Books -->
+          <a
+            href="https://www.amazon.com/s?k=vocabulary&crid=Z5FIMCJCZLDP&sprefix=vocab%2Caps%2C372&linkCode=ll2&tag=dill0a4-20&linkId=b1b602982be06136b7cef1f011ee62ee&language=en_US&ref_=as_li_ss_tl"
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            class="tip-card"
+            style="
+              text-decoration: none;
+              background: linear-gradient(135deg, #232f3e 0%, #37475a 100%);
+              border: 2px solid #ff9900;
+              cursor: pointer;
+              transition: all 0.3s ease;
+            "
+            onmouseover="
+              this.style.transform = 'translateY(-5px)';
+              this.style.boxShadow = '0 10px 30px rgba(255,153,0,0.3)';
+            "
+            onmouseout="
+              this.style.transform = 'translateY(0)';
+              this.style.boxShadow = 'none';
+            "
+          >
+            <div
+              class="tip-icon"
+              style="background: linear-gradient(135deg, #ff9900, #ffad33)"
+            >
+              <i class="fas fa-book" style="color: #232f3e"></i>
             </div>
-            <h4>Learn in Context</h4>
-            <p>
-              Study words within sentences and real-world situations rather than
-              in isolation for better understanding and usage.
+            <h4 style="color: #ffffff">📚 Expand Your Vocabulary!</h4>
+            <p style="color: rgba(255, 255, 255, 0.85)">
+              Discover the best vocabulary books on Amazon. Build your word
+              power with trusted resources for learners of all levels!
             </p>
             <div class="tip-action">
-              <button class="btn-tip" onclick="showContextExamples()">
-                <i class="fas fa-book-open"></i>
-                See Examples
-              </button>
+              <span
+                class="btn-tip"
+                style="
+                  background: linear-gradient(135deg, #ff9900, #ffad33);
+                  color: #232f3e;
+                  font-weight: 600;
+                "
+              >
+                <i class="fas fa-shopping-cart"></i>
+                Browse Vocab Books
+              </span>
             </div>
-          </div>
+          </a>
         </div>
 
         <!-- Quick Resources -->
@@ -931,12 +962,12 @@
       // Statistics tracking
       let stats = JSON.parse(
         localStorage.getItem("vocabStats") ||
-          '{"wordsLearned": 0, "quizzesCompleted": 0, "streak": 0, "lastStudyDate": null}'
+          '{"wordsLearned": 0, "quizzesCompleted": 0, "streak": 0, "lastStudyDate": null}',
       );
 
       // Spaced repetition system
       let studyProgress = JSON.parse(
-        localStorage.getItem("vocabProgress") || "{}"
+        localStorage.getItem("vocabProgress") || "{}",
       );
 
       // Flashcard flip functionality
@@ -992,7 +1023,7 @@
             .querySelector(".flashcard-container")
             .parentNode.insertBefore(
               progressElement,
-              document.querySelector(".flashcard-container")
+              document.querySelector(".flashcard-container"),
             );
         }
         progressElement.textContent = `Card ${progressText} - ${
@@ -1054,7 +1085,7 @@
           >
             ${level}
           </button>
-        `
+        `,
           )
           .join("");
       }
@@ -1191,7 +1222,7 @@
         showNotification("Word marked as known! 👍", "success");
 
         const shouldRemove = confirm(
-          "Remove this word from your current study set?"
+          "Remove this word from your current study set?",
         );
         if (shouldRemove) {
           currentLevelWords.splice(currentFlashcardIndex, 1);
@@ -1201,7 +1232,7 @@
           if (currentLevelWords.length === 0) {
             showNotification(
               "Congratulations! You've completed this level! 🎉",
-              "success"
+              "success",
             );
             return;
           }
@@ -1243,7 +1274,7 @@
 
         const today = new Date();
         const dayOfYear = Math.floor(
-          (today - new Date(today.getFullYear(), 0, 0)) / 86400000
+          (today - new Date(today.getFullYear(), 0, 0)) / 86400000,
         );
         const wordIndex = dayOfYear % allWords.length;
         const word = allWords[wordIndex];
@@ -1396,7 +1427,7 @@
         const heroSection = document.querySelector(".hero");
         heroSection.parentNode.insertBefore(
           searchContainer,
-          heroSection.nextSibling
+          heroSection.nextSibling,
         );
 
         document
@@ -1436,7 +1467,7 @@
             word.definition.toLowerCase().includes(searchTerm) ||
             (word.category &&
               word.category.toLowerCase().includes(searchTerm)) ||
-            (word.example && word.example.toLowerCase().includes(searchTerm))
+            (word.example && word.example.toLowerCase().includes(searchTerm)),
         );
 
         if (matches.length === 0) {
@@ -1474,7 +1505,7 @@
                   <div class="word-header">
                     <span class="word-title">${highlightSearchTerm(
                       word.word,
-                      searchTerm
+                      searchTerm,
                     )}</span>
                     <span class="word-pronunciation">${
                       word.pronunciation || ""
@@ -1482,13 +1513,13 @@
                   </div>
                   <div class="word-definition">${highlightSearchTerm(
                     word.definition,
-                    searchTerm
+                    searchTerm,
                   )}</div>
                   ${
                     word.example
                       ? `<div class="word-example">Example: ${highlightSearchTerm(
                           word.example,
-                          searchTerm
+                          searchTerm,
                         )}</div>`
                       : ""
                   }
@@ -1501,7 +1532,7 @@
                     } level</span>
                   </div>
                 </div>
-              `
+              `,
                 )
                 .join("")}
             </div>
@@ -1519,7 +1550,7 @@
         const regex = new RegExp(`(${searchTerm})`, "gi");
         return text.replace(
           regex,
-          '<mark style="background: rgba(255, 235, 59, 0.3); padding: 0.1em;">$1</mark>'
+          '<mark style="background: rgba(255, 235, 59, 0.3); padding: 0.1em;">$1</mark>',
         );
       }
 
@@ -1652,7 +1683,7 @@
             console.error("Error loading vocabulary data:", error);
             showNotification(
               "Failed to load vocabulary data. Please check your internet connection and refresh the page.",
-              "error"
+              "error",
             );
 
             // Provide fallback data or basic functionality
@@ -1683,7 +1714,7 @@
       function showSpacedRepetitionDemo() {
         showNotification(
           "Spaced repetition: Review after 1 day → 3 days → 7 days → 21 days → 60 days 🧠",
-          "info"
+          "info",
         );
       }
 
@@ -1713,7 +1744,7 @@
       class="back-to-top"
       id="backToTop"
       aria-label="Back to top"
-      onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
     >
       <i class="fas fa-arrow-up"></i>
     </a>
