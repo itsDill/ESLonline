@@ -472,6 +472,25 @@
         }
       }
 
+      /* Bottom ad specific styles - ensure no overlap */
+      .ad-wrapper.bottom-ad {
+        position: relative;
+        z-index: 50;
+        margin-top: 2rem;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      /* Hide bottom ad on short screens to give more space to game */
+      @media (max-height: 700px) {
+        .ad-wrapper.bottom-ad {
+          display: none !important;
+        }
+        .player-hand {
+          margin-bottom: 20px !important;
+        }
+      }
+
       /* Dynamic Animated Background */
       body {
         background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
@@ -1068,6 +1087,8 @@
         flex-wrap: wrap;
         gap: 0.4rem;
         padding: 0.75rem;
+        padding-bottom: 1.5rem;
+        margin-bottom: 150px; /* Space for bottom ad */
         min-height: 140px;
       }
 
@@ -1075,6 +1096,8 @@
         .player-hand {
           gap: 0.2rem;
           padding: 0.5rem 0.25rem;
+          padding-bottom: 1rem;
+          margin-bottom: 130px; /* Space for bottom ad on mobile */
           min-height: 90px;
           max-height: 130px;
           overflow-x: auto;
@@ -1886,10 +1909,10 @@
       }
 
       /* Sound Toggle Enhanced - Mobile Safe Zone */
-      .sound-toggle {
+      .sound-toggle,
+      .fullscreen-toggle {
         position: fixed;
         bottom: 20px;
-        right: 20px;
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -1914,13 +1937,27 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      .sound-toggle {
+        right: 20px;
+      }
+
+      .fullscreen-toggle {
+        right: 78px;
+      }
+
       @media (max-width: 768px) {
-        .sound-toggle {
+        .sound-toggle,
+        .fullscreen-toggle {
           bottom: 15px;
-          right: 15px;
           width: 44px;
           height: 44px;
           font-size: 1rem;
+        }
+        .sound-toggle {
+          right: 15px;
+        }
+        .fullscreen-toggle {
+          right: 68px;
         }
       }
 
@@ -1930,9 +1967,14 @@
           bottom: calc(15px + env(safe-area-inset-bottom));
           right: calc(15px + env(safe-area-inset-right));
         }
+        .fullscreen-toggle {
+          bottom: calc(15px + env(safe-area-inset-bottom));
+          right: calc(68px + env(safe-area-inset-right));
+        }
       }
 
-      .sound-toggle:hover {
+      .sound-toggle:hover,
+      .fullscreen-toggle:hover {
         background: linear-gradient(
           135deg,
           rgba(255, 255, 255, 0.25),
@@ -1942,8 +1984,31 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       }
 
-      .sound-toggle:active {
+      .sound-toggle:active,
+      .fullscreen-toggle:active {
         transform: scale(0.95);
+      }
+
+      /* Fullscreen mode styles */
+      :fullscreen .ad-wrapper,
+      :-webkit-full-screen .ad-wrapper,
+      :fullscreen .game-footer,
+      :-webkit-full-screen .game-footer,
+      :fullscreen .game-header,
+      :-webkit-full-screen .game-header {
+        display: none !important;
+      }
+
+      :fullscreen .game-container,
+      :-webkit-full-screen .game-container {
+        min-height: 100vh !important;
+        padding-bottom: 80px !important;
+      }
+
+      :fullscreen .player-hand,
+      :-webkit-full-screen .player-hand {
+        padding-bottom: 80px !important;
+        margin-bottom: 0 !important;
       }
 
       /* Particle Effects Enhanced */
@@ -2251,6 +2316,20 @@
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
+
+    <!-- Fullscreen Toggle Button -->
+    <button
+      class="fullscreen-toggle"
+      id="fullscreenToggle"
+      onclick="toggleFullscreen()"
+      aria-label="Toggle fullscreen mode"
+    >
+      <i
+        class="fas fa-expand"
+        id="floatingFullscreenIcon"
+        aria-hidden="true"
+      ></i>
+    </button>
 
     <!-- Sound Toggle Button -->
     <button
@@ -5750,7 +5829,10 @@
     <script src="../js/game-ads.js"></script>
 
     <!-- Bottom Ad -->
-    <div class="ad-wrapper" style="margin-top: 1.5rem; margin-bottom: 1rem">
+    <div
+      class="ad-wrapper bottom-ad"
+      style="margin-top: 2rem; margin-bottom: 1rem; clear: both"
+    >
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
