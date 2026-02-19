@@ -493,16 +493,17 @@
         }
       }
 
-      /* Dynamic Animated Background */
+      /* Fun Game Background */
       body {
-        background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
-        background-size: 400% 400%;
-        animation: gradientShift 15s ease infinite;
+        background-color: #1a1a2e; /* Fallback color */
+        background: url("../images/game-bg.jpg") center center / cover no-repeat
+          fixed;
         min-height: 100vh;
         position: relative;
         overflow-x: hidden;
       }
 
+      /* Subtle overlay to ensure readability */
       body::before {
         content: "";
         position: fixed;
@@ -510,29 +511,28 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background:
-          radial-gradient(
-            circle at 20% 80%,
-            rgba(229, 62, 62, 0.15) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 20%,
-            rgba(49, 130, 206, 0.15) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 40% 40%,
-            rgba(56, 161, 105, 0.1) 0%,
-            transparent 40%
-          ),
-          radial-gradient(
-            circle at 60% 60%,
-            rgba(214, 158, 46, 0.1) 0%,
-            transparent 40%
-          );
+        background: rgba(0, 0, 0, 0.35);
         pointer-events: none;
         z-index: 0;
+      }
+
+      /* In-game ad - non-intrusive styling */
+      .in-game-ad {
+        pointer-events: auto;
+        z-index: 1;
+      }
+
+      /* Hide in-game ad in fullscreen */
+      :fullscreen .in-game-ad,
+      :-webkit-full-screen .in-game-ad {
+        display: none !important;
+      }
+
+      /* Hide in-game ad on small screens */
+      @media (max-height: 600px) {
+        .in-game-ad {
+          display: none !important;
+        }
       }
 
       /* Floating UNO cards in background */
@@ -2099,34 +2099,9 @@
         }
       }
 
-      /* Card indicator for number of playable cards */
+      /* Card indicator for number of playable cards - HIDDEN */
       .playable-count {
-        position: fixed;
-        bottom: 70px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(70, 187, 229, 0.9);
-        color: white;
-        padding: 0.4rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        z-index: 50;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-      }
-
-      .playable-count.visible {
-        opacity: 1;
-      }
-
-      @media (max-width: 768px) {
-        .playable-count {
-          bottom: 60px;
-          font-size: 0.7rem;
-          padding: 0.3rem 0.6rem;
-        }
+        display: none !important;
       }
     </style>
   </head>
@@ -2313,25 +2288,6 @@
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- Top Ad -->
-    <div class="ad-wrapper">
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
-        crossorigin="anonymous"
-      ></script>
-      <ins
-        class="adsbygoogle"
-        style="display: block"
-        data-ad-format="autorelaxed"
-        data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="2184713192"
-      ></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
     </div>
 
     <!-- Fullscreen Toggle Button -->
@@ -2581,6 +2537,40 @@
           aria-label="Your hand"
         >
           <!-- Player cards will be generated here -->
+        </div>
+      </div>
+
+      <!-- In-Game Ad - Compact sidebar style -->
+      <div class="in-game-ad" style="margin-top: 1rem; text-align: center">
+        <div
+          style="
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem;
+            max-width: 320px;
+            margin: 0 auto;
+          "
+        >
+          <div
+            style="
+              font-size: 0.65rem;
+              color: rgba(255, 255, 255, 0.4);
+              margin-bottom: 0.25rem;
+            "
+          >
+            Sponsored
+          </div>
+          <ins
+            class="adsbygoogle"
+            style="display: block; max-height: 100px"
+            data-ad-format="fluid"
+            data-ad-layout-key="-fb+5w+4e-db+86"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="2184713192"
+          ></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
         </div>
       </div>
     </div>
@@ -5845,20 +5835,31 @@
 
     <script src="../js/game-ads.js"></script>
 
-    <!-- Bottom Ad -->
+    <!-- Single Bottom Ad - Clean placement below game -->
     <div
       class="ad-wrapper bottom-ad"
-      style="margin-top: 200px; margin-bottom: 1rem; clear: both"
+      style="
+        margin: 2rem auto 1rem;
+        max-width: 728px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1rem;
+      "
     >
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
-        crossorigin="anonymous"
-      ></script>
+      <div
+        style="
+          text-align: center;
+          font-size: 0.7rem;
+          color: rgba(255, 255, 255, 0.5);
+          margin-bottom: 0.5rem;
+        "
+      >
+        Advertisement
+      </div>
       <ins
         class="adsbygoogle"
         style="display: block"
-        data-ad-format="autorelaxed"
+        data-ad-format="horizontal"
         data-ad-client="ca-pub-2456627863532019"
         data-ad-slot="2184713192"
       ></ins>
