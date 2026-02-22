@@ -15,13 +15,13 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <title>
-      BalanceMan - Free ESL Hangman Word Game | Learn English Vocabulary
+      Hangman - Free ESL Word Guessing Game | Learn English Vocabulary
     </title>
 
     <!-- Enhanced SEO Meta Tags -->
     <meta
       name="description"
-      content="Play BalanceMan, a fun hangman-style word game for ESL learners! Guess English words across categories like animals, food, and school. Free educational game with multiple difficulty levels."
+      content="Play Hangman online and learn English vocabulary! Guess words across categories like animals, food, and school. Free educational game with multiple difficulty levels."
     />
     <meta
       name="keywords"
@@ -39,20 +39,17 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="BalanceMan" />
+    <meta name="apple-mobile-web-app-title" content="Hangman" />
 
     <!-- Open Graph Tags -->
-    <meta
-      property="og:title"
-      content="BalanceMan - Free ESL Word Guessing Game"
-    />
+    <meta property="og:title" content="Hangman - Free ESL Word Guessing Game" />
     <meta
       property="og:description"
-      content="Help BalanceMan stay balanced by guessing English words! Fun hangman-style game with categories, difficulty levels, and progress tracking. Perfect for ESL learners!"
+      content="Play Hangman and learn English vocabulary! Guess words from different categories. Free educational game with difficulty levels and progress tracking. Perfect for ESL learners!"
     />
     <meta
       property="og:image"
-      content="https://eslfunonline.com/images/balanceman-preview.png"
+      content="https://eslfunonline.com/images/hangman-preview.png"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -66,14 +63,14 @@
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BalanceMan - ESL Hangman Word Game" />
+    <meta name="twitter:title" content="Hangman - ESL Word Guessing Game" />
     <meta
       name="twitter:description"
-      content="Guess English words and help BalanceMan stay balanced! 🎮 Multiple categories, difficulty levels & progress tracking."
+      content="Guess English words and avoid the hangman! 🎮 Multiple categories, difficulty levels & progress tracking."
     />
     <meta
       name="twitter:image"
-      content="https://eslfunonline.com/images/balanceman-preview.png"
+      content="https://eslfunonline.com/images/hangman-preview.png"
     />
 
     <!-- Canonical URL -->
@@ -128,9 +125,9 @@
       {
         "@context": "https://schema.org",
         "@type": "VideoGame",
-        "name": "BalanceMan - ESL Word Guessing Game",
-        "alternateName": ["ESL Hangman", "Vocabulary BalanceMan"],
-        "description": "A fun and educational hangman-style word guessing game for ESL learners. Features multiple word categories (animals, food, school, weather, family, colors), three difficulty levels, hints system, streak tracking, and score progression. Help BalanceMan stay balanced by guessing English words correctly!",
+        "name": "Hangman - ESL Word Guessing Game",
+        "alternateName": ["ESL Hangman", "Word Guessing Game"],
+        "description": "A classic hangman word-guessing game for ESL learners. Features multiple word categories (animals, food, school, weather, family, colors), three difficulty levels, hints system, streak tracking, and score progression. Guess English words before the hangman is complete!",
         "url": "https://eslfunonline.com/games/balanceman.html",
         "image": {
           "@type": "ImageObject",
@@ -224,7 +221,7 @@
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "BalanceMan",
+            "name": "Hangman",
             "item": "https://eslfunonline.com/games/balanceman.html"
           }
         ]
@@ -239,10 +236,10 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "How do I play BalanceMan?",
+            "name": "How do I play Hangman?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Guess letters to reveal the hidden English word. Each wrong guess makes BalanceMan wobble more. Guess the word before he falls!"
+              "text": "Guess letters to reveal the hidden English word. Each wrong guess adds to the hangman drawing. Guess the word before the hangman is complete!"
             }
           },
           {
@@ -531,6 +528,28 @@
 
       .balanceman {
         font-size: 4rem;
+      }
+
+      .hangman-display {
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto 1rem;
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hangman-svg {
+        width: 100%;
+        height: 100%;
+        max-width: 250px;
+        max-height: 280px;
+      }
+
+      .hangman-part {
+        stroke: rgba(255, 255, 255, 0.9);
+        transition: display 0.3s ease;
       }
 
       .balance-status {
@@ -1184,7 +1203,7 @@
         </a>
       </nav>
       <div class="game-title" aria-hidden="true">
-        <i class="fas fa-balance-scale"></i> BalanceMan
+        <i class="fas fa-skull-crossbones" aria-hidden="true"></i> Hangman
       </div>
     </header>
 
@@ -1192,13 +1211,13 @@
       class="game-container"
       role="main"
       id="main-game"
-      aria-label="BalanceMan word guessing game"
+      aria-label="Hangman word guessing game"
     >
       <header class="game-header">
         <h1>
-          <i class="fas fa-balance-scale" aria-hidden="true"></i> BalanceMan
+          <i class="fas fa-skull-crossbones" aria-hidden="true"></i> Hangman
         </h1>
-        <p>Help BalanceMan stay balanced by guessing the English word!</p>
+        <p>Guess the word before the hangman is complete!</p>
         <p
           style="
             font-size: 0.8rem;
@@ -1322,8 +1341,114 @@
       </div>
 
       <div class="balance-area" role="region" aria-label="Game status area">
-        <div class="balanceman safe" id="balancemanFigure" aria-hidden="true">
-          ⚖️
+        <div class="hangman-display" id="hangmanFigure" aria-hidden="true">
+          <svg viewBox="0 0 200 250" class="hangman-svg">
+            <!-- Gallows -->
+            <line
+              x1="10"
+              y1="230"
+              x2="150"
+              y2="230"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="50"
+              y1="230"
+              x2="50"
+              y2="20"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="50"
+              y1="20"
+              x2="130"
+              y2="20"
+              stroke="black"
+              stroke-width="4"
+            />
+            <line
+              x1="130"
+              y1="20"
+              x2="130"
+              y2="50"
+              stroke="black"
+              stroke-width="4"
+            />
+
+            <!-- Head -->
+            <circle
+              class="hangman-part head"
+              cx="130"
+              cy="70"
+              r="20"
+              stroke="black"
+              stroke-width="4"
+              fill="none"
+              style="display: none"
+            />
+
+            <!-- Body -->
+            <line
+              class="hangman-part body"
+              x1="130"
+              y1="90"
+              x2="130"
+              y2="150"
+              stroke="black"
+              stroke-width="4"
+              style="display: none"
+            />
+
+            <!-- Left Arm -->
+            <line
+              class="hangman-part left-arm"
+              x1="130"
+              y1="110"
+              x2="100"
+              y2="130"
+              stroke="black"
+              stroke-width="4"
+              style="display: none"
+            />
+
+            <!-- Right Arm -->
+            <line
+              class="hangman-part right-arm"
+              x1="130"
+              y1="110"
+              x2="160"
+              y2="130"
+              stroke="black"
+              stroke-width="4"
+              style="display: none"
+            />
+
+            <!-- Left Leg -->
+            <line
+              class="hangman-part left-leg"
+              x1="130"
+              y1="150"
+              x2="110"
+              y2="190"
+              stroke="black"
+              stroke-width="4"
+              style="display: none"
+            />
+
+            <!-- Right Leg -->
+            <line
+              class="hangman-part right-leg"
+              x1="130"
+              y1="150"
+              x2="150"
+              y2="190"
+              stroke="black"
+              stroke-width="4"
+              style="display: none"
+            />
+          </svg>
         </div>
         <div
           class="balance-status"
@@ -1331,7 +1456,7 @@
           role="status"
           aria-live="polite"
         >
-          BalanceMan is stable!
+          Good start! Keep guessing!
         </div>
         <div
           class="progress-bar"
@@ -1881,7 +2006,7 @@
 
           this.updateDisplay();
           this.resetAlphabetGrid();
-          this.updateBalanceMan();
+          this.updateHangman();
           this.hideMessage();
 
           // Reset hint button
@@ -1963,7 +2088,7 @@
             }
 
             this.updateDisplay();
-            this.updateBalanceMan();
+            this.updateHangman();
           }, 200);
         }
 
@@ -2217,13 +2342,12 @@
           }
         }
 
-        updateBalanceMan() {
-          const figure = document.getElementById("balancemanFigure");
+        updateHangman() {
           const status = document.getElementById("balanceStatus");
           const balanceArea = document.querySelector(".balance-area");
 
-          const dangerLevel = this.wrongGuesses / this.maxWrongGuesses;
-          const progressPercent = dangerLevel * 100;
+          const progressPercent =
+            (this.wrongGuesses / this.maxWrongGuesses) * 100;
 
           // Update progress bar
           const progressFill = document.getElementById("progressFill");
@@ -2231,45 +2355,45 @@
             progressFill.style.width = `${progressPercent}%`;
           }
 
-          // Remove existing classes
-          figure.className = "balanceman";
-          balanceArea.classList.remove("danger-bg");
+          // Hide all hangman parts
+          document.querySelectorAll(".hangman-part").forEach((part) => {
+            part.style.display = "none";
+          });
 
-          if (dangerLevel === 0) {
-            figure.textContent = "⚖️";
-            figure.classList.add("safe");
-            status.textContent = "BalanceMan is perfectly balanced! 🎯";
-            status.style.color = "var(--success-color)";
-          } else if (dangerLevel < 0.33) {
-            figure.textContent = "⚖️";
-            figure.classList.add("safe");
-            status.textContent = "BalanceMan is slightly wobbly... 😅";
-            status.style.color = "var(--secondary-color)";
-          } else if (dangerLevel < 0.67) {
-            figure.textContent = "🤹";
-            figure.classList.add("danger");
-            status.textContent = "BalanceMan is struggling to balance! 😰";
-            status.style.color = "var(--orange-color)";
-            balanceArea.classList.add("danger-bg");
-          } else if (dangerLevel < 1) {
-            figure.textContent = "🤸";
-            figure.classList.add("danger");
-            status.textContent = "BalanceMan is about to fall! 🚨";
-            status.style.color = "var(--danger-color)";
-            balanceArea.classList.add("danger-bg");
-          } else {
-            figure.textContent = "�";
-            figure.classList.add("danger");
-            status.textContent = "BalanceMan has fallen! 💔";
-            status.style.color = "var(--danger-color)";
-            balanceArea.classList.add("danger-bg");
+          // Show hangman parts based on wrong guesses
+          const parts = [
+            ".head",
+            ".body",
+            ".left-arm",
+            ".right-arm",
+            ".left-leg",
+            ".right-leg",
+          ];
+
+          for (let i = 0; i < this.wrongGuesses; i++) {
+            const part = document.querySelector(parts[i]);
+            if (part) {
+              part.style.display = "block";
+            }
           }
 
-          // Add shake animation for danger states
-          if (dangerLevel >= 0.5) {
-            figure.style.animation = "shake 0.5s ease-in-out infinite";
+          // Update status message
+          balanceArea.classList.remove("danger-bg");
+
+          if (this.wrongGuesses === 0) {
+            status.textContent = "Good start! Keep guessing!";
+            status.style.color = "var(--success-color)";
+          } else if (this.wrongGuesses < 3) {
+            status.textContent = `${this.wrongGuesses} wrong guess${this.wrongGuesses !== 1 ? "es" : ""} - ${this.maxWrongGuesses - this.wrongGuesses} remaining`;
+            status.style.color = "var(--secondary-color)";
+          } else if (this.wrongGuesses < this.maxWrongGuesses) {
+            status.textContent = `${this.wrongGuesses} wrong guess${this.wrongGuesses !== 1 ? "es" : ""} - Watch out!`;
+            status.style.color = "var(--orange-color)";
+            balanceArea.classList.add("danger-bg");
           } else {
-            figure.style.animation = "";
+            status.textContent = "Game Over! The hangman is complete!";
+            status.style.color = "var(--danger-color)";
+            balanceArea.classList.add("danger-bg");
           }
         }
 
@@ -2397,15 +2521,17 @@
 
     <!-- Footer -->
     <!-- Footer Ad -->
-    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-2456627863532019"
-           data-ad-slot="3089435711"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem">
+      <ins
+        class="adsbygoogle"
+        style="display: block"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="3089435711"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
       <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
+        (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
     <footer class="game-footer" role="contentinfo">
