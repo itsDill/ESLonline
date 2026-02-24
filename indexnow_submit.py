@@ -94,8 +94,8 @@ def submit_urls(urls):
             timeout=10
         )
         
-        if response.status_code == 200:
-            log(f"✓ Successfully submitted {len(urls_batch)} URLs (HTTP 200)")
+        if response.status_code in [200, 202]:
+            log(f"✓ Successfully submitted {len(urls_batch)} URLs (HTTP {response.status_code})")
             return True
         elif response.status_code == 400:
             log(f"✗ Bad request - Invalid format (HTTP 400)")
