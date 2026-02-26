@@ -992,25 +992,6 @@
           <!-- Games will be populated by JavaScript -->
         </section>
 
-        <!-- Google AdSense Advertisement -->
-        <div class="ad-container" style="margin: 3rem 0; text-align: center">
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
-            crossorigin="anonymous"
-          ></script>
-          <ins
-            class="adsbygoogle"
-            style="display: block"
-            data-ad-format="autorelaxed"
-            data-ad-client="ca-pub-2456627863532019"
-            data-ad-slot="6219205518"
-          ></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>
-
         <!-- Noscript Fallback for Users Without JavaScript -->
         <noscript>
           <div class="noscript-fallback">
@@ -1955,10 +1936,20 @@
 
         // Render each game
         gamesToRender.forEach((game, index) => {
+          // Insert ad before the last 3 games
+          if (game.id === 14) {
+            html += `
+              <div class="ad-grid-container">
+                <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-2456627863532019" data-ad-slot="6219205518"></ins>
+              </div>
+            `;
+          }
+
           // Determine badges
           const isNew = game.id >= 10; // Newer games get NEW badge
           const isPopular = game.plays > 3000; // Popular games
           const isFeatured = game.featured;
+          const isComingSoon = game.id >= 14; // Last 3 games are coming soon
 
           // Generate star rating HTML
           const starRating = generateStarRating(game.rating);
@@ -1972,7 +1963,7 @@
 
           // Add game card with enhanced design
           html += `
-            <article class="game-card" data-skill="${
+            <article class="game-card ${isComingSoon ? 'coming-soon-game' : ''}" data-skill="${
               game.skill
             }" data-game-id="${game.id}" 
                      onclick="handleCardClick(event, '${game.link}')" 
@@ -1985,6 +1976,7 @@
                     ? `<img src="${game.image}" alt="${game.title} - ESL ${game.skill} game" class="game-image" loading="lazy" decoding="async">`
                     : `<i class="${game.icon} game-fallback-icon"></i>`
                 }
+                ${isComingSoon ? `<div class="coming-soon-overlay"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="coming-soon-svg"><rect width="200" height="200" fill="rgba(0,0,0,0.7)" rx="20"/><text x="100" y="85" font-size="18" font-weight="bold" fill="white" text-anchor="middle" font-family="Poppins">COMING</text><text x="100" y="115" font-size="18" font-weight="bold" fill="#fbbf24" text-anchor="middle" font-family="Poppins">SOON</text><circle cx="100" cy="135" r="4" fill="#fbbf24" opacity="0.8"/><circle cx="115" cy="140" r="3" fill="#fbbf24" opacity="0.6"/><circle cx="85" cy="142" r="2.5" fill="#fbbf24" opacity="0.5"/></svg></div>` : ''}
                 <div class="game-badges">
                   ${
                     isNew
@@ -2048,10 +2040,14 @@
 
         gamesGrid.innerHTML = html;
 
-        // Initialize the ad after rendering
+        // Initialize the ads after rendering
         setTimeout(() => {
           try {
-            (adsbygoogle = window.adsbygoogle || []).push({});
+            // Push all ads
+            const ads = document.querySelectorAll('.adsbygoogle');
+            ads.forEach(ad => {
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            });
           } catch (e) {
             // AdSense not available
           }
