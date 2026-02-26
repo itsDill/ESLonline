@@ -523,24 +523,18 @@
 .game-card {
   background: var(--bg-card);
   border: 2px solid transparent;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  height: 400px;
   position: relative;
   backdrop-filter: blur(10px);
   will-change: transform, box-shadow;
-  background: linear-gradient(
-    145deg,
-    var(--bg-card),
-    rgba(255, 255, 255, 0.98)
-  );
   width: 100%;
+  aspect-ratio: 1 / 1;
 }
 
 .game-card::before {
@@ -550,13 +544,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(70, 187, 229, 0.05) 0%,
-    rgba(16, 185, 129, 0.05) 50%,
-    rgba(245, 158, 11, 0.05) 100%
-  );
-  border-radius: 20px;
+  background: none;
+  border-radius: 16px;
   z-index: 0;
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -564,45 +553,49 @@
 }
 
 .game-card:hover {
-  transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 25px 50px rgba(70, 187, 229, 0.25),
-    0 12px 35px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(70, 187, 229, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(70, 187, 229, 0.25),
+    0 8px 25px rgba(0, 0, 0, 0.15);
   border-color: rgba(70, 187, 229, 0.3);
 }
 
 .game-card:hover::before {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .game-card:active {
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-2px) scale(1.01);
   transition: all 0.1s ease;
 }
 
 .game-image-container {
-  position: relative;
-  height: 240px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
   background: linear-gradient(
     135deg,
     var(--primary-color) 0%,
     var(--secondary-color) 100%
   );
-  flex-shrink: 0;
   z-index: 2;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 768px) {
   .game-image-container {
-    height: 250px;
+    height: 100%;
   }
 }
 
 @media (min-width: 1200px) {
   .game-image-container {
-    height: 260px;
+    height: 100%;
   }
 }
 
@@ -613,14 +606,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.05) 50%,
-    rgba(0, 0, 0, 0.15) 100%
-  );
+  background: none;
   z-index: 3;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.4s ease;
 }
 
@@ -637,8 +625,8 @@
 }
 
 .game-card:hover .game-image {
-  transform: scale(1.1) rotate(1deg);
-  filter: brightness(1.15) contrast(1.2);
+  transform: scale(1.08);
+  filter: brightness(1.1) contrast(1.15);
 }
 
 .game-fallback-icon {
@@ -700,164 +688,132 @@
   }
 }
 
+@keyframes ratingPulse {
+  0% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .game-content {
-  padding: 24px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  z-index: 5;
-  background: var(--bg-card);
-  position: relative;
-  border-radius: 0 0 20px 20px;
-}
-
-.game-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin: 0 0 12px 0;
-  color: var(--text-primary);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  transition: color 0.3s ease;
-  background: linear-gradient(
-    135deg,
-    var(--text-primary),
-    var(--primary-color)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.game-card:hover .game-title {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.game-description {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0 0 auto 0;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  font-weight: 400;
-}
-
-.game-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-light);
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 10px;
   z-index: 10;
-}
-
-.game-skill {
-  background: linear-gradient(
-    135deg,
-    rgba(70, 187, 229, 0.15),
-    rgba(16, 185, 129, 0.15)
-  );
-  color: var(--primary-color);
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: capitalize;
-  border: 2px solid rgba(70, 187, 229, 0.3);
-  position: relative;
-  z-index: 10;
-  transition: all 0.3s ease;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.game-card:hover .game-skill {
-  background: linear-gradient(
-    135deg,
-    rgba(70, 187, 229, 0.25),
-    rgba(16, 185, 129, 0.25)
-  );
-  border-color: rgba(70, 187, 229, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(70, 187, 229, 0.2);
-}
-
-.btn-play {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color) 0%,
-    var(--secondary-color) 100%
-  );
-  color: white !important;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  box-shadow: 0 6px 20px rgba(70, 187, 229, 0.3);
-  position: relative;
-  z-index: 15;
-  overflow: hidden;
-  text-decoration: none;
-  min-width: 110px;
+  min-height: 32px;
+  transition: all 0.3s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.game-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-.btn-play::before {
-  content: "";
+.game-card:hover .game-content {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+.game-card:hover .game-title {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.game-description {
+  display: none;
+}
+
+.game-rating {
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.6s;
+  bottom: 8px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  z-index: 20;
 }
 
-.btn-play:hover {
-  background: linear-gradient(135deg, var(--primary-hover) 0%, #059669 100%);
-  transform: translateY(-3px) scale(1.06);
-  box-shadow: 0 12px 30px rgba(70, 187, 229, 0.5);
-  color: white !important;
+.game-card:hover .game-rating {
+  opacity: 1;
 }
 
-.btn-play:hover::before {
-  left: 100%;
+.game-rating i.fa-star,
+.game-rating i.fa-star-half-alt {
+  color: #fbbf24;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-shadow: 0 0 4px rgba(251, 191, 36, 0.3);
 }
 
-.btn-play:active {
-  transform: translateY(0) scale(0.98);
-  transition: transform 0.1s;
+.game-rating i.far.fa-star {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.btn-play:focus {
-  outline: 3px solid rgba(70, 187, 229, 0.5);
-  outline-offset: 2px;
+.game-rating i:hover {
+  filter: brightness(1.2);
+  transform: scale(1.3);
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+}
+
+.game-rating i:active {
+  filter: brightness(1.4);
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.8);
+}
+
+.rating-value {
+  font-weight: 700;
+  color: #ffffff;
+  margin-left: 0px;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.play-count {
+  display: none;
+}
+
+.game-skill {
+  display: none;
+}
+
+.game-meta {
+  display: none;
+}
+
+.game-footer {
+  display: none;
 }
 
 /* Notification System */
@@ -1520,6 +1476,7 @@
    FEATURED GAMES CAROUSEL SECTION
    =========================================== */
 .featured-games-section {
+  display: none;
   padding: 3rem 0 2rem;
   background: linear-gradient(
     180deg,
@@ -1775,6 +1732,7 @@
    CATEGORY NAVIGATION SECTION
    =========================================== */
 .category-nav-section {
+  display: none;
   padding: 2rem 0;
   background: var(--bg-secondary);
 }
@@ -1911,12 +1869,18 @@
    =========================================== */
 .game-badges {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-card:hover .game-badges {
+  opacity: 1;
 }
 
 .game-badge {
@@ -1957,14 +1921,20 @@
 
 .game-difficulty {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  padding: 4px 12px;
+  bottom: 8px;
+  right: 8px;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   backdrop-filter: blur(10px);
   z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-card:hover .game-difficulty {
+  opacity: 1;
 }
 
 .badge-beginner {
@@ -2051,34 +2021,8 @@
   color: var(--text-muted);
   font-size: 0.9rem;
   transition: color 0.2s ease;
-}
-
-.game-card:hover .game-devices-icons i {
-  color: var(--primary-color);
-}
-
-/* Mini Play Button */
 .btn-play-mini {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(70, 187, 229, 0.3);
-}
-
-.btn-play-mini:hover {
+  display: none
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 20px rgba(70, 187, 229, 0.4);
 }
@@ -2091,8 +2035,7 @@
    VALUE PROPOSITION SECTION
    =========================================== */
 .value-proposition-section {
-  padding: 4rem 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  display: none;
 }
 
 .dark-mode .value-proposition-section {
@@ -2163,8 +2106,7 @@
    HOW TO USE / TIPS SECTION
    =========================================== */
 .how-to-use-section {
-  padding: 4rem 0;
-  background: var(--bg-secondary);
+  display: none;
 }
 
 .section-header {
@@ -2260,61 +2202,218 @@
 }
 
 /* ===========================================
-   FAQ SECTION
+   RESOURCES & NAVIGATION SECTION
    =========================================== */
-.faq-section {
-  padding: 4rem 0;
-  background: var(--bg-primary);
-  border-top: 1px solid var(--border-light);
+.resources-section {
+  display: none;
 }
 
-.faq-section .section-title {
-  font-size: 2.5rem;
+.resources-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><circle cx="100" cy="100" r="100" fill="rgba(255,255,255,0.05)"/><circle cx="900" cy="500" r="150" fill="rgba(255,255,255,0.05)"/><circle cx="400" cy="400" r="80" fill="rgba(255,255,255,0.05)"/></svg>');
+  background-size: cover;
+  pointer-events: none;
 }
 
-.faq-section .section-subtitle {
-  font-size: 1.2rem;
-  max-width: 600px;
+.resources-section .container {
+  position: relative;
+  z-index: 1;
 }
 
-.faq-container {
-  max-width: 900px;
-  margin: 0 auto;
+.resources-title {
+  font-size: 3rem;
+  color: white;
+  text-align: center;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.faq-item {
-  background: var(--bg-card);
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-lg, 16px);
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.1));
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.resources-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 4rem;
 }
 
-.faq-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
 }
 
-.faq-question {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
+.resource-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.resource-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  width: 0;
+  transition: width 0.4s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.resource-card:hover i {
+  transform: scale(1.2);
+}
+
+.resource-card:hover .resource-arrow {
+  transform: translateX(5px);
+}
+
+.resource-lessons::before {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.resource-blog::before {
+  background: linear-gradient(90deg, #f093fb, #f5576c);
+}
+
+.resource-business::before {
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+}
+
+.resource-teachers::before {
+  background: linear-gradient(90deg, #43e97b, #38f9d7);
+}
+
+.resource-vocab::before {
+  background: linear-gradient(90deg, #fa709a, #fee140);
+}
+
+.resource-coding::before {
+  background: linear-gradient(90deg, #30cfd0, #330867);
+}
+
+.resource-card:hover::before {
+  width: 100%;
+}
+
+.resource-card i {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.4s ease;
+}
+
+.resource-lessons i {
+  color: #667eea;
+}
+
+.resource-blog i {
+  color: #f5576c;
+}
+
+.resource-business i {
+  color: #00f2fe;
+}
+
+.resource-teachers i {
+  color: #38f9d7;
+}
+
+.resource-vocab i {
+  color: #fee140;
+}
+
+.resource-coding i {
+  color: #30cfd0;
+}
+
+.resource-card h3 {
+  font-size: 1.5rem;
+  margin: 0 0 0.75rem;
+  font-weight: 700;
+}
+
+.resource-card p {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.resource-arrow {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.quick-access {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.quick-access h3 {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0 0 2rem;
+  font-weight: 800;
+}
+
+.quick-access {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.quick-link {
+  display: inline-flex;
   align-items: center;
   gap: 0.75rem;
+  background: white;
+  color: #667eea;
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.faq-question i {
-  color: var(--primary-color);
+.quick-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  background: #667eea;
+  color: white;
 }
 
-.faq-answer {
-  color: var(--text-secondary);
-  line-height: 1.7;
-  font-size: 1.1rem;
+.quick-link i {
+  font-size: 1.2rem;
 }
 
 /* ===========================================
@@ -2387,7 +2486,7 @@
 @media (max-width: 768px) {
   .value-proposition-section,
   .how-to-use-section,
-  .faq-section {
+  .resources-section {
     padding: 3rem 0;
   }
 
@@ -2395,20 +2494,34 @@
     font-size: 1.8rem;
   }
 
-  .faq-section .section-title {
+  .resources-title {
     font-size: 2rem;
   }
 
-  .faq-item {
+  .resources-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .resource-card {
     padding: 1.5rem;
   }
 
-  .faq-question {
-    font-size: 1.2rem;
+  .resource-card h3 {
+    font-size: 1.3rem;
   }
 
-  .faq-answer {
-    font-size: 1rem;
+  .resource-card p {
+    font-size: 0.9rem;
+  }
+
+  .quick-access {
+    padding: 2rem 1.5rem;
+  }
+
+  .quick-link {
+    font-size: 0.9rem;
+    padding: 10px 20px;
   }
 
   .tips-grid {
