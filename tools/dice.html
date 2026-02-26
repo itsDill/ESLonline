@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script
@@ -62,15 +62,882 @@
     />
     <link rel="canonical" href="https://eslfunonline.com/tools/dice.html" />
     <title>Interactive Dice Roller | ESL Fun Online - 3D Classroom Tool</title>
-        <!-- Favicon and Icons - Optimized for Google Search -->
+    <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon-48x48.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="../images/favicon-48x48.png"
+    />
     <link rel="apple-touch-icon" sizes="180x180" href="../images/1.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon-512x512.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../images/favicon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="../images/favicon-512x512.png"
+    />
 
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+          radial-gradient(
+            ellipse at 20% 50%,
+            rgba(102, 126, 234, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 80%,
+            rgba(118, 75, 162, 0.1) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Animated Particles Background */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        animation: floatParticle 6s infinite ease-in-out;
+      }
+
+      @keyframes floatParticle {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      /* Game Container */
+      .game-container {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .title {
+        color: white;
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 40px;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.6s ease-out;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f0ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 4px 15px rgba(102, 126, 234, 0.4));
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.4));
+        }
+        50% {
+          filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.8));
+        }
+      }
+
+      .title {
+        animation:
+          slideDown 0.6s ease-out,
+          glow 3s ease-in-out infinite;
+      }
+
+      /* Dice Container */
+      .dice-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+
+      @media (max-width: 768px) {
+        .dice-container {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+      }
+
+      .dice-section,
+      .controls-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        animation: fadeIn 0.8s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dice-section::before,
+      .controls-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          transparent 100%
+        );
+        pointer-events: none;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .dice-info {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      /* Controls Bar */
+      .controls-bar {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .control-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow:
+          0 5px 20px rgba(102, 126, 234, 0.3),
+          0 0 40px rgba(102, 126, 234, 0) inset;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .control-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 70%
+        );
+        transform: translateX(-100%) rotate(45deg);
+      }
+
+      .control-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        box-shadow:
+          0 8px 30px rgba(102, 126, 234, 0.6),
+          0 0 60px rgba(102, 126, 234, 0.2) inset;
+      }
+
+      .control-btn:hover::after {
+        animation: shine 0.6s ease-in-out;
+      }
+
+      @keyframes shine {
+        0% {
+          transform: translateX(-100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(100%) rotate(45deg);
+        }
+      }
+
+      .control-btn:active {
+        transform: translateY(-2px) scale(1.05);
+      }
+
+      /* 3D Dice */
+      .dice-3d-container {
+        perspective: 1200px;
+        width: 200px;
+        height: 200px;
+        margin: 40px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        filter: drop-shadow(0 10px 40px rgba(102, 126, 234, 0.3));
+      }
+
+      .dice-3d-container::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.1) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .dice-3d-container:hover::before {
+        opacity: 1;
+      }
+
+      .dice-3d {
+        width: 150px;
+        height: 150px;
+        position: relative;
+        transform-style: preserve-3d;
+        /* Transforms applied via inline styles */
+      }
+
+      .dice-3d.rolling {
+        animation: rollDice 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .dice-3d.landing {
+        animation: diceLanding 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes rollDice {
+        0% {
+          transform: rotateX(0) rotateY(0) rotateZ(0) scale(1);
+        }
+        95% {
+          transform: rotateX(720deg) rotateY(720deg) rotateZ(720deg) scale(1);
+        }
+        100% {
+          transform: rotateX(720deg) rotateY(720deg) rotateZ(720deg) scale(0.98);
+        }
+      }
+
+      @keyframes diceLanding {
+        0% {
+          transform: scale(0.98);
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+        15% {
+          transform: scale(0.92);
+          filter: drop-shadow(0 8px 20px rgba(102, 126, 234, 0.5));
+        }
+        35% {
+          transform: scale(0.95);
+          filter: drop-shadow(0 6px 15px rgba(102, 126, 234, 0.4));
+        }
+        55% {
+          transform: scale(0.97);
+          filter: drop-shadow(0 5px 12px rgba(102, 126, 234, 0.3));
+        }
+        100% {
+          transform: scale(1);
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+      }
+
+      .dice-face {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 60px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
+        box-shadow:
+          0 8px 32px rgba(102, 126, 234, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        opacity: 0.98;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        transition: all 0.3s ease;
+      }
+
+      .dice-3d.landing .dice-face {
+        animation: faceGlow 0.6s ease-out;
+      }
+
+      @keyframes faceGlow {
+        0% {
+          box-shadow:
+            0 8px 32px rgba(102, 126, 234, 0.4),
+            0 0 40px rgba(251, 191, 36, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        50% {
+          box-shadow:
+            0 8px 32px rgba(102, 126, 234, 0.6),
+            0 0 80px rgba(251, 191, 36, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        100% {
+          box-shadow:
+            0 8px 32px rgba(102, 126, 234, 0.4),
+            0 0 0px rgba(251, 191, 36, 0),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .dice-face.front {
+        transform: translateZ(75px);
+      }
+      .dice-face.back {
+        transform: rotateY(180deg) translateZ(75px);
+      }
+      .dice-face.right {
+        transform: rotateY(90deg) translateZ(75px);
+      }
+      .dice-face.left {
+        transform: rotateY(-90deg) translateZ(75px);
+      }
+      .dice-face.top {
+        transform: rotateX(90deg) translateZ(75px);
+      }
+      .dice-face.bottom {
+        transform: rotateX(-90deg) translateZ(75px);
+      }
+
+      /* Buttons */
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow:
+          0 5px 15px rgba(102, 126, 234, 0.3),
+          0 0 40px rgba(102, 126, 234, 0) inset;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.6s,
+          height 0.6s;
+      }
+
+      .btn:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          0 8px 30px rgba(102, 126, 234, 0.5),
+          0 0 40px rgba(102, 126, 234, 0.1) inset;
+        letter-spacing: 0.5px;
+      }
+
+      .btn:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      .btn:active {
+        transform: translateY(-1px);
+      }
+
+      #rollBtn {
+        width: 100%;
+        padding: 16px;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        animation: popIn 0.6s ease-out;
+      }
+
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #f093fb 0%, #f5ad4e 100%);
+        box-shadow: 0 5px 15px rgba(240, 147, 251, 0.3);
+      }
+
+      .btn-secondary:hover {
+        box-shadow: 0 8px 25px rgba(240, 147, 251, 0.5);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+      }
+
+      .btn-success:hover {
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+      }
+
+      /* Result Display */
+      .result {
+        background: linear-gradient(135deg, #f093fb 0%, #f5ad4e 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 16px;
+        text-align: center;
+        margin-top: 20px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        opacity: 0;
+        transform: scale(0.95) rotateX(90deg);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow:
+          0 10px 40px rgba(245, 173, 78, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        perspective: 1000px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .result::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.8s ease;
+      }
+
+      .result.show::before {
+        left: 100%;
+      }
+
+      .result.show {
+        opacity: 1;
+        transform: scale(1) rotateX(0);
+        animation:
+          resultBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+          resultGlow 0.8s ease-out;
+      }
+
+      @keyframes resultGlow {
+        0% {
+          box-shadow:
+            0 10px 40px rgba(245, 173, 78, 0.3),
+            0 0 60px rgba(245, 173, 78, 0.2) inset;
+        }
+        50% {
+          box-shadow:
+            0 10px 40px rgba(245, 173, 78, 0.6),
+            0 0 100px rgba(245, 173, 78, 0.4) inset;
+        }
+        100% {
+          box-shadow:
+            0 10px 40px rgba(245, 173, 78, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+      }
+
+      @keyframes resultBounce {
+        0% {
+          transform: scale(0.5) rotateX(90deg);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1) rotateX(0);
+        }
+        100% {
+          transform: scale(1) rotateX(0);
+          opacity: 1;
+        }
+      }
+
+      .result h3 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+      }
+
+      #resultText {
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+
+      /* Input Group */
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s ease;
+        background: rgba(102, 126, 234, 0.03);
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.08);
+        box-shadow:
+          0 0 0 4px rgba(102, 126, 234, 0.15),
+          0 5px 20px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Options List */
+      .options-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        min-height: 50px;
+        padding: 12px;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          rgba(118, 75, 162, 0.03) 100%
+        );
+        border-radius: 10px;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+      }
+
+      /* Confetti Animation */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #fbbf24;
+        pointer-events: none;
+        z-index: 99;
+        animation: confettiFall 3s ease-out forwards;
+      }
+
+      @keyframes confettiFall {
+        0% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(500px) translateX(100px) rotate(720deg) scale(0);
+        }
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #999;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 20px;
+      }
+
+      .empty-state svg {
+        width: 30px;
+        height: 30px;
+        opacity: 0.5;
+      }
+
+      .empty-state p {
+        font-size: 0.9rem;
+      }
+
+      .option-tag {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 25px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        animation: slideInTag 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .option-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      @keyframes slideInTag {
+        from {
+          opacity: 0;
+          transform: translateX(-15px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+        }
+      }
+
+      .option-tag button {
+        background: rgba(255, 255, 255, 0.3);
+        border: none;
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .option-tag button:hover {
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      /* Preset Buttons */
+      .preset-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .preset-btn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .preset-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .preset-btn:hover::after {
+        opacity: 1;
+      }
+
+      /* Button Groups */
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .btn-group .btn {
+        flex: 1;
+        padding: 12px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .title {
+          font-size: 2rem;
+          margin-bottom: 30px;
+        }
+
+        .dice-container {
+          grid-template-columns: 1fr;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .btn-group .btn {
+          width: 100%;
+        }
+      }
+
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
     <!-- Animated Background Particles -->
     <div class="particles" id="particles"></div>
 
@@ -173,7 +1040,7 @@
             class="btn btn-secondary"
             id="fullscreenBtn"
             aria-label="Enter fullscreen mode"
-            style="margin-top: 15px;"
+            style="margin-top: 15px"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +1053,9 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+              <path
+                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
+              ></path>
             </svg>
             FULLSCREEN MODE
           </button>
@@ -293,7 +1162,7 @@
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-secondary" id="examplesBtn">
+            <button class="btn btn-secondary" id="gamesBtn">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -313,7 +1182,7 @@
                 <line x1="16" y1="13" x2="8" y2="13"></line>
                 <line x1="16" y1="17" x2="8" y2="17"></line>
               </svg>
-              Examples
+              Games
             </button>
             <button class="btn btn-danger" id="clearBtn">
               <svg
@@ -336,6 +1205,24 @@
                 <line x1="14" y1="11" x2="14" y2="17"></line>
               </svg>
               Clear All
+            </button>
+            <button class="btn btn-info" id="backBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              Back to Tools
             </button>
           </div>
 
@@ -368,7 +1255,8 @@
         const optionsList = document.getElementById("optionsList");
         const addOptionBtn = document.getElementById("addOptionBtn");
         const clearBtn = document.getElementById("clearBtn");
-        const examplesBtn = document.getElementById("examplesBtn");
+        const gamesBtn = document.getElementById("gamesBtn");
+        const backBtn = document.getElementById("backBtn");
         const optionsCount = document.getElementById("optionsCount");
         const soundToggle = document.getElementById("soundToggle");
         const historyToggle = document.getElementById("historyToggle");
@@ -396,14 +1284,14 @@
         // Dice faces
         const faces = ["face1", "face2", "face3", "face4", "face5", "face6"];
 
-        // Dice rotations for each face
+        // Dice rotations for each face with isometric-like view
         const rotations = [
-          { x: 0, y: 0 }, // front
-          { x: 0, y: 180 }, // back
-          { x: 0, y: 90 }, // right
-          { x: 0, y: -90 }, // left
-          { x: -90, y: 0 }, // top
-          { x: 90, y: 0 }, // bottom
+          { x: -30, y: 0 }, // face1 - front with isometric tilt
+          { x: -30, y: 180 }, // face2 - back
+          { x: -30, y: -90 }, // face3 - right
+          { x: -30, y: 90 }, // face4 - left
+          { x: 60, y: 0 }, // face5 - top (rotateX(-90) but with base -30 = 60)
+          { x: -120, y: 0 }, // face6 - bottom
         ];
 
         // Initialize the app
@@ -413,7 +1301,8 @@
           // Set up event listeners
           addOptionBtn.addEventListener("click", addOption);
           clearBtn.addEventListener("click", clearAll);
-          examplesBtn.addEventListener("click", addExamples);
+          gamesBtn.addEventListener("click", addGames);
+          backBtn.addEventListener("click", goBackToTools);
           rollBtn.addEventListener("click", rollDice);
           soundToggle.addEventListener("click", toggleSound);
           historyToggle.addEventListener("click", toggleHistory);
@@ -532,7 +1421,7 @@
                   Remove
                 </button>
               </div>
-            `
+            `,
             )
             .join("");
 
@@ -580,7 +1469,7 @@
 
             // Random number of spins and final face
             const randomFace = Math.floor(
-              Math.random() * Math.min(options.length, 6)
+              Math.random() * Math.min(options.length, 6),
             );
             const baseRotations = 3 + Math.random() * 3; // 3-6 full rotations
 
@@ -590,6 +1479,11 @@
 
             // Apply rolling animation
             dice.classList.add("rolling");
+            // Store the final transform for later
+            dice.setAttribute(
+              "data-final-transform",
+              `rotateX(${totalX}deg) rotateY(${totalY}deg)`,
+            );
             dice.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
 
             // Play rolling sound
@@ -598,17 +1492,27 @@
             setTimeout(() => {
               dice.classList.remove("rolling");
 
+              // Reapply the final transform to ensure dice stays in correct position
+              const finalTransform = dice.getAttribute("data-final-transform");
+              dice.style.transform = finalTransform;
+
+              dice.classList.add("landing");
+
               // Get the selected option
               const selectedOption =
                 options[randomFace] || `Face ${randomFace + 1}`;
 
-              // Show result
-              resultText.textContent = selectedOption;
-              result.classList.add("show");
+              // Show result after landing animation settles
+              setTimeout(() => {
+                resultText.textContent = selectedOption;
+                result.classList.add("show");
+              }, 300);
 
-              // Add celebration effect
-              dice.classList.add("celebrating");
-              createConfetti();
+              // Add celebration effect after landing
+              setTimeout(() => {
+                dice.classList.add("celebrating");
+                createConfetti();
+              }, 400);
 
               // Add to history
               addToHistory(selectedOption);
@@ -654,8 +1558,9 @@
               // Remove celebration class after animation
               setTimeout(() => {
                 dice.classList.remove("celebrating");
+                dice.classList.remove("landing");
               }, 1000);
-            }, 5000);
+            }, 800);
           } catch (error) {
             console.error("Error during dice roll:", error);
             showAlert("Something went wrong! Please try again.", "error");
@@ -682,28 +1587,20 @@
             return;
           }
 
-          if (confirm("Are you sure you want to clear all options?")) {
-            options = [];
-            updateOptionsDisplay();
-            updateDice();
-            result.classList.remove("show");
-            saveData();
-            showAlert("All options cleared!", "success");
-          }
-        }
-
-        function addExamples() {
-          if (options.length > 0) {
-            if (!confirm("This will replace your current options. Continue?")) {
-              return;
-            }
-          }
-
-          const examples = ["Pizza", "Movie", "Game", "Walk", "Read", "Music"];
-          options = [...examples];
+          options = [];
           updateOptionsDisplay();
           updateDice();
-          showAlert("Example options added!", "success");
+          result.classList.remove("show");
+          saveData();
+          showAlert("All options cleared!", "success");
+        }
+
+        function addGames() {
+          window.location.href = "/games/games.html";
+        }
+
+        function goBackToTools() {
+          window.location.href = "tools.html";
         }
 
         function showAlert(message, type = "info") {
@@ -755,8 +1652,9 @@
 
           // Create audio context for rolling sound effect
           try {
-            const audioContext = new (window.AudioContext ||
-              window.webkitAudioContext)();
+            const audioContext = new (
+              window.AudioContext || window.webkitAudioContext
+            )();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
 
@@ -766,13 +1664,13 @@
             oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
             oscillator.frequency.exponentialRampToValueAtTime(
               100,
-              audioContext.currentTime + 0.5
+              audioContext.currentTime + 0.5,
             );
 
             gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(
               0.01,
-              audioContext.currentTime + 0.5
+              audioContext.currentTime + 0.5,
             );
 
             oscillator.start(audioContext.currentTime);
@@ -788,8 +1686,9 @@
 
           // Create audio context for result sound effect
           try {
-            const audioContext = new (window.AudioContext ||
-              window.webkitAudioContext)();
+            const audioContext = new (
+              window.AudioContext || window.webkitAudioContext
+            )();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
 
@@ -800,17 +1699,17 @@
             oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5
             oscillator.frequency.setValueAtTime(
               659,
-              audioContext.currentTime + 0.1
+              audioContext.currentTime + 0.1,
             ); // E5
             oscillator.frequency.setValueAtTime(
               784,
-              audioContext.currentTime + 0.2
+              audioContext.currentTime + 0.2,
             ); // G5
 
             gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(
               0.01,
-              audioContext.currentTime + 0.4
+              audioContext.currentTime + 0.4,
             );
 
             oscillator.start(audioContext.currentTime);
@@ -842,7 +1741,7 @@
           soundToggle.classList.toggle("muted", !soundEnabled);
           soundToggle.setAttribute(
             "aria-label",
-            soundEnabled ? "Mute sound effects" : "Enable sound effects"
+            soundEnabled ? "Mute sound effects" : "Enable sound effects",
           );
           saveData();
 
@@ -877,7 +1776,7 @@
           // Clone dice and result elements
           const diceClone = dice.cloneNode(true);
           diceClone.id = "fullscreenDice";
-          
+
           const resultClone = result.cloneNode(true);
           resultClone.id = "fullscreenResult";
 
@@ -906,7 +1805,7 @@
           // Assemble fullscreen mode
           const container = document.createElement("div");
           container.style.textAlign = "center";
-          
+
           fullscreenOverlay.appendChild(container);
           container.appendChild(diceClone);
           container.appendChild(resultClone);
@@ -915,11 +1814,15 @@
           document.body.appendChild(fullscreenOverlay);
 
           // Add event listeners for fullscreen controls
-          document.getElementById("fullscreenRollBtn").addEventListener("click", () => {
-            rollDiceFullscreen(diceClone, resultClone);
-          });
+          document
+            .getElementById("fullscreenRollBtn")
+            .addEventListener("click", () => {
+              rollDiceFullscreen(diceClone, resultClone);
+            });
 
-          document.getElementById("exitFullscreenBtn").addEventListener("click", exitFullscreen);
+          document
+            .getElementById("exitFullscreenBtn")
+            .addEventListener("click", exitFullscreen);
 
           // ESC key to exit
           document.addEventListener("keydown", handleEscKey);
@@ -960,7 +1863,9 @@
 
           resultElement.classList.remove("show");
 
-          const randomFace = Math.floor(Math.random() * Math.min(options.length, 6));
+          const randomFace = Math.floor(
+            Math.random() * Math.min(options.length, 6),
+          );
           const baseRotations = 3 + Math.random() * 3;
           const finalRotation = rotations[randomFace];
           const totalX = baseRotations * 360 + finalRotation.x;
@@ -976,7 +1881,8 @@
           setTimeout(() => {
             diceElement.classList.remove("rolling");
 
-            const selectedOption = options[randomFace] || `Face ${randomFace + 1}`;
+            const selectedOption =
+              options[randomFace] || `Face ${randomFace + 1}`;
             const resultText = resultElement.querySelector("#resultText");
             if (resultText) {
               resultText.textContent = selectedOption;
@@ -1031,7 +1937,7 @@
             `${
               presetName.charAt(0).toUpperCase() + presetName.slice(1)
             } preset loaded!`,
-            "success"
+            "success",
           );
 
           // Track with analytics
@@ -1191,6 +2097,59 @@
         `;
         document.head.appendChild(style);
       });
+
+      // Generate animated particles
+      function createParticles() {
+        const particlesContainer = document.getElementById("particles");
+        if (!particlesContainer) return;
+
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.top = window.innerHeight + Math.random() * 100 + "px";
+          particle.style.animationDelay = Math.random() * 2 + "s";
+          particle.style.animationDuration = Math.random() * 4 + 6 + "s";
+          particlesContainer.appendChild(particle);
+        }
+
+        // Recreate particles periodically
+        setInterval(() => {
+          if (particlesContainer.children.length < 20) {
+            const particle = document.createElement("div");
+            particle.className = "particle";
+            particle.style.left = Math.random() * 100 + "%";
+            particle.style.top = window.innerHeight + "px";
+            particle.style.animationDelay = "0s";
+            particle.style.animationDuration = Math.random() * 4 + 6 + "s";
+            particlesContainer.appendChild(particle);
+          }
+        }, 500);
+      }
+
+      // Initialize particles when page loads
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", createParticles);
+      } else {
+        createParticles();
+      }
+    </script>
+
+    <!-- Google AdSense Ad -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-format="autorelaxed"
+      data-ad-client="ca-pub-2456627863532019"
+      data-ad-slot="1601303655"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
   </body>
 </html>
