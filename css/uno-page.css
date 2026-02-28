@@ -42,8 +42,10 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  height: calc(100vh - 80px);
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Game Status - More compact */
@@ -51,30 +53,36 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: var(--card-shadow);
+  flex-shrink: 0;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .status-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  flex: 1;
+  min-width: 100px;
 }
 
 .status-icon {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: white;
+  flex-shrink: 0;
 }
 
 .player-icon {
@@ -129,9 +137,9 @@
     "deck current actions"
     "player player player";
   grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr auto 1fr;
-  gap: 1rem;
-  align-items: center;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: stretch;
   min-height: 0;
 }
 
@@ -174,18 +182,21 @@
   grid-area: player;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 0.3rem;
+  align-items: center;
+  gap: 0.2rem;
   flex-wrap: wrap;
   padding: 0.5rem;
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 180px;
+  flex-shrink: 0;
 }
 
 /* Card Styles - Improved for better readability */
 .card {
-  width: 90px;
-  height: 135px;
-  border-radius: 12px;
+  width: 75px;
+  height: 112px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -195,11 +206,12 @@
   box-shadow: var(--card-shadow);
   position: relative;
   font-weight: 800;
-  font-size: 1rem;
-  border: 3px solid rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   user-select: none;
   color: white;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
 /* Center oval like real UNO cards */
@@ -685,7 +697,6 @@
 @media (max-width: 768px) {
   .game-container {
     padding: 0.5rem;
-    height: calc(100vh - 70px);
   }
 
   .game-board {
@@ -696,32 +707,33 @@
       "actions"
       "player";
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto auto;
     gap: 0.5rem;
   }
 
   .card {
-    width: 70px;
-    height: 105px;
-    font-size: 0.8rem;
+    width: 65px;
+    height: 97px;
+    font-size: 0.75rem;
   }
 
   .card-number {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .card-icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .card-vocabulary {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
+
   .game-status {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
-    padding: 0.8rem;
+    padding: 0.6rem;
   }
 
   .header-content {
@@ -754,7 +766,9 @@
 
   .player-hand {
     gap: 0.2rem;
-    overflow: visible;
+    max-height: 165px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
@@ -1119,5 +1133,253 @@
   .nav-item.mobile-dropdown-open:hover .dropdown {
     max-height: 600px !important;
     padding: 0.75rem 0.5rem !important;
+  }
+}
+
+/* Extra small screens - 480px and below */
+@media (max-width: 480px) {
+  .game-container {
+    padding: 0.4rem;
+    gap: 0.5rem;
+  }
+
+  .game-status {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .status-item {
+    font-size: 0.7rem;
+  }
+
+  .status-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .card {
+    width: 60px;
+    height: 90px;
+    font-size: 0.7rem;
+    border-width: 1px;
+  }
+
+  .card::after,
+  .card::before {
+    font-size: 0.6rem;
+  }
+
+  .card-number {
+    font-size: 1rem;
+  }
+
+  .card-icon {
+    font-size: 0.8rem;
+  }
+
+  .player-hand {
+    max-height: 150px;
+    gap: 0.15rem;
+  }
+
+  .computer-hand {
+    gap: 0;
+  }
+
+  .turn-indicator {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .game-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .game-header {
+    padding: 0.5rem 0;
+  }
+
+  .game-stats {
+    font-size: 0.7rem;
+    padding: 0.6rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Discover More Games Section */
+.discover-more-section {
+  margin-top: 4rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(70, 187, 229, 0.05),
+    rgba(59, 130, 246, 0.05)
+  );
+  border-radius: 20px;
+  border: 1px solid rgba(70, 187, 229, 0.2);
+}
+
+.discover-more-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+.discover-games-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.discover-game-box {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.discover-game-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(70, 187, 229, 0.2);
+}
+
+.discover-game-image {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.discover-game-box h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 1rem 1rem 0.5rem 1rem;
+  color: var(--text-primary);
+}
+
+.discover-game-box p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 1rem 1rem 1rem;
+  flex: 1;
+}
+
+.discover-game-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #46bbe5, #3b82f6);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  font-size: 0.95rem;
+}
+
+.discover-game-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(70, 187, 229, 0.3);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.discover-ad-box {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: visible;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  max-height: 500px;
+}
+
+.discover-ad-box .adsbygoogle {
+  display: block !important;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .discover-games-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .discover-ad-box {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .discover-more-section {
+    margin-top: 3rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .discover-more-section h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .discover-games-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .discover-ad-box {
+    grid-column: auto;
+    min-height: 250px;
+  }
+
+  .discover-game-image {
+    height: 120px;
+  }
+
+  .discover-game-box h3 {
+    font-size: 1.1rem;
+    margin: 0.75rem 0.75rem 0.35rem 0.75rem;
+  }
+
+  .discover-game-box p {
+    font-size: 0.85rem;
+    margin: 0 0.75rem 0.75rem 0.75rem;
+  }
+
+  .discover-game-link {
+    padding: 0.6rem 1.2rem;
+    margin: 0.75rem;
+    font-size: 0.9rem;
   }
 }
