@@ -56,12 +56,38 @@ function validateCredentials(username, password, userType) {
     },
   };
 
+  // Teacher credentials
+  const teacherCredentials = {
+    dill: {
+      password: "1234",
+      name: "Dill",
+      dashboard: "dash/dashboard.html",
+    },
+  };
+
   if (
     userType === "student" &&
     Object.prototype.hasOwnProperty.call(studentCredentials, username) &&
     password === studentCredentials[username].password
   ) {
     const u = studentCredentials[username];
+    return {
+      success: true,
+      message: `Welcome ${u.name}!`,
+      userId: username,
+      dashboard: u.dashboard,
+      userName: u.name,
+      userType: userType,
+    };
+  }
+
+  // Check teacher credentials
+  if (
+    userType === "teacher" &&
+    Object.prototype.hasOwnProperty.call(teacherCredentials, username) &&
+    password === teacherCredentials[username].password
+  ) {
+    const u = teacherCredentials[username];
     return {
       success: true,
       message: `Welcome ${u.name}!`,
@@ -103,6 +129,15 @@ function getUserInfo(username, userType) {
       username: username === "tem" ? "tem" : "temreview",
       name: "Tem Review",
       dashboard: "students/temreview.html",
+      userType: userType,
+    };
+  }
+  // Support teacher account
+  if (username === "dill" && userType === "teacher") {
+    return {
+      username: "dill",
+      name: "Dill",
+      dashboard: "dash/dashboard.html",
       userType: userType,
     };
   }

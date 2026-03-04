@@ -1,0 +1,1960 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riko - Student Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 60px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 35px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 2.5em;
+        font-weight: 800;
+        animation: slideInDown 0.5s ease-out;
+      }
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 25px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        font-size: 0.95em;
+      }
+      .back-link:hover {
+        color: #764ba2;
+        transform: translateX(-5px);
+        text-decoration: underline;
+      }
+      .section {
+        margin-bottom: 50px;
+        padding-bottom: 40px;
+        border-bottom: 2px solid #f0f0f0;
+        animation: fadeInUp 0.6s ease-out;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .section:last-child {
+        border-bottom: none;
+      }
+      .section-title {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.6em;
+        margin-bottom: 25px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .label {
+        font-weight: 700;
+        color: #333;
+      }
+      .value {
+        color: #666;
+        font-weight: 600;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        font-weight: 700;
+        animation: bounce 0.6s ease-out;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      .status-completed {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+      .status-upcoming {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+      .lesson-section {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+        padding: 30px;
+        border-radius: 15px;
+        border-left: 5px solid #667eea;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.12);
+      }
+      .questions-box {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+      .question {
+        margin-bottom: 16px;
+        padding: 18px;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+        border-radius: 12px;
+        border-left: 5px solid #667eea;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+      }
+      .question:hover {
+        transform: translateY(-2px) translateX(4px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        background: linear-gradient(135deg, #f8fbff 0%, #f0f8ff 100%);
+      }
+      .question-text {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 1.05em;
+      }
+      .question-hint {
+        color: #666;
+        font-size: 0.9em;
+        font-style: italic;
+      }
+      .progress-bar {
+        background: #e0e0e0;
+        height: 14px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .progress-fill {
+        background: linear-gradient(90deg, #10b981, #059669);
+        height: 100%;
+        border-radius: 10px;
+        animation: fillProgress 1s ease-out;
+      }
+      @keyframes fillProgress {
+        from {
+          width: 0;
+        }
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 20px;
+      }
+      @media (max-width: 1200px) {
+        .info-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .info-card {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 24px;
+        border-radius: 14px;
+        border: 2px solid #667eea30;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+      }
+      .info-card:hover {
+        transform: translateY(-10px);
+        border-color: #667eea;
+        box-shadow: 0 14px 30px rgba(102, 126, 234, 0.18);
+        background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
+      }
+      .info-card-title {
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 0.95em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .info-card-value {
+        font-size: 1.3em;
+        color: #333;
+        font-weight: 700;
+      }
+      .practice-questions {
+        background: linear-gradient(135deg, #fff3e015 0%, #ffe8b515 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 25px;
+        border-left: 5px solid #ff9800;
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.1);
+      }
+      .practice-q {
+        margin-bottom: 0;
+        padding: 18px;
+        background: white;
+        border-radius: 12px;
+        border-left: 5px solid #ff9800;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.12);
+      }
+      .practice-q:hover {
+        transform: translateY(-4px) translateX(4px);
+        box-shadow: 0 8px 20px rgba(255, 152, 0, 0.18);
+        background: #fffbf0;
+      }
+      .game-section {
+        background: linear-gradient(135deg, #f3e5f515 0%, #e1bee715 100%);
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 25px;
+        border-left: 5px solid #9c27b0;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(156, 39, 176, 0.1);
+      }
+      .picture-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 25px;
+      }
+      @media (max-width: 1200px) {
+        .picture-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .picture-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .picture-card {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        aspect-ratio: 1;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3em;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+      }
+      .picture-card:hover {
+        transform: scale(1.12) translateY(-10px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        border-color: rgba(255, 255, 255, 0.8);
+      }
+      .picture-card:active {
+        transform: scale(0.95);
+      }
+      .picture-card.revealed {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.35);
+      }
+      .review-box {
+        background: linear-gradient(135deg, #e8f5e915 0%, #c8e6c915 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 25px;
+        border-left: 5px solid #4caf50;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 1024px) {
+        .review-box {
+          grid-template-columns: 1fr;
+        }
+      }
+      .review-item {
+        margin-bottom: 0;
+        padding: 18px;
+        background: white;
+        border-radius: 12px;
+        border-left: 5px solid #4caf50;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.12);
+      }
+      .review-item:hover {
+        transform: translateY(-4px) translateX(4px);
+        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.18);
+      }
+      .review-title {
+        font-weight: 800;
+        color: #2e7d32;
+        margin-bottom: 10px;
+        font-size: 1.08em;
+      }
+      .review-content {
+        color: #555;
+        font-size: 0.95em;
+        line-height: 1.6;
+      }
+      .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      .practice-column {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      @media (max-width: 1024px) {
+        .two-column {
+          grid-template-columns: 1fr;
+        }
+      }
+      .practice-questions-expanded {
+        background: linear-gradient(135deg, #fff3e015 0%, #ffe8b515 100%);
+        padding: 35px;
+        border-radius: 15px;
+        margin-top: 25px;
+        border-left: 5px solid #ff9800;
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.1);
+      }
+      .practice-section-title {
+        font-weight: 800;
+        color: #e65100;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      /* Game Styles */
+      .game-card {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+      .game-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      }
+      .scramble-grid,
+      .memory-grid,
+      .quiz-options {
+        display: grid;
+        gap: 12px;
+      }
+      .scramble-grid,
+      .memory-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      }
+      .scramble-tile,
+      .memory-card,
+      .quiz-option {
+        padding: 14px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 2px solid transparent;
+      }
+      .scramble-tile {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        font-size: 1.1em;
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+      }
+      .scramble-tile:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+      }
+      .scramble-tile.selected {
+        opacity: 0.5;
+        transform: scale(0.95);
+      }
+      .memory-card {
+        background: linear-gradient(135deg, #ff9800, #ff7043);
+        color: white;
+        font-size: 1em;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(255, 152, 0, 0.2);
+      }
+      .memory-card:hover:not(.matched) {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(255, 152, 0, 0.3);
+      }
+      .memory-card.matched {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        opacity: 0.7;
+        cursor: default;
+      }
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+      .quiz-option {
+        background: #f5f5f5;
+        color: #333;
+        text-align: left;
+        padding: 16px;
+        font-size: 1em;
+        border: 2px solid #ddd;
+      }
+      .quiz-option:hover {
+        background: #e8f5ff;
+        border-color: #667eea;
+        transform: translateX(4px);
+      }
+      .quiz-option.selected {
+        background: #e3f2fd;
+        border-color: #667eea;
+      }
+      .quiz-option.correct {
+        background: #c8e6c9;
+        border-color: #4caf50;
+      }
+      .quiz-option.incorrect {
+        background: #ffcdd2;
+        border-color: #f44336;
+      }
+      .sentence-builder {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+      .sentence-area {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        min-height: 60px;
+        margin-bottom: 15px;
+        border: 2px dashed #667eea;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: flex-start;
+        align-content: flex-start;
+      }
+      .word-tile {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: move;
+        font-weight: 600;
+        user-select: none;
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+        transition: all 0.3s ease;
+      }
+      .word-tile:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(102, 126, 234, 0.3);
+      }
+      .words-pool {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .speed-challenge {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      .challenge-card {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 15px rgba(76, 175, 80, 0.2);
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .challenge-card:hover {
+        transform: scale(1.08);
+        box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+      }
+      .challenge-word {
+        font-size: 1.8em;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .challenge-hint {
+        font-size: 0.9em;
+        opacity: 0.9;
+      }
+      @media (max-width: 768px) {
+        .speed-challenge {
+          grid-template-columns: 1fr;
+        }
+        .scramble-grid,
+        .memory-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+      <h1>👥 Riko</h1>
+
+      <!-- Current Level Section -->
+      <div class="section">
+        <div class="section-title">
+          📚 Current Level: Oxford Phonics World 3
+        </div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-card-title">Status</div>
+            <div class="info-card-value">
+              <span class="status-badge status-completed">✓ Completed</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Focus Area</div>
+            <div class="info-card-value">Phonics & Pronunciation</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Overall Progress</div>
+            <div class="info-card-value">100%</div>
+          </div>
+        </div>
+        <div style="margin-top: 15px">
+          <div class="label">Progress Details</div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Practice Questions -->
+        <div class="practice-questions-expanded">
+          <div class="practice-section-title">
+            🎤 Quick Practice - Conversation at Oxford Phonics 3 Level
+          </div>
+          <div class="two-column">
+            <div class="practice-column">
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">1. How are you?</div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Try answering: "I am fine, thank you. How are you?"
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  2. How is the weather today?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Practice: "The weather is sunny/rainy/cloudy today."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  3. What is your favourite colour?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Answer: "My favourite colour is
+                  [blue/red/green/yellow/purple]."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  4. How was school today?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Try: "School was good/fun/interesting today."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  5. What did you eat for lunch?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Answer: "I ate [rice/chicken/vegetables/noodles] for lunch."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  6. Do you like playing sports?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Say: "Yes, I like playing [football/basketball/badminton]."
+                </div>
+              </div>
+            </div>
+            <div class="practice-column">
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  7. Tell me about your family.
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Practice: "I have a mother, father, and [siblings]. My family
+                  is [adjective]."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  8. What is your hobby?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Answer: "My hobby is [reading/drawing/playing games/sports]."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  9. What time do you wake up?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Practice: "I wake up at 7 o'clock in the morning."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  10. Can you describe your bedroom?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Try: "My bedroom is [big/small/bright]. It has a bed, desk,
+                  and [other items]."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  11. What did you do yesterday?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Say: "Yesterday, I [verb]... For example, I played with my
+                  friends."
+                </div>
+              </div>
+              <div class="practice-q">
+                <div style="font-weight: 600; color: #333">
+                  12. What is your dream job?
+                </div>
+                <div style="color: #666; font-size: 0.9em; margin-top: 5px">
+                  Answer: "I want to be a [doctor/teacher/engineer] because
+                  [reason]."
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Picture Reveal Game -->
+      <div class="section">
+        <div class="section-title">🎮 Picture Reveal Game</div>
+        <div class="game-section">
+          <p style="color: #4a148c; margin-bottom: 15px; font-weight: 600">
+            Click on each card to reveal the picture and say the word out loud!
+            Practice your pronunciation.
+          </p>
+          <div class="picture-grid">
+            <div class="picture-card" onclick="revealPicture(this, '🏠 House')">
+              <span id="card0" style="opacity: 0.3">?</span>
+            </div>
+            <div
+              class="picture-card"
+              onclick="revealPicture(this, '👨‍👩‍👧‍👦 Family')"
+            >
+              <span id="card1" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '🌳 Tree')">
+              <span id="card2" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '📚 Book')">
+              <span id="card3" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '🍎 Apple')">
+              <span id="card4" style="opacity: 0.3">?</span>
+            </div>
+            <div
+              class="picture-card"
+              onclick="revealPicture(this, '⚽ Football')"
+            >
+              <span id="card5" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '🌟 Star')">
+              <span id="card6" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '☀️ Sun')">
+              <span id="card7" style="opacity: 0.3">?</span>
+            </div>
+            <div
+              class="picture-card"
+              onclick="revealPicture(this, '🎓 School')"
+            >
+              <span id="card8" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '🚗 Car')">
+              <span id="card9" style="opacity: 0.3">?</span>
+            </div>
+            <div class="picture-card" onclick="revealPicture(this, '🐕 Dog')">
+              <span id="card10" style="opacity: 0.3">?</span>
+            </div>
+            <div
+              class="picture-card"
+              onclick="revealPicture(this, '🌈 Rainbow')"
+            >
+              <span id="card11" style="opacity: 0.3">?</span>
+            </div>
+          </div>
+          <p style="color: #555; margin-top: 20px; font-size: 0.9em">
+            💡 Tip: Click each card to reveal the picture, then say the word and
+            its beginning sound!
+          </p>
+        </div>
+      </div>
+
+      <!-- Oxford Phonics 3 Review -->
+      <div class="section">
+        <div class="section-title">
+          📖 Oxford Phonics World 3 - Review & Highlights
+        </div>
+        <div class="review-box">
+          <div class="review-item">
+            <div class="review-title">✓ Phonetic Sounds Mastered</div>
+            <div class="review-content">
+              CVC (Consonant-Vowel-Consonant) words, short vowel sounds, initial
+              consonant blends, final consonants, and basic digraphs (ch, sh,
+              th, ng).
+            </div>
+          </div>
+          <div class="review-item">
+            <div class="review-title">✓ Key Skills Developed</div>
+            <div class="review-content">
+              Sound identification, letter-sound correspondence, blending sounds
+              to form words, sight words recognition, and pronunciation
+              accuracy.
+            </div>
+          </div>
+          <div class="review-item">
+            <div class="review-title">✓ Common Words Practiced</div>
+            <div class="review-content">
+              cat, dog, sit, run, jump, book, pen, tree, house, can, go, is,
+              the, and, at, it, on, in.
+            </div>
+          </div>
+          <div class="review-item">
+            <div class="review-title">✓ Areas of Strength</div>
+            <div class="review-content">
+              Excellent pronunciation of short vowel sounds, strong blending
+              skills, clear articulation of consonants, and consistent effort in
+              practice.
+            </div>
+          </div>
+          <div class="review-item">
+            <div class="review-title">📌 Ready for Level 4</div>
+            <div class="review-content">
+              You have successfully completed all phonics fundamentals in Level
+              3! Level 4 will introduce longer words, vowel digraphs (ea, ee,
+              oo), and more complex sentence structures.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Level Section -->
+      <div class="section">
+        <div class="section-title">
+          🚀 Upcoming Level: Oxford Phonics World 4
+        </div>
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-card-title">Status</div>
+            <div class="info-card-value">
+              <span class="status-badge status-upcoming"
+                >🎯 Ready to Start</span
+              >
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Difficulty</div>
+            <div class="info-card-value">Pre-Intermediate+</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Start Date</div>
+            <div class="info-card-value">Today</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Duration</div>
+            <div class="info-card-value">8-10 weeks</div>
+          </div>
+        </div>
+        <div style="margin-top: 25px">
+          <div
+            class="label"
+            style="
+              font-weight: 600;
+              font-size: 1.05em;
+              margin-bottom: 15px;
+              color: #333;
+            "
+          >
+            📚 Learning Objectives
+          </div>
+          <div class="two-column">
+            <div class="practice-column" style="gap: 12px">
+              <div
+                style="
+                  padding: 15px;
+                  background: #f5f5f5;
+                  border-radius: 12px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <div style="font-weight: 600; color: #667eea; font-size: 1em">
+                  ⚡ Advanced Phonics
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px">
+                  Master complex phonics patterns, vowel digraphs (ea, ee, oo),
+                  and consonant clusters
+                </div>
+              </div>
+              <div
+                style="
+                  padding: 15px;
+                  background: #f5f5f5;
+                  border-radius: 12px;
+                  border-left: 4px solid #764ba2;
+                "
+              >
+                <div style="font-weight: 600; color: #764ba2; font-size: 1em">
+                  🔊 Complex Words
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px">
+                  Learn to pronounced multi-syllable words and apply phonics
+                  rules to longer vocabulary
+                </div>
+              </div>
+            </div>
+            <div class="practice-column" style="gap: 12px">
+              <div
+                style="
+                  padding: 15px;
+                  background: #f5f5f5;
+                  border-radius: 12px;
+                  border-left: 4px solid #ff9800;
+                "
+              >
+                <div style="font-weight: 600; color: #ff9800; font-size: 1em">
+                  🎵 Rhythm & Intonation
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px">
+                  Develop natural rhythm, stress patterns, and intonation in
+                  sentence pronunciation
+                </div>
+              </div>
+              <div
+                style="
+                  padding: 15px;
+                  background: #f5f5f5;
+                  border-radius: 12px;
+                  border-left: 4px solid #4caf50;
+                "
+              >
+                <div style="font-weight: 600; color: #4caf50; font-size: 1em">
+                  ✨ Fluency Building
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 5px">
+                  Improve speaking pace, confidence, and accent reduction with
+                  guided practice
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Lesson - Class Activity -->
+      <div class="section">
+        <div class="section-title">
+          📖 Today's Lesson: Let's Learn Together! 🌟
+        </div>
+        <div class="lesson-section">
+          <div
+            style="
+              background: linear-gradient(135deg, #fff9c4 0%, #fffacd 100%);
+              padding: 20px;
+              border-radius: 12px;
+              margin-bottom: 20px;
+              border-left: 5px solid #fbc02d;
+            "
+          >
+            <p
+              style="color: #333; font-weight: 600; font-size: 1.1em; margin: 0"
+            >
+              🎯 Today's Goal: Master fun sounds and build cool words!
+            </p>
+          </div>
+
+          <!-- Warm-Up Activity -->
+          <div
+            style="
+              background: #f5f5f5;
+              padding: 20px;
+              border-radius: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <p
+              style="
+                color: #333;
+                margin-bottom: 15px;
+                font-weight: 700;
+                font-size: 1.05em;
+              "
+            >
+              🎤 Warm-Up: Let's Practice Together!
+            </p>
+            <div class="questions-box">
+              <div class="question">
+                <div class="question-text">
+                  1️⃣ What's the "sh" sound in these words?
+                </div>
+                <div class="question-hint">
+                  Say these: <strong>ship, shop, shoe, shell</strong>
+                </div>
+              </div>
+              <div class="question">
+                <div class="question-text">2️⃣ Can you find the "th" sound?</div>
+                <div class="question-hint">
+                  Listen: <strong>thank, think, three, thumb</strong> - What do
+                  you notice?
+                </div>
+              </div>
+              <div class="question">
+                <div class="question-text">3️⃣ Word Families - What rhymes?</div>
+                <div class="question-hint">
+                  <strong>cat</strong> rhymes with...
+                  <strong>bat, hat, sat!</strong> Can you find more?
+                </div>
+              </div>
+              <div class="question">
+                <div class="question-text">4️⃣ Make your own sentence!</div>
+                <div class="question-hint">
+                  Use these words: <strong>I, like, school</strong> - What can
+                  you make?
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Story Introduction -->
+          <div
+            style="
+              background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+              padding: 20px;
+              border-radius: 12px;
+              margin-bottom: 20px;
+              margin-top: 20px;
+            "
+          >
+            <p
+              style="
+                color: #1b5e20;
+                font-weight: 700;
+                font-size: 1.05em;
+                margin-bottom: 12px;
+              "
+            >
+              📚 Today's Story: "The Treasure Hunt"
+            </p>
+            <p style="color: #333; line-height: 1.8; margin-bottom: 10px">
+              There's a treasure hidden in the school! We need to find words
+              that match special sounds to unlock each door. Complete each
+              challenge below and you'll get closer to the treasure! 🗺️✨
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Overview for Teachers -->
+      <div
+        style="
+          background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+          padding: 25px;
+          border-radius: 14px;
+          margin: 30px 0;
+          border-left: 5px solid #9c27b0;
+        "
+      >
+        <p
+          style="
+            color: #4a148c;
+            font-weight: 800;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+          "
+        >
+          🗺️ Treasure Hunt Route - 5 Challenges Await!
+        </p>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+          "
+        >
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 4px solid #667eea;
+              text-align: center;
+            "
+          >
+            <p style="font-weight: 700; color: #667eea; margin-bottom: 5px">
+              🔤 Challenge 1
+            </p>
+            <p style="font-size: 0.9em; color: #666">Word Scramble</p>
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 4px solid #ff9800;
+              text-align: center;
+            "
+          >
+            <p style="font-weight: 700; color: #ff9800; margin-bottom: 5px">
+              ❓ Challenge 2
+            </p>
+            <p style="font-size: 0.9em; color: #666">Sound Detective</p>
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 4px solid #4caf50;
+              text-align: center;
+            "
+          >
+            <p style="font-weight: 700; color: #4caf50; margin-bottom: 5px">
+              🧠 Challenge 3
+            </p>
+            <p style="font-size: 0.9em; color: #666">Rhyme Memory</p>
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 4px solid #2196f3;
+              text-align: center;
+            "
+          >
+            <p style="font-weight: 700; color: #2196f3; margin-bottom: 5px">
+              📝 Challenge 4
+            </p>
+            <p style="font-size: 0.9em; color: #666">Sentence Builder</p>
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 4px solid #e91e63;
+              text-align: center;
+            "
+          >
+            <p style="font-weight: 700; color: #e91e63; margin-bottom: 5px">
+              ⚡ Challenge 5
+            </p>
+            <p style="font-size: 0.9em; color: #666">Speed Challenge</p>
+          </div>
+        </div>
+        <p
+          style="
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 15px;
+            text-align: center;
+          "
+        >
+          💎 Complete all challenges to find the treasure and become a phonics
+          champion!
+        </p>
+      </div>
+
+      <!-- Word Scramble Game -->
+      <div class="section">
+        <div class="section-title">🔤 Challenge 1: Word Scramble Adventure</div>
+        <div class="game-card">
+          <p style="color: #666; margin-bottom: 15px; font-weight: 600">
+            🎮 Click the letter tiles in the right order to make the word! A
+            clue is waiting for you below. 👇
+          </p>
+          <div
+            style="
+              background: #f9f9f9;
+              padding: 20px;
+              border-radius: 10px;
+              margin-bottom: 20px;
+              text-align: center;
+            "
+          >
+            <p
+              style="
+                color: #666;
+                font-weight: 600;
+                font-size: 0.95em;
+                margin-bottom: 10px;
+              "
+            >
+              Your Word:
+            </p>
+            <div
+              style="
+                font-size: 2em;
+                font-weight: 800;
+                color: #667eea;
+                letter-spacing: 8px;
+                margin-bottom: 15px;
+                padding: 15px;
+                background: white;
+                border-radius: 8px;
+                border: 3px dashed #667eea;
+              "
+            >
+              <span id="scramble-answer" style="color: #667eea">_ _ _ _ _</span>
+            </div>
+            <p style="color: #ff9800; font-size: 1em; font-weight: 700">
+              🔑 Clue: A fun place where you learn with friends!
+            </p>
+          </div>
+          <p
+            style="
+              color: #666;
+              font-weight: 600;
+              margin-bottom: 12px;
+              text-align: center;
+            "
+          >
+            Click the letters:
+          </p>
+          <div
+            class="scramble-grid"
+            id="scramble-tiles"
+            style="margin-bottom: 20px"
+          >
+            <div class="scramble-tile" onclick="selectScramble(this, 's')">
+              S
+            </div>
+            <div class="scramble-tile" onclick="selectScramble(this, 'c')">
+              C
+            </div>
+            <div class="scramble-tile" onclick="selectScramble(this, 'h')">
+              H
+            </div>
+            <div class="scramble-tile" onclick="selectScramble(this, 'o')">
+              O
+            </div>
+            <div class="scramble-tile" onclick="selectScramble(this, 'l')">
+              L
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; justify-content: center">
+            <button
+              onclick="resetScramble()"
+              style="
+                padding: 12px 24px;
+                background: #667eea;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 1em;
+                transition: all 0.3s ease;
+              "
+              onmouseover="this.style.background = '#764ba2'"
+              onmouseout="this.style.background = '#667eea'"
+            >
+              🔄 Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multiple Choice Quiz -->
+      <div class="section">
+        <div class="section-title">❓ Challenge 2: Sound Detective Quiz</div>
+        <div class="game-card">
+          <p style="color: #666; margin-bottom: 20px; font-weight: 600">
+            🕵️ Can you find the right sounds? Listen to the teacher and pick the
+            correct word! 👂
+          </p>
+          <div
+            style="
+              margin-bottom: 25px;
+              padding: 20px;
+              background: #f0f4ff;
+              border-radius: 12px;
+            "
+          >
+            <p
+              style="
+                color: #333;
+                margin-bottom: 12px;
+                font-weight: 700;
+                font-size: 1.1em;
+              "
+            >
+              Question 1: Which word has the "SH" sound? 🎵
+            </p>
+            <p style="color: #666; font-size: 0.95em; margin-bottom: 15px">
+              Say each word out loud. Listen for the "shshsh" sound!
+            </p>
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="selectQuiz(this, true)">
+                <div style="font-size: 1.2em; font-weight: 700">🚢 ship</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Say it: "shhhhip"
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">💺 sit</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Say it: "ssit" (regular S)
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">☀️ sun</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Say it: "ssun" (regular S)
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">🏖️ sand</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Say it: "ssand" (regular S)
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              margin-bottom: 20px;
+              padding: 20px;
+              background: #fff3e0;
+              border-radius: 12px;
+            "
+          >
+            <p
+              style="
+                color: #333;
+                margin-bottom: 12px;
+                font-weight: 700;
+                font-size: 1.1em;
+              "
+            >
+              Question 2: Find the "TH" sound! 🗣️
+            </p>
+            <p style="color: #666; font-size: 0.95em; margin-bottom: 15px">
+              Listen for the "th" sound in your mouth like you're blowing out a
+              candle!
+            </p>
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="selectQuiz(this, true)">
+                <div style="font-size: 1.2em; font-weight: 700">👍 thank</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Put tongue between teeth: "thhhank"
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">⏰ time</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Regular T sound
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">😀 smile</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Regular S sound
+                </div>
+              </div>
+              <div class="quiz-option" onclick="selectQuiz(this, false)">
+                <div style="font-size: 1.2em; font-weight: 700">🎂 cake</div>
+                <div style="font-size: 0.9em; color: #888; margin-top: 5px">
+                  Regular K sound
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            onclick="resetQuiz()"
+            style="
+              padding: 12px 24px;
+              background: #ff9800;
+              color: white;
+              border: none;
+              border-radius: 8px;
+              font-weight: 600;
+              cursor: pointer;
+              font-size: 1em;
+              transition: all 0.3s ease;
+            "
+            onmouseover="this.style.background = '#f57c00'"
+            onmouseout="this.style.background = '#ff9800'"
+          >
+            🔄 Clear Answers
+          </button>
+        </div>
+      </div>
+
+      <!-- Memory Match Game -->
+      <div class="section">
+        <div class="section-title">🧠 Challenge 3: Rhyme Memory Match</div>
+        <div class="game-card">
+          <p style="color: #666; margin-bottom: 15px; font-weight: 600">
+            🎯 Find matching rhyme pairs! Words that rhyme sound the same at the
+            end. Click two words and listen - do they rhyme? 👂
+          </p>
+          <div
+            style="
+              background: #fffacd;
+              padding: 12px;
+              border-radius: 8px;
+              margin-bottom: 15px;
+              text-align: center;
+            "
+          >
+            <p
+              style="
+                color: #cc6600;
+                font-weight: 600;
+                font-size: 0.95em;
+                margin: 0;
+              "
+            >
+              💡 Example: "cat" and "bat" rhyme because they both end with "at"
+            </p>
+          </div>
+          <div class="memory-grid" id="memory-grid">
+            <div class="memory-card" onclick="matchMemory(this, 'cat')">
+              cat 🐱
+            </div>
+            <div class="memory-card" onclick="matchMemory(this, 'bat')">
+              bat 🦇
+            </div>
+            <div class="memory-card" onclick="matchMemory(this, 'dog')">
+              dog 🐕
+            </div>
+            <div class="memory-card" onclick="matchMemory(this, 'log')">
+              log 🪵
+            </div>
+            <div class="memory-card" onclick="matchMemory(this, 'sit')">
+              sit 🪑
+            </div>
+            <div class="memory-card" onclick="matchMemory(this, 'fit')">
+              fit 💪
+            </div>
+          </div>
+          <p
+            style="
+              color: #999;
+              font-size: 0.95em;
+              margin-top: 15px;
+              text-align: center;
+            "
+          >
+            Found:
+            <strong id="memory-score" style="color: #4caf50; font-size: 1.1em"
+              >0/3</strong
+            >
+            rhyme pairs 🎉
+          </p>
+        </div>
+      </div>
+
+      <!-- Sentence Builder -->
+      <div class="section">
+        <div class="section-title">📝 Challenge 4: Build Cool Sentences</div>
+        <div class="sentence-builder">
+          <p
+            style="
+              color: #333;
+              margin-bottom: 12px;
+              font-weight: 600;
+              font-size: 1.05em;
+            "
+          >
+            🎮 Drag the words below into the box to make a sentence. The correct
+            sentence is: <strong>"The cat is fast"</strong> 🐁💨
+          </p>
+          <div class="sentence-area" id="sentence-area">
+            <span style="color: #999; opacity: 0.6">👇 Drop words here</span>
+          </div>
+          <p
+            style="
+              color: #666;
+              margin-bottom: 12px;
+              font-weight: 600;
+              margin-top: 15px;
+            "
+          >
+            📦 Word Bank - Drag these words:
+          </p>
+          <div class="words-pool" id="words-pool">
+            <div
+              class="word-tile"
+              draggable="true"
+              ondragstart="dragStart(event)"
+              ondragend="dragEnd(event)"
+            >
+              The
+            </div>
+            <div
+              class="word-tile"
+              draggable="true"
+              ondragstart="dragStart(event)"
+              ondragend="dragEnd(event)"
+            >
+              cat
+            </div>
+            <div
+              class="word-tile"
+              draggable="true"
+              ondragstart="dragStart(event)"
+              ondragend="dragEnd(event)"
+            >
+              is
+            </div>
+            <div
+              class="word-tile"
+              draggable="true"
+              ondragstart="dragStart(event)"
+              ondragend="dragEnd(event)"
+            >
+              fast
+            </div>
+          </div>
+          <div style="margin-top: 15px; display: flex; gap: 10px">
+            <button
+              onclick="checkSentence()"
+              style="
+                padding: 12px 24px;
+                background: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 1em;
+                transition: all 0.3s ease;
+              "
+              onmouseover="this.style.background = '#45a049'"
+              onmouseout="this.style.background = '#4caf50'"
+            >
+              ✅ Check Sentence
+            </button>
+            <button
+              onclick="resetSentence()"
+              style="
+                padding: 12px 24px;
+                background: #2196f3;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 1em;
+                transition: all 0.3s ease;
+              "
+              onmouseover="this.style.background = '#1976d2'"
+              onmouseout="this.style.background = '#2196f3'"
+            >
+              🔄 Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed Challenge -->
+      <div class="section">
+        <div class="section-title">
+          ⚡ Challenge 5: Speed Challenge - Say Words Fast! 🏃
+        </div>
+        <div class="game-card">
+          <p style="color: #666; margin-bottom: 20px; font-weight: 600">
+            🎤 Click each word and say it out loud! How fast can you say all 4
+            words? Ready... Set... GO! ⏱️
+          </p>
+          <div class="speed-challenge">
+            <div
+              class="challenge-card"
+              onclick="playChallenge(this, 'pronunciation')"
+            >
+              <div class="challenge-word">📖 book</div>
+              <div class="challenge-hint">Say: "book"</div>
+            </div>
+            <div
+              class="challenge-card"
+              onclick="playChallenge(this, 'pronunciation')"
+            >
+              <div class="challenge-word">🌳 tree</div>
+              <div class="challenge-hint">Say: "tree"</div>
+            </div>
+            <div
+              class="challenge-card"
+              onclick="playChallenge(this, 'pronunciation')"
+            >
+              <div class="challenge-word">🏠 house</div>
+              <div class="challenge-hint">Say: "house"</div>
+            </div>
+            <div
+              class="challenge-card"
+              onclick="playChallenge(this, 'pronunciation')"
+            >
+              <div class="challenge-word">👫 friend</div>
+              <div class="challenge-hint">Say: "friend"</div>
+            </div>
+          </div>
+          <p
+            style="
+              color: #999;
+              font-size: 0.95em;
+              margin-top: 20px;
+              text-align: center;
+            "
+          >
+            💡 Tip: Click the word cards and practice saying each word 3 times!
+            The teacher can explain the funny pronunciation!
+          </p>
+        </div>
+      </div>
+
+      <!-- Notes Section -->
+      <div class="section">
+        <div class="section-title">📝 Teacher's Classroom Guide</div>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+          "
+        >
+          <div
+            style="
+              background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+              padding: 20px;
+              border-radius: 12px;
+              border-left: 5px solid #4caf50;
+            "
+          >
+            <p
+              style="
+                color: #1b5e20;
+                font-weight: 700;
+                margin-bottom: 10px;
+                font-size: 1.05em;
+              "
+            >
+              ✅ Riko's Strengths
+            </p>
+            <ul style="color: #333; list-style: none; padding: 0">
+              <li style="margin-bottom: 8px">
+                ✨ Great at identifying "sh" and "th" sounds
+              </li>
+              <li style="margin-bottom: 8px">
+                ✨ Excellent pronunciation skills
+              </li>
+              <li style="margin-bottom: 8px">✨ Strong rhyming awareness</li>
+              <li style="margin-bottom: 8px">✨ Fun, engaged learner!</li>
+            </ul>
+          </div>
+          <div
+            style="
+              background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+              padding: 20px;
+              border-radius: 12px;
+              border-left: 5px solid #2196f3;
+            "
+          >
+            <p
+              style="
+                color: #0d47a1;
+                font-weight: 700;
+                margin-bottom: 10px;
+                font-size: 1.05em;
+              "
+            >
+              📚 What to Focus On
+            </p>
+            <ul style="color: #333; list-style: none; padding: 0">
+              <li style="margin-bottom: 8px">📝 Sentence structure practice</li>
+              <li style="margin-bottom: 8px">
+                📝 Word spelling and recognition
+              </li>
+              <li style="margin-bottom: 8px">
+                📝 Listening comprehension games
+              </li>
+              <li style="margin-bottom: 8px">
+                📝 More confidence with longer words
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          style="
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 5px solid #ff9800;
+          "
+        >
+          <p
+            style="
+              color: #e65100;
+              font-weight: 700;
+              margin-bottom: 12px;
+              font-size: 1.05em;
+            "
+          >
+            💡 How to Use These Activities in Class:
+          </p>
+          <div style="color: #333; line-height: 1.8">
+            <p style="margin-bottom: 10px">
+              <strong>1. Warm-Up (5 mins):</strong> Read the warm-up questions
+              aloud together. Have Riko say the examples. Make it fun!
+            </p>
+            <p style="margin-bottom: 10px">
+              <strong>2. Games (15-20 mins):</strong> Work through the 5
+              challenges together. The "Treasure Hunt" theme makes it exciting.
+              Celebrate each win! 🎉
+            </p>
+            <p style="margin-bottom: 10px">
+              <strong>3. Practice (10 mins):</strong> Repeat the speed challenge
+              3-4 times. Riko can try to beat their own time!
+            </p>
+            <p style="margin-bottom: 0">
+              <strong>4. Wrap-up (5 mins):</strong> Ask Riko which activity was
+              their favorite and what they learned!
+            </p>
+          </div>
+        </div>
+        <div
+          style="
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 5px solid #4caf50;
+          "
+        >
+          <p
+            style="
+              color: #1b5e20;
+              font-weight: 700;
+              margin-bottom: 12px;
+              font-size: 1.05em;
+            "
+          >
+            🎯 Today's Learning Targets:
+          </p>
+          <ul style="color: #333; list-style: none; padding: 0">
+            <li
+              style="
+                margin-bottom: 8px;
+                padding: 10px;
+                background: white;
+                border-radius: 8px;
+              "
+            >
+              ✓ Recognize and practice "SH" consonant digraph (ship, shop,
+              shell)
+            </li>
+            <li
+              style="
+                margin-bottom: 8px;
+                padding: 10px;
+                background: white;
+                border-radius: 8px;
+              "
+            >
+              ✓ Understand and produce "TH" sound (thank, think, three)
+            </li>
+            <li
+              style="
+                margin-bottom: 8px;
+                padding: 10px;
+                background: white;
+                border-radius: 8px;
+              "
+            >
+              ✓ Identify rhyming words and create rhyme pairs
+            </li>
+            <li
+              style="
+                margin-bottom: 8px;
+                padding: 10px;
+                background: white;
+                border-radius: 8px;
+              "
+            >
+              ✓ Build correct sentence structure with simple words
+            </li>
+            <li style="padding: 10px; background: white; border-radius: 8px">
+              ✓ Build confidence and have FUN with English! 🌟
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Picture Reveal Game
+      function revealPicture(element, word) {
+        if (element.classList.contains("revealed")) {
+          element.classList.remove("revealed");
+          element.innerHTML = '<span style="opacity: 0.3">?</span>';
+        } else {
+          element.classList.add("revealed");
+          const emoji = word.split(" ")[0];
+          element.innerHTML = emoji;
+          element.title = word;
+        }
+      }
+
+      // Word Scramble Game
+      let scrambleSelected = [];
+      function selectScramble(element, letter) {
+        if (element.classList.contains("selected")) {
+          element.classList.remove("selected");
+          scrambleSelected = scrambleSelected.filter((l) => l !== letter);
+        } else {
+          element.classList.add("selected");
+          scrambleSelected.push(letter);
+        }
+        updateScrambleDisplay();
+        if (scrambleSelected.join("") === "school") {
+          setTimeout(() => alert("🎉 Correct! You spelled SCHOOL!"), 300);
+        }
+      }
+      function updateScrambleDisplay() {
+        const answer = document.getElementById("scramble-answer");
+        if (scrambleSelected.length === 0) {
+          answer.textContent = "_ _ _ _ _";
+        } else {
+          answer.textContent = scrambleSelected.join(" ").toUpperCase();
+        }
+      }
+      function resetScramble() {
+        scrambleSelected = [];
+        document.querySelectorAll(".scramble-tile").forEach((tile) => {
+          tile.classList.remove("selected");
+        });
+        updateScrambleDisplay();
+      }
+
+      // Quiz
+      let selectedAnswers = {};
+      function selectQuiz(element, isCorrect) {
+        const parent = element.parentElement;
+        parent.querySelectorAll(".quiz-option").forEach((opt) => {
+          opt.classList.remove("selected", "correct", "incorrect");
+        });
+        element.classList.add("selected");
+        if (isCorrect) {
+          element.classList.add("correct");
+        } else {
+          element.classList.add("incorrect");
+        }
+      }
+      function resetQuiz() {
+        document.querySelectorAll(".quiz-option").forEach((opt) => {
+          opt.classList.remove("selected", "correct", "incorrect");
+        });
+      }
+
+      // Memory Match Game
+      let matchedPairs = [];
+      function matchMemory(element, word) {
+        if (element.classList.contains("matched")) return;
+
+        element.style.opacity = "0.3";
+        const selected = document.querySelectorAll(
+          ".memory-card[style*='opacity: 0.3']",
+        );
+
+        if (selected.length === 2) {
+          const words = Array.from(selected).map((el) => el.textContent);
+          const rhymes = {
+            cat: "bat",
+            bat: "cat",
+            dog: "log",
+            log: "dog",
+            sit: "fit",
+            fit: "sit",
+          };
+
+          if (rhymes[words[0]] === words[1]) {
+            selected.forEach((el) => {
+              el.classList.add("matched");
+              el.style.opacity = "0.7";
+            });
+            matchedPairs.push(words);
+            updateMemoryScore();
+            if (matchedPairs.length === 3) {
+              setTimeout(() => alert("🎉 Perfect! All pairs matched!"), 300);
+            }
+          } else {
+            setTimeout(() => {
+              selected.forEach((el) => (el.style.opacity = "1"));
+            }, 1000);
+          }
+        }
+      }
+      function updateMemoryScore() {
+        document.getElementById("memory-score").textContent =
+          matchedPairs.length + "/3";
+      }
+
+      // Sentence Builder with Drag and Drop
+      let draggedElement = null;
+      function dragStart(event) {
+        draggedElement = event.target;
+        event.target.style.opacity = "0.5";
+      }
+      function dragEnd(event) {
+        event.target.style.opacity = "1";
+      }
+      function dragOver(event) {
+        event.preventDefault();
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        const sentenceArea = document.getElementById("sentence-area");
+        if (sentenceArea) {
+          sentenceArea.addEventListener("dragover", dragOver);
+          sentenceArea.addEventListener("drop", (event) => {
+            event.preventDefault();
+            if (draggedElement) {
+              const clone = draggedElement.cloneNode(true);
+              clone.style.opacity = "1";
+              clone.draggable = true;
+              clone.ondragstart = dragStart;
+              clone.ondragend = dragEnd;
+              const removeBtn = document.createElement("button");
+              removeBtn.innerHTML = "✕";
+              removeBtn.style.cssText =
+                "background: none; border: none; color: #f44336; cursor: pointer; font-weight: bold; margin-left: 5px;";
+              removeBtn.onclick = () => {
+                clone.remove();
+                if (
+                  sentenceArea.children.length === 1 &&
+                  sentenceArea.children[0].textContent.includes("Drag")
+                ) {
+                  sentenceArea.innerHTML =
+                    '<span style="color: #999; opacity: 0.6;">Drag words here →</span>';
+                }
+              };
+              if (sentenceArea.innerHTML.includes("Drag words here")) {
+                sentenceArea.innerHTML = "";
+              }
+              clone.parentElement = null;
+              sentenceArea.appendChild(clone);
+              sentenceArea.appendChild(removeBtn);
+            }
+          });
+        }
+      });
+      function checkSentence() {
+        const sentenceArea = document.getElementById("sentence-area");
+        const words = Array.from(sentenceArea.children)
+          .filter((el) => el.classList.contains("word-tile"))
+          .map((el) => el.textContent.trim());
+        const sentence = words.join(" ");
+        if (sentence.toLowerCase() === "the cat is fast") {
+          alert("🎉 Perfect! You made the sentence: 'The cat is fast'! ⭐⭐⭐");
+        } else if (sentence.length === 0) {
+          alert(
+            "Oops! You haven't placed any words yet. Drag the words into the box!",
+          );
+        } else {
+          alert("Not quite right. Try again! Remember: 'The cat is fast' 🐱💨");
+        }
+      }
+      function resetSentence() {
+        const sentenceArea = document.getElementById("sentence-area");
+        sentenceArea.innerHTML =
+          '<span style="color: #999; opacity: 0.6;">👇 Drop words here</span>';
+      }
+
+      // Speed Challenge
+      function playChallenge(element, type) {
+        const word = element.querySelector(".challenge-word").textContent;
+        // Simulate pronunciation feedback
+        element.style.background = "linear-gradient(135deg, #8bc34a, #7cb342)";
+        element.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          element.style.background =
+            "linear-gradient(135deg, #4caf50, #45a049)";
+          element.style.transform = "scale(1)";
+          alert("🎤 Try saying: " + word);
+        }, 200);
+      }
+    </script>
+  </body>
+</html>

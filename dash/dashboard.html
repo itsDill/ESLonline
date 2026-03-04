@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESL Online Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      header {
+        text-align: center;
+        color: white;
+        padding: 20px 20px 10px;
+        flex-shrink: 0;
+      }
+
+      h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        font-weight: 700;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .subtitle {
+        font-size: 0.9em;
+        opacity: 0.95;
+        font-weight: 300;
+        margin-bottom: 12px;
+      }
+
+      .dashboard {
+        flex: 1;
+        display: flex;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .section {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        overflow-y: auto;
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
+        opacity: 0;
+        transform: translateX(100%);
+        pointer-events: none;
+      }
+
+      .section.active {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+      }
+
+      .section.prev {
+        transform: translateX(-100%);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid;
+      }
+
+      .section-title {
+        font-size: 2.2em;
+        font-weight: 700;
+      }
+
+      .emoji {
+        font-size: 2.5em;
+      }
+
+      .teaching-section .section-header {
+        border-bottom-color: #667eea;
+        color: #667eea;
+      }
+
+      .website-section .section-header {
+        border-bottom-color: #f093fb;
+        color: #f093fb;
+      }
+
+      .learning-section .section-header {
+        border-bottom-color: #4facfe;
+        color: #4facfe;
+      }
+
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .cards-container.students-container,
+      .cards-container.learning-container {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+
+      .card {
+        background: white;
+        border-radius: 10px;
+        padding: 12px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+        cursor: pointer;
+      }
+
+      .card a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .card.student-card,
+      .card.learning-card {
+        padding: 12px 8px;
+        min-height: 100px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .teaching-section .card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        border-color: #667eea;
+      }
+
+      .teaching-section .card:hover {
+        border-color: #667eea;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .website-section .card {
+        background: linear-gradient(135deg, #fef5f8 0%, #fce4ec 100%);
+        border-color: #f093fb;
+      }
+
+      .website-section .card:hover {
+        border-color: #f093fb;
+        box-shadow: 0 8px 20px rgba(240, 147, 251, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .learning-section .card {
+        background: linear-gradient(135deg, #e0f7ff 0%, #b3e5fc 100%);
+        border-color: #4facfe;
+      }
+
+      .learning-section .card:hover {
+        border-color: #4facfe;
+        box-shadow: 0 8px 20px rgba(79, 172, 254, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .card-title {
+        font-size: 1.05em;
+        font-weight: 700;
+        color: #222;
+        margin: 0;
+      }
+
+      .card.student-card .card-title,
+      .card.learning-card .card-title {
+        font-size: 0.95em;
+      }
+
+      .card-icon {
+        font-size: 1.4em;
+        flex-shrink: 0;
+      }
+
+      .card.student-card .card-icon,
+      .card.learning-card .card-icon {
+        font-size: 1.8em;
+        margin-bottom: 5px;
+      }
+
+      .card-content {
+        flex: 1;
+        font-size: 0.9em;
+      }
+
+      .card.student-card .card-content,
+      .card.learning-card .card-content {
+        display: none;
+      }
+
+      .card-field {
+        margin-bottom: 8px;
+      }
+
+      .field-label {
+        font-size: 0.75em;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 2px;
+        font-weight: 600;
+      }
+
+      .field-value {
+        font-size: 0.9em;
+        color: #333;
+        word-break: break-word;
+      }
+
+      .field-value a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .field-value a:hover {
+        text-decoration: underline;
+      }
+
+      .card-footer {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: 0.75em;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .teaching-section .badge {
+        background: #667eea;
+        color: white;
+      }
+
+      .website-section .badge {
+        background: #f093fb;
+        color: white;
+      }
+
+      .website-section .badge-done {
+        background: #4facfe;
+        color: white;
+      }
+
+      .learning-section .badge {
+        background: #4facfe;
+        color: white;
+      }
+
+      .empty-container {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+
+      .empty-icon {
+        font-size: 4em;
+        margin-bottom: 15px;
+        opacity: 0.3;
+      }
+
+      .empty-text {
+        font-size: 1.1em;
+        color: #aaa;
+      }
+
+      .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.8em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 100;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-button:hover {
+        background: white;
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-button.prev {
+        left: 20px;
+      }
+
+      .nav-button.next {
+        right: 20px;
+      }
+
+      .section-indicator {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 0;
+      }
+
+      .indicator-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .indicator-dot.active {
+        background: white;
+        width: 25px;
+        border-radius: 5px;
+      }
+
+      .section-subtitle {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .login-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .login-screen.hidden {
+        display: none;
+      }
+
+      .login-box {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .login-title {
+        font-size: 2em;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .login-subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+        font-size: 0.95em;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95em;
+      }
+
+      .form-group input {
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .login-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .login-button:active {
+        transform: translateY(0);
+      }
+
+      .login-error {
+        color: #e53e3e;
+        font-size: 0.9em;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .login-error.show {
+        display: block;
+      }
+
+      .logout-button {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 15px;
+      }
+
+      .logout-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .user-info > div {
+        flex: 1;
+      }
+
+      @media (max-width: 768px) {
+        header {
+          padding: 20px 15px 15px;
+        }
+
+        h1 {
+          font-size: 1.8em;
+        }
+
+        .section {
+          padding: 20px;
+          border-radius: 15px;
+        }
+
+        .nav-button {
+          width: 45px;
+          height: 45px;
+          font-size: 1.5em;
+        }
+
+        .nav-button.prev {
+          left: 10px;
+        }
+
+        .nav-button.next {
+          right: 10px;
+        }
+
+        .cards-container {
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 12px;
+        }
+
+        .card {
+          padding: 15px;
+          min-height: 180px;
+        }
+
+        .card-title {
+          font-size: 0.95em;
+        }
+
+        .card-content {
+          font-size: 0.85em;
+        }
+
+        .logout-button {
+          padding: 6px 12px;
+          font-size: 0.85em;
+          margin-left: 10px;
+        }
+
+        .user-info {
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📊 Dashboard</h1>
+        <p class="subtitle">Teaching • Website • Learning</p>
+        <div class="section-indicator">
+          <div class="indicator-dot active" onclick="goToSection(0)"></div>
+          <div class="indicator-dot" onclick="goToSection(1)"></div>
+          <div class="indicator-dot" onclick="goToSection(2)"></div>
+        </div>
+      </header>
+
+      <div class="dashboard">
+        <!-- TEACHING SECTION -->
+        <div class="section teaching-section active">
+          <div class="section-header">
+            <span class="emoji">👨‍🏫</span>
+            <h2 class="section-title">Teaching</h2>
+          </div>
+
+          <div class="section-subtitle">👥 Students</div>
+          <div
+            class="cards-container students-container"
+            id="students-container"
+          >
+            <a href="student-solar.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Solar</h3>
+            </a>
+            <a href="student-wacha.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Wacha</h3>
+            </a>
+            <a href="student-kyoko.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Kyoko</h3>
+            </a>
+            <a href="student-riko.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Riko</h3>
+            </a>
+            <a href="student-tem.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Tem</h3>
+            </a>
+            <a href="student-bam.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Bam</h3>
+            </a>
+            <a href="student-noonim.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Noonim</h3>
+            </a>
+            <a href="student-teaw.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Teaw</h3>
+            </a>
+            <a href="student-sam.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Sam</h3>
+            </a>
+            <a href="student-noriko.html" class="card student-card">
+              <div class="card-header">
+                <span class="card-icon">👥</span>
+              </div>
+              <h3 class="card-title">Noriko</h3>
+            </a>
+          </div>
+
+          <div class="section-subtitle">📚 Materials</div>
+          <div class="cards-container" id="materials-container">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Grammar Fundamentals</h3>
+                <span class="card-icon">📖</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Type</div>
+                  <div class="field-value">Lesson</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Duration</div>
+                  <div class="field-value">6 weeks</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Status</div>
+                  <div class="field-value">Active</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">Updated</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Pronunciation</h3>
+                <span class="card-icon">🎤</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Type</div>
+                  <div class="field-value">Audio</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Duration</div>
+                  <div class="field-value">4 weeks</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Status</div>
+                  <div class="field-value">Active</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">Active</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Speaking Skills</h3>
+                <span class="card-icon">🗣️</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Type</div>
+                  <div class="field-value">Workshop</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Duration</div>
+                  <div class="field-value">8 weeks</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Status</div>
+                  <div class="field-value">Planned</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">Planning</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEBSITE SECTION -->
+        <div class="section website-section">
+          <div class="section-header">
+            <span class="emoji">🌐</span>
+            <h2 class="section-title">Website</h2>
+          </div>
+
+          <div class="section-subtitle">✅ Tasks</div>
+          <div class="cards-container" id="tasks-container">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Blog Updates</h3>
+                <span class="card-icon">✍️</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Description</div>
+                  <div class="field-value">Refresh grammar posts</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Priority</div>
+                  <div class="field-value">High</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Due</div>
+                  <div class="field-value">Mar 15</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">In Progress</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Mobile Layout</h3>
+                <span class="card-icon">📱</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Description</div>
+                  <div class="field-value">Fix responsive issues</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Priority</div>
+                  <div class="field-value">High</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Due</div>
+                  <div class="field-value">Mar 10</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">In Progress</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Vocab Builder</h3>
+                <span class="card-icon">📝</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Description</div>
+                  <div class="field-value">Interactive tool</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Priority</div>
+                  <div class="field-value">Medium</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Due</div>
+                  <div class="field-value">Mar 22</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">Done</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">SEO Optimization</h3>
+                <span class="card-icon">🔍</span>
+              </div>
+              <div class="card-content">
+                <div class="card-field">
+                  <div class="field-label">Description</div>
+                  <div class="field-value">Meta tags & keywords</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Priority</div>
+                  <div class="field-value">Medium</div>
+                </div>
+                <div class="card-field">
+                  <div class="field-label">Due</div>
+                  <div class="field-value">Mar 20</div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="badge">To Do</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEARNING SECTION -->
+        <div class="section learning-section">
+          <div class="section-header">
+            <span class="emoji">🎓</span>
+            <h2 class="section-title">Learning</h2>
+          </div>
+
+          <div class="section-subtitle">🃏 Learning Modules</div>
+          <div
+            class="cards-container learning-container"
+            id="learning-container"
+          >
+            <a href="learn-english.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🇬🇧</span>
+              </div>
+              <h3 class="card-title">English</h3>
+            </a>
+            <a href="learn-thai.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🇹🇭</span>
+              </div>
+              <h3 class="card-title">Thai</h3>
+            </a>
+            <a href="learn-zulu.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🇿🇦</span>
+              </div>
+              <h3 class="card-title">Zulu</h3>
+            </a>
+            <a href="learn-chinese.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🇨🇳</span>
+              </div>
+              <h3 class="card-title">Chinese</h3>
+            </a>
+            <a href="learn-japanese.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🇯🇵</span>
+              </div>
+              <h3 class="card-title">Japanese</h3>
+            </a>
+            <a href="learn-javascript.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">💛</span>
+              </div>
+              <h3 class="card-title">JavaScript</h3>
+            </a>
+            <a href="learn-html-css.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🌐</span>
+              </div>
+              <h3 class="card-title">HTML & CSS</h3>
+            </a>
+            <a href="learn-websec.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🔒</span>
+              </div>
+              <h3 class="card-title">Web Security</h3>
+            </a>
+            <a href="learn-seo.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">🔍</span>
+              </div>
+              <h3 class="card-title">SEO</h3>
+            </a>
+            <a href="learn-economics.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">📊</span>
+              </div>
+              <h3 class="card-title">Economics</h3>
+            </a>
+            <a href="learn-history.html" class="card learning-card">
+              <div class="card-header">
+                <span class="card-icon">📚</span>
+              </div>
+              <h3 class="card-title">History</h3>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button class="nav-button prev" onclick="previousSection()">❮</button>
+        <button class="nav-button next" onclick="nextSection()">❯</button>
+      </div>
+    </div>
+
+    <script>
+      // Teacher credentials
+      const VALID_CREDENTIALS = {
+        username: "Dill",
+        password: "12345",
+      };
+
+      // Check login state on page load
+      function checkLogin() {
+        const isLoggedIn = localStorage.getItem("dashboardLoggedIn") === "true";
+        const loginScreen = document.getElementById("login-screen");
+        const container = document.querySelector(".container");
+
+        if (isLoggedIn) {
+          loginScreen.classList.add("hidden");
+          container.style.display = "flex";
+        } else {
+          loginScreen.classList.remove("hidden");
+          container.style.display = "none";
+        }
+      }
+
+      // Handle login form submission
+      function handleLogin(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const loginError = document.getElementById("login-error");
+
+        if (
+          username === VALID_CREDENTIALS.username &&
+          password === VALID_CREDENTIALS.password
+        ) {
+          localStorage.setItem("dashboardLoggedIn", "true");
+          localStorage.setItem("teacherName", username);
+          loginError.classList.remove("show");
+          checkLogin();
+          document.getElementById("login-form").reset();
+        } else {
+          loginError.classList.add("show");
+        }
+      }
+
+      // Handle logout
+      function handleLogout() {
+        localStorage.removeItem("dashboardLoggedIn");
+        localStorage.removeItem("teacherName");
+        checkLogin();
+      }
+
+      // Check login status when page loads
+      document.addEventListener("DOMContentLoaded", checkLogin);
+
+      // Dashboard functionality starts here
+      let currentSection = 0;
+      const sections = document.querySelectorAll(".section");
+      const indicators = document.querySelectorAll(".indicator-dot");
+
+      function updateSection() {
+        sections.forEach((section, index) => {
+          section.classList.remove("active", "prev");
+          if (index === currentSection) {
+            section.classList.add("active");
+          } else if (index < currentSection) {
+            section.classList.add("prev");
+          }
+        });
+
+        indicators.forEach((dot, index) => {
+          dot.classList.toggle("active", index === currentSection);
+        });
+      }
+
+      function nextSection() {
+        currentSection = (currentSection + 1) % sections.length;
+        updateSection();
+      }
+
+      function previousSection() {
+        currentSection =
+          (currentSection - 1 + sections.length) % sections.length;
+        updateSection();
+      }
+
+      function goToSection(index) {
+        currentSection = index;
+        updateSection();
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") nextSection();
+        if (e.key === "ArrowLeft") previousSection();
+      });
+    </script>
+  </body>
+</html>
