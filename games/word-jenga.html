@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Word Jenga - ESL Fun Online</title>
-    <link rel="stylesheet" href="../css/styles.css" />
     <style>
       * {
         margin: 0;
@@ -15,50 +14,301 @@
       body {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         padding: 20px;
-        animation: fadeIn 0.6s ease-in;
+        overflow-x: hidden;
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      .game-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
       }
 
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.95;
       }
 
       .game-container {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .tower-area {
         background: white;
         border-radius: 20px;
-        padding: 50px 40px;
-        text-align: center;
+        padding: 40px;
         box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
-        max-width: 700px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 600px;
+        position: relative;
+      }
+
+      .tower {
+        perspective: 1000px;
         width: 100%;
-        animation: slideUp 0.7s ease-out;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      .tower-stack {
+        position: relative;
+        width: 120px;
+        height: 500px;
+      }
+
+      .block {
+        position: absolute;
+        width: 120px;
+        height: 40px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        user-select: none;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .block:hover {
+        transform: translateX(-8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .block.removing {
+        animation: slideOut 0.5s ease-in forwards;
+      }
+
+      @keyframes slideOut {
+        to {
+          opacity: 0;
+          transform: translateX(-150px);
+        }
+      }
+
+      .block.wobble {
+        animation: wobble 0.4s ease-in-out infinite;
+      }
+
+      @keyframes wobble {
+        0% {
+          transform: rotateZ(0deg);
+        }
+        25% {
+          transform: rotateZ(-2deg);
+        }
+        50% {
+          transform: rotateZ(2deg);
+        }
+        75% {
+          transform: rotateZ(-1deg);
+        }
+        100% {
+          transform: rotateZ(0deg);
+        }
+      }
+
+      .tower-stack.collapse {
+        animation: topple 0.9s ease-in forwards;
+      }
+
+      @keyframes topple {
+        0% {
+          transform: rotateZ(0deg);
+          transform-origin: center bottom;
+        }
+        100% {
+          transform: rotateZ(-40deg);
+          transform-origin: center bottom;
+        }
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .score-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+        text-align: center;
+      }
+
+      .score-panel h3 {
+        color: #667eea;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+
+      .score-value {
+        font-size: 3em;
+        color: #667eea;
+        font-weight: 700;
+        margin: 15px 0;
+      }
+
+      .score-label {
+        color: #999;
+        font-size: 0.95em;
+      }
+
+      .instruction-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+      }
+
+      .instruction-panel h3 {
+        color: #667eea;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .instruction-panel p {
+        color: #666;
+        font-size: 0.95em;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .word-display {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 1.3em;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 15px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mic-button {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #6bcf7f 0%, #51cf66 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(107, 207, 127, 0.3);
+      }
+
+      .mic-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(107, 207, 127, 0.4);
+      }
+
+      .mic-button.listening {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+        50% {
+          box-shadow: 0 4px 25px rgba(255, 107, 107, 0.6);
+        }
+      }
+
+      .feedback {
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.95em;
+        text-align: center;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 12px;
+      }
+
+      .feedback.success {
+        background: #d4edda;
+        color: #155724;
+        font-weight: 600;
+      }
+
+      .feedback.error {
+        background: #f8d7da;
+        color: #721c24;
+        font-weight: 600;
+      }
+
+      .feedback.listening-text {
+        background: #cfe2ff;
+        color: #084298;
+        font-size: 0.9em;
+      }
+
+      .game-over-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .game-over-overlay.show {
+        display: flex;
+      }
+
+      .game-over-modal {
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        text-align: center;
+        max-width: 500px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.5s ease-out;
       }
 
       @keyframes slideUp {
         from {
           opacity: 0;
-          transform: translateY(30px);
+          transform: translateY(50px);
         }
         to {
           opacity: 1;
@@ -66,210 +316,429 @@
         }
       }
 
-      .game-icon {
-        font-size: 100px;
-        margin: 20px 0 30px;
-        animation: float 3s ease-in-out infinite;
-        display: inline-block;
-      }
-
-      .game-title {
-        color: #667eea;
-        font-size: 2.8em;
-        margin-bottom: 10px;
-        font-weight: 700;
-        letter-spacing: 1px;
-      }
-
-      .game-subtitle {
-        color: #999;
-        font-size: 0.95em;
+      .game-over-modal h2 {
+        font-size: 2.5em;
         margin-bottom: 20px;
-        font-weight: 300;
-      }
-
-      .game-description {
-        color: #555;
-        font-size: 1.1em;
-        line-height: 1.8;
-        margin: 30px 0;
-      }
-
-      .features {
-        background: #f8f9ff;
-        border-radius: 15px;
-        padding: 25px;
-        margin: 30px 0;
-        text-align: left;
-      }
-
-      .features h3 {
         color: #667eea;
-        font-size: 1.3em;
-        margin-bottom: 15px;
-        text-align: center;
       }
 
-      .features ul {
-        list-style: none;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
+      .game-over-modal.collapsed h2 {
+        color: #ff6b6b;
       }
 
-      .features li {
-        color: #666;
-        padding: 8px 0;
-        font-size: 0.95em;
-        display: flex;
-        align-items: center;
-      }
-
-      .features li:before {
-        content: "✨";
-        margin-right: 10px;
+      .game-over-stats {
+        margin: 30px 0;
         font-size: 1.2em;
+        color: #666;
       }
 
-      .coming-soon {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 18px 35px;
-        border-radius: 50px;
-        font-size: 1em;
+      .game-over-stats p {
+        margin: 10px 0;
         font-weight: 600;
-        display: inline-block;
+      }
+
+      .game-over-stats .score {
+        font-size: 2.5em;
+        color: #667eea;
         margin: 20px 0;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        letter-spacing: 0.5px;
       }
 
-      .difficulty-badge {
-        display: inline-block;
-        background: #feca57;
-        color: #333;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.85em;
-        font-weight: 600;
-        margin-top: 15px;
+      .game-over-modal.collapsed .score {
+        color: #ff6b6b;
       }
 
       .button-group {
-        margin-top: 35px;
         display: flex;
         gap: 15px;
+        margin-top: 30px;
         justify-content: center;
         flex-wrap: wrap;
       }
 
-      .back-button {
-        display: inline-flex;
-        align-items: center;
-        padding: 13px 28px;
-        background-color: #667eea;
-        color: white;
-        text-decoration: none;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-        border: 2px solid #667eea;
-      }
-
-      .back-button:hover {
-        background-color: #764ba2;
-        border-color: #764ba2;
-        box-shadow: 0 8px 25px rgba(118, 75, 162, 0.4);
-        transform: translateY(-2px);
-      }
-
-      .notify-button {
-        display: inline-flex;
-        align-items: center;
-        padding: 13px 28px;
-        background-color: white;
-        color: #667eea;
-        text-decoration: none;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: 2px solid #667eea;
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1em;
+        font-weight: 700;
         cursor: pointer;
+        transition: all 0.3s ease;
       }
 
-      .notify-button:hover {
-        background-color: #f0f3ff;
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-secondary:hover {
+        background: #f0f3ff;
         transform: translateY(-2px);
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 768px) {
         .game-container {
-          padding: 30px 25px;
-        }
-
-        .game-title {
-          font-size: 2.2em;
-        }
-
-        .game-icon {
-          font-size: 70px;
-        }
-
-        .features ul {
           grid-template-columns: 1fr;
         }
 
-        .button-group {
-          flex-direction: column;
+        .header h1 {
+          font-size: 1.8em;
         }
 
-        .back-button,
-        .notify-button {
-          width: 100%;
-          justify-content: center;
+        .tower-area {
+          min-height: 400px;
+        }
+
+        .tower-stack {
+          height: 350px;
+        }
+
+        .game-over-modal {
+          padding: 30px 20px;
         }
       }
     </style>
   </head>
   <body>
-    <div class="game-container">
-      <h1 class="game-title">🎮 Word Jenga</h1>
-      <p class="game-subtitle">A Tower-Building Vocabulary Adventure</p>
-      <div class="game-icon">🏗️</div>
-
-      <p class="game-description">
-        Remove wooden blocks and complete English vocabulary challenges! Test
-        your knowledge and balance your skills in this tower-toppling word game.
-        Build your English vocabulary one block at a time!
-      </p>
-
-      <div class="features">
-        <h3>What You'll Learn</h3>
-        <ul>
-          <li>Vocabulary Building</li>
-          <li>Word Recognition</li>
-          <li>Strategic Thinking</li>
-          <li>Quick Reflexes</li>
-          <li>Memory Skills</li>
-          <li>Risk Assessment</li>
-        </ul>
+    <div class="game-wrapper">
+      <div class="header">
+        <h1>🎮 Word Jenga</h1>
+        <p>Speak the word, pull the block, keep the tower standing!</p>
       </div>
 
-      <div class="difficulty-badge">🟨 Intermediate Level</div>
+      <div class="game-container">
+        <div class="tower-area">
+          <div class="tower">
+            <div class="tower-stack" id="towerStack"></div>
+          </div>
+        </div>
 
-      <div class="coming-soon">Coming Soon</div>
+        <div class="sidebar">
+          <div class="score-panel">
+            <h3>Score</h3>
+            <div class="score-value" id="score">0</div>
+            <div class="score-label">Blocks Removed</div>
+          </div>
 
-      <div class="button-group">
-        <button class="notify-button" onclick="notifyMe()">🔔 Notify Me</button>
-        <a href="../games/games.html" class="back-button">← Back to Games</a>
+          <div class="instruction-panel">
+            <h3>📝 How to Play</h3>
+            <div class="word-display" id="wordDisplay">Speak the Word</div>
+            <button class="mic-button" id="micButton">🎤 Say the Word</button>
+            <div class="feedback" id="feedback"></div>
+            <button
+              class="btn btn-secondary"
+              id="skipBtn"
+              style="width: 100%; margin-top: 10px"
+            >
+              ⏭️ Skip Word
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-over-overlay" id="gameOverOverlay">
+        <div class="game-over-modal" id="gameOverModal">
+          <h2 id="gameOverTitle">🎉 Victory!</h2>
+          <div class="game-over-stats">
+            <p>Tower Height: <span id="finalScore">0</span> Blocks</p>
+            <div class="score">Game Over</div>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="location.reload()">
+              🔄 Play Again
+            </button>
+            <a
+              href="../games/games.html"
+              class="btn btn-secondary"
+              style="text-decoration: none"
+            >
+              ← Back to Games
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
     <script>
-      function notifyMe() {
-        alert("📬 You'll be notified when Word Jenga is ready to play!");
+      // Game State
+      const gameState = {
+        blocks: [],
+        score: 0,
+        gameOver: false,
+        currentWord: null,
+        currentListening: false,
+      };
+
+      // Vocabulary List
+      const vocabulary = [
+        "apple",
+        "book",
+        "cat",
+        "dog",
+        "elephant",
+        "flower",
+        "grape",
+        "house",
+        "island",
+        "jungle",
+        "kitchen",
+        "lemon",
+        "mountain",
+        "notebook",
+        "ocean",
+        "pencil",
+        "queen",
+        "rainbow",
+        "sun",
+        "table",
+        "umbrella",
+        "violin",
+        "water",
+        "yellow",
+        "zebra",
+        "happy",
+        "beautiful",
+        "strong",
+        "quick",
+        "bright",
+        "calm",
+        "dangerous",
+        "excellent",
+        "friendly",
+        "gentle",
+        "helpful",
+      ];
+
+      // Initialize Game
+      function initGame() {
+        const towerStack = document.getElementById("towerStack");
+        towerStack.innerHTML = "";
+
+        gameState.blocks = [];
+        gameState.score = 0;
+        gameState.gameOver = false;
+
+        // Create 15 blocks (no text)
+        const blockCount = 15;
+        for (let i = 0; i < blockCount; i++) {
+          const block = document.createElement("div");
+          block.className = "block";
+          block.style.bottom = i * 40 + "px";
+          block.dataset.index = i;
+
+          towerStack.appendChild(block);
+          gameState.blocks.push({
+            element: block,
+            index: i,
+            removed: false,
+          });
+        }
+
+        // Choose first word
+        chooseNewWord();
+        updateScore();
+        clearFeedback();
       }
+
+      function chooseNewWord() {
+        gameState.currentWord = getRandomWord();
+        document.getElementById("wordDisplay").textContent =
+          gameState.currentWord.toUpperCase();
+        clearFeedback();
+      }
+
+      function getRandomWord() {
+        return vocabulary[Math.floor(Math.random() * vocabulary.length)];
+      }
+
+      function removeRandomBlock() {
+        if (gameState.gameOver) return;
+
+        // Get available blocks
+        const availableBlocks = gameState.blocks.filter((b) => !b.removed);
+        if (availableBlocks.length === 0) return;
+
+        // Pick a random block
+        const randomBlock =
+          availableBlocks[Math.floor(Math.random() * availableBlocks.length)];
+
+        randomBlock.removed = true;
+        randomBlock.element.classList.add("removing");
+        gameState.score++;
+        updateScore();
+
+        // Wobble remaining blocks
+        setTimeout(() => {
+          wobbleTower();
+          randomBlock.element.style.display = "none";
+
+          // Calculate stability based on blocks removed
+          const blocksRemoved = gameState.blocks.filter(
+            (b) => b.removed,
+          ).length;
+          const collapseChance = blocksRemoved / gameState.blocks.length;
+
+          if (Math.random() < collapseChance * 0.35) {
+            // Higher chance of collapse as more blocks are removed
+            setTimeout(endGame, 600);
+          } else {
+            // Choose next word
+            setTimeout(() => {
+              chooseNewWord();
+            }, 500);
+          }
+        }, 300);
+      }
+
+      function wobbleTower() {
+        const stack = document.getElementById("towerStack");
+        stack.classList.add("wobble");
+        setTimeout(() => {
+          stack.classList.remove("wobble");
+        }, 300);
+      }
+
+      function updateScore() {
+        document.getElementById("score").textContent = gameState.score;
+      }
+
+      function clearFeedback() {
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "";
+        feedback.className = "feedback";
+      }
+
+      // Speech Recognition
+      let recognition;
+      if (
+        "webkitSpeechRecognition" in window ||
+        "SpeechRecognition" in window
+      ) {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+          gameState.currentListening = true;
+          document.getElementById("micButton").classList.add("listening");
+          document.getElementById("feedback").textContent = "🎤 Listening...";
+          document.getElementById("feedback").className =
+            "feedback listening-text";
+        };
+
+        recognition.onresult = (event) => {
+          let transcript = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+          }
+
+          if (event.results[event.results.length - 1].isFinal) {
+            transcript = transcript.toLowerCase().trim();
+            checkWord(transcript);
+          }
+        };
+
+        recognition.onerror = (event) => {
+          document.getElementById("feedback").textContent =
+            "🎤 Unable to recognize. Try again!";
+          document.getElementById("feedback").className = "feedback error";
+        };
+
+        recognition.onend = () => {
+          gameState.currentListening = false;
+          document.getElementById("micButton").classList.remove("listening");
+        };
+      }
+
+      function startListening() {
+        if (gameState.gameOver || !recognition) {
+          return;
+        }
+        recognition.start();
+      }
+
+      function checkWord(spoken) {
+        const correctWord = gameState.currentWord.toLowerCase();
+        const feedback = document.getElementById("feedback");
+
+        // Check if spoken word matches (flexible matching)
+        if (
+          spoken.includes(correctWord) ||
+          correctWord.includes(spoken.split(" ")[0])
+        ) {
+          feedback.textContent = `✅ Correct! "${spoken}" - Block removed!`;
+          feedback.className = "feedback success";
+          setTimeout(removeRandomBlock, 600);
+        } else {
+          feedback.textContent = `❌ Wrong word. You said: "${spoken}"`;
+          feedback.className = "feedback error";
+        }
+      }
+
+      function skipBlock() {
+        if (gameState.gameOver) return;
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "⏭️ Word skipped!";
+        feedback.className = "feedback error";
+        setTimeout(() => {
+          chooseNewWord();
+        }, 500);
+      }
+
+      function endGame() {
+        gameState.gameOver = true;
+        const stack = document.getElementById("towerStack");
+        stack.classList.add("collapse");
+
+        setTimeout(() => {
+          showGameOver();
+        }, 900);
+      }
+
+      function showGameOver() {
+        const overlay = document.getElementById("gameOverOverlay");
+        const modal = document.getElementById("gameOverModal");
+        const title = document.getElementById("gameOverTitle");
+        const finalScore = document.getElementById("finalScore");
+
+        finalScore.textContent = gameState.score;
+
+        if (gameState.score >= 10) {
+          title.textContent = "🎉 Excellent Job!";
+          modal.classList.remove("collapsed");
+        } else if (gameState.score >= 5) {
+          title.textContent = "👏 Good Try!";
+          modal.classList.remove("collapsed");
+        } else {
+          title.textContent = "💥 Tower Collapsed!";
+          modal.classList.add("collapsed");
+        }
+
+        overlay.classList.add("show");
+      }
+
+      // Event Listeners
+      document
+        .getElementById("micButton")
+        .addEventListener("click", startListening);
+      document.getElementById("skipBtn").addEventListener("click", skipBlock);
+
+      // Initialize game on load
+      window.addEventListener("load", initGame);
     </script>
   </body>
 </html>
