@@ -267,7 +267,7 @@
       }
 
       .week-content.open {
-        max-height: 2000px;
+        max-height: 10000px;
       }
 
       .week-section {
@@ -345,45 +345,159 @@
       }
 
       .flashcard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
       }
 
-      .flashcard {
-        background: white;
-        border: 2px solid #10b981;
-        border-radius: 8px;
-        padding: 15px;
+      .anki-flashcard-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .anki-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 40px;
         cursor: pointer;
         transition: all 0.3s ease;
         perspective: 1000px;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
       }
 
-      .flashcard:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);
+      .anki-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(102, 126, 234, 0.35);
       }
 
-      .flashcard-front {
-        color: #10b981;
+      .anki-card.flipped {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+
+      .anki-card-front {
+        color: white;
         font-weight: 700;
         text-align: center;
+        font-size: 1.8em;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .anki-card-back {
+        color: white;
+        text-align: center;
+        font-size: 1em;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        opacity: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .anki-card.flipped .anki-card-back {
+        max-height: 300px;
+        opacity: 1;
+      }
+
+      .anki-card-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .anki-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
         font-size: 0.95em;
       }
 
-      .flashcard-back {
-        color: #555;
+      .anki-btn-know {
+        background: #10b981;
+        color: white;
+      }
+
+      .anki-btn-know:hover {
+        background: #059669;
+        transform: translateY(-2px);
+      }
+
+      .anki-btn-dontknow {
+        background: #ef4444;
+        color: white;
+      }
+
+      .anki-btn-dontknow:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+      }
+
+      .anki-progress {
         text-align: center;
+        padding: 10px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        color: #666;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .anki-progress.mastered {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #f0f3ff;
+      }
+
+      .mini-card {
+        background: white;
+        border: 2px solid #10b981;
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .mini-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+      }
+
+      .mini-card-front {
+        color: #10b981;
+        font-weight: 700;
         font-size: 0.85em;
+      }
+
+      .mini-card-back {
+        color: #555;
+        font-size: 0.75em;
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
         opacity: 0;
       }
 
-      .flashcard.flipped .flashcard-back {
-        max-height: 200px;
+      .mini-card.flipped .mini-card-back {
+        max-height: 100px;
         opacity: 1;
       }
 
@@ -471,18 +585,43 @@
       <div class="section">
         <div class="section-title">📖 Learning Materials</div>
         <div class="resources-grid">
-          <a href="#studentBook" class="resource-link" id="studentBookLink">
+          <a
+            href="business/Business_Result_Elementary_Student_39_s_Book.pdf"
+            class="resource-link"
+            id="studentBookLink"
+            target="_blank"
+          >
             <span class="resource-icon">📕</span>
             <span>Student Book</span>
           </a>
-          <a href="#teacherBook" class="resource-link" id="teacherBookLink">
+          <a
+            href="business/Business_Result_Elementary_Teacher_39_s_Book.pdf"
+            class="resource-link"
+            id="teacherBookLink"
+            target="_blank"
+          >
             <span class="resource-icon">📗</span>
             <span>Teacher's Book</span>
           </a>
-          <a href="#audioFiles" class="resource-link" id="audioFilesLink">
+          <div
+            class="resource-link"
+            style="
+              cursor: pointer;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+            "
+            onclick="
+              document
+                .getElementById('audioPlayer')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
             <span class="resource-icon">🎵</span>
             <span>Audio Files</span>
-          </a>
+          </div>
         </div>
         <p style="color: #666; font-size: 0.85em; margin-top: 15px">
           💡 Download or stream these resources to support your learning
@@ -490,8 +629,194 @@
       </div>
 
       <!-- Business Phrasal Verbs & Idioms -->
+      <div class="section"></div>
+
+      <!-- Business Phrasal Verbs & Idioms -->
       <div class="section">
-        <div class="section-title">💼 Business Phrasal Verbs</div>
+        <div class="section-title">
+          � Casual vs Formal Conversation Questions
+        </div>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+          "
+        >
+          <!-- Casual Questions Dropdown -->
+          <div
+            style="
+              background: #f0f8ff;
+              padding: 15px;
+              border-radius: 8px;
+              border-left: 4px solid #667eea;
+            "
+          >
+            <div
+              style="
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: 600;
+                color: #667eea;
+              "
+              onclick="
+                this.parentElement.querySelector(
+                  '.casual-content',
+                ).style.display =
+                  this.parentElement.querySelector('.casual-content').style
+                    .display === 'none'
+                    ? 'block'
+                    : 'none';
+                this.querySelector('.toggle').style.transform =
+                  this.querySelector('.toggle').style.transform ===
+                  'rotate(180deg)'
+                    ? 'rotate(0deg)'
+                    : 'rotate(180deg)';
+              "
+            >
+              <span>😊 Casual Questions</span>
+              <span class="toggle" style="transition: transform 0.3s ease"
+                >▼</span
+              >
+            </div>
+            <div class="casual-content" style="margin-top: 12px; display: none">
+              <p style="font-size: 0.9em; color: #555; margin: 8px 0">
+                <strong>Questions to ask:</strong>
+              </p>
+              <ul
+                style="
+                  margin-left: 20px;
+                  color: #555;
+                  font-size: 0.9em;
+                  line-height: 1.8;
+                "
+              >
+                <li>"What do you do?"</li>
+                <li>"Where are you from?"</li>
+                <li>"How's work going?"</li>
+                <li>"What company are you with?"</li>
+                <li>"How long have you been there?"</li>
+              </ul>
+              <p
+                style="
+                  font-size: 0.9em;
+                  color: #555;
+                  margin-top: 12px;
+                  margin-bottom: 8px;
+                "
+              >
+                <strong>Ways to respond:</strong>
+              </p>
+              <ul
+                style="
+                  margin-left: 20px;
+                  color: #555;
+                  font-size: 0.9em;
+                  line-height: 1.8;
+                "
+              >
+                <li>"I'm a Sales Rep for a tech company."</li>
+                <li>"I'm from Brazil, but I work here now."</li>
+                <li>"Pretty good! We just finished a big project."</li>
+                <li>"Yeah, it's a cool place to work."</li>
+                <li>"About 3 years now. Really enjoying it."</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Formal Questions Dropdown -->
+          <div
+            style="
+              background: #f5f0ff;
+              padding: 15px;
+              border-radius: 8px;
+              border-left: 4px solid #764ba2;
+            "
+          >
+            <div
+              style="
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: 600;
+                color: #764ba2;
+              "
+              onclick="
+                this.parentElement.querySelector(
+                  '.formal-content',
+                ).style.display =
+                  this.parentElement.querySelector('.formal-content').style
+                    .display === 'none'
+                    ? 'block'
+                    : 'none';
+                this.querySelector('.toggle').style.transform =
+                  this.querySelector('.toggle').style.transform ===
+                  'rotate(180deg)'
+                    ? 'rotate(0deg)'
+                    : 'rotate(180deg)';
+              "
+            >
+              <span>🎩 Formal Questions</span>
+              <span class="toggle" style="transition: transform 0.3s ease"
+                >▼</span
+              >
+            </div>
+            <div class="formal-content" style="margin-top: 12px; display: none">
+              <p style="font-size: 0.9em; color: #555; margin: 8px 0">
+                <strong>Questions to ask:</strong>
+              </p>
+              <ul
+                style="
+                  margin-left: 20px;
+                  color: #555;
+                  font-size: 0.9em;
+                  line-height: 1.8;
+                "
+              >
+                <li>"May I ask what your position is?"</li>
+                <li>"What is your company's primary focus?"</li>
+                <li>
+                  "How many years of experience do you have in this field?"
+                </li>
+                <li>"What are your main responsibilities?"</li>
+                <li>
+                  "Could you tell me about your organization's structure?"
+                </li>
+              </ul>
+              <p
+                style="
+                  font-size: 0.9em;
+                  color: #555;
+                  margin-top: 12px;
+                  margin-bottom: 8px;
+                "
+              >
+                <strong>Professional responses:</strong>
+              </p>
+              <ul
+                style="
+                  margin-left: 20px;
+                  color: #555;
+                  font-size: 0.9em;
+                  line-height: 1.8;
+                "
+              >
+                <li>"I hold the position of Senior Project Manager."</li>
+                <li>
+                  "Our company specializes in sustainable energy solutions."
+                </li>
+                <li>"I have been with the organization for five years."</li>
+                <li>"I oversee client relations and project delivery."</li>
+                <li>"We operate with a centralized management structure."</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="section-title">�💼 Business Phrasal Verbs</div>
         <div class="vocabulary-grid">
           <div class="vocab-card">
             <div class="vocab-term">Break down</div>
@@ -664,271 +989,1847 @@
         <div class="content" style="color: #666"></div>
       </div>
 
+      <!-- Course Overview -->
+      <div class="section">
+        <div class="section-title">
+          📖 Oxford Business Result - 12 Unit Overview
+        </div>
+        <div
+          style="
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+          "
+        >
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 1: Jobs</strong><br />Countries,
+            nationalities, jobs, introductions
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 2: Products & Services</strong
+            ><br />Company types, phone calls, numbers
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 3: Location</strong
+            ><br />Workplace locations, addresses, ordering
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 4: Technology</strong
+            ><br />Technology, activities, asking for help
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 5: Communication</strong
+            ><br />Documents, past events, problem solving
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 6: Networking</strong
+            ><br />Social media, trips, conversation skills
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 7: Departments</strong
+            ><br />Departments, directions, phone messages
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 8: Employment</strong
+            ><br />Skills, experience, meeting arrangements
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 9: Competition</strong
+            ><br />Comparing products, prices, competition
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 10: Teamwork</strong
+            ><br />Teamwork, personality types, opinions
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 11: Travel</strong><br />Hotels,
+            restaurants, money, future plans
+          </div>
+          <div
+            style="
+              background: white;
+              padding: 12px;
+              border-radius: 8px;
+              border-left: 3px solid #667eea;
+              font-size: 0.9em;
+            "
+          >
+            <strong style="color: #667eea">Unit 12: Schedules</strong
+            ><br />Calendars, schedules, dates & times
+          </div>
+        </div>
+      </div>
+
       <!-- Weekly Lessons -->
       <div class="section weeks-container">
         <div class="section-title">📖 Weekly Lesson Plan</div>
 
         <!-- Week 1 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 1: Company Culture & Introductions</h3>
+          <h3>Week 1: Unit 1 - Jobs, Countries & Introductions</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
-          <!-- Objectives -->
+          <!-- Learning Objectives -->
           <div class="week-section">
             <div class="week-section-title">🎯 Learning Objectives</div>
             <div class="lesson-objectives">
               <ul>
-                <li>Understand company culture and workplace communication</li>
-                <li>Learn to introduce yourself professionally in business</li>
-                <li>Master key business phrasal verbs: Break down, Bring up</li>
-                <li>Practice formal email greetings and closings</li>
-                <li>Develop skills for first meetings and networking</li>
+                <li>Say what you do and where you are from</li>
+                <li>Ask about personal information (name, job, nationality)</li>
+                <li>Learn countries, nationalities, and job titles</li>
+                <li>Introduce yourself and others professionally</li>
+                <li>Spell your name, company, and job title</li>
+                <li>Say hello and goodbye in business settings</li>
               </ul>
             </div>
           </div>
 
-          <!-- Grammar & Language -->
+          <!-- Working with Words Part 1: Countries & Nationalities -->
           <div class="week-section">
             <div class="week-section-title">
-              💬 Grammar Focus: Present Tenses & Reported Speech
+              📝 Working with Words (Part 1): Countries, Nationalities & Jobs
             </div>
+
             <div class="grammar-content">
-              <h4>Present Simple (routines and facts)</h4>
-              <div class="grammar-example">
-                Our company focuses on innovation and customer satisfaction.
+              <h4>Countries & Nationalities:</h4>
+              <div class="practice-section" style="margin: 10px 0">
+                <div class="practice-item">
+                  🇮🇳 India → Indian | 🇯🇵 Japan → Japanese | 🇵🇱 Poland → Polish
+                </div>
+                <div class="practice-item">
+                  🇧🇷 Brazil → Brazilian | 🇮🇹 Italy → Italian | 🇬🇧 UK → British
+                </div>
+                <div class="practice-item">
+                  🇺🇸 USA → American | 🇿🇦 South Africa → South African
+                </div>
               </div>
-              <div class="grammar-example">
-                We work from 8:30 AM to 5:30 PM, Monday to Friday.
-              </div>
+              <p style="font-size: 0.9em; color: #666; margin-top: 10px">
+                <strong>Word Stress:</strong> Pay attention to stress patterns.
+                JA-pan vs ja-PA-nese | IT-a-ly vs i-TAL-ian
+              </p>
             </div>
-            <div class="grammar-content">
-              <h4>Present Perfect (experience and updates)</h4>
-              <div class="grammar-example">
-                I've worked in the tech industry for five years.
-              </div>
-              <div class="grammar-example">
-                We've recently expanded to three new markets.
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Common Job Titles (Unit 1):</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  • <strong>Receptionist</strong> - Greets visitors, answers
+                  phones
+                </div>
+                <div class="practice-item">
+                  • <strong>Sales Rep</strong> (Sales Representative) - Sells
+                  products/services
+                </div>
+                <div class="practice-item">
+                  • <strong>Team Leader</strong> - Manages a team
+                </div>
+                <div class="practice-item">
+                  • <strong>Personal Assistant</strong> - Administrative support
+                </div>
+                <div class="practice-item">
+                  • <strong>Human Resources Manager</strong> - Manages staff and
+                  recruitment
+                </div>
+                <div class="practice-item">
+                  • <strong>Technician</strong> - Maintains technical equipment
+                </div>
+                <div class="practice-item">
+                  • <strong>Chief Executive Officer (CEO)</strong> -
+                  Highest-ranking executive
+                </div>
+                <div class="practice-item">
+                  • <strong>Financial Director</strong> - Manages company
+                  finances
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Activities -->
+          <!-- Language at Work: Grammar -->
           <div class="week-section">
-            <div class="week-section-title">🎓 Activities & Practice</div>
-            <div class="activity-card">
-              <h4>1. Professional Introduction Role Play</h4>
-              <p>
-                Record yourself introducing your background, current role, and
-                company. Focus on: "Hi, I'm [NAME]. I work as a [ROLE] at
-                [COMPANY]. I'm responsible for [MAIN DUTIES]. In my free time, I
-                enjoy [INTEREST]."
+            <div class="week-section-title">
+              💬 Language at Work: Present Simple & Possessives
+            </div>
+
+            <div class="grammar-content">
+              <h4>Company Example: Marcegaglia</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  <strong>Company:</strong> Marcegaglia (Italian steel pipes
+                  company)
+                </div>
+                <div class="practice-item">
+                  <strong>Head Office:</strong> Near Milan, Italy
+                </div>
+                <div class="practice-item">
+                  <strong>CEOs:</strong> Antonio Marcegaglia & Emma Marcegaglia
+                  (siblings)
+                </div>
+                <div class="practice-item">
+                  <strong>Size:</strong> Multi-billion euro company with 7,000
+                  employees
+                </div>
+                <div class="practice-item">
+                  <strong>Geographic Reach:</strong> Customers worldwide -
+                  Brazil, China, and many other countries
+                </div>
+                <div class="practice-item">
+                  <strong>Type:</strong> Family company started by Steno
+                  Marcegaglia in 1959
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Grammar: Present Simple with "be"</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff; font-size: 0.8em">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Subject</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Positive</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Negative</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Question</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">I</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      am / 'm
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      am not ('m not)
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Am I...?
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      You/We/They
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      are / 're
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      are not (aren't)
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Are you/we/they...?
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      He/She/It
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      is / 's
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      is not (isn't)
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Is he/she/it...?
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <p style="font-size: 0.85em; color: #666; margin-top: 10px">
+                <strong>Tip - Speaking vs Writing:</strong> Use contractions in
+                speaking and emails (I'm, She's, They're). Use full forms in
+                short answers: "Yes, I am." (NOT "Yes, I'm")
               </p>
             </div>
-            <div class="activity-card">
-              <h4>2. Formal Email Writing</h4>
-              <p>
-                Write an introductory email to a business contact. Include:
-                greeting, purpose, relevant background, and professional
-                closing. Example: "To whom it may concern / Dear [Name], I am
-                writing to introduce myself..."
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Exercise 4: Marcegaglia Interview - Choose Correct Verb</h4>
+              <div class="practice-section" style="font-size: 0.9em">
+                <p>
+                  <strong>A:</strong> Is / Are Marcegaglia a family company?
+                </p>
+                <p>
+                  <strong>B:</strong> Yes, it is / am. Steno Marcegaglia started
+                  the company in 1959, and his children Antonio and Emma is /
+                  are the CEOs.
+                </p>
+                <p><strong>A:</strong> Is / Are they from a big family?</p>
+                <p>
+                  <strong>B:</strong> No, they 's / 're from a small family, but
+                  Marcegaglia isn't / 'm not a small company. It 's / 're a
+                  multi-billion euro company with 7,000 employees.
+                </p>
+                <p>
+                  <strong>A:</strong> And is / are all the employees in Italy?
+                </p>
+                <p>
+                  <strong>B:</strong> They is / are in Italy and in many other
+                  countries too, such as Brazil and China.
+                </p>
+                <p style="margin-top: 12px">
+                  <strong
+                    >✓ Answer Key: 1.is 2.is 3.are 4.Are 5.'re 6.isn't 7.'s
+                    8.are 9.are</strong
+                  >
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Possessive Adjectives</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Subject</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Possessive</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Example</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">I</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">my</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      My company is Italian
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">you</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">your</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Your job title is important
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">he</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">his</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      His name is Antonio
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">she</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">her</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Her brother works with her
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">it</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">its</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Its head office is in Milan
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">we</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">our</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Our customers are worldwide
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">they</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">their</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Their father started the company
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <p style="font-size: 0.85em; color: #666; margin-top: 8px">
+                <strong>Important Tip:</strong> it's = it is | its = possessive
+                adjective. "It's a great company and its customers are happy."
               </p>
             </div>
-            <div class="activity-card">
-              <h4>3. Company Culture Discussion</h4>
-              <p>
-                Prepare a 2-minute presentation about your company (real or
-                hypothetical): company values, mission, team size, key
-                achievements, and workplace culture.
-              </p>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>
+                Exercise 5: Sofia Aguilera Company Profile - Fill Possessives
+              </h4>
+              <div class="practice-section" style="font-size: 0.9em">
+                <p>
+                  <strong>Name:</strong> Sofia Aguilera |
+                  <strong>Job:</strong> Managing Director |
+                  <strong>Company:</strong> Webmex Solutions (IT company,
+                  Mexico)
+                </p>
+                <p><strong>Complete the interview:</strong></p>
+                <p>
+                  <strong>Interviewer:</strong> Is _____ (1) your business a
+                  family company?
+                </p>
+                <p>
+                  <strong>Sofia:</strong> Yes, it is. _____ (2) husband is the
+                  Technical Manager. _____ (3) name is Oriel. And _____ (4)
+                  daughter is the Sales Manager. _____ (5) name is Martina.
+                </p>
+                <p><strong>Interviewer:</strong> Is it an IT company?</p>
+                <p>
+                  <strong>Sofia:</strong> Yes, it is. _____ (6) customers are
+                  small businesses. We work with websites.
+                </p>
+                <p style="margin-top: 12px">
+                  <strong
+                    >✓ Answer Key: 1.it's/your 2.My 3.His 4.our 5.Her
+                    6.Our</strong
+                  >
+                </p>
+              </div>
             </div>
-            <div class="activity-card">
-              <h4>4. Listening Exercise</h4>
-              <p>
-                Listen to the Oxford Business Result Unit 1 audio interviews
-                (Track 1-3). Note down: job titles, responsibilities, company
-                names, and interesting facts about speakers.
+
+            <!-- EXPANDED GRAMMAR SECTION: Contractions, Negatives, Questions -->
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Contractions: Speaking vs Writing</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <p style="color: #d9534f; margin-bottom: 10px">
+                  <strong>⭐ VERY IMPORTANT FOR SPEAKING:</strong>
+                </p>
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Positive Form</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Contraction</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Example</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">I am</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">I'm</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "I'm an engineer" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      You are
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">You're</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "You're from Brazil" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">He is</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">He's</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "He's a manager" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">She is</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">She's</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "She's a CEO" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">It is</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">It's</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "It's a great company" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">We are</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">We're</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "We're from Italy" (SPEAKING)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      They are
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      They're
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      "They're engineers" (SPEAKING)
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin-top: 10px; color: #666">
+                  <strong>Remember:</strong> Contractions are very natural in
+                  SPEAKING and emails. Students must use contractions to sound
+                  natural!
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Negative Forms</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Subject</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Negative (Full)</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Negative (Contraction)</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">I</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">am not</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">'m not</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      You/We/They
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      are not
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">aren't</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      He/She/It
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">is not</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">isn't</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 10px; color: #d9534f">
+                  <strong>⚠️ Common Mistake:</strong> "I not am from Italy" ❌ →
+                  "I'm not from Italy" ✅
+                </p>
+                <p style="color: #666">
+                  <strong>Note:</strong> "amn't" does NOT exist. We say "I'm
+                  not" (NOT "I amn't")
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Questions with "To Be"</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <p style="margin-bottom: 10px">
+                  <strong>Structure: Verb + Subject + ?</strong>
+                </p>
+                <div class="practice-item">
+                  <strong>Are you a manager?</strong> (Question: Are + you)
+                </div>
+                <div class="practice-item">
+                  <strong>Is she from Brazil?</strong> (Question: Is + she)
+                </div>
+                <div class="practice-item">
+                  <strong>Is it a family company?</strong> (Question: Is + it)
+                </div>
+                <div class="practice-item">
+                  <strong>Are they engineers?</strong> (Question: Are + they)
+                </div>
+
+                <p style="margin-top: 15px"><strong>Short Answers:</strong></p>
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Question</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Positive Answer</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Negative Answer</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Are you...?
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Yes, I am
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      No, I'm not
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Is she...?
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Yes, she is
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      No, she isn't
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Are they...?
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Yes, they are
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      No, they aren't
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin-top: 10px; color: #d9534f">
+                  <strong>⚠️ CRITICAL RULE:</strong> Short answers do NOT use
+                  contractions! "Yes, I am" ✅ (NOT "Yes, I'm") ❌
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Articles with Jobs</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <p style="margin-bottom: 10px">
+                  <strong>Rule: Use "a" or "an" before a single job</strong>
+                </p>
+                <p style="color: #666; margin-bottom: 10px">
+                  <strong
+                    >Remember: "an" before vowel SOUNDS (not just vowel
+                    letters!)</strong
+                  >
+                </p>
+                <div class="practice-item">
+                  ✓ "I am <strong>a manager</strong>" (m = consonant sound)
+                </div>
+                <div class="practice-item">
+                  ✓ "She is <strong>an engineer</strong>" (e = vowel sound)
+                </div>
+                <div class="practice-item">
+                  ✓ "He is <strong>an accountant</strong>" (a = vowel sound)
+                </div>
+                <div class="practice-item">
+                  ✓ "I work as <strong>an assistant</strong>" (a = vowel sound)
+                </div>
+                <div class="practice-item">
+                  ❌ "She is engineer" (missing article)
+                </div>
+                <div class="practice-item">
+                  ❌ "I am a accountant" (wrong article for vowel sound)
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Sentence Pattern: Introduction Template</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <p style="margin-bottom: 10px">
+                  <strong>Use this pattern to introduce yourself:</strong>
+                </p>
+                <div class="practice-item">
+                  <strong>Name:</strong> "My name is [NAME]"
+                </div>
+                <div class="practice-item">
+                  <strong>Country:</strong> "I am from [COUNTRY]"
+                </div>
+                <div class="practice-item">
+                  <strong>Nationality:</strong> "I am [NATIONALITY]"
+                </div>
+                <div class="practice-item">
+                  <strong>Job:</strong> "I am a/an [JOB]"
+                </div>
+                <p style="margin-top: 12px"><strong>Example:</strong></p>
+                <p style="color: #333; padding: 10px; background: #f9f9f9">
+                  "My name is Sofia Aguilera. I am from Mexico. I am Mexican. I
+                  am a managing director."
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Word Stress: Countries and Nationalities</h4>
+              <div class="practice-section" style="font-size: 0.85em">
+                <p style="margin-bottom: 12px; color: #d9534f">
+                  <strong
+                    >⭐ KEY TO SOUNDING NATURAL: Stress the correct
+                    syllable!</strong
+                  >
+                </p>
+                <p style="margin-bottom: 15px; color: #666">
+                  <em
+                    >RULE: Usually the middle or second syllable is stressed</em
+                  >
+                </p>
+
+                <table style="width: 100%; margin-top: 10px">
+                  <tr style="background: #f0f3ff">
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Country</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Stress Pattern</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Nationality</strong>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>Stress Pattern</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">Japan</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>ja</strong>-PAN
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Japanese
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      japa-NESE
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">Italy</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>IT</strong>-a-ly
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Italian
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      i-TAL-yan
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">India</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>IN</strong>-dia
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">Indian</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>IN</strong>-dian
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">Brazil</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      bra-ZIL
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      Brazilian
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      bra-ZIL-yan
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">Poland</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>PO</strong>-land
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">Polish</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>PO</strong>-lish
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">Africa</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>AF</strong>-ri-ca
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      South African
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      South AF-ri-can
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      America
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      a-MER-i-ca
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      American
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      a-MER-i-can
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px">UK</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">U-K</td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      British
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px">
+                      <strong>BRIT</strong>-ish
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business Communication -->
+          <div class="week-section">
+            <div class="week-section-title">
+              💼 Business Communication: Saying Hello & Goodbye
+            </div>
+
+            <div class="grammar-content">
+              <h4>Introduction & First Meetings</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  • <strong>"Hello. My name is Alek Gorski."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"I'm Eva, Maria's assistant."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"Pleased to meet you."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"Nice to meet you."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"How do you do?"</strong> (Very formal - reply with:
+                  "How do you do?")
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Introducing Someone Else</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  • <strong>"This is my assistant, Elzbieta Wozniak."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"Do you know Alek?"</strong> → Response: "No, how do
+                  you do?"
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Greeting Someone You Know</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  • <strong>"It's good to see you again."</strong> → Response:
+                  "And you."
+                </div>
+                <div class="practice-item">
+                  • <strong>"How are you?"</strong> → Response: "I'm fine,
+                  thanks." or "Not bad."
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Saying Goodbye</h4>
+              <div class="practice-section">
+                <div class="practice-item">
+                  • <strong>"Nice meeting you."</strong> /
+                  <strong>"Nice meeting you, too."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"See you soon."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"Have a good journey."</strong>
+                </div>
+                <div class="practice-item">
+                  • <strong>"Goodbye."</strong> / <strong>"Bye."</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Exercise 7: Match Expressions 1-6 to Responses a-f</h4>
+              <div class="practice-section" style="font-size: 0.9em">
+                <p>
+                  1. "Hello. My name is Alek Gorski." → ___
+                  <strong>c) "How do you do?"</strong>
+                </p>
+                <p>
+                  2. "I'm Eva, Maria Da Rocha's assistant." → ___
+                  <strong>a) "Pleased to meet you."</strong>
+                </p>
+                <p>
+                  3. "This is my assistant, Elzbieta Wozniak." → ___
+                  <strong>e) "Nice to meet you."</strong>
+                </p>
+                <p>
+                  4. "It's good to see you again." → ___
+                  <strong>f) "And you."</strong>
+                </p>
+                <p>5. "How are you?" → ___ <strong>d) "I'm fine."</strong></p>
+                <p>
+                  6. "Do you know Elzbieta?" → ___
+                  <strong>b) "No. How do you do?"</strong>
+                </p>
+              </div>
+            </div>
+
+            <div class="grammar-content" style="margin-top: 15px">
+              <h4>Exercise 8: Complete the Goodbye Conversation</h4>
+              <div class="practice-section" style="font-size: 0.9em">
+                <p><strong>Maria to Alek:</strong> "Introducing Alek..."</p>
+                <p><strong>Alek:</strong> "See you soon"</p>
+                <p>
+                  <strong>Maria:</strong> "Nice meeting you. Have a good
+                  journey."
+                </p>
+                <p><strong>Elzbieta:</strong> "Nice meeting you, too."</p>
+                <p><strong>Alek:</strong> "Thanks. _____________."</p>
+                <div
+                  style="
+                    margin-top: 12px;
+                    padding: 10px;
+                    background: #f0f3ff;
+                    border-radius: 5px;
+                  "
+                >
+                  <strong>✓ Suggested Answer:</strong> "Goodbye" or "See you" or
+                  "Have a good day"
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full Conversation Example -->
+          <div class="week-section">
+            <div class="week-section-title">
+              💬 Complete Realistic Conversation (Listen & Repeat)
+            </div>
+            <div class="grammar-content">
+              <p style="margin: 10px 0; font-size: 0.95em">
+                <strong>VISITOR BOARD SCENARIO - 3 People Meeting:</strong>
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Alek (visitor):</strong> "Hello. My name is Alek Gorski.
+                I'm from Poland."
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Maria (receptionist):</strong> "Pleased to meet you,
+                Alek. I'm Maria Da Rocha. This is my assistant, Elzbieta. She's
+                from Poland too!"
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Elzbieta:</strong> "Oh! Are you from Poland? How do you
+                do?"
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Alek:</strong> "How do you do? Yes, I'm Polish. I'm a
+                Sales Representative with an American company."
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Maria:</strong> "Interesting! Elzbieta is a Personal
+                Assistant here. She manages all the meetings."
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Elzbieta:</strong> "Nice meeting you, Alek. Have a good
+                day."
+              </p>
+              <p style="margin: 8px 0; font-size: 0.9em">
+                <strong>Alek:</strong> "Thanks. See you soon. Nice meeting you
+                both!"
               </p>
             </div>
           </div>
 
-          <!-- Vocabulary Flashcards -->
+          <!-- Key Vocabulary - Anki Style -->
           <div class="week-section">
             <div class="week-section-title">
-              📚 Week 1 Vocabulary Flashcards
+              📚 Vocabulary Flashcards (Anki-Style) - Click Card to Flip, Then
+              Choose
             </div>
+            <div id="ankiContainer" class="anki-flashcard-container">
+              <div id="ankiProgress" class="anki-progress">
+                Card 1 of 20 | Known: 0
+              </div>
+              <div id="ankiCard" class="anki-card" onclick="toggleAnkiCard()">
+                <div>
+                  <div class="anki-card-front" id="ankiCardFront">
+                    Receptionist
+                  </div>
+                  <div class="anki-card-back" id="ankiCardBack">
+                    Person who greets visitors and answers phones at reception
+                    desk
+                  </div>
+                </div>
+              </div>
+              <div class="anki-card-buttons">
+                <button
+                  class="anki-btn anki-btn-dontknow"
+                  onclick="markDontKnow()"
+                >
+                  ❌ Don't Know
+                </button>
+                <button class="anki-btn anki-btn-know" onclick="markKnow()">
+                  ✓ Know It
+                </button>
+              </div>
+            </div>
+
+            <p
+              style="
+                color: #666;
+                font-size: 0.9em;
+                margin-top: 20px;
+                text-align: center;
+              "
+            >
+              <strong>Tip:</strong> Click the card to flip it. Mark "Know It"
+              when you can confidently recall the definition.
+            </p>
+
             <div class="flashcard-grid">
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Company culture</div>
-                <div class="flashcard-back">
-                  The shared values, beliefs, and norms that define an
-                  organization
+              <p
+                style="
+                  color: #667eea;
+                  font-weight: 600;
+                  text-align: center;
+                  margin-bottom: 10px;
+                "
+              >
+                Quick Reference - All 20 Vocabulary Items:
+              </p>
+              <div class="mini-grid">
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Receptionist</div>
+                  <div class="mini-card-back">
+                    Greets visitors, answers phones
+                  </div>
                 </div>
-              </div>
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Break down</div>
-                <div class="flashcard-back">
-                  Analyze or explain in detail, divide into components
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Sales Rep</div>
+                  <div class="mini-card-back">Sells products/services</div>
                 </div>
-              </div>
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Bring up</div>
-                <div class="flashcard-back">
-                  Mention or introduce a topic for discussion
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">CEO</div>
+                  <div class="mini-card-back">Chief Executive Officer</div>
                 </div>
-              </div>
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Key account</div>
-                <div class="flashcard-back">
-                  An important client or customer that generates significant
-                  business
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Team Leader</div>
+                  <div class="mini-card-back">Manages a team</div>
                 </div>
-              </div>
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Responsibilities</div>
-                <div class="flashcard-back">
-                  Duties and tasks that are assigned to someone in a job
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Personal Assistant</div>
+                  <div class="mini-card-back">Admin support staff</div>
                 </div>
-              </div>
-              <div class="flashcard" onclick="toggleFlashcard(this)">
-                <div class="flashcard-front">Liaise with</div>
-                <div class="flashcard-back">
-                  Communicate and maintain contact between different groups or
-                  departments
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Technician</div>
+                  <div class="mini-card-back">Maintains equipment</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Head Office</div>
+                  <div class="mini-card-back">Main company office</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Family Company</div>
+                  <div class="mini-card-back">Family-owned business</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Multi-billion</div>
+                  <div class="mini-card-back">Worth billions</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">How do you do?</div>
+                  <div class="mini-card-back">Formal greeting</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Pleased to meet you</div>
+                  <div class="mini-card-back">Polite greeting</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">How are you?</div>
+                  <div class="mini-card-back">Casual greeting</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">I'm fine, thanks</div>
+                  <div class="mini-card-back">Polite response</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Not bad</div>
+                  <div class="mini-card-back">Casual response</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Nice meeting you</div>
+                  <div class="mini-card-back">Goodbye/parting</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">See you soon</div>
+                  <div class="mini-card-back">Goodbye phrase</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Have a good journey</div>
+                  <div class="mini-card-back">Professional goodbye</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Human Resources Manager</div>
+                  <div class="mini-card-back">Manages staff/hiring</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Professional</div>
+                  <div class="mini-card-back">Formal, business-like</div>
+                </div>
+                <div class="mini-card" onclick="toggleMinCard(this)">
+                  <div class="mini-card-front">Assistant</div>
+                  <div class="mini-card-back">Helper, support staff</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Practice Exercises -->
+          <!-- Homework & Self-Study -->
           <div class="week-section">
-            <div class="week-section-title">✏️ Practice Exercises</div>
-            <div class="practice-section">
-              <h4>Exercise 1: Complete the Sentences</h4>
-              <div class="practice-item">
-                1. I work as a _____ at a multinational company.
-              </div>
-              <div class="practice-item">
-                2. Can you _____ down the key differences between our
-                departments?
-              </div>
-              <div class="practice-item">
-                3. He brought _____ an interesting point in the meeting.
-              </div>
-              <div class="practice-item">
-                4. Our company's _____ emphasizes teamwork and innovation.
-              </div>
+            <div class="week-section-title">📝 Homework & Self-Study Tasks</div>
+
+            <div class="activity-card">
+              <h4>Task 1: Write a Company Profile (Like Marcegaglia)</h4>
+              <p>
+                Write 5-8 sentences about a company (real or imaginary).
+                Include:
+              </p>
+              <p style="margin-left: 15px">
+                • Company name, location, products/services<br />• CEO or leader
+                name and nationality<br />• Company size and global reach<br />•
+                Type of company (family, multinational, etc.)
+              </p>
             </div>
-            <div class="practice-section" style="margin-top: 15px">
-              <h4>Exercise 2: Listening Vocabulary</h4>
-              <div class="practice-item">
-                Listen to the audio and write down 5 job titles and 5 company
-                types mentioned.
+
+            <div class="activity-card">
+              <h4>Task 2: Personal Introduction Recording (1-2 minutes)</h4>
+              <p>Record yourself saying:</p>
+              <p style="margin-left: 15px">
+                • "Hello. My name is _____. I'm from [COUNTRY]. I'm
+                [NATIONALITY]. I'm a/an [JOB]. My company is [COMPANY NAME].
+                It's a [NATIONALITY] company."<br />• Speak slowly and
+                clearly<br />• Try to sound professional
+              </p>
+            </div>
+
+            <div class="activity-card">
+              <h4>Task 3: Spelling Recording</h4>
+              <p>Record yourself spelling clearly:</p>
+              <p style="margin-left: 15px">
+                • Your full name: letter by letter<br />• Your company name:
+                letter by letter<br />• Your job title: word by word
+              </p>
+            </div>
+
+            <div class="activity-card">
+              <h4>Task 4: Write a Conversation (10-20 lines)</h4>
+              <p>
+                Create a dialogue between two people meeting for the first time.
+                Include:
+              </p>
+              <p style="margin-left: 15px">
+                • Greetings and introductions<br />• Information about jobs and
+                nationalities<br />• Goodbye expressions<br />• Use "be" verbs
+                and possessives correctly
+              </p>
+            </div>
+
+            <div class="activity-card">
+              <h4>Task 5: The Introductions Game</h4>
+              <p>
+                Play the board game activity with a partner or study partner.
+                Practice:
+              </p>
+              <p style="margin-left: 15px">
+                • Asking questions about names, jobs, nationalities<br />•
+                Introducing yourself professionally<br />• Spelling names and
+                companies<br />• Saying goodbye politely
+              </p>
+            </div>
+          </div>
+
+          <!-- Unit 1 Audio Tracks -->
+          <div class="week-section">
+            <div class="week-section-title">
+              🎧 Unit 1 Audio Tracks - Click to Play
+            </div>
+            <p style="color: #666; font-size: 0.9em; margin-bottom: 15px">
+              Select a track to listen. These are extracted from the Business
+              Result Elementary coursebook.
+            </p>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 15px;
+              "
+            >
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 1
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_1.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
               </div>
-              <div class="practice-item">
-                Note the responsibilities mentioned for at least 3 different
-                roles.
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 2
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_2.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 3
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_3.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 4
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_4.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 5
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_5.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 6
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_6.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 7
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_7.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+              <div
+                style="
+                  background: #f0f3ff;
+                  padding: 12px;
+                  border-radius: 8px;
+                  border-left: 4px solid #667eea;
+                "
+              >
+                <p style="font-weight: 600; margin-bottom: 8px; color: #667eea">
+                  Unit 1 - Listening 8
+                </p>
+                <audio controls style="width: 100%; height: 32px">
+                  <source
+                    src="business/Business Result 2nd edition Elementary Audio/BR2_001_a1_8.mp3"
+                    type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Week 2 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 2: Job Responsibilities & Workplace Communication</h3>
+          <h3>
+            Week 2: Units 2 & 3 - Products, Services & Phone Calls + Workplace
+            Communication
+          </h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Learn company types and business activities</li>
+              <li>Master how to say numbers in business context</li>
+              <li>Practice making and receiving phone calls</li>
+              <li>Use present simple for company descriptions</li>
+              <li>Develop professional phone etiquette</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 3 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 3: Presentations & Public Speaking</h3>
+          <h3>
+            Week 3: Units 4 & 5 - Technology & Daily Activities + Communication
+            & Problem Solving
+          </h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Talk about company location and buildings</li>
+              <li>Use there is/are and some/any correctly</li>
+              <li>Give and ask for addresses</li>
+              <li>Order products and services by phone</li>
+              <li>Navigate workplace spaces and locations</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 4 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 4: Business Meetings & Negotiations</h3>
+          <h3>Week 4: Unit 6 - Networking & Social Media</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Discuss technology and its business applications</li>
+              <li>Talk about everyday activities and routines</li>
+              <li>Use adverbs of frequency correctly</li>
+              <li>Ask questions in present simple</li>
+              <li>Use sequencing words (first, next, then, finally)</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 5 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 5: Customer Service & Problem Solving</h3>
+          <h3>Week 5: Unit 7 - Departments & Responsibilities</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Deal with business documents and correspondence</li>
+              <li>Use past simple (be and regular verbs)</li>
+              <li>Learn how to apologize professionally</li>
+              <li>Explain and solve business problems</li>
+              <li>Handle difficult customer service situations</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 6 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 6: International Business & Collaboration</h3>
+          <h3>Week 6: Unit 8 - Employment & Professional Skills</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Discuss social media and networking in business</li>
+              <li>Use past simple with irregular verbs</li>
+              <li>Use time expressions for past events</li>
+              <li>Describe trips and experiences</li>
+              <li>Make general conversation and build relationships</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 7 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 7: Project Management & Planning</h3>
+          <h3>Week 7: Unit 9 - Competition</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Describe departments and responsibilities</li>
+              <li>Use prepositions of place and movement</li>
+              <li>Leave and take phone messages professionally</li>
+              <li>Give directions in the workplace</li>
+              <li>Discuss workplace organization and hierarchy</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 8 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 8: Leadership & Team Development</h3>
+          <h3>Week 8: Unit 10 - Teamwork</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">🎯 Learning Objectives</div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Discuss employment, skills and experience</li>
+              <li>Talk about current activities (present continuous)</li>
+              <li>Tell time accurately in business contexts</li>
+              <li>Arrange meetings professionally</li>
+              <li>Interview preparation and techniques</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 9 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 9: Marketing & Business Strategy</h3>
+          <h3>Week 9: Unit 11 - Travel</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">
+              🎯 Learning Objectives - Unit 9: Competition
+            </div>
+            <ul
+              style="
+                color: #555;
+                margin-left: 20px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+              "
+            >
+              <li>Talk about competition in business</li>
+              <li>Compare products and companies using comparatives</li>
+              <li>Say prices and discuss pricing strategies</li>
+              <li>Use superlatives to highlight strengths</li>
+            </ul>
+            <div class="week-section-title">
+              🎯 Learning Objectives - Unit 10: Teamwork
+            </div>
+            <ul style="color: #555; margin-left: 20px; line-height: 1.6">
+              <li>Discuss teamwork and collaboration</li>
+              <li>Understand personality types</li>
+              <li>Respond to news appropriately</li>
+              <li>Give opinions in professional settings</li>
+              <li>Develop team communication skills</li>
+            </ul>
           </div>
         </div>
 
         <!-- Week 10 -->
         <div class="week-header" onclick="toggleWeek(this)">
-          <h3>Week 10: Review & Final Project Presentations</h3>
+          <h3>Week 10: Unit 12 - Schedules</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
           <div class="lesson-objectives">
-            <p style="color: #666">Content coming soon...</p>
+            <div class="week-section-title">
+              🎯 Learning Objectives - Unit 11: Travel
+            </div>
+            <ul
+              style="
+                color: #555;
+                margin-left: 20px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+              "
+            >
+              <li>Book hotel rooms and ask about services</li>
+              <li>Use going to for future plans</li>
+              <li>Give reasons for actions using infinitives</li>
+              <li>Discuss money and business expenses</li>
+              <li>Order food and dine professionally</li>
+            </ul>
+            <div class="week-section-title">
+              🎯 Learning Objectives - Unit 12: Schedules & Review
+            </div>
+            <ul
+              style="
+                color: #555;
+                margin-left: 20px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+              "
+            >
+              <li>Talk about schedules and calendars</li>
+              <li>Use present perfect for recent actions</li>
+              <li>Use prepositions of time correctly</li>
+              <li>Say dates and plan schedules</li>
+              <li>Review and consolidate all 12 units</li>
+              <li>Complete final project presentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Week 11: Review & Test -->
+      <div class="week-header" onclick="toggleWeek(this)">
+        <h3>Week 11: Review & Test - Units 1-12 Consolidation</h3>
+        <span class="week-toggle">▼</span>
+      </div>
+      <div class="week-content">
+        <div class="lesson-objectives">
+          <div class="week-section-title">
+            🎯 Learning Objectives - Final Review & Assessment
+          </div>
+          <ul
+            style="
+              color: #555;
+              margin-left: 20px;
+              line-height: 1.6;
+              margin-bottom: 15px;
+            "
+          >
+            <li>Review all grammar structures from Units 1-12</li>
+            <li>Review all vocabulary from Units 1-12</li>
+            <li>Practice speaking skills with role-plays</li>
+            <li>Take unit assessment tests</li>
+            <li>Complete final project presentation</li>
+            <li>Consolidate and reflect on learning progress</li>
+          </ul>
+        </div>
+
+        <div class="week-section">
+          <div class="week-section-title">📚 Units 1-12 Grammar Summary</div>
+          <div class="grammar-content">
+            <p style="color: #666; margin-bottom: 15px">
+              <strong>Core Grammar Topics Covered:</strong>
+            </p>
+            <div class="practice-section">
+              <div class="practice-item">
+                <strong>Unit 1:</strong> Present simple "be", possessive
+                adjectives, articles with jobs
+              </div>
+              <div class="practice-item">
+                <strong>Unit 2:</strong> Present simple (other verbs), frequency
+                adverbs
+              </div>
+              <div class="practice-item">
+                <strong>Unit 3:</strong> There is/are, prepositions of place
+              </div>
+              <div class="practice-item">
+                <strong>Unit 4:</strong> Present simple review, adverbs, daily
+                routines
+              </div>
+              <div class="practice-item">
+                <strong>Unit 5:</strong> Present continuous, compound sentences
+              </div>
+              <div class="practice-item">
+                <strong>Unit 6:</strong> Tech vocabulary, imperative forms
+              </div>
+              <div class="practice-item">
+                <strong>Unit 7:</strong> Departments and roles, hierarchies
+              </div>
+              <div class="practice-item">
+                <strong>Unit 8:</strong> Past simple, professional experiences
+              </div>
+              <div class="practice-item">
+                <strong>Unit 9:</strong> Comparatives and superlatives
+              </div>
+              <div class="practice-item">
+                <strong>Unit 10:</strong> Team dynamics, present continuous for
+                activities
+              </div>
+              <div class="practice-item">
+                <strong>Unit 11:</strong> Going to + infinitive, planning
+              </div>
+              <div class="practice-item">
+                <strong>Unit 12:</strong> Present perfect, prepositions of time,
+                schedules
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-section">
+          <div class="week-section-title">
+            📝 Final Project: Introduce Your Company
+          </div>
+          <div class="grammar-content">
+            <p style="color: #666; margin-bottom: 15px">
+              <strong>Task:</strong> Prepare a 3-5 minute presentation
+              introducing a company
+            </p>
+            <div class="practice-section">
+              <p><strong>Your presentation should include:</strong></p>
+              <div class="practice-item">• Company name and location</div>
+              <div class="practice-item">
+                • What the company does (products/services)
+              </div>
+              <div class="practice-item">• Key staff and their roles</div>
+              <div class="practice-item">
+                • Why you would want to work there
+              </div>
+              <div class="practice-item">
+                • Use grammar from at least 5 different units
+              </div>
+              <p style="margin-top: 15px"><strong>Grading Criteria:</strong></p>
+              <div class="practice-item">
+                ✓ Pronunciation and stress patterns (Unit 1)
+              </div>
+              <div class="practice-item">✓ Grammar accuracy (Units 1-12)</div>
+              <div class="practice-item">✓ Vocabulary use (Units 1-12)</div>
+              <div class="practice-item">✓ Fluency and confidence</div>
+              <div class="practice-item">
+                ✓ Visual aids / presentation structure
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-section">
+          <div class="week-section-title">
+            🎓 Self-Assessment: How Much Have You Learned?
+          </div>
+          <div class="grammar-content">
+            <p style="color: #666; margin-bottom: 15px">
+              Rate your confidence on a scale of 1-5 (1=Not confident, 5=Very
+              confident)
+            </p>
+            <div class="practice-section" style="font-size: 0.9em">
+              <table style="width: 100%; margin-top: 10px">
+                <tr style="background: #f0f3ff">
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    <strong>Skill</strong>
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    <strong>Rating</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Introducing myself and others
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Describing jobs and companies
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Using present simple correctly
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Talking about experiences (past)
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Making comparisons
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Professional communication
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Business vocabulary
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+                <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    Pronunciation and word stress
+                  </td>
+                  <td style="border: 1px solid #ddd; padding: 8px">
+                    1 2 3 4 5
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -977,6 +2878,212 @@
       function toggleFlashcard(card) {
         card.classList.toggle("flipped");
       }
+
+      // Anki-style flashcard data
+      const ankiCards = [
+        {
+          front: "Receptionist",
+          back: "Person who greets visitors and answers phones at reception desk",
+        },
+        {
+          front: "Sales Rep",
+          back: "Sales Representative - person who sells products/services to clients",
+        },
+        {
+          front: "CEO",
+          back: "Chief Executive Officer - highest-ranking executive in a company",
+        },
+        {
+          front: "Team Leader",
+          back: "Person who manages and supervises a team of employees",
+        },
+        {
+          front: "Personal Assistant",
+          back: "Administrative support staff who helps manage schedules, emails, and tasks",
+        },
+        {
+          front: "Technician",
+          back: "Person with technical skills who maintains equipment and systems",
+        },
+        {
+          front: "Head Office",
+          back: "The main office of a company where senior management works",
+        },
+        {
+          front: "Family Company",
+          back: "A business owned and operated by members of the same family",
+        },
+        {
+          front: "Multi-billion",
+          back: "Worth several billion euros, pounds, or dollars in annual revenue or value",
+        },
+        {
+          front: "How do you do?",
+          back: "Very formal greeting - reply with 'How do you do?' (Don't answer literally)",
+        },
+        {
+          front: "Pleased to meet you",
+          back: "Formal polite greeting when meeting someone for the first time",
+        },
+        {
+          front: "How are you?",
+          back: "Common casual or formal greeting asking about someone's health/well-being",
+        },
+        {
+          front: "I'm fine, thanks",
+          back: "Polite response to 'How are you?' in professional settings",
+        },
+        {
+          front: "Not bad",
+          back: "Casual, informal response meaning 'I'm doing OK'",
+        },
+        {
+          front: "Nice meeting you",
+          back: "Polite phrase said when parting from someone you just met",
+        },
+        {
+          front: "See you soon",
+          back: "Friendly goodbye phrase implying you will meet again shortly",
+        },
+        {
+          front: "Have a good journey",
+          back: "Professional way to say goodbye to someone traveling or leaving",
+        },
+        {
+          front: "Human Resources Manager",
+          back: "HR Manager - person responsible for staffing, hiring, and employee relations",
+        },
+        {
+          front: "Professional",
+          back: "Adjective meaning formal, businesslike, and conforming to accepted standards",
+        },
+        {
+          front: "Assistant",
+          back: "Person employed to help and support another person in their work",
+        },
+      ];
+
+      let currentCardIndex = 0;
+      let knownCount = 0;
+      let dontKnownCards = [];
+      let reviewMode = false;
+      let cardsToReview = [];
+
+      function displayAnkiCard() {
+        let card, displayIndex, totalCards;
+
+        if (reviewMode) {
+          card = ankiCards[cardsToReview[currentCardIndex]];
+          displayIndex = currentCardIndex + 1;
+          totalCards = cardsToReview.length;
+        } else {
+          card = ankiCards[currentCardIndex];
+          displayIndex = currentCardIndex + 1;
+          totalCards = ankiCards.length;
+        }
+
+        document.getElementById("ankiCardFront").textContent = card.front;
+        document.getElementById("ankiCardBack").textContent = card.back;
+        document.getElementById("ankiCard").classList.remove("flipped");
+
+        let progressText;
+        if (reviewMode) {
+          progressText = `Review Mode - Card ${displayIndex} of ${totalCards} | Still Learning: ${cardsToReview.length}`;
+        } else {
+          progressText = `Card ${displayIndex} of ${totalCards} | Known: ${knownCount}`;
+        }
+        document.getElementById("ankiProgress").textContent = progressText;
+      }
+
+      function toggleAnkiCard() {
+        document.getElementById("ankiCard").classList.toggle("flipped");
+      }
+
+      function markKnow() {
+        knownCount++;
+
+        // If in review mode, remove this card from the "don't know" list
+        if (reviewMode) {
+          const cardIndexInOriginal = cardsToReview[currentCardIndex];
+          dontKnownCards = dontKnownCards.filter(
+            (idx) => idx !== cardIndexInOriginal,
+          );
+          cardsToReview = dontKnownCards;
+        }
+
+        nextAnkiCard();
+      }
+
+      function markDontKnow() {
+        // Track this card as "don't know" if not already tracked
+        if (reviewMode) {
+          // Already in review mode, just move to next
+          nextAnkiCard();
+        } else {
+          // Add to don't know list if not already there
+          const cardIndex = currentCardIndex;
+          if (!dontKnownCards.includes(cardIndex)) {
+            dontKnownCards.push(cardIndex);
+          }
+          nextAnkiCard();
+        }
+      }
+
+      function nextAnkiCard() {
+        if (reviewMode) {
+          currentCardIndex++;
+          if (currentCardIndex >= cardsToReview.length) {
+            // Check if there are still cards to review
+            if (cardsToReview.length === 0) {
+              showCompletion();
+            } else {
+              // Restart review mode with remaining cards
+              currentCardIndex = 0;
+              displayAnkiCard();
+            }
+          } else {
+            displayAnkiCard();
+          }
+        } else {
+          currentCardIndex++;
+          if (currentCardIndex >= ankiCards.length) {
+            // First pass complete, check if there are "don't know" cards
+            if (dontKnownCards.length > 0) {
+              // Switch to review mode
+              reviewMode = true;
+              cardsToReview = [...dontKnownCards];
+              currentCardIndex = 0;
+              displayAnkiCard();
+            } else {
+              // All cards known on first pass
+              showCompletion();
+            }
+          } else {
+            displayAnkiCard();
+          }
+        }
+      }
+
+      function showCompletion() {
+        const progress = document.getElementById("ankiProgress");
+        progress.textContent = `🎉 Perfect! You've mastered all ${ankiCards.length} cards! 🎉`;
+        progress.classList.add("mastered");
+
+        // Disable buttons
+        document.querySelector(".anki-btn-know").disabled = true;
+        document.querySelector(".anki-btn-dontknow").disabled = true;
+        document.querySelector(".anki-btn-know").style.opacity = "0.5";
+        document.querySelector(".anki-btn-dontknow").style.opacity = "0.5";
+        document.querySelector(".anki-btn-know").style.cursor = "default";
+        document.querySelector(".anki-btn-dontknow").style.cursor = "default";
+      }
+
+      function toggleMinCard(card) {
+        card.classList.toggle("flipped");
+      }
+
+      // Initialize Anki flashcard
+      displayAnkiCard();
     </script>
   </body>
 </html>
