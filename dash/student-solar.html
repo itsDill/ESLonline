@@ -446,6 +446,440 @@
         color: #92400e;
       }
 
+      /* ── Flip Flashcards ── */
+      .flash-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .flash-card {
+        perspective: 600px;
+        height: 110px;
+        cursor: pointer;
+      }
+      .flash-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+        border-radius: 12px;
+      }
+      .flash-card.flipped .flash-inner {
+        transform: rotateY(180deg);
+      }
+      .flash-front,
+      .flash-back {
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        backface-visibility: hidden;
+        padding: 10px;
+        text-align: center;
+      }
+      .flash-front {
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        border: 2px solid #7dd3fc;
+      }
+      .flash-back {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        border: 2px solid #86efac;
+        transform: rotateY(180deg);
+      }
+      .flash-front .f-emoji {
+        font-size: 2em;
+        margin-bottom: 4px;
+      }
+      .flash-front .f-word {
+        font-weight: 800;
+        font-size: 0.95em;
+        color: #0369a1;
+      }
+      .flash-back .f-meaning {
+        font-size: 0.82em;
+        color: #166534;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .flash-back .f-example {
+        font-size: 0.72em;
+        color: #15803d;
+        margin-top: 4px;
+        opacity: 0.85;
+        font-style: italic;
+      }
+      .flash-hint {
+        text-align: center;
+        font-size: 0.78em;
+        color: #9ca3af;
+        margin-top: 10px;
+      }
+
+      /* ── Word Scramble ── */
+      .scramble-area {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .scramble-item {
+        background: #fafafa;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .scramble-emoji {
+        font-size: 1.5em;
+        flex-shrink: 0;
+        padding-top: 4px;
+      }
+      .s-tile {
+        background: white;
+        border: 2px solid #a78bfa;
+        border-radius: 8px;
+        width: 34px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1em;
+        color: #5b21b6;
+      }
+      .scramble-answer {
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.95em;
+        font-family: inherit;
+        outline: none;
+        width: 160px;
+        transition: border-color 0.2s;
+      }
+      .scramble-answer:focus {
+        border-color: #7c3aed;
+      }
+      .scramble-answer.correct {
+        border-color: #22c55e;
+        background: #f0fdf4;
+      }
+      .scramble-answer.wrong {
+        border-color: #ef4444;
+        background: #fef2f2;
+      }
+      .btn-check {
+        background: #7c3aed;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 0.85em;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-check:hover {
+        background: #5b21b6;
+      }
+      .scramble-result {
+        font-size: 0.82em;
+        font-weight: 600;
+        min-width: 80px;
+      }
+      .scramble-result.ok {
+        color: #16a34a;
+      }
+      .scramble-result.no {
+        color: #dc2626;
+      }
+
+      /* ── Quick Quiz ── */
+      .quiz-question-area {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        border: 1px solid #fed7aa;
+        border-radius: 12px 12px 0 0;
+        padding: 22px 24px 18px;
+        text-align: center;
+      }
+      .quiz-q-num {
+        font-size: 0.75em;
+        color: #9a3412;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+      }
+      .quiz-q-text {
+        font-size: 1.1em;
+        font-weight: 700;
+        color: #1f2937;
+      }
+      .quiz-q-hint {
+        font-size: 0.82em;
+        color: #9a3412;
+        margin-top: 6px;
+        opacity: 0.8;
+      }
+      .quiz-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .quiz-option {
+        padding: 16px 20px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        font-size: 0.95em;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: background 0.15s;
+        font-family: inherit;
+      }
+      .quiz-option:nth-child(1) {
+        border-radius: 0 0 0 0;
+      }
+      .quiz-option:nth-child(2) {
+        border-left: none;
+      }
+      .quiz-option:nth-child(3) {
+        border-top: none;
+        border-radius: 0 0 0 12px;
+      }
+      .quiz-option:nth-child(4) {
+        border-top: none;
+        border-left: none;
+        border-radius: 0 0 12px 0;
+      }
+      .quiz-option:hover {
+        background: #f9fafb;
+      }
+      .quiz-option.correct {
+        background: #dcfce7 !important;
+        color: #15803d;
+      }
+      .quiz-option.wrong {
+        background: #fee2e2 !important;
+        color: #dc2626;
+      }
+      .quiz-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .quiz-score-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #374151;
+      }
+      .quiz-stars {
+        letter-spacing: 2px;
+        font-size: 1.05em;
+      }
+      .btn-next {
+        background: #f59e0b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 20px;
+        font-size: 0.88em;
+        font-weight: 700;
+        cursor: pointer;
+        display: none;
+        font-family: inherit;
+      }
+      .btn-next:hover {
+        background: #d97706;
+      }
+      .btn-next.visible {
+        display: inline-block;
+      }
+
+      /* ── Spin Wheel ── */
+      .spin-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 10px 0;
+      }
+      .wheel-container {
+        position: relative;
+        width: 220px;
+        height: 220px;
+      }
+      #spinCanvas {
+        border-radius: 50%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      }
+      .wheel-pointer {
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.8em;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+      .btn-spin {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 12px 32px;
+        font-size: 1em;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+        letter-spacing: 0.5px;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        font-family: inherit;
+      }
+      .btn-spin:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+      }
+      .btn-spin:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .spin-result {
+        background: linear-gradient(135deg, #faf5ff, #ede9fe);
+        border: 2px solid #c4b5fd;
+        border-radius: 12px;
+        padding: 16px 24px;
+        text-align: center;
+        width: 100%;
+        display: none;
+      }
+      .spin-result.show {
+        display: block;
+      }
+      .spin-result .spin-topic {
+        font-size: 1.1em;
+        font-weight: 800;
+        color: #5b21b6;
+        margin-bottom: 6px;
+      }
+      .spin-result .spin-task {
+        font-size: 0.88em;
+        color: #6d28d9;
+        line-height: 1.5;
+      }
+
+      /* ── Points Board ── */
+      .points-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .points-box {
+        background: linear-gradient(135deg, #fefce8, #fef9c3);
+        border: 2px solid #fde047;
+        border-radius: 14px;
+        padding: 16px 10px;
+        text-align: center;
+      }
+      .points-box .p-icon {
+        font-size: 1.8em;
+        margin-bottom: 4px;
+      }
+      .points-box .p-label {
+        font-size: 0.75em;
+        color: #92400e;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      .points-box .p-val {
+        font-size: 1.6em;
+        font-weight: 800;
+        color: #78350f;
+        line-height: 1;
+        margin: 4px 0 2px;
+      }
+      .btn-award {
+        border: none;
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-size: 0.78em;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: transform 0.15s;
+        font-family: inherit;
+      }
+      .btn-award:hover {
+        transform: scale(1.08);
+      }
+      .btn-award.star {
+        background: #fde047;
+        color: #714517;
+      }
+      .btn-award.gem {
+        background: #a78bfa;
+        color: white;
+      }
+      .btn-award.fire {
+        background: #f97316;
+        color: white;
+      }
+      .btn-award.crown {
+        background: #22c55e;
+        color: white;
+      }
+      .badge-shelf {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 12px;
+        border: 1px dashed #d1d5db;
+        min-height: 56px;
+        align-items: center;
+      }
+      .badge-chip {
+        background: white;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 0.8em;
+        font-weight: 600;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        animation: popIn 0.3s ease;
+      }
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        70% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
       /* ── Responsive ── */
       @media (max-width: 900px) {
         .top-row,
@@ -453,8 +887,30 @@
         .games-grid {
           grid-template-columns: 1fr;
         }
-        .interests-grid {
+        .interests-grid,
+        .flash-grid,
+        .points-row {
           grid-template-columns: repeat(2, 1fr);
+        }
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+        .quiz-option:nth-child(1) {
+          border-radius: 0;
+        }
+        .quiz-option:nth-child(2) {
+          border-left: 1px solid #e5e7eb;
+          border-top: none;
+          border-radius: 0;
+        }
+        .quiz-option:nth-child(3) {
+          border-top: none;
+          border-radius: 0;
+        }
+        .quiz-option:nth-child(4) {
+          border-top: none;
+          border-left: 1px solid #e5e7eb;
+          border-radius: 0 0 12px 12px;
         }
         .hero {
           padding: 24px;
@@ -488,7 +944,7 @@
           <div class="lbl">Conversation</div>
         </div>
         <div class="stat-box">
-          <div class="num">6</div>
+          <div class="num">12</div>
           <div class="lbl">Fun Games</div>
         </div>
         <div class="stat-box">
@@ -1393,42 +1849,231 @@
         </div>
       </div>
 
-      <!-- Row 3: Games -->
+      <!-- Row 3: Games grid (expanded) -->
       <div class="full-row">
         <div class="card">
           <div class="card-title">🧩 Fun Game Ideas for Lessons</div>
-          <div class="games-grid">
+          <div class="games-grid" style="grid-template-columns: repeat(4, 1fr)">
             <div class="game-card">
               <span class="game-icon">🎯</span>
               <div class="game-name">Grammar Quiz Race</div>
-              <div class="game-desc">Answer fast to score points!</div>
+              <div class="game-desc">
+                Answer fast — first to 5 correct wins!
+              </div>
             </div>
             <div class="game-card">
               <span class="game-icon">🃏</span>
               <div class="game-name">Sentence Builder</div>
-              <div class="game-desc">Put word cards in the right order</div>
+              <div class="game-desc">
+                Put scrambled word cards in the right order
+              </div>
             </div>
             <div class="game-card">
               <span class="game-icon">🔍</span>
               <div class="game-name">Spot the Mistake</div>
-              <div class="game-desc">Find the grammar error to win</div>
+              <div class="game-desc">
+                Find the grammar error hidden in the sentence
+              </div>
             </div>
             <div class="game-card">
               <span class="game-icon">🎨</span>
-              <div class="game-name">Draw & Describe</div>
-              <div class="game-desc">Draw it, then explain in English</div>
+              <div class="game-name">Draw &amp; Describe</div>
+              <div class="game-desc">
+                Draw it in 30 seconds, then explain in English
+              </div>
             </div>
             <div class="game-card">
               <span class="game-icon">🏆</span>
               <div class="game-name">Word Relay</div>
-              <div class="game-desc">Take turns naming words in a category</div>
+              <div class="game-desc">
+                Take turns — who can name the most words in a theme?
+              </div>
             </div>
             <div class="game-card">
               <span class="game-icon">🕵️</span>
               <div class="game-name">20 Questions</div>
-              <div class="game-desc">"Is it big? Can it fly?"</div>
+              <div class="game-desc">"Is it big? Can it fly? Is it alive?"</div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">🎭</span>
+              <div class="game-name">Act It Out</div>
+              <div class="game-desc">
+                Teacher mimes — Solar says the present continuous sentence
+              </div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">🚀</span>
+              <div class="game-name">Rocket Launch</div>
+              <div class="game-desc">
+                Get 3 correct in a row to launch the rocket!
+              </div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">🤫</span>
+              <div class="game-name">Taboo Words</div>
+              <div class="game-desc">
+                Describe the word without using the 3 forbidden words
+              </div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">⚡</span>
+              <div class="game-name">Lightning Round</div>
+              <div class="game-desc">
+                60 seconds — answer as many Qs as possible!
+              </div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">🔤</span>
+              <div class="game-name">Word Scramble Race</div>
+              <div class="game-desc">
+                Unscramble the letters to find the hidden word
+              </div>
+            </div>
+            <div class="game-card">
+              <span class="game-icon">🤔</span>
+              <div class="game-name">Would You Rather?</div>
+              <div class="game-desc">
+                "Would you rather be a robot or a dinosaur? Why?"
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Interactive: Vocabulary Flashcards -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">
+            🃏 Vocabulary Flashcards
+            <span
+              style="
+                font-size: 0.7em;
+                color: #9ca3af;
+                margin-left: auto;
+                font-weight: 400;
+              "
+              >tap a card to flip!</span
+            >
+          </div>
+          <div class="flash-grid" id="flashGrid"></div>
+          <p class="flash-hint">
+            Tap any card to reveal the meaning &amp; an example sentence
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive: Word Scramble -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">🔤 Word Scramble — Unscramble It!</div>
+          <div class="scramble-area" id="scrambleArea"></div>
+        </div>
+      </div>
+
+      <!-- Interactive: Quick Grammar Quiz -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">⚡ Quick Grammar Quiz</div>
+          <div>
+            <div class="quiz-question-area">
+              <div class="quiz-q-num" id="qNum">Question 1 of 10</div>
+              <div class="quiz-q-text" id="qText">Loading…</div>
+              <div class="quiz-q-hint" id="qHint"></div>
+            </div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-footer">
+              <div class="quiz-score-bar">
+                ⭐ Score: <span id="quizScore">0</span> &nbsp;|&nbsp;
+                <span class="quiz-stars" id="quizStars"></span>
+              </div>
+              <button class="btn-next" id="btnNext" onclick="nextQuestion()">
+                Next ➜
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive: Spin the Topic Wheel -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">🎰 Spin the Topic Wheel</div>
+          <div class="spin-area">
+            <div class="wheel-container">
+              <div class="wheel-pointer">▼</div>
+              <canvas id="spinCanvas" width="220" height="220"></canvas>
+            </div>
+            <button class="btn-spin" id="btnSpin" onclick="spinWheel()">
+              🎲 SPIN!
+            </button>
+            <div class="spin-result" id="spinResult">
+              <div class="spin-topic" id="spinTopic"></div>
+              <div class="spin-task" id="spinTask"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Points Board -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">🏅 Solar's Points Board</div>
+          <div class="points-row">
+            <div class="points-box">
+              <div class="p-icon">⭐</div>
+              <div class="p-val" id="pStars">0</div>
+              <div class="p-label">Stars</div>
+              <button class="btn-award star" onclick="award('stars')">
+                + Star
+              </button>
+            </div>
+            <div class="points-box">
+              <div class="p-icon">💎</div>
+              <div class="p-val" id="pGems">0</div>
+              <div class="p-label">Gems</div>
+              <button class="btn-award gem" onclick="award('gems')">
+                + Gem
+              </button>
+            </div>
+            <div class="points-box">
+              <div class="p-icon">🔥</div>
+              <div class="p-val" id="pFire">0</div>
+              <div class="p-label">Fire Points</div>
+              <button class="btn-award fire" onclick="award('fire')">
+                + Fire
+              </button>
+            </div>
+            <div class="points-box">
+              <div class="p-icon">👑</div>
+              <div class="p-val" id="pCrown">0</div>
+              <div class="p-label">Crowns</div>
+              <button class="btn-award crown" onclick="award('crown')">
+                + Crown
+              </button>
+            </div>
+          </div>
+          <div
+            style="
+              margin-bottom: 8px;
+              font-size: 0.85em;
+              font-weight: 600;
+              color: #374151;
+            "
+          >
+            🏆 Today's Achievements
+          </div>
+          <div class="badge-shelf" id="badgeShelf"></div>
+          <p
+            id="badgeEmpty"
+            style="
+              font-size: 0.8em;
+              color: #9ca3af;
+              font-style: italic;
+              margin-top: 8px;
+            "
+          >
+            No badges yet — award stars, gems or crowns to add them here!
+          </p>
         </div>
       </div>
 
@@ -1478,10 +2123,433 @@
     </div>
 
     <script>
+      /* ── Expand/collapse topic rows ── */
       function toggleDrop(el) {
-        // Don't toggle if user clicked inside the dropdown content itself
         if (event && event.target.closest(".dropdown-content")) return;
         el.classList.toggle("open");
+      }
+
+      /* ═══════════════════════════════════════════
+         VOCABULARY FLASHCARDS
+      ═══════════════════════════════════════════ */
+      const flashData = [
+        {
+          emoji: "🤖",
+          word: "robot",
+          meaning: "A machine that can move and do tasks",
+          example: "My robot can clean the floor!",
+        },
+        {
+          emoji: "🚀",
+          word: "rocket",
+          meaning: "A vehicle that flies very fast into space",
+          example: "The rocket flew to the moon.",
+        },
+        {
+          emoji: "🌍",
+          word: "planet",
+          meaning: "A big round object that orbits a star",
+          example: "Earth is a planet in our solar system.",
+        },
+        {
+          emoji: "🦖",
+          word: "dinosaur",
+          meaning: "A huge animal that lived millions of years ago",
+          example: "The T-Rex was a scary dinosaur!",
+        },
+        {
+          emoji: "💻",
+          word: "computer",
+          meaning: "A machine for typing, playing, and learning",
+          example: "I use a computer every day.",
+        },
+        {
+          emoji: "⚡",
+          word: "electricity",
+          meaning: "Power that makes lights and computers work",
+          example: "This lamp uses electricity.",
+        },
+        {
+          emoji: "🧲",
+          word: "magnet",
+          meaning: "An object that pulls metal things towards it",
+          example: "The magnet stuck to the fridge.",
+        },
+        {
+          emoji: "🔭",
+          word: "telescope",
+          meaning: "A tool to see objects far away in space",
+          example: "I saw the moon with a telescope!",
+        },
+      ];
+
+      const flashGrid = document.getElementById("flashGrid");
+      flashData.forEach((d) => {
+        const div = document.createElement("div");
+        div.className = "flash-card";
+        div.innerHTML = `
+          <div class="flash-inner">
+            <div class="flash-front">
+              <span class="f-emoji">${d.emoji}</span>
+              <span class="f-word">${d.word}</span>
+            </div>
+            <div class="flash-back">
+              <span class="f-meaning">${d.meaning}</span>
+              <span class="f-example">"${d.example}"</span>
+            </div>
+          </div>`;
+        div.addEventListener("click", () => div.classList.toggle("flipped"));
+        flashGrid.appendChild(div);
+      });
+
+      /* ═══════════════════════════════════════════
+         WORD SCRAMBLE
+      ═══════════════════════════════════════════ */
+      const scrambleWords = [
+        { word: "ROBOT", emoji: "🤖", hint: "It's a machine that moves!" },
+        { word: "SPACE", emoji: "🚀", hint: "Stars and planets live here" },
+        { word: "PLAY", emoji: "🎮", hint: "What you do with games" },
+        {
+          word: "FAST",
+          emoji: "🏎️",
+          hint: "Goes really quickly — an adjective",
+        },
+        { word: "PLANET", emoji: "🌍", hint: "Earth is one of these" },
+      ];
+
+      const scrambleArea = document.getElementById("scrambleArea");
+      scrambleWords.forEach((item, idx) => {
+        const shuffled = item.word
+          .split("")
+          .sort(() => Math.random() - 0.5)
+          .join("");
+        const tilesHtml = shuffled
+          .split("")
+          .map((l) => `<span class="s-tile">${l}</span>`)
+          .join("");
+        const div = document.createElement("div");
+        div.className = "scramble-item";
+        div.innerHTML = `
+          <span class="scramble-emoji">${item.emoji}</span>
+          <div style="flex:1">
+            <div style="font-size:0.78em;color:#6b7280;margin-bottom:8px;">💡 Hint: ${item.hint}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">${tilesHtml}</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <input class="scramble-answer" type="text" placeholder="Type the word…"
+                data-answer="${item.word}" oninput="checkScramble(this)" autocomplete="off" />
+              <button class="btn-check" onclick="revealScramble(this)">💡 Reveal</button>
+              <span class="scramble-result" id="sres${idx}"></span>
+            </div>
+          </div>`;
+        scrambleArea.appendChild(div);
+      });
+
+      function checkScramble(input) {
+        const id = input
+          .closest(".scramble-item")
+          .querySelector(".scramble-result").id;
+        const res = document.getElementById(id);
+        const val = input.value.trim().toUpperCase();
+        if (!val) {
+          input.className = "scramble-answer";
+          res.textContent = "";
+          return;
+        }
+        if (val === input.dataset.answer) {
+          input.className = "scramble-answer correct";
+          res.textContent = "✅ Correct!";
+          res.className = "scramble-result ok";
+        } else {
+          input.className = "scramble-answer wrong";
+          res.textContent = "❌ Try again";
+          res.className = "scramble-result no";
+        }
+      }
+
+      function revealScramble(btn) {
+        const item = btn.closest(".scramble-item");
+        const input = item.querySelector(".scramble-answer");
+        const res = item.querySelector(".scramble-result");
+        input.value = input.dataset.answer;
+        input.className = "scramble-answer correct";
+        res.textContent = "💡 Revealed!";
+        res.className = "scramble-result ok";
+      }
+
+      /* ═══════════════════════════════════════════
+         QUICK GRAMMAR QUIZ
+      ═══════════════════════════════════════════ */
+      const quizData = [
+        {
+          q: "He ___ video games every day.",
+          hint: "Simple Present — he/she adds -s",
+          opts: ["play", "plays", "playing", "is play"],
+          ans: 1,
+        },
+        {
+          q: "She ___ a robot right now!",
+          hint: "Present Continuous — happening now",
+          opts: ["build", "builds", "is building", "are building"],
+          ans: 2,
+        },
+        {
+          q: "___ he like dinosaurs?",
+          hint: "Yes/No question for he/she/it",
+          opts: ["Do", "Does", "Is", "Are"],
+          ans: 1,
+        },
+        {
+          q: "___ is my pencil. (it's near me)",
+          hint: "One thing close to you",
+          opts: ["That", "Those", "These", "This"],
+          ans: 3,
+        },
+        {
+          q: "I ___ fly. Robots ___ talk.",
+          hint: "Ability — can or can't?",
+          opts: ["can / can't", "can't / can", "can / can", "can't / can't"],
+          ans: 0,
+        },
+        {
+          q: "How ___ robots do you have?",
+          hint: "Countable nouns use…",
+          opts: ["much", "many", "lot of", "any"],
+          ans: 1,
+        },
+        {
+          q: "The cat is ___ the table.",
+          hint: "Below / underneath",
+          opts: ["on", "in", "next to", "under"],
+          ans: 3,
+        },
+        {
+          q: "That is a ___ robot!",
+          hint: "Describing word goes before the noun",
+          opts: ["coolly", "cool", "cooling", "cooly"],
+          ans: 1,
+        },
+        {
+          q: "___ are stars. (many, far away)",
+          hint: "Many things, far from you",
+          opts: ["That", "Those", "These", "This"],
+          ans: 1,
+        },
+        {
+          q: "She ___ fly. (negative ability)",
+          hint: "Negative of can",
+          opts: ["doesn't", "isn't", "can't", "not can"],
+          ans: 2,
+        },
+      ];
+
+      let qIdx = 0,
+        qScore = 0,
+        answered = false;
+
+      function loadQuestion() {
+        answered = false;
+        const q = quizData[qIdx];
+        document.getElementById("qNum").textContent =
+          `Question ${qIdx + 1} of ${quizData.length}`;
+        document.getElementById("qText").textContent = q.q;
+        document.getElementById("qHint").textContent = `💡 ${q.hint}`;
+        document.getElementById("btnNext").classList.remove("visible");
+        document.getElementById("quizOptions").innerHTML = q.opts
+          .map(
+            (o, i) =>
+              `<button class="quiz-option" onclick="pickAnswer(this,${i},${q.ans})">${o}</button>`,
+          )
+          .join("");
+      }
+
+      function pickAnswer(btn, idx, correct) {
+        if (answered) return;
+        answered = true;
+        document
+          .querySelectorAll(".quiz-option")
+          [correct].classList.add("correct");
+        if (idx !== correct) btn.classList.add("wrong");
+        else {
+          qScore++;
+          document.getElementById("quizScore").textContent = qScore;
+          document.getElementById("quizStars").textContent = "⭐".repeat(
+            Math.min(qScore, 10),
+          );
+        }
+        document.getElementById("btnNext").classList.add("visible");
+      }
+
+      function nextQuestion() {
+        qIdx++;
+        if (qIdx >= quizData.length) {
+          qIdx = 0;
+          qScore = 0;
+          document.getElementById("quizScore").textContent = "0";
+          document.getElementById("quizStars").textContent = "";
+        }
+        loadQuestion();
+      }
+
+      loadQuestion();
+
+      /* ═══════════════════════════════════════════
+         SPIN THE TOPIC WHEEL
+      ═══════════════════════════════════════════ */
+      const wheelTopics = [
+        {
+          label: "🎮 Games",
+          task: "Talk about your favourite game for 30 seconds. Use: 'I like ___ because ___!'",
+        },
+        {
+          label: "🤖 Robots",
+          task: "Design a robot! Describe what it looks like, what it can do, and name it!",
+        },
+        {
+          label: "🚀 Space",
+          task: "Would you go to space? Which planet? What 3 things would you bring?",
+        },
+        {
+          label: "🦖 Dinos",
+          task: "Tell me 3 facts about dinosaurs. Which is your favourite and why?",
+        },
+        {
+          label: "🍕 Food",
+          task: "Describe your dream lunch using at least 3 adjectives!",
+        },
+        {
+          label: "💪 Can/Can't",
+          task: "Say 5 things you CAN do and 3 things you CAN'T do!",
+        },
+        {
+          label: "🌍 Travel",
+          task: "Where do you want to travel? What would you see and eat there?",
+        },
+        {
+          label: "🏫 My Day",
+          task: "Tell me about your school day: 'First… Then… After that… Finally…'",
+        },
+      ];
+
+      const colours = [
+        "#22c55e",
+        "#3b82f6",
+        "#f59e0b",
+        "#a78bfa",
+        "#ef4444",
+        "#06b6d4",
+        "#f97316",
+        "#ec4899",
+      ];
+      const canvas = document.getElementById("spinCanvas");
+      const ctx = canvas.getContext("2d");
+      const TOTAL = wheelTopics.length;
+      const SLICE = (2 * Math.PI) / TOTAL;
+      let currentAngle = 0;
+      let spinning = false;
+
+      function drawWheel(rotation) {
+        ctx.clearRect(0, 0, 220, 220);
+        for (let i = 0; i < TOTAL; i++) {
+          const start = rotation + i * SLICE;
+          ctx.beginPath();
+          ctx.moveTo(110, 110);
+          ctx.arc(110, 110, 105, start, start + SLICE);
+          ctx.closePath();
+          ctx.fillStyle = colours[i % colours.length];
+          ctx.fill();
+          ctx.strokeStyle = "white";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          // short label
+          ctx.save();
+          ctx.translate(110, 110);
+          ctx.rotate(start + SLICE / 2);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "white";
+          ctx.font = "bold 10px sans-serif";
+          ctx.shadowColor = "rgba(0,0,0,0.3)";
+          ctx.shadowBlur = 3;
+          const parts = wheelTopics[i].label.split(" ");
+          const short = parts.slice(1).join(" ").substring(0, 9);
+          ctx.fillText(short, 100, 4);
+          ctx.restore();
+        }
+        // centre
+        ctx.beginPath();
+        ctx.arc(110, 110, 18, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.shadowColor = "rgba(0,0,0,0.15)";
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#e5e7eb";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = "#1f2937";
+        ctx.font = "16px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("🎲", 110, 116);
+      }
+
+      drawWheel(0);
+
+      function spinWheel() {
+        if (spinning) return;
+        spinning = true;
+        document.getElementById("btnSpin").disabled = true;
+        document.getElementById("spinResult").classList.remove("show");
+        const extra =
+          (5 + Math.random() * 5) * 2 * Math.PI + Math.random() * 2 * Math.PI;
+        const target = currentAngle + extra;
+        const dur = 3200;
+        const t0 = performance.now();
+        const from = currentAngle;
+
+        (function animate(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          drawWheel(from + (target - from) * ease);
+          if (p < 1) {
+            requestAnimationFrame(animate);
+            return;
+          }
+          currentAngle = target % (2 * Math.PI);
+          const ptr =
+            (-Math.PI / 2 - currentAngle + 100 * Math.PI) % (2 * Math.PI);
+          const idx = Math.floor(ptr / SLICE) % TOTAL;
+          document.getElementById("spinTopic").textContent =
+            wheelTopics[idx].label;
+          document.getElementById("spinTask").textContent =
+            wheelTopics[idx].task;
+          document.getElementById("spinResult").classList.add("show");
+          spinning = false;
+          document.getElementById("btnSpin").disabled = false;
+        })(t0);
+      }
+
+      /* ═══════════════════════════════════════════
+         POINTS BOARD
+      ═══════════════════════════════════════════ */
+      const pts = { stars: 0, gems: 0, fire: 0, crown: 0 };
+      const icons = { stars: "⭐", gems: "💎", fire: "🔥", crown: "👑" };
+      const lbls = { stars: "Star", gems: "Gem", fire: "Fire", crown: "Crown" };
+      const idMap = {
+        stars: "pStars",
+        gems: "pGems",
+        fire: "pFire",
+        crown: "pCrown",
+      };
+      const shelf = document.getElementById("badgeShelf");
+      const empty = document.getElementById("badgeEmpty");
+
+      function award(type) {
+        pts[type]++;
+        document.getElementById(idMap[type]).textContent = pts[type];
+        const chip = document.createElement("div");
+        chip.className = "badge-chip";
+        chip.textContent = `${icons[type]} ${lbls[type]} #${pts[type]}`;
+        shelf.appendChild(chip);
+        empty.style.display = "none";
       }
     </script>
   </body>
