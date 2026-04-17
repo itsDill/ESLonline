@@ -10,52 +10,117 @@
         padding: 0;
         box-sizing: border-box;
       }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         padding: 40px 20px;
+        background-attachment: fixed;
       }
+
       .container {
         max-width: 1100px;
         margin: 0 auto;
         background: white;
-        border-radius: 16px;
+        border-radius: 20px;
         padding: 40px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+        animation: fadeInUp 0.5s ease-out;
       }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
       h1 {
         color: #667eea;
         margin-bottom: 30px;
         display: flex;
         align-items: center;
         gap: 15px;
+        font-size: 2em;
       }
+
       .back-link {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         margin-bottom: 20px;
         color: #667eea;
         text-decoration: none;
         font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        background: #f8f9ff;
       }
+
       .back-link:hover {
-        text-decoration: underline;
+        background: #667eea;
+        color: white;
+        transform: translateX(-4px);
       }
+
       .section {
         margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 12px;
+        background: #fafbff;
+        border: 1px solid #e8ebf5;
+        transition: all 0.3s ease;
       }
+
+      .section:hover {
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+      }
+
       .section-title {
         color: #667eea;
         font-size: 1.2em;
         margin-bottom: 15px;
-        font-weight: 600;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
+
       .field {
         margin-bottom: 10px;
         display: flex;
         justify-content: space-between;
+        padding: 8px 12px;
+        background: white;
+        border-radius: 8px;
+        transition: all 0.2s ease;
       }
+
+      .field:hover {
+        background: #f0f3ff;
+      }
+
       .label {
         font-weight: 600;
         color: #333;
@@ -74,68 +139,109 @@
         justify-content: space-between;
         margin-bottom: 8px;
         font-size: 0.95em;
+        font-weight: 600;
       }
 
       .progress-bar {
         width: 100%;
-        height: 8px;
+        height: 12px;
         background: #e0e0e0;
-        border-radius: 4px;
+        border-radius: 6px;
         overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        border-radius: 4px;
+        border-radius: 6px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
       }
 
       /* Schedule */
       .schedule {
-        background: #f8f9ff;
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
         border-left: 4px solid #667eea;
-        padding: 15px;
-        border-radius: 8px;
+        padding: 18px 20px;
+        border-radius: 0 12px 12px 0;
         margin-top: 10px;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
       }
 
       .schedule-item {
-        margin: 8px 0;
+        margin: 10px 0;
         font-size: 0.95em;
         color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .schedule-day {
-        font-weight: 600;
+        font-weight: 700;
         color: #667eea;
+        background: white;
+        padding: 4px 12px;
+        border-radius: 6px;
+        display: inline-block;
       }
 
       /* Resources */
       .resources-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 12px;
         margin-top: 10px;
       }
 
       .resource-link {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 12px;
-        padding: 15px;
-        background: #f8f9ff;
+        justify-content: center;
+        gap: 8px;
+        padding: 18px 15px;
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
         border: 2px solid #667eea;
-        border-radius: 8px;
+        border-radius: 12px;
         text-decoration: none;
         transition: all 0.3s ease;
         color: #667eea;
         font-weight: 600;
+        text-align: center;
       }
 
       .resource-link:hover {
-        background: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        transform: translateX(4px);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
       }
 
       .resource-link.disabled {
@@ -146,7 +252,7 @@
       }
 
       .resource-icon {
-        font-size: 1.5em;
+        font-size: 1.8em;
       }
 
       /* Phrasal Verbs & Idioms */
@@ -158,17 +264,35 @@
       }
 
       .vocab-card {
-        background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
-        border: 2px solid #667eea;
-        border-radius: 10px;
-        padding: 15px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        border: 2px solid #e8ebf5;
+        border-radius: 12px;
+        padding: 18px;
         transition: all 0.3s ease;
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .vocab-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        transition: width 0.3s ease;
       }
 
       .vocab-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
+        border-color: #667eea;
+      }
+
+      .vocab-card:hover::before {
+        width: 6px;
       }
 
       .vocab-term {
@@ -328,8 +452,8 @@
       .week-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
+        padding: 18px 24px;
+        border-radius: 12px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -337,15 +461,17 @@
         margin-bottom: 15px;
         user-select: none;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
       }
 
       .week-header:hover {
-        transform: translateX(4px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
       }
 
       .week-header h3 {
         margin: 0;
+        font-size: 1.1em;
         font-size: 1.1em;
       }
 
@@ -645,6 +771,127 @@
       .reveal-answer.revealed::after {
         content: "";
       }
+
+      /* === Global UX/UI Enhancements === */
+
+      /* Better focus states for accessibility */
+      *:focus-visible {
+        outline: 3px solid rgba(102, 126, 234, 0.5);
+        outline-offset: 2px;
+      }
+
+      /* Smooth transitions globally */
+      button,
+      a,
+      input,
+      .expandable-item,
+      .quiz-option {
+        transition: all 0.25s ease;
+      }
+
+      /* Enhanced scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f3f9;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        border: 2px solid #f1f3f9;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+      }
+
+      /* Better selection highlight */
+      ::selection {
+        background: rgba(102, 126, 234, 0.25);
+        color: #333;
+      }
+
+      /* Card hover enhancements */
+      .section:hover .section-title::before {
+        transform: scale(1.1);
+      }
+
+      /* Interactive hint for reveal answers */
+      .reveal-answer {
+        position: relative;
+        padding: 2px 6px;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.08) 0%,
+          rgba(118, 75, 162, 0.08) 100%
+        );
+      }
+      .reveal-answer:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.15) 0%,
+          rgba(118, 75, 162, 0.15) 100%
+        );
+      }
+
+      /* Enhanced mobile responsiveness */
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+          border-radius: 0;
+          margin: 0;
+        }
+        .section {
+          padding: 15px;
+          margin-bottom: 15px;
+        }
+        .section-title {
+          font-size: 1.1em;
+        }
+        h1 {
+          font-size: 1.5em;
+        }
+        .resources-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+        .schedule-item {
+          padding: 10px 12px;
+          font-size: 0.9em;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .resources-grid {
+          grid-template-columns: 1fr;
+        }
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+        .back-link {
+          font-size: 0.9em;
+          padding: 8px 14px;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        .back-link,
+        .reveal-answer::after {
+          display: none;
+        }
+        .reveal-answer {
+          filter: none !important;
+          background: none !important;
+        }
+        .section {
+          break-inside: avoid;
+          box-shadow: none;
+          border: 1px solid #ddd;
+        }
+      }
     </style>
   </head>
   <body>
@@ -811,7 +1058,7 @@
             "
           >
             <span class="resource-icon">🌟</span>
-            <span>Halfway Review (Units 1–6)</span>
+            <span>Halfway Review (Units 1–7)</span>
           </div>
         </div>
         <p style="color: #666; font-size: 0.85em; margin-top: 15px">
@@ -827,112 +1074,107 @@
         </p>
         <div class="vocabulary-grid">
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Follow up</div>
+            <div class="vocab-term">Pick up</div>
             <div class="vocab-meaning hidden">
-              To contact someone again to check progress or continue a
-              conversation
+              To collect something or someone; to learn easily
             </div>
             <div class="vocab-example hidden">
-              "I'll follow up with the client next week about the proposal."
+              "Can you pick up some coffee on the way to work?"
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Set up</div>
+            <div class="vocab-term">Turn on / Turn off</div>
             <div class="vocab-meaning hidden">
-              To arrange or organize something
+              To start / stop a machine or device
             </div>
             <div class="vocab-example hidden">
-              "Can you set up a meeting with the marketing team?"
+              "Please turn off the lights when you leave the office."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Deal with</div>
+            <div class="vocab-term">Look for</div>
             <div class="vocab-meaning hidden">
-              To handle or manage a situation or problem
+              To search for something or someone
             </div>
             <div class="vocab-example hidden">
-              "I need to deal with this customer complaint immediately."
+              "I'm looking for a new job in marketing."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Look into</div>
+            <div class="vocab-term">Find out</div>
             <div class="vocab-meaning hidden">
-              To investigate or examine something
+              To discover or learn information
             </div>
             <div class="vocab-example hidden">
-              "Let me look into the issue and get back to you."
+              "I need to find out what time the meeting starts."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Take over</div>
+            <div class="vocab-term">Give up</div>
             <div class="vocab-meaning hidden">
-              To assume control or responsibility for something
+              To stop trying; to quit something
             </div>
             <div class="vocab-example hidden">
-              "Sarah will take over the project while I'm on leave."
+              "Don't give up! You're almost finished with the project."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Put off</div>
-            <div class="vocab-meaning hidden">
-              To delay or postpone something
-            </div>
+            <div class="vocab-term">Go on</div>
+            <div class="vocab-meaning hidden">To continue; to happen</div>
             <div class="vocab-example hidden">
-              "We had to put off the deadline until next month."
+              "Please go on with your presentation."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Come up with</div>
-            <div class="vocab-meaning hidden">
-              To think of or produce an idea or solution
-            </div>
+            <div class="vocab-term">Come back</div>
+            <div class="vocab-meaning hidden">To return to a place</div>
             <div class="vocab-example hidden">
-              "We need to come up with a new marketing strategy."
+              "I'll come back to the office after lunch."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Wrap up</div>
+            <div class="vocab-term">Write down</div>
             <div class="vocab-meaning hidden">
-              To finish or complete something
+              To record something on paper or device
             </div>
             <div class="vocab-example hidden">
-              "Let's wrap up the meeting — we've covered everything."
+              "Let me write down your phone number."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Carry out</div>
+            <div class="vocab-term">Fill in / Fill out</div>
             <div class="vocab-meaning hidden">
-              To perform or complete a task or plan
+              To complete a form or document
             </div>
             <div class="vocab-example hidden">
-              "The team will carry out the market research next quarter."
+              "Please fill out this application form."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Break down</div>
+            <div class="vocab-term">Put on / Take off</div>
             <div class="vocab-meaning hidden">
-              To divide into smaller parts; or to stop working
+              To wear / remove clothing or accessories
             </div>
             <div class="vocab-example hidden">
-              "Can you break down the costs for each department?"
+              "Put on your badge before entering the building."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Bring up</div>
+            <div class="vocab-term">Get up</div>
             <div class="vocab-meaning hidden">
-              To mention or introduce a topic
+              To rise from bed; to stand up
             </div>
             <div class="vocab-example hidden">
-              "She brought up an important point during the meeting."
+              "I usually get up at 7am on weekdays."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Cut back</div>
+            <div class="vocab-term">Work out</div>
             <div class="vocab-meaning hidden">
-              To reduce the amount or size of something
+              To exercise; to find a solution; to succeed
             </div>
             <div class="vocab-example hidden">
-              "We need to cut back on expenses this quarter."
+              "I hope this plan works out for everyone."
             </div>
           </div>
         </div>
@@ -940,126 +1182,297 @@
 
       <!-- Idioms Section -->
       <div class="section">
-        <div class="section-title">💬 Business Idioms</div>
+        <div class="section-title">💬 Common Idioms</div>
         <p style="color: #666; font-size: 0.9em; margin-bottom: 15px">
           Click any card to see the meaning and example
         </p>
         <div class="vocabulary-grid">
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">On the same page</div>
-            <div class="vocab-meaning hidden">
-              To have the same understanding or agreement
-            </div>
+            <div class="vocab-term">Piece of cake</div>
+            <div class="vocab-meaning hidden">Something very easy to do</div>
             <div class="vocab-example hidden">
-              "Let's make sure we're all on the same page before we proceed."
+              "The test was a piece of cake — I finished in 20 minutes!"
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Think outside the box</div>
+            <div class="vocab-term">Break the ice</div>
             <div class="vocab-meaning hidden">
-              To think creatively or unconventionally
+              To start a conversation with someone new; reduce awkwardness
             </div>
             <div class="vocab-example hidden">
-              "We need to think outside the box to solve this problem."
+              "Tell a joke to break the ice at the party."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Get the ball rolling</div>
+            <div class="vocab-term">Hit the nail on the head</div>
             <div class="vocab-meaning hidden">
-              To start something; to begin a process
+              To be exactly right about something
             </div>
             <div class="vocab-example hidden">
-              "Let's get the ball rolling on this project today."
+              "You hit the nail on the head — that's exactly the problem."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Touch base</div>
-            <div class="vocab-meaning hidden">
-              To briefly connect or communicate with someone
-            </div>
+            <div class="vocab-term">Under the weather</div>
+            <div class="vocab-meaning hidden">Feeling sick or unwell</div>
             <div class="vocab-example hidden">
-              "I'll touch base with you tomorrow about the schedule."
+              "I'm feeling a bit under the weather today, so I'll work from
+              home."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Keep someone in the loop</div>
+            <div class="vocab-term">In the same boat</div>
             <div class="vocab-meaning hidden">
-              To keep someone informed about progress or changes
+              In the same difficult situation as someone else
             </div>
             <div class="vocab-example hidden">
-              "Please keep me in the loop on any updates."
+              "We're all in the same boat — no one knows how to use this
+              software."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">The bottom line</div>
+            <div class="vocab-term">Keep an eye on</div>
             <div class="vocab-meaning hidden">
-              The most important point; the final result (often about money)
+              To watch or monitor carefully
             </div>
             <div class="vocab-example hidden">
-              "The bottom line is we need to increase sales by 20%."
+              "Can you keep an eye on my bag while I get coffee?"
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Bring to the table</div>
-            <div class="vocab-meaning hidden">
-              To contribute skills, ideas, or value
-            </div>
+            <div class="vocab-term">Once in a blue moon</div>
+            <div class="vocab-meaning hidden">Very rarely; almost never</div>
             <div class="vocab-example hidden">
-              "What experience do you bring to the table?"
+              "I eat fast food once in a blue moon — maybe twice a year."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Win-win situation</div>
-            <div class="vocab-meaning hidden">
-              A situation that benefits everyone involved
-            </div>
+            <div class="vocab-term">Cost an arm and a leg</div>
+            <div class="vocab-meaning hidden">To be very expensive</div>
             <div class="vocab-example hidden">
-              "This partnership is a win-win situation for both companies."
+              "That new iPhone costs an arm and a leg!"
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Back to square one</div>
+            <div class="vocab-term">Better late than never</div>
             <div class="vocab-meaning hidden">
-              To start over from the beginning
+              It's better to do something late than not at all
             </div>
             <div class="vocab-example hidden">
-              "The client rejected our proposal, so we're back to square one."
+              "You finally started learning English! Better late than never."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Cut corners</div>
+            <div class="vocab-term">Call it a day</div>
             <div class="vocab-meaning hidden">
-              To do something cheaply or quickly, sacrificing quality
+              To stop working; to finish for today
             </div>
             <div class="vocab-example hidden">
-              "Don't cut corners on quality — our reputation depends on it."
+              "It's 6pm — let's call it a day and go home."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Go the extra mile</div>
+            <div class="vocab-term">On the other hand</div>
             <div class="vocab-meaning hidden">
-              To make more effort than expected
+              Looking at a different point of view
             </div>
             <div class="vocab-example hidden">
-              "She always goes the extra mile for her clients."
+              "The job pays well. On the other hand, it's very stressful."
             </div>
           </div>
           <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Ahead of the curve</div>
+            <div class="vocab-term">Speak of the devil</div>
             <div class="vocab-meaning hidden">
-              To be more advanced or innovative than others
+              Said when someone you were just talking about arrives
             </div>
             <div class="vocab-example hidden">
-              "Our technology keeps us ahead of the curve."
+              "I was just talking about you — speak of the devil!"
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Notes -->
+      <!-- Teaching Plan & Notes -->
       <div class="section">
-        <div class="section-title">📝 Notes</div>
-        <div class="content" style="color: #666"></div>
+        <div class="section-title">📝 Teaching Plan & Progress Notes</div>
+        <div
+          style="
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+          "
+        >
+          <!-- Progress Summary -->
+          <div
+            style="
+              background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+              color: white;
+              padding: 15px;
+              border-radius: 8px;
+              margin-bottom: 20px;
+            "
+          >
+            <h4 style="margin: 0 0 8px 0; font-size: 1.1em">
+              ✅ Progress Summary
+            </h4>
+            <p style="margin: 0; font-size: 0.95em">
+              <strong>20 hours completed</strong> (50% of course) — Units 1–7
+              done, currently on <strong>Unit 8</strong>
+            </p>
+          </div>
+
+          <!-- Remaining Hours Breakdown -->
+          <div
+            style="
+              background: white;
+              padding: 15px;
+              border-radius: 8px;
+              margin-bottom: 15px;
+              border-left: 4px solid #f59e0b;
+            "
+          >
+            <h4 style="color: #f59e0b; margin: 0 0 12px 0">
+              📅 Remaining 20 Hours – Teaching Plan
+            </h4>
+            <p style="color: #666; font-size: 0.9em; margin-bottom: 12px">
+              <strong>Schedule:</strong> Tuesday & Friday, 2 hours each =
+              <strong>4 hours/week</strong><br />
+              <strong>Estimated completion:</strong> 5 more weeks (20 hours ÷ 4
+              hours/week)
+            </p>
+            <table
+              style="width: 100%; border-collapse: collapse; font-size: 0.9em"
+            >
+              <tr style="background: #fef3c7">
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  <strong>Unit 8: Employment</strong>
+                </td>
+                <td
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                  "
+                >
+                  ~4 hours
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  Skills, experience, present perfect, meeting arrangements
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  <strong>Unit 9: Competition</strong>
+                </td>
+                <td
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                  "
+                >
+                  ~4 hours
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  Comparing products, prices, comparatives/superlatives
+                </td>
+              </tr>
+              <tr style="background: #f3f4f6">
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  <strong>Unit 10: Teamwork</strong>
+                </td>
+                <td
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                  "
+                >
+                  ~4 hours
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  Teamwork, personality types, giving opinions
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  <strong>Unit 11: Travel</strong>
+                </td>
+                <td
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                  "
+                >
+                  ~4 hours
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  Hotels, restaurants, money, future plans (will/going to)
+                </td>
+              </tr>
+              <tr style="background: #f3f4f6">
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  <strong>Unit 12: Schedules</strong>
+                </td>
+                <td
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                  "
+                >
+                  ~4 hours
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd">
+                  Calendars, schedules, dates & times, final review
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Teacher Notes -->
+          <div
+            style="
+              background: #eff6ff;
+              padding: 15px;
+              border-radius: 8px;
+              border-left: 4px solid #3b82f6;
+            "
+          >
+            <h4 style="color: #3b82f6; margin: 0 0 10px 0">📌 Teacher Notes</h4>
+            <ul
+              style="
+                margin: 0;
+                padding-left: 20px;
+                color: #555;
+                line-height: 1.8;
+                font-size: 0.9em;
+              "
+            >
+              <li>
+                <strong>Currently on Unit 8</strong> – focus on present perfect
+                for experience (I have worked...)
+              </li>
+              <li>
+                Student is progressing well – completed Units 1–7 in 20 hours
+                (on schedule)
+              </li>
+              <li>
+                At current pace, book completion expected in
+                <strong>5 weeks</strong>
+              </li>
+              <li>
+                Create final review quiz after Unit 12 for course completion
+              </li>
+              <li>
+                Consider adding speaking practice topics for job interviews
+                (Unit 8–9)
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Course Overview -->
@@ -2668,17 +3081,22 @@
       <style>
         .quiz-question {
           background: white;
-          border: 2px solid #e0e0e0;
-          border-radius: 10px;
-          padding: 20px;
+          border: 2px solid #e8ebf5;
+          border-radius: 12px;
+          padding: 22px;
           margin-bottom: 15px;
           transition: all 0.3s ease;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .quiz-question:hover {
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
         }
         .quiz-question-text {
-          font-weight: 600;
+          font-weight: 700;
           color: #333;
           margin-bottom: 15px;
           font-size: 1.05em;
+          line-height: 1.5;
         }
         .quiz-options {
           display: grid;
@@ -2691,40 +3109,54 @@
           }
         }
         .quiz-option {
-          background: #f8f9ff;
-          border: 2px solid #ddd;
-          border-radius: 8px;
-          padding: 12px 15px;
+          background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
+          border: 2px solid #e0e5f5;
+          border-radius: 10px;
+          padding: 14px 18px;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.25s ease;
           font-size: 0.95em;
+          font-weight: 500;
         }
         .quiz-option:hover {
-          background: #e8ebff;
+          background: linear-gradient(135deg, #e8ebff 0%, #dde3ff 100%);
           border-color: #667eea;
+          transform: translateY(-2px);
         }
         .quiz-option.selected {
-          background: #667eea;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           border-color: #667eea;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         .quiz-option.correct {
-          background: #10b981 !important;
+          background: linear-gradient(
+            135deg,
+            #10b981 0%,
+            #059669 100%
+          ) !important;
           color: white !important;
           border-color: #10b981 !important;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         .quiz-option.incorrect {
-          background: #ef4444 !important;
+          background: linear-gradient(
+            135deg,
+            #ef4444 0%,
+            #dc2626 100%
+          ) !important;
           color: white !important;
           border-color: #ef4444 !important;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
         .quiz-question.answered-correct {
           border-color: #10b981;
-          background: #f0fdf4;
+          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
         }
         .quiz-question.answered-incorrect {
           border-color: #ef4444;
-          background: #fef2f2;
+          background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
         }
       </style>
 
@@ -8895,7 +9327,7 @@
           id="halfwayReview"
           style="background: linear-gradient(135deg, #10b981 0%, #059669 100%)"
         >
-          <h3>🌟 Halfway Review – Units 1–6</h3>
+          <h3>🌟 Halfway Review – Units 1–7</h3>
           <span class="week-toggle">▼</span>
         </div>
         <div class="week-content">
@@ -8921,8 +9353,8 @@
               🎉 You're halfway through the book!
             </p>
             <p style="color: #065f46; font-size: 0.95em">
-              Units 1–6 complete. 6 more to go. Let's review everything before
-              we move on to Unit 7.
+              Units 1–7 complete. 5 more to go. Let's review everything before
+              we move on to Unit 8.
             </p>
             <div
               style="
@@ -8999,13 +9431,24 @@
                 "
                 >✅ Unit 6: Past Simple &amp; Networking</span
               >
+              <span
+                style="
+                  background: #10b981;
+                  color: white;
+                  padding: 6px 14px;
+                  border-radius: 20px;
+                  font-size: 0.82em;
+                  font-weight: 600;
+                "
+                >✅ Unit 7: Departments &amp; Directions</span
+              >
             </div>
           </div>
 
           <!-- Grammar Recap -->
           <div class="week-section">
             <div class="week-section-title">
-              📚 Grammar Quick Recap – Units 1–6
+              📚 Grammar Quick Recap – Units 1–7
             </div>
             <div
               style="
@@ -9137,6 +9580,29 @@
                   </div>
                 </div>
               </div>
+
+              <div class="grammar-content">
+                <h4>Unit 7 – Departments &amp; Prepositions of Place</h4>
+                <div class="grammar-example">
+                  HR · Finance · Marketing · Sales · IT · Logistics
+                </div>
+                <div class="grammar-example">
+                  The office is on the third floor, next to the IT department.
+                </div>
+                <div
+                  class="practice-section"
+                  style="font-size: 0.9em; margin-top: 8px"
+                >
+                  <div class="practice-item">
+                    ✅ Prepositions:
+                    <strong>on (floor), next to, opposite, between</strong>
+                  </div>
+                  <div class="practice-item">
+                    ✅ Phone messages:
+                    <strong>"I'm sorry, [X] is not available."</strong>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -9146,7 +9612,7 @@
               🗣️ Speaking Review – Tell Me About Yourself!
             </div>
             <div class="activity-card">
-              <h4>🎯 Practise using all 6 units in one conversation</h4>
+              <h4>🎯 Practise using all 7 units in one conversation</h4>
               <p style="color: #555; font-size: 0.9em; margin-bottom: 12px">
                 Answer each question using what you've learned. Use full
                 sentences!
@@ -9178,6 +9644,10 @@
                 <div class="practice-item">
                   <strong>Unit 6:</strong> "What did you do last week?" →
                   <em>Last week I went / had / met...</em>
+                </div>
+                <div class="practice-item">
+                  <strong>Unit 7:</strong> "Where is the HR department?" →
+                  <em>It's on the [floor], next to / opposite [department].</em>
                 </div>
               </div>
             </div>
@@ -9263,14 +9733,24 @@
                     ></span
                   >
                 </div>
+                <div class="practice-item">
+                  8. "The office is in the third floor." →
+                  <span
+                    class="reveal-answer"
+                    onclick="this.classList.toggle('revealed')"
+                    ><strong style="color: #10b981"
+                      >The office is <u>on</u> the third floor.</strong
+                    ></span
+                  >
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Bridge to Unit 7 -->
+          <!-- Bridge to Unit 8 -->
           <div class="week-section">
             <div class="week-section-title">
-              🔭 Looking Ahead – Unit 7: Departments
+              🔭 Looking Ahead – Unit 8: Employment
             </div>
             <div
               style="
@@ -9281,7 +9761,7 @@
               "
             >
               <p style="color: #1e40af; font-weight: 600; margin-bottom: 12px">
-                In Unit 7 you will learn to:
+                In Unit 8 you will learn to:
               </p>
               <ul
                 style="
@@ -9292,22 +9772,19 @@
                 "
               >
                 <li>
-                  Name and describe company <strong>departments</strong> (HR,
-                  Sales, Finance, IT, Marketing…)
+                  Talk about <strong>skills and experience</strong> in job
+                  contexts
                 </li>
                 <li>
-                  Use <strong>prepositions of place</strong> (next to, opposite,
-                  on the left, upstairs…)
+                  Use <strong>present perfect</strong> for work experience (I
+                  have worked...)
+                </li>
+                <li>Arrange and confirm <strong>meetings</strong></li>
+                <li>
+                  Discuss <strong>qualifications</strong> and job requirements
                 </li>
                 <li>
-                  Leave and take <strong>professional phone messages</strong>
-                </li>
-                <li>
-                  Give <strong>directions</strong> inside an office building
-                </li>
-                <li>
-                  Talk about <strong>roles and responsibilities</strong> in each
-                  department
+                  Write and respond to <strong>job-related emails</strong>
                 </li>
               </ul>
               <div
@@ -9322,7 +9799,7 @@
                 <p
                   style="font-weight: 600; color: #1e40af; margin-bottom: 10px"
                 >
-                  Preview Vocabulary – Company Departments:
+                  Preview Vocabulary – Employment:
                 </p>
                 <div style="display: flex; flex-wrap: wrap; gap: 8px">
                   <span
@@ -9334,7 +9811,7 @@
                       font-size: 0.85em;
                       font-weight: 600;
                     "
-                    >👥 HR</span
+                    >💼 Experience</span
                   >
                   <span
                     style="
@@ -9345,7 +9822,7 @@
                       font-size: 0.85em;
                       font-weight: 600;
                     "
-                    >💰 Finance</span
+                    >🎓 Qualifications</span
                   >
                   <span
                     style="
@@ -9356,7 +9833,7 @@
                       font-size: 0.85em;
                       font-weight: 600;
                     "
-                    >📢 Marketing</span
+                    >📅 Arrange meetings</span
                   >
                   <span
                     style="
@@ -9367,58 +9844,14 @@
                       font-size: 0.85em;
                       font-weight: 600;
                     "
-                    >🛒 Sales</span
-                  >
-                  <span
-                    style="
-                      background: #dbeafe;
-                      color: #1e40af;
-                      padding: 5px 12px;
-                      border-radius: 15px;
-                      font-size: 0.85em;
-                      font-weight: 600;
-                    "
-                    >💻 IT</span
-                  >
-                  <span
-                    style="
-                      background: #dbeafe;
-                      color: #1e40af;
-                      padding: 5px 12px;
-                      border-radius: 15px;
-                      font-size: 0.85em;
-                      font-weight: 600;
-                    "
-                    >🚚 Logistics</span
-                  >
-                  <span
-                    style="
-                      background: #dbeafe;
-                      color: #1e40af;
-                      padding: 5px 12px;
-                      border-radius: 15px;
-                      font-size: 0.85em;
-                      font-weight: 600;
-                    "
-                    >⚖️ Legal</span
-                  >
-                  <span
-                    style="
-                      background: #dbeafe;
-                      color: #1e40af;
-                      padding: 5px 12px;
-                      border-radius: 15px;
-                      font-size: 0.85em;
-                      font-weight: 600;
-                    "
-                    >📦 Operations</span
+                    >📧 Email writing</span
                   >
                 </div>
                 <p style="font-size: 0.85em; color: #555; margin-top: 12px">
                   💬 Try saying:
                   <em
-                    >"I work in the [department] department. I am responsible
-                    for [task]."</em
+                    >"I have [X] years of experience in [field]. I have worked
+                    at [company]."</em
                   >
                 </p>
               </div>
@@ -9428,7 +9861,7 @@
           <!-- 20-Question Quiz -->
           <div class="week-section">
             <div class="week-section-title">
-              📝 Units 1–6 Halfway Quiz (20 Questions)
+              📝 Units 1–7 Halfway Quiz (20 Questions)
             </div>
             <p style="color: #666; font-size: 0.95em; margin-bottom: 20px">
               Choose the best answer for each question. Press
@@ -10154,9 +10587,9 @@
                 </div>
               </div>
 
-              <div class="quiz-question" data-correct="a">
+              <div class="quiz-question" data-correct="c">
                 <div class="quiz-question-text">
-                  19. LinkedIn is mainly used for...
+                  19. Which department handles hiring new employees?
                 </div>
                 <div class="quiz-options">
                   <div
@@ -10164,35 +10597,36 @@
                     data-value="a"
                     onclick="selectOption3(this)"
                   >
-                    a) Professional networking
+                    a) Marketing
                   </div>
                   <div
                     class="quiz-option"
                     data-value="b"
                     onclick="selectOption3(this)"
                   >
-                    b) Sharing food photos
+                    b) Finance
                   </div>
                   <div
                     class="quiz-option"
                     data-value="c"
                     onclick="selectOption3(this)"
                   >
-                    c) Playing video games
+                    c) Human Resources (HR)
                   </div>
                   <div
                     class="quiz-option"
                     data-value="d"
                     onclick="selectOption3(this)"
                   >
-                    d) Booking flights
+                    d) IT
                   </div>
                 </div>
               </div>
 
               <div class="quiz-question" data-correct="b">
                 <div class="quiz-question-text">
-                  20. Which sentence is correct?
+                  20. "The office is _____ the third floor, _____ the IT
+                  department."
                 </div>
                 <div class="quiz-options">
                   <div
@@ -10200,28 +10634,28 @@
                     data-value="a"
                     onclick="selectOption3(this)"
                   >
-                    a) "I didn't went to the meeting."
+                    a) in / between
                   </div>
                   <div
                     class="quiz-option"
                     data-value="b"
                     onclick="selectOption3(this)"
                   >
-                    b) "I didn't go to the meeting."
+                    b) on / next to
                   </div>
                   <div
                     class="quiz-option"
                     data-value="c"
                     onclick="selectOption3(this)"
                   >
-                    c) "I did went to the meeting."
+                    c) at / under
                   </div>
                   <div
                     class="quiz-option"
                     data-value="d"
                     onclick="selectOption3(this)"
                   >
-                    d) "I didn't goes to the meeting."
+                    d) on / in front
                   </div>
                 </div>
               </div>
@@ -12722,33 +13156,336 @@
             📝 Final Project: Introduce Your Company
           </div>
           <div class="grammar-content">
-            <p style="color: #666; margin-bottom: 15px">
-              <strong>Task:</strong> Prepare a 3-5 minute presentation
-              introducing a company
-            </p>
-            <div class="practice-section">
-              <p><strong>Your presentation should include:</strong></p>
-              <div class="practice-item">• Company name and location</div>
-              <div class="practice-item">
-                • What the company does (products/services)
+            <div
+              style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+              "
+            >
+              <h4 style="margin: 0 0 10px 0; font-size: 1.15em">
+                🎯 Your Task
+              </h4>
+              <p style="margin: 0; font-size: 0.95em">
+                Prepare a <strong>3-5 minute presentation</strong> introducing a
+                real or imaginary company. This is your chance to show
+                everything you've learned!
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 15px;
+                margin-bottom: 20px;
+              "
+            >
+              <div
+                style="
+                  background: #f0f9ff;
+                  border: 2px solid #3b82f6;
+                  border-radius: 10px;
+                  padding: 15px;
+                "
+              >
+                <h5 style="color: #3b82f6; margin: 0 0 10px 0">
+                  🏢 Company Info
+                </h5>
+                <ul
+                  style="
+                    margin: 0;
+                    padding-left: 18px;
+                    font-size: 0.9em;
+                    color: #555;
+                    line-height: 1.7;
+                  "
+                >
+                  <li>Company name and location</li>
+                  <li>What the company does (products/services)</li>
+                  <li>Number of employees</li>
+                  <li>Company history (when started, etc.)</li>
+                </ul>
               </div>
-              <div class="practice-item">• Key staff and their roles</div>
-              <div class="practice-item">
-                • Why you would want to work there
+              <div
+                style="
+                  background: #f0fdf4;
+                  border: 2px solid #10b981;
+                  border-radius: 10px;
+                  padding: 15px;
+                "
+              >
+                <h5 style="color: #10b981; margin: 0 0 10px 0">
+                  👥 People & Roles
+                </h5>
+                <ul
+                  style="
+                    margin: 0;
+                    padding-left: 18px;
+                    font-size: 0.9em;
+                    color: #555;
+                    line-height: 1.7;
+                  "
+                >
+                  <li>Key departments (HR, Sales, IT, etc.)</li>
+                  <li>Important staff and their jobs</li>
+                  <li>Your role (real or imagined)</li>
+                  <li>Daily responsibilities</li>
+                </ul>
               </div>
-              <div class="practice-item">
-                • Use grammar from at least 5 different units
+              <div
+                style="
+                  background: #fef3c7;
+                  border: 2px solid #f59e0b;
+                  border-radius: 10px;
+                  padding: 15px;
+                "
+              >
+                <h5 style="color: #d97706; margin: 0 0 10px 0">
+                  📣 Why Work Here?
+                </h5>
+                <ul
+                  style="
+                    margin: 0;
+                    padding-left: 18px;
+                    font-size: 0.9em;
+                    color: #555;
+                    line-height: 1.7;
+                  "
+                >
+                  <li>Company culture and values</li>
+                  <li>Benefits and opportunities</li>
+                  <li>What makes it special</li>
+                  <li>Future plans/goals</li>
+                </ul>
               </div>
-              <p style="margin-top: 15px"><strong>Grading Criteria:</strong></p>
-              <div class="practice-item">
-                ✓ Pronunciation and stress patterns (Unit 1)
+            </div>
+
+            <div
+              style="
+                background: #faf5ff;
+                border: 2px solid #9333ea;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 20px;
+              "
+            >
+              <h5 style="color: #9333ea; margin: 0 0 12px 0">
+                📚 Grammar Checklist – Use at least 5!
+              </h5>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" />
+                  Present simple (Unit 2)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" />
+                  have/has (Unit 3)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" />
+                  can/can't (Unit 5)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" /> Past
+                  simple (Unit 6)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" />
+                  Prepositions (Unit 7)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" /> There
+                  is/are (Unit 7)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" />
+                  Comparatives (Unit 9)
+                </label>
+                <label
+                  style="
+                    background: white;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-size: 0.85em;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                  "
+                >
+                  <input type="checkbox" style="accent-color: #9333ea" /> Future
+                  plans (Unit 11)
+                </label>
               </div>
-              <div class="practice-item">✓ Grammar accuracy (Units 1-12)</div>
-              <div class="practice-item">✓ Vocabulary use (Units 1-12)</div>
-              <div class="practice-item">✓ Fluency and confidence</div>
-              <div class="practice-item">
-                ✓ Visual aids / presentation structure
-              </div>
+            </div>
+
+            <div
+              style="
+                background: #fee2e2;
+                border: 2px solid #ef4444;
+                border-radius: 10px;
+                padding: 15px;
+              "
+            >
+              <h5 style="color: #ef4444; margin: 0 0 10px 0">
+                ⭐ Grading Criteria (20 points total)
+              </h5>
+              <table style="width: 100%; font-size: 0.9em">
+                <tr style="background: white">
+                  <td style="padding: 8px; border-bottom: 1px solid #fecaca">
+                    Pronunciation & word stress
+                  </td>
+                  <td
+                    style="
+                      padding: 8px;
+                      border-bottom: 1px solid #fecaca;
+                      text-align: right;
+                      font-weight: 600;
+                    "
+                  >
+                    4 pts
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #fecaca">
+                    Grammar accuracy (5+ structures)
+                  </td>
+                  <td
+                    style="
+                      padding: 8px;
+                      border-bottom: 1px solid #fecaca;
+                      text-align: right;
+                      font-weight: 600;
+                    "
+                  >
+                    5 pts
+                  </td>
+                </tr>
+                <tr style="background: white">
+                  <td style="padding: 8px; border-bottom: 1px solid #fecaca">
+                    Vocabulary range & appropriateness
+                  </td>
+                  <td
+                    style="
+                      padding: 8px;
+                      border-bottom: 1px solid #fecaca;
+                      text-align: right;
+                      font-weight: 600;
+                    "
+                  >
+                    4 pts
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #fecaca">
+                    Fluency & confidence
+                  </td>
+                  <td
+                    style="
+                      padding: 8px;
+                      border-bottom: 1px solid #fecaca;
+                      text-align: right;
+                      font-weight: 600;
+                    "
+                  >
+                    4 pts
+                  </td>
+                </tr>
+                <tr style="background: white">
+                  <td style="padding: 8px">Presentation structure & visuals</td>
+                  <td style="padding: 8px; text-align: right; font-weight: 600">
+                    3 pts
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </div>
@@ -12759,84 +13496,1062 @@
           </div>
           <div class="grammar-content">
             <p style="color: #666; margin-bottom: 15px">
-              Rate your confidence on a scale of 1-5 (1=Not confident, 5=Very
-              confident)
+              Click on a rating for each skill. Be honest – this helps identify
+              areas to review!
             </p>
-            <div class="practice-section" style="font-size: 0.9em">
-              <table style="width: 100%; margin-top: 10px">
-                <tr style="background: #f0f3ff">
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    <strong>Skill</strong>
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    <strong>Rating</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Introducing myself and others
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Describing jobs and companies
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Using present simple correctly
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Talking about experiences (past)
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Making comparisons
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Professional communication
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Business vocabulary
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-                <tr>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    Pronunciation and word stress
-                  </td>
-                  <td style="border: 1px solid #ddd; padding: 8px">
-                    1 2 3 4 5
-                  </td>
-                </tr>
-              </table>
+            <div id="selfAssessment" style="font-size: 0.9em">
+              <div
+                class="assessment-item"
+                style="
+                  background: #f8f9ff;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >👋 Introducing myself and others</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: white;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  border: 1px solid #e5e7eb;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >🏢 Describing jobs and companies</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: #f8f9ff;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >📝 Using present simple correctly</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: white;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  border: 1px solid #e5e7eb;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >⏰ Talking about past experiences</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: #f8f9ff;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >⚖️ Making comparisons</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: white;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  border: 1px solid #e5e7eb;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >📞 Professional phone communication</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: #f8f9ff;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >📚 Business vocabulary range</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="assessment-item"
+                style="
+                  background: white;
+                  padding: 12px 15px;
+                  border-radius: 8px;
+                  margin-bottom: 15px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                  border: 1px solid #e5e7eb;
+                "
+              >
+                <span
+                  style="
+                    font-weight: 600;
+                    color: #333;
+                    flex: 1;
+                    min-width: 200px;
+                  "
+                  >🗣️ Pronunciation and word stress</span
+                >
+                <div class="rating-buttons" style="display: flex; gap: 5px">
+                  <button
+                    onclick="rateSkill(this, 1)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    1
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 2)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    2
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 3)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    3
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 4)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    4
+                  </button>
+                  <button
+                    onclick="rateSkill(this, 5)"
+                    class="rate-btn"
+                    style="
+                      width: 36px;
+                      height: 36px;
+                      border: 2px solid #ddd;
+                      border-radius: 50%;
+                      background: white;
+                      cursor: pointer;
+                      font-weight: 600;
+                      transition: all 0.2s;
+                    "
+                  >
+                    5
+                  </button>
+                </div>
+              </div>
+
+              <div
+                id="assessmentResult"
+                style="
+                  display: none;
+                  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                  color: white;
+                  padding: 20px;
+                  border-radius: 12px;
+                  text-align: center;
+                "
+              >
+                <p
+                  style="font-size: 1.2em; font-weight: 700; margin: 0 0 5px 0"
+                >
+                  Your Average Score: <span id="avgScore">0</span>/5
+                </p>
+                <p
+                  style="margin: 0; font-size: 0.9em; opacity: 0.9"
+                  id="scoreMessage"
+                ></p>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 15px">
+                <button
+                  onclick="calculateAssessment()"
+                  style="
+                    flex: 1;
+                    background: linear-gradient(
+                      135deg,
+                      #667eea 0%,
+                      #764ba2 100%
+                    );
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  📊 Calculate My Score
+                </button>
+                <button
+                  onclick="resetAssessment()"
+                  style="
+                    background: #6b7280;
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  🔄 Reset
+                </button>
+              </div>
+
+              <div
+                style="
+                  margin-top: 15px;
+                  padding: 12px;
+                  background: #fef3c7;
+                  border-radius: 8px;
+                  font-size: 0.85em;
+                  color: #92400e;
+                "
+              >
+                <strong>💡 Rating Guide:</strong> 1 = Need lots of practice • 2
+                = Still learning • 3 = OK but need review • 4 = Good • 5 = Very
+                confident
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Locked Final Test -->
+        <div class="week-section" id="finalTestSection">
+          <div
+            class="week-section-title"
+            style="
+              background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+              color: white;
+              position: relative;
+            "
+          >
+            🔒 Final Course Test (Units 1–12)
+            <span
+              style="
+                position: absolute;
+                right: 20px;
+                font-size: 0.8em;
+                opacity: 0.8;
+              "
+              >Locked</span
+            >
+          </div>
+          <div
+            style="
+              background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+              padding: 40px;
+              border-radius: 0 0 12px 12px;
+              text-align: center;
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                backdrop-filter: blur(2px);
+                background: rgba(255, 255, 255, 0.7);
+                z-index: 1;
+              "
+            ></div>
+            <div style="position: relative; z-index: 2">
+              <div style="font-size: 4em; margin-bottom: 15px; opacity: 0.5">
+                🔐
+              </div>
+              <h3 style="color: #6b7280; margin: 0 0 10px 0; font-size: 1.3em">
+                Final Test Locked
+              </h3>
+              <p style="color: #9ca3af; margin: 0 0 20px 0; font-size: 0.95em">
+                Complete all 12 units to unlock the final comprehensive test.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  gap: 8px;
+                  flex-wrap: wrap;
+                  margin-bottom: 20px;
+                "
+              >
+                <span
+                  style="
+                    background: #10b981;
+                    color: white;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 0.75em;
+                    font-weight: 600;
+                  "
+                  >✅ Units 1–7</span
+                >
+                <span
+                  style="
+                    background: #f59e0b;
+                    color: white;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 0.75em;
+                    font-weight: 600;
+                  "
+                  >📝 Unit 8 (In Progress)</span
+                >
+                <span
+                  style="
+                    background: #d1d5db;
+                    color: #6b7280;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 0.75em;
+                    font-weight: 600;
+                  "
+                  >🔒 Units 9–12</span
+                >
+              </div>
+              <div
+                style="
+                  background: white;
+                  border: 2px dashed #d1d5db;
+                  border-radius: 10px;
+                  padding: 15px;
+                  max-width: 400px;
+                  margin: 0 auto;
+                "
+              >
+                <p style="color: #6b7280; margin: 0; font-size: 0.9em">
+                  <strong>What's included:</strong><br />
+                  30 questions • Grammar • Vocabulary • Reading • Listening
+                </p>
+              </div>
+              <p style="color: #9ca3af; margin: 20px 0 0 0; font-size: 0.85em">
+                📅 Estimated unlock date: <strong>5 weeks from now</strong>
+              </p>
             </div>
           </div>
         </div>
@@ -12854,8 +14569,8 @@
         document.getElementById("progressFill").style.width = percentage + "%";
       }
 
-      // 4 lessons × 2 hours = 8 hours completed (Units 1–4 done, starting Unit 5)
-      updateProgress(8);
+      // 10 lessons × 2 hours = 20 hours completed (Units 1–7 done, starting Unit 8)
+      updateProgress(20);
 
       // Initialize vocab cards with hidden meanings and examples
       document.querySelectorAll(".vocab-card").forEach((card) => {
@@ -13507,13 +15222,13 @@
         let message, bgColor;
 
         if (percentage >= 90) {
-          message = `🎉 Amazing! ${correct}/${total} correct (${percentage}%) — Halfway through and flying! Ready for Unit 7!`;
+          message = `🎉 Amazing! ${correct}/${total} correct (${percentage}%) — Halfway through and flying! Ready for Unit 8!`;
           bgColor = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
         } else if (percentage >= 70) {
-          message = `👍 Well done! ${correct}/${total} correct (${percentage}%) — A solid halfway point. Review any gaps before Unit 7.`;
+          message = `👍 Well done! ${correct}/${total} correct (${percentage}%) — A solid halfway point. Review any gaps before Unit 8.`;
           bgColor = "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)";
         } else if (percentage >= 50) {
-          message = `📚 Good effort! ${correct}/${total} correct (${percentage}%) — Revisit Units 1–6 and aim higher next time.`;
+          message = `📚 Good effort! ${correct}/${total} correct (${percentage}%) — Revisit Units 1–7 and aim higher next time.`;
           bgColor = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)";
         } else {
           message = `💪 Keep going! ${correct}/${total} correct (${percentage}%) — Study the unit materials and try again.`;
@@ -13720,6 +15435,100 @@
         document.getElementById("unit8QuizResults").style.display = "none";
       }
 
+      // Self-Assessment Functions
+      function rateSkill(button, rating) {
+        const container = button.parentElement;
+        const buttons = container.querySelectorAll(".rate-btn");
+
+        // Remove previous selection
+        buttons.forEach((btn) => {
+          btn.style.background = "white";
+          btn.style.borderColor = "#ddd";
+          btn.style.color = "#333";
+        });
+
+        // Highlight selected and all below
+        buttons.forEach((btn, index) => {
+          if (index < rating) {
+            const colors = [
+              "#ef4444",
+              "#f59e0b",
+              "#eab308",
+              "#84cc16",
+              "#10b981",
+            ];
+            btn.style.background = colors[rating - 1];
+            btn.style.borderColor = colors[rating - 1];
+            btn.style.color = "white";
+          }
+        });
+
+        button.dataset.selected = "true";
+      }
+
+      function calculateAssessment() {
+        const items = document.querySelectorAll(
+          "#selfAssessment .assessment-item",
+        );
+        let total = 0;
+        let count = 0;
+
+        items.forEach((item) => {
+          const buttons = item.querySelectorAll(".rate-btn");
+          let itemRating = 0;
+          buttons.forEach((btn, index) => {
+            if (btn.style.background && btn.style.background !== "white") {
+              itemRating = index + 1;
+            }
+          });
+          if (itemRating > 0) {
+            total += itemRating;
+            count++;
+          }
+        });
+
+        if (count === 0) {
+          alert("Please rate at least one skill before calculating!");
+          return;
+        }
+
+        const avg = (total / count).toFixed(1);
+        document.getElementById("avgScore").textContent = avg;
+
+        let message = "";
+        let bgColor = "";
+        if (avg >= 4.5) {
+          message =
+            "Excellent! You're very confident. Ready for the final test!";
+          bgColor = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+        } else if (avg >= 3.5) {
+          message =
+            "Good progress! A bit more practice on weaker areas will help.";
+          bgColor = "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)";
+        } else if (avg >= 2.5) {
+          message = "You're getting there! Review units where you rated 1-2.";
+          bgColor = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)";
+        } else {
+          message =
+            "Keep studying! Focus on the grammar and vocabulary sections.";
+          bgColor = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)";
+        }
+
+        document.getElementById("scoreMessage").textContent = message;
+        document.getElementById("assessmentResult").style.display = "block";
+        document.getElementById("assessmentResult").style.background = bgColor;
+      }
+
+      function resetAssessment() {
+        const buttons = document.querySelectorAll("#selfAssessment .rate-btn");
+        buttons.forEach((btn) => {
+          btn.style.background = "white";
+          btn.style.borderColor = "#ddd";
+          btn.style.color = "#333";
+        });
+        document.getElementById("assessmentResult").style.display = "none";
+      }
+
       // Flashcard Functions
       function flipCard(card) {
         card.classList.toggle("flipped");
@@ -13797,8 +15606,8 @@
       /* Reveal Answer Styles for Unit 7 */
       .reveal-answer {
         cursor: pointer;
-        background: #667eea;
-        color: #667eea;
+        background: #667eea !important;
+        color: #667eea !important;
         padding: 2px 12px;
         border-radius: 4px;
         margin-left: 8px;
@@ -13814,8 +15623,8 @@
         transform: scale(1.02);
       }
       .reveal-answer.revealed {
-        background: #f0f3ff;
-        color: #667eea;
+        background: #f0f3ff !important;
+        color: #667eea !important;
         border: 1px solid #667eea;
       }
     </style>
