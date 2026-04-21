@@ -91,6 +91,8 @@
         background: #fafbff;
         border: 1px solid #e8ebf5;
         transition: all 0.3s ease;
+        content-visibility: auto;
+        contain-intrinsic-size: auto 500px;
       }
 
       .section:hover {
@@ -496,7 +498,8 @@
       }
 
       .week-content.open {
-        max-height: 10000px;
+        max-height: none;
+        overflow: visible;
       }
 
       .week-section {
@@ -892,6 +895,184 @@
           border: 1px solid #ddd;
         }
       }
+
+      /* ── Grammar Reference Section ──────────────────────────────── */
+      .grammar-unit { border: 1px solid #e8ebf5; border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+      .grammar-unit-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%); cursor: pointer; font-weight: 600; color: #333; user-select: none; }
+      .grammar-unit-header:hover { background: linear-gradient(135deg, #e8ebff 0%, #dde3ff 100%); }
+      .grammar-unit-body { display: none; padding: 18px; background: white; }
+      .grammar-unit-body.open { display: block; }
+      .grammar-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.92em; }
+      .grammar-table th { background: #667eea; color: white; padding: 8px 12px; text-align: left; }
+      .grammar-table td { border: 1px solid #e8ebf5; padding: 8px 12px; }
+      .grammar-table tr:nth-child(even) td { background: #f8f9ff; }
+      .grammar-note { background: #f0f4ff; border-left: 4px solid #667eea; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 0.9em; color: #444; }
+      .grammar-practice-title { font-weight: 700; color: #667eea; margin: 14px 0 8px; }
+      .grammar-exercise { background: #f8f9ff; border: 1px solid #e0e5f5; border-radius: 8px; padding: 14px; }
+      .grammar-exercise p { font-style: italic; color: #555; margin-bottom: 6px; }
+      .grammar-reveal-btn { margin-top: 12px; background: #667eea; color: white; border: none; border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 0.9em; font-weight: 600; }
+      .grammar-reveal-btn:hover { opacity: 0.9; }
+      .grammar-answers { margin-top: 10px; background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 6px; padding: 10px 14px; font-size: 0.9em; color: #2e7d32; }
+      .hidden-answers { display: none; }
+      .grammar-tag { background: #e8ebff; color: #667eea; border-radius: 12px; padding: 3px 10px; font-size: 0.85em; font-weight: 600; }
+      /* Reveal Answer Styles */
+      .reveal-answer { cursor: pointer; background: #667eea !important; color: #667eea !important; padding: 2px 12px; border-radius: 4px; margin-left: 8px; transition: all 0.3s; user-select: none; display: inline-block; min-width: 60px; text-align: center; font-weight: 600; }
+      .reveal-answer:hover { opacity: 0.9; transform: scale(1.02); }
+      .reveal-answer.revealed { background: #f0f3ff !important; color: #667eea !important; border: 1px solid #667eea; }
+
+      /* ── Flashcard Styles ────────────────────────────────── */
+      .flashcard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .flashcard {
+        perspective: 1000px;
+        height: 160px;
+        cursor: pointer;
+      }
+      .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+      .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+      }
+      .flashcard-front,
+      .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        box-sizing: border-box;
+      }
+      .flashcard-front {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .flashcard-front h4 {
+        margin: 8px 0 0 0;
+        font-size: 1.1em;
+      }
+      .flashcard-back {
+        background: white;
+        border: 2px solid #667eea;
+        transform: rotateY(180deg);
+        color: #333;
+      }
+      .flashcard-back p {
+        margin: 0;
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+      .unit-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        font-weight: 600;
+      }
+      .flashcard:hover .flashcard-inner {
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      }
+      .filter-btn.active {
+        background: #667eea !important;
+        color: white !important;
+      }
+      .flashcard.hidden {
+        display: none;
+      }
+
+      /* ── Quiz Styles ──────────────────────────────────────── */
+      .quiz-question {
+        background: white;
+        border: 2px solid #e8ebf5;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .quiz-question:hover {
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+      }
+      .quiz-question-text {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.05em;
+        line-height: 1.5;
+      }
+      .quiz-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 600px) {
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+      }
+      .quiz-option {
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
+        border: 2px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-size: 0.95em;
+        font-weight: 500;
+      }
+      .quiz-option:hover {
+        background: linear-gradient(135deg, #e8ebff 0%, #dde3ff 100%);
+        border-color: #667eea;
+        transform: translateY(-2px);
+      }
+      .quiz-option.selected {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+      .quiz-option.correct {
+        background: linear-gradient(
+          135deg,
+          #10b981 0%,
+          #059669 100%
+        ) !important;
+        color: white !important;
+        border-color: #10b981 !important;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+      .quiz-option.incorrect {
+        background: linear-gradient(
+          135deg,
+          #ef4444 0%,
+          #dc2626 100%
+        ) !important;
+        color: white !important;
+        border-color: #ef4444 !important;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      }
+      .quiz-question.answered-correct {
+        border-color: #10b981;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      }
+      .quiz-question.answered-incorrect {
+        border-color: #ef4444;
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      }
     </style>
   </head>
   <body>
@@ -1060,236 +1241,32 @@
             <span class="resource-icon">🌟</span>
             <span>Halfway Review (Units 1–7)</span>
           </div>
+          <div
+            class="resource-link"
+            style="
+              cursor: pointer;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+              color: white;
+              border-color: #f59e0b;
+            "
+            onclick="
+              document
+                .getElementById('grammarReference')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            <span class="resource-icon">📐</span>
+            <span>Grammar Reference</span>
+          </div>
         </div>
         <p style="color: #666; font-size: 0.85em; margin-top: 15px">
           💡 Download or stream these resources to support your learning
         </p>
-      </div>
-
-      <!-- Phrasal Verbs Section -->
-      <div class="section">
-        <div class="section-title">🔤 Phrasal Verbs</div>
-        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px">
-          Click any card to see the definition and example
-        </p>
-        <div class="vocabulary-grid">
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Pick up</div>
-            <div class="vocab-meaning hidden">
-              To collect something or someone; to learn easily
-            </div>
-            <div class="vocab-example hidden">
-              "Can you pick up some coffee on the way to work?"
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Turn on / Turn off</div>
-            <div class="vocab-meaning hidden">
-              To start / stop a machine or device
-            </div>
-            <div class="vocab-example hidden">
-              "Please turn off the lights when you leave the office."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Look for</div>
-            <div class="vocab-meaning hidden">
-              To search for something or someone
-            </div>
-            <div class="vocab-example hidden">
-              "I'm looking for a new job in marketing."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Find out</div>
-            <div class="vocab-meaning hidden">
-              To discover or learn information
-            </div>
-            <div class="vocab-example hidden">
-              "I need to find out what time the meeting starts."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Give up</div>
-            <div class="vocab-meaning hidden">
-              To stop trying; to quit something
-            </div>
-            <div class="vocab-example hidden">
-              "Don't give up! You're almost finished with the project."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Go on</div>
-            <div class="vocab-meaning hidden">To continue; to happen</div>
-            <div class="vocab-example hidden">
-              "Please go on with your presentation."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Come back</div>
-            <div class="vocab-meaning hidden">To return to a place</div>
-            <div class="vocab-example hidden">
-              "I'll come back to the office after lunch."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Write down</div>
-            <div class="vocab-meaning hidden">
-              To record something on paper or device
-            </div>
-            <div class="vocab-example hidden">
-              "Let me write down your phone number."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Fill in / Fill out</div>
-            <div class="vocab-meaning hidden">
-              To complete a form or document
-            </div>
-            <div class="vocab-example hidden">
-              "Please fill out this application form."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Put on / Take off</div>
-            <div class="vocab-meaning hidden">
-              To wear / remove clothing or accessories
-            </div>
-            <div class="vocab-example hidden">
-              "Put on your badge before entering the building."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Get up</div>
-            <div class="vocab-meaning hidden">
-              To rise from bed; to stand up
-            </div>
-            <div class="vocab-example hidden">
-              "I usually get up at 7am on weekdays."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Work out</div>
-            <div class="vocab-meaning hidden">
-              To exercise; to find a solution; to succeed
-            </div>
-            <div class="vocab-example hidden">
-              "I hope this plan works out for everyone."
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Idioms Section -->
-      <div class="section">
-        <div class="section-title">💬 Common Idioms</div>
-        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px">
-          Click any card to see the meaning and example
-        </p>
-        <div class="vocabulary-grid">
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Piece of cake</div>
-            <div class="vocab-meaning hidden">Something very easy to do</div>
-            <div class="vocab-example hidden">
-              "The test was a piece of cake — I finished in 20 minutes!"
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Break the ice</div>
-            <div class="vocab-meaning hidden">
-              To start a conversation with someone new; reduce awkwardness
-            </div>
-            <div class="vocab-example hidden">
-              "Tell a joke to break the ice at the party."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Hit the nail on the head</div>
-            <div class="vocab-meaning hidden">
-              To be exactly right about something
-            </div>
-            <div class="vocab-example hidden">
-              "You hit the nail on the head — that's exactly the problem."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Under the weather</div>
-            <div class="vocab-meaning hidden">Feeling sick or unwell</div>
-            <div class="vocab-example hidden">
-              "I'm feeling a bit under the weather today, so I'll work from
-              home."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">In the same boat</div>
-            <div class="vocab-meaning hidden">
-              In the same difficult situation as someone else
-            </div>
-            <div class="vocab-example hidden">
-              "We're all in the same boat — no one knows how to use this
-              software."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Keep an eye on</div>
-            <div class="vocab-meaning hidden">
-              To watch or monitor carefully
-            </div>
-            <div class="vocab-example hidden">
-              "Can you keep an eye on my bag while I get coffee?"
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Once in a blue moon</div>
-            <div class="vocab-meaning hidden">Very rarely; almost never</div>
-            <div class="vocab-example hidden">
-              "I eat fast food once in a blue moon — maybe twice a year."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Cost an arm and a leg</div>
-            <div class="vocab-meaning hidden">To be very expensive</div>
-            <div class="vocab-example hidden">
-              "That new iPhone costs an arm and a leg!"
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Better late than never</div>
-            <div class="vocab-meaning hidden">
-              It's better to do something late than not at all
-            </div>
-            <div class="vocab-example hidden">
-              "You finally started learning English! Better late than never."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Call it a day</div>
-            <div class="vocab-meaning hidden">
-              To stop working; to finish for today
-            </div>
-            <div class="vocab-example hidden">
-              "It's 6pm — let's call it a day and go home."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">On the other hand</div>
-            <div class="vocab-meaning hidden">
-              Looking at a different point of view
-            </div>
-            <div class="vocab-example hidden">
-              "The job pays well. On the other hand, it's very stressful."
-            </div>
-          </div>
-          <div class="vocab-card" onclick="this.classList.toggle('expanded')">
-            <div class="vocab-term">Speak of the devil</div>
-            <div class="vocab-meaning hidden">
-              Said when someone you were just talking about arrives
-            </div>
-            <div class="vocab-example hidden">
-              "I was just talking about you — speak of the devil!"
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Teaching Plan & Notes -->
@@ -1474,6 +1451,356 @@
           </div>
         </div>
       </div>
+
+      <!-- Grammar Reference Section -->
+      <div class="section" id="grammarReference">
+        <div class="section-title">📐 Grammar Reference &amp; Practice</div>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 20px">
+          All 12 grammar points from the Grammar Reference at the back of the Student Book (pages 108–131). Click any item to expand.
+        </p>
+        <div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G1 · Present Simple of <em>be</em> — Units 1 &amp; 2</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Subject</th><th>Positive</th><th>Negative</th><th>Question</th></tr>
+                <tr><td>I</td><td>I <strong>am</strong> (I'm)</td><td>I <strong>am not</strong> (I'm not)</td><td><strong>Am</strong> I…?</td></tr>
+                <tr><td>You / We / They</td><td>You <strong>are</strong> (You're)</td><td>You <strong>aren't</strong></td><td><strong>Are</strong> you…?</td></tr>
+                <tr><td>He / She / It</td><td>He <strong>is</strong> (He's)</td><td>He <strong>isn't</strong></td><td><strong>Is</strong> he…?</td></tr>
+              </table>
+              <div class="grammar-note">📘 <strong>Use:</strong> jobs, nationalities, descriptions. <em>"I'm a manager." / "She's from Thailand."</em></div>
+              <div class="grammar-practice-title">✏️ Practice — Complete with <em>am / is / are</em></div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>She _____ a project manager at a tech company.</li>
+                  <li>We _____ from the Bangkok office.</li>
+                  <li>_____ you free on Friday?</li>
+                  <li>He _____ not in the meeting right now.</li>
+                  <li>They _____ both engineers.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. is &nbsp;·&nbsp; 2. are &nbsp;·&nbsp; 3. Are &nbsp;·&nbsp; 4. is &nbsp;·&nbsp; 5. are</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G2 · Present Simple (other verbs) — Unit 2</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Subject</th><th>Positive</th><th>Negative</th><th>Question</th></tr>
+                <tr><td>I / You / We / They</td><td>I <strong>work</strong></td><td>I <strong>don't work</strong></td><td><strong>Do</strong> you work?</td></tr>
+                <tr><td>He / She / It</td><td>He <strong>works</strong></td><td>He <strong>doesn't work</strong></td><td><strong>Does</strong> he work?</td></tr>
+              </table>
+              <div class="grammar-note">📘 He/she/it: add <em>-s</em> or <em>-es</em>. Negative/question: use <em>does/doesn't</em> + base verb (no -s).</div>
+              <div class="grammar-practice-title">✏️ Practice — Correct the error in each sentence</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>She don't work on weekends.</li>
+                  <li>Does he works in the sales department?</li>
+                  <li>They doesn't have a branch in Seoul.</li>
+                  <li>He sell software to large companies.</li>
+                  <li>Do the company makes electric cars?</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. doesn't work &nbsp;·&nbsp; 2. Does he work &nbsp;·&nbsp; 3. don't have &nbsp;·&nbsp; 4. sells &nbsp;·&nbsp; 5. Does the company make</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G3 · <em>There is / There are</em> — Unit 3</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th></th><th>Positive</th><th>Negative</th><th>Question</th></tr>
+                <tr><td>Singular</td><td>There <strong>is</strong> a cafeteria.</td><td>There <strong>isn't</strong> a gym.</td><td><strong>Is there</strong> a car park?</td></tr>
+                <tr><td>Plural</td><td>There <strong>are</strong> three floors.</td><td>There <strong>aren't</strong> any lifts.</td><td><strong>Are there</strong> any meeting rooms?</td></tr>
+              </table>
+              <div class="grammar-note">📘 Use <em>any</em> in negatives and questions with countable plurals / uncountable nouns.</div>
+              <div class="grammar-practice-title">✏️ Practice — Write <em>is / are / isn't / aren't</em></div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>There _____ a reception area on the ground floor.</li>
+                  <li>There _____ any lockers in the gym.</li>
+                  <li>_____ there a restaurant nearby?</li>
+                  <li>There _____ four meeting rooms on the second floor.</li>
+                  <li>There _____ a parking space — the car park is full.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. is &nbsp;·&nbsp; 2. aren't &nbsp;·&nbsp; 3. Is &nbsp;·&nbsp; 4. are &nbsp;·&nbsp; 5. isn't</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G4 · Adverbs of Frequency — Unit 4</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+                <span class="grammar-tag">always (100%)</span>
+                <span class="grammar-tag">usually (~80%)</span>
+                <span class="grammar-tag">often (~60%)</span>
+                <span class="grammar-tag">sometimes (~40%)</span>
+                <span class="grammar-tag">rarely (~20%)</span>
+                <span class="grammar-tag">never (0%)</span>
+              </div>
+              <div class="grammar-note">📘 Position: <strong>before</strong> the main verb — "I <em>usually</em> check emails." / <strong>after</strong> <em>be</em> — "She <em>is always</em> on time."</div>
+              <div class="grammar-practice-title">✏️ Practice — Put the adverb in the correct position</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>I check my emails in the morning. (always)</li>
+                  <li>She is late to meetings. (never)</li>
+                  <li>We have a team lunch on Fridays. (sometimes)</li>
+                  <li>He travels for work. (often)</li>
+                  <li>They are in the office on weekends. (rarely)</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. I <strong>always</strong> check &nbsp;·&nbsp; 2. She is <strong>never</strong> late &nbsp;·&nbsp; 3. We <strong>sometimes</strong> have &nbsp;·&nbsp; 4. He <strong>often</strong> travels &nbsp;·&nbsp; 5. They are <strong>rarely</strong> in</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G5 · Past Simple of <em>be</em> — Unit 5</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Subject</th><th>Positive</th><th>Negative</th><th>Question</th></tr>
+                <tr><td>I / He / She / It</td><td><strong>was</strong></td><td><strong>wasn't</strong></td><td><strong>Was</strong> he…?</td></tr>
+                <tr><td>You / We / They</td><td><strong>were</strong></td><td><strong>weren't</strong></td><td><strong>Were</strong> they…?</td></tr>
+              </table>
+              <div class="grammar-note">📘 Time signals: <em>yesterday, last week, in 2020, … ago, when I was a student</em></div>
+              <div class="grammar-practice-title">✏️ Practice — Fill in <em>was / were / wasn't / weren't</em></div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>The meeting _____ very long — only 20 minutes.</li>
+                  <li>_____ you at the conference last year?</li>
+                  <li>The client _____ happy with the proposal — they rejected it.</li>
+                  <li>We _____ partners with that company in 2019.</li>
+                  <li>_____ the results good?</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. wasn't &nbsp;·&nbsp; 2. Were &nbsp;·&nbsp; 3. wasn't &nbsp;·&nbsp; 4. were &nbsp;·&nbsp; 5. Were</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G6 · Past Simple Regular Verbs — Unit 5</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <div class="grammar-note">📘 Add <strong>-ed</strong> to the base form. Questions &amp; negatives use <em>did / didn't</em> + base verb.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;font-size:0.92em">
+                <div><strong>work →</strong> worked</div><div><strong>start →</strong> started</div>
+                <div><strong>finish →</strong> finished</div><div><strong>open →</strong> opened</div>
+                <div><strong>travel →</strong> travelled</div><div><strong>decide →</strong> decided</div>
+              </div>
+              <div class="grammar-note">⚠️ Spelling: stop → st<strong>opp</strong>ed (double) · study → stud<strong>ied</strong> (y→ied)</div>
+              <div class="grammar-practice-title">✏️ Practice — Use the past simple form</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>The company _____ (open) its first branch in 1998.</li>
+                  <li>She _____ (present) the report to the board last Tuesday.</li>
+                  <li>We _____ (not / receive) the payment on time.</li>
+                  <li>_____ you _____ (attend) the trade fair last month?</li>
+                  <li>They _____ (launch) the new product in January.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. opened &nbsp;·&nbsp; 2. presented &nbsp;·&nbsp; 3. didn't receive &nbsp;·&nbsp; 4. Did you attend &nbsp;·&nbsp; 5. launched</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G7 · Past Simple Irregular Verbs — Unit 6</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;font-size:0.92em">
+                <div><strong>go →</strong> went</div><div><strong>have →</strong> had</div><div><strong>meet →</strong> met</div>
+                <div><strong>see →</strong> saw</div><div><strong>make →</strong> made</div><div><strong>give →</strong> gave</div>
+                <div><strong>take →</strong> took</div><div><strong>buy →</strong> bought</div><div><strong>sell →</strong> sold</div>
+                <div><strong>speak →</strong> spoke</div><div><strong>come →</strong> came</div><div><strong>get →</strong> got</div>
+              </div>
+              <div class="grammar-note">📘 Negatives &amp; questions still use <em>did / didn't</em> + base form: "I didn't <strong>go</strong>" / "Did you <strong>meet</strong> him?"</div>
+              <div class="grammar-practice-title">✏️ Practice — Use the correct past form</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>We _____ (go) to the trade exhibition in Singapore.</li>
+                  <li>She _____ (meet) the CEO at the networking event.</li>
+                  <li>They _____ (not / sell) enough units last quarter.</li>
+                  <li>_____ he _____ (speak) to the client directly?</li>
+                  <li>I _____ (have) a great meeting with the investors.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. went &nbsp;·&nbsp; 2. met &nbsp;·&nbsp; 3. didn't sell &nbsp;·&nbsp; 4. Did he speak &nbsp;·&nbsp; 5. had</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G8 · Prepositions of Place &amp; Movement — Unit 7</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;font-size:0.92em">
+                <div><strong>in</strong> — inside: in the office</div><div><strong>on</strong> — surface/floor: on the 3rd floor</div>
+                <div><strong>at</strong> — a point: at reception</div><div><strong>next to</strong> — beside: next to the lift</div>
+                <div><strong>opposite</strong> — facing: opposite the café</div><div><strong>between</strong> — middle: between the rooms</div>
+                <div><strong>along</strong> — movement: go along the corridor</div><div><strong>past</strong> — movement: turn left past the stairs</div>
+              </div>
+              <div class="grammar-practice-title">✏️ Practice — Choose the correct preposition</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>The HR department is _____ the second floor. (in / on)</li>
+                  <li>Turn left _____ the reception desk. (past / along)</li>
+                  <li>The café is _____ the IT and Finance departments. (between / opposite)</li>
+                  <li>My office is _____ the end of the corridor. (at / in)</li>
+                  <li>Walk _____ the corridor and you'll see the exit. (along / on)</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. on &nbsp;·&nbsp; 2. past &nbsp;·&nbsp; 3. between &nbsp;·&nbsp; 4. at &nbsp;·&nbsp; 5. along</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G9 · Present Continuous — Unit 8</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Form</th><th>Structure</th><th>Example</th></tr>
+                <tr><td>Positive</td><td>am/is/are + verb-ing</td><td>She <strong>is working</strong> from home today.</td></tr>
+                <tr><td>Negative</td><td>am/is/are + not + verb-ing</td><td>We <strong>aren't meeting</strong> until 3pm.</td></tr>
+                <tr><td>Question</td><td>Am/Is/Are + subject + verb-ing?</td><td><strong>Is</strong> the client <strong>waiting</strong>?</td></tr>
+              </table>
+              <div class="grammar-note">📘 <strong>Spelling:</strong> make→making · run→running · sit→sitting · lie→lying</div>
+              <div class="grammar-note">📘 Use for: actions happening NOW, temporary situations, future arrangements (with a time expression).</div>
+              <div class="grammar-practice-title">✏️ Practice — Put the verb in Present Continuous</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>She _____ (present) to the board right now.</li>
+                  <li>We _____ (not / use) the old software anymore.</li>
+                  <li>_____ they _____ (interview) candidates today?</li>
+                  <li>I _____ (work) on a new project this month.</li>
+                  <li>He _____ (travel) to the Singapore office next week.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. is presenting &nbsp;·&nbsp; 2. aren't using &nbsp;·&nbsp; 3. Are they interviewing &nbsp;·&nbsp; 4. am working &nbsp;·&nbsp; 5. is travelling</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G10 · Comparatives &amp; Superlatives — Unit 9</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Adjective</th><th>Comparative</th><th>Superlative</th></tr>
+                <tr><td>cheap</td><td>cheaper</td><td>the cheapest</td></tr>
+                <tr><td>expensive</td><td>more expensive</td><td>the most expensive</td></tr>
+                <tr><td>good</td><td>better</td><td>the best</td></tr>
+                <tr><td>bad</td><td>worse</td><td>the worst</td></tr>
+                <tr><td>big</td><td>bigger</td><td>the biggest</td></tr>
+              </table>
+              <div class="grammar-note">📘 Short adjectives (1 syllable): add <em>-er / -est</em>. Long adjectives (2+ syllables): use <em>more / the most</em>.</div>
+              <div class="grammar-practice-title">✏️ Practice — Comparative or superlative?</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>Our product is _____ (cheap) than the competitor's.</li>
+                  <li>This is _____ (innovative) product we've ever made.</li>
+                  <li>Their service is _____ (reliable) than ours.</li>
+                  <li>We need a _____ (fast) delivery option.</li>
+                  <li>It was _____ (bad) quarter in the company's history.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. cheaper &nbsp;·&nbsp; 2. the most innovative &nbsp;·&nbsp; 3. more reliable &nbsp;·&nbsp; 4. faster &nbsp;·&nbsp; 5. the worst</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G11 · <em>Going to</em> for Future Plans — Unit 11</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Form</th><th>Structure</th><th>Example</th></tr>
+                <tr><td>Positive</td><td>am/is/are + going to + base verb</td><td>We <strong>are going to</strong> open a new office.</td></tr>
+                <tr><td>Negative</td><td>am/is/are + not + going to + base</td><td>She <strong>isn't going to</strong> attend.</td></tr>
+                <tr><td>Question</td><td>Am/Is/Are + subject + going to + base?</td><td><strong>Are</strong> you <strong>going to</strong> present?</td></tr>
+              </table>
+              <div class="grammar-note">📘 Use for: decisions already made, plans and intentions: <em>"I'm going to take the 8am flight."</em></div>
+              <div class="grammar-practice-title">✏️ Practice — Complete using <em>going to</em></div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>We _____ (expand) into three new markets next year.</li>
+                  <li>She _____ (not / fly) economy — she has a business class ticket.</li>
+                  <li>_____ the team _____ (work) on the weekend?</li>
+                  <li>I _____ (book) the hotel for the conference.</li>
+                  <li>They _____ (present) the new strategy to investors.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. are going to expand &nbsp;·&nbsp; 2. isn't going to fly &nbsp;·&nbsp; 3. Is the team going to work &nbsp;·&nbsp; 4. am going to book &nbsp;·&nbsp; 5. are going to present</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grammar-unit">
+            <div class="grammar-unit-header" onclick="toggleGrammarUnit(this)">
+              <span>G12 · Present Perfect — Unit 12</span>
+              <span class="week-toggle" style="transition:transform 0.3s">▼</span>
+            </div>
+            <div class="grammar-unit-body">
+              <table class="grammar-table">
+                <tr><th>Form</th><th>Structure</th><th>Example</th></tr>
+                <tr><td>Positive</td><td>have/has + past participle</td><td>I <strong>have worked</strong> here for five years.</td></tr>
+                <tr><td>Negative</td><td>haven't/hasn't + past participle</td><td>She <strong>hasn't finished</strong> the report yet.</td></tr>
+                <tr><td>Question</td><td>Have/Has + subject + past participle?</td><td><strong>Have</strong> you <strong>sent</strong> the email?</td></tr>
+              </table>
+              <div class="grammar-note">📘 <strong>Key words:</strong> already, yet, just, ever, never, for, since, recently</div>
+              <div class="grammar-note">📘 Use for: experience (I've been to…), recent actions with present result, unfinished time periods.</div>
+              <div class="grammar-practice-title">✏️ Practice — Complete with Present Perfect</div>
+              <div class="grammar-exercise">
+                <ol style="line-height:2.4;margin:0;padding-left:18px">
+                  <li>She _____ (work) for this company since 2018.</li>
+                  <li>We _____ (not / receive) the contract yet.</li>
+                  <li>_____ you _____ (ever / work) overseas?</li>
+                  <li>He _____ (just / finish) his MBA.</li>
+                  <li>They _____ (already / launch) the product in Asia.</li>
+                </ol>
+                <button class="grammar-reveal-btn" onclick="toggleGrammarAnswers(this)">Show Answers</button>
+                <div class="grammar-answers hidden-answers">1. has worked &nbsp;·&nbsp; 2. haven't received &nbsp;·&nbsp; 3. Have you ever worked &nbsp;·&nbsp; 4. has just finished &nbsp;·&nbsp; 5. have already launched</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- End Grammar Reference -->
 
       <!-- Course Overview -->
       <div class="section">
@@ -3004,161 +3331,9 @@
         </div>
       </div>
 
-      <style>
-        .flashcard-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 15px;
-        }
-        .flashcard {
-          perspective: 1000px;
-          height: 160px;
-          cursor: pointer;
-        }
-        .flashcard-inner {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          transition: transform 0.6s;
-          transform-style: preserve-3d;
-        }
-        .flashcard.flipped .flashcard-inner {
-          transform: rotateY(180deg);
-        }
-        .flashcard-front,
-        .flashcard-back {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          backface-visibility: hidden;
-          border-radius: 12px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 15px;
-          box-sizing: border-box;
-        }
-        .flashcard-front {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-        }
-        .flashcard-front h4 {
-          margin: 8px 0 0 0;
-          font-size: 1.1em;
-        }
-        .flashcard-back {
-          background: white;
-          border: 2px solid #667eea;
-          transform: rotateY(180deg);
-          color: #333;
-        }
-        .flashcard-back p {
-          margin: 0;
-          font-size: 0.9em;
-          line-height: 1.4;
-        }
-        .unit-badge {
-          background: rgba(255, 255, 255, 0.2);
-          padding: 3px 10px;
-          border-radius: 12px;
-          font-size: 0.75em;
-          font-weight: 600;
-        }
-        .flashcard:hover .flashcard-inner {
-          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-        .filter-btn.active {
-          background: #667eea !important;
-          color: white !important;
-        }
-        .flashcard.hidden {
-          display: none;
-        }
-      </style>
 
-      <style>
-        .quiz-question {
-          background: white;
-          border: 2px solid #e8ebf5;
-          border-radius: 12px;
-          padding: 22px;
-          margin-bottom: 15px;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-        .quiz-question:hover {
-          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
-        }
-        .quiz-question-text {
-          font-weight: 700;
-          color: #333;
-          margin-bottom: 15px;
-          font-size: 1.05em;
-          line-height: 1.5;
-        }
-        .quiz-options {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-        }
-        @media (max-width: 600px) {
-          .quiz-options {
-            grid-template-columns: 1fr;
-          }
-        }
-        .quiz-option {
-          background: linear-gradient(135deg, #f8f9ff 0%, #f0f3ff 100%);
-          border: 2px solid #e0e5f5;
-          border-radius: 10px;
-          padding: 14px 18px;
-          cursor: pointer;
-          transition: all 0.25s ease;
-          font-size: 0.95em;
-          font-weight: 500;
-        }
-        .quiz-option:hover {
-          background: linear-gradient(135deg, #e8ebff 0%, #dde3ff 100%);
-          border-color: #667eea;
-          transform: translateY(-2px);
-        }
-        .quiz-option.selected {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          border-color: #667eea;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-        .quiz-option.correct {
-          background: linear-gradient(
-            135deg,
-            #10b981 0%,
-            #059669 100%
-          ) !important;
-          color: white !important;
-          border-color: #10b981 !important;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-        .quiz-option.incorrect {
-          background: linear-gradient(
-            135deg,
-            #ef4444 0%,
-            #dc2626 100%
-          ) !important;
-          color: white !important;
-          border-color: #ef4444 !important;
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-        .quiz-question.answered-correct {
-          border-color: #10b981;
-          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        }
-        .quiz-question.answered-incorrect {
-          border-color: #ef4444;
-          background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        }
-      </style>
+
+
 
       <!-- Weekly Lessons -->
       <div class="section weeks-container">
@@ -15600,32 +15775,18 @@
           }
         });
       }
+
+    function toggleGrammarUnit(header) {
+      const body = header.nextElementSibling;
+      const toggle = header.querySelector('.week-toggle');
+      const isOpen = body.classList.toggle('open');
+      toggle.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+    function toggleGrammarAnswers(btn) {
+      const answers = btn.nextElementSibling;
+      const hidden = answers.classList.toggle('hidden-answers');
+      btn.textContent = hidden ? 'Show Answers' : 'Hide Answers';
+    }
     </script>
-    <style>
-      /* Reveal Answer Styles for Unit 7 */
-      .reveal-answer {
-        cursor: pointer;
-        background: #667eea !important;
-        color: #667eea !important;
-        padding: 2px 12px;
-        border-radius: 4px;
-        margin-left: 8px;
-        transition: all 0.3s;
-        user-select: none;
-        display: inline-block;
-        min-width: 60px;
-        text-align: center;
-        font-weight: 600;
-      }
-      .reveal-answer:hover {
-        opacity: 0.9;
-        transform: scale(1.02);
-      }
-      .reveal-answer.revealed {
-        background: #f0f3ff !important;
-        color: #667eea !important;
-        border: 1px solid #667eea;
-      }
-    </style>
   </body>
 </html>
