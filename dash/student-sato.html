@@ -1,0 +1,2128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sato - Student Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 50px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 2.2em;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 15px;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 25px;
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95em;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+        color: #2c3e50;
+      }
+      .section {
+        margin-bottom: 45px;
+      }
+      .section-title {
+        color: #2c3e50;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+      .field {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 1.05em;
+      }
+      .label {
+        font-weight: 700;
+        color: #333;
+      }
+      .value {
+        color: #3498db;
+        font-weight: 500;
+      }
+      .content-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .instruction-text {
+        color: #666;
+        font-size: 0.95em;
+        margin-bottom: 18px;
+        font-weight: 500;
+      }
+      .expandable-item {
+        background: linear-gradient(135deg, #f8fafb 0%, #f0f4f8 100%);
+        border: 1px solid #ddd;
+        border-left: 5px solid #3498db;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        flex: 0 0 calc(20% - 10px);
+        display: flex;
+        flex-direction: column;
+      }
+      .expandable-item:hover {
+        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+      }
+      .expandable-header {
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.3s ease;
+      }
+      .expandable-header:hover {
+        background: rgba(52, 152, 219, 0.05);
+      }
+      .expandable-header input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        margin-top: 2px;
+      }
+      .item-title {
+        font-weight: 600;
+        color: #333;
+        flex: 1;
+        transition: all 0.3s ease;
+      }
+      .item-title.completed {
+        color: #999;
+        text-decoration: line-through;
+      }
+      .expand-toggle {
+        font-size: 1.2em;
+        color: #3498db;
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+      }
+      .expandable-item.expanded .expand-toggle {
+        transform: rotate(90deg);
+      }
+      .expandable-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .expandable-item.expanded .expandable-content {
+        max-height: 500px;
+      }
+      .expandable-content-inner {
+        padding: 0 15px 15px 15px;
+        color: #666;
+        font-size: 0.95em;
+        line-height: 1.6;
+        background: rgba(255, 255, 255, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+      <h1>💼 Sato</h1>
+      <div class="section">
+        <div class="section-title">Learning Info</div>
+        <div class="field">
+          <span class="label">Level:</span
+          ><span class="value">Upper Intermediate</span>
+        </div>
+        <div class="field">
+          <span class="label">Focus:</span
+          ><span class="value">Business English</span>
+        </div>
+        <div class="field">
+          <span class="label">Progress:</span><span class="value">68%</span>
+        </div>
+        <div class="field">
+          <span class="label">Status:</span><span class="value">Active</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Notes</div>
+        <p style="color: #666">
+          Preparing for international business meetings and presentations. Focus
+          on professional vocabulary and formal communication.
+        </p>
+      </div>
+
+      <!-- BUSINESS PHRASAL VERBS SECTION -->
+      <div class="section">
+        <div class="section-title">💼 Business Phrasal Verbs (25)</div>
+        <p class="instruction-text">
+          Click to expand, learn the definition, and check off when mastered
+        </p>
+
+        <div class="content-list">
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">1. Carry out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To complete or perform a task<br />
+                <strong>Example:</strong> "We need to carry out a market
+                analysis."<br />
+                <strong>Synonym:</strong> Perform, Execute, Conduct
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">2. Look into</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To investigate or examine
+                something<br />
+                <strong>Example:</strong> "I'll look into the budget
+                discrepancies."<br />
+                <strong>Synonym:</strong> Investigate, Examine, Research
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">3. Follow up</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To continue communication after
+                initial contact<br />
+                <strong>Example:</strong> "I'll follow up on that client meeting
+                tomorrow."<br />
+                <strong>Synonym:</strong> Check in, Contact again, Persist
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">4. Bring in</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To introduce or involve
+                someone/something<br />
+                <strong>Example:</strong> "Let's bring in a consultant for this
+                project."<br />
+                <strong>Synonym:</strong> Involve, Introduce, Include
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">5. Draw up</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To prepare or draft a document<br />
+                <strong>Example:</strong> "Can you draw up a contract for this
+                deal?"<br />
+                <strong>Synonym:</strong> Draft, Prepare, Create
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">6. Set up</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To establish or arrange
+                something<br />
+                <strong>Example:</strong> "We'll set up a meeting with the
+                stakeholders."<br />
+                <strong>Synonym:</strong> Establish, Arrange, Organize
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">7. Take on</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To accept or undertake
+                responsibility<br />
+                <strong>Example:</strong> "Are you ready to take on this new
+                role?"<br />
+                <strong>Synonym:</strong> Accept, Undertake, Assume
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">8. Put forward</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To propose or suggest an idea<br />
+                <strong>Example:</strong> "She put forward an interesting
+                strategy."<br />
+                <strong>Synonym:</strong> Propose, Suggest, Submit
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">9. Scale up</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To expand or increase the size of
+                something<br />
+                <strong>Example:</strong> "We need to scale up production next
+                quarter."<br />
+                <strong>Synonym:</strong> Expand, Increase, Grow
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">10. Point out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To draw attention to something<br />
+                <strong>Example:</strong> "I want to point out the risks in this
+                plan."<br />
+                <strong>Synonym:</strong> Highlight, Indicate, Identify
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">11. Wrap up</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To finish or complete something<br />
+                <strong>Example:</strong> "Let's wrap up this meeting in 5
+                minutes."<br />
+                <strong>Synonym:</strong> Finish, Complete, Conclude
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">12. Run into</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To encounter a problem or
+                situation<br />
+                <strong>Example:</strong> "We ran into some technical issues
+                yesterday."<br />
+                <strong>Synonym:</strong> Encounter, Face, Meet
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">13. Cut back</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To reduce or decrease something<br />
+                <strong>Example:</strong> "We need to cut back on expenses."<br />
+                <strong>Synonym:</strong> Reduce, Decrease, Trim
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">14. Roll out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To launch or introduce something
+                new<br />
+                <strong>Example:</strong> "We'll roll out the new product next
+                month."<br />
+                <strong>Synonym:</strong> Launch, Introduce, Release
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">15. Take over</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To assume control or
+                responsibility<br />
+                <strong>Example:</strong> "She will take over the project next
+                month."<br />
+                <strong>Synonym:</strong> Assume, Control, Manage
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">16. Come up with</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To develop or create an idea<br />
+                <strong>Example:</strong> "Can you come up with a solution?"<br />
+                <strong>Synonym:</strong> Develop, Create, Generate
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">17. Put off</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To postpone or delay something<br />
+                <strong>Example:</strong> "Don't put off the meeting again."<br />
+                <strong>Synonym:</strong> Postpone, Delay, Reschedule
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">18. Sort out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To organize or resolve a problem<br />
+                <strong>Example:</strong> "We need to sort out the scheduling
+                conflict."<br />
+                <strong>Synonym:</strong> Organize, Resolve, Solve
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">19. Stand out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To be noticeable or distinctive<br />
+                <strong>Example:</strong> "This proposal stands out from the
+                rest."<br />
+                <strong>Synonym:</strong> Excel, Distinguish, Shine
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">20. Phase out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To gradually discontinue or
+                eliminate<br />
+                <strong>Example:</strong> "We're phasing out the old system."<br />
+                <strong>Synonym:</strong> Eliminate, Discontinue, Remove
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">21. Write off</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To cancel a debt or dismiss as a
+                loss<br />
+                <strong>Example:</strong> "We had to write off the bad debt."<br />
+                <strong>Synonym:</strong> Cancel, Dismiss, Deduct
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">22. Branch out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To expand into new areas or
+                markets<br />
+                <strong>Example:</strong> "The company is branching out into
+                Asia."<br />
+                <strong>Synonym:</strong> Expand, Diversify, Extend
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">23. Break even</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To have equal revenue and
+                expenses<br />
+                <strong>Example:</strong> "We expect to break even by Q3."<br />
+                <strong>Synonym:</strong> Balance, Equal, Match
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">24. Step down</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To resign from a position<br />
+                <strong>Example:</strong> "The CEO will step down next year."<br />
+                <strong>Synonym:</strong> Resign, Retire, Withdraw
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">25. Buy out</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Definition:</strong> To purchase all shares or interest
+                in<br />
+                <strong>Example:</strong> "They bought out their competitor."<br />
+                <strong>Synonym:</strong> Acquire, Purchase, Take over
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUSINESS IDIOMS SECTION -->
+      <div class="section">
+        <div class="section-title">💡 Business Idioms (25)</div>
+        <p class="instruction-text">
+          Click to expand, learn the meaning, and check off when mastered
+        </p>
+
+        <div class="content-list">
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">1. Think outside the box</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Be creative, think differently<br />
+                <strong>Example:</strong> "We need to think outside the box for
+                solutions."<br />
+                <strong>Usage:</strong> Encouraging innovative thinking
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">2. Get the ball rolling</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Start a project or process<br />
+                <strong>Example:</strong> "Let's get the ball rolling on this
+                initiative."<br />
+                <strong>Usage:</strong> Beginning action or discussion
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">3. On the same page</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Everyone understands and agrees<br />
+                <strong>Example:</strong> "Let's make sure we're all on the same
+                page."<br />
+                <strong>Usage:</strong> Confirming mutual understanding
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">4. Low-hanging fruit</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Easy targets or quick wins<br />
+                <strong>Example:</strong> "Let's focus on the low-hanging fruit
+                first."<br />
+                <strong>Usage:</strong> Prioritizing easy achievements
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">5. Touch base</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Make brief contact, check in<br />
+                <strong>Example:</strong> "Let's touch base next week."<br />
+                <strong>Usage:</strong> Scheduling brief updates
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">6. Win-win situation</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Outcome beneficial to all parties<br />
+                <strong>Example:</strong> "This deal is a win-win situation."<br />
+                <strong>Usage:</strong> Describing mutually beneficial outcomes
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">7. Move the needle</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Make significant progress or impact<br />
+                <strong>Example:</strong> "This strategy will really move the
+                needle."<br />
+                <strong>Usage:</strong> Describing meaningful progress
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">8. Circle back</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Return to discuss something later<br />
+                <strong>Example:</strong> "Let's circle back on this
+                tomorrow."<br />
+                <strong>Usage:</strong> Postponing discussion temporarily
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">9. Raise the bar</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Set higher standards or
+                expectations<br />
+                <strong>Example:</strong> "This project raises the bar for
+                quality."<br />
+                <strong>Usage:</strong> Increasing expectations
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">10. Run it up the flagpole</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Present an idea to see reactions<br />
+                <strong>Example:</strong> "Let's run this up the flagpole."<br />
+                <strong>Usage:</strong> Testing ideas with others
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">11. Ballpark figure</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Rough estimate or approximation<br />
+                <strong>Example:</strong> "Can you give me a ballpark
+                figure?"<br />
+                <strong>Usage:</strong> Requesting approximate numbers
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">12. Drill down</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Examine in detail, go deeper<br />
+                <strong>Example:</strong> "Let's drill down into the data."<br />
+                <strong>Usage:</strong> Detailed analysis needed
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">13. Leverage</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Use resources to maximum advantage<br />
+                <strong>Example:</strong> "We can leverage our existing
+                network."<br />
+                <strong>Usage:</strong> Maximizing resource utilization
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">14. Bandwidth</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Capacity or resources available<br />
+                <strong>Example:</strong> "I don't have the bandwidth for
+                that."<br />
+                <strong>Usage:</strong> Discussing available capacity
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">15. Synergy</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Combined effort greater than sum of
+                parts<br />
+                <strong>Example:</strong> "This partnership creates great
+                synergy."<br />
+                <strong>Usage:</strong> Describing collaborative benefits
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">16. Paradigm shift</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Fundamental change in approach<br />
+                <strong>Example:</strong> "This represents a paradigm shift."<br />
+                <strong>Usage:</strong> Major transformation
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">17. Take it offline</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Discuss privately or later<br />
+                <strong>Example:</strong> "Let's take this discussion
+                offline."<br />
+                <strong>Usage:</strong> Moving to private conversation
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">18. Game changer</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Something that significantly alters
+                situation<br />
+                <strong>Example:</strong> "This technology is a game
+                changer."<br />
+                <strong>Usage:</strong> Describing transformative innovation
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">19. Best practice</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Most effective method or procedure<br />
+                <strong>Example:</strong> "This is the industry best
+                practice."<br />
+                <strong>Usage:</strong> Referencing standard procedures
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">20. Deep dive</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Thorough examination or analysis<br />
+                <strong>Example:</strong> "We need a deep dive into the
+                metrics."<br />
+                <strong>Usage:</strong> Detailed investigation
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">21. Stakeholder</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Person with interest in outcome<br />
+                <strong>Example:</strong> "We need to update all
+                stakeholders."<br />
+                <strong>Usage:</strong> Referring to interested parties
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">22. Bottom line</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> The most important point or profit<br />
+                <strong>Example:</strong> "The bottom line is we need
+                results."<br />
+                <strong>Usage:</strong> Getting to the main point
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">23. At the end of the day</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Ultimately, when all is considered<br />
+                <strong>Example:</strong> "At the end of the day, profits
+                matter."<br />
+                <strong>Usage:</strong> Summarizing final considerations
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">24. Quick win</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Easy achievement with fast results<br />
+                <strong>Example:</strong> "Let's focus on some quick wins."<br />
+                <strong>Usage:</strong> Identifying easy successes
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">25. Bring to the table</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Meaning:</strong> Contribute or offer something
+                valuable<br />
+                <strong>Example:</strong> "What can you bring to the table?"<br />
+                <strong>Usage:</strong> Discussing contributions
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFESSIONAL EMAIL EXPRESSIONS -->
+      <div class="section">
+        <div class="section-title">📧 Professional Email Expressions (20)</div>
+        <p class="instruction-text">
+          Essential phrases for business correspondence
+        </p>
+
+        <div class="content-list">
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >1. I hope this email finds you well</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Opening greeting<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> First contact or after a gap
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">2. I am writing to inquire about</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Stating purpose<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Making inquiries
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">3. Please find attached</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Mentioning attachments<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Sending documents
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">4. I would appreciate it if</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Polite request<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Asking for action
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >5. Thank you for your prompt response</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Acknowledging quick reply<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Responding to emails
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >6. I look forward to hearing from you</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Closing with expectation<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Awaiting response
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">7. Please let me know if you need</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Offering assistance<br />
+                <strong>Formality:</strong> Semi-formal<br />
+                <strong>Context:</strong> Providing support
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">8. As per our discussion</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Referencing previous talk<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Follow-up emails
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">9. I regret to inform you that</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Delivering bad news<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Negative updates
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">10. Could you please clarify</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Seeking clarification<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Requesting information
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">11. At your earliest convenience</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Polite urgency<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Requesting timely action
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >12. I apologize for the inconvenience</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Expressing regret<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Acknowledging problems
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">13. Further to my previous email</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Continuing discussion<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Follow-up messages
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >14. I would like to bring to your attention</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Highlighting issues<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Raising concerns
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >15. Please do not hesitate to contact me</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Offering availability<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Closing with openness
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">16. In reference to</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Citing something specific<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Making connections
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">17. We are pleased to announce</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Sharing good news<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Positive announcements
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title"
+                >18. I would be grateful if you could</span
+              >
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Polite request<br />
+                <strong>Formality:</strong> Very formal<br />
+                <strong>Context:</strong> Important requests
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">19. For your information</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Sharing FYI items<br />
+                <strong>Formality:</strong> Semi-formal<br />
+                <strong>Context:</strong> Informational emails
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">20. Best regards / Kind regards</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Use:</strong> Professional closing<br />
+                <strong>Formality:</strong> Formal<br />
+                <strong>Context:</strong> Email signatures
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUSINESS CONVERSATION TOPICS -->
+      <div class="section">
+        <div class="section-title">💼 Business Conversation Topics (15)</div>
+        <p class="instruction-text">
+          Practice professional discussions and workplace conversations
+        </p>
+
+        <div class="content-list">
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">1. Project Updates</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Discussing project progress<br />
+                <strong>Key Phrases:</strong> "We're on track", "running behind
+                schedule", "making good progress"<br />
+                <strong>Practice:</strong> "The project is proceeding as
+                planned. We expect to deliver by Friday."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">2. Meeting Schedules</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Coordinating meeting times<br />
+                <strong>Key Phrases:</strong> "Does Tuesday work for you?", "I'm
+                available between", "Let's touch base"<br />
+                <strong>Practice:</strong> "Would 2pm on Wednesday be convenient
+                for you?"
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">3. Client Relations</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Managing client expectations<br />
+                <strong>Key Phrases:</strong> "I understand your concerns", "We
+                value your business", "Let me look into that"<br />
+                <strong>Practice:</strong> "Thank you for bringing this to our
+                attention. I'll investigate immediately."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">4. Presentations</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Delivering business presentations<br />
+                <strong>Key Phrases:</strong> "Today I'll be presenting", "As
+                you can see", "In conclusion"<br />
+                <strong>Practice:</strong> "Good morning everyone. Today I'll
+                walk you through our Q3 results."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">5. Budget Discussions</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Talking about finances<br />
+                <strong>Key Phrases:</strong> "within budget", "cost-effective",
+                "return on investment"<br />
+                <strong>Practice:</strong> "This solution offers the best ROI
+                while staying within our budget."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">6. Team Collaboration</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Working with colleagues<br />
+                <strong>Key Phrases:</strong> "Let's collaborate on", "team
+                effort", "working together"<br />
+                <strong>Practice:</strong> "I think we should collaborate on
+                this initiative for better results."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">7. Performance Reviews</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Discussing work performance<br />
+                <strong>Key Phrases:</strong> "areas for improvement", "exceeded
+                expectations", "professional development"<br />
+                <strong>Practice:</strong> "You've consistently exceeded
+                expectations this quarter."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">8. Problem Solving</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Addressing workplace issues<br />
+                <strong>Key Phrases:</strong> "I suggest we", "alternative
+                solution", "root cause"<br />
+                <strong>Practice:</strong> "Let's identify the root cause before
+                implementing a solution."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">9. Negotiations</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Business negotiation skills<br />
+                <strong>Key Phrases:</strong> "win-win situation", "meet
+                halfway", "mutually beneficial"<br />
+                <strong>Practice:</strong> "I believe we can reach a mutually
+                beneficial agreement."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">10. Strategic Planning</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Long-term business strategy<br />
+                <strong>Key Phrases:</strong> "strategic objective", "long-term
+                vision", "market position"<br />
+                <strong>Practice:</strong> "Our strategic objective is to
+                increase market share by 15%."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">11. Networking</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Professional networking<br />
+                <strong>Key Phrases:</strong> "Nice to meet you", "What line of
+                work", "Let's stay in touch"<br />
+                <strong>Practice:</strong> "What line of work are you in? I'd
+                love to learn more about your company."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">12. Deadlines & Priorities</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Managing time and priorities<br />
+                <strong>Key Phrases:</strong> "high priority", "time-sensitive",
+                "by end of day"<br />
+                <strong>Practice:</strong> "This is time-sensitive - we need to
+                deliver by EOD Friday."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">13. Company Culture</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Workplace environment and values<br />
+                <strong>Key Phrases:</strong> "company values", "work-life
+                balance", "team spirit"<br />
+                <strong>Practice:</strong> "Our company values innovation and
+                collaboration."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">14. Change Management</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Implementing organizational changes<br />
+                <strong>Key Phrases:</strong> "transition period", "adapt to
+                changes", "new processes"<br />
+                <strong>Practice:</strong> "We'll support you through this
+                transition period."
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">15. Professional Development</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Topic:</strong> Career growth and learning<br />
+                <strong>Key Phrases:</strong> "skill development", "training
+                opportunities", "career advancement"<br />
+                <strong>Practice:</strong> "We offer various training
+                opportunities for skill development."
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUSINESS COLLOCATIONS -->
+      <div class="section">
+        <div class="section-title">🔗 Common Business Collocations (20)</div>
+        <p class="instruction-text">
+          Word combinations frequently used together in business contexts
+        </p>
+
+        <div class="content-list">
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">1. Conduct a meeting</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "I'll conduct the meeting this
+                afternoon."<br />
+                <strong>Note:</strong> Not "do" or "make" a meeting - use
+                "conduct"
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">2. Reach a decision</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We need to reach a decision by
+                Friday."<br />
+                <strong>Note:</strong> Also: make/arrive at a decision
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">3. Meet a deadline</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We worked overtime to meet the
+                deadline."<br />
+                <strong>Note:</strong> Not "achieve" or "reach" - use "meet"
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">4. Launch a product</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We're launching a new product next
+                quarter."<br />
+                <strong>Note:</strong> Common for product releases
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">5. Close a deal</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "She closed the deal yesterday."<br />
+                <strong>Note:</strong> Finalize a sale or agreement
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">6. Generate revenue</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "This campaign will generate
+                significant revenue."<br />
+                <strong>Note:</strong> Create income or profits
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">7. Implement a strategy</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We're implementing a new marketing
+                strategy."<br />
+                <strong>Note:</strong> Put a plan into action
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">8. Achieve targets</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "The team achieved all their quarterly
+                targets."<br />
+                <strong>Note:</strong> Reach goals or objectives
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">9. Handle inquiries</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "Customer service handles all
+                inquiries."<br />
+                <strong>Note:</strong> Deal with questions or requests
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">10. Gain market share</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "Our goal is to gain market share this
+                year."<br />
+                <strong>Note:</strong> Increase portion of market
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">11. Submit a proposal</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "Please submit your proposal by
+                Monday."<br />
+                <strong>Note:</strong> Send in a business plan or offer
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">12. Boost productivity</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "New software will boost
+                productivity."<br />
+                <strong>Note:</strong> Increase efficiency
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">13. Attend a conference</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "I'll attend the industry conference
+                next month."<br />
+                <strong>Note:</strong> Participate in professional events
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">14. Negotiate terms</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We're negotiating the terms of the
+                contract."<br />
+                <strong>Note:</strong> Discuss and agree on conditions
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">15. Deliver results</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "The team consistently delivers
+                results."<br />
+                <strong>Note:</strong> Achieve successful outcomes
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">16. Streamline processes</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "We need to streamline our
+                processes."<br />
+                <strong>Note:</strong> Make operations more efficient
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">17. Foster innovation</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "Our culture fosters innovation."<br />
+                <strong>Note:</strong> Encourage creative thinking
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">18. Exceed expectations</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "You've exceeded our expectations."<br />
+                <strong>Note:</strong> Do better than anticipated
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">19. Address concerns</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "Let me address your concerns
+                immediately."<br />
+                <strong>Note:</strong> Deal with worries or issues
+              </div>
+            </div>
+          </div>
+          <div class="expandable-item">
+            <div
+              class="expandable-header"
+              onclick="this.parentElement.classList.toggle('expanded')"
+            >
+              <input type="checkbox" onclick="event.stopPropagation()" />
+              <span class="item-title">20. Maintain relationships</span>
+              <span class="expand-toggle">›</span>
+            </div>
+            <div class="expandable-content">
+              <div class="expandable-content-inner">
+                <strong>Example:</strong> "It's important to maintain good
+                client relationships."<br />
+                <strong>Note:</strong> Keep connections strong
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
