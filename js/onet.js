@@ -93,7 +93,7 @@
   // Practice Test Timer
   function startPracticeTest(testName, duration) {
     const confirmed = confirm(
-      `Start ${testName}? You will have ${duration} minutes to complete the test.`
+      `Start ${testName}? You will have ${duration} minutes to complete the test.`,
     );
 
     if (confirmed) {
@@ -177,7 +177,7 @@
 
     document
       .querySelectorAll(
-        ".fade-in-up, .subject-card, .tip-card, .practice-card, .overview-card"
+        ".fade-in-up, .subject-card, .tip-card, .practice-card, .overview-card",
       )
       .forEach((el) => {
         el.style.opacity = "0";
@@ -223,7 +223,7 @@
   function initBookmarks() {
     const tipCards = document.querySelectorAll(".tip-card");
     const savedBookmarks = JSON.parse(
-      localStorage.getItem("onetBookmarks") || "[]"
+      localStorage.getItem("onetBookmarks") || "[]",
     );
 
     tipCards.forEach((card, index) => {
@@ -298,8 +298,6 @@
     animateCounters();
     initBookmarks();
     initResourceTracking();
-
-    console.log("O-NET page initialized successfully");
   });
 
   // Export for potential external use

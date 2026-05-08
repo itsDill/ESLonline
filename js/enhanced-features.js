@@ -12,7 +12,7 @@ class ESLEnhancedFeatures {
     // Wait for DOM to be ready
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () =>
-        this.initializeFeatures()
+        this.initializeFeatures(),
       );
     } else {
       this.initializeFeatures();
@@ -132,7 +132,7 @@ class ESLEnhancedFeatures {
 
     let revealed = 0;
     const total = document.querySelectorAll(
-      ".reveal-answer, .quiz-item, .interactive-item"
+      ".reveal-answer, .quiz-item, .interactive-item",
     ).length;
 
     // Track reveal button clicks
@@ -153,7 +153,7 @@ class ESLEnhancedFeatures {
           // Achievement feedback
           if (revealed === total) {
             this.showAchievement(
-              "🎉 Congratulations! You completed everything!"
+              "🎉 Congratulations! You completed everything!",
             );
           } else if (revealed === Math.floor(total / 2)) {
             this.showAchievement("🌟 Great progress! You're halfway there!");
@@ -250,7 +250,7 @@ class ESLEnhancedFeatures {
       // Escape key handling for modals/dropdowns
       if (e.key === "Escape") {
         const openDropdowns = document.querySelectorAll(
-          '.dropdown:not([style*="display: none"])'
+          '.dropdown:not([style*="display: none"])',
         );
         openDropdowns.forEach((dropdown) => {
           dropdown.style.display = "none";
@@ -277,7 +277,7 @@ class ESLEnhancedFeatures {
 
       // Add touch feedback to interactive elements
       const touchElements = document.querySelectorAll(
-        ".feature-card, .reveal-answer, .nav-link"
+        ".feature-card, .reveal-answer, .nav-link",
       );
       touchElements.forEach((element) => {
         element.addEventListener(
@@ -285,7 +285,7 @@ class ESLEnhancedFeatures {
           () => {
             element.style.transform = "scale(0.98)";
           },
-          { passive: true }
+          { passive: true },
         );
 
         element.addEventListener(
@@ -295,7 +295,7 @@ class ESLEnhancedFeatures {
               element.style.transform = "";
             }, 150);
           },
-          { passive: true }
+          { passive: true },
         );
       });
     }
@@ -337,7 +337,7 @@ class ESLEnhancedFeatures {
                     window.adsbygoogle.push({});
                     ad.dataset.loaded = "true";
                   } catch (e) {
-                    console.log("AdSense load deferred");
+                    // AdSense load deferred
                   }
                 }
                 adObserver.unobserve(ad);
@@ -345,7 +345,7 @@ class ESLEnhancedFeatures {
             }
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
 
       document
@@ -386,7 +386,7 @@ class ESLEnhancedFeatures {
             }
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
 
       document.querySelectorAll(".animate-on-scroll").forEach((element) => {
@@ -398,7 +398,7 @@ class ESLEnhancedFeatures {
   // Utility: Focus trap for modals
   trapFocus(element) {
     const focusableElements = element.querySelectorAll(
-      'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+      'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select',
     );
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];

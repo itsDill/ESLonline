@@ -13,11 +13,8 @@
     const body = document.body;
 
     if (!mobileToggle || !navLinks) {
-      console.warn("Mobile menu elements not found");
       return;
     }
-
-    console.log("Mobile menu initialized");
 
     let isMenuOpen = false;
 

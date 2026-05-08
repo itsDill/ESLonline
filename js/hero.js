@@ -70,9 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
           button_type: buttonType,
         });
       }
-
-      // Console log for debugging
-      console.log(`CTA clicked: ${buttonText} (${buttonType})`);
     });
   });
 });
@@ -122,14 +119,14 @@ document.addEventListener("DOMContentLoaded", function () {
           ) {
             const finalValue = parseInt(
               entry.target.getAttribute("data-count") ||
-                entry.target.textContent.replace(/,/g, "")
+                entry.target.textContent.replace(/,/g, ""),
             );
             entry.target.classList.add("animated");
             animateCounter(entry.target, 0, finalValue, 2000);
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     statNumbers.forEach(function (stat) {

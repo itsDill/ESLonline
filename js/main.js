@@ -264,7 +264,6 @@ const ThemeManager = {
   init() {
     // CRITICAL: Check if navigation.js already initialized theme management
     if (window.eslThemeInitialized || window.eslNavigationInitialized) {
-      console.log("ThemeManager: Already initialized, skipping main.js init");
       return;
     }
 
@@ -277,8 +276,6 @@ const ThemeManager = {
 
     this.loadSavedTheme();
     this.bindEvents();
-
-    console.log("Theme manager initialized successfully by main.js");
   },
 
   loadSavedTheme() {
@@ -320,7 +317,7 @@ const ThemeManager = {
         JSON.stringify({
           theme: theme,
           timestamp: Date.now(),
-        })
+        }),
       );
     } catch (e) {
       console.warn("Could not broadcast theme change:", e);
@@ -421,9 +418,6 @@ const Navigation = {
   init() {
     // CRITICAL: Check if navigation.js already initialized navigation
     if (window.eslNavigationInitialized) {
-      console.log(
-        "Navigation: Already initialized by navigation.js, skipping main.js init"
-      );
       return;
     }
 
@@ -435,7 +429,6 @@ const Navigation = {
     this.header = Utils.$("header");
 
     if (!this.mobileToggle || !this.navLinks) {
-      console.warn("Navigation elements not found, skipping navigation init");
       return;
     }
 
@@ -448,8 +441,6 @@ const Navigation = {
 
     this.bindEvents();
     this.initScrollEffects();
-
-    console.log("Navigation initialized successfully by main.js");
   },
 
   cleanupExistingListeners() {
@@ -458,7 +449,7 @@ const Navigation = {
       const newMobileToggle = this.mobileToggle.cloneNode(true);
       this.mobileToggle.parentNode.replaceChild(
         newMobileToggle,
-        this.mobileToggle
+        this.mobileToggle,
       );
       this.mobileToggle = newMobileToggle;
       this.mobileIcon = this.mobileToggle.querySelector("i");
@@ -553,7 +544,7 @@ const Navigation = {
         if (window.innerWidth > 768 && this.isOpen) {
           this.closeMobileMenu();
         }
-      }, 200)
+      }, 200),
     );
 
     // Smooth scrolling for anchor links
@@ -590,7 +581,7 @@ const Navigation = {
 
     // Close all open dropdowns when closing mobile menu
     const openDropdowns = Utils.$$(
-      ".nav-item.mobile-dropdown-open, .nav-item.mobile-open"
+      ".nav-item.mobile-dropdown-open, .nav-item.mobile-open",
     );
     openDropdowns.forEach((item) => {
       item.classList.remove("mobile-dropdown-open", "mobile-open");
@@ -681,7 +672,7 @@ const Navigation = {
               if (otherItem !== item) {
                 otherItem.classList.remove(
                   "mobile-dropdown-open",
-                  "mobile-open"
+                  "mobile-open",
                 );
                 const otherDropdown = otherItem.querySelector(".dropdown");
                 if (otherDropdown) {
@@ -784,7 +775,7 @@ const Performance = {
         },
         {
           rootMargin: "50px 0px",
-        }
+        },
       );
 
       Utils.$$("img[data-src]").forEach((img) => {
@@ -811,7 +802,7 @@ const Performance = {
         {
           threshold: 0.1,
           rootMargin: "0px 0px -50px 0px",
-        }
+        },
       );
 
       Utils.$$(".animate-on-scroll").forEach((el) => {
@@ -846,7 +837,7 @@ const ErrorHandler = {
     window.addEventListener("error", this.handleError.bind(this));
     window.addEventListener(
       "unhandledrejection",
-      this.handlePromiseRejection.bind(this)
+      this.handlePromiseRejection.bind(this),
     );
   },
 
@@ -895,17 +886,10 @@ const ESLApp = {
 
   start() {
     try {
-      console.log("ESL App: Starting initialization...");
-
       // Initialize core systems only if they haven't been initialized by navigation.js
       if (!window.eslNavigationInitialized) {
-        console.log("ESL App: Initializing theme and navigation from main.js");
         ThemeManager.init();
         Navigation.init();
-      } else {
-        console.log(
-          "ESL App: Navigation already initialized by navigation.js, skipping"
-        );
       }
 
       Performance.init();
@@ -916,8 +900,6 @@ const ESLApp = {
 
       // Mark page as loaded
       this.markPageLoaded();
-
-      console.log("ESL Fun Online: All systems initialized successfully");
     } catch (error) {
       console.error("ESL App initialization error:", error);
     }
@@ -966,7 +948,7 @@ const ESLApp = {
       (el, index) => {
         el.classList.add("animate-on-scroll");
         el.style.animationDelay = `${index * 0.1}s`;
-      }
+      },
     );
 
     // Initialize counters if present
@@ -1008,7 +990,7 @@ const ESLApp = {
             }
           });
         },
-        { threshold: 0.5 }
+        { threshold: 0.5 },
       );
 
       const statsSection = Utils.$(".hero-stats, .stats-section");

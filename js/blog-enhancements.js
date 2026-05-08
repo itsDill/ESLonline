@@ -277,7 +277,7 @@
         if (window.showNotification) {
           showNotification(
             "You are currently offline. Some features may not work properly.",
-            "warning"
+            "warning",
           );
         }
       };
@@ -286,7 +286,7 @@
         if (window.showNotification) {
           showNotification(
             "Connection restored! All features are now available.",
-            "success"
+            "success",
           );
         }
       };
@@ -493,12 +493,15 @@
           lastRan = Date.now();
         } else {
           clearTimeout(lastFunc);
-          lastFunc = setTimeout(function () {
-            if (Date.now() - lastRan >= limit) {
-              func.apply(context, args);
-              lastRan = Date.now();
-            }
-          }, limit - (Date.now() - lastRan));
+          lastFunc = setTimeout(
+            function () {
+              if (Date.now() - lastRan >= limit) {
+                func.apply(context, args);
+                lastRan = Date.now();
+              }
+            },
+            limit - (Date.now() - lastRan),
+          );
         }
       };
     }
@@ -592,7 +595,7 @@
       if (searchInput) {
         const debouncedSearch = this.debounce(
           this.performSearch.bind(this),
-          CONFIG.DEBOUNCE_DELAY
+          CONFIG.DEBOUNCE_DELAY,
         );
         searchInput.addEventListener("input", debouncedSearch);
 
@@ -630,7 +633,7 @@
                 <i class="fas fa-search"></i>
                 ${term}
               </div>
-            `
+            `,
               )
               .join("")}
           `;
@@ -800,7 +803,6 @@
 
     trackWebVitals() {
       // This would integrate with actual web vitals library in production
-      console.log("Performance tracking initialized");
     }
   }
 

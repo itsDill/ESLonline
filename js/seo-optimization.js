@@ -48,7 +48,7 @@ function initializeLazyLoading() {
       {
         rootMargin: "50px 0px",
         threshold: 0.01,
-      }
+      },
     );
 
     images.forEach((img) => imageObserver.observe(img));
@@ -119,7 +119,7 @@ function addBreadcrumbSchema() {
   if (!breadcrumbs) return;
 
   const items = Array.from(
-    breadcrumbs.querySelectorAll(".breadcrumb-item")
+    breadcrumbs.querySelectorAll(".breadcrumb-item"),
   ).map((item, index) => {
     const link = item.querySelector("a");
     return {
@@ -238,7 +238,6 @@ function measureCoreWebVitals() {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name === "first-contentful-paint") {
-        console.log("FCP:", entry.startTime);
         if (typeof gtag !== "undefined") {
           gtag("event", "first_contentful_paint", {
             event_category: "Web Vitals",
@@ -254,7 +253,6 @@ function measureCoreWebVitals() {
   const lcpObserver = new PerformanceObserver((list) => {
     const entries = list.getEntries();
     const lastEntry = entries[entries.length - 1];
-    console.log("LCP:", lastEntry.startTime);
     if (typeof gtag !== "undefined") {
       gtag("event", "largest_contentful_paint", {
         event_category: "Web Vitals",
@@ -271,7 +269,7 @@ function monitorResourceTiming() {
 
     // Identify slow-loading resources
     const slowResources = resources.filter(
-      (resource) => resource.duration > 1000
+      (resource) => resource.duration > 1000,
     );
 
     if (slowResources.length > 0) {
@@ -364,7 +362,7 @@ function initializeScrollTracking() {
       const scrollPercent = Math.round(
         (window.scrollY /
           (document.documentElement.scrollHeight - window.innerHeight)) *
-          100
+          100,
       );
 
       scrollThresholds.forEach((threshold) => {
@@ -379,7 +377,7 @@ function initializeScrollTracking() {
           }
         }
       });
-    }, 250)
+    }, 250),
   );
 }
 
