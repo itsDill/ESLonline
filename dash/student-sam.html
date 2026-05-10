@@ -3,92 +3,1859 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sam - Student Dashboard</title>
+    <title>Sam's Learning Hub ⚽🌍</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+
       body {
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3a8a 0%, #10b981 100%);
         min-height: 100vh;
-        padding: 40px 20px;
+        padding: 20px;
       }
+
       .container {
-        max-width: 700px;
+        max-width: 1200px;
         margin: 0 auto;
-        background: white;
-        border-radius: 16px;
-        padding: 40px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
       }
-      h1 {
-        color: #667eea;
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
+
       .back-link {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #667eea;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
         text-decoration: none;
         font-weight: 600;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
       }
+
       .back-link:hover {
-        text-decoration: underline;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateX(-5px);
       }
-      .section {
+
+      .header {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        color: #1e3a8a;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header .subtitle {
+        color: #10b981;
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
         margin-bottom: 30px;
       }
-      .section-title {
-        color: #667eea;
+
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+      }
+
+      .stat-value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #e5e7eb;
+      }
+
+      .card-icon {
+        font-size: 2em;
+      }
+
+      .card-title {
+        font-size: 1.5em;
+        color: #1e3a8a;
+        font-weight: 700;
+      }
+
+      .vocab-word {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .vocab-word:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+      }
+
+      .vocab-term {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .vocab-definition {
+        font-size: 0.95em;
+        opacity: 0.95;
+      }
+
+      .vocab-example {
+        font-style: italic;
+        font-size: 0.9em;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .challenge-btn {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .challenge-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(30, 58, 138, 0.3);
+      }
+
+      .challenge-btn:active {
+        transform: translateY(0);
+      }
+
+      .game-area {
+        background: #f3f4f6;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
+        min-height: 200px;
+      }
+
+      .question {
         font-size: 1.2em;
+        color: #1e3a8a;
         margin-bottom: 15px;
         font-weight: 600;
       }
-      .field {
+
+      .option {
+        background: white;
+        border: 2px solid #e5e7eb;
+        padding: 12px 20px;
+        border-radius: 8px;
         margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .option:hover {
+        border-color: #10b981;
+        background: #f0fdf4;
+      }
+
+      .option.correct {
+        background: #10b981;
+        color: white;
+        border-color: #10b981;
+      }
+
+      .option.wrong {
+        background: #ef4444;
+        color: white;
+        border-color: #ef4444;
+      }
+
+      .score-display {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .sentence-builder {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 15px;
+        background: #f3f4f6;
+        border-radius: 12px;
+        min-height: 80px;
+        margin-bottom: 15px;
       }
-      .label {
+
+      .word-tile {
+        background: white;
+        border: 2px solid #1e3a8a;
+        color: #1e3a8a;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
         font-weight: 600;
-        color: #333;
+        transition: all 0.3s ease;
       }
-      .value {
+
+      .word-tile:hover {
+        background: #1e3a8a;
+        color: white;
+      }
+
+      .word-tile.used {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .your-sentence {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        border: 2px dashed #10b981;
+        min-height: 60px;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+      }
+
+      .btn-reset {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .btn-check {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .feedback {
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 15px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .feedback.success {
+        background: #10b981;
+        color: white;
+      }
+
+      .feedback.error {
+        background: #ef4444;
+        color: white;
+      }
+
+      .progress-bar {
+        background: #e5e7eb;
+        height: 30px;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        height: 100%;
+        transition: width 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .badge {
+        background: white;
+        border: 3px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .badge.earned {
+        border-color: #10b981;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      }
+
+      .badge-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+        filter: grayscale(100%);
+        opacity: 0.3;
+      }
+
+      .badge.earned .badge-icon {
+        filter: grayscale(0%);
+        opacity: 1;
+      }
+
+      .badge-name {
+        font-weight: bold;
+        color: #1e3a8a;
+        margin-bottom: 5px;
+      }
+
+      .badge-description {
+        font-size: 0.85em;
         color: #666;
+      }
+
+      .speaking-prompt {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+      }
+
+      .speaking-prompt h4 {
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+
+      .speaking-prompt ul {
+        margin-left: 20px;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
-      <h1>👥 Sam</h1>
-      <div class="section">
-        <div class="section-title">Learning Info</div>
-        <div class="field">
-          <span class="label">Level:</span><span class="value">Advanced</span>
-        </div>
-        <div class="field">
-          <span class="label">Focus:</span
-          ><span class="value">Technical English</span>
-        </div>
-        <div class="field">
-          <span class="label">Progress:</span><span class="value">75%</span>
-        </div>
-        <div class="field">
-          <span class="label">Status:</span><span class="value">Active</span>
+      <a href="dashboard.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+
+      <div class="header">
+        <h1>⚽ Sam's Learning Hub 🌍</h1>
+        <p class="subtitle">
+          Age 13 | Football Enthusiast | Geography Explorer
+        </p>
+        <div
+          style="
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+          "
+        >
+          <strong>🎉 Welcome to Your Learning Journey!</strong> Start exploring
+          football and geography vocabulary below. Complete quizzes and games to
+          earn points and unlock badges!
         </div>
       </div>
-      <div class="section">
-        <div class="section-title">Notes</div>
-        <div class="content"></div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value" id="totalPoints">0</div>
+          <div class="stat-label">Total Points</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="dayStreak">1</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚽</div>
+          <div class="stat-value" id="footballWords">0</div>
+          <div class="stat-label">Football Words</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌍</div>
+          <div class="stat-value" id="geoWords">0</div>
+          <div class="stat-label">Geography Terms</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎮</div>
+          <div class="stat-value" id="gamesCompleted">0</div>
+          <div class="stat-label">Games Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏅</div>
+          <div class="stat-value" id="badgesEarned">0</div>
+          <div class="stat-label">Badges Earned</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Football Vocabulary -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">⚽</div>
+            <h2 class="card-title">Football Vocabulary</h2>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Striker</div>
+            <div class="vocab-definition">
+              A forward player whose main job is to score goals
+            </div>
+            <div class="vocab-example">
+              "The striker scored a hat-trick in the match!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Penalty Kick</div>
+            <div class="vocab-definition">
+              A free shot at goal from 12 yards, awarded for a foul in the box
+            </div>
+            <div class="vocab-example">
+              "The referee awarded a penalty kick for the handball."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Offside</div>
+            <div class="vocab-definition">
+              When an attacking player is ahead of the last defender when the
+              ball is played
+            </div>
+            <div class="vocab-example">
+              "The goal was disallowed because the player was offside."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Clean Sheet</div>
+            <div class="vocab-definition">
+              When a team doesn't concede any goals in a match
+            </div>
+            <div class="vocab-example">
+              "The goalkeeper kept a clean sheet for the fifth match in a row!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Tackle</div>
+            <div class="vocab-definition">
+              Taking the ball away from an opponent using feet
+            </div>
+            <div class="vocab-example">
+              "The defender made a brilliant tackle to stop the attack."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Free Kick</div>
+            <div class="vocab-definition">
+              An uncontested kick awarded after a foul
+            </div>
+            <div class="vocab-example">
+              "He scored directly from a free kick outside the box!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Through Ball</div>
+            <div class="vocab-definition">
+              A pass played between defenders for a teammate to run onto
+            </div>
+            <div class="vocab-example">
+              "The midfielder played a perfect through ball to the striker."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Dribbling</div>
+            <div class="vocab-definition">
+              Moving with the ball while maintaining control
+            </div>
+            <div class="vocab-example">
+              "His dribbling skills helped him get past three defenders!"
+            </div>
+          </div>
+        </div>
+
+        <!-- Geography Vocabulary -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🌍</div>
+            <h2 class="card-title">Geography Vocabulary</h2>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Archipelago</div>
+            <div class="vocab-definition">
+              A group or chain of islands clustered together
+            </div>
+            <div class="vocab-example">
+              "Indonesia is the largest archipelago in the world."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Plateau</div>
+            <div class="vocab-definition">
+              A flat, elevated area of land higher than the surrounding area
+            </div>
+            <div class="vocab-example">
+              "The Tibetan Plateau is the highest plateau on Earth."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Peninsula</div>
+            <div class="vocab-definition">
+              A piece of land surrounded by water on three sides
+            </div>
+            <div class="vocab-example">
+              "Italy is shaped like a peninsula jutting into the Mediterranean."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Latitude</div>
+            <div class="vocab-definition">
+              The distance north or south of the equator, measured in degrees
+            </div>
+            <div class="vocab-example">
+              "The equator is at 0 degrees latitude."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Canyon</div>
+            <div class="vocab-definition">
+              A deep, narrow valley with steep sides, often carved by a river
+            </div>
+            <div class="vocab-example">
+              "The Grand Canyon is one of the most famous canyons in the world."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Monsoon</div>
+            <div class="vocab-definition">
+              A seasonal wind pattern bringing heavy rainfall
+            </div>
+            <div class="vocab-example">
+              "The monsoon season brings much-needed rain to India."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Tundra</div>
+            <div class="vocab-definition">
+              A vast, flat, treeless Arctic region with permanently frozen soil
+            </div>
+            <div class="vocab-example">
+              "Polar bears live in the Arctic tundra."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">Delta</div>
+            <div class="vocab-definition">
+              A triangular area where a river splits before entering the sea
+            </div>
+            <div class="vocab-example">
+              "The Nile Delta is extremely fertile and supports agriculture."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Football Idioms & Phrases -->
+      <div class="grid" style="margin-bottom: 30px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">💬</div>
+            <h2 class="card-title">Football Idioms & Expressions</h2>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">"Move the goalposts"</div>
+            <div class="vocab-definition">
+              To change the rules or requirements unfairly
+            </div>
+            <div class="vocab-example">
+              "They keep moving the goalposts every time I meet the target!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">"Ball is in your court"</div>
+            <div class="vocab-definition">
+              It's your turn to take action or make a decision
+            </div>
+            <div class="vocab-example">
+              "I've done my part, now the ball is in your court."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">"Score an own goal"</div>
+            <div class="vocab-definition">
+              To do something that harms yourself by mistake
+            </div>
+            <div class="vocab-example">
+              "He scored an own goal by criticizing the boss in the meeting."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">"On the ball"</div>
+            <div class="vocab-definition">
+              Alert, quick to understand or react
+            </div>
+            <div class="vocab-example">
+              "She's really on the ball when it comes to solving problems."
+            </div>
+          </div>
+        </div>
+
+        <!-- Geography Fun Facts -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🌟</div>
+            <h2 class="card-title">Amazing Geography Facts</h2>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">🌊 Deepest Ocean Point</div>
+            <div class="vocab-definition">
+              The Mariana Trench is 11,034 meters deep - deeper than Mount
+              Everest is tall!
+            </div>
+            <div class="vocab-example">
+              "Only three people have ever reached the bottom of the Mariana
+              Trench."
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">🏜️ Driest Place on Earth</div>
+            <div class="vocab-definition">
+              The Atacama Desert in Chile has areas that haven't seen rain for
+              over 400 years
+            </div>
+            <div class="vocab-example">
+              "The Atacama Desert is even drier than Antarctica!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">🌍 Shrinking Sea</div>
+            <div class="vocab-definition">
+              The Dead Sea is shrinking by about 1 meter per year
+            </div>
+            <div class="vocab-example">
+              "You can float effortlessly in the Dead Sea because it's so
+              salty!"
+            </div>
+          </div>
+
+          <div class="vocab-word">
+            <div class="vocab-term">🏔️ Growing Mountain</div>
+            <div class="vocab-definition">
+              Mount Everest grows about 4mm taller every year due to tectonic
+              plates
+            </div>
+            <div class="vocab-example">
+              "The Himalayas are still being pushed up by plate movements!"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievement Badges -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🏅</div>
+          <h2 class="card-title">Achievement Badges</h2>
+        </div>
+        <div class="stats-grid" style="margin: 0">
+          <div class="badge">
+            <div class="badge-icon">⚽</div>
+            <div class="badge-name">Football Fan</div>
+            <div class="badge-description">Complete 5 football quizzes</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">🌍</div>
+            <div class="badge-name">World Explorer</div>
+            <div class="badge-description">Learn 20 geography terms</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">📝</div>
+            <div class="badge-name">Sentence Master</div>
+            <div class="badge-description">Build 10 sentences correctly</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">🔥</div>
+            <div class="badge-name">Week Warrior</div>
+            <div class="badge-description">Keep a 7-day streak</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">💯</div>
+            <div class="badge-name">Perfect Score</div>
+            <div class="badge-description">Get 100% on any quiz</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">🎯</div>
+            <div class="badge-name">Point Collector</div>
+            <div class="badge-description">Earn 1000 total points</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">🏆</div>
+            <div class="badge-name">Super Learner</div>
+            <div class="badge-description">Complete all challenges</div>
+          </div>
+          <div class="badge">
+            <div class="badge-icon">⭐</div>
+            <div class="badge-name">Vocab King</div>
+            <div class="badge-description">Learn 50 new words</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaking Practice Prompts -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎤</div>
+          <h2 class="card-title">Speaking Practice Prompts</h2>
+        </div>
+        <p style="color: #666; margin-bottom: 20px">
+          Practice speaking out loud! Record yourself or talk with a friend
+          about these topics:
+        </p>
+
+        <div class="speaking-prompt">
+          <h4>⚽ Football Discussion</h4>
+          <ul>
+            <li>
+              Describe your favorite football player and explain why they're
+              special
+            </li>
+            <li>Talk about an exciting match you watched recently</li>
+            <li>
+              If you could play any position, which would you choose and why?
+            </li>
+            <li>
+              Explain the offside rule to someone who doesn't know football
+            </li>
+          </ul>
+        </div>
+
+        <div class="speaking-prompt">
+          <h4>🌍 Geography Talk</h4>
+          <ul>
+            <li>
+              Describe a country you'd love to visit and what you'd do there
+            </li>
+            <li>
+              Compare two different landforms (like mountains and deserts)
+            </li>
+            <li>Explain why the equator is important for climate</li>
+            <li>
+              Talk about the most amazing geographical feature you've learned
+              about
+            </li>
+          </ul>
+        </div>
+
+        <div class="speaking-prompt">
+          <h4>🎯 Challenge Questions</h4>
+          <ul>
+            <li>
+              If you could create a football team from any country, which
+              country and why?
+            </li>
+            <li>How does geography affect where football is most popular?</li>
+            <li>
+              What vocabulary words did you learn today that you'll use in real
+              life?
+            </li>
+            <li>Describe your dream: combining football and world travel!</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Daily Challenge -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📅</div>
+          <h2 class="card-title">Daily Challenge - May 10, 2026</h2>
+        </div>
+        <div
+          style="
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+          "
+        >
+          <h3 style="margin-bottom: 10px">🎯 Today's Writing Challenge</h3>
+          <p style="font-size: 1.1em; line-height: 1.6">
+            Write a short paragraph (5-7 sentences) about your favorite football
+            player or a country you'd like to visit. Use at least 3 vocabulary
+            words you learned today!
+          </p>
+        </div>
+        <textarea
+          id="dailyWriting"
+          style="
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+          "
+          placeholder="Start writing your paragraph here..."
+        ></textarea>
+        <button
+          class="challenge-btn"
+          onclick="submitDailyChallenge()"
+          style="margin-top: 15px"
+        >
+          <i class="fas fa-check-circle"></i> Submit Challenge
+        </button>
+        <div id="dailyChallengeResult"></div>
+      </div>
+
+      <!-- Word Scramble Game -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔀</div>
+          <h2 class="card-title">Word Scramble Challenge</h2>
+        </div>
+        <button class="challenge-btn" onclick="startWordScramble()">
+          <i class="fas fa-random"></i> Unscramble Words
+        </button>
+        <div id="wordScramble" class="game-area hidden"></div>
+      </div>
+
+      <!-- Fill in the Blank -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">✍️</div>
+          <h2 class="card-title">Fill in the Blank Challenge</h2>
+        </div>
+        <button class="challenge-btn" onclick="startFillBlank()">
+          <i class="fas fa-pen"></i> Complete Sentences
+        </button>
+        <div id="fillBlank" class="game-area hidden"></div>
+      </div>
+
+      <!-- Football Quiz Challenge -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <h2 class="card-title">Football Quiz Challenge</h2>
+        </div>
+        <button class="challenge-btn" onclick="startFootballQuiz()">
+          <i class="fas fa-play"></i> Start Quiz
+        </button>
+        <div id="footballQuiz" class="game-area hidden"></div>
+      </div>
+
+      <!-- Geography Quiz Challenge -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🗺️</div>
+          <h2 class="card-title">Geography Challenge</h2>
+        </div>
+        <button class="challenge-btn" onclick="startGeoQuiz()">
+          <i class="fas fa-globe"></i> Test Your Knowledge
+        </button>
+        <div id="geoQuiz" class="game-area hidden"></div>
+      </div>
+
+      <!-- Sentence Builder -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔤</div>
+          <h2 class="card-title">Sentence Builder Challenge</h2>
+        </div>
+        <button class="challenge-btn" onclick="startSentenceBuilder()">
+          <i class="fas fa-puzzle-piece"></i> Build Sentences
+        </button>
+        <div id="sentenceBuilder" class="game-area hidden"></div>
+      </div>
+
+      <!-- Vocabulary Match Game -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎮</div>
+          <h2 class="card-title">Vocabulary Match Game</h2>
+        </div>
+        <button class="challenge-btn" onclick="startMatchGame()">
+          <i class="fas fa-gamepad"></i> Play Match Game
+        </button>
+        <div id="matchGame" class="game-area hidden"></div>
       </div>
     </div>
+
+    <script>
+      let totalPoints = 0;
+      let gamesCompleted = 0;
+      let footballWords = 0;
+      let geoWords = 0;
+      let dayStreak = 1;
+      let badgesEarned = 0;
+
+      function updateStats() {
+        document.getElementById("totalPoints").textContent = totalPoints;
+        document.getElementById("gamesCompleted").textContent = gamesCompleted;
+        document.getElementById("footballWords").textContent = footballWords;
+        document.getElementById("geoWords").textContent = geoWords;
+        document.getElementById("dayStreak").textContent = dayStreak;
+        document.getElementById("badgesEarned").textContent = badgesEarned;
+      }
+
+      // Football Quiz (Expanded)
+      const footballQuestions = [
+        {
+          q: "What position is responsible for stopping the ball from entering the goal?",
+          options: ["Striker", "Goalkeeper", "Midfielder", "Defender"],
+          correct: 1,
+        },
+        {
+          q: "How many players are on a football team (including the goalkeeper)?",
+          options: ["9", "10", "11", "12"],
+          correct: 2,
+        },
+        {
+          q: "What is it called when a player scores three goals in one match?",
+          options: ["Double", "Hat-trick", "Triple", "Grand slam"],
+          correct: 1,
+        },
+        {
+          q: "What color card does a referee show for a serious foul?",
+          options: ["Yellow", "Red", "Blue", "Green"],
+          correct: 1,
+        },
+        {
+          q: "How long is a standard football match?",
+          options: ["60 minutes", "75 minutes", "90 minutes", "120 minutes"],
+          correct: 2,
+        },
+        {
+          q: "What is the maximum number of substitutions allowed in most professional matches?",
+          options: ["3", "5", "7", "Unlimited"],
+          correct: 1,
+        },
+        {
+          q: "What is the term for the player who leads the team on the field?",
+          options: ["Coach", "Manager", "Captain", "Striker"],
+          correct: 2,
+        },
+        {
+          q: "How wide is a regulation football goal?",
+          options: ["6 meters", "7.32 meters", "8 meters", "10 meters"],
+          correct: 1,
+        },
+        {
+          q: "What is a 'nutmeg' in football?",
+          options: [
+            "A type of pass",
+            "Kicking the ball through opponent's legs",
+            "A scoring technique",
+            "A defensive move",
+          ],
+          correct: 1,
+        },
+        {
+          q: "Which part of the body CANNOT legally touch the ball (except for goalkeeper)?",
+          options: ["Chest", "Head", "Hands/Arms", "Knee"],
+          correct: 2,
+        },
+        {
+          q: "What is 'extra time' in football?",
+          options: [
+            "Warm-up period",
+            "Half-time",
+            "Additional play in knockout matches",
+            "Injury time",
+          ],
+          correct: 2,
+        },
+        {
+          q: "What does 'assist' mean in football?",
+          options: [
+            "Help the referee",
+            "Pass that leads to a goal",
+            "Block a shot",
+            "Tackle an opponent",
+          ],
+          correct: 1,
+        },
+        {
+          q: "What is a 'derby' match?",
+          options: [
+            "Championship final",
+            "Match between local rivals",
+            "International match",
+            "Friendly match",
+          ],
+          correct: 1,
+        },
+        {
+          q: "What happens when the ball completely crosses the goal line on the ground?",
+          options: ["Corner kick", "Goal kick", "Throw-in", "Penalty"],
+          correct: 1,
+        },
+        {
+          q: "What is the semicircular area around each goal called?",
+          options: ["Goal box", "Penalty arc", "Corner arc", "Center circle"],
+          correct: 1,
+        },
+      ];
+
+      // Geography Quiz (Expanded)
+      const geoQuestions = [
+        {
+          q: "Which is the largest continent by land area?",
+          options: ["Africa", "Asia", "North America", "Europe"],
+          correct: 1,
+        },
+        {
+          q: "What is the longest river in the world?",
+          options: ["Amazon", "Nile", "Yangtze", "Mississippi"],
+          correct: 1,
+        },
+        {
+          q: "Which ocean is the largest?",
+          options: ["Atlantic", "Indian", "Pacific", "Arctic"],
+          correct: 2,
+        },
+        {
+          q: "Mount Everest is located in which mountain range?",
+          options: ["Alps", "Andes", "Rockies", "Himalayas"],
+          correct: 3,
+        },
+        {
+          q: "Which desert is the largest hot desert in the world?",
+          options: ["Sahara", "Arabian", "Gobi", "Kalahari"],
+          correct: 0,
+        },
+        {
+          q: "What is the capital of Australia?",
+          options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+          correct: 2,
+        },
+        {
+          q: "Which country has the most natural lakes?",
+          options: ["USA", "Russia", "Canada", "Finland"],
+          correct: 2,
+        },
+        {
+          q: "What is the smallest country in the world?",
+          options: ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
+          correct: 1,
+        },
+        {
+          q: "Which strait separates Europe from Africa?",
+          options: [
+            "Bering Strait",
+            "Strait of Gibraltar",
+            "Strait of Malacca",
+            "Dover Strait",
+          ],
+          correct: 1,
+        },
+        {
+          q: "What type of landform is New Zealand?",
+          options: ["Peninsula", "Archipelago", "Isthmus", "Cape"],
+          correct: 1,
+        },
+        {
+          q: "Which line divides the Earth into Northern and Southern hemispheres?",
+          options: [
+            "Prime Meridian",
+            "Tropic of Cancer",
+            "Equator",
+            "Arctic Circle",
+          ],
+          correct: 2,
+        },
+        {
+          q: "What is the world's highest waterfall?",
+          options: [
+            "Niagara Falls",
+            "Victoria Falls",
+            "Angel Falls",
+            "Iguazu Falls",
+          ],
+          correct: 2,
+        },
+        {
+          q: "Which sea is the saltiest body of water?",
+          options: ["Red Sea", "Dead Sea", "Mediterranean Sea", "Caspian Sea"],
+          correct: 1,
+        },
+        {
+          q: "What is the imaginary line at 0° longitude called?",
+          options: [
+            "Equator",
+            "International Date Line",
+            "Prime Meridian",
+            "Tropic Line",
+          ],
+          correct: 2,
+        },
+        {
+          q: "Which continent has no permanent human population?",
+          options: ["Arctic", "Antarctica", "Greenland", "Iceland"],
+          correct: 1,
+        },
+      ];
+
+      function startFootballQuiz() {
+        runQuiz("footballQuiz", footballQuestions, "Football");
+      }
+
+      function startGeoQuiz() {
+        runQuiz("geoQuiz", geoQuestions, "Geography");
+      }
+
+      function runQuiz(elementId, questions, topic) {
+        const container = document.getElementById(elementId);
+        container.classList.remove("hidden");
+        container.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let currentQ = 0;
+        let score = 0;
+
+        function showQuestion() {
+          if (currentQ >= questions.length) {
+            const points = score * 10;
+            totalPoints += points;
+            gamesCompleted++;
+
+            // Update vocabulary word counts based on quiz topic
+            if (topic === "Football") {
+              footballWords += 5; // Award 5 words per football quiz completion
+            } else if (topic === "Geography") {
+              geoWords += 5; // Award 5 words per geography quiz completion
+            }
+
+            updateStats();
+            container.innerHTML = `
+              <div class="score-display">
+                🎉 Quiz Complete! 🎉<br>
+                Score: ${score}/${questions.length}<br>
+                Points Earned: ${points}
+              </div>
+              <button class="challenge-btn" onclick="location.reload()">
+                <i class="fas fa-redo"></i> Try Again
+              </button>
+            `;
+            return;
+          }
+
+          const q = questions[currentQ];
+          container.innerHTML = `
+            <div class="question">${currentQ + 1}. ${q.q}</div>
+            ${q.options
+              .map(
+                (opt, i) =>
+                  `<div class="option" onclick="checkAnswer(${i}, ${q.correct}, '${elementId}', ${currentQ})">${opt}</div>`,
+              )
+              .join("")}
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${(currentQ / questions.length) * 100}%">
+                ${currentQ}/${questions.length}
+              </div>
+            </div>
+          `;
+        }
+
+        window.checkAnswer = function (
+          selected,
+          correct,
+          containerId,
+          questionNum,
+        ) {
+          const options = document.querySelectorAll(`#${containerId} .option`);
+          options.forEach((opt) => (opt.style.pointerEvents = "none"));
+
+          if (selected === correct) {
+            options[selected].classList.add("correct");
+            score++;
+            setTimeout(() => {
+              currentQ++;
+              showQuestion();
+            }, 1000);
+          } else {
+            options[selected].classList.add("wrong");
+            options[correct].classList.add("correct");
+            setTimeout(() => {
+              currentQ++;
+              showQuestion();
+            }, 1500);
+          }
+        };
+
+        showQuestion();
+      }
+
+      // Sentence Builder (Expanded)
+      const sentenceExercises = [
+        {
+          words: ["The", "striker", "scored", "a", "brilliant", "goal"],
+          correct: "The striker scored a brilliant goal",
+        },
+        {
+          words: [
+            "We",
+            "studied",
+            "continents",
+            "the",
+            "seven",
+            "in",
+            "geography",
+          ],
+          correct: "We studied the seven continents in geography",
+        },
+        {
+          words: [
+            "football",
+            "The",
+            "won",
+            "team",
+            "penalty",
+            "the",
+            "after",
+            "shootout",
+          ],
+          correct: "The football team won after the penalty shootout",
+        },
+        {
+          words: [
+            "highest",
+            "is",
+            "Everest",
+            "mountain",
+            "the",
+            "Mount",
+            "in",
+            "world",
+            "the",
+          ],
+          correct: "Mount Everest is the highest mountain in the world",
+        },
+        {
+          words: ["goalkeeper", "The", "made", "amazing", "save", "an"],
+          correct: "The goalkeeper made an amazing save",
+        },
+        {
+          words: ["Pacific", "largest", "is", "The", "ocean", "the", "Ocean"],
+          correct: "The Pacific Ocean is the largest ocean",
+        },
+        {
+          words: [
+            "midfielders",
+            "ball",
+            "the",
+            "control",
+            "The",
+            "in",
+            "center",
+            "the",
+          ],
+          correct: "The midfielders control the ball in the center",
+        },
+        {
+          words: [
+            "equator",
+            "near",
+            "countries",
+            "Many",
+            "have",
+            "climates",
+            "the",
+            "tropical",
+          ],
+          correct: "Many countries near the equator have tropical climates",
+        },
+      ];
+
+      function startSentenceBuilder() {
+        const container = document.getElementById("sentenceBuilder");
+        container.classList.remove("hidden");
+        container.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let currentEx = 0;
+        let userSentence = [];
+
+        function showExercise() {
+          if (currentEx >= sentenceExercises.length) {
+            const points = currentEx * 15;
+            totalPoints += points;
+            gamesCompleted++;
+
+            // Award vocabulary for sentence building (mixed topics)
+            footballWords += 2;
+            geoWords += 2;
+
+            updateStats();
+            container.innerHTML = `
+              <div class="score-display">
+                🌟 All Sentences Complete! 🌟<br>
+                Points Earned: ${points}
+              </div>
+            `;
+            return;
+          }
+
+          const ex = sentenceExercises[currentEx];
+          const shuffled = [...ex.words].sort(() => Math.random() - 0.5);
+
+          container.innerHTML = `
+            <div class="question">Build the correct sentence:</div>
+            <div class="your-sentence" id="userSentence">Tap words below to build your sentence...</div>
+            <div class="sentence-builder" id="wordTiles">
+              ${shuffled
+                .map(
+                  (word, i) =>
+                    `<div class="word-tile" onclick="addWord('${word}', ${i})">${word}</div>`,
+                )
+                .join("")}
+            </div>
+            <button class="btn-reset" onclick="resetSentence()">Reset</button>
+            <button class="btn-check" onclick="checkSentence('${ex.correct}')">Check</button>
+            <div id="sentenceFeedback"></div>
+          `;
+          userSentence = [];
+        }
+
+        window.addWord = function (word, index) {
+          const tile = document.querySelectorAll("#wordTiles .word-tile")[
+            index
+          ];
+          if (!tile.classList.contains("used")) {
+            userSentence.push(word);
+            tile.classList.add("used");
+            document.getElementById("userSentence").textContent =
+              userSentence.join(" ");
+          }
+        };
+
+        window.resetSentence = function () {
+          userSentence = [];
+          document
+            .querySelectorAll(".word-tile")
+            .forEach((t) => t.classList.remove("used"));
+          document.getElementById("userSentence").textContent =
+            "Tap words below to build your sentence...";
+          document.getElementById("sentenceFeedback").innerHTML = "";
+        };
+
+        window.checkSentence = function (correct) {
+          const userAnswer = userSentence.join(" ");
+          const feedback = document.getElementById("sentenceFeedback");
+
+          if (userAnswer.toLowerCase() === correct.toLowerCase()) {
+            feedback.innerHTML =
+              '<div class="feedback success">✅ Perfect! Great job!</div>';
+            setTimeout(() => {
+              currentEx++;
+              showExercise();
+            }, 1500);
+          } else {
+            feedback.innerHTML = `<div class="feedback error">❌ Try again! Correct: "${correct}"</div>`;
+          }
+        };
+
+        showExercise();
+      }
+
+      // Match Game
+      const matchPairs = [
+        { term: "Striker", def: "Player who scores goals" },
+        { term: "Peninsula", def: "Land surrounded by water on 3 sides" },
+        { term: "Hat-trick", def: "Three goals in one match" },
+        { term: "Archipelago", def: "Group of islands" },
+        { term: "Offside", def: "Illegal position in football" },
+        { term: "Latitude", def: "Distance from the equator" },
+      ];
+
+      function startMatchGame() {
+        const container = document.getElementById("matchGame");
+        container.classList.remove("hidden");
+        container.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let selected = [];
+        let matched = 0;
+
+        const allItems = [
+          ...matchPairs.map((p) => ({
+            text: p.term,
+            type: "term",
+            pair: p.def,
+          })),
+          ...matchPairs.map((p) => ({
+            text: p.def,
+            type: "def",
+            pair: p.term,
+          })),
+        ].sort(() => Math.random() - 0.5);
+
+        container.innerHTML = `
+          <div class="question">Match the terms with their definitions!</div>
+          <div class="score-display">Matches: <span id="matchCount">0</span>/${matchPairs.length}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+            ${allItems
+              .map(
+                (item, i) =>
+                  `<div class="option" id="match${i}" onclick="selectMatch(${i}, '${item.text}', '${item.pair}')" style="padding: 15px; text-align: center;">
+                ${item.text}
+              </div>`,
+              )
+              .join("")}
+          </div>
+          <div id="matchFeedback"></div>
+        `;
+
+        window.selectMatch = function (index, text, pair) {
+          const elem = document.getElementById("match" + index);
+
+          if (elem.classList.contains("correct") || selected.length >= 2)
+            return;
+
+          selected.push({ index, text, pair, elem });
+          elem.style.background = "#fbbf24";
+          elem.style.color = "white";
+
+          if (selected.length === 2) {
+            setTimeout(() => {
+              const [first, second] = selected;
+
+              if (first.text === second.pair || second.text === first.pair) {
+                first.elem.classList.add("correct");
+                second.elem.classList.add("correct");
+                first.elem.style.pointerEvents = "none";
+                second.elem.style.pointerEvents = "none";
+                matched++;
+                document.getElementById("matchCount").textContent = matched;
+
+                if (matched === matchPairs.length) {
+                  const points = 50;
+                  totalPoints += points;
+                  gamesCompleted++;
+
+                  // Award vocabulary for match game (mixed topics)
+                  footballWords += 3;
+                  geoWords += 3;
+
+                  updateStats();
+                  setTimeout(() => {
+                    document.getElementById("matchFeedback").innerHTML =
+                      `<div class="feedback success">🎉 All Matched! Points: ${points}</div>`;
+                  }, 500);
+                }
+              } else {
+                first.elem.style.background = "white";
+                first.elem.style.color = "#1e3a8a";
+                second.elem.style.background = "white";
+                second.elem.style.color = "#1e3a8a";
+              }
+              selected = [];
+            }, 800);
+          }
+        };
+      }
+
+      // Daily Challenge
+      function submitDailyChallenge() {
+        const text = document.getElementById("dailyWriting").value.trim();
+        const result = document.getElementById("dailyChallengeResult");
+
+        if (text.length < 50) {
+          result.innerHTML =
+            '<div class="feedback error">Write at least 5-7 sentences (about 50 words)!</div>';
+          return;
+        }
+
+        const wordCount = text.split(/\s+/).length;
+        const points = Math.min(100, wordCount * 2);
+        totalPoints += points;
+        gamesCompleted++;
+
+        // Award vocabulary for writing practice
+        footballWords += 1;
+        geoWords += 1;
+
+        updateStats();
+
+        result.innerHTML = `
+          <div class="feedback success">
+            ✅ Great work! ${wordCount} words written<br>
+            Points earned: ${points}<br>
+            Keep practicing your writing skills! 📝
+          </div>
+        `;
+
+        document.getElementById("dailyWriting").disabled = true;
+      }
+
+      // Word Scramble Game
+      const scrambleWords = [
+        {
+          word: "STRIKER",
+          scrambled: "RKTIERSE",
+          hint: "Football player who scores goals",
+        },
+        { word: "PENALTY", scrambled: "TLNYPAE", hint: "Kick from 12 yards" },
+        {
+          word: "GOALKEEPER",
+          scrambled: "EKOELPARGE",
+          hint: "Protects the goal",
+        },
+        {
+          word: "ARCHIPELAGO",
+          scrambled: "GALOAPHEICR",
+          hint: "Group of islands",
+        },
+        {
+          word: "PENINSULA",
+          scrambled: "AENLNSIPU",
+          hint: "Land surrounded by water on 3 sides",
+        },
+        { word: "EQUATOR", scrambled: "UEOQTRA", hint: "Line at 0° latitude" },
+        {
+          word: "DRIBBLING",
+          scrambled: "IBLBGNIRD",
+          hint: "Moving with the ball",
+        },
+        { word: "PLATEAU", scrambled: "PLTUEAA", hint: "Flat elevated land" },
+        {
+          word: "OFFSIDE",
+          scrambled: "EFDSOFI",
+          hint: "Illegal position in football",
+        },
+        {
+          word: "MONSOON",
+          scrambled: "NOMNSOO",
+          hint: "Seasonal rainfall pattern",
+        },
+      ];
+
+      function startWordScramble() {
+        const container = document.getElementById("wordScramble");
+        container.classList.remove("hidden");
+        container.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let currentWord = 0;
+
+        function showWord() {
+          if (currentWord >= scrambleWords.length) {
+            const points = currentWord * 10;
+            totalPoints += points;
+            gamesCompleted++;
+
+            // Award vocabulary for word scramble (mixed topics)
+            footballWords += 3;
+            geoWords += 3;
+
+            updateStats();
+            container.innerHTML = `
+              <div class="score-display">
+                🎉 All Words Unscrambled! 🎉<br>
+                Points Earned: ${points}
+              </div>
+            `;
+            return;
+          }
+
+          const word = scrambleWords[currentWord];
+          container.innerHTML = `
+            <div class="question">Unscramble this word:</div>
+            <div class="score-display" style="font-size: 2em; letter-spacing: 5px; margin: 20px 0;">
+              ${word.scrambled}
+            </div>
+            <div style="color: #666; margin-bottom: 20px;">💡 Hint: ${word.hint}</div>
+            <input type="text" id="scrambleInput" placeholder="Type your answer..." 
+              style="width: 100%; padding: 15px; font-size: 1.2em; border: 2px solid #10b981; border-radius: 8px; text-transform: uppercase; text-align: center;">
+            <button class="challenge-btn" onclick="checkScramble('${word.word}')" style="margin-top: 15px;">
+              <i class="fas fa-check"></i> Check Answer
+            </button>
+            <div id="scrambleFeedback"></div>
+            <div class="progress-bar" style="margin-top: 15px;">
+              <div class="progress-fill" style="width: ${(currentWord / scrambleWords.length) * 100}%">
+                ${currentWord}/${scrambleWords.length}
+              </div>
+            </div>
+          `;
+
+          document.getElementById("scrambleInput").focus();
+          document
+            .getElementById("scrambleInput")
+            .addEventListener("keypress", function (e) {
+              if (e.key === "Enter") checkScramble(word.word);
+            });
+        }
+
+        window.checkScramble = function (correct) {
+          const input = document
+            .getElementById("scrambleInput")
+            .value.toUpperCase()
+            .trim();
+          const feedback = document.getElementById("scrambleFeedback");
+
+          if (input === correct) {
+            feedback.innerHTML =
+              '<div class="feedback success">✅ Correct! Well done!</div>';
+            setTimeout(() => {
+              currentWord++;
+              showWord();
+            }, 1200);
+          } else {
+            feedback.innerHTML =
+              '<div class="feedback error">❌ Try again!</div>';
+            document.getElementById("scrambleInput").value = "";
+            document.getElementById("scrambleInput").focus();
+          }
+        };
+
+        showWord();
+      }
+
+      // Fill in the Blank
+      const fillBlankSentences = [
+        {
+          sentence: "The ___ scored three goals and completed a hat-trick.",
+          options: ["defender", "striker", "referee", "coach"],
+          correct: 1,
+        },
+        {
+          sentence: "Mount Everest is in the ___ mountain range.",
+          options: ["Alps", "Andes", "Himalayas", "Rockies"],
+          correct: 2,
+        },
+        {
+          sentence: "The goalkeeper made an amazing ___ to prevent a goal.",
+          options: ["pass", "save", "tackle", "header"],
+          correct: 1,
+        },
+        {
+          sentence: "The ___ is an imaginary line at 0 degrees latitude.",
+          options: ["Prime Meridian", "Equator", "Tropic", "Axis"],
+          correct: 1,
+        },
+        {
+          sentence:
+            "A ___ is awarded when a foul occurs inside the penalty area.",
+          options: ["free kick", "corner", "penalty kick", "throw-in"],
+          correct: 2,
+        },
+        {
+          sentence: "Indonesia is the world's largest ___.",
+          options: ["peninsula", "archipelago", "plateau", "delta"],
+          correct: 1,
+        },
+        {
+          sentence: "The midfielder controlled the ball with excellent ___.",
+          options: ["shooting", "dribbling", "diving", "running"],
+          correct: 1,
+        },
+        {
+          sentence: "The Sahara is the largest hot ___ in the world.",
+          options: ["forest", "tundra", "desert", "jungle"],
+          correct: 2,
+        },
+        {
+          sentence:
+            "When the ball goes over the goal line, the referee awards a ___.",
+          options: ["penalty", "corner kick", "free kick", "goal kick"],
+          correct: 3,
+        },
+        {
+          sentence: "A ___ forms when a river splits before entering the sea.",
+          options: ["canyon", "delta", "plateau", "peninsula"],
+          correct: 1,
+        },
+      ];
+
+      function startFillBlank() {
+        const container = document.getElementById("fillBlank");
+        container.classList.remove("hidden");
+        container.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        let currentQ = 0;
+        let score = 0;
+
+        function showQuestion() {
+          if (currentQ >= fillBlankSentences.length) {
+            const points = score * 8;
+            totalPoints += points;
+            gamesCompleted++;
+
+            // Award vocabulary for fill in the blank (mixed topics)
+            footballWords += 3;
+            geoWords += 3;
+
+            updateStats();
+            container.innerHTML = `
+              <div class="score-display">
+                🎯 Challenge Complete! 🎯<br>
+                Score: ${score}/${fillBlankSentences.length}<br>
+                Points Earned: ${points}
+              </div>
+            `;
+            return;
+          }
+
+          const q = fillBlankSentences[currentQ];
+          const parts = q.sentence.split("___");
+
+          container.innerHTML = `
+            <div class="question">${currentQ + 1}. Complete the sentence:</div>
+            <div style="background: white; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1.2em; line-height: 2;">
+              ${parts[0]} <strong style="color: #10b981;">______</strong> ${parts[1]}
+            </div>
+            ${q.options
+              .map(
+                (opt, i) =>
+                  `<div class="option" onclick="checkFillBlank(${i}, ${q.correct})">${opt}</div>`,
+              )
+              .join("")}
+            <div class="progress-bar" style="margin-top: 15px;">
+              <div class="progress-fill" style="width: ${(currentQ / fillBlankSentences.length) * 100}%">
+                ${currentQ}/${fillBlankSentences.length}
+              </div>
+            </div>
+          `;
+        }
+
+        window.checkFillBlank = function (selected, correct) {
+          const options = document.querySelectorAll("#fillBlank .option");
+          options.forEach((opt) => (opt.style.pointerEvents = "none"));
+
+          if (selected === correct) {
+            options[selected].classList.add("correct");
+            score++;
+            setTimeout(() => {
+              currentQ++;
+              showQuestion();
+            }, 1000);
+          } else {
+            options[selected].classList.add("wrong");
+            options[correct].classList.add("correct");
+            setTimeout(() => {
+              currentQ++;
+              showQuestion();
+            }, 1500);
+          }
+        };
+
+        showQuestion();
+      }
+
+      // Initialize stats display
+      updateStats();
+    </script>
   </body>
 </html>
