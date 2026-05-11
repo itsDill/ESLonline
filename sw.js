@@ -3,7 +3,7 @@
  * Provides offline support and caching for game resources
  */
 
-const CACHE_NAME = "esl-games-v1.0.0";
+const CACHE_NAME = "esl-games-v1.0.1";
 const STATIC_RESOURCES = [
   "/games/games.html",
 
@@ -25,7 +25,7 @@ self.addEventListener("install", (event) => {
       })
       .catch((error) => {
         // Cache installation failed - silent handling
-      })
+      }),
   );
   self.skipWaiting();
 });
@@ -39,9 +39,9 @@ self.addEventListener("activate", (event) => {
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
-        })
+        }),
       );
-    })
+    }),
   );
   self.clients.claim();
 });
@@ -96,11 +96,11 @@ self.addEventListener("fetch", (event) => {
           if (event.request.destination === "image") {
             return new Response(
               '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"><rect width="100%" height="100%" fill="#f0f0f0"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666">Offline</text></svg>',
-              { headers: { "Content-Type": "image/svg+xml" } }
+              { headers: { "Content-Type": "image/svg+xml" } },
             );
           }
         });
-    })
+    }),
   );
 });
 
