@@ -1,3 +1,4 @@
+'use strict';
 // ===== WRITING TOOLS & INTERACTIVE UTILITIES =====
 
 // ===== THESIS STATEMENT BUILDER =====

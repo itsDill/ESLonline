@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Enhanced Footer Component
  * ESL Fun Online - Professional Footer for All Pages

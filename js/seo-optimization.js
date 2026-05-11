@@ -1,3 +1,4 @@
+'use strict';
 // SEO Optimization JavaScript
 
 // Initialize SEO optimizations when DOM is loaded

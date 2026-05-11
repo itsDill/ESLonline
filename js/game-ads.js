@@ -1,3 +1,4 @@
+'use strict';
 // Game Ads JavaScript - Handle ad loading and display for game pages
 
 // Initialize ads when page loads

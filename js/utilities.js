@@ -1,3 +1,4 @@
+'use strict';
 /* ========================================
    UTILITIES AND CACHE BUSTING
    Centralized utility functions for all pages

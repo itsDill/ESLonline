@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Enhanced Navigation Support v2.0
  * ESL Fun Online - Improved mobile menu with smooth animations

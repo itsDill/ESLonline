@@ -1,3 +1,4 @@
+'use strict';
 /* ========================================
    HERO SECTION JAVASCRIPT
    Centralized hero functionality for all pages

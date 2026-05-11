@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Enhanced Features JavaScript for All Featured Pages
  * Provides consistent functionality across ESL Fun Online featured pages

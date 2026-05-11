@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Unified Authentication & Navigation JavaScript
  * ESL Fun Online - Optimized and Conflict-Free Version
@@ -25,37 +26,8 @@ const CONFIG = {
 };
 
 // ==============================================
-// USER AUTHENTICATION (SECURE IMPLEMENTATION)
+// USER SESSION
 // ==============================================
-
-// Note: In production, user authentication should be handled server-side
-// This is a placeholder for client-side demo purposes only
-const USER_DATABASE = {
-  // Demo users with encrypted/hashed passwords in production
-  students: {
-    // For security, all passwords should be properly hashed in production
-    demo_student: {
-      password: "securePass123!", // In production: use bcrypt hash
-      name: "Demo Student",
-      dashboard: "students/dashboard.html",
-    },
-  },
-  teachers: {
-    demo_teacher: {
-      password: "teacherSecure456!", // In production: use bcrypt hash
-      name: "Demo Teacher",
-      dashboard: "teachers/dashboard.html",
-    },
-  },
-  admins: {
-    // Admin access should use multi-factor authentication in production
-    demo_admin: {
-      password: "adminSecure789!", // In production: use bcrypt hash + MFA
-      name: "Demo Administrator",
-      dashboard: "admin.html",
-    },
-  },
-};
 
 // ==============================================
 // UTILITY FUNCTIONS
@@ -182,65 +154,10 @@ const Utils = {
 // ==============================================
 
 const Auth = {
-  // Validate user credentials (unified function)
-  validateCredentials(userId, password, userType) {
-    const userDatabase =
-      USER_DATABASE[userType + "s"] || USER_DATABASE[userType];
-
-    if (!userDatabase) {
-      return {
-        success: false,
-        message: `Invalid user type: ${userType}`,
-      };
-    }
-
-    const user = userDatabase[userId];
-
-    if (!user || user.password !== password) {
-      return {
-        success: false,
-        message: `Invalid ${userType} credentials. Please check your username and password.`,
-      };
-    }
-
-    return {
-      success: true,
-      userId,
-      userType,
-      name: user.name,
-      dashboard: user.dashboard,
-    };
-  },
-
-  // Login process
-  login(userId, password, userType) {
-    const result = this.validateCredentials(userId, password, userType);
-
-    if (result.success) {
-      const sessionData = {
-        userId: result.userId,
-        userType: result.userType,
-        name: result.name,
-        loginTime: new Date().toISOString(),
-      };
-
-      Utils.storage.set(CONFIG.STORAGE_KEYS.USER, JSON.stringify(sessionData));
-
-      // Redirect to appropriate dashboard
-      if (result.dashboard) {
-        setTimeout(() => {
-          window.location.href = result.dashboard;
-        }, 500);
-      }
-    }
-
-    return result;
-  },
-
   // Logout process
   logout() {
     Utils.storage.remove(CONFIG.STORAGE_KEYS.USER);
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   },
 
   // Check if user is logged in
@@ -1021,7 +938,6 @@ window.ESL = {
   ThemeManager,
   Navigation,
   Utils,
-  validateCredentials: Auth.validateCredentials.bind(Auth), // Legacy support
 };
 
 // Auto-initialize the application

@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Page Enhancement Scripts
  * Consolidated UI enhancements and performance optimizations
