@@ -523,80 +523,186 @@
       .scramble-area {
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 16px;
       }
       .scramble-item {
-        background: #fafafa;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 16px 18px;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 18px 20px;
         display: flex;
         align-items: flex-start;
-        gap: 14px;
+        gap: 16px;
         flex-wrap: wrap;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .scramble-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        border-radius: 16px 0 0 16px;
+        background: var(--cat-color, #a78bfa);
+      }
+      .scramble-item.solved {
+        border-color: #86efac;
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        box-shadow: 0 4px 18px rgba(34, 197, 94, 0.18);
+      }
+      .scramble-item.solved::before {
+        background: #22c55e;
       }
       .scramble-emoji {
-        font-size: 1.5em;
+        font-size: 2em;
         flex-shrink: 0;
-        padding-top: 4px;
+        padding-top: 2px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
       }
       .s-tile {
-        background: white;
-        border: 2px solid #a78bfa;
-        border-radius: 8px;
-        width: 34px;
-        height: 36px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-weight: 800;
-        font-size: 1em;
-        color: #5b21b6;
+        font-weight: 900;
+        font-size: 1.05em;
+        width: 36px;
+        height: 40px;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+        box-shadow:
+          0 3px 0 rgba(0, 0, 0, 0.18),
+          0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: rotate(var(--tilt, 0deg));
+        transition: transform 0.2s;
+      }
+      .s-tile:hover {
+        transform: rotate(0deg) scale(1.15);
+      }
+      .scramble-cat-badge {
+        display: inline-block;
+        font-size: 0.68em;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: white;
+        background: var(--cat-color, #a78bfa);
+        margin-bottom: 8px;
+        vertical-align: middle;
+      }
+      .scramble-hint {
+        font-size: 0.8em;
+        color: #6b7280;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .scramble-tiles-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 12px;
+      }
+      .scramble-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
       }
       .scramble-answer {
         border: 2px solid #d1d5db;
-        border-radius: 8px;
-        padding: 8px 12px;
-        font-size: 0.95em;
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-size: 1em;
         font-family: inherit;
+        font-weight: 700;
         outline: none;
-        width: 160px;
-        transition: border-color 0.2s;
+        width: 170px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        letter-spacing: 1px;
       }
       .scramble-answer:focus {
         border-color: #7c3aed;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
       }
       .scramble-answer.correct {
         border-color: #22c55e;
         background: #f0fdf4;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
       }
       .scramble-answer.wrong {
         border-color: #ef4444;
         background: #fef2f2;
+        animation: shake 0.35s ease;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-5px);
+        }
+        60% {
+          transform: translateX(5px);
+        }
       }
       .btn-check {
-        background: #7c3aed;
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
+        border-radius: 10px;
+        padding: 9px 18px;
         font-size: 0.85em;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
+        box-shadow: 0 3px 8px rgba(109, 40, 217, 0.3);
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        font-family: inherit;
+        white-space: nowrap;
       }
       .btn-check:hover {
-        background: #5b21b6;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(109, 40, 217, 0.4);
       }
       .scramble-result {
-        font-size: 0.82em;
-        font-weight: 600;
-        min-width: 80px;
+        font-size: 0.88em;
+        font-weight: 800;
+        min-width: 90px;
+        transition: transform 0.2s;
       }
       .scramble-result.ok {
-        color: #16a34a;
+        color: #15803d;
+        animation: popIn 0.35s ease;
       }
       .scramble-result.no {
         color: #dc2626;
+      }
+      .scramble-score-bar {
+        text-align: center;
+        padding: 12px 0 4px;
+        font-size: 0.85em;
+        font-weight: 700;
+        color: #374151;
+        border-top: 1px solid #f3f4f6;
+        margin-top: 4px;
+      }
+      .scramble-score-bar .s-stars {
+        font-size: 1.15em;
+        letter-spacing: 2px;
       }
 
       /* ── Quick Quiz ── */
@@ -778,6 +884,164 @@
         font-size: 0.88em;
         color: #6d28d9;
         line-height: 1.5;
+      }
+
+      /* ── Wheel Customizer ── */
+      .wheel-customizer {
+        margin-top: 18px;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 14px;
+      }
+      .btn-customize-toggle {
+        background: none;
+        border: 1.5px solid #d1d5db;
+        border-radius: 8px;
+        padding: 7px 16px;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #374151;
+        cursor: pointer;
+        transition: background 0.15s;
+        font-family: inherit;
+      }
+      .btn-customize-toggle:hover {
+        background: #f9fafb;
+      }
+      .customizer-panel {
+        margin-top: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .cust-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .cust-label {
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #374151;
+        min-width: 80px;
+      }
+      .cust-val {
+        font-size: 0.82em;
+        color: #6b7280;
+        min-width: 48px;
+      }
+      .cust-section-title {
+        font-size: 0.78em;
+        font-weight: 700;
+        color: #166534;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        border-bottom: 1px solid #dcfce7;
+        padding-bottom: 4px;
+      }
+      .segment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 220px;
+        overflow-y: auto;
+      }
+      .seg-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 6px 10px;
+      }
+      .seg-color-swatch {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .seg-color-swatch input[type="color"] {
+        position: absolute;
+        inset: -4px;
+        opacity: 0;
+        cursor: pointer;
+        width: 200%;
+        height: 200%;
+      }
+      .seg-label-text {
+        flex: 1;
+        font-size: 0.85em;
+        color: #1f2937;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .seg-del {
+        background: none;
+        border: 1px solid #fca5a5;
+        color: #dc2626;
+        border-radius: 6px;
+        padding: 3px 8px;
+        font-size: 0.75em;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        flex-shrink: 0;
+      }
+      .seg-del:hover {
+        background: #fef2f2;
+      }
+      .add-seg-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .cust-input {
+        border: 1.5px solid #d1d5db;
+        border-radius: 8px;
+        padding: 7px 10px;
+        font-size: 0.83em;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+        width: 150px;
+      }
+      .cust-input.wide {
+        width: 240px;
+      }
+      .cust-input:focus {
+        border-color: #22c55e;
+      }
+      .cust-color-pick {
+        width: 36px;
+        height: 34px;
+        border: 1.5px solid #d1d5db;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 2px;
+        background: white;
+      }
+      .btn-add-seg {
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 7px 16px;
+        font-size: 0.85em;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+      }
+      .btn-add-seg:hover {
+        background: #16a34a;
       }
 
       /* ── Points Board ── */
@@ -1965,8 +2229,28 @@
       <!-- Interactive: Word Scramble -->
       <div class="full-row">
         <div class="card">
-          <div class="card-title">🔤 Word Scramble — Unscramble It!</div>
+          <div class="card-title">
+            🔤 Word Scramble — Unscramble It!
+            <span
+              style="
+                font-size: 0.7em;
+                color: #9ca3af;
+                margin-left: auto;
+                font-weight: 400;
+              "
+              >type or tap reveal</span
+            >
+          </div>
           <div class="scramble-area" id="scrambleArea"></div>
+          <div
+            class="scramble-score-bar"
+            id="scrambleScoreBar"
+            style="display: none"
+          >
+            Score: <span id="scrambleScore">0</span> /
+            <span id="scrambleTotal">0</span> &nbsp;
+            <span class="s-stars" id="scrambleStars"></span>
+          </div>
         </div>
       </div>
 
@@ -1999,7 +2283,7 @@
         <div class="card">
           <div class="card-title">🎰 Spin the Topic Wheel</div>
           <div class="spin-area">
-            <div class="wheel-container">
+            <div class="wheel-container" id="wheelContainer">
               <div class="wheel-pointer">▼</div>
               <canvas id="spinCanvas" width="220" height="220"></canvas>
             </div>
@@ -2009,6 +2293,57 @@
             <div class="spin-result" id="spinResult">
               <div class="spin-topic" id="spinTopic"></div>
               <div class="spin-task" id="spinTask"></div>
+            </div>
+          </div>
+          <!-- Wheel Customizer -->
+          <div class="wheel-customizer">
+            <button class="btn-customize-toggle" onclick="toggleCustomizer()">
+              ⚙️ Customize Wheel ▾
+            </button>
+            <div
+              class="customizer-panel"
+              id="customizerPanel"
+              style="display: none"
+            >
+              <div class="cust-row">
+                <span class="cust-label">Wheel Size</span>
+                <input
+                  type="range"
+                  min="160"
+                  max="340"
+                  value="220"
+                  id="wheelSizeSlider"
+                  oninput="resizeWheel(this.value)"
+                />
+                <span class="cust-val" id="wheelSizeVal">220px</span>
+              </div>
+              <div class="cust-section-title">Segments</div>
+              <div id="segmentList" class="segment-list"></div>
+              <div class="add-seg-row">
+                <input
+                  type="text"
+                  id="newSegLabel"
+                  class="cust-input"
+                  placeholder="🏷️ Label (e.g. 🎵 Music)"
+                  maxlength="30"
+                />
+                <input
+                  type="text"
+                  id="newSegTask"
+                  class="cust-input wide"
+                  placeholder="Task prompt for this topic…"
+                  maxlength="140"
+                />
+                <input
+                  type="color"
+                  id="newSegColor"
+                  class="cust-color-pick"
+                  value="#22c55e"
+                />
+                <button class="btn-add-seg" onclick="addSegment()">
+                  + Add
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2181,6 +2516,78 @@
           meaning: "A tool to see objects far away in space",
           example: "I saw the moon with a telescope!",
         },
+        {
+          emoji: "🌋",
+          word: "volcano",
+          meaning: "A mountain that can erupt with hot melted rock",
+          example: "The volcano exploded with lava!",
+        },
+        {
+          emoji: "⬇️",
+          word: "gravity",
+          meaning: "The invisible force that pulls everything down",
+          example: "Gravity keeps us on the ground.",
+        },
+        {
+          emoji: "🌌",
+          word: "galaxy",
+          meaning: "A giant group of billions of stars in space",
+          example: "Our galaxy is called the Milky Way.",
+        },
+        {
+          emoji: "☄️",
+          word: "meteor",
+          meaning: "A piece of rock that flies through space",
+          example: "A meteor fell to Earth long ago!",
+        },
+        {
+          emoji: "🛸",
+          word: "satellite",
+          meaning: "A machine that orbits Earth in space",
+          example: "Satellites help planes find their way.",
+        },
+        {
+          emoji: "👨‍🔬",
+          word: "scientist",
+          meaning: "A person who studies how things work",
+          example: "Scientists discovered dinosaur bones.",
+        },
+        {
+          emoji: "💡",
+          word: "invention",
+          meaning: "Something brand new that someone created",
+          example: "The computer is a great invention!",
+        },
+        {
+          emoji: "⌨️",
+          word: "keyboard",
+          meaning: "The part of a computer you type on",
+          example: "I press the keys on the keyboard.",
+        },
+        {
+          emoji: "☀️",
+          word: "solar",
+          meaning: "Related to the Sun and its energy",
+          example: "Solar panels use sunlight to make power.",
+        },
+        {
+          emoji: "🔋",
+          word: "battery",
+          meaning: "An object that stores electricity",
+          example: "My game controller needs a new battery.",
+        },
+        {
+          emoji: "🌊",
+          word: "ocean",
+          meaning: "A huge, deep body of salt water",
+          example: "Whales and sharks live in the ocean.",
+        },
+        {
+          emoji: "🧪",
+          word: "experiment",
+          meaning: "A test to find out how something works",
+          example: "We did a fun science experiment!",
+        },
       ];
 
       const flashGrid = document.getElementById("flashGrid");
@@ -2206,49 +2613,211 @@
          WORD SCRAMBLE
       ═══════════════════════════════════════════ */
       const scrambleWords = [
-        { word: "ROBOT", emoji: "🤖", hint: "It's a machine that moves!" },
-        { word: "SPACE", emoji: "🚀", hint: "Stars and planets live here" },
-        { word: "PLAY", emoji: "🎮", hint: "What you do with games" },
         {
-          word: "FAST",
-          emoji: "🏎️",
-          hint: "Goes really quickly — an adjective",
+          word: "ROCKET",
+          emoji: "🚀",
+          hint: "Flies to space at super speed!",
+          cat: "Space",
+          catColor: "#6366f1",
         },
-        { word: "PLANET", emoji: "🌍", hint: "Earth is one of these" },
+        {
+          word: "ROBOT",
+          emoji: "🤖",
+          hint: "A machine that can think and move",
+          cat: "Tech",
+          catColor: "#0ea5e9",
+        },
+        {
+          word: "PLANET",
+          emoji: "🌍",
+          hint: "Earth is one of eight of these",
+          cat: "Space",
+          catColor: "#6366f1",
+        },
+        {
+          word: "VOLCANO",
+          emoji: "🌋",
+          hint: "Explodes with hot lava!",
+          cat: "Science",
+          catColor: "#ef4444",
+        },
+        {
+          word: "GRAVITY",
+          emoji: "⬇️",
+          hint: "Invisible force that keeps you on Earth",
+          cat: "Science",
+          catColor: "#ef4444",
+        },
+        {
+          word: "DINOSAUR",
+          emoji: "🦖",
+          hint: "Huge reptile from millions of years ago",
+          cat: "Nature",
+          catColor: "#16a34a",
+        },
+        {
+          word: "KEYBOARD",
+          emoji: "⌨️",
+          hint: "You use this to type on a computer",
+          cat: "Tech",
+          catColor: "#0ea5e9",
+        },
+        {
+          word: "GALAXY",
+          emoji: "🌌",
+          hint: "A giant group of billions of stars",
+          cat: "Space",
+          catColor: "#6366f1",
+        },
+        {
+          word: "MAGNET",
+          emoji: "🧲",
+          hint: "Pulls metal things towards it",
+          cat: "Science",
+          catColor: "#ef4444",
+        },
+        {
+          word: "INVENTOR",
+          emoji: "💡",
+          hint: "A person who creates something totally new",
+          cat: "People",
+          catColor: "#f59e0b",
+        },
       ];
 
+      /* tile colour palettes per category */
+      const tileColors = {
+        Space: [
+          "#6366f1",
+          "#818cf8",
+          "#4f46e5",
+          "#a5b4fc",
+          "#3730a3",
+          "#c7d2fe",
+          "#4338ca",
+        ],
+        Tech: [
+          "#0ea5e9",
+          "#38bdf8",
+          "#0284c7",
+          "#7dd3fc",
+          "#0369a1",
+          "#bae6fd",
+          "#0c4a6e",
+        ],
+        Science: [
+          "#ef4444",
+          "#f87171",
+          "#dc2626",
+          "#fca5a5",
+          "#b91c1c",
+          "#fecaca",
+          "#991b1b",
+        ],
+        Nature: [
+          "#16a34a",
+          "#4ade80",
+          "#15803d",
+          "#86efac",
+          "#166534",
+          "#bbf7d0",
+          "#14532d",
+        ],
+        People: [
+          "#f59e0b",
+          "#fbbf24",
+          "#d97706",
+          "#fde68a",
+          "#b45309",
+          "#fef3c7",
+          "#92400e",
+        ],
+      };
+
+      let scrambleSolved = 0;
       const scrambleArea = document.getElementById("scrambleArea");
-      scrambleWords.forEach((item, idx) => {
-        const shuffled = item.word
-          .split("")
-          .sort(() => Math.random() - 0.5)
-          .join("");
+      const scrambleScoreBar = document.getElementById("scrambleScoreBar");
+      document.getElementById("scrambleTotal").textContent =
+        scrambleWords.length;
+      scrambleScoreBar.style.display = "block";
+
+      scrambleWords.forEach(function (item, idx) {
+        /* shuffle — guarantee different from original */
+        let shuffled;
+        do {
+          shuffled = item.word
+            .split("")
+            .sort(function () {
+              return Math.random() - 0.5;
+            })
+            .join("");
+        } while (shuffled === item.word && item.word.length > 1);
+
+        const palette = tileColors[item.cat] || tileColors.Space;
         const tilesHtml = shuffled
           .split("")
-          .map((l) => `<span class="s-tile">${l}</span>`)
+          .map(function (l, ti) {
+            const color = palette[ti % palette.length];
+            const tilt = (Math.random() * 8 - 4).toFixed(1);
+            return (
+              '<span class="s-tile" style="background:' +
+              color +
+              ";--tilt:" +
+              tilt +
+              'deg">' +
+              l +
+              "</span>"
+            );
+          })
           .join("");
+
         const div = document.createElement("div");
         div.className = "scramble-item";
-        div.innerHTML = `
-          <span class="scramble-emoji">${item.emoji}</span>
-          <div style="flex:1">
-            <div style="font-size:0.78em;color:#6b7280;margin-bottom:8px;">💡 Hint: ${item.hint}</div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">${tilesHtml}</div>
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <input class="scramble-answer" type="text" placeholder="Type the word…"
-                data-answer="${item.word}" oninput="checkScramble(this)" autocomplete="off" />
-              <button class="btn-check" onclick="revealScramble(this)">💡 Reveal</button>
-              <span class="scramble-result" id="sres${idx}"></span>
-            </div>
-          </div>`;
+        div.style.setProperty("--cat-color", item.catColor);
+        div.innerHTML =
+          '<span class="scramble-emoji">' +
+          item.emoji +
+          "</span>" +
+          '<div style="flex:1">' +
+          '<div style="margin-bottom:8px">' +
+          '<span class="scramble-cat-badge">' +
+          item.cat +
+          "</span>" +
+          "</div>" +
+          '<div class="scramble-hint"><span>💡</span>' +
+          item.hint +
+          "</div>" +
+          '<div class="scramble-tiles-row">' +
+          tilesHtml +
+          "</div>" +
+          '<div class="scramble-controls">' +
+          '<input class="scramble-answer" type="text" placeholder="Type the word…" ' +
+          'data-answer="' +
+          item.word +
+          '" data-idx="' +
+          idx +
+          '" ' +
+          'oninput="checkScramble(this)" autocomplete="off" spellcheck="false" />' +
+          '<button class="btn-check" onclick="revealScramble(this)">💡 Reveal</button>' +
+          '<span class="scramble-result" id="sres' +
+          idx +
+          '"></span>' +
+          "</div>" +
+          "</div>";
         scrambleArea.appendChild(div);
       });
 
+      function updateScrambleScore() {
+        document.getElementById("scrambleScore").textContent = scrambleSolved;
+        const pct = scrambleSolved / scrambleWords.length;
+        const stars =
+          pct >= 1 ? "🌟🌟🌟" : pct >= 0.6 ? "⭐⭐" : pct >= 0.3 ? "⭐" : "";
+        document.getElementById("scrambleStars").textContent = stars;
+      }
+
       function checkScramble(input) {
-        const id = input
-          .closest(".scramble-item")
-          .querySelector(".scramble-result").id;
-        const res = document.getElementById(id);
+        const item = input.closest(".scramble-item");
+        const res = item.querySelector(".scramble-result");
         const val = input.value.trim().toUpperCase();
         if (!val) {
           input.className = "scramble-answer";
@@ -2256,12 +2825,21 @@
           return;
         }
         if (val === input.dataset.answer) {
+          if (input.className.indexOf("correct") === -1) {
+            scrambleSolved++;
+            updateScrambleScore();
+          }
           input.className = "scramble-answer correct";
-          res.textContent = "✅ Correct!";
+          res.textContent = "🎉 Correct!";
           res.className = "scramble-result ok";
+          item.classList.add("solved");
+          input.disabled = true;
         } else {
+          /* re-apply animation by toggling class */
+          input.className = "scramble-answer";
+          void input.offsetWidth;
           input.className = "scramble-answer wrong";
-          res.textContent = "❌ Try again";
+          res.textContent = "❌ Try again!";
           res.className = "scramble-result no";
         }
       }
@@ -2270,10 +2848,16 @@
         const item = btn.closest(".scramble-item");
         const input = item.querySelector(".scramble-answer");
         const res = item.querySelector(".scramble-result");
+        if (input.className.indexOf("correct") === -1) {
+          scrambleSolved++;
+          updateScrambleScore();
+        }
         input.value = input.dataset.answer;
         input.className = "scramble-answer correct";
+        input.disabled = true;
         res.textContent = "💡 Revealed!";
         res.className = "scramble-result ok";
+        item.classList.add("solved");
       }
 
       /* ═══════════════════════════════════════════
@@ -2429,8 +3013,7 @@
           task: "Tell me about your school day: 'First… Then… After that… Finally…'",
         },
       ];
-
-      const colours = [
+      let wheelColors = [
         "#22c55e",
         "#3b82f6",
         "#f59e0b",
@@ -2440,43 +3023,63 @@
         "#f97316",
         "#ec4899",
       ];
+      let wheelSize = 220;
       const canvas = document.getElementById("spinCanvas");
       const ctx = canvas.getContext("2d");
-      const TOTAL = wheelTopics.length;
-      const SLICE = (2 * Math.PI) / TOTAL;
       let currentAngle = 0;
       let spinning = false;
 
+      function getWheelColor(i) {
+        if (i < wheelColors.length) return wheelColors[i];
+        const base = [
+          "#22c55e",
+          "#3b82f6",
+          "#f59e0b",
+          "#a78bfa",
+          "#ef4444",
+          "#06b6d4",
+          "#f97316",
+          "#ec4899",
+        ];
+        return base[i % base.length];
+      }
+
       function drawWheel(rotation) {
-        ctx.clearRect(0, 0, 220, 220);
-        for (let i = 0; i < TOTAL; i++) {
-          const start = rotation + i * SLICE;
+        const cx = wheelSize / 2,
+          cy = wheelSize / 2,
+          r = wheelSize / 2 - 5;
+        ctx.clearRect(0, 0, wheelSize, wheelSize);
+        const total = wheelTopics.length;
+        if (total === 0) return;
+        const slice = (2 * Math.PI) / total;
+        for (let i = 0; i < total; i++) {
+          const start = rotation + i * slice;
           ctx.beginPath();
-          ctx.moveTo(110, 110);
-          ctx.arc(110, 110, 105, start, start + SLICE);
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, r, start, start + slice);
           ctx.closePath();
-          ctx.fillStyle = colours[i % colours.length];
+          ctx.fillStyle = getWheelColor(i);
           ctx.fill();
           ctx.strokeStyle = "white";
           ctx.lineWidth = 2;
           ctx.stroke();
-          // short label
           ctx.save();
-          ctx.translate(110, 110);
-          ctx.rotate(start + SLICE / 2);
+          ctx.translate(cx, cy);
+          ctx.rotate(start + slice / 2);
           ctx.textAlign = "right";
           ctx.fillStyle = "white";
-          ctx.font = "bold 10px sans-serif";
+          const fs = Math.max(8, Math.min(12, wheelSize / 22));
+          ctx.font = "bold " + fs + "px sans-serif";
           ctx.shadowColor = "rgba(0,0,0,0.3)";
           ctx.shadowBlur = 3;
           const parts = wheelTopics[i].label.split(" ");
-          const short = parts.slice(1).join(" ").substring(0, 9);
-          ctx.fillText(short, 100, 4);
+          const short = parts.slice(1).join(" ").substring(0, 10);
+          ctx.fillText(short, r * 0.9, fs / 3);
           ctx.restore();
         }
-        // centre
+        const centR = Math.max(14, wheelSize * 0.08);
         ctx.beginPath();
-        ctx.arc(110, 110, 18, 0, 2 * Math.PI);
+        ctx.arc(cx, cy, centR, 0, 2 * Math.PI);
         ctx.fillStyle = "white";
         ctx.shadowColor = "rgba(0,0,0,0.15)";
         ctx.shadowBlur = 8;
@@ -2486,15 +3089,16 @@
         ctx.lineWidth = 2;
         ctx.stroke();
         ctx.fillStyle = "#1f2937";
-        ctx.font = "16px sans-serif";
+        ctx.font =
+          Math.max(12, Math.floor(wheelSize * 0.075)) + "px sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("🎲", 110, 116);
+        ctx.fillText("🎲", cx, cy + Math.max(5, Math.floor(wheelSize * 0.027)));
       }
 
       drawWheel(0);
 
       function spinWheel() {
-        if (spinning) return;
+        if (spinning || wheelTopics.length === 0) return;
         spinning = true;
         document.getElementById("btnSpin").disabled = true;
         document.getElementById("spinResult").classList.remove("show");
@@ -2504,7 +3108,6 @@
         const dur = 3200;
         const t0 = performance.now();
         const from = currentAngle;
-
         (function animate(now) {
           const p = Math.min((now - t0) / dur, 1);
           const ease = 1 - Math.pow(1 - p, 3);
@@ -2514,9 +3117,11 @@
             return;
           }
           currentAngle = target % (2 * Math.PI);
+          const total = wheelTopics.length;
+          const slice = (2 * Math.PI) / total;
           const ptr =
             (-Math.PI / 2 - currentAngle + 100 * Math.PI) % (2 * Math.PI);
-          const idx = Math.floor(ptr / SLICE) % TOTAL;
+          const idx = Math.floor(ptr / slice) % total;
           document.getElementById("spinTopic").textContent =
             wheelTopics[idx].label;
           document.getElementById("spinTask").textContent =
@@ -2525,6 +3130,94 @@
           spinning = false;
           document.getElementById("btnSpin").disabled = false;
         })(t0);
+      }
+
+      /* ── Wheel Customizer ── */
+      function toggleCustomizer() {
+        const panel = document.getElementById("customizerPanel");
+        const btn = document.querySelector(".btn-customize-toggle");
+        const isOpen = panel.style.display !== "none";
+        panel.style.display = isOpen ? "none" : "block";
+        btn.textContent = isOpen
+          ? "⚙️ Customize Wheel ▾"
+          : "⚙️ Customize Wheel ▲";
+        if (!isOpen) renderSegmentList();
+      }
+
+      function renderSegmentList() {
+        const list = document.getElementById("segmentList");
+        list.innerHTML = "";
+        wheelTopics.forEach(function (t, i) {
+          const row = document.createElement("div");
+          row.className = "seg-row";
+          const col = getWheelColor(i);
+          row.innerHTML =
+            '<div class="seg-color-swatch" style="background:' +
+            col +
+            '">' +
+            '<input type="color" value="' +
+            col +
+            '" oninput="updateSegColor(' +
+            i +
+            ',this.value)" />' +
+            "</div>" +
+            '<span class="seg-label-text">' +
+            t.label.replace(/&/g, "&amp;").replace(/</g, "&lt;") +
+            "</span>" +
+            '<button class="seg-del" onclick="removeSegment(' +
+            i +
+            ')">✕</button>';
+          list.appendChild(row);
+        });
+      }
+
+      function updateSegColor(i, color) {
+        while (wheelColors.length <= i) wheelColors.push("#888888");
+        wheelColors[i] = color;
+        const swatches = document.querySelectorAll(".seg-color-swatch");
+        if (swatches[i]) swatches[i].style.background = color;
+        drawWheel(currentAngle);
+      }
+
+      function removeSegment(i) {
+        if (wheelTopics.length <= 2) {
+          alert("The wheel needs at least 2 segments!");
+          return;
+        }
+        wheelTopics.splice(i, 1);
+        wheelColors.splice(i, 1);
+        drawWheel(currentAngle);
+        renderSegmentList();
+      }
+
+      function addSegment() {
+        const label = document.getElementById("newSegLabel").value.trim();
+        const task = document.getElementById("newSegTask").value.trim();
+        const color = document.getElementById("newSegColor").value;
+        if (!label) {
+          document.getElementById("newSegLabel").focus();
+          return;
+        }
+        wheelTopics.push({
+          label: label,
+          task: task || "Talk about: " + label,
+        });
+        wheelColors.push(color);
+        document.getElementById("newSegLabel").value = "";
+        document.getElementById("newSegTask").value = "";
+        drawWheel(currentAngle);
+        renderSegmentList();
+      }
+
+      function resizeWheel(size) {
+        wheelSize = parseInt(size);
+        document.getElementById("wheelSizeVal").textContent = size + "px";
+        canvas.width = wheelSize;
+        canvas.height = wheelSize;
+        const container = document.getElementById("wheelContainer");
+        container.style.width = wheelSize + "px";
+        container.style.height = wheelSize + "px";
+        drawWheel(currentAngle);
       }
 
       /* ═══════════════════════════════════════════
