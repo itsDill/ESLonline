@@ -1686,7 +1686,7 @@
                     data-value="B"
                     onclick="selectFinalOption(this)"
                   >
-                    B) "I'm Noonim. Nice to meet you. I work in finance."
+                    B) "I'm Noonim. Nice to meet you."
                   </div>
                   <div
                     class="quiz-option"
@@ -1958,7 +1958,7 @@
                   <span
                     style="color: #667eea; font-size: 0.8em; font-weight: 600"
                     >Unit 5 · Grammar</span
-                  ><br />The presentation ___ very impressive.
+                  ><br />The presentation ___ very impressive yesterday.
                 </div>
                 <div class="quiz-options">
                   <div
@@ -3392,11 +3392,11 @@
       // ── Rating system ────────────────────────────────────────────
       const questionRatings = {};
       const ratingLabels = {
-        1: "Very difficult",
-        2: "Difficult",
-        3: "OK",
-        4: "Easy",
-        5: "Very easy",
+        1: "Poor",
+        2: "Below average",
+        3: "Satisfactory",
+        4: "Good",
+        5: "Excellent",
       };
 
       function injectRatingWidgets() {
@@ -3520,6 +3520,16 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
 
+        // Strip characters that jsPDF built-in fonts cannot render (emojis, fancy dashes, bullets)
+        function cleanText(str) {
+          return str
+            .replace(/\u2022/g, "-")       // bullet •
+            .replace(/[\u2013\u2014]/g, "-") // en/em dash
+            .replace(/[^\x20-\x7E\u00A0-\u00FF]/g, "") // strip non-latin1
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
         const questions = document.querySelectorAll(
           "#finalQuizContainer .quiz-question",
         );
@@ -3551,6 +3561,17 @@
         });
         const pct = Math.round((correct / total) * 100);
 
+        // ── Speaking score (50%) ─────────────────────────────────────
+        let speakSum = 0, speakCount = 0;
+        for (let i = 1; i <= 5; i++) {
+          const r = questionRatings["s" + i] || 0;
+          if (r > 0) { speakSum += r; speakCount++; }
+        }
+        const speakPct = speakCount > 0 ? Math.round((speakSum / (speakCount * 5)) * 100) : null;
+        const mcqWeighted   = Math.round(pct * 0.5);
+        const speakWeighted = speakPct !== null ? Math.round(speakPct * 0.5) : null;
+        const combined      = speakWeighted !== null ? mcqWeighted + speakWeighted : null;
+
         // ── Header ──────────────────────────────────────────────────
         doc.setFont("helvetica", "bold");
         doc.setFontSize(15);
@@ -3563,11 +3584,12 @@
 
         // ── Score boxes ─────────────────────────────────────────────
         const boxes = [
-          { label: "MCQ Score",  value: correct + "/" + total,    fill: [240,253,244], text: [16,185,129]   },
-          { label: "Percentage", value: pct + "%",                fill: [240,244,255], text: [102,126,234]  },
-          { label: "To Review",  value: String(total - correct),  fill: [254,242,242], text: [239,68,68]    },
+          { label: "Combined Score", value: combined !== null ? combined + "%" : "N/A", fill: [255,248,230], text: [245,158,11]  },
+          { label: "MCQ (50%)",      value: pct + "%",                                  fill: [240,244,255], text: [102,126,234] },
+          { label: "Speaking (50%)", value: speakPct !== null ? speakPct + "%" : "N/A", fill: [240,253,244], text: [16,185,129]  },
+          { label: "To Review",      value: String(total - correct),                    fill: [254,242,242], text: [239,68,68]   },
         ];
-        const bx = 14, by = 27, bw = 59, bh = 16;
+        const bx = 14, by = 27, bw = 43, bh = 16;
         boxes.forEach((b, i) => {
           const x = bx + i * (bw + 3);
           doc.setFillColor(...b.fill);
@@ -3640,7 +3662,7 @@
         doc.setFont("helvetica", "normal");
         doc.setFontSize(6.5);
         doc.setTextColor(150, 150, 150);
-        doc.text("Rating scale:  1 = Needs lots of work   2 = Difficult   3 = OK   4 = Easy   5 = Very easy", 14, y + 6.5);
+        doc.text("Rating scale:  1 = Poor   2 = Below average   3 = Satisfactory   4 = Good   5 = Excellent", 14, y + 6.5);
         y += 11;
 
         // ── Speaking task cards ──────────────────────────────────────
@@ -3656,9 +3678,9 @@
           let promptText = "";
           if (taskEl) {
             const titleEl = taskEl.querySelector(".quiz-question-text");
-            if (titleEl) taskTitle = titleEl.innerText.replace(/\n+/g, " ").trim();
+            if (titleEl) taskTitle = cleanText(titleEl.innerText.replace(/\n+/g, " "));
             const promptEl = taskEl.children[1];
-            if (promptEl) promptText = promptEl.innerText.replace(/\n+/g, " ").trim();
+            if (promptEl) promptText = cleanText(promptEl.innerText.replace(/\n+/g, " "));
           }
 
           const promptWrapped = doc.splitTextToSize(promptText, 170);
