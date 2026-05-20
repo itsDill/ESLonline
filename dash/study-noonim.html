@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noonim – Test Study Guide</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 30px 20px;
+        background-attachment: fixed;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #f8f9ff;
+        transition: all 0.2s;
+      }
+      .back-link:hover {
+        background: #667eea;
+        color: white;
+        transform: translateX(-3px);
+      }
+      h1 {
+        color: #667eea;
+        font-size: 1.9em;
+        margin: 18px 0 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .subtitle {
+        color: #888;
+        font-size: 0.95em;
+        margin-bottom: 28px;
+      }
+      /* Section wrapper */
+      .study-section {
+        margin-bottom: 28px;
+        border-radius: 14px;
+        border: 1px solid #e8ebf5;
+        overflow: hidden;
+      }
+      .study-section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 14px 20px;
+        font-size: 1.05em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        justify-content: space-between;
+      }
+      .study-section-header .toggle-icon {
+        font-size: 0.85em;
+        transition: transform 0.3s;
+      }
+      .study-section-body {
+        padding: 22px;
+        background: #fafbff;
+      }
+      /* Grammar tables */
+      .gtable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+        font-size: 0.9em;
+      }
+      .gtable th {
+        background: #667eea;
+        color: white;
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .gtable td {
+        border: 1px solid #e0e5f5;
+        padding: 8px 12px;
+      }
+      .gtable tr:nth-child(even) td {
+        background: #f4f6ff;
+      }
+      .note {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 0.9em;
+        color: #444;
+        line-height: 1.6;
+      }
+      .ex {
+        background: #f8f9ff;
+        border: 1px solid #dde0f5;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+        color: #333;
+        margin: 6px 0;
+      }
+      .tag {
+        display: inline-block;
+        background: #e8ebff;
+        color: #667eea;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 0.78em;
+        font-weight: 700;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+      /* Irregular verbs hero */
+      .irr-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .irr-card {
+        background: white;
+        border: 2px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 14px 16px;
+        text-align: center;
+        transition: all 0.25s;
+      }
+      .irr-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 14px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+      }
+      .irr-card.hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        color: white;
+      }
+      .irr-base {
+        font-size: 1.1em;
+        font-weight: 700;
+        color: #333;
+      }
+      .irr-card.hero .irr-base {
+        color: white;
+      }
+      .irr-forms {
+        font-size: 0.85em;
+        color: #666;
+        margin-top: 5px;
+      }
+      .irr-card.hero .irr-forms {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .irr-forms span {
+        font-weight: 600;
+      }
+      /* Quick tip cards */
+      .tip-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px;
+      }
+      .tip-card {
+        background: white;
+        border: 2px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .tip-card h4 {
+        color: #667eea;
+        font-size: 0.95em;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+      .tip-card p,
+      .tip-card li {
+        color: #555;
+        font-size: 0.88em;
+        line-height: 1.7;
+      }
+      .tip-card ul {
+        padding-left: 16px;
+      }
+      /* Grammar mini-grid for 12 points */
+      .grammar-mini-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 14px;
+      }
+      .gm-card {
+        background: white;
+        border: 1px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 16px;
+        border-left: 4px solid #667eea;
+      }
+      .gm-card h4 {
+        color: #667eea;
+        font-size: 0.9em;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .gm-card .rule {
+        background: #f0f4ff;
+        border-radius: 5px;
+        padding: 6px 10px;
+        font-size: 0.85em;
+        color: #333;
+        margin-bottom: 6px;
+      }
+      .gm-card .example {
+        color: #667eea;
+        font-style: italic;
+        font-size: 0.84em;
+      }
+      /* Present Perfect vs Past Simple */
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.89em;
+        margin: 12px 0;
+      }
+      .compare-table th {
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 700;
+      }
+      .compare-table td {
+        border: 1px solid #e0e5f5;
+        padding: 8px 12px;
+      }
+      .compare-table .pp-col {
+        background: #f0f8ff;
+      }
+      .compare-table .ps-col {
+        background: #fff8f0;
+      }
+      .compare-table .pp-header {
+        background: #0ea5e9;
+        color: white;
+      }
+      .compare-table .ps-header {
+        background: #f59e0b;
+        color: white;
+      }
+      /* Top nav */
+      .top-nav {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        padding: 14px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        border: 1px solid #e8ebf5;
+      }
+      .nav-btn {
+        background: white;
+        border: 2px solid #667eea;
+        color: #667eea;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.85em;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .nav-btn:hover {
+        background: #667eea;
+        color: white;
+      }
+      .alert-box {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 2px solid #f59e0b;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        color: #92400e;
+        font-size: 0.95em;
+        line-height: 1.7;
+      }
+      .alert-box strong {
+        color: #78350f;
+      }
+      /* Toggle open/close */
+      .study-section-body.collapsed {
+        display: none;
+      }
+      @media (max-width: 680px) {
+        .container {
+          padding: 18px;
+        }
+        h1 {
+          font-size: 1.4em;
+        }
+        .grammar-mini-grid {
+          grid-template-columns: 1fr;
+        }
+        .irr-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media print {
+        body {
+          background: none;
+          padding: 0;
+        }
+        .container {
+          box-shadow: none;
+          border-radius: 0;
+          padding: 16px;
+        }
+        .back-link,
+        .top-nav,
+        .study-section-header .toggle-icon {
+          display: none;
+        }
+        .study-section-body.collapsed {
+          display: block !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="student-noonim.html" class="back-link">← Back to Dashboard</a>
+
+      <h1>📖 Test Study Guide</h1>
+      <p class="subtitle">
+        Quick review for the Final Course Test — Oxford Business Result (Units
+        1–12)
+      </p>
+
+      <!-- Quick Nav -->
+      <div class="top-nav">
+        <a href="#irr-verbs" class="nav-btn">Irregular Verbs</a>
+        <a href="#go-went-gone" class="nav-btn">go / went / gone ⭐</a>
+        <a href="#grammar12" class="nav-btn">12 Grammar Points</a>
+        <a href="#pp-vs-ps" class="nav-btn">Present Perfect vs Past</a>
+        <a href="#vocab" class="nav-btn">Key Vocabulary</a>
+        <a href="#test-tips" class="nav-btn">Test Tips</a>
+      </div>
+
+      <div class="alert-box">
+        <strong>Before the test:</strong> Read through each section below. Focus
+        on the grammar rules and examples. For the speaking part, practise
+        answering out loud using the prompts on the test page.
+      </div>
+
+      <!-- ── 1. GO / WENT / GONE highlight ──────────────────── -->
+      <div class="study-section" id="go-went-gone">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>⭐ Focus: go / went / gone (and key irregular verbs)</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="note">
+            <strong>go → went → gone</strong> is one of the most common
+            irregular verbs in English. The three forms are:
+            <strong>base form</strong> (present) →
+            <strong>past simple</strong> →
+            <strong>past participle</strong> (used with <em>have/has</em>).
+          </div>
+
+          <table class="gtable" style="margin-top: 14px">
+            <tr>
+              <th>Tense</th>
+              <th>Form used</th>
+              <th>Example</th>
+            </tr>
+            <tr>
+              <td>Present Simple</td>
+              <td><strong>go</strong></td>
+              <td>I <strong>go</strong> to work every day.</td>
+            </tr>
+            <tr>
+              <td>Past Simple</td>
+              <td><strong>went</strong></td>
+              <td>I <strong>went</strong> to Singapore last year.</td>
+            </tr>
+            <tr>
+              <td>Present Perfect</td>
+              <td>have/has + <strong>gone / been</strong></td>
+              <td>
+                I <strong>have been</strong> to three countries. <br /><em
+                  style="color: #888; font-size: 0.9em"
+                  >(gone = left and not back; been = visited)</em
+                >
+              </td>
+            </tr>
+          </table>
+
+          <div class="note" style="border-color: #f59e0b; background: #fffbeb">
+            ⚠️ <strong>Trick question!</strong> "I have been to Paris" = I
+            visited Paris (experience). <br />
+            "He has gone to Paris" = He is there now (not back yet). <br />
+            For life experience questions, use <strong>have been to</strong>.
+          </div>
+
+          <div class="ex">
+            Q: I ___ to three different countries for work. (life experience) →
+            <strong>have been</strong>
+          </div>
+          <div class="ex">
+            Q: We ___ to the trade fair in Singapore. (past, specific time) →
+            <strong>went</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. All Irregular Verbs in the test ─────────────── -->
+      <div class="study-section" id="irr-verbs">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>📋 Irregular Verbs — All forms in the test</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <p style="color: #666; font-size: 0.9em; margin-bottom: 16px">
+            These verbs have irregular past simple / past participle forms. They
+            appear in the test. The
+            <strong style="color: #667eea">highlighted card</strong> is the most
+            important one to remember.
+          </p>
+
+          <div class="irr-grid">
+            <!-- HERO card -->
+            <div class="irr-card hero">
+              <div class="irr-base">go</div>
+              <div class="irr-forms">
+                Past: <span>went</span> &nbsp;·&nbsp; Participle:
+                <span>gone / been</span>
+              </div>
+              <div style="font-size: 0.75em; margin-top: 6px; opacity: 0.9">
+                ⭐ Most important!
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">speak</div>
+              <div class="irr-forms">
+                Past: <span>spoke</span> &nbsp;·&nbsp; Participle:
+                <span>spoken</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">have</div>
+              <div class="irr-forms">
+                Past: <span>had</span> &nbsp;·&nbsp; Participle:
+                <span>had</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">make</div>
+              <div class="irr-forms">
+                Past: <span>made</span> &nbsp;·&nbsp; Participle:
+                <span>made</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">meet</div>
+              <div class="irr-forms">
+                Past: <span>met</span> &nbsp;·&nbsp; Participle:
+                <span>met</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">see</div>
+              <div class="irr-forms">
+                Past: <span>saw</span> &nbsp;·&nbsp; Participle:
+                <span>seen</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">sell</div>
+              <div class="irr-forms">
+                Past: <span>sold</span> &nbsp;·&nbsp; Participle:
+                <span>sold</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">buy</div>
+              <div class="irr-forms">
+                Past: <span>bought</span> &nbsp;·&nbsp; Participle:
+                <span>bought</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">give</div>
+              <div class="irr-forms">
+                Past: <span>gave</span> &nbsp;·&nbsp; Participle:
+                <span>given</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">take</div>
+              <div class="irr-forms">
+                Past: <span>took</span> &nbsp;·&nbsp; Participle:
+                <span>taken</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">come</div>
+              <div class="irr-forms">
+                Past: <span>came</span> &nbsp;·&nbsp; Participle:
+                <span>come</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">get</div>
+              <div class="irr-forms">
+                Past: <span>got</span> &nbsp;·&nbsp; Participle:
+                <span>got / gotten</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">send</div>
+              <div class="irr-forms">
+                Past: <span>sent</span> &nbsp;·&nbsp; Participle:
+                <span>sent</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">write</div>
+              <div class="irr-forms">
+                Past: <span>wrote</span> &nbsp;·&nbsp; Participle:
+                <span>written</span>
+              </div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-base">know</div>
+              <div class="irr-forms">
+                Past: <span>knew</span> &nbsp;·&nbsp; Participle:
+                <span>known</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top: 18px">
+            <strong>Rule for negative / questions:</strong> Always use the
+            <strong>base form</strong> after did/didn't.<br />
+            ✅ "Did he <strong>speak</strong> to the client?" &nbsp;&nbsp; ✅
+            "He didn't <strong>go</strong> to the meeting."<br />
+            ❌ "Did he <strong>spoke</strong>?" &nbsp;&nbsp; ❌ "He didn't
+            <strong>went</strong>."
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. 12 Grammar Quick Cards ─────────────────────── -->
+      <div class="study-section" id="grammar12">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>📐 12 Grammar Points — Quick Cards</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="grammar-mini-grid">
+            <div class="gm-card">
+              <h4>G1 · Present Simple: BE <span class="tag">Q1</span></h4>
+              <div class="rule">
+                I <strong>am</strong> · He/She/It <strong>is</strong> ·
+                You/We/They <strong>are</strong>
+              </div>
+              <div class="example">
+                "She <em>is</em> the CEO." / "They <em>are</em> partners."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>
+                G2 · Present Simple: Other Verbs <span class="tag">Q3, Q4</span>
+              </h4>
+              <div class="rule">
+                He/She/It → add <strong>-s</strong> · Negative:
+                <strong>doesn't</strong> + base
+              </div>
+              <div class="example">
+                "She <em>doesn't</em> manage the team." / "It <em>exports</em>."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>G3 · There is / There are <span class="tag">Q5</span></h4>
+              <div class="rule">
+                Singular → <strong>Is there</strong>? / Plural →
+                <strong>Are there</strong>?
+              </div>
+              <div class="example">
+                "<em>Is there</em> a cafeteria?" / "<em>Are there</em> any
+                rooms?"
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>G4 · Adverbs of Frequency <span class="tag">Q7</span></h4>
+              <div class="rule">
+                After <strong>be</strong>: "He <em>is always</em> late." ·
+                Before main verb: "I <em>always</em> check."
+              </div>
+              <div class="example">
+                always · usually · often · sometimes · rarely · never
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>G5 · Past Simple: BE <span class="tag">Q9</span></h4>
+              <div class="rule">
+                I/He/She/It → <strong>was</strong> · You/We/They →
+                <strong>were</strong>
+              </div>
+              <div class="example">
+                "The presentation <em>was</em> impressive." / "<em>Were</em>
+                they there?"
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>
+                G6 · Past Simple: Regular <span class="tag">Q10, Q26, Q29</span>
+              </h4>
+              <div class="rule">
+                Base + <strong>-ed</strong>: worked, signed, achieved, launched
+              </div>
+              <div class="example">
+                "She <em>signed</em> the contract last Tuesday." / "They
+                <em>achieved</em> great results."
+              </div>
+            </div>
+            <div class="gm-card" style="border-left-color: #764ba2">
+              <h4>
+                G7 · Past Simple: Irregular <span class="tag">Q11, Q25</span>
+              </h4>
+              <div class="rule">
+                go→<strong>went</strong> · speak→<strong>spoke</strong> ·
+                have→<strong>had</strong>
+              </div>
+              <div class="example">
+                "I <em>spoke</em> to the MD at the conference." / "We
+                <em>went</em> to Singapore."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>
+                G8 · Prepositions of Movement <span class="tag">Q6, Q13</span>
+              </h4>
+              <div class="rule">
+                <strong>along</strong> a corridor · <strong>past</strong> a
+                place · <strong>on</strong> a floor
+              </div>
+              <div class="example">
+                "Go <em>along</em> the corridor." / "HR is <em>on</em> the
+                second floor."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>G9 · Present Continuous <span class="tag">Q15</span></h4>
+              <div class="rule">am/is/are + verb<strong>-ing</strong></div>
+              <div class="example">
+                "She <em>is presenting</em> to the board right now."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>
+                G10 · Comparatives &amp; Superlatives
+                <span class="tag">Q17, Q18, Q27</span>
+              </h4>
+              <div class="rule">
+                Short: <strong>-er / -est</strong> · Long:
+                <strong>more / the most</strong> · good →
+                <strong>better / the best</strong>
+              </div>
+              <div class="example">
+                "<em>More reliable</em> than…" / "The
+                <em>most innovative</em> product."
+              </div>
+            </div>
+            <div class="gm-card">
+              <h4>G11 · Going to <span class="tag">Q21, Q28</span></h4>
+              <div class="rule">
+                I <strong>am going to</strong> + base verb (planned decision)
+              </div>
+              <div class="example">
+                "I <em>am going to</em> take the early flight."
+              </div>
+            </div>
+            <div class="gm-card" style="border-left-color: #10b981">
+              <h4>
+                G12 · Present Perfect
+                <span class="tag">Q16, Q23, Q24, Q25</span>
+              </h4>
+              <div class="rule">
+                have/has + <strong>past participle</strong>
+              </div>
+              <div class="example">
+                "She <em>has worked</em> here for five years." / "<em>Have</em>
+                you ever worked abroad?"
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 4. Present Perfect vs Past Simple ─────────────── -->
+      <div class="study-section" id="pp-vs-ps">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>🔁 Present Perfect vs Past Simple — Know the difference!</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="note" style="margin-bottom: 16px">
+            This is the <strong>most tested grammar area</strong> in the test.
+            Many students confuse these two tenses. Learn the key signals!
+          </div>
+
+          <table class="compare-table">
+            <tr>
+              <th class="pp-header">Present Perfect (have + V3)</th>
+              <th class="ps-header">Past Simple (V2 or -ed)</th>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                Used for <strong>experience</strong> (ever/never)
+              </td>
+              <td class="ps-col">
+                Used for a <strong>specific past time</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                Used with:
+                <em>ever, never, already, yet, just, since, for, recently</em>
+              </td>
+              <td class="ps-col">
+                Used with:
+                <em>yesterday, last week, in 2022, ago, on Tuesday</em>
+              </td>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                <em>"I <strong>have worked</strong> here for five years."</em>
+              </td>
+              <td class="ps-col">
+                <em>"I <strong>worked</strong> in marketing in 2019."</em>
+              </td>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                <em>"<strong>Have</strong> you ever worked overseas?"</em>
+              </td>
+              <td class="ps-col">
+                <em>"<strong>Did</strong> you go to the conference?"</em>
+              </td>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                <em>"She <strong>hasn't finished</strong> the report yet."</em>
+              </td>
+              <td class="ps-col">
+                <em
+                  >"She <strong>didn't finish</strong> the report
+                  yesterday."</em
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="pp-col">
+                <em>"I <strong>have been</strong> to three countries."</em>
+                (life exp.)
+              </td>
+              <td class="ps-col">
+                <em>"I <strong>went</strong> to Singapore last year."</em>
+                (specific)
+              </td>
+            </tr>
+          </table>
+
+          <div class="note" style="border-color: #f59e0b; background: #fffbeb">
+            ⚠️ <strong>Test questions that use this:</strong><br />
+            Q16: "I <strong>have worked</strong> in marketing for five years."
+            ✅ (experience on CV)<br />
+            Q23: "<strong>Have</strong> you ever worked in a foreign country?"
+            ✅<br />
+            Q24: "She <strong>hasn't finished</strong> the report yet." ✅<br />
+            Q25: "I <strong>have been</strong> to three countries." ✅ (life
+            experience)<br />
+            Q26: "We <strong>signed</strong> the deal in March 2022." ✅
+            (specific past date)
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. Key Vocabulary for the Test ────────────────── -->
+      <div class="study-section" id="vocab">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>💼 Key Vocabulary — Quick Reference</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="tip-grid">
+            <div class="tip-card">
+              <h4>Unit 1 · Jobs & Introductions</h4>
+              <ul>
+                <li><strong>CEO</strong> – Chief Executive Officer</li>
+                <li>
+                  <strong>receptionist</strong> – greets visitors at front desk
+                </li>
+                <li><strong>colleague</strong> – person you work with</li>
+                <li><strong>nationality</strong> – the country you are from</li>
+                <li><strong>introduce</strong> – to tell people your name</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>Unit 2 · Products &amp; Services</h4>
+              <ul>
+                <li><strong>export</strong> – sell goods to other countries</li>
+                <li>
+                  <strong>import</strong> – buy goods from other countries
+                </li>
+                <li>
+                  <strong>manufacture</strong> – make products in a factory
+                </li>
+                <li><strong>supplier</strong> – company that provides goods</li>
+                <li><strong>customer</strong> – person who buys from you</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>Unit 6–7 · Networking &amp; Departments</h4>
+              <ul>
+                <li>
+                  <strong>network (verb)</strong> – meet contacts professionally
+                </li>
+                <li>
+                  <strong>small talk</strong> – light conversation to start
+                </li>
+                <li>
+                  <strong>HR (Human Resources)</strong> – manages employees
+                  &amp; hiring
+                </li>
+                <li><strong>department</strong> – a section of a company</li>
+                <li>
+                  <strong>report to</strong> – have someone as your manager
+                </li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>Unit 8 · Employment</h4>
+              <ul>
+                <li>
+                  <strong>CV / résumé</strong> – document listing your
+                  experience
+                </li>
+                <li>
+                  <strong>qualifications</strong> – degrees and certifications
+                </li>
+                <li><strong>salary</strong> – money paid for work</li>
+                <li><strong>full-time / part-time</strong> – work hours</li>
+                <li><strong>teamwork</strong> – working well with others</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>Unit 9–10 · Competition &amp; Teamwork</h4>
+              <ul>
+                <li>
+                  <strong>reliable</strong> – dependable, consistent quality
+                </li>
+                <li><strong>innovative</strong> – new and creative</li>
+                <li><strong>competitive</strong> – wants to win</li>
+                <li><strong>team player</strong> – works well with others</li>
+                <li>
+                  <strong>In my opinion…</strong> – polite way to give a view
+                </li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>Unit 11–12 · Travel &amp; Schedules</h4>
+              <ul>
+                <li><strong>make a reservation</strong> – book a room/table</li>
+                <li>
+                  <strong>check in / check out</strong> – arrive/leave hotel
+                </li>
+                <li><strong>I'm going to…</strong> – planned future action</li>
+                <li><strong>yet</strong> – used in negative present perfect</li>
+                <li><strong>already</strong> – done before expected</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Business Email vocab -->
+          <div class="note" style="margin-top: 18px">
+            <strong>Professional email greetings (Q30):</strong><br />
+            ✅ "Dear Mr. Thompson," &nbsp;·&nbsp; ✅ "Dear Ms. Smith,"
+            &nbsp;·&nbsp; ✅ "Dear Sir/Madam,"<br />
+            ❌ "Hey there!" &nbsp;·&nbsp; ❌ "Yo, John" &nbsp;·&nbsp; ❌ "What's
+            up?"
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 6. Test Tips ───────────────────────────────────── -->
+      <div class="study-section" id="test-tips">
+        <div class="study-section-header" onclick="toggleStudySection(this)">
+          <span>💡 Test Tips — How to approach each question</span>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="tip-grid">
+            <div class="tip-card">
+              <h4>🕵️ Fill-in-the-blank Grammar</h4>
+              <ul>
+                <li>
+                  Identify the <strong>tense signal word</strong> in the
+                  sentence (last year → past simple; ever/yet → present perfect;
+                  right now → present continuous; going to → future plan).
+                </li>
+                <li>
+                  Check the <strong>subject</strong> (he/she/it → use -s or was,
+                  not were).
+                </li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>🗣 Professional Language</h4>
+              <ul>
+                <li>
+                  For "most professional" questions, look for
+                  <strong>formal, polite</strong> language.
+                </li>
+                <li>
+                  Avoid options that sound rude, casual, or strange in a
+                  business context.
+                </li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>📊 Comparative vs Superlative</h4>
+              <ul>
+                <li>
+                  <strong>Comparing two things:</strong> use comparative (-er /
+                  more…)
+                </li>
+                <li>
+                  <strong>Best/worst in a group:</strong> use superlative (the
+                  -est / the most…)
+                </li>
+                <li>Irregular: good → better → <strong>the best</strong></li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>⏳ Tense Time Signals</h4>
+              <ul>
+                <li>
+                  <em>last year / in 2022 / yesterday</em> →
+                  <strong>Past Simple</strong>
+                </li>
+                <li>
+                  <em>ever / never / yet / already / since / for</em> →
+                  <strong>Present Perfect</strong>
+                </li>
+                <li>
+                  <em>right now / at the moment</em> →
+                  <strong>Present Continuous</strong>
+                </li>
+                <li>
+                  <em>going to / planning to</em> → <strong>Future plan</strong>
+                </li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>🎤 Speaking Tips</h4>
+              <ul>
+                <li>
+                  Use the <strong>language tips</strong> printed on each task
+                  card.
+                </li>
+                <li>
+                  Mix tenses: talk about the past (past simple), experience
+                  (present perfect), and future plans (going to).
+                </li>
+                <li>It's OK to pause and think — speak clearly, not fast.</li>
+              </ul>
+            </div>
+            <div class="tip-card">
+              <h4>✅ Quick Review Checklist</h4>
+              <ul>
+                <li>☐ go / went / been to</li>
+                <li>☐ have/has + past participle</li>
+                <li>☐ doesn't vs don't</li>
+                <li>☐ is always (adverb after be)</li>
+                <li>☐ is presenting (present continuous)</li>
+                <li>☐ am going to (future plan)</li>
+                <li>☐ the best / the most… (superlative)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer link back -->
+      <div
+        style="
+          text-align: center;
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid #e8ebf5;
+        "
+      >
+        <a
+          href="student-noonim.html#finalTestSection"
+          class="back-link"
+          style="display: inline-flex"
+        >
+          📝 Go to the Final Test →
+        </a>
+      </div>
+    </div>
+
+    <script>
+      function toggleStudySection(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".toggle-icon");
+        const collapsed = body.classList.toggle("collapsed");
+        icon.style.transform = collapsed ? "rotate(-90deg)" : "rotate(0deg)";
+      }
+      // Start all sections open
+    </script>
+  </body>
+</html>
