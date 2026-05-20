@@ -1236,6 +1236,8 @@
         box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
       }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -3398,19 +3400,19 @@
       };
 
       function injectRatingWidgets() {
-        const questions = document.querySelectorAll(
-          "#finalQuizContainer .quiz-question",
-        );
-        questions.forEach((q, idx) => {
-          const qNum = idx + 1;
+        // Speaking tasks only
+        for (let i = 1; i <= 5; i++) {
+          const task = document.getElementById("speakTask" + i);
+          if (!task) continue;
+          const key = "s" + i;
           const row = document.createElement("div");
           row.className = "q-rating-row";
           row.innerHTML = `
             <span class="rating-label">Score:</span>
-            ${[1, 2, 3, 4, 5].map((n) => `<span class="q-star" data-q="${qNum}" data-v="${n}" onclick="setQuestionRating(this,${qNum},${n})">★</span>`).join("")}
-            <span class="q-rating-note" id="rn-${qNum}"></span>`;
-          q.appendChild(row);
-        });
+            ${[1, 2, 3, 4, 5].map((n) => `<span class="q-star" data-q="${key}" data-v="${n}" onclick="setQuestionRating(this,'${key}',${n})">★</span>`).join("")}
+            <span class="q-rating-note" id="rn-${key}"></span>`;
+          task.appendChild(row);
+        }
       }
 
       function setQuestionRating(star, qNum, val) {
@@ -3513,14 +3515,17 @@
           .scrollIntoView({ behavior: "smooth" });
       }
 
-      // ── PDF / Print Export ───────────────────────────────────────
+      // ── PDF Export ───────────────────────────────────────────────
       function exportTestPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+
         const questions = document.querySelectorAll(
           "#finalQuizContainer .quiz-question",
         );
         const total = questions.length;
         let correct = 0;
-        const rows = [];
+        const tableBody = [];
 
         questions.forEach((q, idx) => {
           const qNum = idx + 1;
@@ -3531,137 +3536,164 @@
           const qtextEl = q.querySelector(".quiz-question-text");
           const qtext = qtextEl
             ? qtextEl.innerText.replace(/\n+/g, " ").trim()
-            : `Question ${qNum}`;
-
+            : "Q" + qNum;
           const selected = q.querySelector(".quiz-option.selected");
-          const selectedText = selected
-            ? selected.innerText.trim()
-            : "(no answer)";
-
+          const selectedText = selected ? selected.innerText.trim() : "(no answer)";
           const correctOpt = q.querySelector(".quiz-option.correct");
-          const correctText = correctOpt ? correctOpt.innerText.trim() : "—";
+          const correctText = correctOpt ? correctOpt.innerText.trim() : "-";
+          const statusText = isCorrect ? "Correct" : isIncorrect ? "Wrong" : "-";
 
-          const rating = questionRatings[qNum] || 0;
-          const ratingStars = rating
-            ? "★".repeat(rating) + "☆".repeat(5 - rating)
-            : "—";
-          const ratingNote = ratingLabels[rating] || "—";
-
-          const statusColor = isCorrect
-            ? "#10b981"
-            : isIncorrect
-              ? "#ef4444"
-              : "#aaa";
-          const statusText = isCorrect
-            ? "✓ Correct"
-            : isIncorrect
-              ? "✗ Incorrect"
-              : "—";
-
-          rows.push(`
-            <tr style="page-break-inside:avoid">
-              <td style="border:1px solid #ddd;padding:8px;text-align:center;font-weight:700;color:#667eea">${qNum}</td>
-              <td style="border:1px solid #ddd;padding:8px;font-size:0.85em;color:#333">${qtext}</td>
-              <td style="border:1px solid #ddd;padding:8px;font-size:0.85em">${selectedText}</td>
-              <td style="border:1px solid #ddd;padding:8px;font-size:0.85em;color:#10b981;font-weight:600">${correctText}</td>
-              <td style="border:1px solid #ddd;padding:8px;text-align:center;color:${statusColor};font-weight:700">${statusText}</td>
-              <td style="border:1px solid #ddd;padding:8px;text-align:center;color:#f59e0b">${ratingStars}<br><span style="font-size:0.75em;color:#999">${ratingNote}</span></td>
-            </tr>`);
+          tableBody.push({ qNum, qtext, selectedText, correctText, statusText, isCorrect, isIncorrect });
         });
 
-        const pct = Math.round((correct / total) * 100);
         const today = new Date().toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
+          day: "numeric", month: "long", year: "numeric",
+        });
+        const pct = Math.round((correct / total) * 100);
+
+        // ── Header ──────────────────────────────────────────────────
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(15);
+        doc.setTextColor(102, 126, 234);
+        doc.text("Final Course Test Report", 14, 16);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        doc.setTextColor(130, 130, 130);
+        doc.text("Oxford Business Result  |  Student: Noonim  |  Date: " + today, 14, 23);
+
+        // ── Score boxes ─────────────────────────────────────────────
+        const boxes = [
+          { label: "MCQ Score",  value: correct + "/" + total,    fill: [240,253,244], text: [16,185,129]   },
+          { label: "Percentage", value: pct + "%",                fill: [240,244,255], text: [102,126,234]  },
+          { label: "To Review",  value: String(total - correct),  fill: [254,242,242], text: [239,68,68]    },
+        ];
+        const bx = 14, by = 27, bw = 59, bh = 16;
+        boxes.forEach((b, i) => {
+          const x = bx + i * (bw + 3);
+          doc.setFillColor(...b.fill);
+          doc.roundedRect(x, by, bw, bh, 2, 2, "F");
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(14);
+          doc.setTextColor(...b.text);
+          doc.text(b.value, x + bw / 2, by + 8, { align: "center" });
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(6.5);
+          doc.setTextColor(100, 100, 100);
+          doc.text(b.label, x + bw / 2, by + 13.5, { align: "center" });
         });
 
-        const ratedCount = Object.keys(questionRatings).length;
-        const avgRating =
-          ratedCount > 0
-            ? (
-                Object.values(questionRatings).reduce((a, b) => a + b, 0) /
-                ratedCount
-              ).toFixed(1)
-            : "—";
+        // ── Part A heading ───────────────────────────────────────────
+        const partAY = by + bh + 8;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(102, 126, 234);
+        doc.text("Part A - Multiple Choice (" + total + " questions)", 14, partAY);
+        doc.setDrawColor(102, 126, 234);
+        doc.setLineWidth(0.4);
+        doc.line(14, partAY + 1.5, 196, partAY + 1.5);
 
-        const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Noonim – Final Test Report</title>
-  <style>
-    * { margin:0;padding:0;box-sizing:border-box; }
-    body { font-family: Arial, sans-serif; padding: 28px; color: #222; }
-    h1 { font-size:1.4em; color:#667eea; margin-bottom:4px; }
-    .subtitle { color:#888; font-size:0.9em; margin-bottom:20px; }
-    .summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
-    .sum-box { border-radius:8px; padding:14px; text-align:center; }
-    .sum-box .val { font-size:2em; font-weight:800; margin-bottom:4px; }
-    .sum-box .lbl { font-size:0.78em; font-weight:600; }
-    table { width:100%; border-collapse:collapse; font-size:0.87em; }
-    th { background:#667eea; color:white; padding:9px 10px; text-align:left; }
-    tr:nth-child(even) td { background:#f8f9ff; }
-    @media print {
-      body { padding:14px; }
-      button { display:none; }
-    }
-  </style>
-</head>
-<body>
-  <h1>📝 Final Course Test Report — Oxford Business Result</h1>
-  <div class="subtitle">Student: <strong>Noonim</strong> &nbsp;·&nbsp; Date: <strong>${today}</strong></div>
+        // ── MCQ table ────────────────────────────────────────────────
+        doc.autoTable({
+          startY: partAY + 5,
+          head: [[ "#", "Question", "Your Answer", "Correct Answer", "Result" ]],
+          body: tableBody.map((r) => [ r.qNum, r.qtext, r.selectedText, r.correctText, r.statusText ]),
+          theme: "striped",
+          headStyles: {
+            fillColor: [102, 126, 234],
+            textColor: 255,
+            fontSize: 7.5,
+            fontStyle: "bold",
+          },
+          bodyStyles: { fontSize: 7, textColor: [50, 50, 50] },
+          alternateRowStyles: { fillColor: [248, 249, 255] },
+          columnStyles: {
+            0: { cellWidth: 8,  halign: "center", fontStyle: "bold" },
+            1: { cellWidth: 72 },
+            2: { cellWidth: 34 },
+            3: { cellWidth: 34 },
+            4: { cellWidth: 34, halign: "center" },
+          },
+          didParseCell: function (data) {
+            if (data.column.index === 4 && data.section === "body") {
+              const orig = tableBody[data.row.index];
+              if (orig && orig.isCorrect)   data.cell.styles.textColor = [16, 185, 129];
+              if (orig && orig.isIncorrect) data.cell.styles.textColor = [239, 68, 68];
+            }
+            if (data.column.index === 0 && data.section === "body") {
+              data.cell.styles.textColor = [102, 126, 234];
+            }
+          },
+          margin: { left: 14, right: 14 },
+        });
 
-  <div class="summary-grid">
-    <div class="sum-box" style="background:#f0fdf4">
-      <div class="val" style="color:#10b981">${correct}/${total}</div>
-      <div class="lbl" style="color:#047857">Score (MCQ)</div>
-    </div>
-    <div class="sum-box" style="background:#f0f4ff">
-      <div class="val" style="color:#667eea">${pct}%</div>
-      <div class="lbl" style="color:#4338ca">Percentage</div>
-    </div>
-    <div class="sum-box" style="background:#fffbeb">
-      <div class="val" style="color:#f59e0b">${avgRating}</div>
-      <div class="lbl" style="color:#92400e">Avg. Teacher Rating</div>
-    </div>
-    <div class="sum-box" style="background:#fef2f2">
-      <div class="val" style="color:#ef4444">${total - correct}</div>
-      <div class="lbl" style="color:#b91c1c">To Review</div>
-    </div>
-  </div>
+        // ── Part B heading ───────────────────────────────────────────
+        let y = doc.lastAutoTable.finalY + 10;
+        if (y > 255) { doc.addPage(); y = 14; }
 
-  <table>
-    <thead>
-      <tr>
-        <th style="width:4%">#</th>
-        <th style="width:34%">Question</th>
-        <th style="width:18%">Student's Answer</th>
-        <th style="width:18%">Correct Answer</th>
-        <th style="width:10%">Result</th>
-        <th style="width:16%">Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${rows.join("")}
-    </tbody>
-  </table>
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(102, 126, 234);
+        doc.text("Part B - Speaking Assessment (5 tasks)", 14, y);
+        doc.setDrawColor(102, 126, 234);
+        doc.setLineWidth(0.4);
+        doc.line(14, y + 1.5, 196, y + 1.5);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(6.5);
+        doc.setTextColor(150, 150, 150);
+        doc.text("Rating scale:  1 = Needs lots of work   2 = Difficult   3 = OK   4 = Easy   5 = Very easy", 14, y + 6.5);
+        y += 11;
 
-  <div style="margin-top:22px;padding:16px;background:#f8f9ff;border-radius:8px;border-left:4px solid #667eea;font-size:0.88em;color:#444">
-    <strong>Notes:</strong> Rating scale — 1 = Needs lots of work &nbsp;·&nbsp; 2 = Still learning &nbsp;·&nbsp; 3 = OK, review needed &nbsp;·&nbsp; 4 = Good &nbsp;·&nbsp; 5 = Very confident
-  </div>
+        // ── Speaking task cards ──────────────────────────────────────
+        for (let i = 1; i <= 5; i++) {
+          const taskEl = document.getElementById("speakTask" + i);
+          const key = "s" + i;
+          const rating = questionRatings[key] || 0;
+          const ratingDisplay = rating
+            ? "Rating: " + rating + "/5  -  " + (ratingLabels[rating] || "")
+            : "Rating: Not rated";
 
-  <div style="text-align:center;margin-top:20px">
-    <button onclick="window.print()" style="background:#667eea;color:white;border:none;padding:10px 24px;border-radius:6px;font-size:1em;font-weight:700;cursor:pointer">🖨 Print / Save as PDF</button>
-  </div>
-  <script>window.onload = function() { window.print(); }<\/script>
-</body>
-</html>`;
+          let taskTitle = "Task " + i;
+          let promptText = "";
+          if (taskEl) {
+            const titleEl = taskEl.querySelector(".quiz-question-text");
+            if (titleEl) taskTitle = titleEl.innerText.replace(/\n+/g, " ").trim();
+            const promptEl = taskEl.children[1];
+            if (promptEl) promptText = promptEl.innerText.replace(/\n+/g, " ").trim();
+          }
 
-        const win = window.open("", "_blank");
-        win.document.open();
-        win.document.write(html);
-        win.document.close();
+          const promptWrapped = doc.splitTextToSize(promptText, 170);
+          const cardH = 8 + promptWrapped.length * 4 + 8;
+
+          if (y + cardH > 282) { doc.addPage(); y = 14; }
+
+          // Card background
+          doc.setFillColor(i % 2 === 1 ? 248 : 255, i % 2 === 1 ? 249 : 255, 255);
+          doc.setDrawColor(208, 215, 255);
+          doc.setLineWidth(0.3);
+          doc.roundedRect(14, y, 182, cardH, 2, 2, "FD");
+
+          // Title
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(8);
+          doc.setTextColor(102, 126, 234);
+          doc.text(taskTitle, 18, y + 6);
+
+          // Prompt
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7);
+          doc.setTextColor(70, 70, 70);
+          doc.text(promptWrapped, 18, y + 11);
+
+          // Rating
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(7.5);
+          doc.setTextColor(245, 158, 11);
+          doc.text(ratingDisplay, 18, y + cardH - 2.5);
+
+          y += cardH + 3;
+        }
+
+        doc.save("noonim-final-test-report.pdf");
       }
 
       // Inject rating widgets on load
