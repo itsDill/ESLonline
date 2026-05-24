@@ -824,6 +824,9 @@
         position: relative;
         width: 220px;
         height: 220px;
+        transition:
+          width 0.3s,
+          height 0.3s;
       }
       #spinCanvas {
         border-radius: 50%;
@@ -918,6 +921,23 @@
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
+      }
+      .size-preset-btn {
+        padding: 5px 12px;
+        border: 1.5px solid #22c55e;
+        border-radius: 7px;
+        background: #fff;
+        color: #166534;
+        font-size: 0.78em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        letter-spacing: 0.3px;
+        font-family: inherit;
+      }
+      .size-preset-btn:hover {
+        background: #22c55e;
+        color: #fff;
       }
       .cust-label {
         font-size: 0.85em;
@@ -2307,14 +2327,27 @@
             >
               <div class="cust-row">
                 <span class="cust-label">Wheel Size</span>
+                <button class="size-preset-btn" onclick="resizeWheel(80)">
+                  XS
+                </button>
+                <button class="size-preset-btn" onclick="resizeWheel(160)">
+                  S
+                </button>
                 <input
                   type="range"
-                  min="160"
-                  max="340"
+                  min="80"
+                  max="900"
                   value="220"
                   id="wheelSizeSlider"
                   oninput="resizeWheel(this.value)"
+                  style="flex: 1; min-width: 120px"
                 />
+                <button class="size-preset-btn" onclick="resizeWheel(440)">
+                  L
+                </button>
+                <button class="size-preset-btn" onclick="resizeWheel(900)">
+                  XL
+                </button>
                 <span class="cust-val" id="wheelSizeVal">220px</span>
               </div>
               <div class="cust-section-title">Segments</div>
@@ -3210,10 +3243,13 @@
       }
 
       function resizeWheel(size) {
-        wheelSize = parseInt(size);
-        document.getElementById("wheelSizeVal").textContent = size + "px";
+        wheelSize = Math.max(80, Math.min(900, parseInt(size)));
+        document.getElementById("wheelSizeVal").textContent = wheelSize + "px";
+        document.getElementById("wheelSizeSlider").value = wheelSize;
         canvas.width = wheelSize;
         canvas.height = wheelSize;
+        canvas.style.width = wheelSize + "px";
+        canvas.style.height = wheelSize + "px";
         const container = document.getElementById("wheelContainer");
         container.style.width = wheelSize + "px";
         container.style.height = wheelSize + "px";
