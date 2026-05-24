@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * Enhanced Navigation Support v2.0
  * ESL Fun Online - Improved mobile menu with smooth animations
@@ -36,7 +36,7 @@ function initializeNavigation() {
     body.classList.toggle("dark-mode", savedTheme === "dark");
     document.documentElement.classList.toggle(
       "dark-mode",
-      savedTheme === "dark"
+      savedTheme === "dark",
     );
 
     const themeIcon = themeToggle.querySelector("i");
@@ -84,18 +84,26 @@ function initializeNavigation() {
     // Functions to handle menu state
     function openMenu() {
       isMenuOpen = true;
+      // Save scroll position before locking — prevents page jump on Android
+      const scrollY = window.scrollY;
+      body.dataset.menuScrollY = scrollY;
+      body.style.top = "-" + scrollY + "px";
       freshNavLinks.classList.add("active");
       if (mobileIcon) mobileIcon.className = "fas fa-times";
-      body.style.overflow = "hidden";
       body.classList.add("mobile-menu-open");
     }
 
     function closeMenu() {
       isMenuOpen = false;
+      const scrollY = parseInt(body.dataset.menuScrollY || "0");
+      body.classList.remove("mobile-menu-open");
+      body.style.top = "";
+      // Clear inline overflow — restores CSS-defined overflow-x: hidden
+      body.style.overflow = "";
       freshNavLinks.classList.remove("active");
       if (mobileIcon) mobileIcon.className = "fas fa-bars";
-      body.style.overflow = "auto";
-      body.classList.remove("mobile-menu-open");
+      // Restore scroll position instantly (no visual jump)
+      window.scrollTo({ top: scrollY, behavior: "instant" });
       // Close all dropdowns when closing menu
       navItems.forEach(resetDropdown);
     }
@@ -112,27 +120,7 @@ function initializeNavigation() {
       }
     });
 
-    // Touch support for mobile toggle with better handling
-    let touchHandled = false;
-    freshMobileToggle.addEventListener("touchstart", function (e) {
-      if (window.innerWidth <= 768) {
-        touchHandled = false;
-      }
-    });
-
-    freshMobileToggle.addEventListener("touchend", function (e) {
-      if (window.innerWidth <= 768 && !touchHandled) {
-        e.preventDefault();
-        e.stopPropagation();
-        touchHandled = true;
-
-        if (isMenuOpen) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      }
-    });
+    // touch-action: manipulation in CSS removes the 300ms delay — no JS touch handlers needed
 
     // Dropdown functionality for mobile ONLY
     navItems.forEach((item) => {
@@ -164,27 +152,7 @@ function initializeNavigation() {
           // On desktop, let CSS :hover handle the dropdown display
         });
 
-        // Add touch event for better mobile support
-        if (freshChevron) {
-          let dropdownTouchHandled = false;
-
-          freshLink.addEventListener("touchstart", function (e) {
-            const isMobile = window.innerWidth <= 768;
-            if (isMobile) {
-              dropdownTouchHandled = false;
-            }
-          });
-
-          freshLink.addEventListener("touchend", function (e) {
-            const isMobile = window.innerWidth <= 768;
-            if (isMobile && !dropdownTouchHandled) {
-              e.preventDefault();
-              e.stopPropagation();
-              dropdownTouchHandled = true;
-              toggleMobileDropdown(item, freshChevron);
-            }
-          });
-        }
+        // touch-action: manipulation in CSS removes 300ms tap delay — no JS touch handlers needed
       }
     });
 
@@ -285,7 +253,12 @@ function initializeNavigation() {
         header.classList.remove("scrolled");
       }
 
-      if (currentScrollY > lastScrollY && currentScrollY > 200) {
+      // Don't hide header while mobile menu is open (menu is anchored to header position)
+      if (
+        currentScrollY > lastScrollY &&
+        currentScrollY > 200 &&
+        !document.body.classList.contains("mobile-menu-open")
+      ) {
         header.classList.add("hidden");
       } else {
         header.classList.remove("hidden");
@@ -313,7 +286,7 @@ window.ESLUtils = window.ESLUtils || {
 
     if (navLinks) {
       navLinks.classList.remove("active");
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
       document.body.classList.remove("mobile-menu-open");
     }
 
