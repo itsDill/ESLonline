@@ -11,13 +11,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Interactive decision matrix tool. Enter options and weighted criteria, score each combination, and find the best choice based on data."
+      content="Business and consultancy vocabulary quiz. Test your knowledge of finance, strategy, operations and HR terms across three difficulty levels."
     />
     <meta name="author" content="ESL Fun Online" />
     <meta name="robots" content="index, follow" />
-    <title>
-      Decision Matrix | ESL Fun Online — Weighted Options Scoring Tool
-    </title>
+    <title>Business Vocab Quiz | ESL Fun Online — Consultancy &amp; Finance Terms</title>
     <link rel="icon" href="../favicon.ico" sizes="any" />
     <link
       rel="icon"
@@ -56,23 +54,54 @@
     <link rel="stylesheet" href="../css/mobile-optimized.css?v=1763019900" />
     <link rel="stylesheet" href="../css/layout-fixes.css?v=1763019900" />
     <style>
-      .tool-page-wrap {
-        max-width: 860px;
-        margin: 0 auto;
-        padding: 3rem 1rem 5rem;
-      }
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--primary-color, #46bbe5);
-        text-decoration: none;
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
-      }
-      .back-link:hover {
-        text-decoration: underline;
-      }
+      .tool-page-wrap { max-width: 700px; margin: 0 auto; padding: 3rem 1rem 5rem; }
+      .back-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--primary-color, #46bbe5); text-decoration: none; font-size: 0.9rem; margin-bottom: 1.5rem; }
+      .back-link:hover { text-decoration: underline; }
+      /* Option buttons */
+      .quiz-options { display: flex; flex-direction: column; gap: 0.55rem; margin: 1rem 0 0.5rem; }
+      .quiz-opt { background: var(--bg-secondary, #f9fafb); border: 2px solid var(--border-color, #e5e7eb); border-radius: 10px; padding: 0.75rem 1rem; text-align: left; font-size: 0.88rem; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; align-items: flex-start; gap: 0.65rem; width: 100%; font-family: inherit; line-height: 1.4; }
+      .quiz-opt:hover:not(:disabled) { border-color: #46bbe5; background: rgba(70,187,229,0.07); }
+      .quiz-opt:disabled { cursor: default; }
+      .quiz-opt.correct { border-color: #10b981 !important; background: rgba(16,185,129,0.1) !important; color: #065f46; }
+      .quiz-opt.wrong   { border-color: #ef4444 !important; background: rgba(239,68,68,0.08)  !important; color: #991b1b; }
+      .quiz-opt .opt-letter { font-weight: 700; min-width: 1.3rem; color: #9ca3af; flex-shrink: 0; }
+      .quiz-opt.correct .opt-letter { color: #10b981; }
+      .quiz-opt.wrong   .opt-letter { color: #ef4444; }
+      .dark-mode .quiz-opt { background: rgba(255,255,255,0.03); border-color: #374151; color: var(--text-primary, #f9fafb); }
+      .dark-mode .quiz-opt:hover:not(:disabled) { background: rgba(70,187,229,0.1); }
+      .dark-mode .quiz-opt.correct { background: rgba(16,185,129,0.15) !important; color: #6ee7b7; }
+      .dark-mode .quiz-opt.wrong   { background: rgba(239,68,68,0.13)  !important; color: #fca5a5; }
+      /* Quiz HUD & progress */
+      .quiz-progress-bar { height: 6px; background: #e5e7eb; border-radius: 3px; margin-bottom: 0.9rem; overflow: hidden; }
+      #quizProgressFill { height: 100%; background: #10b981; border-radius: 3px; transition: width 0.35s ease; }
+      .dark-mode .quiz-progress-bar { background: #374151; }
+      .quiz-hud { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-secondary, #6b7280); margin-bottom: 0.6rem; font-weight: 600; }
+      #quizStreak { color: #f59e0b; }
+      .quiz-category-chip { display: inline-block; background: rgba(16,185,129,0.1); color: #059669; border: 1px solid rgba(16,185,129,0.25); padding: 0.12rem 0.55rem; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.55rem; }
+      .dark-mode .quiz-category-chip { color: #6ee7b7; }
+      .quiz-q-text { font-size: 1rem; font-weight: 600; line-height: 1.55; color: var(--text-primary, #111827); }
+      .quiz-feedback { min-height: 2.8rem; border-radius: 8px; padding: 0.5rem 0.8rem; margin-top: 0.6rem; font-size: 0.83rem; line-height: 1.5; }
+      .quiz-feedback.correct { background: rgba(16,185,129,0.09); color: #065f46; border-left: 3px solid #10b981; }
+      .quiz-feedback.wrong   { background: rgba(239,68,68,0.07);  color: #7f1d1d; border-left: 3px solid #ef4444; }
+      .dark-mode .quiz-feedback.correct { color: #6ee7b7; }
+      .dark-mode .quiz-feedback.wrong   { color: #fca5a5; }
+      /* Personal best */
+      #vocabBestDisplay { text-align: center; color: #f59e0b; font-size: 0.87rem; font-weight: 600; margin: 0.7rem 0 0; padding: 0.4rem 0.75rem; background: rgba(245,158,11,0.1); border-radius: 8px; }
+      /* Grade */
+      .result-grade { font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 0.2rem; }
+      /* Review */
+      .vocab-review { margin-top: 0.85rem; max-height: 270px; overflow-y: auto; text-align: left; border: 1px solid #e5e7eb; border-radius: 10px; }
+      .dark-mode .vocab-review { border-color: #374151; }
+      .vocab-review-item { padding: 0.55rem 0.85rem; border-bottom: 1px solid #f3f4f6; font-size: 0.79rem; line-height: 1.5; }
+      .dark-mode .vocab-review-item { border-color: #374151; }
+      .vocab-review-item:last-child { border-bottom: none; }
+      .vocab-review-item.correct { background: rgba(16,185,129,0.06); }
+      .vocab-review-item.wrong   { background: rgba(239,68,68,0.06); }
+      .dark-mode .vocab-review-item.correct { background: rgba(16,185,129,0.1); }
+      .dark-mode .vocab-review-item.wrong   { background: rgba(239,68,68,0.1); }
+      .vocab-review-item .rv-term { font-weight: 700; }
+      .vocab-review-item .rv-exp  { font-style: italic; opacity: 0.8; margin-top: 0.1rem; }
+      #vocabBestNote { font-weight: 600; margin: 0.3rem 0; }
     </style>
     <script
       async
@@ -328,10 +357,10 @@
         class="hero-bg"
       />
       <div class="hero-content">
-        <h1 class="hero-title">Decision Matrix</h1>
+        <h1 class="hero-title">Business Vocab Quiz</h1>
         <p class="hero-subtitle">
-          Compare options using weighted criteria. Enter your choices, score
-          each cell, and find the best answer with data.
+          Test your knowledge of finance, strategy and operations terminology
+          across three difficulty levels.
         </p>
       </div>
     </section>
@@ -340,55 +369,77 @@
       <a href="tools.html" class="back-link"
         ><i class="fas fa-arrow-left"></i> Back to Tools</a
       >
-      <div class="featured-tool-card" id="decisionTool">
+      <div class="featured-tool-card" id="vocabTool">
         <div class="featured-tool-header">
           <div class="featured-tool-icon decision">
-            <i class="fas fa-table"></i>
+            <i class="fas fa-graduation-cap"></i>
           </div>
           <div>
             <span class="featured-badge">Interactive</span>
-            <h3>Decision Matrix</h3>
-            <p>Compare options with weighted criteria scoring</p>
+            <h3>Business Vocab Quiz</h3>
+            <p>Consultancy &amp; finance terminology &mdash; 3 difficulty levels</p>
           </div>
         </div>
         <div class="featured-tool-body">
-          <div id="dmSetup">
-            <div class="dm-inputs">
-              <div>
-                <label class="dm-label">Options (one per line)</label>
-                <textarea
-                  id="dmOptions"
-                  placeholder="Option A&#10;Option B&#10;Option C"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div>
-                <label class="dm-label">Criteria : Weight (e.g. Cost:3)</label>
-                <textarea
-                  id="dmCriteria"
-                  placeholder="Cost:3&#10;Speed:2&#10;Quality:5"
-                  rows="3"
-                ></textarea>
+
+          <!-- Setup -->
+          <div id="vocabSetup">
+            <div class="setup-row">
+              <span class="setup-label">Difficulty:</span>
+              <div class="btn-group">
+                <button class="setup-btn active" data-diff="beginner">\ud83d\udfe2 Beginner</button>
+                <button class="setup-btn" data-diff="intermediate">\ud83d\udfe1 Intermediate</button>
+                <button class="setup-btn" data-diff="advanced">\ud83d\udd34 Advanced</button>
               </div>
             </div>
-            <button class="featured-start-btn" id="buildMatrix">
-              Build Matrix
-            </button>
+            <div class="setup-row">
+              <span class="setup-label">Category:</span>
+              <div class="btn-group" style="flex-wrap:wrap">
+                <button class="setup-btn active" data-cat="all">\u2605 All</button>
+                <button class="setup-btn" data-cat="finance">Finance</button>
+                <button class="setup-btn" data-cat="strategy">Strategy</button>
+                <button class="setup-btn" data-cat="operations">Operations</button>
+                <button class="setup-btn" data-cat="marketing">Marketing</button>
+                <button class="setup-btn" data-cat="hr">HR</button>
+              </div>
+            </div>
+            <div class="setup-row">
+              <span class="setup-label">Questions:</span>
+              <div class="btn-group">
+                <button class="setup-btn active" data-qcount="10">10</button>
+                <button class="setup-btn" data-qcount="15">15</button>
+                <button class="setup-btn" data-qcount="20">20</button>
+              </div>
+            </div>
+            <div id="vocabBestDisplay" style="display:none"></div>
+            <button class="featured-start-btn" id="startVocab">Start Quiz</button>
           </div>
-          <div id="dmMatrix" style="display: none">
-            <div id="dmTableWrap"></div>
-            <button class="featured-submit-btn wide" id="calcMatrix">
-              Calculate Winner
-            </button>
-            <div id="dmResult" class="dm-result"></div>
-            <button
-              class="setup-btn"
-              id="resetMatrix"
-              style="margin-top: 0.75rem"
-            >
-              Reset
-            </button>
+
+          <!-- Running -->
+          <div id="vocabRunning" style="display:none">
+            <div class="quiz-progress-bar"><div id="quizProgressFill" style="width:0%"></div></div>
+            <div class="quiz-hud">
+              <span id="quizQLabel">Q 1 / 10</span>
+              <span id="quizScore">Score: 0</span>
+              <span id="quizStreak">\ud83d\udd25 0</span>
+            </div>
+            <div id="quizCategoryChip" class="quiz-category-chip"></div>
+            <div class="quiz-q-text" id="quizQuestion"></div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div id="quizFeedback" class="quiz-feedback"></div>
           </div>
+
+          <!-- Results -->
+          <div id="vocabResults" style="display:none">
+            <div class="featured-results-box">
+              <div class="result-grade" id="vocabGrade"></div>
+              <div class="result-big" id="vocabFinalScore"></div>
+              <div class="result-sub" id="vocabBestNote"></div>
+              <div class="vocab-review" id="vocabReview"></div>
+              <button class="featured-start-btn" id="retryVocab" style="margin-top:1rem">Try Again</button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -463,142 +514,280 @@
 
     <script>
       (function () {
-        var dmOptions = [];
-        var dmCriteria = [];
+        var vocabDiff     = "beginner";
+        var vocabCat      = "all";
+        var vocabQCount   = 10;
+        var vocabQueue    = [];
+        var vocabIndex    = 0;
+        var vocabScore    = 0;
+        var vocabStreak   = 0;
+        var vocabBestStreak = 0;
+        var vocabLog      = [];
+        var answerLocked  = false;
 
-        function buildTable() {
-          var table = document.createElement("table");
-          table.className = "dm-table";
-          var thead = document.createElement("thead");
-          var hRow = document.createElement("tr");
-          var th0 = document.createElement("th");
-          th0.textContent = "Option";
-          hRow.appendChild(th0);
-          dmCriteria.forEach(function (c) {
-            var th = document.createElement("th");
-            th.textContent = c.name;
-            var sm = document.createElement("small");
-            sm.textContent = " w=" + c.weight;
-            th.appendChild(sm);
-            hRow.appendChild(th);
-          });
-          var thTot = document.createElement("th");
-          thTot.textContent = "Score";
-          hRow.appendChild(thTot);
-          thead.appendChild(hRow);
-          table.appendChild(thead);
-          var tbody = document.createElement("tbody");
-          dmOptions.forEach(function (opt, oi) {
-            var tr = document.createElement("tr");
-            var tdOpt = document.createElement("td");
-            tdOpt.textContent = opt;
-            tr.appendChild(tdOpt);
-            dmCriteria.forEach(function (c, ci) {
-              var td = document.createElement("td");
-              var input = document.createElement("input");
-              input.type = "number";
-              input.min = "0";
-              input.max = "10";
-              input.value = "5";
-              input.id = "dm_" + oi + "_" + ci;
-              input.className = "dm-score-input";
-              input.addEventListener("input", recalc);
-              td.appendChild(input);
-              tr.appendChild(td);
-            });
-            var tdTot = document.createElement("td");
-            tdTot.className = "dm-score-cell";
-            tdTot.id = "dmtot_" + oi;
-            tdTot.textContent = "—";
-            tr.appendChild(tdTot);
-            tbody.appendChild(tr);
-          });
-          table.appendChild(tbody);
-          var wrap = document.createElement("div");
-          wrap.className = "dm-table-wrap";
-          wrap.appendChild(table);
-          document.getElementById("dmTableWrap").innerHTML = "";
-          document.getElementById("dmTableWrap").appendChild(wrap);
-          document.getElementById("dmResult").textContent = "";
-          document.getElementById("dmMatrix").style.display = "";
-          recalc();
+        // ── Question bank (60 questions, 20 per difficulty) ───────────────
+        var bank = [
+          // ═══════════════ BEGINNER ═══════════════
+          {d:"beginner",cat:"finance",   term:"KPI",          q:"What does KPI stand for?",                                                       opts:["Key Performance Indicator","Key Profit Index","Key Product Insight","Key Planning Input"],           ans:0, exp:"KPIs are measurable values showing how well a team or organisation is achieving its objectives."},
+          {d:"beginner",cat:"finance",   term:"ROI",          q:"What does ROI measure?",                                                          opts:["Revenue earned from a project","Profit from an investment relative to its cost","The rate of inflation","The cost to run operations"],           ans:1, exp:"ROI = (Gain \u2212 Cost) \u00f7 Cost \u00d7 100%. It shows the efficiency of an investment."},
+          {d:"beginner",cat:"finance",   term:"Revenue",      q:"Which best describes 'revenue'?",                                                 opts:["Total profit after all expenses","Total income from sales before any expenses","Cash held in the bank","Owner\u2019s personal income"],             ans:1, exp:"Revenue is the top-line figure \u2014 total sales income before any costs are deducted."},
+          {d:"beginner",cat:"finance",   term:"P&L",          q:"What is a Profit & Loss statement?",                                              opts:["A legal document for partnerships","A financial statement showing income, costs and profit over a period","A list of assets and liabilities","A marketing budget plan"],   ans:1, exp:"The P&L (income statement) summarises revenues and expenses to show net profit or loss in a period."},
+          {d:"beginner",cat:"finance",   term:"Cash Flow",    q:"Cash flow refers to:",                                                            opts:["The company\u2019s stock price movement","Total annual profits","The movement of money in and out of a business","A bank\u2019s interest rate"],   ans:2, exp:"Positive cash flow means more money is coming in than going out. Profitable companies can still fail with poor cash flow."},
+          {d:"beginner",cat:"finance",   term:"Gross Profit", q:"Gross profit is calculated as:",                                                  opts:["Revenue minus all operating expenses","Revenue minus cost of goods sold only","Net income after tax","Operating expenses divided by revenue"],     ans:1, exp:"Gross Profit = Revenue \u2212 COGS. It shows profitability before overhead, salaries and other operating expenses."},
+          {d:"beginner",cat:"finance",   term:"Equity",       q:"In business, equity refers to:",                                                  opts:["A loan from the bank","The owner\u2019s interest in a company (assets minus liabilities)","A government grant","Monthly interest payments"],       ans:1, exp:"Equity = Assets \u2212 Liabilities. It represents what the owners would receive if all assets were sold and debts paid."},
+          {d:"beginner",cat:"finance",   term:"Liability",    q:"A liability in accounting is:",                                                   opts:["An asset owned by the company","A financial obligation or debt owed by the business","Revenue earned but not yet received","Equity held by investors"], ans:1, exp:"Liabilities include loans, accounts payable and other obligations that must be settled over time."},
+          {d:"beginner",cat:"finance",   term:"Budget",       q:"A budget is:",                                                                    opts:["The actual money spent last month","A financial plan estimating expected income and expenditure","A contract with a supplier","A performance appraisal"],  ans:1, exp:"Budgets set targets, allocate resources and provide a baseline for measuring actual financial performance."},
+          {d:"beginner",cat:"finance",   term:"Profit Margin",q:"Profit margin shows:",                                                            opts:["Total revenue earned","How much profit is made per \u00a3/$ of revenue","The gap between two competitors\u2019 prices","Operating costs as a ratio of headcount"], ans:1, exp:"Profit Margin = Net Profit \u00f7 Revenue \u00d7 100%. A 20% margin means 20p profit per \u00a31 of sales."},
+          {d:"beginner",cat:"strategy",  term:"SWOT",         q:"In SWOT analysis, the 'T' stands for:",                                           opts:["Technology","Targets","Threats","Timing"],   ans:2, exp:"SWOT = Strengths, Weaknesses, Opportunities, Threats \u2014 a foundational strategic planning framework."},
+          {d:"beginner",cat:"strategy",  term:"Market Share", q:"Market share measures:",                                                          opts:["How much profit a company makes","What percentage of total industry sales one company captures","Total revenue in a market","Headcount vs. competitors"],  ans:1, exp:"Market share = company sales \u00f7 total industry sales \u00d7 100%. It reflects competitive position."},
+          {d:"beginner",cat:"strategy",  term:"MVP",          q:"In a startup context, MVP stands for:",                                           opts:["Most Valuable Professional","Minimum Viable Product","Maximum Value Proposition","Market Validation Process"],  ans:1, exp:"An MVP has just enough features to test with early customers and gather feedback, minimising build risk."},
+          {d:"beginner",cat:"strategy",  term:"Benchmark",    q:"A benchmark is best described as:",                                               opts:["A target profit margin","A standard reference point used for comparison and performance evaluation","A minimum contract value","A regulatory requirement"], ans:1, exp:"Benchmarking compares metrics against industry standards or top performers to identify performance gaps."},
+          {d:"beginner",cat:"general",   term:"B2B",          q:"What does B2B mean?",                                                             opts:["Back to Basics","Business to Business","Budget to Budget","Brand to Brand"],  ans:1, exp:"B2B refers to commercial transactions between two businesses (e.g. a supplier selling to a retailer)."},
+          {d:"beginner",cat:"general",   term:"B2C",          q:"B2C transactions are between:",                                                   opts:["A business and a consumer","Two businesses","A bank and a company","Two consumers"],   ans:0, exp:"B2C (Business to Consumer) covers companies selling directly to individual customers, like retail or e-commerce."},
+          {d:"beginner",cat:"general",   term:"Stakeholder",  q:"A stakeholder is:",                                                               opts:["Only a shareholder with equity","Anyone with an interest in or affected by a business","A senior manager","A customer who makes repeat purchases"],   ans:1, exp:"Stakeholders include employees, customers, investors, suppliers and regulators \u2014 anyone affected by the business."},
+          {d:"beginner",cat:"general",   term:"Invoice",      q:"An invoice is a document that:",                                                  opts:["Records internal meeting notes","Requests payment from a customer for goods or services delivered","Confirms a job application","Lists employee salary details"],  ans:1, exp:"Invoices include itemised costs, payment terms and due dates. They form part of the accounts receivable process."},
+          {d:"beginner",cat:"general",   term:"Agenda",       q:"In a business meeting, an agenda is:",                                            opts:["A summary of decisions made","A list of topics and sequence for discussion","A project timeline","A performance review form"],  ans:1, exp:"A well-prepared agenda keeps meetings focused, ensures all topics are covered and respects participants\u2019 time."},
+          {d:"beginner",cat:"general",   term:"Asset",        q:"Which is an example of a business asset?",                                        opts:["A bank loan","Money owed to suppliers","Cash held in accounts","Unpaid tax liability"],  ans:2, exp:"Assets are resources with economic value owned by the company \u2014 cash, equipment, intellectual property and property."},
+
+          // ═══════════════ INTERMEDIATE ═══════════════
+          {d:"intermediate",cat:"finance",   term:"EBITDA",         q:"EBITDA stands for:",                                                          opts:["Earnings Before Income Tax and Depreciation Allowances","Earnings Before Interest, Taxes, Depreciation, and Amortisation","Estimated Budgeted Income Through Direct Activity","Earnings Based on Incremental Total Direct Allocation"],  ans:1, exp:"EBITDA strips out non-operating factors to show core operating profitability, useful for comparing companies."},
+          {d:"intermediate",cat:"finance",   term:"Burn Rate",      q:"Burn rate is:",                                                               opts:["The speed at which a company earns revenue","The rate at which a company spends its cash reserves","Annual employee turnover rate","The rate of product defects in manufacturing"],  ans:1, exp:"Divide cash reserves by monthly burn rate to get \u2018runway\u2019 \u2014 how many months until funds run out."},
+          {d:"intermediate",cat:"finance",   term:"ARR",            q:"In SaaS, ARR refers to:",                                                     opts:["Average Revenue Rate","Annual Recurring Revenue \u2014 predictable revenue expected per year","Accounts Receivable Ratio","Adjusted Revenue Report"],  ans:1, exp:"ARR = MRR \u00d7 12. It\u2019s the gold-standard metric for subscription businesses as it reflects predictable future income."},
+          {d:"intermediate",cat:"finance",   term:"Working Capital", q:"Working capital is calculated as:",                                          opts:["Total revenue minus total costs","Current assets minus current liabilities","Long-term assets minus long-term debt","Monthly income minus fixed overheads"],  ans:1, exp:"Positive working capital means the company can meet short-term obligations. Negative WC signals liquidity risk."},
+          {d:"intermediate",cat:"finance",   term:"Gross Margin",   q:"Gross margin is:",                                                            opts:["Net profit after all expenses","Gross profit expressed as a percentage of revenue","Revenue divided by number of customers","EBITDA divided by total assets"],  ans:1, exp:"Gross Margin = (Revenue \u2212 COGS) \u00f7 Revenue \u00d7 100%. Software companies often achieve 70\u201390%; manufacturing ~30\u201340%."},
+          {d:"intermediate",cat:"finance",   term:"Run Rate",       q:"A company\u2019s run rate is:",                                               opts:["The average speed of a production line","An annualised projection of current performance (e.g. monthly revenue \u00d7 12)","Total cumulative revenue since founding","The average deal size"],  ans:1, exp:"Run rate provides a quick estimate but can be misleading for seasonal businesses or those growing rapidly."},
+          {d:"intermediate",cat:"finance",   term:"Unit Economics",  q:"'Unit economics' refers to:",                                               opts:["Revenue per product category","Revenue and costs directly associated with a single unit or customer","Profit divided by total employees","Operating cost per factory unit"],  ans:1, exp:"Positive unit economics (LTV > CAC) is essential before scaling \u2014 you can\u2019t grow your way out of bad unit economics."},
+          {d:"intermediate",cat:"finance",   term:"MoM Growth",     q:"Month-over-Month (MoM) growth measures:",                                    opts:["Average growth over 12 months","Percentage change in a metric from the previous month","Year-to-date cumulative revenue","Seasonal growth adjustments"],  ans:1, exp:"MoM = (current \u2212 prior) \u00f7 prior \u00d7 100%. Useful for tracking rapid-growth metrics in early-stage companies."},
+          {d:"intermediate",cat:"marketing", term:"Churn Rate",     q:"Churn rate measures:",                                                        opts:["How fast a company grows revenue","The rate at which customers stop doing business with a company","Employee productivity","How quickly stock is sold"],  ans:1, exp:"High churn means customers are leaving. Reducing churn by 1% can dramatically improve ARR over time."},
+          {d:"intermediate",cat:"marketing", term:"CAC",            q:"Customer Acquisition Cost (CAC) is:",                                         opts:["Total revenue from a customer","The total cost to acquire a single new customer","Monthly subscription fee","Customer satisfaction score"],  ans:1, exp:"CAC = Total sales & marketing spend \u00f7 number of new customers. Must be compared to LTV to assess sustainability."},
+          {d:"intermediate",cat:"marketing", term:"LTV",            q:"Customer Lifetime Value (LTV) measures:",                                     opts:["The age of a customer relationship","Total expected revenue from a customer over the full relationship","The cost to retain an existing customer","Monthly revenue divided by churn rate"],  ans:1, exp:"LTV:CAC ratio of 3:1 or higher is generally considered healthy for SaaS/subscription businesses."},
+          {d:"intermediate",cat:"marketing", term:"NPS",            q:"Net Promoter Score (NPS) measures:",                                          opts:["Revenue from new clients","Customer loyalty \u2014 how likely customers are to recommend the business","Number of product features","Service resolution time"],  ans:1, exp:"NPS = % Promoters (9\u201310) \u2212 % Detractors (0\u20136). A score above 50 is excellent; below 0 signals serious issues."},
+          {d:"intermediate",cat:"strategy",  term:"Value Proposition",q:"A value proposition is:",                                                  opts:["The price of a product","The unique benefit that solves a customer problem and differentiates you","A company\u2019s mission statement","A marketing tagline"],  ans:1, exp:"A strong value prop answers 'why should a customer choose us over alternatives?' \u2014 the core of positioning."},
+          {d:"intermediate",cat:"strategy",  term:"Go-to-Market",   q:"A Go-to-Market (GTM) strategy defines:",                                     opts:["The company\u2019s annual growth targets","How a product will be launched, positioned and sold to reach customers","Long-term capital allocation","Employee onboarding processes"],  ans:1, exp:"GTM covers target segments, pricing, channels, messaging and sales approach \u2014 the launch execution playbook."},
+          {d:"intermediate",cat:"strategy",  term:"Synergy",        q:"In M&A, 'synergy' refers to:",                                               opts:["When two companies are in the same industry","The combined entity creating more value than the sum of its parts","Shared branding after a merger","Duplicate staff reduction"],  ans:1, exp:"Synergies can be revenue (cross-selling) or cost-based (shared overhead). They justify acquisition premiums."},
+          {d:"intermediate",cat:"strategy",  term:"Pivot",          q:"A startup 'pivot' means:",                                                    opts:["Hiring a new CEO","A fundamental change in business strategy while retaining core team and resources","Expanding into a new country","Raising a new funding round"],  ans:1, exp:"Famous pivots: Instagram was a location check-in app; Slack was built inside a gaming company."},
+          {d:"intermediate",cat:"strategy",  term:"Market Penetration",q:"Market penetration strategy involves:",                                   opts:["Entering an entirely new market","Increasing sales of an existing product in an existing market","Developing new products for new markets","Acquiring a competitor"],  ans:1, exp:"Market penetration \u2014 one of Ansoff\u2019s four growth strategies \u2014 typically uses competitive pricing, promotions or improved distribution."},
+          {d:"intermediate",cat:"strategy",  term:"Due Diligence",  q:"Due diligence in M&A refers to:",                                            opts:["A regulatory compliance audit","Thorough investigation of a company\u2019s finances and operations before completing a deal","Ongoing board governance reporting","Employee performance reviews"],  ans:1, exp:"DD uncovers liabilities, contractual risks and true financial health before a buyer commits capital."},
+          {d:"intermediate",cat:"hr",        term:"OKR",            q:"OKR stands for:",                                                             opts:["Operational Key Results","Objectives and Key Results \u2014 a goal-setting framework","Output and Knowledge Review","Ongoing KPI Reporting"],  ans:1, exp:"OKRs define ambitious objectives (the 'what') and 2\u20135 measurable key results (the 'how'). Popularised by Google."},
+          {d:"intermediate",cat:"operations",term:"SLA",            q:"A Service Level Agreement (SLA) defines:",                                   opts:["Employee salary terms","Agreed service standards, response times and performance obligations between provider and client","Supplier payment terms","Annual software licensing costs"],  ans:1, exp:"SLAs create accountability \u2014 breach triggers penalties. Common in IT, outsourcing and customer support."},
+
+          // ═══════════════ ADVANCED ═══════════════
+          {d:"advanced",cat:"finance",   term:"WACC",             q:"WACC (Weighted Average Cost of Capital) represents:",                         opts:["The highest cost of any single funding source","Average cost of all capital sources, weighted by their proportion in the capital structure","Interest expense divided by total debt","Total cost of equity only"],  ans:1, exp:"WACC is used as the discount rate in DCF valuations. Investments earning above WACC create shareholder value."},
+          {d:"advanced",cat:"finance",   term:"NPV",              q:"Net Present Value (NPV) of an investment is:",                                opts:["Total undiscounted cash inflows minus outflows","Present value of future cash flows minus the initial investment","Future cash flows divided by years","Internal rate of return as a cash value"],  ans:1, exp:"NPV > 0 means the investment adds value. NPV < 0 means it destroys value at the given discount rate."},
+          {d:"advanced",cat:"finance",   term:"IRR",              q:"The Internal Rate of Return (IRR) is:",                                       opts:["The rate of return that equals the risk-free rate","The discount rate at which an investment\u2019s NPV equals zero","The average return across all investments","Revenue growth rate adjusted for inflation"],  ans:1, exp:"If IRR > WACC, the investment creates value. IRR is used to rank competing projects of similar scale."},
+          {d:"advanced",cat:"finance",   term:"CAGR",             q:"CAGR measures:",                                                              opts:["Monthly compounding interest","The smooth annual growth rate of a metric over a multi-year period","Year-over-year revenue divided by inflation","Stock dividend growth rate"],  ans:1, exp:"CAGR = (Ending Value / Starting Value)^(1/n) \u2212 1. It smooths volatility to show a clean trend."},
+          {d:"advanced",cat:"finance",   term:"Amortisation",     q:"Amortisation in accounting refers to:",                                       opts:["Raising new capital through equity","Gradually writing off an intangible asset\u2019s value or reducing a debt over time","Depreciation of physical machinery","Paying dividends to shareholders"],  ans:1, exp:"Amortisation applies to intangible assets (patents, goodwill). Depreciation applies to tangible assets."},
+          {d:"advanced",cat:"finance",   term:"Hedging",          q:"In finance, hedging means:",                                                  opts:["Investing only in low-risk assets","Reducing financial risk by taking an offsetting position in a correlated asset","Raising prices during inflation","Reducing headcount to lower costs"],  ans:1, exp:"Airlines hedge fuel costs using futures. Currency hedging protects exporters from exchange rate movements."},
+          {d:"advanced",cat:"finance",   term:"Equity Dilution",  q:"Equity dilution occurs when:",                                                opts:["Share prices fall on public markets","New shares are issued, reducing the ownership percentage of existing shareholders","A dividend is paid to investors","A company repurchases its own shares"],  ans:1, exp:"Dilution is common in venture funding rounds. A founder at 80% may hold 65% after new shares are issued."},
+          {d:"advanced",cat:"finance",   term:"Runway",           q:"In startup finance, 'runway' means:",                                         opts:["A product launch timeline","How long a company can operate before running out of cash at current burn rate","The timeframe to IPO","Target revenue for the next funding round"],  ans:1, exp:"Runway (months) = Cash Balance \u00f7 Monthly Net Burn. VCs expect startups to raise before runway drops below 6 months."},
+          {d:"advanced",cat:"finance",   term:"DCF",              q:"Discounted Cash Flow (DCF) valuation works by:",                             opts:["Comparing revenue to market competitors","Projecting future cash flows and discounting them to present value using WACC","Multiplying EBITDA by an industry multiple","Valuing balance sheet assets at market value"],  ans:1, exp:"DCF is theoretically the most rigorous valuation method but highly sensitive to growth rate and discount rate assumptions."},
+          {d:"advanced",cat:"finance",   term:"EBITDA Margin",    q:"EBITDA margin is calculated as:",                                             opts:["Gross profit divided by total assets","EBITDA as a percentage of total revenue","Net income divided by total expenses","Operating cash flow per employee"],  ans:1, exp:"EBITDA Margin = EBITDA \u00f7 Revenue \u00d7 100%. SaaS companies often target 20%+; mature businesses 30\u201350%."},
+          {d:"advanced",cat:"strategy",  term:"Porter's Five Forces",q:"Porter's Five Forces does NOT include:",                                  opts:["Threat of new entrants","Bargaining power of suppliers","Net Promoter Score","Threat of substitute products"],  ans:2, exp:"The five forces are: competitive rivalry, threat of entrants, substitutes, buyer power and supplier power. NPS is unrelated."},
+          {d:"advanced",cat:"strategy",  term:"Blue Ocean Strategy",q:"Blue Ocean Strategy advocates:",                                           opts:["Winning by being the lowest-cost competitor","Creating an entirely new uncontested market space rather than competing in existing markets","Acquiring competitors to consolidate market share","Differentiating on premium quality alone"],  ans:1, exp:"Blue oceans (new markets) contrast with red oceans (existing, heavily competed spaces). Kim & Mauborgne, 2005."},
+          {d:"advanced",cat:"strategy",  term:"Competitive Moat",  q:"A 'competitive moat' refers to:",                                           opts:["A patent on a specific product feature","A durable competitive advantage that protects long-term market position and profitability","A temporary pricing advantage","Regulatory barriers in one country"],  ans:1, exp:"Moats include network effects, switching costs, cost advantages and intangibles. Term popularised by Warren Buffett."},
+          {d:"advanced",cat:"strategy",  term:"Disintermediation", q:"Disintermediation occurs when:",                                            opts:["Two companies merge their distribution channels","Intermediaries are removed from a supply chain, with producers selling directly to end customers","A company outsources distribution","A retailer expands their product range"],  ans:1, exp:"The internet enabled mass disintermediation. Airlines sell direct; fintechs cut out brokers and traditional banks."},
+          {d:"advanced",cat:"strategy",  term:"Paradigm Shift",    q:"A paradigm shift in business describes:",                                   opts:["A minor product update","A fundamental, transformative change in the dominant model or assumptions of an industry","A management restructuring","A shift from B2B to B2C"],  ans:1, exp:"The smartphone was a paradigm shift that disrupted cameras, GPS and maps. COVID drove a shift in remote work."},
+          {d:"advanced",cat:"strategy",  term:"Capital Allocation", q:"Capital allocation refers to:",                                            opts:["The process of hiring senior executives","How a company distributes financial resources across investments, operations and returns to shareholders","Setting departmental headcount budgets","The interest rate on corporate bonds"],  ans:1, exp:"Great capital allocators (Buffett, Bezos) generate outsized long-term returns by directing capital to highest-ROI opportunities."},
+          {d:"advanced",cat:"operations",term:"Value Chain",       q:"A company's value chain represents:",                                       opts:["The network of suppliers it uses","All activities required to create and deliver a product from inputs to end customer","The hierarchy of employee roles","Supply and demand equilibrium"],  ans:1, exp:"Porter\u2019s value chain: primary activities (logistics, operations, sales, service) + support (HR, tech, procurement)."},
+          {d:"advanced",cat:"operations",term:"Throughput",        q:"In operations management, throughput is:",                                  opts:["Number of employees in a facility","The rate at which a system produces output per unit of time","Total production cost per unit","Warehouse capacity in square metres"],  ans:1, exp:"In Theory of Constraints, increasing throughput at the bottleneck is the primary lever for improving total system output."},
+          {d:"advanced",cat:"operations",term:"Vertical Integration",q:"Vertical integration is when a company:",                                opts:["Expands into a new geographic market","Acquires or develops control over stages of its supply chain or distribution network","Merges with a direct competitor","Licenses its products to third parties"],  ans:1, exp:"Apple (backward: A-series chips) and Amazon (forward: own delivery network) are classic integration examples."},
+          {d:"advanced",cat:"hr",        term:"Succession Planning",q:"Succession planning is:",                                                  opts:["Annual salary review process","Identifying and developing employees to fill key leadership roles in the future","A process for redundancy selection","Recruiting externally for senior positions"],  ans:1, exp:"Effective succession planning reduces leadership risk and ensures organisational continuity when key people leave."}
+        ];
+
+        // ── Helpers ──────────────────────────────────────────────────────
+        function shuffle(arr) {
+          var a = arr.slice();
+          for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = a[i]; a[i] = a[j]; a[j] = t;
+          }
+          return a;
         }
 
-        function recalc() {
-          dmOptions.forEach(function (opt, oi) {
-            var total = 0;
-            dmCriteria.forEach(function (c, ci) {
-              var el = document.getElementById("dm_" + oi + "_" + ci);
-              if (el) total += (parseInt(el.value) || 0) * c.weight;
+        function getGrade(pct) {
+          if (pct >= 90) return { grade: "A+", color: "#10b981", label: "Outstanding!" };
+          if (pct >= 80) return { grade: "A",  color: "#10b981", label: "Excellent!" };
+          if (pct >= 70) return { grade: "B",  color: "#46bbe5", label: "Good work!" };
+          if (pct >= 60) return { grade: "C",  color: "#f59e0b", label: "Keep studying" };
+          if (pct >= 40) return { grade: "D",  color: "#ef4444", label: "Needs work" };
+          return { grade: "F", color: "#ef4444", label: "Keep trying!" };
+        }
+
+        // ── Personal best ────────────────────────────────────────────────
+        function getBestKey() { return "vocabBest_" + vocabDiff + "_" + vocabCat + "_" + vocabQCount; }
+        function getBest() { try { return parseInt(localStorage.getItem(getBestKey())) || 0; } catch(e) { return 0; } }
+        function setBest(v) { try { localStorage.setItem(getBestKey(), v); } catch(e) {} }
+        function refreshBestDisplay() {
+          var b = getBest();
+          var el = document.getElementById("vocabBestDisplay");
+          if (b > 0) { el.textContent = "\uD83C\uDFC6 Personal best: " + b + "/" + vocabQCount; el.style.display = ""; }
+          else { el.style.display = "none"; }
+        }
+
+        // ── Setup bindings ───────────────────────────────────────────────
+        function bindGroup(attr, cb) {
+          document.querySelectorAll("#vocabTool .setup-btn[" + attr + "]").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+              document.querySelectorAll("#vocabTool .setup-btn[" + attr + "]").forEach(function(b) { b.classList.remove("active"); });
+              this.classList.add("active");
+              cb(this.getAttribute(attr));
             });
-            var el = document.getElementById("dmtot_" + oi);
-            if (el) el.textContent = total.toFixed(1);
+          });
+        }
+        bindGroup("data-diff",   function(v) { vocabDiff   = v; refreshBestDisplay(); });
+        bindGroup("data-cat",    function(v) { vocabCat    = v; refreshBestDisplay(); });
+        bindGroup("data-qcount", function(v) { vocabQCount = parseInt(v); refreshBestDisplay(); });
+
+        // ── Build queue ──────────────────────────────────────────────────
+        function buildQueue() {
+          var pool = bank.filter(function(q) {
+            return q.d === vocabDiff && (vocabCat === "all" || q.cat === vocabCat);
+          });
+          if (!pool.length) pool = bank.filter(function(q) { return q.d === vocabDiff; });
+          pool = shuffle(pool).slice(0, vocabQCount);
+          // Shuffle option order per question
+          vocabQueue = pool.map(function(q) {
+            var idx = shuffle([0,1,2,3]);
+            return {
+              term: q.term, cat: q.cat, q: q.q,
+              opts: idx.map(function(i) { return q.opts[i]; }),
+              ans:  idx.indexOf(q.ans),
+              exp:  q.exp
+            };
           });
         }
 
-        document
-          .getElementById("buildMatrix")
-          .addEventListener("click", function () {
-            dmOptions = document
-              .getElementById("dmOptions")
-              .value.trim()
-              .split("\n")
-              .map(function (s) {
-                return s.trim();
-              })
-              .filter(Boolean);
-            var raw = document
-              .getElementById("dmCriteria")
-              .value.trim()
-              .split("\n")
-              .map(function (s) {
-                return s.trim();
-              })
-              .filter(Boolean);
-            if (dmOptions.length < 2 || raw.length < 1) {
-              alert("Enter at least 2 options and 1 criterion.");
-              return;
+        // ── Show question ────────────────────────────────────────────────
+        function showQuestion() {
+          answerLocked = false;
+          var q = vocabQueue[vocabIndex];
+          var total = vocabQueue.length;
+
+          // progress
+          document.getElementById("quizProgressFill").style.width = (vocabIndex / total * 100) + "%";
+          document.getElementById("quizQLabel").textContent = "Q " + (vocabIndex + 1) + " / " + total;
+          document.getElementById("quizScore").textContent   = "Score: " + vocabScore;
+          document.getElementById("quizStreak").textContent  = "\uD83D\uDD25 " + vocabStreak;
+          document.getElementById("quizCategoryChip").textContent = q.cat.charAt(0).toUpperCase() + q.cat.slice(1);
+          document.getElementById("quizQuestion").textContent = q.term ? "\u201C" + q.term + "\u201D \u2014 " + q.q : q.q;
+          document.getElementById("quizFeedback").textContent = "";
+          document.getElementById("quizFeedback").className  = "quiz-feedback";
+
+          // build option buttons
+          var optsEl = document.getElementById("quizOptions");
+          optsEl.innerHTML = "";
+          var letters = ["A", "B", "C", "D"];
+          q.opts.forEach(function(opt, i) {
+            var btn = document.createElement("button");
+            btn.className = "quiz-opt";
+            btn.innerHTML = "<span class='opt-letter'>" + letters[i] + ".</span>" + opt;
+            btn.addEventListener("click", function() { handleAnswer(i); });
+            optsEl.appendChild(btn);
+          });
+        }
+
+        // ── Handle answer ────────────────────────────────────────────────
+        function handleAnswer(chosen) {
+          if (answerLocked) return;
+          answerLocked = true;
+
+          var q = vocabQueue[vocabIndex];
+          var isCorrect = (chosen === q.ans);
+          var btns = document.querySelectorAll("#vocabTool .quiz-opt");
+
+          // disable all & highlight
+          btns.forEach(function(b, i) {
+            b.disabled = true;
+            if (i === q.ans)  b.classList.add("correct");
+            if (i === chosen && !isCorrect) b.classList.add("wrong");
+          });
+
+          if (isCorrect) {
+            vocabScore++;
+            vocabStreak++;
+            if (vocabStreak > vocabBestStreak) vocabBestStreak = vocabStreak;
+          } else {
+            vocabStreak = 0;
+          }
+
+          var fb = document.getElementById("quizFeedback");
+          fb.textContent = (isCorrect ? "\u2713 Correct! " : "\u2717 Incorrect. ") + "\uD83D\uDCA1 " + q.exp;
+          fb.className   = "quiz-feedback " + (isCorrect ? "correct" : "wrong");
+
+          vocabLog.push({ term: q.term, q: q.q, chosen: q.opts[chosen], correct: q.opts[q.ans], exp: q.exp, ok: isCorrect });
+
+          setTimeout(function() {
+            vocabIndex++;
+            if (vocabIndex < vocabQueue.length) {
+              showQuestion();
+            } else {
+              showResults();
             }
-            dmCriteria = raw.map(function (c) {
-              var parts = c.split(":");
-              return {
-                name: parts[0].trim(),
-                weight: parseFloat(parts[1]) || 1,
-              };
-            });
-            document.getElementById("dmSetup").style.display = "none";
-            buildTable();
-          });
+          }, isCorrect ? 1200 : 2000);
+        }
 
-        document
-          .getElementById("calcMatrix")
-          .addEventListener("click", function () {
-            var best = { name: "", score: -1 };
-            dmOptions.forEach(function (opt, oi) {
-              var total = 0;
-              dmCriteria.forEach(function (c, ci) {
-                var el = document.getElementById("dm_" + oi + "_" + ci);
-                if (el) total += (parseInt(el.value) || 0) * c.weight;
-              });
-              if (total > best.score) best = { name: opt, score: total };
-            });
-            document.getElementById("dmResult").textContent = best.name
-              ? "🏆 Recommended: " +
-                best.name +
-                " (score: " +
-                best.score.toFixed(1) +
-                ")"
-              : "";
-          });
+        // ── Results ──────────────────────────────────────────────────────
+        function showResults() {
+          document.getElementById("vocabRunning").style.display = "none";
+          document.getElementById("vocabResults").style.display = "";
 
-        document
-          .getElementById("resetMatrix")
-          .addEventListener("click", function () {
-            document.getElementById("dmMatrix").style.display = "none";
-            document.getElementById("dmSetup").style.display = "";
-            document.getElementById("dmOptions").value = "";
-            document.getElementById("dmCriteria").value = "";
+          var pct = Math.round(vocabScore / vocabQueue.length * 100);
+          var g   = getGrade(pct);
+          document.getElementById("vocabGrade").textContent  = g.grade;
+          document.getElementById("vocabGrade").style.color  = g.color;
+          document.getElementById("vocabFinalScore").textContent =
+            pct + "% \u2014 " + vocabScore + "/" + vocabQueue.length + " \u00b7 " + g.label;
+          document.getElementById("quizProgressFill").style.width = "100%";
+
+          var prev    = getBest();
+          var noteEl  = document.getElementById("vocabBestNote");
+          if (vocabScore > prev) {
+            setBest(vocabScore);
+            noteEl.textContent = "\uD83C\uDFC6 New personal best!";
+            noteEl.style.color = "#10b981";
+          } else if (prev > 0) {
+            noteEl.textContent = "Personal best: " + prev + "/" + vocabQueue.length;
+            noteEl.style.color = "";
+          } else {
+            noteEl.textContent = "Best streak: " + vocabBestStreak;
+          }
+
+          var reviewEl = document.getElementById("vocabReview");
+          reviewEl.innerHTML = "";
+          vocabLog.forEach(function(item) {
+            var div = document.createElement("div");
+            div.className = "vocab-review-item " + (item.ok ? "correct" : "wrong");
+            var termSpan = document.createElement("div");
+            termSpan.className = "rv-term";
+            termSpan.textContent = (item.ok ? "\u2713 " : "\u2717 ") + item.term;
+            var expSpan = document.createElement("div");
+            expSpan.className = "rv-exp";
+            expSpan.textContent = item.ok ? item.exp : "You chose: \u201C" + item.chosen + "\u201D. " + item.exp;
+            div.appendChild(termSpan);
+            div.appendChild(expSpan);
+            reviewEl.appendChild(div);
           });
+        }
+
+        // ── Controls ─────────────────────────────────────────────────────
+        document.getElementById("startVocab").addEventListener("click", function() {
+          vocabScore = 0; vocabStreak = 0; vocabBestStreak = 0; vocabIndex = 0; vocabLog = [];
+          buildQueue();
+          if (!vocabQueue.length) { alert("No questions match those settings. Try 'All' category."); return; }
+          document.getElementById("vocabSetup").style.display   = "none";
+          document.getElementById("vocabResults").style.display = "none";
+          document.getElementById("vocabRunning").style.display = "";
+          showQuestion();
+        });
+
+        document.getElementById("retryVocab").addEventListener("click", function() {
+          document.getElementById("vocabResults").style.display = "none";
+          document.getElementById("vocabSetup").style.display   = "";
+          refreshBestDisplay();
+        });
+
+        // Init
+        refreshBestDisplay();
       })();
     </script>
 
