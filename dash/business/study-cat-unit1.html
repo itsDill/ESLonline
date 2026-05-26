@@ -1,0 +1,1984 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat – Unit 1: Contacts</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 30px 20px;
+        background-attachment: fixed;
+      }
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+      }
+
+      /* ── Back link ─────────────────────────────────── */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #f8f9ff;
+        transition: all 0.2s;
+        border: 1px solid #e8ebf5;
+      }
+      .back-link:hover {
+        background: #667eea;
+        color: white;
+        transform: translateX(-3px);
+      }
+
+      /* ── Hero ──────────────────────────────────────── */
+      h1 {
+        color: #667eea;
+        font-size: 1.9em;
+        margin: 18px 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .subtitle {
+        color: #888;
+        font-size: 0.95em;
+        margin-bottom: 10px;
+      }
+      .unit-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50px;
+        padding: 6px 18px;
+        font-size: 0.85em;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+
+      /* ── Quick nav ─────────────────────────────────── */
+      .top-nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        padding: 14px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        border: 1px solid #e8ebf5;
+      }
+      .nav-btn {
+        background: white;
+        border: 2px solid #667eea;
+        color: #667eea;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.82em;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .nav-btn:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      /* ── Section wrapper ───────────────────────────── */
+      .study-section {
+        margin-bottom: 24px;
+        border-radius: 14px;
+        border: 1px solid #e8ebf5;
+        overflow: hidden;
+      }
+      .study-section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 14px 20px;
+        font-size: 1.02em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        justify-content: space-between;
+      }
+      .study-section-header .ti {
+        font-size: 0.85em;
+        transition: transform 0.3s;
+      }
+      .study-section-body {
+        padding: 22px;
+        background: #fafbff;
+      }
+      .study-section-body.collapsed {
+        display: none;
+      }
+
+      /* ── Grammar tables ────────────────────────────── */
+      .gtable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+        font-size: 0.9em;
+      }
+      .gtable th {
+        background: #667eea;
+        color: white;
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .gtable td {
+        border: 1px solid #e0e5f5;
+        padding: 8px 12px;
+      }
+      .gtable tr:nth-child(even) td {
+        background: #f4f6ff;
+      }
+
+      .note {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 0.9em;
+        color: #444;
+        line-height: 1.6;
+      }
+      .ex {
+        background: #f8f9ff;
+        border: 1px solid #dde0f5;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+        color: #333;
+        margin: 6px 0;
+        line-height: 1.7;
+      }
+      .tag {
+        display: inline-block;
+        background: #e8ebff;
+        color: #667eea;
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 0.78em;
+        font-weight: 700;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+      .warn-tag {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      /* ── Vocab grid ────────────────────────────────── */
+      .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .vocab-card {
+        background: white;
+        border: 2px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 12px 14px;
+        transition: all 0.25s;
+      }
+      .vocab-card:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(102, 126, 234, 0.15);
+      }
+      .vocab-word {
+        font-weight: 700;
+        color: #333;
+        font-size: 0.95em;
+      }
+      .vocab-meaning {
+        color: #666;
+        font-size: 0.82em;
+        margin-top: 4px;
+      }
+      .vocab-ex {
+        color: #667eea;
+        font-style: italic;
+        font-size: 0.8em;
+        margin-top: 4px;
+      }
+
+      /* ── Conversation cards ─────────────────────────── */
+      .conv-dialogue {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e0e5f5;
+        overflow: hidden;
+        margin-bottom: 18px;
+      }
+      .conv-header {
+        background: linear-gradient(135deg, #f0f4ff, #e8edff);
+        padding: 10px 16px;
+        font-size: 0.82em;
+        font-weight: 700;
+        color: #667eea;
+        border-bottom: 1px solid #e0e5f5;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .conv-body {
+        padding: 16px;
+      }
+      .line-a,
+      .line-b {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: flex-start;
+      }
+      .speaker-badge {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75em;
+        font-weight: 700;
+        color: white;
+      }
+      .line-a .speaker-badge {
+        background: #667eea;
+      }
+      .line-b .speaker-badge {
+        background: #764ba2;
+      }
+      .speech {
+        background: #f8f9ff;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.9em;
+        color: #333;
+        flex: 1;
+        line-height: 1.5;
+      }
+      .line-a .speech {
+        border-bottom-left-radius: 2px;
+      }
+      .line-b .speech {
+        border-bottom-right-radius: 2px;
+        background: #f3f0ff;
+      }
+      .conv-tip {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 0.83em;
+        color: #92400e;
+        margin-top: 10px;
+      }
+      .practice-prompt {
+        background: #f0fdf4;
+        border: 1px dashed #86efac;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 12px;
+        font-size: 0.88em;
+        color: #166534;
+      }
+      .practice-prompt strong {
+        color: #15803d;
+      }
+
+      /* ── Idioms ────────────────────────────────────── */
+      .idiom-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .idiom-card {
+        background: white;
+        border: 2px solid #e0e5f5;
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.25s;
+        border-left: 5px solid #667eea;
+      }
+      .idiom-card:hover {
+        box-shadow: 0 5px 18px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
+      }
+      .idiom-phrase {
+        font-size: 1em;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 6px;
+      }
+      .idiom-meaning {
+        font-size: 0.87em;
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 6px;
+      }
+      .idiom-example {
+        font-size: 0.83em;
+        color: #888;
+        font-style: italic;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 6px;
+        margin-top: 4px;
+      }
+
+      /* ── Phrasal verbs ─────────────────────────────── */
+      .pv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        margin-top: 8px;
+      }
+      .pv-table th {
+        background: #764ba2;
+        color: white;
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .pv-table td {
+        border: 1px solid #e0e5f5;
+        padding: 9px 12px;
+      }
+      .pv-table tr:nth-child(even) td {
+        background: #f9f6ff;
+      }
+      .pv-table .pv-phrase {
+        font-weight: 700;
+        color: #764ba2;
+      }
+      .pv-table .pv-ex {
+        color: #667eea;
+        font-style: italic;
+        font-size: 0.88em;
+      }
+
+      /* ── Locked test ───────────────────────────────── */
+      .lock-section {
+        border-radius: 16px;
+        border: 2px dashed #d1d5f5;
+        background: #fafbff;
+        padding: 32px;
+        text-align: center;
+        margin-top: 24px;
+      }
+      .lock-icon {
+        font-size: 3em;
+        margin-bottom: 12px;
+      }
+      .lock-title {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 6px;
+      }
+      .lock-subtitle {
+        color: #888;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+      }
+      .password-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      #testPassword {
+        padding: 10px 16px;
+        border: 2px solid #c7d2fe;
+        border-radius: 8px;
+        font-size: 0.95em;
+        outline: none;
+        transition: border-color 0.2s;
+        width: 200px;
+        text-align: center;
+        letter-spacing: 3px;
+      }
+      #testPassword:focus {
+        border-color: #667eea;
+      }
+      #testPassword.shake {
+        animation: shake 0.4s ease;
+        border-color: #ef4444;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-6px);
+        }
+        40%,
+        80% {
+          transform: translateX(6px);
+        }
+      }
+      .unlock-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-size: 0.95em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .unlock-btn:hover {
+        opacity: 0.85;
+      }
+      #lockError {
+        color: #ef4444;
+        font-size: 0.85em;
+        margin-top: 10px;
+        display: none;
+      }
+      #testContent {
+        display: none;
+      }
+
+      /* ── Quiz inside test ──────────────────────────── */
+      .quiz-question {
+        background: white;
+        border-radius: 12px;
+        border: 2px solid #e8ebf5;
+        padding: 18px 20px;
+        margin-bottom: 14px;
+        transition: all 0.25s;
+      }
+      .quiz-question.answered-correct {
+        border-color: #10b981;
+        background: #f0fdf4;
+      }
+      .quiz-question.answered-incorrect {
+        border-color: #ef4444;
+        background: #fef2f2;
+      }
+      .quiz-question-text {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95em;
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+      .q-tag {
+        font-size: 0.72em;
+        background: #e8ebff;
+        color: #667eea;
+        border-radius: 20px;
+        padding: 2px 8px;
+        font-weight: 700;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+      .quiz-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px;
+      }
+      .quiz-option {
+        background: #f8f9ff;
+        border: 2px solid #e0e5f5;
+        border-radius: 8px;
+        padding: 9px 13px;
+        cursor: pointer;
+        font-size: 0.88em;
+        color: #444;
+        transition: all 0.18s;
+        text-align: center;
+      }
+      .quiz-option:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+      .quiz-option.selected {
+        border-color: #667eea;
+        background: #f0f4ff;
+        font-weight: 600;
+        color: #667eea;
+      }
+      .quiz-option.correct {
+        border-color: #10b981;
+        background: #ecfdf5;
+        color: #065f46;
+        font-weight: 700;
+      }
+      .quiz-option.incorrect {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #991b1b;
+      }
+      .quiz-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .quiz-btn {
+        padding: 10px 22px;
+        border-radius: 8px;
+        border: none;
+        font-size: 0.9em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .quiz-btn-check {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .quiz-btn-reset {
+        background: #f3f4f6;
+        color: #555;
+        border: 2px solid #e0e0e0;
+      }
+      .quiz-btn:hover {
+        opacity: 0.85;
+      }
+      #quizResults {
+        display: none;
+        margin-top: 16px;
+        padding: 14px 18px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 700;
+        font-size: 1em;
+        text-align: center;
+      }
+
+      /* ── Utility ───────────────────────────────────── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 12px;
+      }
+      .mini-box {
+        background: white;
+        border: 1px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 14px;
+      }
+      .mini-box h4 {
+        color: #667eea;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+      }
+      .mini-box ul {
+        padding-left: 16px;
+        color: #555;
+        font-size: 0.87em;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 680px) {
+        .container {
+          padding: 18px;
+        }
+        h1 {
+          font-size: 1.4em;
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .vocab-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .idiom-grid {
+          grid-template-columns: 1fr;
+        }
+        .quiz-options {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media print {
+        body {
+          background: none;
+          padding: 0;
+        }
+        .container {
+          box-shadow: none;
+          border-radius: 0;
+          padding: 16px;
+        }
+        .back-link,
+        .top-nav,
+        .study-section-header .ti {
+          display: none;
+        }
+        .study-section-body.collapsed {
+          display: block !important;
+        }
+        .lock-section {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="student-cat.html" class="back-link">← Back to Cat's Dashboard</a>
+
+      <h1>🐱 Cat — Unit 1 Lesson Guide</h1>
+      <p class="subtitle">Oxford Business Result (2nd Ed) · Elementary</p>
+      <div class="unit-badge">📘 Unit 1: Contacts &amp; Introductions</div>
+
+      <!-- Quick nav -->
+      <div class="top-nav">
+        <a href="#grammar" class="nav-btn">📐 Grammar</a>
+        <a href="#vocabulary" class="nav-btn">💼 Vocabulary</a>
+        <a href="#conversation" class="nav-btn">💬 Conversation</a>
+        <a href="#idioms" class="nav-btn">🌟 Idioms</a>
+        <a href="#phrasals" class="nav-btn">🔗 Phrasal Verbs</a>
+        <a href="#unit-test" class="nav-btn">🔒 Unit Test</a>
+      </div>
+
+      <!-- ── OVERVIEW ────────────────────────────────── -->
+      <div class="study-section">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📋 Unit 1 Overview — What You'll Learn</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="two-col">
+            <div class="mini-box">
+              <h4>🎯 Learning Goals</h4>
+              <ul>
+                <li>Introduce yourself in a business context</li>
+                <li>Ask and answer basic questions about jobs</li>
+                <li>Say where you are from (nationalities)</li>
+                <li>Exchange contact details politely</li>
+                <li>Use present simple: <em>be</em> &amp; <em>have</em></li>
+              </ul>
+            </div>
+            <div class="mini-box">
+              <h4>📚 What's Covered</h4>
+              <ul>
+                <li>Grammar: present simple — <em>be</em>, <em>have</em></li>
+                <li>Vocabulary: jobs, companies, countries</li>
+                <li>Phrases: greetings &amp; introductions</li>
+                <li>Idioms: 4 networking idioms</li>
+                <li>Phrasal verbs: 5 communication verbs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note" style="margin-top: 14px">
+            💡 <strong>For the teacher:</strong> Unit 1 covers ~3 hours. Spend
+            Session 1 on grammar + vocabulary, Session 2 on conversation
+            practice + idioms/phrasal verbs, then unlock the unit test at the
+            end of Session 2.
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GRAMMAR ────────────────────────────────── -->
+      <div class="study-section" id="grammar">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span
+            >📐 Grammar — Present Simple: <em>be</em> &amp; <em>have</em></span
+          >
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em">
+            Part 1: The verb <em>be</em>
+          </h3>
+          <table class="gtable">
+            <tr>
+              <th>Pronoun</th>
+              <th>Positive</th>
+              <th>Negative</th>
+              <th>Short form</th>
+            </tr>
+            <tr>
+              <td>I</td>
+              <td>I am a manager.</td>
+              <td>I am not a teacher.</td>
+              <td>I'm / I'm not</td>
+            </tr>
+            <tr>
+              <td>You</td>
+              <td>You are Thai.</td>
+              <td>You are not British.</td>
+              <td>You're / You're not</td>
+            </tr>
+            <tr>
+              <td>He / She / It</td>
+              <td>She is the director.</td>
+              <td>He is not here.</td>
+              <td>She's / He's not</td>
+            </tr>
+            <tr>
+              <td>We / They</td>
+              <td>They are engineers.</td>
+              <td>We are not free.</td>
+              <td>They're / We're not</td>
+            </tr>
+          </table>
+
+          <div class="note">
+            <strong>Questions with <em>be</em>:</strong> Move the verb before
+            the subject.<br />
+            <em>Are you from Thailand?</em> → Yes, I am. / No, I'm not.<br />
+            <em>Is she the manager?</em> → Yes, she is. / No, she isn't.
+          </div>
+
+          <div class="ex">
+            What is your name? → My name is Cat.<br />
+            Where are you from? → I'm from Thailand.<br />
+            Are you a teacher? → Yes, I am. / No, I'm not — I'm an accountant.
+          </div>
+
+          <h3 style="color: #667eea; margin: 18px 0 12px; font-size: 1em">
+            Part 2: The verb <em>have</em>
+          </h3>
+          <table class="gtable">
+            <tr>
+              <th>Pronoun</th>
+              <th>Positive</th>
+              <th>Negative</th>
+            </tr>
+            <tr>
+              <td>I / You / We / They</td>
+              <td>I have a business card.</td>
+              <td>I don't have your number.</td>
+            </tr>
+            <tr>
+              <td>He / She / It</td>
+              <td>She has a meeting at 3pm.</td>
+              <td>He doesn't have an office.</td>
+            </tr>
+          </table>
+
+          <div class="note">
+            <strong>Questions with <em>have</em>:</strong> Use
+            <em>do / does</em>.<br />
+            <em>Do you have a business card?</em> → Yes, I do. / No, I don't.<br />
+            <em>Does she have your number?</em> → Yes, she does. / No, she
+            doesn't.
+          </div>
+
+          <div class="ex">
+            Do you have an email address? → Yes, I do. It's cat@company.com<br />
+            Does he have the report? → No, he doesn't. I'll send it later.
+          </div>
+
+          <h3 style="color: #667eea; margin: 18px 0 12px; font-size: 1em">
+            Part 3: Wh- Questions
+          </h3>
+          <table class="gtable">
+            <tr>
+              <th>Question word</th>
+              <th>Example question</th>
+              <th>Short answer pattern</th>
+            </tr>
+            <tr>
+              <td><strong>What</strong></td>
+              <td>What do you do?</td>
+              <td>I'm a manager at ABC Co.</td>
+            </tr>
+            <tr>
+              <td><strong>Where</strong></td>
+              <td>Where are you from?</td>
+              <td>I'm from Bangkok.</td>
+            </tr>
+            <tr>
+              <td><strong>Who</strong></td>
+              <td>Who is your manager?</td>
+              <td>Her name is Lisa.</td>
+            </tr>
+            <tr>
+              <td><strong>How</strong></td>
+              <td>How are you?</td>
+              <td>I'm fine, thank you.</td>
+            </tr>
+          </table>
+
+          <div class="note" style="margin-top: 14px">
+            ⚠️ <strong>Common mistake:</strong> Don't say
+            <em>"What are you do?"</em> — use <em>do</em>, not <em>are</em> for
+            jobs.<br />
+            ✅ <em>"What do you do?"</em> (correct) &nbsp;|&nbsp; ❌
+            <em>"What are you do?"</em> (wrong)
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VOCABULARY ─────────────────────────────── -->
+      <div class="study-section" id="vocabulary">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>💼 Vocabulary — Jobs, Companies &amp; Countries</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <h3 style="color: #667eea; margin-bottom: 12px; font-size: 1em">
+            Jobs &amp; Titles
+          </h3>
+          <div class="vocab-grid">
+            <div class="vocab-card">
+              <div class="vocab-word">manager</div>
+              <div class="vocab-meaning">someone who leads a team</div>
+              <div class="vocab-ex">"I'm a manager at a bank."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">director</div>
+              <div class="vocab-meaning">
+                senior leader of a company or department
+              </div>
+              <div class="vocab-ex">"She's the sales director."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">engineer</div>
+              <div class="vocab-meaning">designs or builds things</div>
+              <div class="vocab-ex">"He's a software engineer."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">accountant</div>
+              <div class="vocab-meaning">manages money and finances</div>
+              <div class="vocab-ex">"I'm an accountant."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">consultant</div>
+              <div class="vocab-meaning">gives expert advice</div>
+              <div class="vocab-ex">"She's an IT consultant."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">assistant</div>
+              <div class="vocab-meaning">helps someone with their work</div>
+              <div class="vocab-ex">"He's the director's assistant."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">receptionist</div>
+              <div class="vocab-meaning">greets visitors, answers phones</div>
+              <div class="vocab-ex">"She works as a receptionist."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">HR manager</div>
+              <div class="vocab-meaning">manages staff and recruitment</div>
+              <div class="vocab-ex">"He's in HR."</div>
+            </div>
+          </div>
+
+          <h3 style="color: #667eea; margin: 18px 0 12px; font-size: 1em">
+            Company &amp; Department Words
+          </h3>
+          <div class="vocab-grid">
+            <div class="vocab-card">
+              <div class="vocab-word">headquarters</div>
+              <div class="vocab-meaning">the main office of a company</div>
+              <div class="vocab-ex">"Our HQ is in London."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">branch</div>
+              <div class="vocab-meaning">a local office away from HQ</div>
+              <div class="vocab-ex">"We have a branch in Bangkok."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">department</div>
+              <div class="vocab-meaning">
+                a division of a company (e.g. Sales, IT)
+              </div>
+              <div class="vocab-ex">"I work in the marketing department."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">colleague</div>
+              <div class="vocab-meaning">someone you work with</div>
+              <div class="vocab-ex">"This is my colleague, Tom."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">client</div>
+              <div class="vocab-meaning">a customer (usually business)</div>
+              <div class="vocab-ex">"She's meeting a new client."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">supplier</div>
+              <div class="vocab-meaning">
+                a company that provides goods/services
+              </div>
+              <div class="vocab-ex">"We have a new supplier."</div>
+            </div>
+          </div>
+
+          <h3 style="color: #667eea; margin: 18px 0 12px; font-size: 1em">
+            Nationalities &amp; Countries
+          </h3>
+          <table class="gtable">
+            <tr>
+              <th>Country</th>
+              <th>Nationality</th>
+              <th>Example</th>
+            </tr>
+            <tr>
+              <td>Thailand</td>
+              <td>Thai</td>
+              <td>She's Thai. / She's from Thailand.</td>
+            </tr>
+            <tr>
+              <td>Japan</td>
+              <td>Japanese</td>
+              <td>He's Japanese.</td>
+            </tr>
+            <tr>
+              <td>UK / Britain</td>
+              <td>British</td>
+              <td>She's British. / She's from the UK.</td>
+            </tr>
+            <tr>
+              <td>USA / America</td>
+              <td>American</td>
+              <td>He's American.</td>
+            </tr>
+            <tr>
+              <td>France</td>
+              <td>French</td>
+              <td>She's French.</td>
+            </tr>
+            <tr>
+              <td>Germany</td>
+              <td>German</td>
+              <td>He's German.</td>
+            </tr>
+            <tr>
+              <td>China</td>
+              <td>Chinese</td>
+              <td>She's Chinese.</td>
+            </tr>
+            <tr>
+              <td>Korea</td>
+              <td>Korean</td>
+              <td>He's Korean.</td>
+            </tr>
+          </table>
+
+          <div class="note" style="margin-top: 12px">
+            <strong>Key pattern:</strong> Use <em>be</em> + nationality as an
+            adjective: <em>"I am Thai."</em><br />
+            Or use <em>from</em> + country: <em>"I'm from Thailand."</em> — Both
+            are correct and common!
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONVERSATION ──────────────────────────── -->
+      <div class="study-section" id="conversation">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>💬 Conversation Practice — 3 Scenarios</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <!-- Dialogue 1 -->
+          <div class="conv-dialogue">
+            <div class="conv-header">
+              🏢 Scenario 1 — Meeting at a conference
+            </div>
+            <div class="conv-body">
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  Hello, I'm David Chen. Nice to meet you.
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Nice to meet you too. I'm Cat. I'm from Bangkok.
+                </div>
+              </div>
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">Great! What do you do, Cat?</div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  I'm a marketing manager at TechLine. And you?
+                </div>
+              </div>
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  I'm a sales director at Global Connect. Here's my business
+                  card.
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Thank you! Here's mine. Let's stay in touch.
+                </div>
+              </div>
+              <div class="conv-tip">
+                💡 <strong>Useful phrases:</strong> "Nice to meet you." ·
+                "Here's my card." · "Let's stay in touch."
+              </div>
+              <div class="practice-prompt">
+                <strong>🗣️ Your turn:</strong> Practise this dialogue with your
+                teacher. Then replace the names and jobs with your own
+                information!
+              </div>
+            </div>
+          </div>
+
+          <!-- Dialogue 2 -->
+          <div class="conv-dialogue">
+            <div class="conv-header">
+              📞 Scenario 2 — Introducing a colleague
+            </div>
+            <div class="conv-body">
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  Cat, this is James. He's our new IT consultant.
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Hi James, I'm Cat. I'm in the marketing department.
+                </div>
+              </div>
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  Nice to meet you, Cat. Are you from Bangkok?
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Yes, I am. And you? Where are you from?
+                </div>
+              </div>
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  I'm British. I'm from London originally, but I live here now.
+                </div>
+              </div>
+              <div class="conv-tip">
+                💡 <strong>Key structure:</strong> "This is [name]. He's/She's
+                [job]." — great for introductions!
+              </div>
+              <div class="practice-prompt">
+                <strong>🗣️ Your turn:</strong> Introduce your teacher to an
+                imaginary colleague. Include: name, job, department, country.
+              </div>
+            </div>
+          </div>
+
+          <!-- Dialogue 3 -->
+          <div class="conv-dialogue">
+            <div class="conv-header">
+              📋 Scenario 3 — Exchanging contact details
+            </div>
+            <div class="conv-body">
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  Do you have an email address I can reach you on?
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Yes, it's cat.smith@techline.com. Do you have a business card?
+                </div>
+              </div>
+              <div class="line-a">
+                <div class="speaker-badge">A</div>
+                <div class="speech">
+                  I don't have one today, sorry! But here's my mobile number.
+                </div>
+              </div>
+              <div class="line-b">
+                <div class="speaker-badge">B</div>
+                <div class="speech">
+                  Great. I'll call you next week to arrange a meeting.
+                </div>
+              </div>
+              <div class="conv-tip">
+                💡 <strong>Formal vs informal:</strong> "Can I have your contact
+                details?" (formal) · "What's your number?" (informal)
+              </div>
+              <div class="practice-prompt">
+                <strong>🗣️ Your turn:</strong> Ask your teacher for their
+                "business" contact details. Use the phrases:
+                <em>Do you have...? Here's my... I'll call you...</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── IDIOMS ─────────────────────────────────── -->
+      <div class="study-section" id="idioms">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🌟 Idioms — Business Networking Language</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <p style="color: #666; font-size: 0.9em; margin-bottom: 16px">
+            These idioms are commonly used in business introductions and
+            networking situations.
+          </p>
+
+          <div class="idiom-grid">
+            <div class="idiom-card">
+              <div class="idiom-phrase">🧊 break the ice</div>
+              <div class="idiom-meaning">
+                To start a conversation in an awkward or new social situation.
+              </div>
+              <div class="idiom-example">
+                "He told a joke to break the ice at the conference."
+              </div>
+            </div>
+            <div class="idiom-card">
+              <div class="idiom-phrase">📞 touch base</div>
+              <div class="idiom-meaning">
+                To make brief contact with someone; to check in.
+              </div>
+              <div class="idiom-example">
+                "Let's touch base next week about the project."
+              </div>
+            </div>
+            <div class="idiom-card">
+              <div class="idiom-phrase">📄 on the same page</div>
+              <div class="idiom-meaning">
+                To have the same understanding or agreement about something.
+              </div>
+              <div class="idiom-example">
+                "Before we start, let's make sure we're on the same page."
+              </div>
+            </div>
+            <div class="idiom-card">
+              <div class="idiom-phrase">🤝 put a face to a name</div>
+              <div class="idiom-meaning">
+                To finally meet someone you've only communicated with before.
+              </div>
+              <div class="idiom-example">
+                "It's so nice to put a face to a name — we've emailed a lot!"
+              </div>
+            </div>
+            <div class="idiom-card">
+              <div class="idiom-phrase">🏃 hit the ground running</div>
+              <div class="idiom-meaning">
+                To start something quickly and energetically from the beginning.
+              </div>
+              <div class="idiom-example">
+                "She's a new employee but she really hit the ground running."
+              </div>
+            </div>
+            <div class="idiom-card">
+              <div class="idiom-phrase">
+                🃏 keep your cards close to your chest
+              </div>
+              <div class="idiom-meaning">
+                To not share too much information about your plans.
+              </div>
+              <div class="idiom-example">
+                "In negotiations, it's smart to keep your cards close to your
+                chest."
+              </div>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top: 16px">
+            🗣️ <strong>Speaking practice:</strong> Try using one idiom in a
+            sentence about your own job or company. For example:
+            <em
+              >"In my job, I often need to break the ice with new clients."</em
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PHRASAL VERBS ──────────────────────────── -->
+      <div class="study-section" id="phrasals">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🔗 Phrasal Verbs — Phone &amp; Communication</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <p style="color: #666; font-size: 0.9em; margin-bottom: 14px">
+            These phrasal verbs are essential for business communication — phone
+            calls, emails, and meetings.
+          </p>
+
+          <table class="pv-table">
+            <tr>
+              <th style="width: 18%">Phrasal Verb</th>
+              <th style="width: 32%">Meaning</th>
+              <th style="width: 25%">Example</th>
+              <th style="width: 25%">Common context</th>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">call back</span></td>
+              <td>Return a phone call to someone</td>
+              <td>
+                <span class="pv-ex">"I'll call you back in 10 minutes."</span>
+              </td>
+              <td>Phone calls, meetings</td>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">get through</span></td>
+              <td>Successfully reach someone by phone</td>
+              <td>
+                <span class="pv-ex">"I can't get through to the manager."</span>
+              </td>
+              <td>Phone calls</td>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">pass on</span></td>
+              <td>Give a message or information to someone else</td>
+              <td>
+                <span class="pv-ex">"Can you pass on a message to Lisa?"</span>
+              </td>
+              <td>Offices, phone messages</td>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">fill in</span></td>
+              <td>Complete a form with required information</td>
+              <td>
+                <span class="pv-ex"
+                  >"Please fill in this registration form."</span
+                >
+              </td>
+              <td>Admin, registration</td>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">set up</span></td>
+              <td>Arrange or organise something (meeting, account)</td>
+              <td>
+                <span class="pv-ex"
+                  >"Can we set up a meeting for Thursday?"</span
+                >
+              </td>
+              <td>Meetings, appointments</td>
+            </tr>
+            <tr>
+              <td><span class="pv-phrase">look up</span></td>
+              <td>Find information (in a book, online)</td>
+              <td>
+                <span class="pv-ex"
+                  >"I'll look up her email address for you."</span
+                >
+              </td>
+              <td>Research, contacts</td>
+            </tr>
+          </table>
+
+          <div class="note" style="margin-top: 14px">
+            ⚠️ <strong>Separable phrasal verbs:</strong> Some can be split:
+            <em>"Call me back"</em> or <em>"Call back me"</em>? ✅ Both OK with
+            pronouns: <em>"Call me back."</em> ✅ With nouns:
+            <em>"Call back David"</em> or <em>"Call David back."</em>
+          </div>
+
+          <div class="ex" style="margin-top: 10px">
+            Fill in the blanks: 1. I called but I couldn't _____ through. (get)
+            2. Can you _____ a message on to Sarah? (pass) 3. I'll _____ you
+            back this afternoon. (call) 4. Please _____ in this form at
+            reception. (fill) 5. Let's _____ up a meeting for next week. (set)
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LOCKED TEST ─────────────────────────────── -->
+      <div class="study-section" id="unit-test">
+        <div
+          class="study-section-header"
+          style="background: linear-gradient(135deg, #374151, #1f2937)"
+        >
+          <span>🔒 Unit 1 Test — Enter teacher code to unlock</span>
+        </div>
+        <div class="study-section-body" style="background: #f9fafb">
+          <div id="lockGate" class="lock-section">
+            <div class="lock-icon">🔐</div>
+            <div class="lock-title">Unit 1 Test</div>
+            <div class="lock-subtitle">
+              This test is locked. Ask your teacher for the unlock code when
+              you're ready.
+            </div>
+            <div class="password-row">
+              <input
+                type="password"
+                id="testPassword"
+                placeholder="Enter code"
+                autocomplete="off"
+                onkeydown="if (event.key === 'Enter') unlockTest();"
+              />
+              <button class="unlock-btn" onclick="unlockTest()">
+                🔓 Unlock
+              </button>
+            </div>
+            <div id="lockError">
+              Incorrect code — try again or ask your teacher.
+            </div>
+          </div>
+
+          <div id="testContent">
+            <p
+              style="
+                color: #555;
+                font-size: 0.92em;
+                margin-bottom: 20px;
+                background: #f0f4ff;
+                padding: 14px 18px;
+                border-radius: 8px;
+                border-left: 4px solid #667eea;
+              "
+            >
+              <strong>Unit 1 Test:</strong> 12 questions covering grammar,
+              vocabulary, and phrases from this unit. Select your answer and
+              press <strong>Check Answers</strong> when finished.
+            </p>
+
+            <div id="quizContainer">
+              <!-- Q1 -->
+              <div class="quiz-question" data-correct="b">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Grammar</span> Complete the sentence:
+                  "_____ you from Japan?"
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    Do
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    Are
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    Is
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    Have
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q2 -->
+              <div class="quiz-question" data-correct="c">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Grammar</span> "What _____ you do?"
+                  (asking about someone's job)
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    are
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    is
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    do
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    have
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q3 -->
+              <div class="quiz-question" data-correct="a">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Grammar</span> Choose the correct
+                  sentence.
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    She is a director.
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    She be a director.
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    She are a director.
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    She do a director.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q4 -->
+              <div class="quiz-question" data-correct="d">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Grammar</span> "He _____ have a business
+                  card today." (negative)
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    isn't
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    not
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    aren't
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    doesn't
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q5 -->
+              <div class="quiz-question" data-correct="b">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Vocabulary</span> A person who gives
+                  expert advice to a company is called a _____ .
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    receptionist
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    consultant
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    accountant
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    assistant
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q6 -->
+              <div class="quiz-question" data-correct="c">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Vocabulary</span> Someone from the United
+                  Kingdom is called _____ .
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    American
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    English
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    British
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    European
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q7 -->
+              <div class="quiz-question" data-correct="a">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Vocabulary</span> The main office of a
+                  company is called the _____ .
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    headquarters
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    branch
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    department
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    supplier
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q8 -->
+              <div class="quiz-question" data-correct="d">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Conversation</span> You meet someone new
+                  at a conference. What's the most natural thing to say?
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    What is your problem?
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    Who do you work?
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    Do you have work?
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    Nice to meet you. What do you do?
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q9 -->
+              <div class="quiz-question" data-correct="b">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Phrasal Verb</span> "I tried to call him
+                  but I couldn't _____ through." What's the missing word?
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    pass
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    get
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    call
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    put
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q10 -->
+              <div class="quiz-question" data-correct="c">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Phrasal Verb</span> "Can you _____ a
+                  message on to the manager?" What's the missing word?
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    set
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    look
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    pass
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    fill
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q11 -->
+              <div class="quiz-question" data-correct="a">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Idiom</span> "Let's _____ the ice with a
+                  few introductions before the meeting." Which word completes
+                  this idiom?
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    break
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    make
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    touch
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    start
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q12 -->
+              <div class="quiz-question" data-correct="d">
+                <div class="quiz-question-text">
+                  <span class="q-tag">Idiom</span> "Nice to finally meet you —
+                  it's great to put a _____ to a name!" Which word is missing?
+                </div>
+                <div class="quiz-options">
+                  <div
+                    class="quiz-option"
+                    data-value="a"
+                    onclick="selectOption(this)"
+                  >
+                    body
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="b"
+                    onclick="selectOption(this)"
+                  >
+                    voice
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="c"
+                    onclick="selectOption(this)"
+                  >
+                    hand
+                  </div>
+                  <div
+                    class="quiz-option"
+                    data-value="d"
+                    onclick="selectOption(this)"
+                  >
+                    face
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /quizContainer -->
+
+            <div class="quiz-actions">
+              <button class="quiz-btn quiz-btn-check" onclick="checkQuiz()">
+                ✅ Check Answers
+              </button>
+              <button class="quiz-btn quiz-btn-reset" onclick="resetQuiz()">
+                🔄 Reset
+              </button>
+              <button
+                class="quiz-btn"
+                style="
+                  background: #f0fdf4;
+                  color: #166534;
+                  border: 2px solid #86efac;
+                "
+                onclick="lockTestAgain()"
+              >
+                🔒 Lock Test
+              </button>
+            </div>
+            <div id="quizResults"></div>
+          </div>
+          <!-- /testContent -->
+        </div>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <script>
+      // ── Section toggle ─────────────────────────────────────────────
+      function toggleSection(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".ti");
+        const isCollapsed = body.classList.toggle("collapsed");
+        if (icon) icon.style.transform = isCollapsed ? "rotate(-90deg)" : "";
+      }
+
+      // ── Lock / unlock test ─────────────────────────────────────────
+      // The unlock code is: unit1
+      const UNLOCK_CODE = "unit1";
+
+      function unlockTest() {
+        const input = document.getElementById("testPassword");
+        const err = document.getElementById("lockError");
+        if (input.value.trim().toLowerCase() === UNLOCK_CODE) {
+          document.getElementById("lockGate").style.display = "none";
+          document.getElementById("testContent").style.display = "block";
+          err.style.display = "none";
+        } else {
+          input.classList.remove("shake");
+          void input.offsetWidth; // reflow to restart animation
+          input.classList.add("shake");
+          err.style.display = "block";
+          input.value = "";
+          input.focus();
+        }
+      }
+
+      function lockTestAgain() {
+        document.getElementById("lockGate").style.display = "block";
+        document.getElementById("testContent").style.display = "none";
+        document.getElementById("testPassword").value = "";
+        document.getElementById("lockError").style.display = "none";
+        resetQuiz();
+      }
+
+      // ── Quiz logic ─────────────────────────────────────────────────
+      function selectOption(el) {
+        const q = el.closest(".quiz-question");
+        if (
+          q.classList.contains("answered-correct") ||
+          q.classList.contains("answered-incorrect")
+        )
+          return;
+        q.querySelectorAll(".quiz-option").forEach((o) =>
+          o.classList.remove("selected"),
+        );
+        el.classList.add("selected");
+      }
+
+      function checkQuiz() {
+        const questions = document.querySelectorAll(
+          "#quizContainer .quiz-question",
+        );
+        let correct = 0;
+        questions.forEach((q) => {
+          const ans = q.dataset.correct;
+          const sel = q.querySelector(".quiz-option.selected");
+          q.querySelectorAll(".quiz-option").forEach((o) =>
+            o.classList.remove("correct", "incorrect"),
+          );
+          q.classList.remove("answered-correct", "answered-incorrect");
+          if (sel) {
+            if (sel.dataset.value === ans) {
+              sel.classList.add("correct");
+              q.classList.add("answered-correct");
+              correct++;
+            } else {
+              sel.classList.add("incorrect");
+              q.classList.add("answered-incorrect");
+              q.querySelectorAll(".quiz-option").forEach((o) => {
+                if (o.dataset.value === ans) o.classList.add("correct");
+              });
+            }
+          } else {
+            q.classList.add("answered-incorrect");
+            q.querySelectorAll(".quiz-option").forEach((o) => {
+              if (o.dataset.value === ans) o.classList.add("correct");
+            });
+          }
+        });
+        const total = questions.length;
+        const pct = Math.round((correct / total) * 100);
+        let msg, bg;
+        if (pct >= 90) {
+          msg = `🎉 Excellent! ${correct}/${total} (${pct}%) — Outstanding work on Unit 1!`;
+          bg = "linear-gradient(135deg,#10b981,#059669)";
+        } else if (pct >= 75) {
+          msg = `👍 Great! ${correct}/${total} (${pct}%) — Almost there, review the ones you missed.`;
+          bg = "linear-gradient(135deg,#3b82f6,#2563eb)";
+        } else if (pct >= 55) {
+          msg = `📚 Good effort! ${correct}/${total} (${pct}%) — Review the grammar section and try again.`;
+          bg = "linear-gradient(135deg,#f59e0b,#d97706)";
+        } else {
+          msg = `💪 Keep going! ${correct}/${total} (${pct}%) — Go back through the unit and practise more.`;
+          bg = "linear-gradient(135deg,#ef4444,#dc2626)";
+        }
+        const res = document.getElementById("quizResults");
+        res.textContent = msg;
+        res.style.background = bg;
+        res.style.display = "block";
+        res.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function resetQuiz() {
+        document
+          .querySelectorAll("#quizContainer .quiz-question")
+          .forEach((q) => {
+            q.classList.remove("answered-correct", "answered-incorrect");
+            q.querySelectorAll(".quiz-option").forEach((o) =>
+              o.classList.remove("selected", "correct", "incorrect"),
+            );
+          });
+        const res = document.getElementById("quizResults");
+        res.style.display = "none";
+        res.textContent = "";
+      }
+    </script>
+  </body>
+</html>

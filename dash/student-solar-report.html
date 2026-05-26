@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solar – Student Progress Report</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f3f4f6;
+        color: #1f2937;
+        min-height: 100vh;
+        padding: 30px 20px 60px;
+      }
+
+      /* ── Screen toolbar ── */
+      .toolbar {
+        max-width: 820px;
+        margin: 0 auto 18px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .toolbar a {
+        color: #6b7280;
+        font-size: 0.88em;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .toolbar a:hover {
+        color: #374151;
+      }
+      .toolbar-right {
+        margin-left: auto;
+        display: flex;
+        gap: 10px;
+      }
+      .btn-print,
+      .btn-edit {
+        border: none;
+        border-radius: 8px;
+        padding: 9px 20px;
+        font-size: 0.88em;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .btn-print {
+        background: #22c55e;
+        color: white;
+        box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+      }
+      .btn-print:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 14px rgba(34, 197, 94, 0.4);
+      }
+      .btn-edit {
+        background: white;
+        color: #374151;
+        border: 1.5px solid #d1d5db;
+      }
+      .btn-edit:hover {
+        background: #f9fafb;
+      }
+
+      /* ── Report paper ── */
+      .report {
+        max-width: 820px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      /* ── Header band ── */
+      .report-header {
+        background: linear-gradient(
+          135deg,
+          #22c55e 0%,
+          #10b981 45%,
+          #06b6d4 100%
+        );
+        padding: 36px 44px 30px;
+        color: white;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .rh-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .rh-avatar {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.6em;
+        flex-shrink: 0;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+      }
+      .rh-name {
+        font-size: 2em;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .rh-sub {
+        opacity: 0.88;
+        font-size: 0.95em;
+        margin-top: 4px;
+      }
+      .rh-meta {
+        text-align: right;
+      }
+      .rh-meta .rh-label {
+        font-size: 0.75em;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .rh-meta .rh-val {
+        font-size: 1em;
+        font-weight: 700;
+      }
+      .rh-meta + .rh-meta {
+        margin-top: 10px;
+      }
+      .rh-metas {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      /* ── Overall rating banner ── */
+      .overall-band {
+        background: #f0fdf4;
+        border-bottom: 2px solid #dcfce7;
+        padding: 22px 44px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
+      .overall-label {
+        font-size: 0.8em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #166534;
+        min-width: 110px;
+      }
+      .star-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .star {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15em;
+        cursor: pointer;
+        transition: transform 0.15s;
+        border: 2px solid transparent;
+      }
+      .star:hover {
+        transform: scale(1.2);
+      }
+      .star.filled {
+        background: #fde047;
+        border-color: #ca8a04;
+      }
+      .star.empty {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        filter: grayscale(1);
+        opacity: 0.5;
+      }
+      .star-caption {
+        font-size: 0.82em;
+        font-weight: 700;
+        color: #15803d;
+        margin-left: 8px;
+        min-width: 80px;
+      }
+      .overall-divider {
+        width: 1px;
+        background: #bbf7d0;
+        height: 36px;
+      }
+
+      /* ── Section layout ── */
+      .report-body {
+        padding: 36px 44px;
+      }
+      .section {
+        margin-bottom: 34px;
+      }
+      .section-title {
+        font-size: 1.05em;
+        font-weight: 800;
+        color: #166534;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #dcfce7;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* ── Skill rows ── */
+      .skill-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .skill-table th {
+        font-size: 0.72em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #6b7280;
+        padding: 0 0 8px;
+        text-align: left;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .skill-table th.center {
+        text-align: center;
+      }
+      .skill-table td {
+        padding: 11px 0;
+        border-bottom: 1px solid #f9fafb;
+        vertical-align: middle;
+      }
+      .skill-table tr:last-child td {
+        border-bottom: none;
+      }
+      .skill-name {
+        font-weight: 600;
+        font-size: 0.9em;
+        color: #1f2937;
+      }
+      .skill-sub {
+        font-size: 0.78em;
+        color: #6b7280;
+        margin-top: 2px;
+      }
+      .skill-dots {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+        padding: 0 8px;
+      }
+      .dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.15s;
+        flex-shrink: 0;
+      }
+      .dot:hover {
+        transform: scale(1.25);
+      }
+      .dot.d1.on {
+        background: #ef4444;
+        border-color: #dc2626;
+      } /* Needs work */
+      .dot.d2.on {
+        background: #f59e0b;
+        border-color: #d97706;
+      } /* Developing */
+      .dot.d3.on {
+        background: #3b82f6;
+        border-color: #2563eb;
+      } /* Good */
+      .dot.d4.on {
+        background: #22c55e;
+        border-color: #16a34a;
+      } /* Excellent */
+      .dot.off {
+        background: #f3f4f6;
+        border-color: #e5e7eb;
+      }
+      .level-label {
+        font-size: 0.72em;
+        font-weight: 700;
+        text-align: center;
+        width: 70px;
+        padding: 3px 0;
+        border-radius: 20px;
+      }
+      .level-label.l1 {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .level-label.l2 {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .level-label.l3 {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+      .level-label.l4 {
+        background: #dcfce7;
+        color: #15803d;
+      }
+
+      /* ── Legend ── */
+      .legend {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+        padding: 10px 14px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78em;
+        color: #374151;
+        font-weight: 600;
+      }
+      .legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* ── Text blocks (comments, strengths) ── */
+      .text-block {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 16px 18px;
+        font-size: 0.9em;
+        line-height: 1.75;
+        color: #374151;
+        min-height: 80px;
+        background: white;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .text-block:focus {
+        border-color: #22c55e;
+      }
+      .text-block[contenteditable="false"] {
+        background: #fafafa;
+        cursor: default;
+      }
+      .text-block ul,
+      .text-block ol {
+        padding-left: 20px;
+      }
+      .text-block li {
+        margin-bottom: 4px;
+      }
+
+      /* ── Two-column note areas ── */
+      .two-note {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .note-label {
+        font-size: 0.78em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+      .note-label.green {
+        color: #15803d;
+      }
+      .note-label.orange {
+        color: #92400e;
+      }
+
+      /* ── Home practice ── */
+      .home-practice {
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        border: 1.5px solid #fde68a;
+        border-radius: 10px;
+        padding: 18px 20px;
+      }
+      .hp-title {
+        font-size: 0.85em;
+        font-weight: 800;
+        color: #92400e;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      .hp-list {
+        list-style: none;
+        padding: 0;
+      }
+      .hp-list li {
+        padding: 7px 0;
+        border-bottom: 1px dashed #fde68a;
+        font-size: 0.88em;
+        color: #78350f;
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+      }
+      .hp-list li:last-child {
+        border-bottom: none;
+      }
+      .hp-list li::before {
+        content: "📌";
+        flex-shrink: 0;
+      }
+
+      /* ── Signature row ── */
+      .sig-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-top: 8px;
+      }
+      .sig-box {
+        border-top: 1.5px solid #d1d5db;
+        padding-top: 8px;
+      }
+      .sig-label {
+        font-size: 0.75em;
+        color: #9ca3af;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* ── Footer ── */
+      .report-footer {
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        padding: 16px 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.78em;
+        color: #9ca3af;
+        font-weight: 500;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* ── Print styles ── */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+        .toolbar {
+          display: none;
+        }
+        .report {
+          border-radius: 0;
+          box-shadow: none;
+          max-width: 100%;
+        }
+        .star,
+        .dot {
+          cursor: default;
+        }
+        .text-block {
+          border-color: #e5e7eb !important;
+        }
+        @page {
+          margin: 1.2cm 1.5cm;
+          size: A4;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .report-header {
+          padding: 24px 20px;
+        }
+        .report-body {
+          padding: 24px 20px;
+        }
+        .overall-band {
+          padding: 18px 20px;
+        }
+        .report-footer {
+          padding: 14px 20px;
+        }
+        .two-note {
+          grid-template-columns: 1fr;
+        }
+        .sig-row {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .rh-meta {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Screen toolbar -->
+    <div class="toolbar no-print">
+      <a href="student-solar.html">← Back to Solar's Dashboard</a>
+      <div class="toolbar-right">
+        <button class="btn-edit" onclick="toggleEdit()">✏️ Edit Mode</button>
+        <button class="btn-print" onclick="window.print()">
+          🖨️ Print / Save PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="report">
+      <!-- Header -->
+      <div class="report-header">
+        <div class="rh-left">
+          <div class="rh-avatar">🌞</div>
+          <div>
+            <div class="rh-name">Solar</div>
+            <div class="rh-sub">
+              Student Progress Report &nbsp;·&nbsp; ESL Fun Online
+            </div>
+            <div class="rh-sub" style="margin-top: 4px; opacity: 0.75">
+              Age 8 &nbsp;·&nbsp; Beginner–Elementary &nbsp;·&nbsp; Grammar
+              &amp; Conversation
+            </div>
+          </div>
+        </div>
+        <div class="rh-metas">
+          <div class="rh-meta">
+            <div class="rh-label">Report Date</div>
+            <div class="rh-val" id="reportDate"></div>
+          </div>
+          <div class="rh-meta">
+            <div class="rh-label">Period</div>
+            <div class="rh-val" contenteditable="true" spellcheck="false">
+              May 2026
+            </div>
+          </div>
+          <div class="rh-meta">
+            <div class="rh-label">Lessons</div>
+            <div class="rh-val" contenteditable="true" spellcheck="false">
+              — lessons
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overall Rating -->
+      <div class="overall-band">
+        <div class="overall-label">Overall Progress</div>
+        <div class="star-row" id="overallStars">
+          <div class="star filled" onclick="setOverall(1)" title="1">⭐</div>
+          <div class="star filled" onclick="setOverall(2)" title="2">⭐</div>
+          <div class="star filled" onclick="setOverall(3)" title="3">⭐</div>
+          <div class="star empty" onclick="setOverall(4)" title="4">⭐</div>
+          <div class="star empty" onclick="setOverall(5)" title="5">⭐</div>
+          <span class="star-caption" id="overallCaption">Good Progress</span>
+        </div>
+        <div class="overall-divider"></div>
+        <div class="overall-label">Attitude &amp; Effort</div>
+        <div class="star-row" id="effortStars">
+          <div class="star filled" onclick="setEffort(1)" title="1">⭐</div>
+          <div class="star filled" onclick="setEffort(2)" title="2">⭐</div>
+          <div class="star filled" onclick="setEffort(3)" title="3">⭐</div>
+          <div class="star filled" onclick="setEffort(4)" title="4">⭐</div>
+          <div class="star empty" onclick="setEffort(5)" title="5">⭐</div>
+          <span class="star-caption" id="effortCaption">Very Good</span>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="report-body">
+        <!-- Legend -->
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background: #ef4444"></div>
+            Needs Work
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: #f59e0b"></div>
+            Developing
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: #3b82f6"></div>
+            Good
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: #22c55e"></div>
+            Excellent
+          </div>
+          <span style="margin-left: auto; font-size: 0.75em; color: #9ca3af"
+            >Click dots to set level &nbsp;·&nbsp; Click text to edit</span
+          >
+        </div>
+
+        <!-- Grammar Skills -->
+        <div class="section">
+          <div class="section-title">📖 Grammar Skills</div>
+          <table class="skill-table">
+            <thead>
+              <tr>
+                <th style="width: 45%">Topic</th>
+                <th class="center" style="width: 100px">Level</th>
+                <th style="width: 30%">Teacher Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="skill-name">Simple Present Tense</div>
+                  <div class="skill-sub">"I play / He plays"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g1"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Present Continuous</div>
+                  <div class="skill-sub">"I am playing right now"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g2"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Questions with Do / Does</div>
+                  <div class="skill-sub">"Do you like robots?"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g3"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">This / That / These / Those</div>
+                  <div class="skill-sub">
+                    "This is my robot. Those are stars."
+                  </div>
+                </td>
+                <td><div class="skill-dots" data-id="g4"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Adjectives</div>
+                  <div class="skill-sub">"The big green robot is fast"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g5"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Plural Nouns</div>
+                  <div class="skill-sub">"one robot → two robots"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g6"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Past Simple (Regular)</div>
+                  <div class="skill-sub">"I played / I jumped"</div>
+                </td>
+                <td><div class="skill-dots" data-id="g7"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Can / Can't</div>
+                  <div class="skill-sub">
+                    "I can fly a rocket! I can't drive."
+                  </div>
+                </td>
+                <td><div class="skill-dots" data-id="g8"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Conversation Skills -->
+        <div class="section">
+          <div class="section-title">💬 Conversation Skills</div>
+          <table class="skill-table">
+            <thead>
+              <tr>
+                <th style="width: 45%">Topic</th>
+                <th class="center" style="width: 100px">Level</th>
+                <th style="width: 30%">Teacher Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="skill-name">Greetings &amp; Introductions</div>
+                  <div class="skill-sub">
+                    "Hi! I'm Solar. Nice to meet you!"
+                  </div>
+                </td>
+                <td><div class="skill-dots" data-id="c1"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Talking About Hobbies</div>
+                  <div class="skill-sub">"I love playing video games!"</div>
+                </td>
+                <td><div class="skill-dots" data-id="c2"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Describing Things</div>
+                  <div class="skill-sub">"It is big, fast and blue."</div>
+                </td>
+                <td><div class="skill-dots" data-id="c3"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Asking &amp; Answering Questions</div>
+                  <div class="skill-sub">
+                    "What do you like? — I like robots!"
+                  </div>
+                </td>
+                <td><div class="skill-dots" data-id="c4"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Telling a Story (Past)</div>
+                  <div class="skill-sub">"Yesterday I played…"</div>
+                </td>
+                <td><div class="skill-dots" data-id="c5"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Talking About the Future</div>
+                  <div class="skill-sub">"I want to be a robot engineer!"</div>
+                </td>
+                <td><div class="skill-dots" data-id="c6"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Pronunciation &amp; Clarity</div>
+                  <div class="skill-sub">
+                    Can listeners understand Solar easily?
+                  </div>
+                </td>
+                <td><div class="skill-dots" data-id="c7"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="skill-name">Confidence &amp; Fluency</div>
+                  <div class="skill-sub">Speaks without hesitation or fear</div>
+                </td>
+                <td><div class="skill-dots" data-id="c8"></div></td>
+                <td>
+                  <span
+                    class="text-block"
+                    contenteditable="true"
+                    spellcheck="false"
+                    style="
+                      min-height: auto;
+                      display: inline-block;
+                      width: 100%;
+                      padding: 6px 10px;
+                      font-size: 0.82em;
+                    "
+                  ></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Strengths & Areas to Improve -->
+        <div class="section">
+          <div class="section-title">📊 Strengths &amp; Areas to Improve</div>
+          <div class="two-note">
+            <div>
+              <div class="note-label green">✅ Strengths</div>
+              <div class="text-block" contenteditable="true" spellcheck="false">
+                <ul>
+                  <li>
+                    Excellent enthusiasm and positive attitude in every lesson
+                  </li>
+                  <li>
+                    Strong vocabulary retention when topics connect to interests
+                    (robots, space, games)
+                  </li>
+                  <li>
+                    Good comprehension of new grammar patterns when explained
+                    visually
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="note-label orange">🎯 Areas to Improve</div>
+              <div class="text-block" contenteditable="true" spellcheck="false">
+                <ul>
+                  <li>Remembering to add -s for he/she/it in simple present</li>
+                  <li>Building confidence to speak in longer sentences</li>
+                  <li>Practicing past tense -ed endings in connected speech</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher Comments -->
+        <div class="section">
+          <div class="section-title">📝 Teacher Comments</div>
+          <div class="text-block" contenteditable="true" spellcheck="false">
+            Solar is a bright, enthusiastic learner who brings great energy to
+            every lesson. He has a natural curiosity — especially when topics
+            relate to technology, space, and video games — which makes learning
+            engaging and effective. His ability to pick up new vocabulary
+            quickly is impressive for his age and level. With continued practice
+            on verb endings and building sentence length, Solar is on a great
+            path toward elementary fluency. Keep up the fantastic work!
+          </div>
+        </div>
+
+        <!-- Home Practice -->
+        <div class="section">
+          <div class="section-title">🏠 Recommended Home Practice</div>
+          <div class="home-practice">
+            <div class="hp-title">Things to practice between lessons</div>
+            <ul class="hp-list" id="hpList">
+              <li contenteditable="true" spellcheck="false">
+                Practice 5 sentences using "He / She + verb + s" (e.g. "My dad
+                drives a car. My mum cooks rice.")
+              </li>
+              <li contenteditable="true" spellcheck="false">
+                Play the Flashcard game on ESL Fun Online — Vocabulary section —
+                for 5 minutes, 3 times a week
+              </li>
+              <li contenteditable="true" spellcheck="false">
+                Watch one short English video about robots or space and tell the
+                teacher one new word next lesson
+              </li>
+              <li contenteditable="true" spellcheck="false">
+                Say 3 sentences each morning in English about what you are
+                doing: "I am eating breakfast. I am wearing…"
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Next Session Goals -->
+        <div class="section">
+          <div class="section-title">🎯 Next Session Goals</div>
+          <div class="text-block" contenteditable="true" spellcheck="false">
+            <ul>
+              <li>
+                Introduce Past Simple with irregular verbs (go → went, see →
+                saw) using a space adventure story
+              </li>
+              <li>
+                Conversation drill: "Tell me about your weekend" — full
+                paragraph practice
+              </li>
+              <li>
+                Quick Quiz: Grammar review game (Simple Present vs Present
+                Continuous)
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Signatures -->
+        <div class="section" style="margin-bottom: 0">
+          <div class="sig-row">
+            <div>
+              <div class="sig-box">
+                <div class="sig-label">Teacher Signature &amp; Date</div>
+              </div>
+            </div>
+            <div>
+              <div class="sig-box">
+                <div class="sig-label">
+                  Parent / Guardian Signature &amp; Date
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /report-body -->
+
+      <!-- Footer -->
+      <div class="report-footer">
+        <span>ESL Fun Online &nbsp;·&nbsp; eslonline.com</span>
+        <span id="footerDate"></span>
+      </div>
+    </div>
+    <!-- /report -->
+
+    <script>
+      // Set today's date
+      const today = new Date();
+      const fmt = today.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      document.getElementById("reportDate").textContent = fmt;
+      document.getElementById("footerDate").textContent = "Generated " + fmt;
+
+      // ── Star ratings ──
+      const overallLabels = [
+        "",
+        "Needs Improvement",
+        "Making Progress",
+        "Good Progress",
+        "Very Good Progress",
+        "Excellent Progress!",
+      ];
+      const effortLabels = [
+        "",
+        "Needs Encouragement",
+        "Trying Hard",
+        "Good Effort",
+        "Very Good",
+        "Outstanding! 🌟",
+      ];
+
+      function setStars(containerId, captionId, n, labels) {
+        const stars = document.querySelectorAll(`#${containerId} .star`);
+        stars.forEach((s, i) => {
+          s.className = "star " + (i < n ? "filled" : "empty");
+        });
+        document.getElementById(captionId).textContent = labels[n] || "";
+      }
+
+      function setOverall(n) {
+        setStars("overallStars", "overallCaption", n, overallLabels);
+      }
+      function setEffort(n) {
+        setStars("effortStars", "effortCaption", n, effortLabels);
+      }
+
+      // ── Skill dots ──
+      const levelLabels = ["Needs Work", "Developing", "Good", "Excellent"];
+      const dotColors = ["d1", "d2", "d3", "d4"];
+
+      function buildDots(container) {
+        const id = container.dataset.id;
+        let current = 0;
+        for (let i = 1; i <= 4; i++) {
+          const d = document.createElement("div");
+          d.className = `dot ${dotColors[i - 1]} off`;
+          d.title = levelLabels[i - 1];
+          d.dataset.level = i;
+          d.addEventListener("click", () => {
+            current = current === i ? 0 : i;
+            updateDots(container, current);
+          });
+          container.appendChild(d);
+        }
+        // Add label span
+        const lbl = document.createElement("span");
+        lbl.className = "level-label";
+        lbl.style.display = "none";
+        container.appendChild(lbl);
+      }
+
+      function updateDots(container, level) {
+        const dots = container.querySelectorAll(".dot");
+        const lbl = container.querySelector(".level-label");
+        dots.forEach((d, i) => {
+          const l = i + 1;
+          d.className = `dot ${dotColors[i]} ${l <= level ? "on" : "off"}`;
+        });
+        if (level === 0) {
+          lbl.style.display = "none";
+          lbl.textContent = "";
+        } else {
+          lbl.style.display = "block";
+          lbl.className = `level-label l${level}`;
+          lbl.textContent = levelLabels[level - 1];
+        }
+      }
+
+      document.querySelectorAll(".skill-dots").forEach(buildDots);
+
+      // ── Edit mode toggle ──
+      let editMode = true;
+      function toggleEdit() {
+        editMode = !editMode;
+        const blocks = document.querySelectorAll("[contenteditable]");
+        blocks.forEach(
+          (b) => (b.contentEditable = editMode ? "true" : "false"),
+        );
+        document.querySelector(".btn-edit").textContent = editMode
+          ? "🔒 Lock"
+          : "✏️ Edit Mode";
+        document.querySelector(".legend span").textContent = editMode
+          ? "Click dots to set level · Click text to edit"
+          : "Read-only mode";
+      }
+    </script>
+  </body>
+</html>
