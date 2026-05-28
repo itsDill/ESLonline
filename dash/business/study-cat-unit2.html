@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat – Unit 2: Companies</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 30px 20px;
+        background-attachment: fixed;
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #f8f9ff;
+        transition: all 0.2s;
+        border: 1px solid #e8ebf5;
+      }
+
+      .back-link:hover {
+        background: #667eea;
+        color: white;
+        transform: translateX(-3px);
+      }
+
+      h1 {
+        color: #667eea;
+        font-size: 1.9em;
+        margin: 18px 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .subtitle {
+        color: #888;
+        font-size: 0.95em;
+        margin-bottom: 10px;
+      }
+
+      .unit-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 50px;
+        padding: 6px 18px;
+        font-size: 0.85em;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+
+      .top-nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        padding: 14px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        border: 1px solid #e8ebf5;
+      }
+
+      .nav-btn {
+        background: white;
+        border: 2px solid #10b981;
+        color: #10b981;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.82em;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .nav-btn:hover {
+        background: #10b981;
+        color: white;
+      }
+
+      .study-section {
+        margin-bottom: 24px;
+        border-radius: 14px;
+        border: 1px solid #e8ebf5;
+        overflow: hidden;
+      }
+
+      .study-section-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 14px 20px;
+        font-size: 1.02em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        justify-content: space-between;
+      }
+
+      .study-section-header .ti {
+        font-size: 0.85em;
+        transition: transform 0.3s;
+      }
+
+      .study-section-body {
+        padding: 22px;
+        background: #fafbff;
+      }
+
+      .study-section-body.collapsed {
+        display: none;
+      }
+
+      .gtable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+        font-size: 0.9em;
+      }
+
+      .gtable th {
+        background: #10b981;
+        color: white;
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .gtable td {
+        border: 1px solid #e0e5f5;
+        padding: 8px 12px;
+      }
+
+      .gtable tr:nth-child(even) td {
+        background: #f4fdf9;
+      }
+
+      .note {
+        background: #f0fdf4;
+        border-left: 4px solid #10b981;
+        padding: 10px 14px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 0.9em;
+        color: #444;
+        line-height: 1.6;
+      }
+
+      .ex {
+        background: #f8f9ff;
+        border: 1px solid #dde0f5;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+        color: #333;
+        margin: 6px 0;
+        line-height: 1.7;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+
+      .mini-box {
+        background: white;
+        border: 1px solid #e4e8f4;
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+
+      .mini-box h4 {
+        color: #10b981;
+        margin-bottom: 10px;
+        font-size: 0.98em;
+      }
+
+      .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .vocab-card {
+        background: white;
+        border: 2px solid #e0e5f5;
+        border-radius: 10px;
+        padding: 12px 14px;
+        transition: all 0.25s;
+      }
+
+      .vocab-card:hover {
+        border-color: #10b981;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+      }
+
+      .vocab-word {
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 4px;
+      }
+
+      .vocab-meaning {
+        font-size: 0.88em;
+        color: #555;
+        line-height: 1.5;
+      }
+
+      .vocab-ex {
+        font-size: 0.82em;
+        color: #777;
+        margin-top: 6px;
+        font-style: italic;
+      }
+
+      .audio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .audio-card {
+        background: white;
+        border: 1px solid #dbe7ef;
+        border-radius: 12px;
+        padding: 14px;
+        box-shadow: 0 8px 20px rgba(16, 24, 40, 0.04);
+      }
+
+      .audio-card h4 {
+        color: #0f766e;
+        margin-bottom: 8px;
+        font-size: 1em;
+      }
+
+      .audio-card p {
+        color: #555;
+        font-size: 0.9em;
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+
+      .practice-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .practice-item {
+        background: white;
+        border: 1px solid #e1e6f3;
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+
+      .practice-item strong {
+        color: #10b981;
+      }
+
+      .quiz-grid {
+        display: grid;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .quiz-card {
+        background: white;
+        border: 1px solid #e3e7f2;
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+
+      .quiz-card h4 {
+        color: #0f766e;
+        margin-bottom: 8px;
+      }
+
+      .quiz-options {
+        display: grid;
+        gap: 8px;
+      }
+
+      .quiz-option {
+        border: 1px solid #d8dee8;
+        border-radius: 8px;
+        padding: 8px 10px;
+        background: #fafbff;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 24px 16px;
+        }
+
+        h1 {
+          font-size: 1.55em;
+        }
+      }
+    </style>
+    <script>
+      function toggleSection(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".ti");
+        body.classList.toggle("collapsed");
+        icon.textContent = body.classList.contains("collapsed") ? "►" : "▼";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="student-cat.html" class="back-link">← Back to Cat's Dashboard</a>
+
+      <h1>🐱 Cat — Unit 2 Lesson Guide</h1>
+      <p class="subtitle">Oxford Business Result (2nd Ed) · Elementary</p>
+      <div class="unit-badge">📗 Unit 2: Companies</div>
+
+      <div class="top-nav">
+        <a href="#grammar" class="nav-btn">📐 Grammar</a>
+        <a href="#vocabulary" class="nav-btn">💼 Vocabulary</a>
+        <a href="#audio" class="nav-btn">🎧 Audio</a>
+        <a href="#conversation" class="nav-btn">💬 Conversation</a>
+        <a href="#review" class="nav-btn">📝 Review</a>
+      </div>
+
+      <div class="study-section">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📋 Unit 2 Overview — What You'll Learn</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="two-col">
+            <div class="mini-box">
+              <h4>🎯 Learning Goals</h4>
+              <ul style="padding-left: 18px; line-height: 1.8; color: #444">
+                <li>Talk about companies and what they do</li>
+                <li>Describe departments and where people work</li>
+                <li>Use the present simple for facts and routines</li>
+                <li>Ask about company structure, size, and location</li>
+              </ul>
+            </div>
+            <div class="mini-box">
+              <h4>📚 What's Covered</h4>
+              <ul style="padding-left: 18px; line-height: 1.8; color: #444">
+                <li>Grammar: present simple, third person -s</li>
+                <li>
+                  Vocabulary: company types, departments, workplace words, and
+                  office locations
+                </li>
+                <li>Audio: real Unit 2 listening tracks from Activity 2</li>
+                <li>Communication: describing your company</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note" style="margin-top: 14px">
+            💡 <strong>Teacher note:</strong> This unit is designed for a 3-hour
+            block. Start with company vocabulary, move to grammar practice, then
+            use the audio cards for listening, noticing, and speaking.
+          </div>
+        </div>
+      </div>
+
+      <div class="study-section" id="grammar">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📐 Grammar — Present Simple for Companies</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <table class="gtable">
+            <tr>
+              <th>Subject</th>
+              <th>Positive</th>
+              <th>Negative</th>
+            </tr>
+            <tr>
+              <td>The company</td>
+              <td>The company exports software.</td>
+              <td>The company does not export cars.</td>
+            </tr>
+            <tr>
+              <td>She / He</td>
+              <td>She manages the sales team.</td>
+              <td>He doesn't work in finance.</td>
+            </tr>
+            <tr>
+              <td>We / They</td>
+              <td>We have offices in Asia.</td>
+              <td>They don't sell direct to customers.</td>
+            </tr>
+          </table>
+
+          <div class="note">
+            <strong>Remember:</strong> Add <em>-s</em> or <em>-es</em> to the
+            verb with <strong>he / she / it</strong>. In company descriptions,
+            this usually appears with jobs, departments, and routines.
+          </div>
+
+          <div class="ex">
+            The company sells medical equipment.<br />
+            The sales team works from Monday to Friday.<br />
+            Our head office is in Singapore.
+          </div>
+
+          <h3 style="color: #10b981; margin: 18px 0 12px; font-size: 1em">
+            Question forms
+          </h3>
+          <div class="note">
+            <strong>Do / Does</strong> questions are common in this unit.<br />
+            <em>Does the company have a finance department?</em><br />
+            <em>Do you work in the main office?</em><br />
+            <em>Does your company have branches overseas?</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-section" id="vocabulary">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>💼 Vocabulary — Companies & Departments</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="vocab-grid">
+            <div class="vocab-card">
+              <div class="vocab-word">company</div>
+              <div class="vocab-meaning">
+                an organization that sells goods or services
+              </div>
+              <div class="vocab-ex">"She works for a small company."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">office</div>
+              <div class="vocab-meaning">a place where people work</div>
+              <div class="vocab-ex">"The office is on the third floor."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">head office</div>
+              <div class="vocab-meaning">the main office of a company</div>
+              <div class="vocab-ex">"Our head office is in Bangkok."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">branch</div>
+              <div class="vocab-meaning">a local office in another place</div>
+              <div class="vocab-ex">"We have a branch in Hanoi."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">department</div>
+              <div class="vocab-meaning">a section of a company</div>
+              <div class="vocab-ex">"She works in the HR department."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">sales</div>
+              <div class="vocab-meaning">the team that sells products</div>
+              <div class="vocab-ex">"Sales are very strong this month."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">finance</div>
+              <div class="vocab-meaning">money, accounts, and budgets</div>
+              <div class="vocab-ex">"Finance checks the numbers."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">HR</div>
+              <div class="vocab-meaning">human resources</div>
+              <div class="vocab-ex">"HR recruits new staff."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">production</div>
+              <div class="vocab-meaning">making products</div>
+              <div class="vocab-ex">"The production team works fast."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">service</div>
+              <div class="vocab-meaning">the work a company provides</div>
+              <div class="vocab-ex">"They provide a delivery service."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">factory</div>
+              <div class="vocab-meaning">a place where products are made</div>
+              <div class="vocab-ex">"The factory is outside the city."</div>
+            </div>
+            <div class="vocab-card">
+              <div class="vocab-word">subsidiary</div>
+              <div class="vocab-meaning">
+                a smaller company owned by a larger one
+              </div>
+              <div class="vocab-ex">"The subsidiary is in Japan."</div>
+            </div>
+          </div>
+
+          <div class="ex" style="margin-top: 14px">
+            Our company is a small software company.<br />
+            We have a sales team, a finance department, and customer service.<br />
+            The head office is in Bangkok and the branch office is in Chiang
+            Mai.
+          </div>
+        </div>
+      </div>
+
+      <div class="study-section" id="audio">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🎧 Audio — Unit 2 Listening Practice</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <p style="color: #555; font-size: 0.92em; line-height: 1.7">
+            These are the real Unit 2 audio tracks from the book’s audio set.
+            The files live in the Unit 1 audio folder in this workspace, so the
+            page points to those MP3s directly.
+          </p>
+
+          <div class="audio-grid">
+            <div class="audio-card">
+              <h4>Track 2.1</h4>
+              <p>Activity 2, Track 1 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_1.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.2</h4>
+              <p>Activity 2, Track 2 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_2.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.3</h4>
+              <p>Activity 2, Track 3 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_3.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.4</h4>
+              <p>Activity 2, Track 4 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_4.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.5</h4>
+              <p>Activity 2, Track 5 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_5.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.6</h4>
+              <p>Activity 2, Track 6 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_6.mp3"
+              ></audio>
+            </div>
+
+            <div class="audio-card">
+              <h4>Track 2.7</h4>
+              <p>Activity 2, Track 7 from the book audio set.</p>
+              <audio
+                controls
+                preload="none"
+                src="Business%20Result%202nd%20edition%20Elementary%20Audio/BR2_001_a2_7.mp3"
+              ></audio>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top: 14px">
+            The full Activity 2 set is now linked here, so students can play the
+            book audio directly from this Unit 2 page.
+          </div>
+        </div>
+      </div>
+
+      <div class="study-section" id="conversation">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>💬 Conversation Practice</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="practice-list">
+            <div class="practice-item">
+              <strong>Prompt 1:</strong> Describe your company in 3 sentences.
+            </div>
+            <div class="practice-item">
+              <strong>Prompt 2:</strong> Say what departments your company has.
+            </div>
+            <div class="practice-item">
+              <strong>Prompt 3:</strong> Ask a partner where their office is
+              located.
+            </div>
+            <div class="practice-item">
+              <strong>Prompt 4:</strong> Explain one thing your company does
+              every day.
+            </div>
+            <div class="practice-item">
+              <strong>Prompt 5:</strong> Say whether your company has branches,
+              a head office, or a factory.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-section" id="review">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📝 Quick Review</span>
+          <span class="ti">▼</span>
+        </div>
+        <div class="study-section-body">
+          <div class="quiz-grid">
+            <div class="quiz-card">
+              <h4>1. Choose the correct sentence</h4>
+              <div class="quiz-options">
+                <div class="quiz-option">A) The company export to Japan.</div>
+                <div class="quiz-option">B) The company exports to Japan.</div>
+                <div class="quiz-option">
+                  C) The company exporting to Japan.
+                </div>
+              </div>
+            </div>
+            <div class="quiz-card">
+              <h4>2. Choose the correct question</h4>
+              <div class="quiz-options">
+                <div class="quiz-option">A) Does the company have HR?</div>
+                <div class="quiz-option">B) Do the company have HR?</div>
+                <div class="quiz-option">C) Does the company has HR?</div>
+              </div>
+            </div>
+            <div class="quiz-card">
+              <h4>3. Fill in the blank</h4>
+              <div class="quiz-options">
+                <div class="quiz-option">Our sales team ___ new clients.</div>
+                <div class="quiz-option">Answer: meets / supports / calls</div>
+              </div>
+            </div>
+            <div class="quiz-card">
+              <h4>4. Review question</h4>
+              <div class="quiz-options">
+                <div class="quiz-option">
+                  What department handles money and budgets?
+                </div>
+                <div class="quiz-option">Answer: finance</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top: 14px">
+            Next step: practice the audio section, then link this unit from the
+            dashboard when you’re ready for class use.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
