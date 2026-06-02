@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat - Unit 3: Location</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #ff9f1c 0%, #ff6b35 100%);
+        min-height: 100vh;
+        padding: 30px 20px;
+        background-attachment: fixed;
+      }
+
+      .container {
+        max-width: 1050px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.22);
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: #ff6b35;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #fff3ec;
+        transition: all 0.2s;
+        border: 1px solid #ffd7c9;
+      }
+
+      .back-link:hover {
+        background: #ff6b35;
+        color: #ffffff;
+        transform: translateX(-3px);
+      }
+
+      h1 {
+        color: #ff6b35;
+        font-size: 1.9em;
+        margin: 18px 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .subtitle {
+        color: #777;
+        font-size: 0.95em;
+        margin-bottom: 10px;
+      }
+
+      .unit-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #ff9f1c 0%, #ff6b35 100%);
+        color: #ffffff;
+        border-radius: 50px;
+        padding: 6px 18px;
+        font-size: 0.85em;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+
+      .top-nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        padding: 14px;
+        background: #fff8f4;
+        border-radius: 10px;
+        border: 1px solid #ffe0d1;
+      }
+
+      .nav-btn {
+        background: #ffffff;
+        border: 2px solid #ff6b35;
+        color: #ff6b35;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 0.82em;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .nav-btn:hover {
+        background: #ff6b35;
+        color: #ffffff;
+      }
+
+      .study-section {
+        margin-bottom: 24px;
+        border-radius: 14px;
+        border: 1px solid #f5dfd5;
+        overflow: hidden;
+      }
+
+      .study-section-header {
+        background: linear-gradient(135deg, #ff9f1c 0%, #ff6b35 100%);
+        color: #ffffff;
+        padding: 14px 20px;
+        font-size: 1.02em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        justify-content: space-between;
+      }
+
+      .study-section-header .ti {
+        font-size: 0.85em;
+        transition: transform 0.3s;
+      }
+
+      .study-section-body {
+        padding: 22px;
+        background: #fffdfc;
+      }
+
+      .study-section-body.collapsed {
+        display: none;
+      }
+
+      .section-note {
+        background: #fff2ea;
+        border-left: 4px solid #ff6b35;
+        border-radius: 4px;
+        padding: 10px 14px;
+        color: #4d4d4d;
+        font-size: 0.9em;
+        margin: 10px 0;
+        line-height: 1.6;
+      }
+
+      .tip-box {
+        background: #fff8df;
+        border-left: 4px solid #f59e0b;
+        border-radius: 4px;
+        padding: 10px 14px;
+        color: #5f4b1f;
+        font-size: 0.9em;
+        margin: 10px 0;
+        line-height: 1.6;
+      }
+
+      .task-box {
+        background: #ffffff;
+        border: 1px solid #f0e3dc;
+        border-radius: 10px;
+        padding: 14px;
+        margin: 12px 0;
+      }
+
+      .task-title {
+        color: #ff6b35;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+      }
+
+      .task-list {
+        padding-left: 18px;
+        line-height: 1.8;
+        color: #333;
+        font-size: 0.92em;
+      }
+
+      .task-list li {
+        margin-bottom: 2px;
+      }
+
+      .matching-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 8px;
+      }
+
+      .match-item {
+        background: #fff;
+        border: 1px solid #f1e5de;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 0.9em;
+      }
+
+      .lego-block {
+        background: #eef7ff;
+        border: 1px solid #d6e8f8;
+        border-radius: 10px;
+        padding: 14px;
+        color: #2a3f54;
+        line-height: 1.7;
+        font-size: 0.92em;
+        margin-top: 10px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 10px;
+      }
+
+      .gtable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+      }
+
+      .gtable th {
+        background: #ff6b35;
+        color: #fff;
+        padding: 9px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .gtable td {
+        border: 1px solid #f1ddd3;
+        padding: 8px 12px;
+      }
+
+      .gtable tr:nth-child(even) td {
+        background: #fff8f3;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+
+      .mini-card {
+        background: #fff;
+        border: 1px solid #f1e3db;
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      .mini-card h4 {
+        color: #ff6b35;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+      }
+
+      .mini-card ul {
+        padding-left: 16px;
+        line-height: 1.7;
+        font-size: 0.88em;
+        color: #444;
+      }
+
+      .qa-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .qa-card {
+        background: #fff;
+        border: 1px solid #f0e3dc;
+        border-radius: 10px;
+        padding: 12px;
+      }
+
+      .qa-card strong {
+        color: #ff6b35;
+      }
+
+      .practice-box {
+        margin-top: 12px;
+        border: 2px dashed #ffb396;
+        border-radius: 10px;
+        padding: 12px;
+        background: #fff9f6;
+      }
+
+      .practice-box textarea,
+      .practice-box input,
+      .practice-box select {
+        width: 100%;
+        border: 1px solid #f1cbb9;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin-top: 6px;
+        font-size: 0.9em;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.86em;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: #ff6b35;
+        color: #fff;
+      }
+
+      .btn-secondary {
+        background: #fff;
+        border: 1px solid #f1c7b4;
+        color: #ff6b35;
+      }
+
+      .answer {
+        display: none;
+        margin-top: 8px;
+        background: #f0fff2;
+        border-left: 4px solid #10b981;
+        padding: 8px 10px;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: #1f4f38;
+      }
+
+      .answer.show {
+        display: block;
+      }
+
+      .address-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .address-card {
+        border: 1px solid #f2e2d9;
+        border-radius: 10px;
+        padding: 12px;
+        background: #fff;
+        font-size: 0.9em;
+      }
+
+      .footer-actions {
+        margin-top: 24px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 720px) {
+        .container {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="student-cat.html" class="back-link">← Back to Cat Dashboard</a>
+
+      <h1>📍 Unit 3: Location</h1>
+      <p class="subtitle">Business Result Elementary - Unit 3 study guide</p>
+      <div class="unit-badge">
+        Starting Point + Vocabulary + Grammar + Speaking
+      </div>
+
+      <div class="top-nav">
+        <a class="nav-btn" href="#starting">Starting Point</a>
+        <a class="nav-btn" href="#words">Working with Words</a>
+        <a class="nav-btn" href="#grammar">Language at Work</a>
+        <a class="nav-btn" href="#addresses">Practically Speaking</a>
+        <a class="nav-btn" href="#phone">Business Communication</a>
+      </div>
+
+      <section class="study-section" id="starting">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🚀 Starting Point</span><span class="ti">▶</span>
+        </div>
+        <div class="study-section-body">
+          <div class="task-box">
+            <div class="task-title">Discuss these questions</div>
+            <ol class="task-list">
+              <li>
+                Does your company have offices or operations in different
+                countries? Where?
+              </li>
+              <li>
+                Do you always work in the same place? What places do you visit
+                for your job?
+              </li>
+              <li>Where is your head office?</li>
+            </ol>
+          </div>
+          <div class="practice-box">
+            <label for="starterNotes"
+              >Write your speaking notes for class</label
+            >
+            <textarea
+              id="starterNotes"
+              placeholder="Example: Our head office is in..., we also have operations in..."
+            ></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="study-section" id="words">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🏢 Working with Words: Location and Workplace</span
+          ><span class="ti">▶</span>
+        </div>
+        <div class="study-section-body">
+          <div class="task-box">
+            <div class="task-title">1) Key workplaces</div>
+            <div class="matching-grid">
+              <div class="match-item">
+                <strong>Factory</strong> - We make all our products here.
+              </div>
+              <div class="match-item">
+                <strong>Research and development (R&D) centre</strong> - We
+                design new products here.
+              </div>
+              <div class="match-item">
+                <strong>Sales office</strong> - Sales reps visit customers, then
+                return here.
+              </div>
+              <div class="match-item">
+                <strong>Head office</strong> - Directors and top management work
+                here.
+              </div>
+              <div class="match-item">
+                <strong>Distribution centre</strong> - Products arrive here,
+                then go to customers.
+              </div>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">2) Reading: LEGO Group</div>
+            <div class="lego-block">
+              LEGO produces play materials for children and sells products in
+              more than 140 countries. It is a Danish company and the name comes
+              from leg godt (play well). It operates on six continents and has
+              about 14,000 employees. There are also LEGOLAND parks in Asia,
+              Europe and North America.
+            </div>
+            <div class="tip-box">
+              Tip: about / around = approximately. Example: about 850 employees,
+              around 100 countries.
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">3) Continent practice</div>
+            <div class="two-col">
+              <div class="mini-card">
+                <h4>Continents to use</h4>
+                <ul>
+                  <li>Africa</li>
+                  <li>Australia</li>
+                  <li>North America</li>
+                  <li>Asia</li>
+                  <li>Europe</li>
+                  <li>South America</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <h4>Speaking prompt</h4>
+                <ul>
+                  <li>Which continents does your company operate in?</li>
+                  <li>Where are your biggest sales offices?</li>
+                  <li>Where is your headquarters (HQ)?</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">4) Presentation prep (book task)</div>
+            <p style="font-size: 0.9em; color: #444; line-height: 1.7">
+              Prepare a short presentation about your company or AstraZeneca
+              using these points: head office (London, UK), R&D centres (Sweden
+              + North America + India), factories (27 in 19 countries), and
+              sales offices by region.
+            </p>
+            <div class="practice-box">
+              <label for="presentationPlan">Presentation notes</label>
+              <textarea
+                id="presentationPlan"
+                placeholder="Good morning. Today, I'd like to tell you about... We have... Our head office is..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="study-section" id="grammar">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>🧠 Language at Work: There is/are + Some/Any</span
+          ><span class="ti">▶</span>
+        </div>
+        <div class="study-section-body">
+          <div class="task-box">
+            <div class="task-title">1) Why Singapore is good for business</div>
+            <div class="section-note">
+              Key ideas from the text: strategic location in South-East Asia,
+              flights to about 300 cities, strong harbour, low business taxes,
+              easy visas, many hotels and exhibition centres, excellent
+              schools/hospitals, and low crime.
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">2) Grammar table</div>
+            <div class="table-wrap">
+              <table class="gtable">
+                <tr>
+                  <th></th>
+                  <th>Positive</th>
+                  <th>Negative</th>
+                  <th>Question</th>
+                  <th>Short answer</th>
+                </tr>
+                <tr>
+                  <td><strong>Singular noun</strong></td>
+                  <td>There is an airport.</td>
+                  <td>There isn't an airport.</td>
+                  <td>Is there an airport?</td>
+                  <td>Yes, there is. / No, there isn't.</td>
+                </tr>
+                <tr>
+                  <td><strong>Plural noun</strong></td>
+                  <td>There are two airports.</td>
+                  <td>There aren't two airports.</td>
+                  <td>Are there two airports?</td>
+                  <td>Yes, there are. / No, there aren't.</td>
+                </tr>
+              </table>
+            </div>
+            <div class="section-note">
+              We use some and any with plural nouns. Use some in positive
+              sentences. Use any in negative sentences and questions.
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">
+              3) Gap fill practice (from listening task)
+            </div>
+            <p style="font-size: 0.9em; color: #444; line-height: 1.7">
+              A: Dubai is a great location for a conference. The weather is
+              always good.<br />
+              B: What about the airport? <strong>____</strong> lots of
+              international flights?<br />
+              A: Yes, <strong>____</strong>. And <strong>____</strong> a problem
+              with transport from the airport...<br />
+              B: But <strong>____</strong> a good place for a conference?<br />
+              A: Yes, <strong>____</strong>. It's the Dubai International
+              Exhibition and Convention complex.
+            </p>
+            <div class="btn-row">
+              <button
+                class="btn btn-primary"
+                onclick="toggleAnswer('ans-grammar')"
+              >
+                Show suggested answers
+              </button>
+            </div>
+            <div id="ans-grammar" class="answer">
+              1) Are there 2) there are 3) there isn't 4) is there 5) there is
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">4) Hotel comparison speaking task</div>
+            <div class="qa-grid">
+              <div class="qa-card">
+                <strong>Question:</strong> Is there a bus to the airport?
+              </div>
+              <div class="qa-card">
+                <strong>Question:</strong> Is there a car park?
+              </div>
+              <div class="qa-card">
+                <strong>Question:</strong> Are there restaurants and bars?
+              </div>
+              <div class="qa-card">
+                <strong>Question:</strong> Are there leisure facilities (pool,
+                gym)?
+              </div>
+              <div class="qa-card">
+                <strong>Question:</strong> Are there conference or meeting
+                rooms?
+              </div>
+              <div class="qa-card">
+                <strong>Question:</strong> Are there other useful services?
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="study-section" id="addresses">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📧 Practically Speaking: Email and Postal Addresses</span
+          ><span class="ti">▶</span>
+        </div>
+        <div class="study-section-body">
+          <div class="tip-box">
+            Tip: all one word in email addresses. Example: info@fastshop.com
+          </div>
+          <div class="task-box">
+            <div class="task-title">1) Say these clearly</div>
+            <div class="address-grid">
+              <div class="address-card">peter.tieng@forresters.ca</div>
+              <div class="address-card">alina_dl@gmail.com</div>
+              <div class="address-card">jobs-info@topcommunications.co.uk</div>
+              <div class="address-card">99 Edward Street, Toronto, M5V 2MD</div>
+              <div class="address-card">21 Old School Rd, Glasgow, G21 4YU</div>
+              <div class="address-card">742 Quaker St, Seattle, 98104</div>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">2) Symbols and abbreviations</div>
+            <div class="table-wrap">
+              <table class="gtable">
+                <tr>
+                  <th>Symbol / Abbrev.</th>
+                  <th>Meaning</th>
+                </tr>
+                <tr>
+                  <td>@</td>
+                  <td>at</td>
+                </tr>
+                <tr>
+                  <td>&amp;</td>
+                  <td>and</td>
+                </tr>
+                <tr>
+                  <td>.</td>
+                  <td>dot</td>
+                </tr>
+                <tr>
+                  <td>-</td>
+                  <td>hyphen / dash</td>
+                </tr>
+                <tr>
+                  <td>St</td>
+                  <td>Street</td>
+                </tr>
+                <tr>
+                  <td>Rd</td>
+                  <td>Road</td>
+                </tr>
+                <tr>
+                  <td>Dept</td>
+                  <td>department</td>
+                </tr>
+                <tr>
+                  <td>_</td>
+                  <td>underscore</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">3) Useful phone expressions</div>
+            <ul class="task-list">
+              <li>Can you spell that for me?</li>
+              <li>Sorry, can you repeat that, please?</li>
+              <li>What's the postcode, please?</li>
+              <li>So that's ... Is that right?</li>
+              <li>Yes, that's right.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="study-section" id="phone">
+        <div class="study-section-header" onclick="toggleSection(this)">
+          <span>📞 Business Communication: Ordering by Phone</span
+          ><span class="ti">▶</span>
+        </div>
+        <div class="study-section-body">
+          <div class="task-box">
+            <div class="task-title">Key expressions</div>
+            <div class="table-wrap">
+              <table class="gtable">
+                <tr>
+                  <th>Function</th>
+                  <th>Useful language</th>
+                </tr>
+                <tr>
+                  <td>Asking to do something</td>
+                  <td>Can I order ... ?</td>
+                </tr>
+                <tr>
+                  <td>Asking for information</td>
+                  <td>
+                    Can you tell me ... ? / Can I have ... ? / Can you confirm
+                    ... ?
+                  </td>
+                </tr>
+                <tr>
+                  <td>Asking for repetition</td>
+                  <td>
+                    Can you repeat that? / Can you say that more slowly, please?
+                  </td>
+                </tr>
+                <tr>
+                  <td>Responding yes</td>
+                  <td>Yes, of course. / Sure.</td>
+                </tr>
+                <tr>
+                  <td>Responding no</td>
+                  <td>I'm sorry, but ...</td>
+                </tr>
+                <tr>
+                  <td>Confirming</td>
+                  <td>Got it. / Yes, that's right.</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">Role-play from the book</div>
+            <p style="font-size: 0.9em; color: #444; line-height: 1.7">
+              Student A orders mobile phones. Student B is the supplier.<br />
+              Use these prompts: order mobile phones, product code DFK 1678, ask
+              for delivery tomorrow, out of stock so offer DFK 1688, delivery
+              address 35 Waldorf Street, confirm by email at
+              purchasing@bcom.biz.
+            </p>
+            <div class="practice-box">
+              <label for="roleplayPrep"
+                >Write your role-play script notes</label
+              >
+              <textarea
+                id="roleplayPrep"
+                placeholder="Customer: Can I order... Supplier: I'm sorry, but..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="task-box">
+            <div class="task-title">Quick check</div>
+            <ol class="task-list">
+              <li>Can you ask for a product code politely?</li>
+              <li>Can you ask for delivery time politely?</li>
+              <li>Can you ask for repetition in two ways?</li>
+              <li>Can you confirm an email address clearly?</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="nav-btn" href="#starting">Back to top sections</a>
+        <a class="nav-btn" href="student-cat.html">Return to dashboard</a>
+      </div>
+    </div>
+
+    <script>
+      function toggleSection(headerEl) {
+        const body = headerEl.nextElementSibling;
+        const icon = headerEl.querySelector(".ti");
+        body.classList.toggle("collapsed");
+        icon.style.transform = body.classList.contains("collapsed")
+          ? "rotate(0deg)"
+          : "rotate(90deg)";
+      }
+
+      function toggleAnswer(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle("show");
+      }
+
+      document.querySelectorAll(".study-section-header").forEach((header) => {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".ti");
+        body.classList.add("collapsed");
+        icon.style.transform = "rotate(0deg)";
+      });
+
+      const firstSectionBody = document.querySelector(
+        ".study-section .study-section-body",
+      );
+      const firstSectionIcon = document.querySelector(".study-section .ti");
+      if (firstSectionBody && firstSectionIcon) {
+        firstSectionBody.classList.remove("collapsed");
+        firstSectionIcon.style.transform = "rotate(90deg)";
+      }
+    </script>
+  </body>
+</html>
