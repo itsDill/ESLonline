@@ -152,6 +152,41 @@
         font-weight: 700;
         color: #f59e0b;
       }
+      /* Toggle sign button */
+      .math-sign-toggle {
+        padding: 0.5rem 0.8rem;
+        background: #e5e7eb;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #374151;
+        transition: all 0.2s ease;
+      }
+      .math-sign-toggle:hover {
+        background: #d1d5db;
+      }
+      .math-sign-toggle.negative {
+        background: #fca5a5;
+        color: #991b1b;
+      }
+      .math-sign-toggle.negative:hover {
+        background: #f87171;
+      }
+      .dark-mode .math-sign-toggle {
+        background: #4b5563;
+        color: #e5e7eb;
+      }
+      .dark-mode .math-sign-toggle:hover {
+        background: #5a6577;
+      }
+      .dark-mode .math-sign-toggle.negative {
+        background: #7f1d1d;
+        color: #fca5a5;
+      }
+      .dark-mode .math-sign-toggle.negative:hover {
+        background: #991b1b;
+      }
     </style>
     <!-- Google tag (gtag.js) -->
     <script
@@ -480,6 +515,7 @@
             </div>
             <div class="math-question" id="mathQuestion"></div>
             <div class="math-answer-row">
+              <button class="math-sign-toggle" id="signToggle">+</button>
               <input type="text" id="mathAnswer" autocomplete="off" />
               <button class="featured-submit-btn" id="submitMath">OK</button>
             </div>
@@ -592,6 +628,7 @@
         var mathStreak = 0;
         var mathBestStreak = 0;
         var mathLog = [];
+        var mathIsNegative = false;
 
         // Number ranges per difficulty [xMin, xMax, yMin, yMax]
         var ranges = {
@@ -763,6 +800,9 @@
           }
 
           mathCorrectAnswer = a;
+          mathIsNegative = false;
+          document.getElementById("signToggle").classList.remove("negative");
+          document.getElementById("signToggle").textContent = "+";
           document.getElementById("mathQuestion").textContent = q;
           document.getElementById("mathAnswer").value = "";
           document.getElementById("mathAnswer").focus();
@@ -863,6 +903,7 @@
           var input = document.getElementById("mathAnswer");
           var val = parseInt(input.value, 10);
           if (isNaN(val)) return;
+          if (mathIsNegative) val = -val;
           var fb = document.getElementById("mathFeedback");
           var qText = document.getElementById("mathQuestion").textContent;
           mathTotal++;
@@ -938,6 +979,20 @@
             document.getElementById("mathResults").style.display = "none";
             document.getElementById("mathSetup").style.display = "";
             refreshBestDisplay();
+          });
+
+        document
+          .getElementById("signToggle")
+          .addEventListener("click", function () {
+            mathIsNegative = !mathIsNegative;
+            var btn = document.getElementById("signToggle");
+            if (mathIsNegative) {
+              btn.textContent = "−";
+              btn.classList.add("negative");
+            } else {
+              btn.textContent = "+";
+              btn.classList.remove("negative");
+            }
           });
 
         // Init
