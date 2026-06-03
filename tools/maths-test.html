@@ -481,11 +481,10 @@
             <div class="math-question" id="mathQuestion"></div>
             <div class="math-answer-row">
               <input
-                type="number"
+                type="text"
                 id="mathAnswer"
-                placeholder="Your answer"
                 autocomplete="off"
-                inputmode="numeric"
+                inputmode="decimal"
               />
               <button class="featured-submit-btn" id="submitMath">OK</button>
             </div>
@@ -684,7 +683,16 @@
 
         function nextQuestion() {
           var baseTypes = ["add", "sub", "mul", "div"];
-          var hardExtras = ["sq", "pct", "neg"];
+          var hardExtras = [
+            "sq",
+            "pct",
+            "neg",
+            "pow",
+            "fact",
+            "dbl",
+            "half",
+            "compound",
+          ];
           var pool =
             mathDiff === "hard" ? baseTypes.concat(hardExtras) : baseTypes;
           var t = mathType === "all" ? pool[rng(0, pool.length - 1)] : mathType;
@@ -721,12 +729,42 @@
             var base = rng(1, 20) * 10;
             q = pct + "% of " + base + " = ?";
             a = Math.round((pct / 100) * base);
-          } else {
-            // neg: result is negative
+          } else if (t === "neg") {
+            // Negative result: small number minus larger number
             var y2 = rng(10, 50),
               x2 = rng(1, y2 - 1);
             q = x2 + " \u2212 " + y2 + " = ?";
             a = x2 - y2;
+          } else if (t === "pow") {
+            // Power/exponent
+            var base = rng(2, 10);
+            var exp = rng(2, 4);
+            q = base + "^" + exp + " = ?";
+            a = Math.pow(base, exp);
+          } else if (t === "fact") {
+            // Factorial
+            var n = rng(3, 8);
+            q = n + "! = ?";
+            a = 1;
+            for (var i = 1; i <= n; i++) a *= i;
+          } else if (t === "dbl") {
+            // Double a number
+            var x = rng(10, 100);
+            q = "Double " + x + " = ?";
+            a = x * 2;
+          } else if (t === "half") {
+            // Half of a number
+            var x = rng(10, 100);
+            if (x % 2 === 1) x++;
+            q = "Half of " + x + " = ?";
+            a = x / 2;
+          } else if (t === "compound") {
+            // Mixed operation: (a + b) × c
+            var a1 = rng(2, 10);
+            var b1 = rng(2, 10);
+            var c1 = rng(2, 8);
+            q = "(" + a1 + " + " + b1 + ") \u00d7 " + c1 + " = ?";
+            a = (a1 + b1) * c1;
           }
 
           mathCorrectAnswer = a;
