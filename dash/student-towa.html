@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Towa - Student Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f3f0ff;
+        min-height: 100vh;
+      }
+
+      /* ── Hero banner ── */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #6d28d9 40%,
+          #06b6d4 100%
+        );
+        padding: 32px 48px 28px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .hero-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .hero-avatar {
+        width: 72px;
+        height: 72px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4em;
+        flex-shrink: 0;
+      }
+      .hero h1 {
+        font-size: 2.2em;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .hero-sub {
+        opacity: 0.9;
+        font-size: 1em;
+        margin-top: 2px;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .stat-box {
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(6px);
+        border-radius: 12px;
+        padding: 14px 22px;
+        text-align: center;
+        min-width: 110px;
+      }
+      .stat-box .num {
+        font-size: 1.5em;
+        font-weight: 800;
+      }
+      .stat-box .lbl {
+        font-size: 0.78em;
+        opacity: 0.85;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 2px;
+      }
+      .back-link {
+        position: absolute;
+        top: 16px;
+        left: 20px;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9em;
+        z-index: 10;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: #fff;
+      }
+
+      /* ── Main grid ── */
+      .page-wrap {
+        position: relative;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 32px 48px;
+      }
+      .top-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 24px;
+        margin-top: -20px;
+      }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .full-row {
+        margin-top: 24px;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5e7eb;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .card:hover {
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      .card-title {
+        font-size: 1.15em;
+        font-weight: 700;
+        color: #6d28d9;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #ede9fe;
+      }
+
+      /* ── Info fields ── */
+      .field {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .field:last-child {
+        border-bottom: none;
+      }
+      .label {
+        font-weight: 600;
+        color: #374151;
+      }
+      .value {
+        color: #6b7280;
+      }
+      .status-active {
+        background: #ede9fe;
+        color: #6d28d9;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85em;
+      }
+
+      /* ── Calendar ── */
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .calendar-header {
+        font-weight: 600;
+        color: #6d28d9;
+        text-align: center;
+        font-size: 0.85em;
+        padding: 8px 0;
+      }
+      .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: #f9f5ff;
+        border: 1px solid #ede9fe;
+        font-size: 0.9em;
+        font-weight: 500;
+        color: #374151;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .calendar-day:hover {
+        background: #ede9fe;
+        border-color: #ddd6fe;
+      }
+      .calendar-day.has-event {
+        background: #ddd6fe;
+        color: #6d28d9;
+        font-weight: 700;
+      }
+      .calendar-day.today {
+        background: #8b5cf6;
+        color: white;
+        font-weight: 700;
+      }
+
+      /* ── Materials Grid ── */
+      .materials-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-top: 18px;
+      }
+      .material-card {
+        background: linear-gradient(135deg, #f3f0ff 0%, #faf5ff 100%);
+        border: 1px solid #ede9fe;
+        border-radius: 12px;
+        padding: 18px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .material-card:hover {
+        border-color: #ddd6fe;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        transform: translateY(-2px);
+      }
+      .material-card-title {
+        font-weight: 700;
+        color: #6d28d9;
+        margin-bottom: 8px;
+        font-size: 0.95em;
+      }
+      .material-card-desc {
+        font-size: 0.85em;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+
+      /* ── Practice Grid ── */
+      .practice-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .practice-item {
+        background: linear-gradient(135deg, #f3f0ff 0%, #faf5ff 100%);
+        border: 1px solid #ede9fe;
+        border-radius: 12px;
+        padding: 16px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .practice-item:hover {
+        border-color: #ddd6fe;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        transform: translateY(-2px);
+      }
+      .practice-icon {
+        font-size: 2em;
+        margin-bottom: 8px;
+      }
+      .practice-label {
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #6d28d9;
+      }
+
+      /* ── Vocab list ── */
+      .vocab-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .vocab-item {
+        padding: 14px;
+        background: #f9f5ff;
+        border-left: 3px solid #8b5cf6;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .vocab-item:hover {
+        background: #f3f0ff;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+      }
+      .vocab-word {
+        font-weight: 700;
+        color: #6d28d9;
+        margin-bottom: 4px;
+      }
+      .vocab-def {
+        font-size: 0.9em;
+        color: #6b7280;
+        margin-bottom: 4px;
+      }
+      .vocab-example {
+        font-size: 0.85em;
+        color: #9ca3af;
+        font-style: italic;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 1024px) {
+        .top-row {
+          grid-template-columns: 1fr;
+        }
+        .materials-grid {
+          grid-template-columns: 1fr;
+        }
+        .practice-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 24px 20px 20px;
+        }
+        .hero h1 {
+          font-size: 1.8em;
+        }
+        .page-wrap {
+          padding: 0 16px 32px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .materials-grid,
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .practice-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-stats {
+          width: 100%;
+          gap: 12px;
+        }
+        .stat-box {
+          flex: 1;
+          min-width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-avatar">T</div>
+        <div>
+          <h1>Towa</h1>
+          <div class="hero-sub">EIKEN Level 5 Preparation</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="num">95%</div>
+          <div class="lbl">Progress</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">45</div>
+          <div class="lbl">Lessons</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">850+</div>
+          <div class="lbl">Vocab</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">A+</div>
+          <div class="lbl">Grade</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-wrap">
+      <!-- Profile & Contact -->
+      <div class="top-row">
+        <div class="card">
+          <div class="card-title">ℹ️ Profile Information</div>
+          <div class="field">
+            <span class="label">Student Level</span>
+            <span class="value">EIKEN Level 5</span>
+          </div>
+          <div class="field">
+            <span class="label">Status</span>
+            <span class="status-active">Active</span>
+          </div>
+          <div class="field">
+            <span class="label">Current Grade</span>
+            <span class="value">A+</span>
+          </div>
+          <div class="field">
+            <span class="label">Lessons Completed</span>
+            <span class="value">45 / 50</span>
+          </div>
+          <div class="field">
+            <span class="label">Vocabulary Learned</span>
+            <span class="value">850+ words</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📧 Contact & Instructor</div>
+          <div class="field">
+            <span class="label">Instructor</span>
+            <span class="value">Mr. Tanaka</span>
+          </div>
+          <div class="field">
+            <span class="label">Email</span>
+            <span class="value">instructor@eslfunonline.com</span>
+          </div>
+          <div class="field">
+            <span class="label">Availability</span>
+            <span class="value">Mon-Fri, 3-7 PM JST</span>
+          </div>
+          <div class="field">
+            <span class="label">Next Session</span>
+            <span class="value">June 7, 2026 - 4:00 PM</span>
+          </div>
+          <div class="field">
+            <span class="label">Communication</span>
+            <span class="value">Email, Video Call</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Calendar -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">📅 June 2026 Schedule</div>
+          <div style="overflow-x: auto">
+            <div class="calendar">
+              <div class="calendar-header">Sun</div>
+              <div class="calendar-header">Mon</div>
+              <div class="calendar-header">Tue</div>
+              <div class="calendar-header">Wed</div>
+              <div class="calendar-header">Thu</div>
+              <div class="calendar-header">Fri</div>
+              <div class="calendar-header">Sat</div>
+
+              <div class="calendar-day">1</div>
+              <div class="calendar-day">2</div>
+              <div class="calendar-day">3</div>
+              <div class="calendar-day">4</div>
+              <div class="calendar-day">5</div>
+              <div class="calendar-day">6</div>
+              <div class="calendar-day">7</div>
+              <div class="calendar-day">8</div>
+              <div class="calendar-day">9</div>
+              <div class="calendar-day">10</div>
+              <div class="calendar-day">11</div>
+              <div class="calendar-day has-event" title="EIKEN Reading Exam">
+                12
+              </div>
+              <div class="calendar-day">13</div>
+              <div class="calendar-day">14</div>
+              <div class="calendar-day has-event" title="Listening Practice">
+                15
+              </div>
+              <div class="calendar-day">16</div>
+              <div class="calendar-day">17</div>
+              <div class="calendar-day">18</div>
+              <div class="calendar-day">19</div>
+              <div class="calendar-day has-event" title="Speaking Session">
+                20
+              </div>
+              <div class="calendar-day">21</div>
+              <div class="calendar-day">22</div>
+              <div class="calendar-day">23</div>
+              <div class="calendar-day">24</div>
+              <div class="calendar-day has-event" title="Mock EIKEN Exam">
+                25
+              </div>
+              <div class="calendar-day">26</div>
+              <div class="calendar-day">27</div>
+              <div class="calendar-day">28</div>
+              <div class="calendar-day">29</div>
+              <div class="calendar-day">30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EIKEN Materials -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">📚 EIKEN Level 5 Materials</div>
+          <div class="materials-grid">
+            <div class="material-card">
+              <div class="material-card-title">
+                🎯 Advanced Grammar & Structures
+              </div>
+              <div class="material-card-desc">
+                Complex sentences, conditionals, passive voice, inversions, and
+                tense mastery
+              </div>
+            </div>
+            <div class="material-card">
+              <div class="material-card-title">💡 Advanced Vocabulary</div>
+              <div class="material-card-desc">
+                450+ academic terms, 200+ collocations & idioms, business &
+                technical vocabulary
+              </div>
+            </div>
+            <div class="material-card">
+              <div class="material-card-title">🎤 Speaking & Listening</div>
+              <div class="material-card-desc">
+                Fluent speech, native-speed audio (100+ hours), accent
+                variation, presentation skills
+              </div>
+            </div>
+            <div class="material-card">
+              <div class="material-card-title">
+                ✍️ Advanced Writing & Essays
+              </div>
+              <div class="material-card-desc">
+                Essay structures, discourse markers, cohesion techniques, formal
+                writing conventions
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vocabulary Review -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">🔤 Advanced Vocabulary Review</div>
+          <div class="vocab-list">
+            <div class="vocab-item">
+              <div class="vocab-word">1. Sophisticated</div>
+              <div class="vocab-def">
+                Having refined taste, knowledge, and judgment
+              </div>
+              <div class="vocab-example">
+                Her sophisticated approach impressed the committee.
+              </div>
+            </div>
+            <div class="vocab-item">
+              <div class="vocab-word">2. Eloquent</div>
+              <div class="vocab-def">
+                Fluent or persuasive in speaking or writing
+              </div>
+              <div class="vocab-example">
+                The speaker delivered an eloquent presentation on climate
+                change.
+              </div>
+            </div>
+            <div class="vocab-item">
+              <div class="vocab-word">3. Meticulous</div>
+              <div class="vocab-def">
+                Showing great attention to detail; very careful and precise
+              </div>
+              <div class="vocab-example">
+                Her meticulous research methodology earned her recognition.
+              </div>
+            </div>
+            <div class="vocab-item">
+              <div class="vocab-word">4. Comprehensive</div>
+              <div class="vocab-def">
+                Complete and including all or nearly all elements
+              </div>
+              <div class="vocab-example">
+                The report provides a comprehensive analysis of market trends.
+              </div>
+            </div>
+            <div class="vocab-item">
+              <div class="vocab-word">5. Proficient</div>
+              <div class="vocab-def">
+                Competent or skilled in doing or using something
+              </div>
+              <div class="vocab-example">
+                Towa has become proficient in English grammar.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Exercises -->
+      <div class="full-row">
+        <div class="card">
+          <div class="card-title">🎯 Practice Exercises</div>
+          <div class="practice-grid">
+            <div class="practice-item">
+              <div class="practice-icon">📝</div>
+              <div class="practice-label">Grammar<br />50+ Problems</div>
+            </div>
+            <div class="practice-item">
+              <div class="practice-icon">🎧</div>
+              <div class="practice-label">Listening<br />30+ Drills</div>
+            </div>
+            <div class="practice-item">
+              <div class="practice-icon">🎤</div>
+              <div class="practice-label">Speaking<br />20+ Tasks</div>
+            </div>
+            <div class="practice-item">
+              <div class="practice-icon">✍️</div>
+              <div class="practice-label">Essays<br />15+ Prompts</div>
+            </div>
+            <div class="practice-item">
+              <div class="practice-icon">📚</div>
+              <div class="practice-label">Mock Exams<br />6+ Tests</div>
+            </div>
+            <div class="practice-item">
+              <div class="practice-icon">⭐</div>
+              <div class="practice-label">Review<br />Daily Vocab</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Progress -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">📊 Recent Scores</div>
+          <div class="field">
+            <span class="label">Grammar Test</span>
+            <span class="value" style="color: #10b981; font-weight: 600"
+              >98%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Writing Sample</span>
+            <span class="value" style="color: #10b981; font-weight: 600"
+              >96%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Speaking Eval</span>
+            <span class="value" style="color: #10b981; font-weight: 600"
+              >94%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Listening Test</span>
+            <span class="value" style="color: #10b981; font-weight: 600"
+              >92%</span
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🏆 Skill Mastery</div>
+          <div class="field">
+            <span class="label">Advanced Grammar</span>
+            <span class="value" style="color: #8b5cf6; font-weight: 600"
+              >96%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Vocabulary</span>
+            <span class="value" style="color: #8b5cf6; font-weight: 600"
+              >95%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Listening</span>
+            <span class="value" style="color: #8b5cf6; font-weight: 600"
+              >94%</span
+            >
+          </div>
+          <div class="field">
+            <span class="label">Writing</span>
+            <span class="value" style="color: #8b5cf6; font-weight: 600"
+              >92%</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
