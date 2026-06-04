@@ -81,29 +81,50 @@ function initializeNavigation() {
     const mobileIcon = freshMobileToggle.querySelector("i");
     let isMenuOpen = false;
 
+    // Initialize aria attributes
+    freshMobileToggle.setAttribute("aria-expanded", "false");
+    freshMobileToggle.setAttribute("aria-controls", "navLinks");
+    freshNavLinks.setAttribute("aria-hidden", "true");
+
+    // Set aria-expanded on dropdown links
+    navItems.forEach((item) => {
+      const link = item.querySelector(".nav-link");
+      const dropdown = item.querySelector(".dropdown");
+      if (link && dropdown && link.querySelector(".fa-chevron-down")) {
+        link.setAttribute("aria-expanded", "false");
+      }
+    });
+
     // Functions to handle menu state
     function openMenu() {
       isMenuOpen = true;
       // Save scroll position before locking — prevents page jump on Android
       const scrollY = window.scrollY;
       body.dataset.menuScrollY = scrollY;
-      body.style.top = "-" + scrollY + "px";
       freshNavLinks.classList.add("active");
       if (mobileIcon) mobileIcon.className = "fas fa-times";
       body.classList.add("mobile-menu-open");
+      freshMobileToggle.setAttribute("aria-expanded", "true");
+      freshNavLinks.setAttribute("aria-hidden", "false");
+      // Focus first nav item for accessibility
+      const firstNavLink = freshNavLinks.querySelector(".nav-link");
+      if (firstNavLink) {
+        setTimeout(() => firstNavLink.focus(), 100);
+      }
     }
 
     function closeMenu() {
       isMenuOpen = false;
-      const scrollY = parseInt(body.dataset.menuScrollY || "0");
       body.classList.remove("mobile-menu-open");
       body.style.top = "";
       // Clear inline overflow — restores CSS-defined overflow-x: hidden
       body.style.overflow = "";
       freshNavLinks.classList.remove("active");
       if (mobileIcon) mobileIcon.className = "fas fa-bars";
-      // Restore scroll position instantly (no visual jump)
-      window.scrollTo({ top: scrollY, behavior: "instant" });
+      freshMobileToggle.setAttribute("aria-expanded", "false");
+      freshNavLinks.setAttribute("aria-hidden", "true");
+      // Return focus to menu toggle
+      freshMobileToggle.focus();
       // Close all dropdowns when closing menu
       navItems.forEach(resetDropdown);
     }
@@ -159,6 +180,7 @@ function initializeNavigation() {
     // Mobile dropdown toggle function
     function toggleMobileDropdown(item, chevron) {
       const isOpen = item.classList.contains("mobile-open");
+      const link = item.querySelector(".nav-link");
 
       // Close all other dropdowns first
       navItems.forEach((otherItem) => {
@@ -170,9 +192,16 @@ function initializeNavigation() {
       // Toggle current dropdown
       if (isOpen) {
         resetDropdown(item);
+        if (link) link.setAttribute("aria-expanded", "false");
       } else {
         item.classList.add("mobile-open");
         chevron.style.transform = "rotate(180deg)";
+        if (link) link.setAttribute("aria-expanded", "true");
+        // Focus first dropdown item
+        const firstDropdownItem = item.querySelector(".dropdown-item");
+        if (firstDropdownItem) {
+          setTimeout(() => firstDropdownItem.focus(), 50);
+        }
       }
     }
 
@@ -180,8 +209,12 @@ function initializeNavigation() {
     function resetDropdown(item) {
       item.classList.remove("mobile-open", "desktop-open");
       const chevron = item.querySelector(".fa-chevron-down");
+      const link = item.querySelector(".nav-link");
       if (chevron) {
         chevron.style.transform = "rotate(0deg)";
+      }
+      if (link) {
+        link.setAttribute("aria-expanded", "false");
       }
     }
 
@@ -215,6 +248,30 @@ function initializeNavigation() {
       if (e.key === "Escape" && isMenuOpen) {
         closeMenu();
         freshMobileToggle.focus();
+      }
+
+      // Trap focus within mobile menu when open
+      if (isMenuOpen && e.key === "Tab") {
+        const focusableElements = freshNavLinks.querySelectorAll(
+          "a, button, [tabindex]:not([tabindex='-1'])",
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        const activeElement = document.activeElement;
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          // Tab
+          if (activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
       }
     });
 
