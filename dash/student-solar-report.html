@@ -1096,6 +1096,165 @@
           </div>
         </div>
 
+        <!-- Level Check Test Results -->
+        <div class="section" id="testResultsSection" style="display: none">
+          <div class="section-title">📝 Level Check Test Results</div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 16px;
+              margin-bottom: 20px;
+            "
+          >
+            <div
+              style="
+                background: #f0fdf4;
+                padding: 18px;
+                border-radius: 10px;
+                border: 1.5px solid #dcfce7;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.8em;
+                  font-weight: 700;
+                  color: #6b7280;
+                  text-transform: uppercase;
+                  letter-spacing: 0.4px;
+                  margin-bottom: 8px;
+                "
+              >
+                📚 Vocabulary
+              </div>
+              <div
+                style="font-size: 1.8em; font-weight: 800; color: #166534"
+                id="testVocab"
+              >
+                —
+              </div>
+              <div
+                style="font-size: 0.8em; color: #6b7280; margin-top: 4px"
+                id="testVocabPct"
+              >
+                —
+              </div>
+            </div>
+            <div
+              style="
+                background: #f0fdf4;
+                padding: 18px;
+                border-radius: 10px;
+                border: 1.5px solid #dcfce7;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.8em;
+                  font-weight: 700;
+                  color: #6b7280;
+                  text-transform: uppercase;
+                  letter-spacing: 0.4px;
+                  margin-bottom: 8px;
+                "
+              >
+                🔤 Grammar
+              </div>
+              <div
+                style="font-size: 1.8em; font-weight: 800; color: #166534"
+                id="testGrammar"
+              >
+                —
+              </div>
+              <div
+                style="font-size: 0.8em; color: #6b7280; margin-top: 4px"
+                id="testGrammarPct"
+              >
+                —
+              </div>
+            </div>
+            <div
+              style="
+                background: #f0fdf4;
+                padding: 18px;
+                border-radius: 10px;
+                border: 1.5px solid #dcfce7;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.8em;
+                  font-weight: 700;
+                  color: #6b7280;
+                  text-transform: uppercase;
+                  letter-spacing: 0.4px;
+                  margin-bottom: 8px;
+                "
+              >
+                📖 Reading
+              </div>
+              <div
+                style="font-size: 1.8em; font-weight: 800; color: #166534"
+                id="testReading"
+              >
+                —
+              </div>
+              <div
+                style="font-size: 0.8em; color: #6b7280; margin-top: 4px"
+                id="testReadingPct"
+              >
+                —
+              </div>
+            </div>
+            <div
+              style="
+                background: #f0fdf4;
+                padding: 18px;
+                border-radius: 10px;
+                border: 1.5px solid #dcfce7;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.8em;
+                  font-weight: 700;
+                  color: #6b7280;
+                  text-transform: uppercase;
+                  letter-spacing: 0.4px;
+                  margin-bottom: 8px;
+                "
+              >
+                🗣️ Speaking
+              </div>
+              <div
+                style="font-size: 1.8em; font-weight: 800; color: #166534"
+                id="testSpeaking"
+              >
+                —
+              </div>
+              <div
+                style="font-size: 0.8em; color: #6b7280; margin-top: 4px"
+                id="testSpeakingPct"
+              >
+                —
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              background: #f9fafb;
+              padding: 14px 16px;
+              border-radius: 8px;
+              border: 1px solid #e5e7eb;
+              font-size: 0.85em;
+              color: #6b7280;
+              text-align: center;
+            "
+          >
+            <span id="testDate">Test completed on —</span>
+          </div>
+        </div>
+
         <!-- Signatures -->
         <div class="section" style="margin-bottom: 0">
           <div class="sig-row">
@@ -1227,6 +1386,45 @@
           ? "Click dots to set level · Click text to edit"
           : "Read-only mode";
       }
+
+      // ── Load test results from localStorage ──
+      function loadTestResults() {
+        try {
+          const results = localStorage.getItem("solarTestResults");
+          if (!results) return;
+
+          const data = JSON.parse(results);
+          const section = document.getElementById("testResultsSection");
+          section.style.display = "block";
+
+          document.getElementById("testVocab").textContent =
+            `${data.vocabulary.score}/${data.vocabulary.total}`;
+          document.getElementById("testVocabPct").textContent =
+            `${data.overall.vocabPercent}%`;
+
+          document.getElementById("testGrammar").textContent =
+            `${data.grammar.score}/${data.grammar.total}`;
+          document.getElementById("testGrammarPct").textContent =
+            `${data.overall.grammarPercent}%`;
+
+          document.getElementById("testReading").textContent =
+            `${data.reading.score}/${data.reading.total}`;
+          document.getElementById("testReadingPct").textContent =
+            `${data.overall.readingPercent}%`;
+
+          document.getElementById("testSpeaking").textContent =
+            `${data.speaking.score}/${data.speaking.total}`;
+          document.getElementById("testSpeakingPct").textContent =
+            `${data.overall.speakingPercent}%`;
+
+          document.getElementById("testDate").textContent =
+            `Test completed on ${data.date}`;
+        } catch (e) {
+          console.log("No test results found");
+        }
+      }
+
+      loadTestResults();
     </script>
   </body>
 </html>
