@@ -1,0 +1,2176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TOEIC Practice Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #16233f;
+        --ink-soft: #2c3b5e;
+        --paper: #f1f3f6;
+        --paper-card: #ffffff;
+        --border: #d8dce3;
+        --gold: #c9982e;
+        --gold-soft: #f3e7cb;
+        --teal: #2f7a78;
+        --teal-soft: #e1f0ef;
+        --coral: #c1443c;
+        --coral-soft: #fbe7e5;
+        --text: #1b2436;
+        --text-mute: #5b6478;
+        --serif: "Source Serif 4", Georgia, serif;
+        --sans: "IBM Plex Sans", -apple-system, sans-serif;
+        --mono: "IBM Plex Mono", "Courier New", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--paper);
+        font-family: var(--sans);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.5;
+      }
+      .app {
+        max-width: 840px;
+        margin: 0 auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      /* ===== Top bar ===== */
+      .topbar {
+        background: var(--ink);
+        color: #fff;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .topbar .brand {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: 0.02em;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .topbar .brand small {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--gold);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .topbar .meta {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #c9d2e3;
+      }
+      .topbar .meta .timer {
+        color: #fff;
+      }
+      .progress-track {
+        height: 4px;
+        background: #2a3a5c;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--gold);
+        transition: width 0.3s ease;
+        width: 0%;
+      }
+      /* ===== Main content ===== */
+      main {
+        flex: 1;
+        padding: 28px 20px 100px;
+      }
+      .card {
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 28px;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 10px;
+        display: block;
+      }
+      h1 {
+        font-family: var(--serif);
+        font-size: 2.1rem;
+        margin: 0 0 6px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+      h2 {
+        font-family: var(--serif);
+        font-size: 1.5rem;
+        margin: 0 0 12px;
+        color: var(--ink);
+        font-weight: 600;
+      }
+      h3 {
+        font-family: var(--serif);
+        font-size: 1.15rem;
+        margin: 0 0 10px;
+        color: var(--ink);
+        font-weight: 600;
+      }
+      p {
+        color: var(--text);
+      }
+      .sub {
+        color: var(--text-mute);
+        font-size: 0.98rem;
+      }
+
+      /* Intro screen */
+      .intro-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin: 24px 0;
+      }
+      .intro-part {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 14px 16px;
+        background: var(--paper);
+      }
+      .intro-part .num {
+        font-family: var(--mono);
+        color: var(--teal);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+      }
+      .intro-part .name {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.02rem;
+        margin: 2px 0 4px;
+      }
+      .intro-part .count {
+        font-size: 0.85rem;
+        color: var(--text-mute);
+      }
+      .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 22px 0 10px;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+      .section-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .btn {
+        font-family: var(--sans);
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        border-radius: 3px;
+        padding: 13px 26px;
+        cursor: pointer;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+      }
+      .btn-primary {
+        background: var(--ink);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--ink-soft);
+      }
+      .btn-primary:disabled {
+        background: #aeb6c6;
+        cursor: not-allowed;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        border-color: var(--ink);
+      }
+      .btn-gold {
+        background: var(--gold);
+        color: #fff;
+      }
+      .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 22px;
+        flex-wrap: wrap;
+      }
+
+      /* Part intro */
+      .part-instructions {
+        background: var(--teal-soft);
+        border-left: 3px solid var(--teal);
+        padding: 14px 16px;
+        border-radius: 3px;
+        font-size: 0.95rem;
+        margin: 16px 0;
+      }
+
+      /* Question screen */
+      .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .q-tag {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--teal);
+        background: var(--teal-soft);
+        padding: 4px 9px;
+        border-radius: 3px;
+      }
+      .q-number {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--text-mute);
+      }
+      .context-box {
+        border: 1px solid var(--border);
+        background: var(--paper);
+        border-radius: 4px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+      }
+      .context-box .who {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .context-box p {
+        margin: 0 0 10px;
+        font-size: 0.96rem;
+      }
+      .context-box p:last-child {
+        margin-bottom: 0;
+      }
+      .svg-wrap {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        background: #edeff3;
+      }
+      .svg-wrap svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .audio-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .audio-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--ink);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-family: var(--sans);
+        font-weight: 600;
+        font-size: 0.88rem;
+        cursor: pointer;
+      }
+      .audio-btn:hover {
+        background: var(--ink-soft);
+      }
+      .audio-btn .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .link-btn {
+        background: none;
+        border: none;
+        color: var(--teal);
+        font-size: 0.85rem;
+        cursor: pointer;
+        text-decoration: underline;
+        font-family: var(--sans);
+      }
+      .transcript {
+        display: none;
+        font-size: 0.9rem;
+        color: var(--text-mute);
+        border-top: 1px dashed var(--border);
+        margin-top: 10px;
+        padding-top: 10px;
+        font-style: italic;
+      }
+      .transcript.show {
+        display: block;
+      }
+      .prompt {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 16px;
+      }
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .option {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 12px 14px;
+        cursor: pointer;
+        transition:
+          border-color 0.12s ease,
+          background 0.12s ease;
+      }
+      .option:hover {
+        border-color: var(--ink-soft);
+        background: var(--paper);
+      }
+      .option .letter {
+        font-family: var(--mono);
+        font-weight: 600;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        flex-shrink: 0;
+        color: var(--ink);
+      }
+      .option.selected {
+        border-color: var(--ink);
+        background: var(--teal-soft);
+      }
+      .option.selected .letter {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .option-text {
+        font-size: 0.96rem;
+        padding-top: 2px;
+      }
+
+      /* review / result states */
+      .option.correct-answer {
+        border-color: var(--gold);
+        background: var(--gold-soft);
+      }
+      .option.correct-answer .letter {
+        background: var(--gold);
+        color: #fff;
+        border-color: var(--gold);
+      }
+      .option.wrong-answer {
+        border-color: var(--coral);
+        background: var(--coral-soft);
+      }
+      .option.wrong-answer .letter {
+        background: var(--coral);
+        color: #fff;
+        border-color: var(--coral);
+      }
+      .explain-box {
+        margin-top: 16px;
+        border-left: 3px solid var(--gold);
+        background: var(--gold-soft);
+        padding: 12px 16px;
+        border-radius: 3px;
+        font-size: 0.92rem;
+      }
+      .explain-box b {
+        color: var(--ink);
+      }
+
+      .nav-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 24px;
+      }
+      .flag-note {
+        font-size: 0.8rem;
+        color: var(--text-mute);
+        font-family: var(--mono);
+      }
+
+      /* ===== Score report ===== */
+      .report-hero {
+        text-align: center;
+        padding: 10px 0 24px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 24px;
+      }
+      .report-hero .eyebrow {
+        justify-content: center;
+      }
+      .total-score {
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 4.2rem;
+        color: var(--ink);
+        line-height: 1;
+        margin: 6px 0;
+      }
+      .total-score span {
+        font-size: 1.4rem;
+        color: var(--text-mute);
+        font-weight: 400;
+      }
+      .scale-bar-wrap {
+        margin: 20px auto;
+        max-width: 520px;
+      }
+      .scale-label-row {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--text-mute);
+        margin-bottom: 4px;
+      }
+      .scale-bar {
+        position: relative;
+        height: 10px;
+        background: linear-gradient(90deg, #dce4ee, #c9d6e8);
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+      .scale-marker {
+        position: absolute;
+        top: -6px;
+        width: 2px;
+        height: 22px;
+        background: var(--gold);
+      }
+      .scale-marker::after {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .section-scores {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 26px;
+      }
+      .section-score-card {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 16px;
+        text-align: center;
+      }
+      .section-score-card .label {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--teal);
+      }
+      .section-score-card .num {
+        font-family: var(--serif);
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 4px 0;
+      }
+      .section-score-card .frac {
+        font-size: 0.82rem;
+        color: var(--text-mute);
+      }
+      .part-breakdown {
+        margin-top: 28px;
+      }
+      .part-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.92rem;
+      }
+      .part-row:last-child {
+        border-bottom: none;
+      }
+      .part-row .pname {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .bar-mini {
+        flex: 1;
+        margin: 0 14px;
+        height: 6px;
+        background: #e7e9ee;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .bar-mini-fill {
+        height: 100%;
+        background: var(--teal);
+      }
+      .review-list {
+        margin-top: 10px;
+      }
+      .review-item {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 16px 18px;
+        margin-bottom: 12px;
+      }
+      .review-item .rtag {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-right: 8px;
+      }
+      .rtag.correct {
+        background: var(--gold-soft);
+        color: #8a6a17;
+      }
+      .rtag.wrong {
+        background: var(--coral-soft);
+        color: var(--coral);
+      }
+      .rtag.skipped {
+        background: #edeff3;
+        color: var(--text-mute);
+      }
+
+      footer.help {
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--text-mute);
+        padding: 18px;
+      }
+      kbd {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 0.64rem;
+        background: #e7eaf0;
+        border: 1px solid #c8cdd8;
+        border-bottom-width: 2px;
+        border-radius: 2px;
+        padding: 1px 5px;
+        color: var(--ink-soft);
+      }
+      .keyboard-hint {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--text-mute);
+        text-align: center;
+        margin-top: 14px;
+      }
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.25;
+        }
+      }
+      .audio-btn.playing .dot {
+        animation: pulse-dot 0.8s ease-in-out infinite;
+      }
+      .audio-btn.playing {
+        background: var(--teal);
+      }
+      .flag-unanswered {
+        color: #8a5500;
+      }
+      .cefr-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--teal-soft);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 5px 14px;
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--teal);
+        margin-top: 10px;
+      }
+      .cefr-badge .lvl {
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      @media (max-width: 600px) {
+        .intro-grid {
+          grid-template-columns: 1fr;
+        }
+        .section-scores {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 1.6rem;
+        }
+        .total-score {
+          font-size: 3rem;
+        }
+        main {
+          padding: 20px 14px 90px;
+        }
+        .card {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="topbar" id="topbar" style="display: none">
+        <div class="brand">
+          TOEIC<sup style="font-size: 0.55rem">&reg;</sup>
+          <small>Practice Test</small>
+        </div>
+        <div class="meta">
+          <span id="partLabel">Part 1</span>
+          <span class="timer" id="timerDisplay">00:00</span>
+        </div>
+      </div>
+      <div class="progress-track" id="progressTrack" style="display: none">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <main id="main"></main>
+      <footer class="help">
+        Unofficial practice material &middot; not affiliated with ETS or the
+        TOEIC&reg; program
+      </footer>
+    </div>
+
+    <script>
+      /* =========================================================
+   TOEIC PRACTICE TEST — DATA
+   ========================================================= */
+
+      const SVGS = {
+        desk: `<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="260" fill="#EDEFF3"/>
+    <rect x="0" y="200" width="400" height="60" fill="#D7DBE3"/>
+    <rect x="40" y="120" width="220" height="80" fill="#B9A889"/>
+    <rect x="40" y="120" width="220" height="10" fill="#A8987A"/>
+    <rect x="70" y="70" width="90" height="60" rx="3" fill="#3A4A63"/>
+    <rect x="76" y="76" width="78" height="42" fill="#7FA6C9"/>
+    <rect x="60" y="128" width="110" height="8" fill="#5B6478"/>
+    <circle cx="220" cy="150" r="26" fill="#E7C79B"/>
+    <rect x="190" y="176" width="60" height="50" fill="#2F6F6B"/>
+    <rect x="196" y="140" width="48" height="30" fill="#E7C79B"/>
+    <rect x="205" y="150" width="30" height="16" fill="#3A4A63"/>
+    <rect x="290" y="40" width="6" height="180" fill="#C7CCD6"/>
+    <rect x="296" y="40" width="70" height="180" fill="#D9E4EF" opacity="0.6"/>
+  </svg>`,
+        copier: `<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="260" fill="#EEF0F4"/>
+    <rect x="0" y="210" width="400" height="50" fill="#D7DBE3"/>
+    <rect x="150" y="110" width="120" height="90" rx="4" fill="#4A5674"/>
+    <rect x="160" y="120" width="100" height="40" fill="#8CA0BE"/>
+    <rect x="170" y="170" width="40" height="14" fill="#2F3A52"/>
+    <circle cx="120" cy="150" r="24" fill="#E7C79B"/>
+    <rect x="100" y="174" width="45" height="55" fill="#2F7A78"/>
+    <rect x="95" y="150" width="55" height="30" fill="#E7C79B" opacity="0"/>
+    <rect x="118" y="176" width="35" height="10" fill="#E7C79B"/>
+    <rect x="270" y="60" width="60" height="90" fill="#C9CFDA"/>
+  </svg>`,
+        loading: `<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="260" fill="#E7EAF0"/>
+    <rect x="0" y="220" width="400" height="40" fill="#B8BEC9"/>
+    <rect x="230" y="90" width="140" height="100" fill="#8C97A8"/>
+    <rect x="230" y="90" width="140" height="16" fill="#6E7A8E"/>
+    <rect x="250" y="120" width="100" height="60" fill="#3A4358"/>
+    <rect x="40" y="200" width="50" height="30" fill="#B9A362"/>
+    <rect x="95" y="200" width="50" height="30" fill="#C9B475"/>
+    <circle cx="90" cy="160" r="22" fill="#E7C79B"/>
+    <rect x="70" y="182" width="42" height="45" fill="#2F6F6B"/>
+    <rect x="60" y="150" width="55" height="20" fill="#8C6A3C"/>
+  </svg>`,
+        waiting: `<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="260" fill="#EFF1F5"/>
+    <rect x="0" y="210" width="400" height="50" fill="#D7DBE3"/>
+    <rect x="40" y="160" width="60" height="50" fill="#4A5674"/>
+    <rect x="150" y="160" width="60" height="50" fill="#4A5674"/>
+    <rect x="260" y="160" width="60" height="50" fill="#4A5674"/>
+    <circle cx="70" cy="140" r="20" fill="#E7C79B"/>
+    <rect x="52" y="158" width="36" height="35" fill="#2F7A78"/>
+    <circle cx="180" cy="140" r="20" fill="#D9AE7C"/>
+    <rect x="162" y="158" width="36" height="35" fill="#C1443C"/>
+    <rect x="230" y="120" width="24" height="30" fill="#fff"/>
+    <circle cx="290" cy="140" r="20" fill="#E7C79B"/>
+    <rect x="272" y="158" width="36" height="35" fill="#3A4A63"/>
+  </svg>`,
+      };
+
+      // Each "block" carries shared context (audio/svg/passage) and one or more questions.
+      const testParts = [
+        {
+          id: "p1",
+          section: "listening",
+          key: "Part 1",
+          title: "Part 1: Photographs",
+          directions:
+            "For each question, a picture is shown. Four statements about the picture will be read aloud (or read via transcript). Select the statement that best describes the picture.",
+          blocks: [
+            {
+              type: "photo",
+              svg: "desk",
+              questions: [
+                {
+                  audio:
+                    "Look at the picture. (A) The man is talking on the phone. (B) The man is typing on his laptop. (C) The man is reading a newspaper. (D) The man is standing near the window.",
+                  options: [
+                    "The man is talking on the phone.",
+                    "The man is typing on his laptop.",
+                    "The man is reading a newspaper.",
+                    "The man is standing near the window.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The picture shows a man seated at a desk with his hands on a laptop keyboard. Choice (B) matches the action shown. (A), (C), and (D) describe actions or positions that are not depicted.",
+                },
+              ],
+            },
+            {
+              type: "photo",
+              svg: "copier",
+              questions: [
+                {
+                  audio:
+                    "Look at the picture. (A) She is watering the plants. (B) She is making photocopies. (C) She is answering the phone. (D) She is filing documents in a cabinet.",
+                  options: [
+                    "She is watering the plants.",
+                    "She is making photocopies.",
+                    "She is answering the phone.",
+                    "She is filing documents in a cabinet.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The woman is standing at a photocopier, so (B) is correct. There is no evidence of plants, a phone, or a filing cabinet in the picture.",
+                },
+              ],
+            },
+            {
+              type: "photo",
+              svg: "loading",
+              questions: [
+                {
+                  audio:
+                    "Look at the picture. (A) The workers are loading boxes onto a truck. (B) The truck is being repaired. (C) The workers are painting a wall. (D) The boxes have been left in the street.",
+                  options: [
+                    "The workers are loading boxes onto a truck.",
+                    "The truck is being repaired.",
+                    "The workers are painting a wall.",
+                    "The boxes have been left in the street.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "The picture shows workers moving boxes toward a truck at a loading dock, which matches (A). Watch out for (D) — the boxes are being handled, not simply left behind.",
+                },
+              ],
+            },
+            {
+              type: "photo",
+              svg: "waiting",
+              questions: [
+                {
+                  audio:
+                    "Look at the picture. (A) The chairs are being rearranged. (B) Some people are seated in a waiting area. (C) The room is empty. (D) A man is sweeping the floor.",
+                  options: [
+                    "The chairs are being rearranged.",
+                    "Some people are seated in a waiting area.",
+                    "The room is empty.",
+                    "A man is sweeping the floor.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "Several people are shown seated in chairs, so (B) correctly describes the scene. (C) is a common trap — a picture with people is never 'empty.'",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p2",
+          section: "listening",
+          key: "Part 2",
+          title: "Part 2: Question-Response",
+          directions:
+            "You will hear a question or statement and three possible responses. Choose the response that best answers the question.",
+          blocks: [
+            {
+              type: "audio-only",
+              questions: [
+                {
+                  audio:
+                    "When does the marketing meeting start? (A) It starts at ten o'clock. (B) In the conference room on the third floor. (C) Yes, I'll attend.",
+                  options: [
+                    "It starts at ten o'clock.",
+                    "In the conference room on the third floor.",
+                    "Yes, I'll attend.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "'When' asks about time, so only (A) directly answers with a time. (B) answers a 'where' question, and (C) responds to a yes/no question.",
+                },
+              ],
+            },
+            {
+              type: "audio-only",
+              questions: [
+                {
+                  audio:
+                    "Could you send me the sales report by Friday? (A) I sent it yesterday. (B) Sure, no problem. (C) It's on the top shelf.",
+                  options: [
+                    "I sent it yesterday.",
+                    "Sure, no problem.",
+                    "It's on the top shelf.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "This is a polite request. (B) is a direct, appropriate agreement. (A) contradicts the premise that it hasn't been sent, and (C) is unrelated.",
+                },
+              ],
+            },
+            {
+              type: "audio-only",
+              questions: [
+                {
+                  audio:
+                    "Who's presenting the quarterly results? (A) Around five hundred dollars. (B) Sarah from the finance team. (C) Next Tuesday afternoon.",
+                  options: [
+                    "Around five hundred dollars.",
+                    "Sarah from the finance team.",
+                    "Next Tuesday afternoon.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "'Who' requires a person as an answer. Only (B) names a person. (A) answers 'how much' and (C) answers 'when.'",
+                },
+              ],
+            },
+            {
+              type: "audio-only",
+              questions: [
+                {
+                  audio:
+                    "Isn't the new office on Fifth Avenue? (A) No, it's actually on Third Avenue. (B) I bought it last week. (C) He's a new employee.",
+                  options: [
+                    "No, it's actually on Third Avenue.",
+                    "I bought it last week.",
+                    "He's a new employee.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "Negative questions are still answered as if the 'not' weren't there. (A) directly confirms/corrects the location, which is the expected response.",
+                },
+              ],
+            },
+            {
+              type: "audio-only",
+              questions: [
+                {
+                  audio:
+                    "Would you like coffee or tea? (A) I'll have coffee, thanks. (B) It's on the second floor. (C) Yes, I would.",
+                  options: [
+                    "I'll have coffee, thanks.",
+                    "It's on the second floor.",
+                    "Yes, I would.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "This is an 'or' choice question, so a simple 'yes' (C) is a common trap and doesn't work grammatically. (A) picks one of the two options offered.",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p3",
+          section: "listening",
+          key: "Part 3",
+          title: "Part 3: Conversations",
+          directions:
+            "You will hear a conversation between two or three people. Answer the three questions that follow based on what is said.",
+          blocks: [
+            {
+              type: "conversation",
+              lines: [
+                {
+                  who: "Man",
+                  text: "Hi Karen, do you know why the printer on the third floor isn't working? I've been trying to print the client contract for the last ten minutes.",
+                },
+                {
+                  who: "Woman",
+                  text: "Oh, I heard about that. Apparently, it's out of toner. IT ordered a replacement cartridge, but it won't arrive until tomorrow morning.",
+                },
+                {
+                  who: "Man",
+                  text: "That's a problem. I need to send the signed contract to the client by five o'clock today.",
+                },
+                {
+                  who: "Woman",
+                  text: "Why don't you just email it as a PDF instead? Most clients accept digital signatures now.",
+                },
+                { who: "Man", text: "Good idea. I'll ask him if that works." },
+              ],
+              questions: [
+                {
+                  prompt: "What problem does the man mention?",
+                  options: [
+                    "A printer is completely broken.",
+                    "The printer has run out of toner.",
+                    "A client canceled a meeting.",
+                    "His computer crashed.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The woman explains the printer 'is out of toner' — the printer itself isn't broken, it simply needs a new cartridge.",
+                },
+                {
+                  prompt: "When will the new cartridge arrive?",
+                  options: [
+                    "Later today.",
+                    "Tomorrow morning.",
+                    "Next week.",
+                    "It has already arrived.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The woman states IT ordered a replacement, 'but it won't arrive until tomorrow morning.'",
+                },
+                {
+                  prompt: "What does the woman suggest the man do?",
+                  options: [
+                    "Buy a new printer.",
+                    "Call the client.",
+                    "Send the contract by email.",
+                    "Wait until tomorrow.",
+                  ],
+                  correct: 2,
+                  explanation:
+                    "She suggests, 'Why don't you just email it as a PDF instead?' — recommending email over printing.",
+                },
+              ],
+            },
+            {
+              type: "conversation",
+              lines: [
+                {
+                  who: "Woman",
+                  text: "Thank you for calling Bayview Hotel, how can I help you?",
+                },
+                {
+                  who: "Man",
+                  text: "Hi, I'd like to book a room for two nights, checking in this Thursday.",
+                },
+                {
+                  who: "Woman",
+                  text: "Let me check our availability... We have a standard room available, but our deluxe rooms are fully booked that week.",
+                },
+                {
+                  who: "Man",
+                  text: "That's fine. Does the standard room include breakfast?",
+                },
+                {
+                  who: "Woman",
+                  text: "Yes, breakfast is included, and there's also free parking for guests.",
+                },
+                {
+                  who: "Man",
+                  text: "Great, I'll take it. Could I get a room on a higher floor? I prefer a view.",
+                },
+              ],
+              questions: [
+                {
+                  prompt: "Why is the man calling?",
+                  options: [
+                    "To cancel a reservation.",
+                    "To make a hotel reservation.",
+                    "To complain about service.",
+                    "To ask about restaurant hours.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "He says, 'I'd like to book a room for two nights,' which is a request to make a reservation.",
+                },
+                {
+                  prompt: "What does the woman say about the deluxe rooms?",
+                  options: [
+                    "They are cheaper than standard rooms.",
+                    "They are fully booked.",
+                    "They don't include breakfast.",
+                    "They have recently been renovated.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "She states the deluxe rooms 'are fully booked that week.'",
+                },
+                {
+                  prompt:
+                    "What does the man request at the end of the conversation?",
+                  options: [
+                    "A room with a view.",
+                    "A late check-out.",
+                    "A discount.",
+                    "An airport shuttle.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "He asks for 'a room on a higher floor' because he 'prefers a view.'",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p4",
+          section: "listening",
+          key: "Part 4",
+          title: "Part 4: Talks",
+          directions:
+            "You will hear a short talk given by a single speaker. Answer the three questions that follow.",
+          blocks: [
+            {
+              type: "talk",
+              speakerLabel: "Voicemail Message",
+              text: "Hi, this is a message for Mr. Alvarez. This is Denise from Riverside Office Supplies. I'm calling to let you know that the order you placed last week — twenty boxes of printer paper and ten ink cartridges — has been shipped and should arrive by Wednesday. Please note that due to a system update, our online payment portal will be down this weekend, so if you'd like to place any additional orders, please call us directly instead of using the website. Thanks, and have a great day.",
+              questions: [
+                {
+                  prompt: "Who most likely is Denise?",
+                  options: [
+                    "A store customer.",
+                    "An employee at a supply company.",
+                    "A delivery driver.",
+                    "An IT technician.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "Denise says she is calling 'from Riverside Office Supplies' about an order — she works for the supply company.",
+                },
+                {
+                  prompt: "What is one item included in the order?",
+                  options: [
+                    "Office chairs.",
+                    "Printer paper.",
+                    "Computer monitors.",
+                    "Coffee machines.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The order includes 'twenty boxes of printer paper and ten ink cartridges.'",
+                },
+                {
+                  prompt: "What does Denise recommend for the weekend?",
+                  options: [
+                    "Visiting the store in person.",
+                    "Calling instead of ordering online.",
+                    "Canceling the order.",
+                    "Waiting until next month.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "Since the online payment portal will be down, she says to 'call us directly instead of using the website.'",
+                },
+              ],
+            },
+            {
+              type: "talk",
+              speakerLabel: "Store Announcement",
+              text: "Attention shoppers, Fairview Department Store will be closing in fifteen minutes. Please bring your final purchases to the checkout counters on the first floor. As a reminder, our annual summer sale continues through the end of this week, with discounts of up to forty percent on selected clothing and footwear. We'd like to thank you for shopping with us today, and we look forward to seeing you again soon.",
+              questions: [
+                {
+                  prompt:
+                    "Where is this announcement most likely taking place?",
+                  options: [
+                    "In an airport.",
+                    "In a department store.",
+                    "On a train.",
+                    "At a restaurant.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The announcement mentions 'Fairview Department Store' closing and checkout counters, placing it in a store.",
+                },
+                {
+                  prompt:
+                    "What will happen soon, according to the announcement?",
+                  options: [
+                    "The store will close.",
+                    "A sale will begin.",
+                    "A delivery will arrive.",
+                    "A fire drill will start.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "The speaker says the store 'will be closing in fifteen minutes.'",
+                },
+                {
+                  prompt:
+                    "According to the announcement, what is currently discounted?",
+                  options: [
+                    "Electronics.",
+                    "Clothing and footwear.",
+                    "Furniture.",
+                    "Groceries.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The sale offers 'discounts of up to forty percent on selected clothing and footwear.'",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p5",
+          section: "reading",
+          key: "Part 5",
+          title: "Part 5: Incomplete Sentences",
+          directions:
+            "Choose the word or phrase that best completes each sentence.",
+          blocks: [
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "The new employee handbook ___ all staff members before the end of the month.",
+                  options: [
+                    "distribute",
+                    "will be distributed to",
+                    "distributing",
+                    "has distribute",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The handbook does not perform the action itself, so a passive future form is needed: 'will be distributed to.'",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "Please make sure the report is submitted ___ Friday afternoon.",
+                  options: ["until", "by", "since", "during"],
+                  correct: 1,
+                  explanation:
+                    "'By' is used with deadlines to mean 'no later than.' 'Until' would describe a continuous action up to a point, which doesn't fit a one-time submission.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "The manager was very ___ with the team's performance this quarter.",
+                  options: [
+                    "satisfy",
+                    "satisfaction",
+                    "satisfied",
+                    "satisfying",
+                  ],
+                  correct: 2,
+                  explanation:
+                    "After 'was very,' an adjective is needed to describe the manager's feeling. 'Satisfied' (meaning 'pleased') fits; 'satisfying' would describe something that causes satisfaction.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "___ the heavy rain, the outdoor event proceeded as scheduled.",
+                  options: ["Although", "Despite", "Because", "Unless"],
+                  correct: 1,
+                  explanation:
+                    "'Despite' is followed directly by a noun phrase ('the heavy rain'). 'Although' would require a full clause (subject + verb).",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "Employees are required to complete the training course ___ they begin their new roles.",
+                  options: ["before", "besides", "except", "among"],
+                  correct: 0,
+                  explanation:
+                    "The logical sequence is training first, then starting the role, so the time connector 'before' is correct.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "The company's revenue grew ___ over the past three years.",
+                  options: ["steady", "steadier", "steadily", "steadiness"],
+                  correct: 2,
+                  explanation:
+                    "An adverb is needed to modify the verb 'grew.' 'Steadily' is the adverb form.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "Neither the director nor the assistants ___ available for the call this afternoon.",
+                  options: ["is", "are", "was", "has been"],
+                  correct: 1,
+                  explanation:
+                    "With 'neither...nor,' the verb agrees with the noun closest to it — 'assistants' is plural, so 'are' is correct.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "The proposal will be reviewed by the board ___ it is finalized.",
+                  options: ["once", "yet", "so", "also"],
+                  correct: 0,
+                  explanation:
+                    "'Once' (meaning 'as soon as') correctly links the two time-related clauses.",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "All visitors must sign in at the front desk and wear a ___ badge at all times.",
+                  options: ["visit", "visitor", "visiting", "visited"],
+                  correct: 1,
+                  explanation:
+                    "'Visitor' is used here as a noun modifier before 'badge' (a 'visitor badge'), similar to 'employee ID.'",
+                },
+              ],
+            },
+            {
+              type: "sentence",
+              questions: [
+                {
+                  prompt:
+                    "The technician repaired the equipment ___ than expected.",
+                  options: ["fast", "faster", "fastest", "most fast"],
+                  correct: 1,
+                  explanation:
+                    "'Than' signals a comparison between two things, which requires the comparative form 'faster.'",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p6",
+          section: "reading",
+          key: "Part 6",
+          title: "Part 6: Text Completion",
+          directions:
+            "Read each passage and choose the word, phrase, or sentence that best completes each numbered blank.",
+          blocks: [
+            {
+              type: "passage",
+              passageTitle: "Internal Memo",
+              passageParts: [
+                "To: All Staff",
+                "From: Facilities Department",
+                "Subject: Elevator Maintenance",
+                "",
+                "Dear Colleagues,",
+                "Please be advised that the elevators in the main building will undergo routine maintenance next Tuesday. [32] all elevators will be temporarily out of service between 9 a.m. and 1 p.m. During this time, staff are asked to use the stairs. We apologize for any [33] this may cause. [34] The maintenance team expects the work to be completed on schedule, and all elevators will resume normal [35] by 1:30 p.m.",
+                "Thank you for your understanding.",
+                "Facilities Department",
+              ],
+              questions: [
+                {
+                  blankLabel: "32",
+                  prompt: "Choose the best word for blank (32).",
+                  options: [
+                    "However",
+                    "Therefore",
+                    "For example",
+                    "In addition",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "'Therefore' logically connects the cause (maintenance being performed) with its result (elevators being out of service).",
+                },
+                {
+                  blankLabel: "33",
+                  prompt: "Choose the best word for blank (33).",
+                  options: [
+                    "inconvenience",
+                    "convenience",
+                    "conveniently",
+                    "inconveniently",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "A noun is needed after 'any' — 'apologize for any inconvenience' is a common fixed expression.",
+                },
+                {
+                  blankLabel: "34",
+                  prompt: "Choose the sentence that best fits blank (34).",
+                  options: [
+                    "The cafeteria will remain open as usual.",
+                    "If you have any questions, please contact the Facilities Office.",
+                    "The building was constructed in 1998.",
+                    "Employees are encouraged to take the day off.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "This sentence logically follows an apology by offering a point of contact for concerns, and it fits the memo's overall purpose.",
+                },
+                {
+                  blankLabel: "35",
+                  prompt: "Choose the best word for blank (35).",
+                  options: ["operate", "operation", "operating", "operations"],
+                  correct: 3,
+                  explanation:
+                    "'Resume normal operations' is the standard collocation — a plural noun is required after the adjective 'normal.'",
+                },
+              ],
+            },
+            {
+              type: "passage",
+              passageTitle: "Grand Opening Notice",
+              passageParts: [
+                "Grand Opening — Riverside Fitness Center",
+                "",
+                "Riverside Fitness Center is proud to announce its grand opening on August 3rd. [36] the first two weeks, all new members will receive a 20% discount on annual memberships. Our facility features state-of-the-art equipment, a heated pool, and certified personal trainers who can help you [37] your fitness goals. [38] Whether you're a beginner or an experienced athlete, our staff is ready to support you every step of the way.",
+                "Don't miss this [39] opportunity to invest in your health. Visit our website or stop by in person to sign up today.",
+              ],
+              questions: [
+                {
+                  blankLabel: "36",
+                  prompt: "Choose the best word for blank (36).",
+                  options: ["During", "At", "Since", "While"],
+                  correct: 0,
+                  explanation:
+                    "'During' is used with a period of time ('the first two weeks') to describe when something applies.",
+                },
+                {
+                  blankLabel: "37",
+                  prompt: "Choose the best word for blank (37).",
+                  options: ["achieve", "achieved", "achievement", "achieving"],
+                  correct: 0,
+                  explanation:
+                    "After the modal-like structure 'can help you,' the base form of the verb is required: 'help you achieve.'",
+                },
+                {
+                  blankLabel: "38",
+                  prompt: "Choose the sentence that best fits blank (38).",
+                  options: [
+                    "The center will be closed on public holidays.",
+                    "Group classes, including yoga and spin, are also available.",
+                    "Parking is limited to two hours.",
+                    "The building was previously a warehouse.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "This sentence continues describing the facility's offerings, fitting naturally before the mention of supporting all skill levels.",
+                },
+                {
+                  blankLabel: "39",
+                  prompt: "Choose the best word for blank (39).",
+                  options: ["limit", "limited", "limiting", "limitation"],
+                  correct: 1,
+                  explanation:
+                    "'Limited-time opportunity' is a fixed phrase — 'limited' functions as an adjective modifying 'opportunity.'",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "p7",
+          section: "reading",
+          key: "Part 7",
+          title: "Part 7: Reading Comprehension",
+          directions:
+            "Read the passage(s) and answer the questions that follow based on the information given.",
+          blocks: [
+            {
+              type: "passage",
+              passageTitle: "Notice to All Tenants",
+              passageParts: [
+                "NOTICE TO ALL TENANTS",
+                "Parkview Apartments will be conducting its annual fire safety inspection during the week of September 14–18. A certified inspector will visit each unit to check smoke detectors, fire extinguishers, and emergency exits. Tenants do not need to be present during the inspection, but building management must be notified in advance if you would like to be there. Inspections will take place between 9 a.m. and 4 p.m. on weekdays. If your unit is not inspected due to access issues, a follow-up visit will be scheduled for the following week. Please ensure that hallways and stairwells remain clear of personal belongings, as blocked pathways are a safety violation and may result in a fine. For questions, contact the management office at (555) 234-9981.",
+                "— Parkview Apartments Management",
+              ],
+              questions: [
+                {
+                  prompt: "What is the purpose of this notice?",
+                  options: [
+                    "To announce a rent increase.",
+                    "To inform tenants of an upcoming inspection.",
+                    "To advertise a vacant apartment.",
+                    "To request feedback from tenants.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The notice's main subject is the 'annual fire safety inspection,' informing tenants of when it will occur.",
+                },
+                {
+                  prompt:
+                    "What is NOT mentioned as something the inspector will check?",
+                  options: [
+                    "Smoke detectors.",
+                    "Fire extinguishers.",
+                    "Emergency exits.",
+                    "Electrical wiring.",
+                  ],
+                  correct: 3,
+                  explanation:
+                    "The passage lists 'smoke detectors, fire extinguishers, and emergency exits' — electrical wiring is not mentioned.",
+                },
+                {
+                  prompt:
+                    "What might happen if a tenant leaves belongings in the hallway?",
+                  options: [
+                    "They will receive a free inspection.",
+                    "They may be fined.",
+                    "Their apartment will be inspected first.",
+                    "They will receive a discount on rent.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The notice states blocked pathways are 'a safety violation and may result in a fine.'",
+                },
+              ],
+            },
+            {
+              type: "double-passage",
+              passageTitle: "Conference Registration",
+              docs: [
+                {
+                  label: "Email",
+                  parts: [
+                    "From: Tom Reyes",
+                    "To: Priya Nair",
+                    "Subject: Conference Registration",
+                    "",
+                    "Hi Priya,",
+                    "I've registered us both for the Digital Marketing Summit on October 10th. I selected the 'Team' package, which includes access to all sessions plus the networking lunch. I noticed there are two workshops offered at the same time slot in the afternoon — could you let me know which one you'd prefer to attend? I'm leaning toward the 'SEO Strategies' workshop, but I'm flexible.",
+                    "Also, note that the morning keynote starts promptly at 9 a.m., so we should plan to arrive by 8:30 to check in.",
+                    "Best,",
+                    "Tom",
+                  ],
+                },
+                {
+                  label: "Event Schedule",
+                  parts: [
+                    "DIGITAL MARKETING SUMMIT — October 10",
+                    "8:30 a.m. — Check-in & Registration",
+                    "9:00 a.m. — Keynote: The Future of Digital Marketing",
+                    "10:30 a.m. — Networking Lunch",
+                    "1:00 p.m. — Workshop A: SEO Strategies (Room 101)",
+                    "1:00 p.m. — Workshop B: Social Media Analytics (Room 102)",
+                    "3:00 p.m. — Closing Remarks",
+                  ],
+                },
+              ],
+              questions: [
+                {
+                  prompt: "What does the 'Team' package include?",
+                  options: [
+                    "Only the keynote session.",
+                    "All sessions and the networking lunch.",
+                    "A private meeting room.",
+                    "Transportation to the venue.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "Tom writes that the Team package 'includes access to all sessions plus the networking lunch.'",
+                },
+                {
+                  prompt: "Why does Tom mention the workshops in his email?",
+                  options: [
+                    "To ask Priya which one she wants to attend.",
+                    "To complain about the schedule.",
+                    "To cancel one of the workshops.",
+                    "To recommend a speaker.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "Tom asks, 'could you let me know which one you'd prefer to attend?' — he is soliciting Priya's preference.",
+                },
+                {
+                  prompt:
+                    "According to the schedule, what time does the keynote begin?",
+                  options: [
+                    "8:30 a.m.",
+                    "9:00 a.m.",
+                    "10:30 a.m.",
+                    "1:00 p.m.",
+                  ],
+                  correct: 1,
+                  explanation:
+                    "The schedule lists '9:00 a.m. — Keynote: The Future of Digital Marketing.'",
+                },
+                {
+                  prompt:
+                    "Based on both documents, what time should Tom and Priya plan to arrive at the venue?",
+                  options: [
+                    "8:30 a.m.",
+                    "9:00 a.m.",
+                    "10:30 a.m.",
+                    "1:00 p.m.",
+                  ],
+                  correct: 0,
+                  explanation:
+                    "Tom's email says to 'arrive by 8:30 to check in,' which matches the schedule's 8:30 a.m. check-in slot — this requires cross-referencing both documents.",
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      /* =========================================================
+   FLATTEN INTO A LINEAR QUESTION SEQUENCE
+   ========================================================= */
+      const sequence = []; // {partIdx, blockIdx, qIdx, isFirstOfPart, isFirstOfBlock}
+      testParts.forEach((part, pi) => {
+        part.blocks.forEach((block, bi) => {
+          block.questions.forEach((q, qi) => {
+            sequence.push({
+              pi,
+              bi,
+              qi,
+              isFirstOfPart: bi === 0 && qi === 0,
+              isFirstOfBlock: qi === 0,
+            });
+          });
+        });
+      });
+      const TOTAL_Q = sequence.length;
+
+      /* =========================================================
+   STATE
+   ========================================================= */
+      let state = {
+        screen: "intro", // intro | partintro | question | report
+        seqIndex: 0,
+        answers: {}, // key "pi-bi-qi" -> selected option index
+        startTime: null,
+        elapsed: 0,
+        timerHandle: null,
+        pendingPartIntroFor: 0,
+      };
+
+      function qKey(pi, bi, qi) {
+        return pi + "-" + bi + "-" + qi;
+      }
+
+      /* =========================================================
+   RENDER HELPERS
+   ========================================================= */
+      const mainEl = document.getElementById("main");
+      const topbar = document.getElementById("topbar");
+      const progressTrack = document.getElementById("progressTrack");
+      const progressFill = document.getElementById("progressFill");
+      const partLabelEl = document.getElementById("partLabel");
+      const timerDisplay = document.getElementById("timerDisplay");
+
+      function fmtTime(s) {
+        const m = Math.floor(s / 60)
+          .toString()
+          .padStart(2, "0");
+        const sec = (s % 60).toString().padStart(2, "0");
+        return m + ":" + sec;
+      }
+      function startTimer() {
+        if (state.timerHandle) return;
+        state.startTime = Date.now() - state.elapsed * 1000;
+        state.timerHandle = setInterval(() => {
+          state.elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+          timerDisplay.textContent = fmtTime(state.elapsed);
+        }, 1000);
+      }
+      function stopTimer() {
+        clearInterval(state.timerHandle);
+        state.timerHandle = null;
+      }
+
+      function speak(text, btn) {
+        if (!("speechSynthesis" in window)) {
+          alert(
+            'Speech playback is not supported in this browser. Use "Show transcript" instead.',
+          );
+          return;
+        }
+        if (btn && btn.classList.contains("playing")) {
+          window.speechSynthesis.cancel();
+          btn.classList.remove("playing");
+          return;
+        }
+        window.speechSynthesis.cancel();
+        document
+          .querySelectorAll(".audio-btn.playing")
+          .forEach((b) => b.classList.remove("playing"));
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 0.95;
+        if (btn) {
+          btn.classList.add("playing");
+          utter.onend = () => btn.classList.remove("playing");
+          utter.onerror = () => btn.classList.remove("playing");
+        }
+        window.speechSynthesis.speak(utter);
+      }
+
+      function letterFor(i) {
+        return String.fromCharCode(65 + i);
+      }
+
+      /* =========================================================
+   SCREENS
+   ========================================================= */
+      function renderIntro() {
+        topbar.style.display = "none";
+        progressTrack.style.display = "none";
+        const listeningQ = testParts
+          .filter((p) => p.section === "listening")
+          .reduce(
+            (a, p) =>
+              a + p.blocks.reduce((b, bl) => b + bl.questions.length, 0),
+            0,
+          );
+        const readingQ = testParts
+          .filter((p) => p.section === "reading")
+          .reduce(
+            (a, p) =>
+              a + p.blocks.reduce((b, bl) => b + bl.questions.length, 0),
+            0,
+          );
+        mainEl.innerHTML = `
+    <div class="card">
+      <span class="eyebrow">Unofficial Practice Material</span>
+      <h1>TOEIC&reg; Listening &amp; Reading<br>Practice Test</h1>
+      <p class="sub">A condensed, self-contained practice test covering all seven official question types &mdash; four Listening parts and three Reading parts &mdash; with a full answer key and explanations at the end.</p>
+
+      <div class="section-divider">Listening Section &middot; ${listeningQ} questions</div>
+      <div class="intro-grid">
+        <div class="intro-part"><span class="num">PART 1</span><div class="name">Photographs</div><div class="count">4 questions</div></div>
+        <div class="intro-part"><span class="num">PART 2</span><div class="name">Question-Response</div><div class="count">5 questions</div></div>
+        <div class="intro-part"><span class="num">PART 3</span><div class="name">Conversations</div><div class="count">6 questions</div></div>
+        <div class="intro-part"><span class="num">PART 4</span><div class="name">Talks</div><div class="count">6 questions</div></div>
+      </div>
+
+      <div class="section-divider">Reading Section &middot; ${readingQ} questions</div>
+      <div class="intro-grid">
+        <div class="intro-part"><span class="num">PART 5</span><div class="name">Incomplete Sentences</div><div class="count">10 questions</div></div>
+        <div class="intro-part"><span class="num">PART 6</span><div class="name">Text Completion</div><div class="count">8 questions</div></div>
+        <div class="intro-part"><span class="num">PART 7</span><div class="name">Reading Comprehension</div><div class="count">7 questions</div></div>
+      </div>
+
+      <p class="sub" style="margin-top:20px;">Listening items include a <b>Play Audio</b> button (text-to-speech) as well as an optional transcript toggle, so this test works with or without sound.</p>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="beginTest()">Begin Test</button>
+      </div>
+    </div>
+  `;
+      }
+
+      function beginTest() {
+        state.screen = "partintro";
+        state.pendingPartIntroFor = 0;
+        state.seqIndex = 0;
+        render();
+      }
+
+      function renderPartIntro(partIdx) {
+        topbar.style.display = "flex";
+        progressTrack.style.display = "block";
+        const part = testParts[partIdx];
+        partLabelEl.textContent = part.key;
+        updateProgressBar();
+        startTimer();
+        mainEl.innerHTML = `
+    <div class="card">
+      <span class="eyebrow">${part.section === "listening" ? "Listening Section" : "Reading Section"}</span>
+      <h2>${part.title}</h2>
+      <div class="part-instructions">${part.directions}</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="startPartQuestions(${partIdx})">Start ${part.key}</button>
+      </div>
+    </div>
+  `;
+      }
+
+      function startPartQuestions(partIdx) {
+        // find first seqIndex belonging to this part
+        const idx = sequence.findIndex((s) => s.pi === partIdx);
+        state.seqIndex = idx;
+        state.screen = "question";
+        render();
+      }
+
+      function updateProgressBar() {
+        const answeredCount = Object.keys(state.answers).length;
+        const pct = Math.round((state.seqIndex / TOTAL_Q) * 100);
+        progressFill.style.width = pct + "%";
+      }
+
+      function renderQuestion() {
+        topbar.style.display = "flex";
+        progressTrack.style.display = "block";
+        const item = sequence[state.seqIndex];
+        const part = testParts[item.pi];
+        const block = part.blocks[item.bi];
+        const q = block.questions[item.qi];
+        partLabelEl.textContent = part.key;
+        updateProgressBar();
+
+        const key = qKey(item.pi, item.bi, item.qi);
+        const selected = state.answers[key];
+
+        // context html
+        let contextHtml = "";
+        if (block.type === "photo") {
+          contextHtml += `<div class="svg-wrap">${SVGS[block.svg]}</div>`;
+          contextHtml += `<div class="audio-controls">
+        <button class="audio-btn" onclick="speak(${JSON.stringify(q.audio)}, this)"><span class="dot"></span>Play Audio (A–D)</button>
+        <button class="link-btn" onclick="toggleTranscript(this)">Show transcript</button>
+      </div>
+      <div class="transcript">${q.audio}</div>`;
+        } else if (block.type === "audio-only") {
+          contextHtml += `<div class="audio-controls">
+        <button class="audio-btn" onclick="speak(${JSON.stringify(q.audio)}, this)"><span class="dot"></span>Play Audio</button>
+        <button class="link-btn" onclick="toggleTranscript(this)">Show transcript</button>
+      </div>
+      <div class="transcript">${q.audio}</div>`;
+        } else if (block.type === "conversation") {
+          const fullText = block.lines
+            .map((l) => l.who + ": " + l.text)
+            .join(" ");
+          contextHtml += `<div class="audio-controls">
+        <button class="audio-btn" onclick="speak(${JSON.stringify(fullText)}, this)"><span class="dot"></span>Play Conversation</button>
+        <button class="link-btn" onclick="toggleTranscript(this)">Show transcript</button>
+      </div>
+      <div class="context-box transcript">
+        ${block.lines.map((l) => `<p><span class="who">${l.who}:</span> ${l.text}</p>`).join("")}
+      </div>`;
+        } else if (block.type === "talk") {
+          contextHtml += `<div class="audio-controls">
+        <button class="audio-btn" onclick="speak(${JSON.stringify(block.text)}, this)"><span class="dot"></span>Play Talk</button>
+        <button class="link-btn" onclick="toggleTranscript(this)">Show transcript</button>
+      </div>
+      <div class="context-box transcript">
+        <p><span class="who">${block.speakerLabel}:</span> ${block.text}</p>
+      </div>`;
+        } else if (block.type === "passage") {
+          contextHtml += `<div class="context-box">
+        <h3>${block.passageTitle}</h3>
+        ${block.passageParts.map((p) => (p === "" ? "" : `<p>${p}</p>`)).join("")}
+      </div>`;
+        } else if (block.type === "double-passage") {
+          contextHtml += `<div class="context-box">
+        <h3>${block.passageTitle}</h3>
+        ${block.docs.map((d) => `<p style="font-family:var(--mono); font-size:0.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); margin-top:14px;">${d.label}</p>` + d.parts.map((p) => (p === "" ? "" : `<p>${p}</p>`)).join("")).join("")}
+      </div>`;
+        }
+
+        const promptText = q.prompt || "";
+        const blankNote = q.blankLabel
+          ? `<span class="q-tag">Blank ${q.blankLabel}</span> `
+          : "";
+
+        const optionsHtml = q.options
+          .map((opt, i) => {
+            const isSelected = selected === i;
+            return `<div class="option ${isSelected ? "selected" : ""}" onclick="selectOption(${i})">
+      <div class="letter">${letterFor(i)}</div>
+      <div class="option-text">${opt}</div>
+    </div>`;
+          })
+          .join("");
+
+        const isLast = state.seqIndex === TOTAL_Q - 1;
+        const globalQNum = state.seqIndex + 1;
+
+        mainEl.innerHTML = `
+    <div class="card">
+      <div class="q-header">
+        <span class="q-tag">${part.title}</span>
+        <span class="q-number">Question ${globalQNum} of ${TOTAL_Q}</span>
+      </div>
+      ${contextHtml}
+      ${promptText ? `<div class="prompt">${blankNote}${promptText}</div>` : blankNote ? `<div class="prompt">${blankNote}Select the best option to complete the sentence.</div>` : ""}
+      <div class="options">${optionsHtml}</div>
+      <p class="keyboard-hint">Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to select &nbsp;&middot;&nbsp; <kbd>Enter</kbd> or <kbd>&rarr;</kbd> to advance &nbsp;&middot;&nbsp; <kbd>&larr;</kbd> to go back</p>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="prevQuestion()" ${state.seqIndex === 0 ? "disabled" : ""}>Back</button>
+        <span class="flag-note${selected === undefined ? " flag-unanswered" : ""}">&#9679; ${selected !== undefined ? "Answered" : "Not answered yet"}</span>
+        <button class="btn btn-primary" onclick="nextQuestion()" ${selected === undefined ? "disabled" : ""}>${isLast ? "Finish Test" : "Next"}</button>
+      </div>
+    </div>
+  `;
+      }
+
+      function toggleTranscript(btn) {
+        const t = btn.parentElement.nextElementSibling.classList.contains(
+          "transcript",
+        )
+          ? btn.parentElement.nextElementSibling
+          : btn.closest(".card").querySelector(".transcript");
+        t.classList.toggle("show");
+        btn.textContent = t.classList.contains("show")
+          ? "Hide transcript"
+          : "Show transcript";
+      }
+
+      function selectOption(i) {
+        const item = sequence[state.seqIndex];
+        const key = qKey(item.pi, item.bi, item.qi);
+        state.answers[key] = i;
+        render();
+      }
+
+      function nextQuestion() {
+        if (state.seqIndex === TOTAL_Q - 1) {
+          finishTest();
+          return;
+        }
+        const nextItem = sequence[state.seqIndex + 1];
+        const currentItem = sequence[state.seqIndex];
+        state.seqIndex++;
+        if (nextItem.pi !== currentItem.pi) {
+          state.screen = "partintro";
+        } else {
+          state.screen = "question";
+        }
+        render();
+      }
+
+      function prevQuestion() {
+        if (state.seqIndex === 0) return;
+        state.seqIndex--;
+        state.screen = "question";
+        render();
+      }
+
+      /* =========================================================
+   SCORING + REPORT
+   ========================================================= */
+      function getCEFR(score) {
+        if (score >= 945) return { level: "C2", desc: "Mastery / Proficiency" };
+        if (score >= 785) return { level: "C1", desc: "Advanced Professional" };
+        if (score >= 550) return { level: "B2", desc: "Upper Intermediate" };
+        if (score >= 405) return { level: "B1", desc: "Intermediate" };
+        if (score >= 255) return { level: "A2", desc: "Elementary" };
+        return { level: "A1", desc: "Beginner" };
+      }
+
+      function finishTest() {
+        stopTimer();
+        state.screen = "report";
+        render();
+      }
+
+      function computeResults() {
+        let listeningCorrect = 0,
+          listeningTotal = 0,
+          readingCorrect = 0,
+          readingTotal = 0;
+        const perPart = {};
+        sequence.forEach((item) => {
+          const part = testParts[item.pi];
+          const block = part.blocks[item.bi];
+          const q = block.questions[item.qi];
+          const key = qKey(item.pi, item.bi, item.qi);
+          const chosen = state.answers[key];
+          const correct = chosen === q.correct;
+          if (!perPart[part.key])
+            perPart[part.key] = { correct: 0, total: 0, section: part.section };
+          perPart[part.key].total++;
+          if (correct) perPart[part.key].correct++;
+          if (part.section === "listening") {
+            listeningTotal++;
+            if (correct) listeningCorrect++;
+          } else {
+            readingTotal++;
+            if (correct) readingCorrect++;
+          }
+        });
+        return {
+          listeningCorrect,
+          listeningTotal,
+          readingCorrect,
+          readingTotal,
+          perPart,
+        };
+      }
+
+      function scaleScore(correct, total) {
+        // simplified proportional mapping to the official 5-495 scale, rounded to nearest 5
+        if (total === 0) return 5;
+        const raw = (correct / total) * 495;
+        let scaled = Math.round(raw / 5) * 5;
+        scaled = Math.max(5, Math.min(495, scaled));
+        return scaled;
+      }
+
+      function renderReport() {
+        topbar.style.display = "flex";
+        progressTrack.style.display = "block";
+        progressFill.style.width = "100%";
+        partLabelEl.textContent = "Score Report";
+        stopTimer();
+
+        const r = computeResults();
+        const lScaled = scaleScore(r.listeningCorrect, r.listeningTotal);
+        const rScaled = scaleScore(r.readingCorrect, r.readingTotal);
+        const total = lScaled + rScaled;
+        const pct = Math.round((total / 990) * 100);
+        const cefr = getCEFR(total);
+
+        const partRowsHtml = Object.keys(perPartOrdered(r.perPart))
+          .map((k) => {
+            const d = r.perPart[k];
+            const pctBar = Math.round((d.correct / d.total) * 100);
+            return `<div class="part-row">
+      <span class="pname">${k}</span>
+      <div class="bar-mini"><div class="bar-mini-fill" style="width:${pctBar}%"></div></div>
+      <span>${d.correct}/${d.total}</span>
+    </div>`;
+          })
+          .join("");
+
+        const reviewHtml = sequence
+          .map((item, idx) => {
+            const part = testParts[item.pi];
+            const block = part.blocks[item.bi];
+            const q = block.questions[item.qi];
+            const key = qKey(item.pi, item.bi, item.qi);
+            const chosen = state.answers[key];
+            const isCorrect = chosen === q.correct;
+            const tag =
+              chosen === undefined
+                ? `<span class="rtag skipped">SKIPPED</span>`
+                : isCorrect
+                  ? `<span class="rtag correct">CORRECT</span>`
+                  : `<span class="rtag wrong">INCORRECT</span>`;
+            const optsHtml = q.options
+              .map((opt, i) => {
+                let cls = "";
+                if (i === q.correct) cls = "correct-answer";
+                else if (i === chosen) cls = "wrong-answer";
+                return `<div class="option ${cls}" style="cursor:default;">
+        <div class="letter">${letterFor(i)}</div>
+        <div class="option-text">${opt}</div>
+      </div>`;
+              })
+              .join("");
+            return `<div class="review-item">
+      <div style="margin-bottom:8px;">${tag}<span class="q-number">${part.title} &middot; Question ${idx + 1}</span></div>
+      <div class="prompt" style="font-size:0.98rem;">${q.prompt || (q.blankLabel ? "Blank " + q.blankLabel : "Select the correct statement.")}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="explain-box"><b>Explanation:</b> ${q.explanation}</div>
+    </div>`;
+          })
+          .join("");
+
+        mainEl.innerHTML = `
+    <div class="card">
+      <div class="report-hero">
+        <span class="eyebrow">Score Report</span>
+        <div class="total-score">${total}<span> / 990</span></div>
+        <p class="sub">Estimated scaled score &middot; time: ${fmtTime(state.elapsed)}</p>
+        <div><span class="cefr-badge"><span class="lvl">${cefr.level}</span>${cefr.desc}</span></div>
+        <div class="scale-bar-wrap">
+          <div class="scale-label-row"><span>10</span><span>990</span></div>
+          <div class="scale-bar"><div class="scale-marker" style="left:calc(${pct}% - 1px)"></div></div>
+        </div>
+      </div>
+
+      <div class="section-scores">
+        <div class="section-score-card">
+          <div class="label">Listening</div>
+          <div class="num">${lScaled}</div>
+          <div class="frac">${r.listeningCorrect} / ${r.listeningTotal} correct</div>
+        </div>
+        <div class="section-score-card">
+          <div class="label">Reading</div>
+          <div class="num">${rScaled}</div>
+          <div class="frac">${r.readingCorrect} / ${r.readingTotal} correct</div>
+        </div>
+      </div>
+
+      <div class="part-breakdown">
+        <h3>Score by Part</h3>
+        ${partRowsHtml}
+      </div>
+
+      <p class="sub" style="margin-top:14px; font-size:0.82rem;">Note: this scaled score uses a simplified proportional formula for practice purposes only. It is not the official ETS scoring algorithm and should be treated as a rough estimate.</p>
+
+      <div class="btn-row">
+        <button class="btn btn-gold" onclick="scrollToReview()">Review Answers &amp; Explanations</button>
+        <button class="btn btn-ghost" onclick="restartTest()">Retake Test</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;" id="reviewSection">
+      <h2>Answer Review</h2>
+      <p class="sub">Every question, your answer, the correct answer, and why.</p>
+      <div class="review-list">${reviewHtml}</div>
+    </div>
+  `;
+      }
+
+      function perPartOrdered(perPart) {
+        // ensure order follows testParts order
+        const ordered = {};
+        testParts.forEach((p) => {
+          if (perPart[p.key]) ordered[p.key] = perPart[p.key];
+        });
+        return ordered;
+      }
+
+      function scrollToReview() {
+        document
+          .getElementById("reviewSection")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function restartTest() {
+        state = {
+          screen: "intro",
+          seqIndex: 0,
+          answers: {},
+          startTime: null,
+          elapsed: 0,
+          timerHandle: null,
+          pendingPartIntroFor: 0,
+        };
+        timerDisplay.textContent = "00:00";
+        render();
+      }
+
+      /* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+      document.addEventListener("keydown", function (e) {
+        if (state.screen !== "question") return;
+        if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
+        const key = e.key.toUpperCase();
+        if (
+          ["A", "B", "C", "D"].includes(key) &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.altKey
+        ) {
+          const item = sequence[state.seqIndex];
+          const q = testParts[item.pi].blocks[item.bi].questions[item.qi];
+          const idx = key.charCodeAt(0) - 65;
+          if (idx < q.options.length) {
+            e.preventDefault();
+            selectOption(idx);
+          }
+        } else if (
+          (e.key === "Enter" || e.key === "ArrowRight") &&
+          !e.target.closest("button")
+        ) {
+          const item = sequence[state.seqIndex];
+          const k = qKey(item.pi, item.bi, item.qi);
+          if (state.answers[k] !== undefined) {
+            e.preventDefault();
+            nextQuestion();
+          }
+        } else if (e.key === "ArrowLeft" && !e.target.closest("button")) {
+          if (state.seqIndex > 0) {
+            e.preventDefault();
+            prevQuestion();
+          }
+        }
+      });
+
+      /* =========================================================
+   ROUTER
+   ========================================================= */
+      function render() {
+        window.scrollTo(0, 0);
+        if (state.screen === "intro") renderIntro();
+        else if (state.screen === "partintro")
+          renderPartIntro(sequence[state.seqIndex].pi);
+        else if (state.screen === "question") renderQuestion();
+        else if (state.screen === "report") renderReport();
+      }
+
+      render();
+    </script>
+  </body>
+</html>
