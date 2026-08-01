@@ -1,33 +1,37 @@
-'use strict';
+"use strict";
 // Game Ads JavaScript - Handle ad loading and display for game pages
+
+function initializePendingGameAds() {
+  if (typeof adsbygoogle === "undefined") {
+    return;
+  }
+
+  const ads = document.querySelectorAll(".adsbygoogle");
+  ads.forEach((ad) => {
+    if (
+      ad.hasAttribute("data-adsbygoogle-status") ||
+      ad.hasAttribute("data-game-ad-initialized")
+    ) {
+      return;
+    }
+
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      ad.setAttribute("data-game-ad-initialized", "true");
+    } catch (e) {
+      // Ad failed to load - silent handling
+    }
+  });
+}
 
 // Initialize ads when page loads
 document.addEventListener("DOMContentLoaded", function () {
-  // Check if AdSense is available
-  if (typeof adsbygoogle !== "undefined") {
-    // Push ads that might not have been loaded
-    const ads = document.querySelectorAll(".adsbygoogle");
-    ads.forEach((ad) => {
-      if (!ad.hasAttribute("data-adsbygoogle-status")) {
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          // Ad failed to load - silent handling
-        }
-      }
-    });
-  }
+  initializePendingGameAds();
 });
 
-// Function to refresh ads (if needed)
+// Backward-compatible hook: initialize pending ad units once.
 function refreshGameAds() {
-  if (typeof adsbygoogle !== "undefined") {
-    try {
-      refreshAds();
-    } catch (e) {
-      // Ad refresh failed - silent handling
-    }
-  }
+  initializePendingGameAds();
 }
 
 // Export for use in other scripts

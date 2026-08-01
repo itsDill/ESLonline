@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * Enhanced Features JavaScript for All Featured Pages
  * Provides consistent functionality across ESL Fun Online featured pages
@@ -324,15 +324,18 @@ class ESLEnhancedFeatures {
 
   // AdSense Optimization
   initAdSenseOptimizations() {
-    // Lazy load AdSense ads
+    // Lazy initialize ad units once when they enter viewport.
+    // Avoid repeated pushes to reduce invalid request noise.
     if ("IntersectionObserver" in window) {
       const adObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               const ad = entry.target;
-              if (!ad.dataset.loaded) {
-                // Trigger AdSense refresh if needed
+              if (
+                !ad.dataset.loaded &&
+                !ad.hasAttribute("data-adsbygoogle-status")
+              ) {
                 if (window.adsbygoogle && window.adsbygoogle.push) {
                   try {
                     window.adsbygoogle.push({});
@@ -341,8 +344,8 @@ class ESLEnhancedFeatures {
                     // AdSense load deferred
                   }
                 }
-                adObserver.unobserve(ad);
               }
+              adObserver.unobserve(ad);
             }
           });
         },
@@ -350,7 +353,9 @@ class ESLEnhancedFeatures {
       );
 
       document
-        .querySelectorAll(".adsbygoogle:not([data-loaded])")
+        .querySelectorAll(
+          ".adsbygoogle:not([data-loaded]):not([data-adsbygoogle-status])",
+        )
         .forEach((ad) => {
           adObserver.observe(ad);
         });
