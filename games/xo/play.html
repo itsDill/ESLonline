@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="XO - Challenge yourself in this English twist on Tic-Tac-Toe! Answer vocabulary questions to mark your spot and win the game!"
+    />
+    <title>XO - ESL Fun Online</title>
+    <link rel="canonical" href="https://eslfunonline.com/games/xo/play.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+      }
+
+      .game-container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+        animation: slideDown 0.6s ease;
+      }
+
+      .header h1 {
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+      }
+
+      .game-area {
+        background: white;
+        border-radius: 25px;
+        padding: 2.5rem;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+        margin-bottom: 2rem;
+        animation: fadeIn 0.6s ease 0.2s both;
+      }
+
+      .setup-screen {
+        text-align: center;
+      }
+
+      .setup-screen h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 2rem;
+      }
+
+      .setup-section {
+        margin-bottom: 2.5rem;
+      }
+
+      .setup-section h3 {
+        font-size: 1.3rem;
+        color: #667eea;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+
+      .setup-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .setup-btn {
+        padding: 1.2rem;
+        border: 3px solid #ddd;
+        background: white;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        color: #333;
+      }
+
+      .setup-btn:hover {
+        border-color: #667eea;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+      }
+
+      .setup-btn.selected {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      .difficulty-label {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        margin-top: 0.5rem;
+      }
+
+      .start-btn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 1.2rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .start-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+      }
+
+      .start-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-screen {
+        display: none;
+      }
+
+      .game-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .info-box {
+        text-align: center;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+        border-radius: 12px;
+        border: 2px solid #ddd;
+      }
+
+      .info-box .label {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .info-box .value {
+        font-size: 2rem;
+        color: #667eea;
+        font-weight: 700;
+      }
+
+      .info-box .difficulty-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background: #667eea;
+        color: white;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .question-section {
+        background: linear-gradient(135deg, #fff8f3 0%, #ffe8d3 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        border-left: 6px solid #f5ad4e;
+        animation: slideIn 0.4s ease;
+      }
+
+      .question-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .question-icon {
+        font-size: 1.8rem;
+        color: #f5ad4e;
+      }
+
+      .question {
+        font-size: 1.2rem;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+
+      .option-btn {
+        padding: 1rem;
+        border: 2px solid #f5ad4e;
+        background: white;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .option-btn:hover:not(:disabled) {
+        border-color: #667eea;
+        background: #f0f4ff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(245, 173, 78, 0.2);
+      }
+
+      .option-btn.correct {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-color: #10b981;
+        animation: pulse 0.6s ease;
+      }
+
+      .option-btn.incorrect {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border-color: #ef4444;
+        animation: shake 0.4s ease;
+      }
+
+      .option-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #eef2ff 100%);
+        border-radius: 15px;
+      }
+
+      .cell {
+        aspect-ratio: 1;
+        border: 3px solid #667eea;
+        border-radius: 12px;
+        background: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+      }
+
+      .cell:hover:not(:disabled) {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+        transform: scale(1.08);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .cell.disabled {
+        cursor: not-allowed;
+      }
+
+      .cell.o {
+        color: #ef4444;
+      }
+
+      .cell.x {
+        color: #10b981;
+      }
+
+      .cell.placed {
+        animation: placeCell 0.4s ease;
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .btn-secondary:hover {
+        background: #d0d0d0;
+        transform: translateY(-2px);
+      }
+
+      .btn-setup {
+        background: #f5ad4e;
+        color: white;
+      }
+
+      .btn-setup:hover {
+        background: #f29c1f;
+        transform: translateY(-2px);
+      }
+
+      .game-status {
+        text-align: center;
+        padding: 1.8rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.4s ease;
+      }
+
+      .game-status.winner {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border-color: #10b981;
+        color: #155724;
+      }
+
+      .game-status.loser {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        border-color: #ef4444;
+        color: #721c24;
+      }
+
+      .game-status.draw {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border-color: #ffc107;
+        color: #856404;
+      }
+
+      .game-status.active {
+        background: linear-gradient(135deg, #cfe2ff 0%, #b6d4ff 100%);
+        border-color: #667eea;
+        color: #084298;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #f0f0f0;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+        border-radius: 12px;
+        border: 2px solid #ddd;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0.7rem;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .back-link {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .back-link a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .back-link a:hover {
+        transform: translateX(-5px);
+        opacity: 0.8;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes placeCell {
+        0% {
+          transform: scale(0.8) rotate(-10deg);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .header h1 {
+          font-size: 2.2rem;
+        }
+
+        .cell {
+          font-size: 1.8rem;
+        }
+
+        .game-area {
+          padding: 1.5rem;
+        }
+
+        .setup-buttons {
+          grid-template-columns: 1fr;
+        }
+
+        .board {
+          gap: 0.6rem;
+          padding: 1rem;
+        }
+
+        .info-box {
+          padding: 1rem;
+        }
+
+        .question-section {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="header">
+        <h1>❌⭕ XO</h1>
+        <p>Answer English questions to mark your spots and win!</p>
+      </div>
+
+      <div class="game-area">
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+          <h2>🎮 Prepare for Battle</h2>
+
+          <!-- Difficulty Selection -->
+          <div class="setup-section">
+            <h3>Select Difficulty</h3>
+            <div class="setup-buttons" id="difficultyButtons">
+              <button class="setup-btn" onclick="selectDifficulty('easy')">
+                ⭐ Easy<br /><span class="difficulty-label"
+                  >Computer plays slower</span
+                >
+              </button>
+              <button
+                class="setup-btn selected"
+                onclick="selectDifficulty('medium')"
+              >
+                ⭐⭐ Medium<br /><span class="difficulty-label"
+                  >Balanced play</span
+                >
+              </button>
+              <button class="setup-btn" onclick="selectDifficulty('hard')">
+                ⭐⭐⭐ Hard<br /><span class="difficulty-label"
+                  >Computer plays smart</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- Player Mark Selection -->
+          <div class="setup-section">
+            <h3>Choose Your Mark</h3>
+            <div class="setup-buttons" id="markButtons">
+              <button class="setup-btn selected" onclick="selectMark('x')">
+                ✅ X<br /><span class="difficulty-label"
+                  >Play as X (first)</span
+                >
+              </button>
+              <button class="setup-btn" onclick="selectMark('o')">
+                ⭕ O<br /><span class="difficulty-label"
+                  >Play as O (second)</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- Start Button -->
+          <button class="start-btn" onclick="startGame()" id="startBtn">
+            <i class="fas fa-play"></i> Start Game
+          </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+          <!-- Game Stats -->
+          <div class="game-info">
+            <div class="info-box">
+              <div class="label">Your Mark</div>
+              <div class="value" id="playerMarkDisplay">X</div>
+            </div>
+            <div class="info-box">
+              <div class="label">Difficulty</div>
+              <span class="difficulty-badge" id="difficultyDisplay"
+                >Medium</span
+              >
+            </div>
+            <div class="info-box">
+              <div class="label">Score</div>
+              <div class="value" id="scoreDisplay">0-0-0</div>
+            </div>
+          </div>
+
+          <!-- Game Status -->
+          <div class="game-status" id="gameStatus">Loading...</div>
+
+          <!-- Question Section -->
+          <div
+            id="questionSection"
+            class="question-section"
+            style="display: none"
+          >
+            <div class="question-header">
+              <span class="question-icon"
+                ><i class="fas fa-lightbulb"></i
+              ></span>
+              <div class="question" id="questionText"></div>
+            </div>
+            <div class="options" id="optionsContainer"></div>
+          </div>
+
+          <!-- Game Board -->
+          <div class="board" id="gameBoard"></div>
+
+          <!-- Controls -->
+          <div class="controls">
+            <button class="btn btn-primary" onclick="resetGame()">
+              <i class="fas fa-redo"></i> New Game
+            </button>
+            <button class="btn btn-setup" onclick="backToSetup()">
+              <i class="fas fa-cog"></i> Change Settings
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="window.location.href = 'games.html'"
+            >
+              <i class="fas fa-arrow-left"></i> Exit
+            </button>
+          </div>
+
+          <!-- Statistics -->
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-label">Wins</div>
+              <div class="stat-value" id="winCount">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Losses</div>
+              <div class="stat-value" id="lossCount">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Draws</div>
+              <div class="stat-value" id="drawCount">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-link">
+        <a href="games.html"
+          ><i class="fas fa-arrow-left"></i> Back to All Games</a
+        >
+      </div>
+    </div>
+
+    <script>
+      // Game Configuration
+      let gameConfig = {
+        difficulty: "medium",
+        playerMark: "X",
+        computerMark: "O",
+      };
+
+      // Game state
+      let gameState = ["", "", "", "", "", "", "", "", ""];
+      let gameActive = true;
+      let questionAnswered = false;
+      let currentGameStarted = false;
+
+      // Statistics
+      let stats = {
+        wins: 0,
+        losses: 0,
+        draws: 0,
+      };
+
+      // Difficulty levels
+      const difficultyLevels = {
+        easy: { delay: 2000, accuracy: 0.4, label: "Easy" },
+        medium: { delay: 1200, accuracy: 0.7, label: "Medium" },
+        hard: { delay: 800, accuracy: 0.95, label: "Hard" },
+      };
+
+      // Comprehensive vocabulary questions organized by difficulty
+      const questionsByDifficulty = {
+        easy: [
+          {
+            question: "What does 'happy' mean?",
+            options: ["Sad", "Joyful", "Angry", "Tired"],
+            correct: 1,
+          },
+          {
+            question: "Which word means 'big'?",
+            options: ["Small", "Tiny", "Large", "Short"],
+            correct: 2,
+          },
+          {
+            question: "What is 'cold'?",
+            options: ["Hot", "Warm", "Low temperature", "Freezing"],
+            correct: 2,
+          },
+          {
+            question: "What does 'fast' mean?",
+            options: ["Slow", "Quick", "Stopped", "Moving"],
+            correct: 1,
+          },
+          {
+            question: "Which means 'beautiful'?",
+            options: ["Ugly", "Pretty", "Bad", "Wrong"],
+            correct: 1,
+          },
+          {
+            question: "What does 'dark' mean?",
+            options: ["Bright", "Light", "Without light", "Clear"],
+            correct: 2,
+          },
+          {
+            question: "Which word means 'young'?",
+            options: ["Old", "New", "Not old", "Adult"],
+            correct: 2,
+          },
+          {
+            question: "What is 'easy'?",
+            options: ["Difficult", "Hard", "Simple", "Complex"],
+            correct: 2,
+          },
+        ],
+        medium: [
+          {
+            question: "What does 'serendipity' mean?",
+            options: [
+              "Finding something good by chance",
+              "Being sad",
+              "Working hard",
+              "Making mistakes",
+            ],
+            correct: 0,
+          },
+          {
+            question: "Which word means 'to strengthen'?",
+            options: ["Weaken", "Fortify", "Break", "Destroy"],
+            correct: 1,
+          },
+          {
+            question: "What is a 'benevolent' person?",
+            options: [
+              "Cruel and mean",
+              "Kind and charitable",
+              "Lazy",
+              "Dishonest",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does 'obsolete' mean?",
+            options: [
+              "Modern and new",
+              "No longer in use",
+              "Very expensive",
+              "Broken",
+            ],
+            correct: 1,
+          },
+          {
+            question: "'Eloquent' describes someone who speaks...",
+            options: [
+              "Quietly",
+              "Fluently and expressively",
+              "Slowly",
+              "Rarely",
+            ],
+            correct: 1,
+          },
+          {
+            question: "What does 'ephemeral' mean?",
+            options: [
+              "Lasting a long time",
+              "Lasting a short time",
+              "Very strong",
+              "Colorful",
+            ],
+            correct: 1,
+          },
+          {
+            question: "'Pragmatic' approach means being...",
+            options: [
+              "Theoretical",
+              "Practical and realistic",
+              "Optimistic",
+              "Pessimistic",
+            ],
+            correct: 1,
+          },
+          {
+            question: "Which word means 'mysterious'?",
+            options: ["Clear", "Enigmatic", "Obvious", "Simple"],
+            correct: 1,
+          },
+        ],
+        hard: [
+          {
+            question: "What does 'ubiquitous' mean?",
+            options: ["Rare", "Present everywhere", "Absent", "Unique"],
+            correct: 1,
+          },
+          {
+            question: "'Ameliorate' means to...",
+            options: ["Worsen", "Make better", "Change", "Destroy"],
+            correct: 1,
+          },
+          {
+            question: "What is 'perspicacious' thinking?",
+            options: ["Foolish", "Keen and discerning", "Confused", "Angry"],
+            correct: 1,
+          },
+          {
+            question: "'Obfuscate' means to...",
+            options: ["Clarify", "Make unclear", "Explain", "Simplify"],
+            correct: 1,
+          },
+          {
+            question: "A 'sesquipedalian' word is...",
+            options: ["Short", "Simple", "Very long and complex", "Loud"],
+            correct: 2,
+          },
+          {
+            question: "'Ineluctable' means...",
+            options: ["Avoidable", "Impossible to avoid", "Optional", "Easy"],
+            correct: 1,
+          },
+          {
+            question: "'Ebullient' describes someone who is...",
+            options: ["Quiet", "Enthusiastic and lively", "Sad", "Tired"],
+            correct: 1,
+          },
+          {
+            question: "What does 'pellucid' mean?",
+            options: [
+              "Murky",
+              "Clear and easy to understand",
+              "Difficult",
+              "Confusing",
+            ],
+            correct: 1,
+          },
+        ],
+      };
+
+      // Winning combinations
+      const winningCombos = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+
+      // Setup functions
+      function selectDifficulty(level) {
+        gameConfig.difficulty = level;
+        document
+          .querySelectorAll("#difficultyButtons .setup-btn")
+          .forEach((btn) => btn.classList.remove("selected"));
+        event.target.closest(".setup-btn").classList.add("selected");
+      }
+
+      function selectMark(mark) {
+        gameConfig.playerMark = mark.toUpperCase();
+        gameConfig.computerMark = mark.toUpperCase() === "X" ? "O" : "X";
+        document
+          .querySelectorAll("#markButtons .setup-btn")
+          .forEach((btn) => btn.classList.remove("selected"));
+        event.target.closest(".setup-btn").classList.add("selected");
+      }
+
+      function startGame() {
+        document.getElementById("setupScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        currentGameStarted = true;
+
+        document.getElementById("playerMarkDisplay").textContent =
+          gameConfig.playerMark;
+        document.getElementById("difficultyDisplay").textContent =
+          difficultyLevels[gameConfig.difficulty].label;
+
+        resetGame();
+      }
+
+      function backToSetup() {
+        document.getElementById("setupScreen").style.display = "block";
+        document.getElementById("gameScreen").style.display = "none";
+        currentGameStarted = false;
+      }
+
+      // Get questions based on difficulty
+      function getQuestion() {
+        const questions = questionsByDifficulty[gameConfig.difficulty];
+        return questions[Math.floor(Math.random() * questions.length)];
+      }
+
+      // Initialize game
+      function initGame() {
+        loadStats();
+        renderBoard();
+        updateStatus();
+        updateScoreDisplay();
+      }
+
+      // Render game board
+      function renderBoard() {
+        const board = document.getElementById("gameBoard");
+        board.innerHTML = "";
+
+        gameState.forEach((cell, index) => {
+          const cellEl = document.createElement("div");
+          cellEl.className = "cell";
+          if (cell) {
+            cellEl.classList.add(cell.toLowerCase());
+            cellEl.classList.add("placed");
+          }
+          cellEl.textContent = cell;
+          cellEl.onclick = () => handleCellClick(index);
+          board.appendChild(cellEl);
+        });
+      }
+
+      // Handle cell click
+      function handleCellClick(index) {
+        if (!gameActive || gameState[index] || !questionAnswered) {
+          return;
+        }
+
+        // Player makes move
+        gameState[index] = gameConfig.playerMark;
+        questionAnswered = false;
+        renderBoard();
+
+        // Check game state
+        if (checkWin(gameConfig.playerMark)) {
+          gameActive = false;
+          document.getElementById("gameStatus").textContent =
+            "🎉 You Win! Excellent!";
+          document.getElementById("gameStatus").className =
+            "game-status winner";
+          stats.wins++;
+          trackGameCompletion("win");
+          saveStats();
+          updateScoreDisplay();
+          return;
+        }
+
+        if (isBoardFull()) {
+          gameActive = false;
+          document.getElementById("gameStatus").textContent = "🤝 It's a Draw!";
+          document.getElementById("gameStatus").className = "game-status draw";
+          stats.draws++;
+          trackGameCompletion("draw");
+          saveStats();
+          updateScoreDisplay();
+          return;
+        }
+
+        // Computer makes move
+        const delay = difficultyLevels[gameConfig.difficulty].delay;
+        setTimeout(() => {
+          computerMove();
+        }, delay);
+      }
+
+      // Computer AI with difficulty-based behavior
+      function computerMove() {
+        const accuracy = difficultyLevels[gameConfig.difficulty].accuracy;
+
+        // Hard difficulty: play perfectly
+        if (gameConfig.difficulty === "hard") {
+          const move = findBestMove();
+          if (move !== -1) {
+            gameState[move] = gameConfig.computerMark;
+            renderBoard();
+            finishComputerMove();
+            return;
+          }
+        }
+
+        // Medium difficulty: sometimes play perfectly, sometimes random
+        if (gameConfig.difficulty === "medium" && Math.random() < accuracy) {
+          const move = findBestMove();
+          if (move !== -1) {
+            gameState[move] = gameConfig.computerMark;
+            renderBoard();
+            finishComputerMove();
+            return;
+          }
+        }
+
+        // Easy difficulty: mostly random moves
+        for (let i = 0; i < gameState.length; i++) {
+          if (gameState[i] === "") {
+            gameState[i] = gameConfig.computerMark;
+            renderBoard();
+            finishComputerMove();
+            return;
+          }
+        }
+      }
+
+      // Find best move (minimax-inspired)
+      function findBestMove() {
+        // Try to win
+        for (let combo of winningCombos) {
+          const [a, b, c] = combo;
+          if (
+            gameState[a] === gameConfig.computerMark &&
+            gameState[b] === gameConfig.computerMark &&
+            gameState[c] === ""
+          ) {
+            return c;
+          }
+        }
+
+        // Block player's win
+        for (let combo of winningCombos) {
+          const [a, b, c] = combo;
+          if (
+            gameState[a] === gameConfig.playerMark &&
+            gameState[b] === gameConfig.playerMark &&
+            gameState[c] === ""
+          ) {
+            return c;
+          }
+        }
+
+        // Take center
+        if (gameState[4] === "") return 4;
+
+        // Take corners
+        const corners = [0, 2, 6, 8].filter((i) => gameState[i] === "");
+        if (corners.length > 0)
+          return corners[Math.floor(Math.random() * corners.length)];
+
+        // Take any available
+        const available = gameState
+          .map((cell, i) => (cell === "" ? i : -1))
+          .filter((i) => i !== -1);
+        return available.length > 0 ? available[0] : -1;
+      }
+
+      // Finish computer move
+      function finishComputerMove() {
+        if (checkWin(gameConfig.computerMark)) {
+          gameActive = false;
+          document.getElementById("gameStatus").textContent =
+            "🤖 Computer Wins!";
+          document.getElementById("gameStatus").className = "game-status loser";
+          stats.losses++;
+          trackGameCompletion("loss");
+          saveStats();
+          updateScoreDisplay();
+          return;
+        }
+
+        if (isBoardFull()) {
+          gameActive = false;
+          document.getElementById("gameStatus").textContent = "🤝 It's a Draw!";
+          document.getElementById("gameStatus").className = "game-status draw";
+          stats.draws++;
+          trackGameCompletion("draw");
+          saveStats();
+          updateScoreDisplay();
+          return;
+        }
+
+        showQuestion();
+      }
+
+      // Show question
+      function showQuestion() {
+        const question = getQuestion();
+        document.getElementById("questionText").textContent = question.question;
+
+        const optionsContainer = document.getElementById("optionsContainer");
+        optionsContainer.innerHTML = "";
+
+        question.options.forEach((option, index) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.textContent = option;
+          btn.onclick = () => handleAnswer(index, question.correct);
+          optionsContainer.appendChild(btn);
+        });
+
+        document.getElementById("questionSection").style.display = "block";
+        updateStatus();
+      }
+
+      // Handle answer
+      function handleAnswer(selected, correct) {
+        const buttons = document.querySelectorAll(".option-btn");
+        buttons.forEach((btn) => (btn.disabled = true));
+
+        if (selected === correct) {
+          buttons[selected].classList.add("correct");
+          questionAnswered = true;
+          setTimeout(() => {
+            document.getElementById("questionSection").style.display = "none";
+            updateStatus();
+          }, 1500);
+        } else {
+          buttons[selected].classList.add("incorrect");
+          buttons[correct].classList.add("correct");
+          setTimeout(() => {
+            computerMove();
+            document.getElementById("questionSection").style.display = "none";
+          }, 1500);
+        }
+      }
+
+      // Check win condition
+      function checkWin(mark) {
+        return winningCombos.some((combo) => {
+          const [a, b, c] = combo;
+          return (
+            gameState[a] === mark &&
+            gameState[b] === mark &&
+            gameState[c] === mark
+          );
+        });
+      }
+
+      // Check if board is full
+      function isBoardFull() {
+        return gameState.every((cell) => cell !== "");
+      }
+
+      // Update status
+      function updateStatus() {
+        if (!gameActive) return;
+
+        if (questionAnswered) {
+          document.getElementById("gameStatus").textContent =
+            "👉 Your turn! Click a cell.";
+          document.getElementById("gameStatus").className =
+            "game-status active";
+        } else {
+          document.getElementById("gameStatus").textContent =
+            "🧠 Answer the question to play!";
+          document.getElementById("gameStatus").className = "game-status";
+        }
+      }
+
+      // Update score display
+      function updateScoreDisplay() {
+        document.getElementById("scoreDisplay").textContent =
+          `${stats.wins}-${stats.draws}-${stats.losses}`;
+        document.getElementById("winCount").textContent = stats.wins;
+        document.getElementById("lossCount").textContent = stats.losses;
+        document.getElementById("drawCount").textContent = stats.draws;
+      }
+
+      // Reset game
+      function resetGame() {
+        gameState = ["", "", "", "", "", "", "", "", ""];
+        gameActive = true;
+        questionAnswered = false;
+        renderBoard();
+        document.getElementById("questionSection").style.display = "none";
+        document.getElementById("gameStatus").textContent =
+          "🧠 Answer a question to start!";
+        document.getElementById("gameStatus").className = "game-status";
+        updateScoreDisplay();
+        showQuestion();
+      }
+
+      // Save stats
+      function saveStats() {
+        localStorage.setItem("xoStats", JSON.stringify(stats));
+      }
+
+      // Load stats
+      function loadStats() {
+        const saved = localStorage.getItem("xoStats");
+        if (saved) {
+          stats = JSON.parse(saved);
+        }
+        updateScoreDisplay();
+      }
+
+      // Track game completion
+      function trackGameCompletion(result) {
+        if (window.gtag) {
+          gtag("event", "game_completion", {
+            game_title: "XO",
+            game_id: "xo",
+            result: result,
+            difficulty: gameConfig.difficulty,
+            player_wins: stats.wins,
+            player_losses: stats.losses,
+          });
+        }
+      }
+
+      // Initialize on load
+      document.addEventListener("DOMContentLoaded", () => {
+        loadStats();
+        // Setup screen is already visible by default
+      });
+    </script>
+  </body>
+</html>

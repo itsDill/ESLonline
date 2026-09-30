@@ -70,31 +70,31 @@ const FooterComponent = {
             <h3><i class="fas fa-graduation-cap"></i> English Learning</h3>
             <ul>
               <li>
-                <a href="${basePath}english/grammar.html">
+                <a href="${basePath}resources/english/grammar.html">
                   <i class="fas fa-spell-check"></i>
                   <span>Grammar Guides</span>
                 </a>
               </li>
               <li>
-                <a href="${basePath}english/vocabguide.html">
+                <a href="${basePath}resources/english/vocabguide.html">
                   <i class="fas fa-book-open"></i>
                   <span>Vocabulary Builder</span>
                 </a>
               </li>
               <li>
-                <a href="${basePath}english/ielts.html">
+                <a href="${basePath}resources/english/ielts.html">
                   <i class="fas fa-certificate"></i>
                   <span>IELTS Preparation</span>
                 </a>
               </li>
               <li>
-                <a href="${basePath}english/toeic.html">
+                <a href="${basePath}resources/english/toeic.html">
                   <i class="fas fa-briefcase"></i>
                   <span>TOEIC Preparation</span>
                 </a>
               </li>
               <li>
-                <a href="${basePath}english/business.html">
+                <a href="${basePath}resources/english/business.html">
                   <i class="fas fa-handshake"></i>
                   <span>Business English</span>
                 </a>
@@ -131,7 +131,7 @@ const FooterComponent = {
                 </a>
               </li>
               <li>
-                <a href="${basePath}tools/tools.html">
+                <a href="${basePath}resources/tools/tools.html">
                   <i class="fas fa-tools"></i>
                   <span>Developer Toolkit</span>
                 </a>
@@ -144,7 +144,7 @@ const FooterComponent = {
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="${basePath}blog/blog.html">
+                <a href="${basePath}resources/lessons-and-blog/blog.html">
                   <i class="fas fa-blog"></i>
                   <span>Learning Blog</span>
                 </a>

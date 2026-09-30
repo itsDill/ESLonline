@@ -39,6 +39,16 @@ function initializeNavigation() {
       savedTheme === "dark",
     );
 
+    const applyThemeSurface = (isDark) => {
+      body.style.backgroundColor = isDark ? "#070b14" : "#ffffff";
+      body.style.color = isDark ? "#f3f4f6" : "#1f2937";
+      document.documentElement.style.backgroundColor = isDark
+        ? "#070b14"
+        : "#ffffff";
+    };
+
+    applyThemeSurface(savedTheme === "dark");
+
     const themeIcon = themeToggle.querySelector("i");
     if (themeIcon) {
       themeIcon.className =
@@ -56,6 +66,8 @@ function initializeNavigation() {
       document.documentElement.classList.toggle("dark-mode");
       const isDark = body.classList.contains("dark-mode");
       const theme = isDark ? "dark" : "light";
+
+      applyThemeSurface(isDark);
 
       localStorage.setItem("theme", theme);
       const icon = freshThemeToggle.querySelector("i");

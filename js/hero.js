@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /* ========================================
    HERO SECTION JAVASCRIPT
    Centralized hero functionality for all pages
@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     statNumbers.forEach(function (stat) {
+      if (stat.classList.contains("static-stat")) return;
       observer.observe(stat);
     });
   }
