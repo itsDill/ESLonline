@@ -21,12 +21,12 @@ HEADER_TEMPLATE = """<header>
               height="40"
             />
             <span class="logo-text">ESL Fun Online</span>
-          </a>
-
-          <ul
-            class="nav-links"
-            id="navLinks"
             role="menubar"
+                <a href="{P}resources/index.html"
+                  ><i class="fas fa-book-open"></i><span>Resources</span></a
+                >
+              </li>
+              <li>
             aria-label="Main navigation"
           >
             <li class="nav-item" role="none">
@@ -53,31 +53,15 @@ HEADER_TEMPLATE = """<header>
                 Teacher
               </a>
             </li>
+            <li class="nav-item" role="none">
+              <a href="{P}resources/lessons-and-blog/blog.html" class="nav-link" role="menuitem">
+                <i class="fas fa-blog"></i>
+                Blog
+              </a>
+            </li>
           </ul>
 
           <div class="controls">
-            <a
-              href="{P}coding/codingresources.html"
-              class="control-btn"
-              style="
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                border: none;
-                font-size: 0.9rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 0.4rem;
-                text-decoration: none;
-                padding: 0.6rem 1rem;
-                border-radius: 8px;
-                transition: all 0.3s ease;
-              "
-              aria-label="Try coding"
-            >
-              <i class="fas fa-code"></i>
-              <span>Try Coding</span>
-            </a>
             <button
               class="control-btn theme-toggle"
               id="themeToggle"
@@ -121,8 +105,8 @@ FOOTER_TEMPLATE = """<footer>
               <h3>ESL Fun Online</h3>
             </div>
             <p>
-              Transform your English and coding skills with our premium
-              interactive resources.
+              Transform your English skills with our premium interactive
+              resources.
             </p>
           </div>
 
@@ -143,28 +127,6 @@ FOOTER_TEMPLATE = """<footer>
               <li>
                 <a href="{P}resources/business/presentation-coach.html"
                   ><i class="fas fa-handshake"></i><span>Business</span></a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <!-- Programming Section -->
-          <div class="footer-section">
-            <h3><i class="fas fa-code"></i> Coding</h3>
-            <ul>
-              <li>
-                <a href="{P}coding/computerbasics.html"
-                  ><i class="fas fa-desktop"></i><span>Basics</span></a
-                >
-              </li>
-              <li>
-                <a href="{P}coding/ai.html"
-                  ><i class="fas fa-robot"></i><span>AI</span></a
-                >
-              </li>
-              <li>
-                <a href="{P}coding/codingresources.html"
-                  ><i class="fas fa-terminal"></i><span>Resources</span></a
                 >
               </li>
             </ul>

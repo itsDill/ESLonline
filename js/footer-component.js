@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * Enhanced Footer Component
  * ESL Fun Online - Professional Footer for All Pages
@@ -24,9 +24,8 @@ const FooterComponent = {
               <h3>ESL Fun Online</h3>
             </div>
             <p>
-              Transform your English and coding skills with our premium interactive resources. 
-              Join thousands of successful learners mastering IELTS, TOEIC, business English, 
-              and cutting-edge programming languages.
+              Transform your English skills with our premium interactive resources.
+              Join thousands of successful learners mastering IELTS, TOEIC, and business English.
             </p>
             
             <!-- Achievement Stats -->
@@ -102,43 +101,6 @@ const FooterComponent = {
             </ul>
           </div>
 
-          <!-- Programming Section -->
-          <div class="footer-section">
-            <h3><i class="fas fa-code"></i> Programming</h3>
-            <ul>
-              <li>
-                <a href="${basePath}coding/computerbasics.html">
-                  <i class="fas fa-desktop"></i>
-                  <span>Computer Basics</span>
-                </a>
-              </li>
-              <li>
-                <a href="${basePath}coding/ai.html">
-                  <i class="fas fa-robot"></i>
-                  <span>AI Fundamentals</span>
-                </a>
-              </li>
-              <li>
-                <a href="${basePath}coding/codingresources.html">
-                  <i class="fas fa-terminal"></i>
-                  <span>Coding Resources</span>
-                </a>
-              </li>
-              <li>
-                <a href="${basePath}games/games.html">
-                  <i class="fas fa-gamepad"></i>
-                  <span>Educational Games</span>
-                </a>
-              </li>
-              <li>
-                <a href="${basePath}resources/tools/tools.html">
-                  <i class="fas fa-tools"></i>
-                  <span>Developer Toolkit</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
           <!-- Quick Links Section -->
           <div class="footer-section">
             <h3><i class="fas fa-link"></i> Quick Links</h3>
@@ -153,6 +115,18 @@ const FooterComponent = {
                 <a href="${basePath}lessons.html">
                   <i class="fas fa-chalkboard-teacher"></i>
                   <span>Online Lessons</span>
+                </a>
+              </li>
+              <li>
+                <a href="${basePath}games/games.html">
+                  <i class="fas fa-gamepad"></i>
+                  <span>Educational Games</span>
+                </a>
+              </li>
+              <li>
+                <a href="${basePath}resources/tools/tools.html">
+                  <i class="fas fa-tools"></i>
+                  <span>Learning Tools</span>
                 </a>
               </li>
               <li>

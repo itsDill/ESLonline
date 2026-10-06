@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /**
  * Page Enhancement Scripts
  * Consolidated UI enhancements and performance optimizations
@@ -211,26 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Hero Background Lazy Loading for Desktop Only
+  // Keep hero visuals CSS-only for fast, consistent rendering.
   function initHeroOptimization() {
     const hero = document.querySelector(".hero");
     if (!hero) return;
 
     const isMobile = window.innerWidth <= 768;
-
-    if (!isMobile) {
-      // Only load background image on desktop
-      const img = new Image();
-      img.onload = function () {
-        hero.style.setProperty("--hero-bg-loaded", 'url("images/hero.webp")');
-        hero.classList.add("bg-loaded");
-      };
-      img.src = "images/hero.webp";
-    } else {
-      // On mobile, ensure background is just gradient
-      hero.style.background =
-        "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)";
-    }
 
     // Optimize scroll indicator for mobile
     const scrollIndicator = document.querySelector(".scroll-indicator");

@@ -23,7 +23,7 @@ def generate_sitemap(domain="https://eslfunonline.com", output_file="sitemap.xml
     root = Path('/Users/dillchalisas/ESLonline')
     
     # Skip these directories
-    skip_dirs = {'.git', '.venv', '.dev-files', '.idea', '.vscode', '__pycache__'}
+    skip_dirs = {'.git', '.venv', '.dev-files', '.idea', '.vscode', '__pycache__', 'coding'}
     skip_files = {'header-template.html', 'idioms-grid-section.html'}
     
     # Create XML root
@@ -54,7 +54,6 @@ def generate_sitemap(domain="https://eslfunonline.com", output_file="sitemap.xml
         'teacher-hub/index.html': 0.8,
         'contact.html': 0.7,
         'lessons.html': 0.7,
-        'coding/': 0.8,
         'games/': 0.85,
         'resources/': 0.8,
         'teacher-hub/': 0.7,
