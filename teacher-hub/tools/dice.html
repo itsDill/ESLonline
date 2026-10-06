@@ -40,7 +40,7 @@
     <meta property="og:image" content="https://eslfunonline.com/images/1.png" />
     <meta
       property="og:url"
-      content="https://eslfunonline.com/tools/dice.html"
+      content="https://eslfunonline.com/teacher-hub/tools/dice.html"
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
@@ -56,7 +56,10 @@
       name="twitter:image"
       content="https://eslfunonline.com/images/1.png"
     />
-    <link rel="canonical" href="https://eslfunonline.com/tools/dice.html" />
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/teacher-hub/tools/dice.html"
+    />
     <title>Interactive Dice Roller | ESL Fun Online - 3D Classroom Tool</title>
     <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../../favicon.ico" sizes="any" />
@@ -931,6 +934,187 @@
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 4px;
       }
+
+      header,
+      footer {
+        position: relative;
+        z-index: 2;
+      }
+
+      .game-container {
+        padding-top: clamp(1.5rem, 5vw, 3rem);
+      }
+
+      .dice-section,
+      .controls-section {
+        color: #253047;
+      }
+
+      .dice-3d-container {
+        max-width: 100%;
+      }
+
+      .dice-face {
+        overflow: hidden;
+        padding: 0.3rem;
+        overflow-wrap: anywhere;
+        text-align: center;
+        font-size: clamp(1.4rem, 4.3vw, 2.4rem);
+      }
+
+      .option-item,
+      .history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid rgba(102, 126, 234, 0.14);
+        border-radius: 0.75rem;
+        background: #fff;
+        color: #253047;
+        overflow-wrap: anywhere;
+      }
+
+      .option-text,
+      .history-result {
+        min-width: 0;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .remove-btn {
+        flex: 0 0 auto;
+        padding: 0.4rem 0.55rem;
+        border: 0;
+        border-radius: 0.55rem;
+        background: #fff0f0;
+        color: #b42318;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .btn:focus-visible,
+      .control-btn:focus-visible,
+      .remove-btn:focus-visible {
+        outline: 3px solid #253047;
+        outline-offset: 3px;
+      }
+
+      .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+        transform: none;
+      }
+
+      .result[hidden] {
+        display: none;
+      }
+
+      .fullscreen-mode {
+        position: fixed;
+        z-index: 3000;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        overflow: auto;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #111827, #312e81);
+        color: #fff;
+      }
+
+      .fullscreen-mode > div {
+        width: min(100%, 850px);
+      }
+
+      .fullscreen-mode .dice-3d-container {
+        width: min(70vw, 300px);
+        height: min(70vw, 300px);
+        margin: 1rem auto 2rem;
+      }
+
+      .fullscreen-mode .dice-3d {
+        transform: scale(1.35);
+      }
+
+      .fullscreen-mode .dice-face {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+      }
+
+      .fullscreen-mode .result {
+        opacity: 1;
+        transform: none;
+      }
+
+      .fullscreen-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 600px) {
+        .dice-section,
+        .controls-section {
+          padding: 1rem;
+          border-radius: 1rem;
+        }
+
+        .dice-3d-container {
+          width: 170px;
+          height: 170px;
+          margin: 1.5rem auto;
+        }
+
+        .dice-3d,
+        .dice-face {
+          width: 126px;
+          height: 126px;
+        }
+
+        .dice-face.front {
+          transform: translateZ(63px);
+        }
+        .dice-face.back {
+          transform: rotateY(180deg) translateZ(63px);
+        }
+        .dice-face.right {
+          transform: rotateY(90deg) translateZ(63px);
+        }
+        .dice-face.left {
+          transform: rotateY(-90deg) translateZ(63px);
+        }
+        .dice-face.top {
+          transform: rotateX(90deg) translateZ(63px);
+        }
+        .dice-face.bottom {
+          transform: rotateX(-90deg) translateZ(63px);
+        }
+
+        .controls-bar {
+          margin-bottom: 0.75rem;
+        }
+        .fullscreen-controls {
+          flex-direction: column;
+        }
+        .fullscreen-controls .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
     <link rel="stylesheet" href="../../css/main.css" />
     <link rel="stylesheet" href="../../css/header-consolidated.css" />
@@ -939,14 +1123,48 @@
       rel="stylesheet"
       href="../../css/footer-consolidated.css?v=20260923"
     />
+    <style>
+      body {
+        background: linear-gradient(135deg, #eef2ff, #f8faff) !important;
+      }
+
+      .game-container .title {
+        color: #24324b;
+        background: none;
+        -webkit-text-fill-color: #24324b;
+        text-shadow: none;
+        filter: none;
+      }
+
+      .game-container .dice-section,
+      .game-container .controls-section {
+        background: rgba(255, 255, 255, 0.96);
+        border-color: rgba(71, 91, 145, 0.16);
+      }
+
+      .game-container .result.show {
+        min-height: 80px;
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+      }
+
+      .fullscreen-mode .result.show {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+      }
+    </style>
   </head>
   <body>
     <header>
       <div class="container">
         <nav class="navbar">
-          <a href="../index.html" class="logo-container">
+          <a href="../../index.html" class="logo-container">
             <img
-              src="../images/1.png"
+              src="../../images/1.png"
               alt="ESL Fun Online Logo"
               class="logo-image"
               width="40"
@@ -962,20 +1180,20 @@
             aria-label="Main navigation"
           >
             <li class="nav-item" role="none">
-              <a href="../index.html" class="nav-link" role="menuitem">
+              <a href="../../index.html" class="nav-link" role="menuitem">
                 <i class="fas fa-home"></i>
                 Home
               </a>
             </li>
             <li class="nav-item" role="none">
-              <a href="../games/games.html" class="nav-link" role="menuitem">
+              <a href="../../games/games.html" class="nav-link" role="menuitem">
                 <i class="fas fa-dice"></i>
                 Games
               </a>
             </li>
             <li class="nav-item" role="none">
               <a
-                href="../resources/index.html"
+                href="../../resources/index.html"
                 class="nav-link"
                 role="menuitem"
               >
@@ -985,7 +1203,7 @@
             </li>
             <li class="nav-item" role="none">
               <a
-                href="../teacher-hub/index.html"
+                href="../../teacher-hub/index.html"
                 class="nav-link"
                 role="menuitem"
               >
@@ -1018,7 +1236,7 @@
     <!-- Animated Background Particles -->
     <div class="particles" id="particles"></div>
 
-    <div class="game-container">
+    <main class="game-container">
       <h1 class="title">🎲 Custom Dice</h1>
 
       <div class="dice-container">
@@ -1032,7 +1250,8 @@
             <button
               class="control-btn"
               id="soundToggle"
-              aria-label="Toggle sound effects"
+              aria-label="Mute sound effects"
+              aria-pressed="true"
               title="Toggle Sound"
             >
               <svg
@@ -1055,6 +1274,8 @@
               class="control-btn"
               id="historyToggle"
               aria-label="View roll history"
+              aria-controls="historyPanel"
+              aria-expanded="false"
               title="View History"
             >
               <svg
@@ -1076,7 +1297,12 @@
           </div>
 
           <div class="dice-3d-container">
-            <div class="dice-3d" id="dice">
+            <div
+              class="dice-3d"
+              id="dice"
+              role="img"
+              aria-label="Dice ready to roll"
+            >
               <div class="dice-face front" id="face1">1</div>
               <div class="dice-face back" id="face2">2</div>
               <div class="dice-face right" id="face3">3</div>
@@ -1137,7 +1363,14 @@
             FULLSCREEN MODE
           </button>
 
-          <div class="result" id="result" role="alert" aria-live="polite">
+          <div
+            class="result"
+            id="result"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            hidden
+          >
             <h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1196,8 +1429,15 @@
           </div>
 
           <div class="input-group">
-            <label>Your Options: <span id="optionsCount">(0/6)</span></label>
-            <div class="options-list" id="optionsList">
+            <label id="optionsLabel"
+              >Your Options: <span id="optionsCount">(0/6)</span></label
+            >
+            <div
+              class="options-list"
+              id="optionsList"
+              role="list"
+              aria-labelledby="optionsLabel"
+            >
               <div class="empty-state">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1304,7 +1544,12 @@
           </div>
 
           <!-- History Panel -->
-          <div class="history-panel" id="historyPanel" style="display: none">
+          <div
+            class="history-panel"
+            id="historyPanel"
+            style="display: none"
+            aria-label="Roll history"
+          >
             <h4>Roll History</h4>
             <div class="history-list" id="historyList">
               <p class="empty-history">
@@ -1319,7 +1564,7 @@
       </div>
 
       <!-- AdSense Ad Unit - Bottom -->
-    </div>
+    </main>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -1386,7 +1631,7 @@
           clearHistory.addEventListener("click", clearRollHistory);
           fullscreenBtn.addEventListener("click", toggleFullscreen);
 
-          optionInput.addEventListener("keypress", function (e) {
+          optionInput.addEventListener("keydown", function (e) {
             if (e.key === "Enter") {
               addOption();
             }
@@ -1408,15 +1653,18 @@
             });
           });
 
-          // Initialize features
-          createParticles();
+          // Initialize features once; omit decorative particles for reduced-motion users.
           loadSavedData();
           updateDice();
           updateOptionsDisplay();
           updateHistoryDisplay();
+          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            createParticles();
+          }
         }
 
         function addOption() {
+          if (isRolling) return;
           const option = optionInput.value.trim();
 
           if (!option) {
@@ -1430,7 +1678,12 @@
             return;
           }
 
-          if (options.includes(option)) {
+          if (
+            options.some(
+              (existing) =>
+                existing.toLocaleLowerCase() === option.toLocaleLowerCase(),
+            )
+          ) {
             showAlert("This option already exists!");
             optionInput.value = "";
             optionInput.focus();
@@ -1448,6 +1701,9 @@
 
           updateOptionsDisplay();
           updateDice();
+          result.hidden = true;
+          result.classList.remove("show");
+          dice.style.transform = "";
           saveData();
           showAlert("Option added successfully!", "success");
 
@@ -1460,10 +1716,15 @@
         }
 
         function removeOption(index) {
+          if (isRolling) return;
           options.splice(index, 1);
           updateOptionsDisplay();
           updateDice();
+          result.hidden = true;
+          result.classList.remove("show");
+          dice.style.transform = "";
           saveData();
+          addOptionBtn.focus();
         }
 
         function updateOptionsDisplay() {
@@ -1485,26 +1746,22 @@
             return;
           }
 
-          optionsList.innerHTML = options
-            .map(
-              (option, index) => `
-              <div class="option-item" data-index="${index}">
-                <span class="option-text">${option}</span>
-                <button class="remove-btn" aria-label="Remove ${option}">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                  Remove
-                </button>
-              </div>
-            `,
-            )
-            .join("");
-
-          // Add event listeners to remove buttons
-          document.querySelectorAll(".remove-btn").forEach((btn, index) => {
-            btn.addEventListener("click", () => removeOption(index));
+          optionsList.replaceChildren();
+          options.forEach((option, index) => {
+            const item = document.createElement("div");
+            item.className = "option-item";
+            item.setAttribute("role", "listitem");
+            const label = document.createElement("span");
+            label.className = "option-text";
+            label.textContent = option;
+            const button = document.createElement("button");
+            button.className = "remove-btn";
+            button.type = "button";
+            button.setAttribute("aria-label", `Remove ${option}`);
+            button.textContent = "Remove";
+            button.addEventListener("click", () => removeOption(index));
+            item.append(label, button);
+            optionsList.appendChild(item);
           });
         }
 
@@ -1522,143 +1779,112 @@
               face.textContent = `${i + 1}`;
             }
           }
+          dice.setAttribute(
+            "aria-label",
+            options.length
+              ? `Custom die with ${options.length} ${options.length === 1 ? "option" : "options"}`
+              : "Die ready; add options before rolling",
+          );
         }
 
         function rollDice() {
+          rollDiceOn(dice, result, rollBtn);
+        }
+
+        function randomIndex(max) {
+          if (!Number.isSafeInteger(max) || max < 1) return 0;
+          if (!window.crypto?.getRandomValues)
+            return Math.floor(Math.random() * max);
+          const range = 0x100000000;
+          const limit = range - (range % max);
+          const sample = new Uint32Array(1);
+          do {
+            window.crypto.getRandomValues(sample);
+          } while (sample[0] >= limit);
+          return sample[0] % max;
+        }
+
+        function rollDiceOn(targetDice, targetResult, targetButton) {
           if (isRolling || !canRoll) {
-            if (!canRoll) {
-              showAlert("Add some options first!", "error");
-            }
+            if (!canRoll) showAlert("Add some options first!", "error");
             return;
           }
 
-          try {
-            isRolling = true;
-            rollBtn.disabled = true;
-            rollBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-              </svg>
-              ROLLING...
-            `;
+          isRolling = true;
+          const selectedIndex = randomIndex(options.length);
+          const selectedOption = options[selectedIndex];
+          const finalRotation = rotations[selectedIndex];
+          const spins = 3 + randomIndex(4);
+          const totalX = spins * 360 + finalRotation.x;
+          const totalY = spins * 360 + finalRotation.y;
+          const rollButtons = [
+            rollBtn,
+            document.getElementById("fullscreenRollBtn"),
+          ].filter(Boolean);
+          rollButtons.forEach((button) => {
+            button.disabled = true;
+            button.setAttribute("aria-busy", "true");
+          });
+          targetButton.textContent = "Rolling…";
+          targetResult.hidden = false;
+          targetResult.classList.remove("show");
+          playRollSound();
+          targetDice.classList.remove("landing", "celebrating");
+          targetDice.classList.add("rolling");
+          targetDice.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
 
-            result.classList.remove("show");
-
-            // Random number of spins and final face
-            const randomFace = Math.floor(
-              Math.random() * Math.min(options.length, 6),
-            );
-            const baseRotations = 3 + Math.random() * 3; // 3-6 full rotations
-
-            const finalRotation = rotations[randomFace];
-            const totalX = baseRotations * 360 + finalRotation.x;
-            const totalY = baseRotations * 360 + finalRotation.y;
-
-            // Apply rolling animation
-            dice.classList.add("rolling");
-            // Store the final transform for later
-            dice.setAttribute(
-              "data-final-transform",
-              `rotateX(${totalX}deg) rotateY(${totalY}deg)`,
-            );
-            dice.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
-
-            // Play rolling sound
-            playRollSound();
-
-            setTimeout(() => {
-              dice.classList.remove("rolling");
-
-              // Reapply the final transform to ensure dice stays in correct position
-              const finalTransform = dice.getAttribute("data-final-transform");
-              dice.style.transform = finalTransform;
-
-              dice.classList.add("landing");
-
-              // Get the selected option
-              const selectedOption =
-                options[randomFace] || `Face ${randomFace + 1}`;
-
-              // Show result after landing animation settles
-              setTimeout(() => {
-                resultText.textContent = selectedOption;
-                result.classList.add("show");
-              }, 300);
-
-              // Add celebration effect after landing
-              setTimeout(() => {
-                dice.classList.add("celebrating");
-                createConfetti();
-              }, 400);
-
-              // Add to history
+          window.setTimeout(
+            () => {
+              targetDice.classList.remove("rolling");
+              targetDice.classList.add("landing");
+              const targetText = targetResult.querySelector(
+                "#resultText, .result-value",
+              );
+              if (targetText) targetText.textContent = selectedOption;
+              else
+                targetResult
+                  .querySelector("p")
+                  ?.replaceChildren(document.createTextNode(selectedOption));
+              targetResult.classList.add("show");
+              targetDice.setAttribute(
+                "aria-label",
+                `Result: ${selectedOption}`,
+              );
               addToHistory(selectedOption);
-
-              // Reset button
-              rollBtn.disabled = false;
-              rollBtn.innerHTML = `
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <rect x="3" y="3" width="6" height="6" rx="1"></rect>
-                <rect x="15" y="15" width="6" height="6" rx="1"></rect>
-                <path d="M9 3h6v6"></path>
-                <path d="M15 9v6h6"></path>
-                <path d="M3 15h6v6"></path>
-              </svg>
-              ROLL THE DICE
-            `;
-
-              isRolling = false;
-
-              // Play result sound
-              playResultSound();
-
-              // Track with analytics
+              if (
+                !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ) {
+                targetDice.classList.add("celebrating");
+                createConfetti();
+              }
               if (typeof gtag !== "undefined") {
                 gtag("event", "dice_roll", {
                   result: selectedOption,
                   options_count: options.length,
-                  custom_dice: options.length > 0,
+                  custom_dice: true,
                 });
               }
-
-              // Remove celebration class after animation
-              setTimeout(() => {
-                dice.classList.remove("celebrating");
-                dice.classList.remove("landing");
-              }, 1000);
-            }, 800);
-          } catch (error) {
-            console.error("Error during dice roll:", error);
-            showAlert("Something went wrong! Please try again.", "error");
-
-            // Reset button state
-            isRolling = false;
-            rollBtn.disabled = false;
-            rollBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="3" width="6" height="6" rx="1"></rect>
-                <rect x="15" y="15" width="6" height="6" rx="1"></rect>
-                <path d="M9 3h6v6"></path>
-                <path d="M15 9v6h6"></path>
-                <path d="M3 15h6v6"></path>
-              </svg>
-              ROLL THE DICE
-            `;
-          }
+              rollButtons.forEach((button) => {
+                button.disabled = false;
+                button.removeAttribute("aria-busy");
+                button.textContent =
+                  button === rollBtn ? "🎲 ROLL THE DICE" : "🎲 ROLL AGAIN";
+              });
+              isRolling = false;
+              playResultSound();
+              window.setTimeout(
+                () => targetDice.classList.remove("celebrating", "landing"),
+                700,
+              );
+            },
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? 0
+              : 800,
+          );
         }
 
         function clearAll() {
+          if (isRolling) return;
           if (options.length === 0) {
             showAlert("No options to clear!");
             return;
@@ -1667,17 +1893,19 @@
           options = [];
           updateOptionsDisplay();
           updateDice();
+          result.hidden = true;
           result.classList.remove("show");
+          dice.style.transform = "";
           saveData();
           showAlert("All options cleared!", "success");
         }
 
         function addGames() {
-          window.location.href = "/games/games.html";
+          window.location.href = "../../games/games.html";
         }
 
         function goBackToTools() {
-          window.location.href = "tools.html";
+          window.location.href = "../../teacher-hub/index.html";
         }
 
         function showAlert(message, type = "info") {
@@ -1752,6 +1980,9 @@
 
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.5);
+            oscillator.addEventListener("ended", () => audioContext.close(), {
+              once: true,
+            });
           } catch (e) {
             // Fallback if audio context is not supported
             console.log("Audio not supported");
@@ -1791,6 +2022,9 @@
 
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.4);
+            oscillator.addEventListener("ended", () => audioContext.close(), {
+              once: true,
+            });
           } catch (e) {
             // Fallback if audio context is not supported
             console.log("Audio not supported");
@@ -1800,7 +2034,9 @@
         // New Advanced Features Functions
         function createParticles() {
           const particlesContainer = document.getElementById("particles");
-          const particleCount = 50;
+          if (!particlesContainer || particlesContainer.childElementCount)
+            return;
+          const particleCount = 24;
 
           for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement("div");
@@ -1816,6 +2052,7 @@
         function toggleSound() {
           soundEnabled = !soundEnabled;
           soundToggle.classList.toggle("muted", !soundEnabled);
+          soundToggle.setAttribute("aria-pressed", String(soundEnabled));
           soundToggle.setAttribute(
             "aria-label",
             soundEnabled ? "Mute sound effects" : "Enable sound effects",
@@ -1832,16 +2069,17 @@
           const isVisible = historyPanel.style.display !== "none";
           historyPanel.style.display = isVisible ? "none" : "block";
           historyToggle.classList.toggle("active", !isVisible);
+          historyToggle.setAttribute("aria-expanded", String(!isVisible));
+          if (!isVisible)
+            historyPanel.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+            });
         }
 
         function toggleFullscreen() {
-          isFullscreen = !isFullscreen;
-
-          if (isFullscreen) {
-            enterFullscreen();
-          } else {
-            exitFullscreen();
-          }
+          if (isFullscreen) exitFullscreen();
+          else enterFullscreen();
         }
 
         function enterFullscreen() {
@@ -1849,6 +2087,12 @@
           const fullscreenOverlay = document.createElement("div");
           fullscreenOverlay.id = "fullscreenOverlay";
           fullscreenOverlay.className = "fullscreen-mode";
+          fullscreenOverlay.setAttribute("role", "dialog");
+          fullscreenOverlay.setAttribute("aria-modal", "true");
+          fullscreenOverlay.setAttribute(
+            "aria-label",
+            "Fullscreen custom dice roller",
+          );
 
           // Clone dice and result elements
           const diceClone = dice.cloneNode(true);
@@ -1856,6 +2100,12 @@
 
           const resultClone = result.cloneNode(true);
           resultClone.id = "fullscreenResult";
+          resultClone.hidden = !result.classList.contains("show");
+          resultClone.querySelector("#resultText")?.removeAttribute("id");
+          resultClone.querySelector("h3")?.setAttribute("aria-hidden", "true");
+          resultClone.querySelector("p")?.classList.add("result-value");
+          diceClone.id = "fullscreenDice";
+          diceClone.setAttribute("aria-label", dice.getAttribute("aria-label"));
 
           // Create fullscreen controls
           const controls = document.createElement("div");
@@ -1882,9 +2132,12 @@
           // Assemble fullscreen mode
           const container = document.createElement("div");
           container.style.textAlign = "center";
+          const diceContainer = document.createElement("div");
+          diceContainer.className = "dice-3d-container";
 
           fullscreenOverlay.appendChild(container);
-          container.appendChild(diceClone);
+          container.appendChild(diceContainer);
+          diceContainer.appendChild(diceClone);
           container.appendChild(resultClone);
           container.appendChild(controls);
 
@@ -1901,98 +2154,41 @@
             .getElementById("exitFullscreenBtn")
             .addEventListener("click", exitFullscreen);
 
-          // ESC key to exit
+          isFullscreen = true;
+          fullscreenBtn.setAttribute("aria-pressed", "true");
+          fullscreenBtn.setAttribute("aria-label", "Exit fullscreen mode");
+          document.getElementById("fullscreenRollBtn").disabled = !canRoll;
+          document.getElementById("exitFullscreenBtn").focus();
+          if (fullscreenOverlay.requestFullscreen) {
+            fullscreenOverlay.requestFullscreen().catch(() => {});
+          }
           document.addEventListener("keydown", handleEscKey);
         }
 
         function exitFullscreen() {
           const overlay = document.getElementById("fullscreenOverlay");
-          if (overlay) {
-            overlay.remove();
-          }
+          if (overlay) overlay.remove();
           isFullscreen = false;
+          fullscreenBtn.setAttribute("aria-pressed", "false");
+          fullscreenBtn.setAttribute("aria-label", "Enter fullscreen mode");
           document.removeEventListener("keydown", handleEscKey);
+          if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          }
+          fullscreenBtn.focus();
         }
 
         function handleEscKey(e) {
-          if (e.key === "Escape" && isFullscreen) {
-            exitFullscreen();
-          }
+          if (e.key === "Escape" && isFullscreen) exitFullscreen();
         }
 
+        document.addEventListener("fullscreenchange", () => {
+          if (isFullscreen && !document.fullscreenElement) exitFullscreen();
+        });
+
         function rollDiceFullscreen(diceElement, resultElement) {
-          if (isRolling || !canRoll) {
-            if (!canRoll) {
-              showAlert("Add some options first!", "error");
-            }
-            return;
-          }
-
-          isRolling = true;
           const rollButton = document.getElementById("fullscreenRollBtn");
-          rollButton.disabled = true;
-          rollButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-            </svg>
-            ROLLING...
-          `;
-
-          resultElement.classList.remove("show");
-
-          const randomFace = Math.floor(
-            Math.random() * Math.min(options.length, 6),
-          );
-          const baseRotations = 3 + Math.random() * 3;
-          const finalRotation = rotations[randomFace];
-          const totalX = baseRotations * 360 + finalRotation.x;
-          const totalY = baseRotations * 360 + finalRotation.y;
-
-          diceElement.classList.add("rolling");
-          diceElement.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
-
-          if (soundEnabled) {
-            playRollSound();
-          }
-
-          setTimeout(() => {
-            diceElement.classList.remove("rolling");
-
-            const selectedOption =
-              options[randomFace] || `Face ${randomFace + 1}`;
-            const resultText = resultElement.querySelector("#resultText");
-            if (resultText) {
-              resultText.textContent = selectedOption;
-            }
-            resultElement.classList.add("show");
-
-            diceElement.classList.add("celebrating");
-            createConfetti();
-
-            addToHistory(selectedOption);
-
-            rollButton.disabled = false;
-            rollButton.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="6" height="6" rx="1"></rect>
-                <rect x="15" y="15" width="6" height="6" rx="1"></rect>
-                <path d="M9 3h6v6"></path>
-                <path d="M15 9v6h6"></path>
-                <path d="M3 15h6v6"></path>
-              </svg>
-              ROLL AGAIN
-            `;
-
-            isRolling = false;
-
-            if (soundEnabled) {
-              playResultSound();
-            }
-
-            setTimeout(() => {
-              diceElement.classList.remove("celebrating");
-            }, 1000);
-          }, 5000);
+          rollDiceOn(diceElement, resultElement, rollButton);
         }
 
         function loadPreset(presetName) {
@@ -2009,7 +2205,9 @@
           options = [...presets[presetName]];
           updateOptionsDisplay();
           updateDice();
+          result.hidden = true;
           result.classList.remove("show");
+          saveData();
           showAlert(
             `${
               presetName.charAt(0).toUpperCase() + presetName.slice(1)
@@ -2051,20 +2249,23 @@
             return;
           }
 
-          historyList.innerHTML = rollHistory
-            .map((item) => {
-              const timeStr = item.timestamp.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-              return `
-              <div class="history-item">
-                <span class="history-result">${item.result}</span>
-                <span class="history-time">${timeStr}</span>
-              </div>
-            `;
-            })
-            .join("");
+          historyList.replaceChildren();
+          rollHistory.forEach((item) => {
+            const row = document.createElement("div");
+            row.className = "history-item";
+            const value = document.createElement("span");
+            value.className = "history-result";
+            value.textContent = item.result;
+            const time = document.createElement("time");
+            time.className = "history-time";
+            time.dateTime = item.timestamp.toISOString();
+            time.textContent = item.timestamp.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            row.append(value, time);
+            historyList.appendChild(row);
+          });
         }
 
         function clearRollHistory() {
@@ -2099,18 +2300,56 @@
             const saved = localStorage.getItem("diceGameData");
             if (saved) {
               const data = JSON.parse(saved);
-              if (data.options && Array.isArray(data.options)) {
-                options = data.options;
+              if (Array.isArray(data.options)) {
+                const seen = new Set();
+                options = data.options
+                  .filter((item) => typeof item === "string")
+                  .map((item) => item.trim())
+                  .filter((item) => {
+                    const key = item.toLocaleLowerCase();
+                    if (
+                      !item ||
+                      item.length > 15 ||
+                      seen.has(key) ||
+                      seen.size >= 6
+                    )
+                      return false;
+                    seen.add(key);
+                    return true;
+                  });
               }
               if (typeof data.soundEnabled === "boolean") {
                 soundEnabled = data.soundEnabled;
                 soundToggle.classList.toggle("muted", !soundEnabled);
+                soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+                soundToggle.setAttribute(
+                  "aria-label",
+                  soundEnabled ? "Mute sound effects" : "Enable sound effects",
+                );
               }
-              if (data.rollHistory && Array.isArray(data.rollHistory)) {
-                rollHistory = data.rollHistory.map((item) => ({
-                  ...item,
-                  timestamp: new Date(item.timestamp),
-                }));
+              if (Array.isArray(data.rollHistory)) {
+                rollHistory = data.rollHistory
+                  .filter(
+                    (item) =>
+                      item &&
+                      typeof item.result === "string" &&
+                      item.result.length <= 15,
+                  )
+                  .slice(0, 20)
+                  .map((item) => {
+                    const parsed = new Date(item.timestamp);
+                    return {
+                      result: item.result,
+                      timestamp: Number.isNaN(parsed.getTime())
+                        ? new Date()
+                        : parsed,
+                      options: Array.isArray(item.options)
+                        ? item.options
+                            .filter((option) => typeof option === "string")
+                            .slice(0, 6)
+                        : [],
+                    };
+                  });
               }
             }
           } catch (e) {
@@ -2174,42 +2413,6 @@
         `;
         document.head.appendChild(style);
       });
-
-      // Generate animated particles
-      function createParticles() {
-        const particlesContainer = document.getElementById("particles");
-        if (!particlesContainer) return;
-
-        for (let i = 0; i < 30; i++) {
-          const particle = document.createElement("div");
-          particle.className = "particle";
-          particle.style.left = Math.random() * 100 + "%";
-          particle.style.top = window.innerHeight + Math.random() * 100 + "px";
-          particle.style.animationDelay = Math.random() * 2 + "s";
-          particle.style.animationDuration = Math.random() * 4 + 6 + "s";
-          particlesContainer.appendChild(particle);
-        }
-
-        // Recreate particles periodically
-        setInterval(() => {
-          if (particlesContainer.children.length < 20) {
-            const particle = document.createElement("div");
-            particle.className = "particle";
-            particle.style.left = Math.random() * 100 + "%";
-            particle.style.top = window.innerHeight + "px";
-            particle.style.animationDelay = "0s";
-            particle.style.animationDuration = Math.random() * 4 + 6 + "s";
-            particlesContainer.appendChild(particle);
-          }
-        }, 500);
-      }
-
-      // Initialize particles when page loads
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", createParticles);
-      } else {
-        createParticles();
-      }
     </script>
 
     <footer>
@@ -2219,11 +2422,11 @@
             <div class="brand-header">
               <picture>
                 <source
-                  srcset="..//images/logo-optimized.webp"
+                  srcset="../../images/logo-optimized.webp"
                   type="image/webp"
                 />
                 <img
-                  src="..//images/logo-optimized.png"
+                  src="../../images/logo-optimized.png"
                   alt="ESL Fun Online"
                   class="footer-logo"
                   loading="lazy"
@@ -2243,17 +2446,17 @@
             <h3><i class="fas fa-graduation-cap"></i> English</h3>
             <ul>
               <li>
-                <a href="../resources/english/grammar.html"
+                <a href="../../resources/english/grammar.html"
                   ><i class="fas fa-spell-check"></i><span>Grammar</span></a
                 >
               </li>
               <li>
-                <a href="../resources/english/vocabguide.html"
+                <a href="../../resources/english/vocabguide.html"
                   ><i class="fas fa-book-open"></i><span>Vocabulary</span></a
                 >
               </li>
               <li>
-                <a href="../resources/business/presentation-coach.html"
+                <a href="../../resources/business/presentation-coach.html"
                   ><i class="fas fa-handshake"></i><span>Business</span></a
                 >
               </li>
@@ -2263,23 +2466,23 @@
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="../lessons.html"
+                <a href="../../lessons.html"
                   ><i class="fas fa-chalkboard-teacher"></i
                   ><span>Lessons</span></a
                 >
               </li>
               <li>
-                <a href="../games/games.html"
+                <a href="../../games/games.html"
                   ><i class="fas fa-gamepad"></i><span>Games</span></a
                 >
               </li>
               <li>
-                <a href="../teacher-hub/index.html"
+                <a href="../../teacher-hub/index.html"
                   ><i class="fas fa-tools"></i><span>Tools</span></a
                 >
               </li>
               <li>
-                <a href="../resources/lessons-and-blog/blog.html"
+                <a href="../../resources/lessons-and-blog/blog.html"
                   ><i class="fas fa-book-open"></i><span>Blog</span></a
                 >
               </li>
@@ -2289,13 +2492,13 @@
         <div class="footer-bottom">
           <div class="footer-bottom-center">
             <div class="footer-links">
-              <a href="../privacy.html"
+              <a href="../../privacy.html"
                 ><i class="fas fa-shield-alt"></i>Privacy</a
               >
-              <a href="../terms.html"
+              <a href="../../terms.html"
                 ><i class="fas fa-file-contract"></i>Terms</a
               >
-              <a href="../cookies.html"
+              <a href="../../cookies.html"
                 ><i class="fas fa-cookie-bite"></i>Cookies</a
               >
             </div>

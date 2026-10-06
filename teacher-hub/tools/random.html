@@ -21,8 +21,11 @@
       name="description"
       content="Free online random generator tools for teachers and students. Generate random numbers, names, groups, and more for classroom activities and language learning games."
     />
-    <title>Ultimate Random Generator | Everything Random</title>
-    <link rel="canonical" href="https://eslfunonline.com/tools/random.html" />
+    <title>Classroom Random Generator | ESL Fun Online</title>
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/teacher-hub/tools/random.html"
+    />
     <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../../favicon.ico" sizes="any" />
     <link
@@ -78,6 +81,334 @@
       rel="stylesheet"
       href="../../css/footer-consolidated.css?v=20260923"
     />
+    <style>
+      .random-tool {
+        width: min(100% - 2rem, 1280px);
+        margin: 0 auto;
+        padding: 2.5rem 0 4rem;
+      }
+      .random-tool .header {
+        margin: 0 auto 2rem;
+        text-align: center;
+      }
+      .random-tool .title {
+        margin: 0 0 0.65rem;
+        color: var(--text-primary);
+        font-family: var(--font-family-brand);
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        line-height: 1.15;
+      }
+      .random-tool .subtitle {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+      }
+      .generators-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        align-items: stretch;
+        gap: 1.25rem;
+      }
+      .generator-card,
+      .history-section {
+        min-width: 0;
+        padding: 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 1.1rem;
+        background: var(--bg-primary);
+        box-shadow: var(--shadow-md);
+      }
+      .generator-card {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .card-icon {
+        display: grid;
+        width: 2.75rem;
+        height: 2.75rem;
+        flex: 0 0 2.75rem;
+        place-items: center;
+        border-radius: 0.85rem;
+        background: var(--primary-light);
+        font-size: 1.35rem;
+      }
+      .card-title {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 1.15rem;
+      }
+      .generator-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+      .input-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      .custom-entry-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .custom-list-entry {
+        min-height: 90px;
+        resize: vertical;
+      }
+      .custom-entry-row .preset-btn {
+        justify-self: start;
+        min-width: 130px;
+      }
+      .input-field {
+        box-sizing: border-box;
+        min-width: 0;
+        min-height: 44px;
+        flex: 1 1 120px;
+        padding: 0.65rem 0.75rem;
+        border: 1px solid var(--border-dark);
+        border-radius: 0.65rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font: inherit;
+      }
+      .input-field:focus-visible,
+      .preset-btn:focus-visible,
+      .generate-btn:focus-visible,
+      .copy-result-btn:focus-visible,
+      .remove-item-btn:focus-visible {
+        outline: 3px solid
+          color-mix(in srgb, var(--primary-color) 45%, transparent);
+        outline-offset: 2px;
+      }
+      .preset-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+      .preset-btn,
+      .remove-item-btn,
+      .copy-result-btn {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.7rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.65rem;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font: inherit;
+        cursor: pointer;
+        transition:
+          border-color 0.15s ease,
+          background 0.15s ease,
+          transform 0.15s ease;
+      }
+      .preset-btn:hover,
+      .preset-btn.is-selected {
+        border-color: var(--primary-color);
+        background: var(--primary-light);
+      }
+      .preset-btn:hover {
+        transform: translateY(-1px);
+      }
+      .generate-btn {
+        display: inline-flex;
+        min-height: 46px;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        padding: 0.7rem 1rem;
+        border: 0;
+        border-radius: 0.7rem;
+        background: var(--gradient-primary);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          filter 0.15s ease,
+          transform 0.15s ease;
+      }
+      .generate-btn:hover {
+        filter: brightness(1.05);
+        transform: translateY(-1px);
+      }
+      .result-display {
+        display: flex;
+        min-height: 58px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.8rem;
+        border: 1px dashed var(--border-dark);
+        border-radius: 0.7rem;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        overflow-wrap: anywhere;
+      }
+      .result-display.has-result {
+        border-style: solid;
+      }
+      .result-text {
+        min-width: 0;
+        font-weight: 600;
+        line-height: 1.55;
+      }
+      .result-display.is-error {
+        border-color: var(--error-color);
+        color: var(--error-color);
+      }
+      .placeholder-text {
+        color: var(--text-secondary);
+      }
+      .copy-result-btn {
+        min-height: 34px;
+        flex: 0 0 auto;
+        padding: 0.35rem 0.55rem;
+      }
+      .color-results {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+      .color-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.55rem;
+        background: var(--bg-primary);
+        font-size: 0.85rem;
+      }
+      .color-swatch {
+        width: 1.15rem;
+        height: 1.15rem;
+        border: 1px solid rgb(0 0 0 / 15%);
+        border-radius: 50%;
+      }
+      .custom-list-container {
+        display: flex;
+        max-height: 190px;
+        flex-direction: column;
+        gap: 0.35rem;
+        overflow: auto;
+      }
+      .custom-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        padding: 0.4rem 0.55rem;
+        border-radius: 0.5rem;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        overflow-wrap: anywhere;
+      }
+      .remove-item-btn {
+        min-height: 30px;
+        padding: 0.2rem 0.45rem;
+        color: var(--error-color);
+      }
+      .timer-display {
+        color: var(--text-primary);
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.2;
+        text-align: center;
+      }
+      .timer-display.warning {
+        color: var(--warning-color);
+      }
+      .timer-display.finished {
+        color: var(--success-color);
+      }
+      .timer-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .history-section {
+        margin-top: 1.5rem;
+      }
+      .history-title {
+        margin: 0 0 1rem;
+        color: var(--text-primary);
+        font-size: 1.35rem;
+      }
+      .history-list {
+        display: grid;
+        gap: 0.55rem;
+      }
+      .history-item {
+        display: grid;
+        grid-template-columns: minmax(90px, 0.25fr) minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 0.8rem;
+        border-radius: 0.65rem;
+        background: var(--bg-secondary);
+      }
+      .history-type {
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+      .history-result {
+        color: var(--text-primary);
+        overflow-wrap: anywhere;
+      }
+      .history-time {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+      }
+      .tool-message {
+        margin: 0 0 1rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--error-color);
+        border-radius: 0.7rem;
+        background: rgba(239, 68, 68, 0.08);
+        color: var(--error-color);
+      }
+      .tool-message[hidden] {
+        display: none;
+      }
+      @media (max-width: 600px) {
+        .random-tool {
+          width: min(100% - 1rem, 1280px);
+          padding-top: 1.5rem;
+        }
+        .generator-card,
+        .history-section {
+          padding: 1rem;
+        }
+        .history-item {
+          grid-template-columns: 1fr;
+          gap: 0.2rem;
+        }
+        .result-display {
+          align-items: flex-start;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .preset-btn,
+        .generate-btn {
+          transition: none;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -155,13 +486,14 @@
       </div>
     </header>
 
-    <div class="container">
+    <main class="random-tool">
       <div class="header">
-        <h1 class="title">🎲 Ultimate Random Generator</h1>
+        <h1 class="title">🎲 Classroom Random Generator</h1>
         <p class="subtitle">
           Generate anything random - numbers, letters, decisions, and more!
         </p>
       </div>
+      <div id="toolMessage" class="tool-message" role="alert" hidden></div>
 
       <div class="generators-grid">
         <!-- Random Numbers -->
@@ -176,20 +508,27 @@
                 type="number"
                 class="input-field"
                 id="numMin"
+                aria-label="Minimum number"
                 placeholder="Min"
                 value="1"
+                min="-1000000"
+                max="1000000"
               />
               <input
                 type="number"
                 class="input-field"
                 id="numMax"
+                aria-label="Maximum number"
                 placeholder="Max"
                 value="100"
+                min="-1000000"
+                max="1000000"
               />
               <input
                 type="number"
                 class="input-field"
                 id="numCount"
+                aria-label="How many numbers to generate"
                 placeholder="Count"
                 value="1"
                 min="1"
@@ -203,7 +542,10 @@
               <button class="preset-btn" onclick="setNumberPreset(1, 10, 1)">
                 Rating (1-10)
               </button>
-              <button class="preset-btn" onclick="setNumberPreset(1, 100, 5)">
+              <button
+                class="preset-btn"
+                onclick="setNumberPreset(1, 100, 5, true)"
+              >
                 Lottery (5 nums)
               </button>
               <button class="preset-btn" onclick="setNumberPreset(0, 1, 1)">
@@ -214,7 +556,7 @@
           <button class="generate-btn" onclick="generateNumbers()">
             🎯 Generate Numbers
           </button>
-          <div class="result-display" id="numberResult">
+          <div class="result-display" id="numberResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get random numbers</span
             >
@@ -233,12 +575,17 @@
                 type="number"
                 class="input-field"
                 id="letterCount"
+                aria-label="How many letters to generate"
                 placeholder="Count"
                 value="5"
                 min="1"
                 max="50"
               />
-              <select class="input-field" id="letterType">
+              <select
+                class="input-field"
+                id="letterType"
+                aria-label="Letter case"
+              >
                 <option value="uppercase">UPPERCASE</option>
                 <option value="lowercase">lowercase</option>
                 <option value="mixed">Mixed Case</option>
@@ -258,7 +605,7 @@
                 Initials
               </button>
               <button class="preset-btn" onclick="setLetterPreset(8, 'mixed')">
-                Password
+                Short Code
               </button>
               <button
                 class="preset-btn"
@@ -271,7 +618,7 @@
           <button class="generate-btn" onclick="generateLetters()">
             🔤 Generate Letters
           </button>
-          <div class="result-display" id="letterResult">
+          <div class="result-display" id="letterResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get random letters</span
             >
@@ -318,7 +665,11 @@
               </button>
             </div>
             <div class="input-row">
-              <select class="input-field" id="questionCategory">
+              <select
+                class="input-field"
+                id="questionCategory"
+                aria-label="Question category"
+              >
                 <option value="all">All Categories</option>
                 <option value="icebreaker">Ice Breakers</option>
                 <option value="deep">Deep Thoughts</option>
@@ -332,7 +683,7 @@
           <button class="generate-btn" onclick="generateQuestion()">
             💭 Generate Question
           </button>
-          <div class="result-display" id="questionResult">
+          <div class="result-display" id="questionResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get a random question</span
             >
@@ -367,7 +718,11 @@
               </button>
             </div>
             <div class="input-row">
-              <select class="input-field" id="topicCategory">
+              <select
+                class="input-field"
+                id="topicCategory"
+                aria-label="Topic category"
+              >
                 <option value="all">All Topics</option>
                 <option value="conversation">Conversation Starters</option>
                 <option value="debate">Debate Topics</option>
@@ -380,7 +735,7 @@
           <button class="generate-btn" onclick="generateTopic()">
             🚀 Generate Topic
           </button>
-          <div class="result-display" id="topicResult">
+          <div class="result-display" id="topicResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get a random topic</span
             >
@@ -395,7 +750,11 @@
           </div>
           <div class="generator-content">
             <div class="input-row">
-              <select class="input-field" id="colorFormat">
+              <select
+                class="input-field"
+                id="colorFormat"
+                aria-label="Color format"
+              >
                 <option value="hex">HEX (#FF0000)</option>
                 <option value="rgb">RGB (255, 0, 0)</option>
                 <option value="hsl">HSL (0, 100%, 50%)</option>
@@ -405,6 +764,7 @@
                 type="number"
                 class="input-field"
                 id="colorCount"
+                aria-label="How many colors to generate"
                 placeholder="Count"
                 value="1"
                 min="1"
@@ -412,6 +772,9 @@
               />
             </div>
             <div class="preset-buttons">
+              <button class="preset-btn" onclick="setColorPreset('random')">
+                Random Colors
+              </button>
               <button class="preset-btn" onclick="setColorPreset('pastel')">
                 Pastel Colors
               </button>
@@ -429,7 +792,7 @@
           <button class="generate-btn" onclick="generateColors()">
             🌈 Generate Colors
           </button>
-          <div class="result-display" id="colorResult">
+          <div class="result-display" id="colorResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get random colors</span
             >
@@ -448,12 +811,17 @@
                 type="number"
                 class="input-field"
                 id="wordCount"
+                aria-label="How many words to generate"
                 placeholder="Count"
                 value="3"
                 min="1"
                 max="20"
               />
-              <select class="input-field" id="wordType">
+              <select
+                class="input-field"
+                id="wordType"
+                aria-label="Word category"
+              >
                 <option value="common">Common Words</option>
                 <option value="adjectives">Adjectives</option>
                 <option value="nouns">Nouns</option>
@@ -483,7 +851,7 @@
           <button class="generate-btn" onclick="generateWords()">
             📚 Generate Words
           </button>
-          <div class="result-display" id="wordResult">
+          <div class="result-display" id="wordResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get random words</span
             >
@@ -497,15 +865,18 @@
             <h3 class="card-title">Custom List</h3>
           </div>
           <div class="generator-content">
-            <div class="input-row">
-              <input
-                type="text"
-                class="input-field"
+            <div class="input-row custom-entry-row">
+              <textarea
+                class="input-field custom-list-entry"
                 id="customInput"
-                placeholder="Add your custom option"
-                maxlength="50"
-              />
-              <button class="preset-btn" onclick="addCustomItem()">Add</button>
+                aria-label="Student names or custom options, one per line"
+                placeholder="Paste student names, one per line"
+                maxlength="5000"
+                rows="3"
+              ></textarea>
+              <button class="preset-btn" onclick="addCustomItem()">
+                Add names
+              </button>
             </div>
             <div class="custom-list-container" id="customList">
               <div
@@ -539,7 +910,7 @@
           <button class="generate-btn" onclick="generateCustom()">
             🎯 Pick Random Item
           </button>
-          <div class="result-display" id="customResult">
+          <div class="result-display" id="customResult" aria-live="polite">
             <span class="placeholder-text">Add items and click generate</span>
           </div>
         </div>
@@ -556,12 +927,14 @@
                 type="date"
                 class="input-field"
                 id="dateStart"
+                aria-label="Start date"
                 value="2024-01-01"
               />
               <input
                 type="date"
                 class="input-field"
                 id="dateEnd"
+                aria-label="End date"
                 value="2025-12-31"
               />
             </div>
@@ -583,7 +956,7 @@
           <button class="generate-btn" onclick="generateDate()">
             📆 Generate Date
           </button>
-          <div class="result-display" id="dateResult">
+          <div class="result-display" id="dateResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get a random date</span
             >
@@ -602,12 +975,17 @@
                 type="number"
                 class="input-field"
                 id="passwordLength"
+                aria-label="Password length"
                 placeholder="Length"
                 value="12"
                 min="4"
                 max="50"
               />
-              <select class="input-field" id="passwordType">
+              <select
+                class="input-field"
+                id="passwordType"
+                aria-label="Password character types"
+              >
                 <option value="mixed">Letters + Numbers</option>
                 <option value="strong">Strong (+ Symbols)</option>
                 <option value="letters">Letters Only</option>
@@ -644,7 +1022,7 @@
           <button class="generate-btn" onclick="generatePassword()">
             🔐 Generate Password
           </button>
-          <div class="result-display" id="passwordResult">
+          <div class="result-display" id="passwordResult" aria-live="polite">
             <span class="placeholder-text"
               >Click generate to get a random password</span
             >
@@ -672,7 +1050,14 @@
                 5 Minutes
               </button>
             </div>
-            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div
+              class="timer-display"
+              id="timerDisplay"
+              role="timer"
+              aria-live="off"
+            >
+              00:00
+            </div>
             <div class="timer-controls">
               <button
                 class="generate-btn"
@@ -689,9 +1074,22 @@
               >
                 ⏹️ Stop Timer
               </button>
+              <button
+                class="preset-btn"
+                id="timerPauseBtn"
+                onclick="pauseTimer()"
+                style="display: none"
+              >
+                ⏸️ Pause
+              </button>
             </div>
           </div>
-          <div class="result-display" id="timerResult">
+          <div
+            class="result-display"
+            id="timerResult"
+            role="status"
+            aria-live="polite"
+          >
             <span class="placeholder-text"
               >Select a time and start the timer</span
             >
@@ -702,7 +1100,7 @@
       <!-- History Section -->
       <div class="history-section">
         <h2 class="history-title">🕒 Generation History</h2>
-        <div class="history-list" id="historyList">
+        <div class="history-list" id="historyList" aria-live="polite">
           <div
             class="placeholder-text"
             style="text-align: center; padding: 30px"
@@ -716,12 +1114,16 @@
           </button>
         </div>
       </div>
-    </div>
+    </main>
 
     <script>
       // Game state
       var customItems = [];
-      var history = [];
+      var generationHistory = [];
+      let activeColorPreset = "random";
+      let timerEndAt = null;
+      let timerPaused = false;
+      const HISTORY_LIMIT = 30;
 
       // Data collections
       const questionCategories = {
@@ -868,27 +1270,239 @@
         ],
       };
 
-      // Set default question category
-      let currentQuestionCategory = "all";
-
       // Set default custom items
-      const defaultCustomItems = [
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Grape",
-        "Lemon",
-        "Mango",
-        "Orange",
-        "Peach",
-        "Pear",
-        "Pineapple",
-        "Plum",
-        "Raspberry",
-        "Strawberry",
-        "Watermelon",
+      const defaultCustomItems = [];
+      let numberUnique = false;
+
+      const namedColors = [
+        { name: "Coral", hex: "#ff7f50" },
+        { name: "Tomato", hex: "#ff6347" },
+        { name: "Gold", hex: "#ffd700" },
+        { name: "Lime Green", hex: "#32cd32" },
+        { name: "Turquoise", hex: "#40e0d0" },
+        { name: "Sky Blue", hex: "#87ceeb" },
+        { name: "Royal Blue", hex: "#4169e1" },
+        { name: "Violet", hex: "#8a2be2" },
+        { name: "Hot Pink", hex: "#ff69b4" },
+        { name: "Salmon", hex: "#fa8072" },
+        { name: "Sea Green", hex: "#2e8b57" },
+        { name: "Slate Gray", hex: "#708090" },
       ];
+      const colorPalettes = {
+        pastel: [
+          "#ffd1dc",
+          "#cdb4db",
+          "#bde0fe",
+          "#caffbf",
+          "#fdffb6",
+          "#ffc8a2",
+        ],
+        vibrant: [
+          "#ff1744",
+          "#ff9100",
+          "#ffea00",
+          "#00e676",
+          "#00b0ff",
+          "#d500f9",
+        ],
+        dark: [
+          "#191970",
+          "#006400",
+          "#4b0082",
+          "#8b0000",
+          "#2f4f4f",
+          "#191919",
+        ],
+        rainbow: [
+          "#ff0000",
+          "#ff7f00",
+          "#ffff00",
+          "#00a000",
+          "#0000ff",
+          "#8b00ff",
+        ],
+      };
+
+      function secureRandomInt(maxExclusive) {
+        if (!Number.isSafeInteger(maxExclusive) || maxExclusive < 1) return 0;
+        if (!window.crypto?.getRandomValues) {
+          return Math.floor(Math.random() * maxExclusive);
+        }
+        const range = 0x100000000;
+        if (maxExclusive > range) {
+          return Math.floor(Math.random() * maxExclusive);
+        }
+        const limit = range - (range % maxExclusive);
+        const buffer = new Uint32Array(1);
+        do {
+          window.crypto.getRandomValues(buffer);
+        } while (buffer[0] >= limit);
+        return buffer[0] % maxExclusive;
+      }
+
+      function randomInteger(min, max) {
+        return min + secureRandomInt(max - min + 1);
+      }
+
+      function readIntegerInput(id, min, max, label) {
+        const input = document.getElementById(id);
+        const value = Number(input.value);
+        if (!Number.isSafeInteger(value) || value < min || value > max) {
+          showErrorFor(
+            input,
+            `${label} must be a whole number from ${min} to ${max}.`,
+          );
+          input.focus();
+          return null;
+        }
+        input.removeAttribute("aria-invalid");
+        return value;
+      }
+
+      function showErrorFor(input, message) {
+        input.setAttribute("aria-invalid", "true");
+        displayError(
+          `${input.closest(".generator-card").querySelector(".card-title").textContent}: ${message}`,
+        );
+      }
+
+      function displayError(message) {
+        const error = document.getElementById("toolMessage");
+        error.textContent = message;
+        error.hidden = false;
+      }
+
+      function clearToolMessage() {
+        const error = document.getElementById("toolMessage");
+        error.textContent = "";
+        error.hidden = true;
+        document.querySelectorAll("[aria-invalid='true']").forEach((input) => {
+          input.removeAttribute("aria-invalid");
+        });
+      }
+
+      function setActivePreset(button) {
+        button = button || document.activeElement;
+        button
+          .closest(".preset-buttons")
+          ?.querySelectorAll(".preset-btn")
+          .forEach((item) => {
+            item.classList.toggle("is-selected", item === button);
+            item.setAttribute(
+              "aria-pressed",
+              item === button ? "true" : "false",
+            );
+          });
+      }
+
+      function setNumberPreset(min, max, count, unique = false) {
+        document.getElementById("numMin").value = min;
+        document.getElementById("numMax").value = max;
+        document.getElementById("numCount").value = count;
+        numberUnique = unique;
+        setActivePreset();
+        clearToolMessage();
+      }
+
+      function setLetterPreset(count, type) {
+        document.getElementById("letterCount").value = count;
+        document.getElementById("letterType").value = type;
+        setActivePreset();
+      }
+
+      function setQuestionCategory(category) {
+        document.getElementById("questionCategory").value = category;
+        setActivePreset();
+      }
+
+      function setTopicCategory(category) {
+        document.getElementById("topicCategory").value = category;
+        setActivePreset();
+      }
+
+      function setColorPreset(preset) {
+        activeColorPreset = preset;
+        if (preset !== "random") {
+          document.getElementById("colorFormat").value = "hex";
+        }
+        setActivePreset();
+      }
+
+      document.getElementById("colorFormat").addEventListener("change", () => {
+        activeColorPreset = "random";
+        document
+          .getElementById("colorResult")
+          .closest(".generator-card")
+          .querySelectorAll(".preset-btn.is-selected")
+          .forEach((button) => {
+            button.classList.remove("is-selected");
+            button.setAttribute("aria-pressed", "false");
+          });
+      });
+
+      function setWordPreset(count, type) {
+        document.getElementById("wordCount").value = count;
+        document.getElementById("wordType").value = type;
+        setActivePreset();
+      }
+
+      function setDatePreset(preset) {
+        const startInput = document.getElementById("dateStart");
+        const endInput = document.getElementById("dateEnd");
+        const today = new Date();
+        let start;
+        let end;
+        if (preset === "thisYear") {
+          start = new Date(today.getFullYear(), 0, 1);
+          end = new Date(today.getFullYear(), 11, 31);
+        } else if (preset === "nextMonth") {
+          start = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+          end = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+        } else if (preset === "pastYear") {
+          start = new Date(
+            today.getFullYear() - 1,
+            today.getMonth(),
+            today.getDate(),
+          );
+          end = today;
+        } else {
+          start = today;
+          end = new Date(
+            today.getFullYear() + 5,
+            today.getMonth(),
+            today.getDate(),
+          );
+        }
+        const toDateInput = (date) => {
+          const local = new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000,
+          );
+          return local.toISOString().slice(0, 10);
+        };
+        startInput.value = toDateInput(start);
+        endInput.value = toDateInput(end);
+        setActivePreset();
+      }
+
+      function setPasswordPreset(length, type) {
+        document.getElementById("passwordLength").value = length;
+        document.getElementById("passwordType").value = type;
+        setActivePreset();
+      }
+
+      function generateCustom() {
+        if (!customItems.length) {
+          displayError("Add at least one item to your custom list first.");
+          document.getElementById("customInput").focus();
+          return;
+        }
+        clearToolMessage();
+        displayResult(
+          "customResult",
+          customItems[randomInteger(0, customItems.length - 1)],
+          "custom pick",
+        );
+      }
 
       // Initialize custom items
       function initCustomItems() {
@@ -899,13 +1513,49 @@
       // Add item to custom list
       function addCustomItem() {
         const input = document.getElementById("customInput");
-        const value = input.value.trim();
-        if (value && !customItems.includes(value)) {
-          customItems.push(value);
-          input.value = "";
-          renderCustomList();
+        const values = input.value
+          .split(/\r?\n/)
+          .map((value) => value.trim())
+          .filter(Boolean);
+        if (!values.length) {
+          displayError("Add at least one name or option first.");
+          input.focus();
+          return;
         }
+        const existing = new Set(
+          customItems.map((item) => item.toLocaleLowerCase()),
+        );
+        const additions = values
+          .filter((value) => {
+            const key = value.toLocaleLowerCase();
+            if (existing.has(key)) return false;
+            existing.add(key);
+            return true;
+          })
+          .slice(0, Math.max(0, 100 - customItems.length));
+        if (!additions.length) {
+          displayError(
+            customItems.length >= 100
+              ? "Custom lists can contain up to 100 options."
+              : "Those names or options are already in your list.",
+          );
+          input.focus();
+          return;
+        }
+        clearToolMessage();
+        customItems.push(...additions);
+        input.value = "";
+        renderCustomList();
       }
+
+      document
+        .getElementById("customInput")
+        .addEventListener("keydown", (event) => {
+          if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault();
+            addCustomItem();
+          }
+        });
 
       // Remove item from custom list
       function removeCustomItem(item) {
@@ -915,6 +1565,10 @@
 
       // Load custom preset
       function loadCustomPreset(type) {
+        if (timerInterval) {
+          displayError("Stop the timer before replacing the custom list.");
+          return;
+        }
         let items = [];
         switch (type) {
           case "movies":
@@ -981,10 +1635,17 @@
           customItems.forEach((item) => {
             const div = document.createElement("div");
             div.className = "custom-item";
-            div.innerHTML = `
-                        <span>${item}</span>
-                        <button class="remove-item-btn" onclick="removeCustomItem('${item}')">✖️</button>
-                    `;
+            const label = document.createElement("span");
+            label.textContent = item;
+            const removeButton = document.createElement("button");
+            removeButton.className = "remove-item-btn";
+            removeButton.type = "button";
+            removeButton.setAttribute("aria-label", `Remove ${item}`);
+            removeButton.textContent = "✖️";
+            removeButton.addEventListener("click", () =>
+              removeCustomItem(item),
+            );
+            div.append(label, removeButton);
             list.appendChild(div);
           });
         }
@@ -992,7 +1653,7 @@
 
       // Clear history
       function clearHistory() {
-        history = [];
+        generationHistory = [];
         renderHistory();
       }
 
@@ -1000,20 +1661,27 @@
       function renderHistory() {
         const list = document.getElementById("historyList");
         list.innerHTML = "";
-        if (history.length === 0) {
+        if (generationHistory.length === 0) {
           list.innerHTML =
             '<div class="placeholder-text" style="text-align: center; padding: 30px;">Your generation history will appear here</div>';
         } else {
-          history.forEach((item) => {
+          generationHistory.forEach((item) => {
             const div = document.createElement("div");
             div.className = "history-item";
-            div.innerHTML = `
-                        <div class="history-type">${item.type}</div>
-                        <div class="history-result">${item.result}</div>
-                        <div class="history-time">${new Date(
-                          item.time,
-                        ).toLocaleString()}</div>
-                    `;
+            const type = document.createElement("div");
+            type.className = "history-type";
+            type.textContent = item.type;
+            const result = document.createElement("div");
+            result.className = "history-result";
+            result.textContent = item.result;
+            const time = document.createElement("time");
+            time.className = "history-time";
+            time.dateTime = item.time.toISOString();
+            time.textContent = item.time.toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+            });
+            div.append(type, result, time);
             list.appendChild(div);
           });
         }
@@ -1021,19 +1689,44 @@
 
       // Generate random numbers
       function generateNumbers() {
-        const min = parseInt(document.getElementById("numMin").value);
-        const max = parseInt(document.getElementById("numMax").value);
-        const count = parseInt(document.getElementById("numCount").value);
+        const min = readIntegerInput("numMin", -1000000, 1000000, "Minimum");
+        const max = readIntegerInput("numMax", -1000000, 1000000, "Maximum");
+        const count = readIntegerInput("numCount", 1, 50, "Count");
+        if ([min, max, count].includes(null)) return;
+        if (min > max) {
+          showErrorFor(
+            document.getElementById("numMin"),
+            "Minimum must not exceed the maximum.",
+          );
+          return;
+        }
+        clearToolMessage();
+        const rangeSize = max - min + 1;
+        if (numberUnique && count > rangeSize) {
+          displayError(
+            "There are not enough numbers in this range for a unique draw.",
+          );
+          return;
+        }
         let result = [];
-        for (let i = 0; i < count; i++) {
-          result.push(Math.floor(Math.random() * (max - min + 1)) + min);
+        if (numberUnique) {
+          const selected = new Set();
+          for (let index = rangeSize - count; index < rangeSize; index++) {
+            const candidate = randomInteger(0, index);
+            selected.add(selected.has(candidate) ? index : candidate);
+          }
+          result = [...selected].map((value) => value + min);
+        } else {
+          for (let i = 0; i < count; i++) result.push(randomInteger(min, max));
         }
         displayResult("numberResult", result.join(", "), "numbers");
       }
 
       // Generate random letters
       function generateLetters() {
-        const count = parseInt(document.getElementById("letterCount").value);
+        const count = readIntegerInput("letterCount", 1, 50, "Count");
+        if (count === null) return;
+        clearToolMessage();
         const type = document.getElementById("letterType").value;
         let result = "";
         const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -1045,9 +1738,7 @@
               ? lowercase
               : uppercase + lowercase;
         for (let i = 0; i < count; i++) {
-          result += characters.charAt(
-            Math.floor(Math.random() * characters.length),
-          );
+          result += characters.charAt(secureRandomInt(characters.length));
         }
         displayResult("letterResult", result, "letters");
       }
@@ -1063,7 +1754,9 @@
         } else {
           questions = questionCategories[category];
         }
-        const randomIndex = Math.floor(Math.random() * questions.length);
+        if (!questions?.length) return;
+        clearToolMessage();
+        const randomIndex = secureRandomInt(questions.length);
         const result = questions[randomIndex];
         displayResult("questionResult", result, "question");
       }
@@ -1079,43 +1772,51 @@
         } else {
           topics = topicCategories[category];
         }
-        const randomIndex = Math.floor(Math.random() * topics.length);
+        if (!topics?.length) return;
+        clearToolMessage();
+        const randomIndex = secureRandomInt(topics.length);
         const result = topics[randomIndex];
         displayResult("topicResult", result, "topic");
       }
 
       // Generate random colors
       function generateColors() {
-        const count = parseInt(document.getElementById("colorCount").value);
+        const count = readIntegerInput("colorCount", 1, 10, "Count");
+        if (count === null) return;
+        clearToolMessage();
         const format = document.getElementById("colorFormat").value;
         let result = [];
         for (let i = 0; i < count; i++) {
           let color = "";
-          if (format === "hex") {
-            color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+          if (activeColorPreset !== "random") {
+            const palette = colorPalettes[activeColorPreset];
+            color = palette[secureRandomInt(palette.length)];
+          } else if (format === "hex") {
+            color = `#${randomInteger(0, 0xffffff).toString(16).padStart(6, "0").toUpperCase()}`;
           } else if (format === "rgb") {
             color =
               "rgb(" +
-              Math.floor(Math.random() * 256) +
+              randomInteger(0, 255) +
               ", " +
-              Math.floor(Math.random() * 256) +
+              randomInteger(0, 255) +
               ", " +
-              Math.floor(Math.random() * 256) +
+              randomInteger(0, 255) +
               ")";
           } else if (format === "hsl") {
-            color = "hsl(" + Math.floor(Math.random() * 360) + ", 100%, 50%)";
+            color = `hsl(${randomInteger(0, 359)}, 100%, 50%)`;
           } else {
-            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            color = letters.charAt(Math.floor(Math.random() * letters.length));
+            color = namedColors[secureRandomInt(namedColors.length)].name;
           }
           result.push(color);
         }
-        displayResult("colorResult", result.join(", "), "colors");
+        displayColors(result, format);
       }
 
       // Generate random words
       function generateWords() {
-        const count = parseInt(document.getElementById("wordCount").value);
+        const count = readIntegerInput("wordCount", 1, 20, "Count");
+        if (count === null) return;
+        clearToolMessage();
         const type = document.getElementById("wordType").value;
         let words = [];
         if (type === "common") {
@@ -1209,7 +1910,7 @@
         }
         let result = [];
         for (let i = 0; i < count; i++) {
-          const randomIndex = Math.floor(Math.random() * words.length);
+          const randomIndex = secureRandomInt(words.length);
           result.push(words[randomIndex]);
         }
         displayResult("wordResult", result.join(", "), "words");
@@ -1217,20 +1918,37 @@
 
       // Generate random date
       function generateDate() {
-        const start = new Date(document.getElementById("dateStart").value);
-        const end = new Date(document.getElementById("dateEnd").value);
-        const date = new Date(
-          start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-        );
-        const result = date.toISOString().split("T")[0];
+        const startValue = document.getElementById("dateStart").value;
+        const endValue = document.getElementById("dateEnd").value;
+        const start = new Date(`${startValue}T00:00:00Z`);
+        const end = new Date(`${endValue}T00:00:00Z`);
+        if (
+          !startValue ||
+          !endValue ||
+          Number.isNaN(start.getTime()) ||
+          Number.isNaN(end.getTime())
+        ) {
+          displayError("Choose a valid start date and end date.");
+          return;
+        }
+        if (start > end) {
+          displayError("Start date must be on or before the end date.");
+          document.getElementById("dateStart").focus();
+          return;
+        }
+        clearToolMessage();
+        const firstDay = Math.floor(start.getTime() / 86400000);
+        const lastDay = Math.floor(end.getTime() / 86400000);
+        const date = new Date(randomInteger(firstDay, lastDay) * 86400000);
+        const result = date.toISOString().slice(0, 10);
         displayResult("dateResult", result, "date");
       }
 
       // Generate random password
       function generatePassword() {
-        const length = parseInt(
-          document.getElementById("passwordLength").value,
-        );
+        const length = readIntegerInput("passwordLength", 4, 50, "Length");
+        if (length === null) return;
+        clearToolMessage();
         const type = document.getElementById("passwordType").value;
         let charset = "";
         if (type === "mixed") {
@@ -1244,27 +1962,111 @@
         } else {
           charset = "0123456789";
         }
-        let password = "";
-        for (let i = 0; i < length; i++) {
-          password += charset.charAt(
-            Math.floor(Math.random() * charset.length),
+        const requiredGroups =
+          type === "strong"
+            ? [
+                "abcdefghijklmnopqrstuvwxyz",
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "0123456789",
+                "!@#$%^&*()_+",
+              ]
+            : type === "mixed"
+              ? [
+                  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                  "0123456789",
+                ]
+              : [charset];
+        if (length < requiredGroups.length) {
+          displayError(
+            `This password type needs at least ${requiredGroups.length} characters.`,
           );
+          return;
         }
+        const characters = requiredGroups.map(
+          (group) => group[secureRandomInt(group.length)],
+        );
+        const allCharacters = requiredGroups.join("");
+        while (characters.length < length) {
+          characters.push(allCharacters[secureRandomInt(allCharacters.length)]);
+        }
+        for (let index = characters.length - 1; index > 0; index--) {
+          const swapIndex = secureRandomInt(index + 1);
+          [characters[index], characters[swapIndex]] = [
+            characters[swapIndex],
+            characters[index],
+          ];
+        }
+        const password = characters.join("");
         displayResult("passwordResult", password, "password");
       }
 
       // Display result
       function displayResult(resultId, result, type) {
-        document.getElementById(resultId).classList.add("has-result");
-        document.getElementById(resultId).innerHTML =
-          `<span class="result-text">${result}</span>`;
+        clearToolMessage();
+        const container = document.getElementById(resultId);
+        container.classList.add("has-result");
+        container.classList.remove("is-error");
+        container.replaceChildren();
+        const resultText = document.createElement("span");
+        resultText.className = "result-text";
+        resultText.textContent = result;
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.className = "copy-result-btn";
+        copyButton.textContent = "Copy";
+        copyButton.setAttribute("aria-label", `Copy ${type} result`);
+        copyButton.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(String(result));
+            copyButton.textContent = "Copied";
+            setTimeout(() => (copyButton.textContent = "Copy"), 1400);
+          } catch {
+            const range = document.createRange();
+            range.selectNodeContents(resultText);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            copyButton.textContent = "Select & copy";
+          }
+        });
+        container.append(resultText, copyButton);
         addToHistory(type, result);
+      }
+
+      function displayColors(colors, format) {
+        clearToolMessage();
+        const container = document.getElementById("colorResult");
+        container.classList.add("has-result");
+        container.replaceChildren();
+        const chips = document.createElement("div");
+        chips.className = "color-results";
+        colors.forEach((color) => {
+          const chip = document.createElement("span");
+          chip.className = "color-chip";
+          const swatch = document.createElement("span");
+          swatch.className = "color-swatch";
+          const namedColor = namedColors.find((item) => item.name === color);
+          swatch.style.backgroundColor = colorPalettes[
+            activeColorPreset
+          ]?.includes(color)
+            ? color
+            : format === "name"
+              ? namedColor?.hex
+              : color;
+          const label = document.createElement("span");
+          label.textContent = color;
+          chip.append(swatch, label);
+          chips.appendChild(chip);
+        });
+        container.appendChild(chips);
+        addToHistory("colors", colors.join(", "));
       }
 
       // Add to history
       function addToHistory(type, result) {
         const now = new Date();
-        history.push({ type, result, time: now });
+        generationHistory.unshift({ type, result: String(result), time: now });
+        generationHistory = generationHistory.slice(0, HISTORY_LIMIT);
         renderHistory();
       }
 
@@ -1274,8 +2076,13 @@
       let selectedTime = 0;
 
       function setTimer(seconds) {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = null;
         selectedTime = seconds;
         timerSeconds = seconds;
+        timerEndAt = null;
+        timerPaused = false;
+        clearToolMessage();
         updateTimerDisplay();
         document.getElementById("timerResult").innerHTML =
           `<span class="placeholder-text">Timer set for ${formatTime(
@@ -1289,16 +2096,23 @@
         // Reset buttons
         document.getElementById("timerStartBtn").style.display = "inline-block";
         document.getElementById("timerStopBtn").style.display = "none";
+        document.getElementById("timerPauseBtn").style.display = "none";
+        document.getElementById("timerStartBtn").innerHTML = "▶️ Start Timer";
       }
 
       function startTimer() {
         if (selectedTime === 0) {
-          alert("Please select a timer duration first!");
+          displayError("Please select a timer duration first.");
           return;
         }
+        if (timerInterval) return;
+        if (!timerPaused || timerSeconds <= 0) timerSeconds = selectedTime;
+        timerPaused = false;
+        timerEndAt = Date.now() + timerSeconds * 1000;
 
         document.getElementById("timerStartBtn").style.display = "none";
         document.getElementById("timerStopBtn").style.display = "inline-block";
+        document.getElementById("timerPauseBtn").style.display = "inline-flex";
 
         const display = document.getElementById("timerDisplay");
         display.className = "timer-display active";
@@ -1306,8 +2120,12 @@
         document.getElementById("timerResult").innerHTML =
           `<span class="result-text">Timer running...</span>`;
 
+        clearToolMessage();
         timerInterval = setInterval(() => {
-          timerSeconds--;
+          timerSeconds = Math.max(
+            0,
+            Math.ceil((timerEndAt - Date.now()) / 1000),
+          );
           updateTimerDisplay();
 
           // Warning at 10 seconds
@@ -1319,17 +2137,19 @@
           if (timerSeconds <= 0) {
             clearInterval(timerInterval);
             timerInterval = null;
+            timerEndAt = null;
+            timerPaused = false;
             display.className = "timer-display finished";
             document.getElementById("timerResult").innerHTML =
               `<span class="result-text">🎉 Time's up!</span>`;
-
-            // Play sound or alert
-            alert("⏰ Time's up!");
 
             // Reset buttons
             document.getElementById("timerStartBtn").style.display =
               "inline-block";
             document.getElementById("timerStopBtn").style.display = "none";
+            document.getElementById("timerPauseBtn").style.display = "none";
+            document.getElementById("timerStartBtn").innerHTML =
+              "↻ Start Again";
 
             // Add to history
             addToHistory(
@@ -1338,6 +2158,23 @@
             );
           }
         }, 1000);
+        updateTimerDisplay();
+      }
+
+      function pauseTimer() {
+        if (!timerInterval || timerEndAt === null) return;
+        timerSeconds = Math.max(0, Math.ceil((timerEndAt - Date.now()) / 1000));
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerEndAt = null;
+        timerPaused = true;
+        updateTimerDisplay();
+        document.getElementById("timerStartBtn").style.display = "inline-block";
+        document.getElementById("timerStartBtn").innerHTML = "▶️ Resume Timer";
+        document.getElementById("timerStopBtn").style.display = "inline-block";
+        document.getElementById("timerPauseBtn").style.display = "none";
+        document.getElementById("timerDisplay").className = "timer-display";
+        document.getElementById("timerResult").textContent = "Timer paused.";
       }
 
       function stopTimer() {
@@ -1345,12 +2182,16 @@
           clearInterval(timerInterval);
           timerInterval = null;
         }
+        timerEndAt = null;
+        timerPaused = false;
 
         const display = document.getElementById("timerDisplay");
         display.className = "timer-display";
 
         document.getElementById("timerStartBtn").style.display = "inline-block";
         document.getElementById("timerStopBtn").style.display = "none";
+        document.getElementById("timerPauseBtn").style.display = "none";
+        document.getElementById("timerStartBtn").innerHTML = "▶️ Start Timer";
         document.getElementById("timerResult").innerHTML =
           `<span class="placeholder-text">Timer stopped</span>`;
 
@@ -1360,6 +2201,7 @@
       }
 
       function updateTimerDisplay() {
+        timerSeconds = Math.max(0, timerSeconds);
         const minutes = Math.floor(timerSeconds / 60);
         const seconds = timerSeconds % 60;
         document.getElementById("timerDisplay").textContent = `${minutes
@@ -1383,6 +2225,7 @@
 
       // Initialize
       initCustomItems();
+      setDatePreset("thisYear");
     </script>
 
     <footer>
@@ -1392,11 +2235,11 @@
             <div class="brand-header">
               <picture>
                 <source
-                  srcset="..//images/logo-optimized.webp"
+                  srcset="../../images/logo-optimized.webp"
                   type="image/webp"
                 />
                 <img
-                  src="..//images/logo-optimized.png"
+                  src="../../images/logo-optimized.png"
                   alt="ESL Fun Online"
                   class="footer-logo"
                   loading="lazy"
@@ -1416,17 +2259,17 @@
             <h3><i class="fas fa-graduation-cap"></i> English</h3>
             <ul>
               <li>
-                <a href="../resources/english/grammar.html"
+                <a href="../../resources/english/grammar.html"
                   ><i class="fas fa-spell-check"></i><span>Grammar</span></a
                 >
               </li>
               <li>
-                <a href="../resources/english/vocabguide.html"
+                <a href="../../resources/english/vocabguide.html"
                   ><i class="fas fa-book-open"></i><span>Vocabulary</span></a
                 >
               </li>
               <li>
-                <a href="../resources/business/presentation-coach.html"
+                <a href="../../resources/business/presentation-coach.html"
                   ><i class="fas fa-handshake"></i><span>Business</span></a
                 >
               </li>
@@ -1436,23 +2279,23 @@
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="../lessons.html"
+                <a href="../../lessons.html"
                   ><i class="fas fa-chalkboard-teacher"></i
                   ><span>Lessons</span></a
                 >
               </li>
               <li>
-                <a href="../games/games.html"
+                <a href="../../games/games.html"
                   ><i class="fas fa-gamepad"></i><span>Games</span></a
                 >
               </li>
               <li>
-                <a href="../teacher-hub/index.html"
+                <a href="../../teacher-hub/index.html"
                   ><i class="fas fa-tools"></i><span>Tools</span></a
                 >
               </li>
               <li>
-                <a href="../resources/lessons-and-blog/blog.html"
+                <a href="../../resources/lessons-and-blog/blog.html"
                   ><i class="fas fa-book-open"></i><span>Blog</span></a
                 >
               </li>
@@ -1462,13 +2305,13 @@
         <div class="footer-bottom">
           <div class="footer-bottom-center">
             <div class="footer-links">
-              <a href="../privacy.html"
+              <a href="../../privacy.html"
                 ><i class="fas fa-shield-alt"></i>Privacy</a
               >
-              <a href="../terms.html"
+              <a href="../../terms.html"
                 ><i class="fas fa-file-contract"></i>Terms</a
               >
-              <a href="../cookies.html"
+              <a href="../../cookies.html"
                 ><i class="fas fa-cookie-bite"></i>Cookies</a
               >
             </div>

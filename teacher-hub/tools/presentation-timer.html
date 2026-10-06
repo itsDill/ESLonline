@@ -27,7 +27,7 @@
     </title>
     <link
       rel="canonical"
-      href="https://eslfunonline.com/tools/presentation-timer.html"
+      href="https://eslfunonline.com/teacher-hub/tools/presentation-timer.html"
     />
     <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../../favicon.ico" sizes="any" />
@@ -84,83 +84,236 @@
       rel="stylesheet"
       href="../../css/footer-consolidated.css?v=20260923"
     />
+    <style>
+      .presentation-intro {
+        max-width: 760px;
+        margin: 2.5rem auto 2rem;
+        text-align: center;
+      }
+      .presentation-intro h1 {
+        margin: 0 0 0.75rem;
+        color: var(--text-primary);
+        font-size: clamp(2rem, 5vw, 3rem);
+      }
+      .presentation-intro p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.7;
+      }
+      .setup-section,
+      .timer-container,
+      .notes-section {
+        margin: 1.5rem auto;
+        padding: clamp(1.25rem, 3vw, 2rem);
+        border: 1px solid var(--border-color);
+        border-radius: 1.25rem;
+        background: var(--bg-primary);
+        box-shadow: var(--shadow-md);
+      }
+      .setup-section,
+      .notes-section {
+        max-width: 1040px;
+      }
+      .setup-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+        gap: 1rem;
+      }
+      .setup-item {
+        padding: 1.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        background: var(--bg-secondary);
+      }
+      .setup-item h4 {
+        margin: 0 0 1rem;
+        color: var(--text-primary);
+      }
+      .time-input {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 46px;
+        margin: 0.35rem 0;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid var(--border-dark);
+        border-radius: 0.65rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font: inherit;
+      }
+      .preset-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.75rem;
+      }
+      .preset-btn {
+        padding: 0.45rem 0.7rem;
+        border: 1px solid var(--border-color);
+        border-radius: 999px;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+      .preset-btn:hover:not(:disabled),
+      .preset-btn:focus-visible {
+        border-color: var(--primary-color);
+        color: var(--primary-dark);
+      }
+      .timer-container {
+        max-width: 860px;
+        text-align: center;
+      }
+      .status-indicator {
+        display: inline-flex;
+        margin-bottom: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+      .status-ready {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+      }
+      .status-running {
+        background: var(--secondary-light);
+        color: var(--secondary-hover);
+      }
+      .status-paused {
+        background: var(--accent-light);
+        color: var(--accent-hover);
+      }
+      .status-finished {
+        background: rgba(239, 68, 68, 0.12);
+        color: var(--error-color);
+      }
+      .main-timer {
+        color: var(--text-primary);
+        font-variant-numeric: tabular-nums;
+        font-size: clamp(3.25rem, 12vw, 6rem);
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .main-timer.warning {
+        color: var(--warning-color);
+      }
+      .main-timer.danger {
+        color: var(--error-color);
+      }
+      .progress-circle {
+        width: min(220px, 52vw);
+        margin: 1rem auto;
+      }
+      .progress-circle svg {
+        display: block;
+        width: 100%;
+        transform: rotate(-90deg);
+      }
+      .progress-circle-bg,
+      .progress-circle-fill {
+        fill: none;
+        stroke-width: 10;
+      }
+      .progress-circle-bg {
+        stroke: var(--border-color);
+      }
+      .progress-circle-fill {
+        stroke: var(--primary-color);
+        stroke-linecap: round;
+        stroke-dasharray: 565.49;
+        stroke-dashoffset: 565.49;
+        transition:
+          stroke-dashoffset 0.35s linear,
+          stroke 0.25s ease;
+      }
+      .time-sections {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.65rem;
+        margin: 1rem 0 1.5rem;
+      }
+      .time-section {
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        color: var(--text-secondary);
+      }
+      .time-section.active {
+        border-color: var(--primary-color);
+        background: var(--primary-light);
+        color: var(--text-primary);
+      }
+      .section-title {
+        font-weight: 700;
+      }
+      .section-time {
+        margin-top: 0.2rem;
+        font-variant-numeric: tabular-nums;
+      }
+      .timer-container > .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.65rem;
+      }
+      .notes-input {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 150px;
+        padding: 0.9rem;
+        border: 1px solid var(--border-dark);
+        border-radius: 0.75rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font: inherit;
+        line-height: 1.6;
+        resize: vertical;
+      }
+      .fullscreen-mode {
+        position: fixed;
+        z-index: 2000;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 1rem;
+        background: #07111f;
+        color: #fff;
+        text-align: center;
+      }
+      .fullscreen-mode:fullscreen {
+        display: flex !important;
+      }
+      .fullscreen-mode .main-timer {
+        font-size: clamp(5rem, 24vw, 18rem);
+        color: #fff;
+      }
+      .fullscreen-mode .main-timer.warning {
+        color: #fbbf24;
+      }
+      .fullscreen-mode .main-timer.danger {
+        color: #fb7185;
+      }
+      .setup-section :disabled,
+      .preset-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      @media (max-width: 600px) {
+        .presentation-intro {
+          margin-top: 1.5rem;
+        }
+        .setup-item {
+          padding: 1rem;
+        }
+        .timer-container > .controls > * {
+          flex: 1 1 42%;
+          justify-content: center;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="scroll-progress" id="scrollProgress"></div>
-    <header>
-      <div class="container">
-        <nav class="navbar">
-          <a href="../../index.html" class="logo-container">
-            <img
-              src="../../images/1.png"
-              alt="ESL Fun Online Logo"
-              class="logo-image"
-              width="40"
-              height="40"
-            />
-            <span class="logo-text">ESL Fun Online</span>
-          </a>
-
-          <ul
-            class="nav-links"
-            id="navLinks"
-            role="menubar"
-            aria-label="Main navigation"
-          >
-            <li class="nav-item" role="none">
-              <a href="../../index.html" class="nav-link" role="menuitem">
-                <i class="fas fa-home"></i>
-                Home
-              </a>
-            </li>
-            <li class="nav-item" role="none">
-              <a href="../../games/games.html" class="nav-link" role="menuitem">
-                <i class="fas fa-dice"></i>
-                Games
-              </a>
-            </li>
-            <li class="nav-item" role="none">
-              <a
-                href="../../resources/index.html"
-                class="nav-link"
-                role="menuitem"
-              >
-                <i class="fas fa-book-open"></i>
-                Resources
-              </a>
-            </li>
-            <li class="nav-item" role="none">
-              <a
-                href="../../teacher-hub/index.html"
-                class="nav-link"
-                role="menuitem"
-              >
-                <i class="fas fa-chalkboard-user"></i>
-                Teacher
-              </a>
-            </li>
-          </ul>
-
-          <div class="controls">
-            <button
-              class="control-btn theme-toggle"
-              id="themeToggle"
-              aria-label="Toggle dark mode"
-            >
-              <i class="fas fa-moon"></i>
-            </button>
-          </div>
-          <button
-            class="control-btn mobile-toggle"
-            id="mobileToggle"
-            aria-label="Toggle mobile menu"
-          >
-            <i class="fas fa-bars"></i>
-          </button>
-        </nav>
-      </div>
-    </header>
-
     <!-- Header -->
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -239,8 +392,8 @@
       </div>
     </header>
 
-    <!-- Immediate Mobile Menu Script - Inline for guaranteed execution -->
-    <script>
+    <!-- Navigation is initialized once by the shared navigation.js script. -->
+    <script type="text/plain">
       (function () {
         "use strict";
 
@@ -437,18 +590,9 @@
 
     <main>
       <div class="container">
-        <div style="text-align: center; margin: 2rem 0">
-          <h1
-            style="
-              font-size: 3rem;
-              font-weight: 700;
-              color: var(--text-primary);
-              margin-bottom: 1rem;
-            "
-          >
-            ⏱️ Presentation Timer
-          </h1>
-          <p style="font-size: 1.2rem; color: var(--text-secondary)">
+        <div class="presentation-intro">
+          <h1>⏱️ Presentation Timer</h1>
+          <p>
             Professional timer for presentations, speeches, and talks. Visual
             cues help you stay on track and manage your time effectively.
           </p>
@@ -471,6 +615,7 @@
                 type="number"
                 class="time-input"
                 id="totalMinutes"
+                aria-label="Total duration in minutes"
                 value="20"
                 min="1"
                 max="180"
@@ -502,8 +647,10 @@
                     type="number"
                     class="time-input"
                     id="warningMinutes"
+                    aria-label="Warning threshold in minutes"
                     value="5"
-                    min="1"
+                    min="0"
+                    max="180"
                   />
                   <label style="font-size: 0.9rem; color: var(--text-secondary)"
                     >Warning (min)</label
@@ -514,8 +661,10 @@
                     type="number"
                     class="time-input"
                     id="dangerMinutes"
+                    aria-label="Final warning threshold in minutes"
                     value="2"
-                    min="1"
+                    min="0"
+                    max="180"
                   />
                   <label style="font-size: 0.9rem; color: var(--text-secondary)"
                     >Final (min)</label
@@ -530,6 +679,7 @@
                 type="number"
                 class="time-input"
                 id="sectionsCount"
+                aria-label="Number of presentation sections"
                 value="3"
                 min="1"
                 max="10"
@@ -547,11 +697,23 @@
         </div>
 
         <div class="timer-container">
-          <div class="status-indicator status-ready" id="statusIndicator">
+          <div
+            class="status-indicator status-ready"
+            id="statusIndicator"
+            role="status"
+            aria-live="polite"
+          >
             Ready
           </div>
 
-          <div class="main-timer" id="mainTimer">20:00</div>
+          <div
+            class="main-timer"
+            id="mainTimer"
+            aria-label="Time remaining"
+            aria-live="off"
+          >
+            20:00
+          </div>
 
           <div class="progress-circle">
             <svg viewBox="0 0 200 200">
@@ -585,14 +747,15 @@
             <button class="btn btn-secondary" id="resetBtn">
               <i class="fas fa-redo"></i> Reset
             </button>
-            <button class="btn btn-secondary" id="fullscreenBtn">
+            <button
+              class="btn btn-secondary"
+              id="fullscreenBtn"
+              aria-pressed="false"
+            >
               <i class="fas fa-expand"></i> Fullscreen
             </button>
-            <a
-              href="../../resources/tools/tools.html"
-              class="btn btn-secondary"
-            >
-              <i class="fas fa-arrow-left"></i> Back to Tools
+            <a href="../../teacher-hub/index.html" class="btn btn-secondary">
+              <i class="fas fa-arrow-left"></i> Back to Teacher Hub
             </a>
           </div>
         </div>
@@ -611,8 +774,21 @@
     </main>
 
     <!-- Fullscreen Timer -->
-    <div class="fullscreen-mode" id="fullscreenTimer" style="display: none">
-      <div class="main-timer" id="fullscreenMainTimer">20:00</div>
+    <div
+      class="fullscreen-mode"
+      id="fullscreenTimer"
+      role="dialog"
+      aria-label="Fullscreen presentation timer"
+      style="display: none"
+    >
+      <div
+        class="main-timer"
+        id="fullscreenMainTimer"
+        aria-label="Time remaining"
+        aria-live="off"
+      >
+        20:00
+      </div>
       <div style="font-size: 1.5rem; margin-top: 2rem; opacity: 0.8">
         Press <strong>ESC</strong> to exit fullscreen
       </div>
@@ -627,9 +803,11 @@
       let sections = [];
       let currentSection = 0;
       let timerInterval = null;
+      let endAt = null;
       let isRunning = false;
       let isPaused = false;
       let isFullscreen = false;
+      const originalTitle = document.title;
 
       // DOM elements
       const mainTimer = document.getElementById("mainTimer");
@@ -648,6 +826,13 @@
       const warningMinutesInput = document.getElementById("warningMinutes");
       const dangerMinutesInput = document.getElementById("dangerMinutes");
       const sectionsCountInput = document.getElementById("sectionsCount");
+      const configurationInputs = [
+        totalMinutesInput,
+        warningMinutesInput,
+        dangerMinutesInput,
+        sectionsCountInput,
+        ...document.querySelectorAll(".preset-btn"),
+      ];
 
       // Event listeners
       document.querySelectorAll(".preset-btn[data-minutes]").forEach((btn) => {
@@ -680,7 +865,12 @@
 
       // Keyboard shortcuts
       document.addEventListener("keydown", (e) => {
-        if (e.code === "Space" && !e.target.matches("input, textarea")) {
+        if (
+          e.code === "Space" &&
+          !e.target.closest?.(
+            "input, textarea, button, a, select, [contenteditable='true']",
+          )
+        ) {
           e.preventDefault();
           if (isRunning) {
             pauseTimer();
@@ -701,26 +891,61 @@
       });
 
       function updateSettings() {
-        if (isRunning) return;
+        if (isRunning || isPaused) return;
 
-        totalTime = parseInt(totalMinutesInput.value) * 60;
-        warningTime = parseInt(warningMinutesInput.value) * 60;
-        dangerTime = parseInt(dangerMinutesInput.value) * 60;
-        sectionsCount = parseInt(sectionsCountInput.value);
+        const readClampedInteger = (input, fallback, min, max) => {
+          const parsed = Number.parseInt(input.value, 10);
+          const value = Number.isFinite(parsed) ? parsed : fallback;
+          return Math.min(max, Math.max(min, value));
+        };
+
+        const totalMinutes = readClampedInteger(totalMinutesInput, 20, 1, 180);
+        const warningMinutes = readClampedInteger(
+          warningMinutesInput,
+          5,
+          0,
+          totalMinutes,
+        );
+        const dangerMinutes = readClampedInteger(
+          dangerMinutesInput,
+          2,
+          0,
+          warningMinutes,
+        );
+        sectionsCount = readClampedInteger(sectionsCountInput, 3, 1, 10);
+        totalMinutesInput.value = totalMinutes;
+        warningMinutesInput.value = warningMinutes;
+        dangerMinutesInput.value = dangerMinutes;
+        sectionsCountInput.value = sectionsCount;
+        totalTime = totalMinutes * 60;
+        warningTime = warningMinutes * 60;
+        dangerTime = dangerMinutes * 60;
 
         currentTime = totalTime;
+        isPaused = false;
+        document.title = originalTitle;
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+        statusIndicator.textContent = "Ready";
+        statusIndicator.className = "status-indicator status-ready";
         updateDisplay();
         generateSections();
       }
 
+      function setConfigurationLocked(locked) {
+        configurationInputs.forEach((input) => {
+          input.disabled = locked;
+        });
+      }
+
       function generateSections() {
         sections = [];
-        const sectionTime = Math.floor(totalTime / sectionsCount);
+        const baseDuration = Math.floor(totalTime / sectionsCount);
+        const extraSeconds = totalTime % sectionsCount;
 
         for (let i = 0; i < sectionsCount; i++) {
           sections.push({
             title: `Section ${i + 1}`,
-            duration: sectionTime,
+            duration: baseDuration + (i < extraSeconds ? 1 : 0),
             elapsed: 0,
             active: i === 0,
           });
@@ -754,12 +979,13 @@
       }
 
       function startTimer() {
+        if (isRunning) return;
+        if (!isPaused && currentTime <= 0) resetTimer();
+
         if (isPaused) {
-          // Resume
           isRunning = true;
           isPaused = false;
         } else {
-          // Fresh start
           isRunning = true;
           currentSection = 0;
           if (sections.length > 0) {
@@ -774,14 +1000,21 @@
         pauseBtn.style.display = "inline-flex";
         statusIndicator.textContent = "Running";
         statusIndicator.className = "status-indicator status-running";
-
+        setConfigurationLocked(true);
+        endAt = Date.now() + currentTime * 1000;
+        clearInterval(timerInterval);
         timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
       }
 
       function pauseTimer() {
+        if (!isRunning) return;
+        currentTime = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
         isRunning = false;
         isPaused = true;
+        endAt = null;
         clearInterval(timerInterval);
+        updateTimerDisplayAndSections();
 
         startBtn.style.display = "inline-flex";
         startBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
@@ -793,6 +1026,8 @@
       function resetTimer() {
         isRunning = false;
         isPaused = false;
+        document.title = originalTitle;
+        endAt = null;
         clearInterval(timerInterval);
         currentTime = totalTime;
         currentSection = 0;
@@ -802,6 +1037,7 @@
         pauseBtn.style.display = "none";
         statusIndicator.textContent = "Ready";
         statusIndicator.className = "status-indicator status-ready";
+        setConfigurationLocked(false);
 
         // Reset sections
         if (sections.length > 0) {
@@ -816,35 +1052,42 @@
       }
 
       function updateTimer() {
-        currentTime--;
-
-        // Update sections
-        if (sections.length > 0 && currentSection < sections.length) {
-          sections[currentSection].elapsed++;
-
-          if (
-            sections[currentSection].elapsed >=
-              sections[currentSection].duration &&
-            currentSection < sections.length - 1
-          ) {
-            sections[currentSection].active = false;
-            currentSection++;
-            if (currentSection < sections.length) {
-              sections[currentSection].active = true;
-            }
-          }
-        }
-
-        updateDisplay();
-        renderSections();
-
+        if (!isRunning || endAt === null) return;
+        currentTime = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+        updateTimerDisplayAndSections();
         if (currentTime <= 0) {
           finishTimer();
         }
       }
 
+      function updateTimerDisplayAndSections() {
+        const elapsed = totalTime - currentTime;
+        let elapsedBeforeSection = 0;
+
+        sections.forEach((section, index) => {
+          const sectionEnd = elapsedBeforeSection + section.duration;
+          section.elapsed = Math.min(
+            section.duration,
+            Math.max(0, elapsed - elapsedBeforeSection),
+          );
+          section.active =
+            elapsed < sectionEnd ||
+            (elapsed === totalTime && index === sections.length - 1);
+          elapsedBeforeSection = sectionEnd;
+        });
+        currentSection = Math.min(
+          sections.length - 1,
+          sections.findIndex((section) => section.active),
+        );
+        if (currentSection < 0) currentSection = 0;
+        updateDisplay();
+        renderSections();
+      }
+
       function finishTimer() {
         isRunning = false;
+        isPaused = false;
+        endAt = null;
         clearInterval(timerInterval);
 
         startBtn.style.display = "inline-flex";
@@ -852,6 +1095,7 @@
         pauseBtn.style.display = "none";
         statusIndicator.textContent = "Finished";
         statusIndicator.className = "status-indicator status-finished";
+        setConfigurationLocked(false);
 
         // Play completion sound
         try {
@@ -861,7 +1105,7 @@
           audio.play().catch(() => {});
         } catch (e) {}
 
-        alert("🎉 Presentation time complete! Great job!");
+        document.title = "Time is up! | Presentation Timer";
       }
 
       function updateDisplay() {
@@ -881,7 +1125,10 @@
         });
 
         // Update progress circle
-        const progress = (totalTime - currentTime) / totalTime;
+        const progress = Math.min(
+          1,
+          Math.max(0, (totalTime - currentTime) / totalTime),
+        );
         const circumference = 2 * Math.PI * 90;
         const offset = circumference * (1 - progress);
         progressCircle.style.strokeDashoffset = offset;
@@ -918,10 +1165,12 @@
         fullscreenTimer.style.display = "flex";
         fullscreenBtn.innerHTML =
           '<i class="fas fa-compress"></i> Exit Fullscreen';
+        fullscreenBtn.setAttribute("aria-pressed", "true");
 
-        // Request fullscreen API if available
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().catch(() => {});
+        if (fullscreenTimer.requestFullscreen) {
+          fullscreenTimer.requestFullscreen().catch(() => {
+            fullscreenTimer.style.display = "flex";
+          });
         }
       }
 
@@ -929,12 +1178,21 @@
         isFullscreen = false;
         fullscreenTimer.style.display = "none";
         fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
+        fullscreenBtn.setAttribute("aria-pressed", "false");
 
-        // Exit fullscreen API if available
-        if (document.exitFullscreen) {
+        if (document.fullscreenElement && document.exitFullscreen) {
           document.exitFullscreen().catch(() => {});
         }
       }
+
+      document.addEventListener("fullscreenchange", () => {
+        if (document.fullscreenElement !== fullscreenTimer && isFullscreen) {
+          isFullscreen = false;
+          fullscreenTimer.style.display = "none";
+          fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
+          fullscreenBtn.setAttribute("aria-pressed", "false");
+        }
+      });
 
       // Initialize
       updateSettings();
@@ -944,13 +1202,25 @@
       // Auto-save notes
       const speakerNotes = document.getElementById("speakerNotes");
       speakerNotes.addEventListener("input", () => {
-        localStorage.setItem("presentationNotes", speakerNotes.value);
+        try {
+          localStorage.setItem("presentationNotes", speakerNotes.value);
+        } catch (error) {
+          console.warn(
+            "Speaker notes could not be saved in this browser.",
+            error,
+          );
+        }
       });
 
       // Load saved notes
-      const savedNotes = localStorage.getItem("presentationNotes");
-      if (savedNotes) {
-        speakerNotes.value = savedNotes;
+      try {
+        const savedNotes = localStorage.getItem("presentationNotes");
+        if (savedNotes) speakerNotes.value = savedNotes;
+      } catch (error) {
+        console.warn(
+          "Speaker notes could not be loaded in this browser.",
+          error,
+        );
       }
     </script>
 
@@ -963,11 +1233,11 @@
             <div class="brand-header">
               <picture>
                 <source
-                  srcset="..//images/logo-optimized.webp"
+                  srcset="../../images/logo-optimized.webp"
                   type="image/webp"
                 />
                 <img
-                  src="..//images/logo-optimized.png"
+                  src="../../images/logo-optimized.png"
                   alt="ESL Fun Online"
                   class="footer-logo"
                   loading="lazy"
@@ -987,17 +1257,17 @@
             <h3><i class="fas fa-graduation-cap"></i> English</h3>
             <ul>
               <li>
-                <a href="../resources/english/grammar.html"
+                <a href="../../resources/english/grammar.html"
                   ><i class="fas fa-spell-check"></i><span>Grammar</span></a
                 >
               </li>
               <li>
-                <a href="../resources/english/vocabguide.html"
+                <a href="../../resources/english/vocabguide.html"
                   ><i class="fas fa-book-open"></i><span>Vocabulary</span></a
                 >
               </li>
               <li>
-                <a href="../resources/business/presentation-coach.html"
+                <a href="../../resources/business/presentation-coach.html"
                   ><i class="fas fa-handshake"></i><span>Business</span></a
                 >
               </li>
@@ -1007,23 +1277,23 @@
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="../lessons.html"
+                <a href="../../lessons.html"
                   ><i class="fas fa-chalkboard-teacher"></i
                   ><span>Lessons</span></a
                 >
               </li>
               <li>
-                <a href="../games/games.html"
+                <a href="../../games/games.html"
                   ><i class="fas fa-gamepad"></i><span>Games</span></a
                 >
               </li>
               <li>
-                <a href="../teacher-hub/index.html"
+                <a href="../../teacher-hub/index.html"
                   ><i class="fas fa-tools"></i><span>Tools</span></a
                 >
               </li>
               <li>
-                <a href="../resources/lessons-and-blog/blog.html"
+                <a href="../../resources/lessons-and-blog/blog.html"
                   ><i class="fas fa-book-open"></i><span>Blog</span></a
                 >
               </li>
@@ -1033,13 +1303,13 @@
         <div class="footer-bottom">
           <div class="footer-bottom-center">
             <div class="footer-links">
-              <a href="../privacy.html"
+              <a href="../../privacy.html"
                 ><i class="fas fa-shield-alt"></i>Privacy</a
               >
-              <a href="../terms.html"
+              <a href="../../terms.html"
                 ><i class="fas fa-file-contract"></i>Terms</a
               >
-              <a href="../cookies.html"
+              <a href="../../cookies.html"
                 ><i class="fas fa-cookie-bite"></i>Cookies</a
               >
             </div>

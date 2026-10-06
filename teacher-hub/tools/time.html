@@ -1,104 +1,30 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-9G9RD6BHLN");
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Interactive digital and analog clock learning tool for ESL students. Learn time-telling, practice clock reading, and master time vocabulary in English."
-    />
+    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
     <meta name="author" content="ESL Fun Online" />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
     <meta
-      property="og:title"
-      content="Interactive ESL Clock Learning Tool | ESL Fun Online"
+      name="description"
+      content="A free, simple classroom countdown timer with quick presets, pause and resume, fullscreen display, and a clear end-of-activity alert."
     />
-    <meta
-      property="og:description"
-      content="Learn to tell time in English with our interactive digital and analog clock tool. Perfect for ESL students and time vocabulary practice."
+    <meta name="theme-color" content="#f4f7fb" />
+    <link
+      rel="canonical"
+      href="https://eslfunonline.com/teacher-hub/tools/time.html"
     />
-    <meta property="og:image" content="https://eslfunonline.com/images/1.png" />
-    <meta
-      property="og:url"
-      content="https://eslfunonline.com/tools/time.html"
-    />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Interactive ESL Clock Learning Tool" />
-    <meta
-      name="twitter:description"
-      content="Learn time-telling in English with interactive clock practice"
-    />
-    <meta
-      name="twitter:image"
-      content="https://eslfunonline.com/images/1.png"
-    />
-    <link rel="canonical" href="https://eslfunonline.com/tools/time.html" />
-    <title>
-      Interactive ESL Clock Learning Tool | Time Practice & Vocabulary
-    </title>
-    <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../../favicon.ico" sizes="any" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="../../images/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="../../images/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="48x48"
-      href="../../images/favicon-48x48.png"
-    />
-    <link rel="apple-touch-icon" sizes="180x180" href="../../images/1.png" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="../../images/favicon-192x192.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="512x512"
-      href="../../images/favicon-512x512.png"
-    />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
       rel="stylesheet"
-      media="print"
-      onload="this.media = 'all'"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      media="print"
-      onload="this.media = 'all'"
     />
     <link rel="stylesheet" href="../../css/main.css" />
     <link rel="stylesheet" href="../../css/header-consolidated.css" />
@@ -107,9 +33,525 @@
       rel="stylesheet"
       href="../../css/footer-consolidated.css?v=20260923"
     />
+    <title>Classroom Timer | ESL Fun Online</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --timer-ink: #17233b;
+        --timer-muted: #66758d;
+        --timer-line: #e3e9f2;
+        --timer-paper: #fff;
+        --timer-wash: #f4f7fb;
+        --timer-blue: #3867df;
+        --timer-blue-dark: #264fb9;
+        --timer-green: #118263;
+        --timer-amber: #c77a0b;
+        --timer-red: #cf4050;
+        --timer-shadow: 0 22px 60px rgba(31, 54, 92, 0.11);
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(
+            ellipse at 85% 12%,
+            rgba(207, 225, 255, 0.72),
+            transparent 33rem
+          ),
+          var(--timer-wash);
+        color: var(--timer-ink);
+        font-family: Inter, sans-serif;
+      }
+
+      .timer-page {
+        width: min(100% - 32px, 1120px);
+        margin: 0 auto;
+        padding: clamp(28px, 5vw, 56px) 0 64px;
+      }
+
+      .timer-intro {
+        max-width: 720px;
+        margin: 0 auto 28px;
+        text-align: center;
+      }
+
+      .timer-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        color: var(--timer-blue-dark);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .timer-intro h1 {
+        margin: 0;
+        color: var(--timer-ink);
+        font:
+          800 clamp(2rem, 5vw, 3.25rem)/1.08 Manrope,
+          sans-serif;
+        letter-spacing: -0.05em;
+      }
+
+      .timer-intro p {
+        max-width: 600px;
+        margin: 14px auto 0;
+        color: var(--timer-muted);
+        font-size: clamp(0.95rem, 2vw, 1.08rem);
+        line-height: 1.65;
+      }
+
+      .timer-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+        overflow: hidden;
+        border: 1px solid rgba(215, 225, 240, 0.9);
+        border-radius: 24px;
+        background: var(--timer-paper);
+        box-shadow: var(--timer-shadow);
+      }
+
+      .timer-display-panel {
+        position: relative;
+        display: grid;
+        min-height: 500px;
+        align-content: center;
+        justify-items: center;
+        overflow: hidden;
+        padding: clamp(28px, 5vw, 56px);
+        background: linear-gradient(145deg, #f7faff, #eef4ff);
+        text-align: center;
+      }
+
+      .timer-display-panel::before,
+      .timer-display-panel::after {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border: 1px solid rgba(56, 103, 223, 0.08);
+        border-radius: 50%;
+        content: "";
+        pointer-events: none;
+      }
+
+      .timer-display-panel::before {
+        top: -145px;
+        left: -115px;
+        box-shadow:
+          0 0 0 30px rgba(56, 103, 223, 0.025),
+          0 0 0 60px rgba(56, 103, 223, 0.02);
+      }
+
+      .timer-display-panel::after {
+        right: -165px;
+        bottom: -180px;
+        width: 360px;
+        height: 360px;
+      }
+
+      .timer-display-panel > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .timer-state {
+        min-height: 24px;
+        margin: 0 0 14px;
+        color: var(--timer-green);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .timer-face {
+        display: grid;
+        width: min(72vw, 320px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--timer-blue) var(--progress, 100%),
+          #dce6f6 0
+        );
+        box-shadow: 0 14px 38px rgba(49, 86, 164, 0.16);
+        transition: background 0.25s ease;
+      }
+
+      .timer-face-inner {
+        display: grid;
+        width: calc(100% - 14px);
+        height: calc(100% - 14px);
+        align-content: center;
+        justify-items: center;
+        gap: 4px;
+        border-radius: 50%;
+        background: #fff;
+      }
+
+      .timer-clock {
+        margin: 0;
+        color: var(--timer-ink);
+        font:
+          800 clamp(3.6rem, 10vw, 5.3rem)/1 Manrope,
+          sans-serif;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.065em;
+      }
+
+      .timer-subtitle {
+        margin: 9px 0 0;
+        color: var(--timer-muted);
+        font-size: 0.85rem;
+      }
+
+      .timer-shell[data-state="warning"] .timer-face {
+        background: conic-gradient(
+          var(--timer-amber) var(--progress, 100%),
+          #f4e7d2 0
+        );
+      }
+
+      .timer-shell[data-state="warning"] .timer-state {
+        color: var(--timer-amber);
+      }
+
+      .timer-shell[data-state="finished"] .timer-face,
+      .timer-shell[data-state="last-seconds"] .timer-face {
+        background: conic-gradient(
+          var(--timer-red) var(--progress, 100%),
+          #f4dfe2 0
+        );
+      }
+
+      .timer-shell[data-state="finished"] .timer-state,
+      .timer-shell[data-state="last-seconds"] .timer-state {
+        color: var(--timer-red);
+      }
+
+      .timer-shell[data-state="last-seconds"] .timer-clock {
+        animation: timer-pulse 0.8s ease-in-out infinite alternate;
+      }
+
+      @keyframes timer-pulse {
+        to {
+          transform: scale(1.035);
+        }
+      }
+
+      .timer-controls-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 23px;
+        padding: clamp(24px, 4vw, 42px);
+      }
+
+      .timer-controls-panel h2 {
+        margin: 0 0 5px;
+        font:
+          800 1.2rem Manrope,
+          sans-serif;
+      }
+
+      .panel-hint {
+        margin: 0;
+        color: var(--timer-muted);
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .timer-presets {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .timer-preset,
+      .timer-button,
+      .fullscreen-button {
+        min-height: 44px;
+        border: 1px solid var(--timer-line);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--timer-ink);
+        font:
+          700 0.85rem Inter,
+          sans-serif;
+        cursor: pointer;
+        transition:
+          border-color 0.16s ease,
+          background-color 0.16s ease,
+          transform 0.16s ease,
+          box-shadow 0.16s ease;
+      }
+
+      .timer-preset:hover,
+      .timer-button:hover,
+      .fullscreen-button:hover {
+        transform: translateY(-1px);
+        border-color: #b7c9f5;
+        box-shadow: 0 6px 15px rgba(43, 76, 145, 0.09);
+      }
+
+      .timer-preset[aria-pressed="true"] {
+        border-color: var(--timer-blue);
+        background: #eef3ff;
+        color: var(--timer-blue-dark);
+      }
+
+      .timer-custom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .timer-field {
+        display: grid;
+        gap: 6px;
+        color: var(--timer-muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .timer-field input {
+        width: 100%;
+        min-height: 46px;
+        padding: 0 12px;
+        border: 1px solid var(--timer-line);
+        border-radius: 11px;
+        background: #fff;
+        color: var(--timer-ink);
+        font:
+          700 1rem Inter,
+          sans-serif;
+      }
+
+      .timer-field input:focus-visible,
+      .timer-button:focus-visible,
+      .timer-preset:focus-visible,
+      .fullscreen-button:focus-visible {
+        outline: 3px solid rgba(56, 103, 223, 0.3);
+        outline-offset: 2px;
+      }
+
+      .timer-actions {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 9px;
+      }
+
+      .timer-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 14px;
+      }
+
+      .timer-button.primary {
+        border-color: var(--timer-blue);
+        background: var(--timer-blue);
+        color: #fff;
+      }
+
+      .timer-button.primary:hover {
+        border-color: var(--timer-blue-dark);
+        background: var(--timer-blue-dark);
+      }
+
+      .timer-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .timer-tools {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 15px;
+        border-top: 1px solid var(--timer-line);
+      }
+
+      .fullscreen-button {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        font-size: 0.78rem;
+      }
+
+      .sound-control {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        gap: 8px;
+        color: var(--timer-muted);
+        font-size: 0.78rem;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      .sound-control input {
+        width: 17px;
+        height: 17px;
+        accent-color: var(--timer-blue);
+      }
+
+      .timer-help {
+        margin: -8px 0 0;
+        color: var(--timer-muted);
+        font-size: 0.72rem;
+        line-height: 1.55;
+      }
+
+      .timer-fullscreen {
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        display: none;
+        min-height: 100vh;
+        min-height: 100dvh;
+        align-content: center;
+        justify-items: center;
+        gap: 18px;
+        padding: 24px;
+        background: radial-gradient(ellipse at 50% 30%, #233d6b, #0d172b 72%);
+        color: #fff;
+        text-align: center;
+      }
+
+      .timer-fullscreen.is-open {
+        display: grid;
+      }
+
+      .timer-fullscreen .timer-state {
+        margin-bottom: 0;
+        color: #9fe1c9;
+      }
+
+      .timer-fullscreen .timer-face {
+        width: min(66vw, 440px);
+        background: conic-gradient(
+          #55b899 var(--progress, 100%),
+          rgba(255, 255, 255, 0.17) 0
+        );
+      }
+
+      .timer-fullscreen .timer-face-inner {
+        background: #111f38;
+      }
+
+      .timer-fullscreen .timer-clock {
+        color: #fff;
+        font-size: clamp(5rem, 17vw, 10rem);
+      }
+
+      .timer-fullscreen .timer-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .timer-fullscreen[data-state="warning"] .timer-face {
+        background: conic-gradient(
+          #f3b343 var(--progress, 100%),
+          rgba(255, 255, 255, 0.17) 0
+        );
+      }
+
+      .timer-fullscreen[data-state="finished"] .timer-face,
+      .timer-fullscreen[data-state="last-seconds"] .timer-face {
+        background: conic-gradient(
+          #ef6672 var(--progress, 100%),
+          rgba(255, 255, 255, 0.17) 0
+        );
+      }
+
+      .fullscreen-exit {
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font:
+          700 0.82rem Inter,
+          sans-serif;
+        cursor: pointer;
+      }
+
+      .timer-fullscreen:fullscreen,
+      .timer-fullscreen:-webkit-full-screen {
+        display: grid;
+      }
+
+      @media (max-width: 820px) {
+        .timer-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .timer-display-panel {
+          min-height: 390px;
+        }
+
+        .timer-face {
+          width: min(64vw, 280px);
+        }
+
+        .timer-controls-panel {
+          gap: 19px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .timer-page {
+          width: min(100% - 20px, 1120px);
+          padding-top: 28px;
+        }
+
+        .timer-display-panel {
+          min-height: 330px;
+          padding: 24px 16px;
+        }
+
+        .timer-face {
+          width: min(72vw, 240px);
+        }
+
+        .timer-controls-panel {
+          padding: 22px 18px;
+        }
+
+        .timer-actions {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .timer-preset {
+          min-height: 42px;
+          font-size: 0.78rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="scroll-progress" id="scrollProgress"></div>
     <header>
       <div class="container">
         <nav class="navbar">
@@ -123,7 +565,6 @@
             />
             <span class="logo-text">ESL Fun Online</span>
           </a>
-
           <ul
             class="nav-links"
             id="navLinks"
@@ -131,670 +572,291 @@
             aria-label="Main navigation"
           >
             <li class="nav-item" role="none">
-              <a href="../../index.html" class="nav-link" role="menuitem">
-                <i class="fas fa-home"></i>
-                Home
-              </a>
+              <a href="../../index.html" class="nav-link" role="menuitem"
+                ><i class="fas fa-home" aria-hidden="true"></i> Home</a
+              >
             </li>
             <li class="nav-item" role="none">
-              <a href="../../games/games.html" class="nav-link" role="menuitem">
-                <i class="fas fa-dice"></i>
-                Games
-              </a>
+              <a href="../../games/games.html" class="nav-link" role="menuitem"
+                ><i class="fas fa-dice" aria-hidden="true"></i> Games</a
+              >
             </li>
             <li class="nav-item" role="none">
               <a
                 href="../../resources/index.html"
                 class="nav-link"
                 role="menuitem"
+                ><i class="fas fa-book-open" aria-hidden="true"></i>
+                Resources</a
               >
-                <i class="fas fa-book-open"></i>
-                Resources
-              </a>
             </li>
             <li class="nav-item" role="none">
-              <a
-                href="../../teacher-hub/index.html"
-                class="nav-link"
-                role="menuitem"
+              <a href="../index.html" class="nav-link" role="menuitem"
+                ><i class="fas fa-chalkboard-user" aria-hidden="true"></i>
+                Teacher</a
               >
-                <i class="fas fa-chalkboard-user"></i>
-                Teacher
-              </a>
             </li>
           </ul>
-
           <div class="controls">
             <button
               class="control-btn theme-toggle"
               id="themeToggle"
+              type="button"
               aria-label="Toggle dark mode"
             >
-              <i class="fas fa-moon"></i>
+              <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
           </div>
           <button
             class="control-btn mobile-toggle"
             id="mobileToggle"
+            type="button"
             aria-label="Toggle mobile menu"
           >
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-bars" aria-hidden="true"></i>
           </button>
         </nav>
       </div>
     </header>
 
-    <script>
-      let currentTime = { hours: 12, minutes: 0, seconds: 0 };
-      let isDragging = false;
-      let dragHand = null;
-      let isRealTime = false;
-      let quizMode = false;
-      let difficulty = "easy";
-      let stats = {
-        correct: 0,
-        total: 0,
-        streak: 0,
-        bestStreak: 0,
-      };
+    <main class="timer-page">
+      <div class="timer-intro">
+        <span class="timer-eyebrow"
+          ><i class="fas fa-stopwatch" aria-hidden="true"></i> Teacher classroom
+          tool</span
+        >
+        <h1>Classroom Timer</h1>
+        <p>
+          Set a time, start the activity, and keep the whole class on track. Use
+          the large display on a projector or interactive board.
+        </p>
+      </div>
 
-      const clock = document.getElementById("clock");
-      const hourHand = document.getElementById("hourHand");
-      const minuteHand = document.getElementById("minuteHand");
-      const secondHand = document.getElementById("secondHand");
-      const timeDisplay = document.getElementById("timeDisplay");
+      <section
+        class="timer-shell"
+        id="timerShell"
+        data-state="ready"
+        aria-label="Classroom countdown timer"
+      >
+        <div class="timer-display-panel" id="timerStage">
+          <p
+            class="timer-state"
+            id="timerState"
+            role="status"
+            aria-live="polite"
+          >
+            Ready when you are
+          </p>
+          <div
+            class="timer-face"
+            id="timerFace"
+            role="img"
+            aria-label="Timer progress"
+          >
+            <div class="timer-face-inner">
+              <p
+                class="timer-clock"
+                id="timerClock"
+                aria-label="10 minutes remaining"
+              >
+                10:00
+              </p>
+              <p class="timer-subtitle" id="timerSubtitle">
+                Choose a duration to begin
+              </p>
+            </div>
+          </div>
+        </div>
 
-      // Load stats from localStorage
-      function loadStats() {
-        const savedStats = localStorage.getItem("clockStats");
-        if (savedStats) {
-          stats = { ...stats, ...JSON.parse(savedStats) };
-          updateStatsDisplay();
-        }
-      }
+        <div class="timer-controls-panel" id="timerControls">
+          <div>
+            <h2>Set a duration</h2>
+            <p class="panel-hint">
+              Pick a quick time or enter a custom countdown.
+            </p>
+          </div>
 
-      // Save stats to localStorage
-      function saveStats() {
-        localStorage.setItem("clockStats", JSON.stringify(stats));
-      }
+          <div class="timer-presets" role="group" aria-label="Timer presets">
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="60"
+              aria-pressed="false"
+            >
+              1 min
+            </button>
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="180"
+              aria-pressed="false"
+            >
+              3 min
+            </button>
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="300"
+              aria-pressed="false"
+            >
+              5 min
+            </button>
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="600"
+              aria-pressed="true"
+            >
+              10 min
+            </button>
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="900"
+              aria-pressed="false"
+            >
+              15 min
+            </button>
+            <button
+              class="timer-preset"
+              type="button"
+              data-seconds="1800"
+              aria-pressed="false"
+            >
+              30 min
+            </button>
+          </div>
 
-      // Update stats display
-      function updateStatsDisplay() {
-        document.getElementById("correctCount").textContent = stats.correct;
-        document.getElementById("totalCount").textContent = stats.total;
-        document.getElementById("accuracy").textContent =
-          stats.total > 0
-            ? Math.round((stats.correct / stats.total) * 100) + "%"
-            : "0%";
-        document.getElementById("streak").textContent = stats.streak;
-      }
+          <div class="timer-custom" aria-label="Custom duration">
+            <label class="timer-field" for="minutesInput"
+              >Minutes
+              <input
+                id="minutesInput"
+                type="number"
+                min="0"
+                max="999"
+                value="10"
+                inputmode="numeric"
+              />
+            </label>
+            <label class="timer-field" for="secondsInput"
+              >Seconds
+              <input
+                id="secondsInput"
+                type="number"
+                min="0"
+                max="59"
+                value="0"
+                inputmode="numeric"
+              />
+            </label>
+          </div>
 
-      // Create clock numbers
-      function createNumbers() {
-        for (let i = 1; i <= 12; i++) {
-          const number = document.createElement("div");
-          number.className = "number";
-          number.textContent = i;
-          number.id = `number${i}`;
+          <div class="timer-actions">
+            <button
+              class="timer-button primary"
+              id="startPauseButton"
+              type="button"
+            >
+              <i class="fas fa-play" aria-hidden="true"></i
+              ><span>Start timer</span>
+            </button>
+            <button class="timer-button" id="resetButton" type="button">
+              <i class="fas fa-rotate-left" aria-hidden="true"></i
+              ><span>Reset</span>
+            </button>
+          </div>
 
-          const angle = (i - 3) * 30; // Start from 3 o'clock position
-          const x = 50 + 40 * Math.cos((angle * Math.PI) / 180);
-          const y = 50 + 40 * Math.sin((angle * Math.PI) / 180);
+          <div class="timer-tools">
+            <button
+              class="fullscreen-button"
+              id="fullscreenButton"
+              type="button"
+            >
+              <i class="fas fa-expand" aria-hidden="true"></i
+              ><span>Projector view</span>
+            </button>
+            <label class="sound-control" for="soundToggle"
+              ><input id="soundToggle" type="checkbox" checked /><span
+                >End sound</span
+              ></label
+            >
+          </div>
+          <p class="timer-help">
+            Keyboard: <strong>Space</strong> start/pause ·
+            <strong>R</strong> reset · <strong>F</strong> projector view
+          </p>
+        </div>
+      </section>
+    </main>
 
-          number.style.left = x + "%";
-          number.style.top = y + "%";
-          clock.appendChild(number);
-        }
-      }
-
-      // Update clock hands
-      function updateClock() {
-        const hourAngle =
-          (currentTime.hours % 12) * 30 + currentTime.minutes * 0.5;
-        const minuteAngle = currentTime.minutes * 6 + currentTime.seconds * 0.1;
-        const secondAngle = currentTime.seconds * 6;
-
-        hourHand.style.transform = `rotate(${hourAngle}deg)`;
-        minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
-        secondHand.style.transform = `rotate(${secondAngle}deg)`;
-
-        const timeString = `${currentTime.hours
-          .toString()
-          .padStart(2, "0")}:${currentTime.minutes
-          .toString()
-          .padStart(2, "0")}:${currentTime.seconds
-          .toString()
-          .padStart(2, "0")}`;
-        timeDisplay.textContent = timeString;
-      }
-
-      // Dragging functionality
-      function makeDraggable() {
-        [hourHand, minuteHand].forEach((hand) => {
-          hand.addEventListener("mousedown", startDrag);
-          hand.addEventListener("touchstart", startDrag);
-        });
-
-        document.addEventListener("mousemove", drag);
-        document.addEventListener("touchmove", drag);
-        document.addEventListener("mouseup", endDrag);
-        document.addEventListener("touchend", endDrag);
-      }
-
-      function startDrag(e) {
-        e.preventDefault();
-        isDragging = true;
-        dragHand = e.target;
-        dragHand.style.cursor = "grabbing";
-      }
-
-      function drag(e) {
-        if (!isDragging || !dragHand) return;
-
-        const rect = clock.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-
-        const x = clientX - centerX;
-        const y = clientY - centerY;
-
-        let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
-        if (angle < 0) angle += 360;
-
-        if (dragHand === hourHand) {
-          currentTime.hours = Math.round(angle / 30) % 12;
-          if (currentTime.hours === 0) currentTime.hours = 12;
-        } else if (dragHand === minuteHand) {
-          currentTime.minutes = Math.round(angle / 6) % 60;
-        }
-
-        updateClock();
-      }
-
-      function endDrag() {
-        if (dragHand) {
-          dragHand.style.cursor = "grab";
-        }
-        isDragging = false;
-        dragHand = null;
-      }
-
-      // Style functions
-      function toggleClockStyle(style) {
-        clock.classList.toggle(style);
-      }
-
-      function toggleNumbers(style) {
-        const numbers = document.querySelectorAll(".number");
-        numbers.forEach((num) => {
-          if (style === "hidden") {
-            num.style.opacity = num.style.opacity === "0" ? "1" : "0";
-          } else if (style === "emoji") {
-            const emojis = [
-              "🕐",
-              "🕑",
-              "🕒",
-              "🕓",
-              "🕔",
-              "🕕",
-              "🕖",
-              "🕗",
-              "🕘",
-              "🕙",
-              "🕚",
-              "🕛",
-            ];
-            num.classList.toggle("emoji");
-            if (num.classList.contains("emoji")) {
-              const numValue = parseInt(num.textContent);
-              num.setAttribute("data-emoji", emojis[numValue - 1]);
-            }
-          } else {
-            num.classList.toggle(style);
-          }
-        });
-      }
-
-      function toggleHandStyle(style) {
-        [hourHand, minuteHand, secondHand].forEach((hand) => {
-          hand.classList.toggle(style);
-        });
-      }
-
-      function changeColor(color) {
-        document.documentElement.style.setProperty("--accent-color", color);
-        hourHand.style.background = color;
-        document.getElementById("centerDot").style.background = color;
-      }
-
-      // Enhanced random time generator based on difficulty
-      function randomTime() {
-        switch (difficulty) {
-          case "easy":
-            // Only o'clock, half past, quarter past, quarter to
-            const easyTimes = [
-              [1, 0],
-              [2, 0],
-              [3, 0],
-              [4, 0],
-              [5, 0],
-              [6, 0],
-              [7, 0],
-              [8, 0],
-              [9, 0],
-              [10, 0],
-              [11, 0],
-              [12, 0],
-              [1, 30],
-              [2, 30],
-              [3, 30],
-              [4, 30],
-              [5, 30],
-              [6, 30],
-              [7, 30],
-              [8, 30],
-              [9, 30],
-              [10, 30],
-              [11, 30],
-              [12, 30],
-              [1, 15],
-              [2, 15],
-              [3, 15],
-              [6, 15],
-              [9, 15],
-              [12, 15],
-              [3, 45],
-              [6, 45],
-              [9, 45],
-              [12, 45],
-            ];
-            const easyTime =
-              easyTimes[Math.floor(Math.random() * easyTimes.length)];
-            currentTime.hours = easyTime[0];
-            currentTime.minutes = easyTime[1];
-            break;
-          case "medium":
-            // 5-minute intervals
-            currentTime.hours = Math.floor(Math.random() * 12) + 1;
-            currentTime.minutes = Math.floor(Math.random() * 12) * 5;
-            break;
-          case "hard":
-            // Any time
-            currentTime.hours = Math.floor(Math.random() * 12) + 1;
-            currentTime.minutes = Math.floor(Math.random() * 60);
-            break;
-        }
-        currentTime.seconds = 0;
-        updateClock();
-        createFloatingEmoji("🎲");
-      }
-
-      // Set difficulty level
-      function setDifficulty(level, e) {
-        difficulty = level;
-        document
-          .querySelectorAll(".difficulty-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-        if (e && e.target) {
-          e.target.classList.add("active");
-        }
-
-        // Update quiz question based on difficulty
-        const questionTexts = {
-          easy: "What time is it? (Try: 3:00, 6:30, 9:15, 12:45)",
-          medium: "What time is it? (Try: 2:25, 7:40, 11:55)",
-          hard: "What time is it? (Try: 4:23, 8:07, 10:42)",
-        };
-
-        if (quizMode) {
-          document.getElementById("quizQuestion").textContent =
-            questionTexts[level];
-        }
-      }
-
-      function setTime(hours, minutes) {
-        currentTime.hours = hours;
-        currentTime.minutes = minutes;
-        currentTime.seconds = 0;
-        updateClock();
-      }
-
-      function playTickSound() {
-        // Create tick sound using Web Audio API
-        const audioContext = new (
-          window.AudioContext || window.webkitAudioContext
-        )();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.frequency.value = 800;
-        oscillator.type = "square";
-
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(
-          0.01,
-          audioContext.currentTime + 0.1,
-        );
-
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-      }
-
-      function celebrateTime() {
-        const emojis = ["🎉", "🎊", "🌟", "✨", "🎈", "🥳"];
-        for (let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            createFloatingEmoji(
-              emojis[Math.floor(Math.random() * emojis.length)],
-            );
-          }, i * 100);
-        }
-
-        clock.style.animation = "bounce 0.5s ease";
-        setTimeout(() => {
-          clock.style.animation = "";
-        }, 500);
-      }
-
-      function shakeTime() {
-        clock.style.animation = "shake 0.5s ease";
-        setTimeout(() => {
-          clock.style.animation = "";
-        }, 500);
-        randomTime();
-      }
-
-      function createFloatingEmoji(emoji) {
-        const floatingEmoji = document.createElement("div");
-        floatingEmoji.className = "floating-emoji";
-        floatingEmoji.textContent = emoji;
-        floatingEmoji.style.left = Math.random() * window.innerWidth + "px";
-        floatingEmoji.style.top = window.innerHeight + "px";
-        document.body.appendChild(floatingEmoji);
-
-        setTimeout(() => {
-          floatingEmoji.remove();
-        }, 3000);
-      }
-      function startQuiz(e) {
-        quizMode = !quizMode;
-        const btn = e && e.target ? e.target : null;
-        if (quizMode && btn) {
-          btn.textContent = "🎯 Stop Quiz";
-          btn.classList.add("active");
-          generateQuizQuestion();
-        } else if (btn) {
-          btn.textContent = "🎯 Quiz Mode";
-          btn.classList.remove("active");
-          document.getElementById("quizResult").textContent = "";
-          document.getElementById("quizQuestion").textContent =
-            "What time is it?";
-        }
-      }
-
-      function generateQuizQuestion() {
-        if (!quizMode) return;
-        randomTime();
-        const questionTexts = {
-          easy: "What time is it? (Example: 3:00, 6:30, 9:15, 12:45)",
-          medium: "What time is it? (Example: 2:25, 7:40, 11:55)",
-          hard: "What time is it? (Example: 4:23, 8:07, 10:42)",
-        };
-        document.getElementById("quizQuestion").textContent =
-          questionTexts[difficulty];
-        document.getElementById("quizInput").value = "";
-        document.getElementById("quizResult").textContent = "";
-      }
-
-      function checkAnswer() {
-        const userAnswer = document.getElementById("quizInput").value.trim();
-        const correctHour = currentTime.hours;
-        const correctMinute = currentTime.minutes;
-        const correctAnswer = `${correctHour}:${correctMinute
-          .toString()
-          .padStart(2, "0")}`;
-        const altAnswer = `${correctHour}:${correctMinute}`;
-        const resultDiv = document.getElementById("quizResult");
-
-        stats.total++;
-
-        if (userAnswer === correctAnswer || userAnswer === altAnswer) {
-          stats.correct++;
-          stats.streak++;
-          if (stats.streak > stats.bestStreak) {
-            stats.bestStreak = stats.streak;
-          }
-
-          resultDiv.textContent = `🎉 Correct! Great job! ${
-            stats.streak > 1 ? `Streak: ${stats.streak}` : ""
-          }`;
-          resultDiv.className = "quiz-result correct";
-          celebrateTime();
-
-          if (quizMode) {
-            setTimeout(generateQuizQuestion, 2000);
-          }
-        } else {
-          stats.streak = 0;
-          resultDiv.textContent = `❌ Try again! The correct time is ${correctAnswer}`;
-          resultDiv.className = "quiz-result incorrect";
-        }
-
-        updateStatsDisplay();
-        saveStats();
-      }
-
-      function showTimeInWords() {
-        const hours = currentTime.hours;
-        function showTimeInWords() {
-          const hours = currentTime.hours;
-          const minutes = currentTime.minutes;
-          let timeInWords = "";
-
-          const hourWords = [
-            "",
-            "one",
-            "two",
-            "three",
-            "four",
-            "five",
-            "six",
-            "seven",
-            "eight",
-            "nine",
-            "ten",
-            "eleven",
-            "twelve",
-          ];
-
-          if (minutes === 0) {
-            timeInWords = `${hourWords[hours]} o'clock`;
-          } else if (minutes === 15) {
-            timeInWords = `quarter past ${hourWords[hours]}`;
-          } else if (minutes === 30) {
-            timeInWords = `half past ${hourWords[hours]}`;
-          } else if (minutes === 45) {
-            const nextHour = hours === 12 ? 1 : hours + 1;
-            timeInWords = `quarter to ${hourWords[nextHour]}`;
-          } else if (minutes < 30) {
-            timeInWords = `${minutes} minutes past ${hourWords[hours]}`;
-          } else {
-            const nextHour = hours === 12 ? 1 : hours + 1;
-            timeInWords = `${60 - minutes} minutes to ${hourWords[nextHour]}`;
-          }
-
-          alert(`The time in words: ${timeInWords}`);
-        }
-
-        function realTime(e) {
-          isRealTime = !isRealTime;
-          const btn = e && e.target ? e.target : null;
-          if (isRealTime && btn) {
-            btn.textContent = "⏰ Stop Real Time";
-            btn.classList.add("active");
-            updateRealTime();
-          } else if (btn) {
-            btn.textContent = "⏰ Real Time";
-            btn.classList.remove("active");
-          }
-        }
-        if (!isRealTime) return;
-        const now = new Date();
-        currentTime.hours = now.getHours() % 12 || 12;
-        currentTime.minutes = now.getMinutes();
-        currentTime.seconds = now.getSeconds();
-        updateClock();
-        setTimeout(updateRealTime, 1000);
-      }
-
-      // Reset statistics
-      function resetStats() {
-        if (
-          confirm("Are you sure you want to reset your progress statistics?")
-        ) {
-          stats = { correct: 0, total: 0, streak: 0, bestStreak: 0 };
-          updateStatsDisplay();
-          saveStats();
-          createFloatingEmoji("🔄");
-        }
-      }
-
-      // Practice specific time types
-      function practiceOClock() {
-        const hours = Math.floor(Math.random() * 12) + 1;
-        setTime(hours, 0);
-        createFloatingEmoji("🕐");
-      }
-
-      function practiceHalfPast() {
-        const hours = Math.floor(Math.random() * 12) + 1;
-        setTime(hours, 30);
-        createFloatingEmoji("🕕");
-      }
-
-      function practiceQuarters() {
-        const hours = Math.floor(Math.random() * 12) + 1;
-        const minutes = Math.random() < 0.5 ? 15 : 45;
-        setTime(hours, minutes);
-        createFloatingEmoji("🕒");
-      }
-
-      function practiceMinutes() {
-        randomTime();
-        createFloatingEmoji("🕘");
-      }
-
-      // Add shake animation
-      const shakeKeyframes = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-                20%, 40%, 60%, 80% { transform: translateX(10px); }
-            }
-        `;
-      const style = document.createElement("style");
-      style.textContent = shakeKeyframes;
-      document.head.appendChild(style);
-
-      // Initialize everything
-      loadStats();
-      createNumbers();
-      updateClock();
-      makeDraggable();
-
-      // Allow Enter key in quiz input
-      document
-        .getElementById("quizInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            checkAnswer();
-          }
-        });
-
-      // Add some initial fun
-      setTimeout(() => {
-        createFloatingEmoji("🕐");
-      }, 1000);
-
-      // Auto-save stats periodically
-      setInterval(saveStats, 30000); // Save every 30 seconds
-    </script>
+    <div
+      class="timer-fullscreen"
+      id="fullscreenStage"
+      data-state="ready"
+      aria-label="Classroom timer projector view"
+    >
+      <p class="timer-state" id="fullscreenState" aria-live="polite">
+        Ready when you are
+      </p>
+      <div
+        class="timer-face"
+        id="fullscreenFace"
+        role="img"
+        aria-label="Timer progress"
+      >
+        <div class="timer-face-inner">
+          <p class="timer-clock" id="fullscreenClock">10:00</p>
+          <p class="timer-subtitle" id="fullscreenSubtitle">
+            Choose a duration to begin
+          </p>
+        </div>
+      </div>
+      <button class="fullscreen-exit" id="exitFullscreenButton" type="button">
+        <i class="fas fa-compress" aria-hidden="true"></i> Exit projector view
+        <span>(Esc)</span>
+      </button>
+    </div>
 
     <footer>
       <div class="container">
         <div class="footer-content">
           <div class="footer-section footer-brand">
             <div class="brand-header">
-              <picture>
-                <source
-                  srcset="..//images/logo-optimized.webp"
-                  type="image/webp"
-                />
-                <img
-                  src="..//images/logo-optimized.png"
-                  alt="ESL Fun Online"
-                  class="footer-logo"
-                  loading="lazy"
-                  decoding="async"
-                  width="40"
-                  height="40"
-                />
-              </picture>
+              <img
+                src="../../images/1.png"
+                alt="ESL Fun Online"
+                class="footer-logo"
+                width="40"
+                height="40"
+                loading="lazy"
+              />
               <h3>ESL Fun Online</h3>
             </div>
             <p>
-              Supporting English learners and teachers with engaging lessons,
-              games, and classroom resources.
+              Free resources, games, and classroom tools for English teachers
+              and learners.
             </p>
           </div>
           <div class="footer-section">
-            <h3><i class="fas fa-graduation-cap"></i> English</h3>
+            <h3><i class="fas fa-link" aria-hidden="true"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="../resources/english/grammar.html"
-                  ><i class="fas fa-spell-check"></i><span>Grammar</span></a
+                <a href="../index.html"
+                  ><i class="fas fa-tools" aria-hidden="true"></i
+                  ><span>Teacher tools</span></a
                 >
               </li>
               <li>
-                <a href="../resources/english/vocabguide.html"
-                  ><i class="fas fa-book-open"></i><span>Vocabulary</span></a
+                <a href="presentation-timer.html"
+                  ><i class="fas fa-person-chalkboard" aria-hidden="true"></i
+                  ><span>Presentation timer</span></a
                 >
               </li>
               <li>
-                <a href="../resources/business/presentation-coach.html"
-                  ><i class="fas fa-handshake"></i><span>Business</span></a
-                >
-              </li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <h3><i class="fas fa-link"></i> Quick Links</h3>
-            <ul>
-              <li>
-                <a href="../lessons.html"
-                  ><i class="fas fa-chalkboard-teacher"></i
-                  ><span>Lessons</span></a
-                >
-              </li>
-              <li>
-                <a href="../games/games.html"
-                  ><i class="fas fa-gamepad"></i><span>Games</span></a
-                >
-              </li>
-              <li>
-                <a href="../teacher-hub/index.html"
-                  ><i class="fas fa-tools"></i><span>Tools</span></a
-                >
-              </li>
-              <li>
-                <a href="../resources/lessons-and-blog/blog.html"
-                  ><i class="fas fa-book-open"></i><span>Blog</span></a
+                <a href="random.html"
+                  ><i class="fas fa-random" aria-hidden="true"></i
+                  ><span>Student picker</span></a
                 >
               </li>
             </ul>
@@ -803,35 +865,346 @@
         <div class="footer-bottom">
           <div class="footer-bottom-center">
             <div class="footer-links">
-              <a href="../privacy.html"
-                ><i class="fas fa-shield-alt"></i>Privacy</a
-              >
-              <a href="../terms.html"
-                ><i class="fas fa-file-contract"></i>Terms</a
-              >
-              <a href="../cookies.html"
-                ><i class="fas fa-cookie-bite"></i>Cookies</a
-              >
+              <a href="../../privacy.html">Privacy</a
+              ><a href="../../terms.html">Terms</a
+              ><a href="../../cookies.html">Cookies</a>
             </div>
           </div>
           <div class="footer-bottom-left">
-            <p>
-              &copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.
-            </p>
-            <p class="footer-subtitle">Empowering learners worldwide</p>
-          </div>
-          <div class="footer-bottom-right">
-            <div class="footer-badges">
-              <div class="badge">
-                <i class="fas fa-award"></i><span>Certified</span>
-              </div>
-              <div class="badge">
-                <i class="fas fa-lock"></i><span>Secure</span>
-              </div>
-            </div>
+            <p>© 2026 <strong>ESL Fun Online</strong>. All rights reserved.</p>
           </div>
         </div>
       </div>
     </footer>
+
+    <script src="../../js/navigation.js"></script>
+    <script>
+      (() => {
+        const shell = document.getElementById("timerShell");
+        const stage = document.getElementById("timerStage");
+        const clock = document.getElementById("timerClock");
+        const stateLabel = document.getElementById("timerState");
+        const subtitle = document.getElementById("timerSubtitle");
+        const face = document.getElementById("timerFace");
+        const fullscreenStage = document.getElementById("fullscreenStage");
+        const fullscreenClock = document.getElementById("fullscreenClock");
+        const fullscreenState = document.getElementById("fullscreenState");
+        const fullscreenSubtitle =
+          document.getElementById("fullscreenSubtitle");
+        const fullscreenFace = document.getElementById("fullscreenFace");
+        const minutesInput = document.getElementById("minutesInput");
+        const secondsInput = document.getElementById("secondsInput");
+        const startPauseButton = document.getElementById("startPauseButton");
+        const resetButton = document.getElementById("resetButton");
+        const fullscreenButton = document.getElementById("fullscreenButton");
+        const exitFullscreenButton = document.getElementById(
+          "exitFullscreenButton",
+        );
+        const soundToggle = document.getElementById("soundToggle");
+        const presetButtons = [...document.querySelectorAll(".timer-preset")];
+
+        let initialSeconds = 600;
+        let remainingMs = initialSeconds * 1000;
+        let deadline = 0;
+        let intervalId = null;
+        let running = false;
+        let finished = false;
+        let audioContext;
+
+        function formatTime(milliseconds) {
+          const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+          if (hours > 0) {
+            return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+          }
+          return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        }
+
+        function setState(state, message) {
+          shell.dataset.state = state;
+          fullscreenStage.dataset.state = state;
+          stateLabel.textContent = message;
+          fullscreenState.textContent = message;
+        }
+
+        function updateDisplay() {
+          const text = formatTime(remainingMs);
+          clock.textContent = text;
+          fullscreenClock.textContent = text;
+          const spokenTime = `${Math.ceil(remainingMs / 60000)} minute${Math.ceil(remainingMs / 60000) === 1 ? "" : "s"} remaining`;
+          clock.setAttribute("aria-label", spokenTime);
+          const percent =
+            initialSeconds > 0
+              ? Math.max(
+                  0,
+                  Math.min(100, (remainingMs / (initialSeconds * 1000)) * 100),
+                )
+              : 0;
+          face.style.setProperty("--progress", `${percent}%`);
+          fullscreenFace.style.setProperty("--progress", `${percent}%`);
+
+          if (finished) {
+            setState("finished", "Time is up!");
+            subtitle.textContent = "Activity complete";
+            fullscreenSubtitle.textContent = "Activity complete";
+          } else if (!running && remainingMs === initialSeconds * 1000) {
+            setState("ready", "Ready when you are");
+            subtitle.textContent = "Choose a duration to begin";
+            fullscreenSubtitle.textContent = "Choose a duration to begin";
+          } else if (!running) {
+            setState("paused", "Timer paused");
+            subtitle.textContent = "Take a moment, then resume";
+            fullscreenSubtitle.textContent = "Take a moment, then resume";
+          } else if (remainingMs <= 10000) {
+            setState("last-seconds", "Final seconds");
+            subtitle.textContent = "Finish up!";
+            fullscreenSubtitle.textContent = "Finish up!";
+          } else if (
+            remainingMs <= Math.min(60000, initialSeconds * 0.2 * 1000)
+          ) {
+            setState("warning", "Almost there");
+            subtitle.textContent = "The activity is nearly finished";
+            fullscreenSubtitle.textContent = "The activity is nearly finished";
+          } else {
+            setState("running", "Timer running");
+            subtitle.textContent = "You’ve got this";
+            fullscreenSubtitle.textContent = "You’ve got this";
+          }
+
+          startPauseButton.innerHTML = running
+            ? '<i class="fas fa-pause" aria-hidden="true"></i><span>Pause</span>'
+            : `<i class="fas fa-play" aria-hidden="true"></i><span>${finished ? "Start again" : remainingMs < initialSeconds * 1000 ? "Resume timer" : "Start timer"}</span>`;
+          minutesInput.disabled = running;
+          secondsInput.disabled = running;
+        }
+
+        function syncInputs(seconds) {
+          minutesInput.value = Math.floor(seconds / 60);
+          secondsInput.value = seconds % 60;
+          presetButtons.forEach((button) => {
+            button.setAttribute(
+              "aria-pressed",
+              String(Number(button.dataset.seconds) === seconds),
+            );
+          });
+        }
+
+        function readInputs() {
+          const minutes = Math.max(
+            0,
+            Math.min(999, Number.parseInt(minutesInput.value, 10) || 0),
+          );
+          const seconds = Math.max(
+            0,
+            Math.min(59, Number.parseInt(secondsInput.value, 10) || 0),
+          );
+          const total = minutes * 60 + seconds;
+          if (!total) {
+            stateLabel.textContent = "Choose at least one second";
+            minutesInput.focus();
+            return null;
+          }
+          return total;
+        }
+
+        function clearTick() {
+          if (intervalId !== null) {
+            window.clearInterval(intervalId);
+            intervalId = null;
+          }
+        }
+
+        function playEndSound() {
+          if (!soundToggle.checked) return;
+          try {
+            const AudioContextClass =
+              window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            audioContext ||= new AudioContextClass();
+            if (audioContext.state === "suspended") audioContext.resume();
+            [659.25, 783.99, 1046.5].forEach((frequency, index) => {
+              const oscillator = audioContext.createOscillator();
+              const gain = audioContext.createGain();
+              const startAt = audioContext.currentTime + index * 0.18;
+              oscillator.type = "sine";
+              oscillator.frequency.value = frequency;
+              gain.gain.setValueAtTime(0.0001, startAt);
+              gain.gain.exponentialRampToValueAtTime(0.16, startAt + 0.025);
+              gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.32);
+              oscillator.connect(gain);
+              gain.connect(audioContext.destination);
+              oscillator.start(startAt);
+              oscillator.stop(startAt + 0.34);
+            });
+          } catch (error) {
+            console.warn("Timer completion sound is unavailable.", error);
+          }
+        }
+
+        function finishTimer() {
+          clearTick();
+          running = false;
+          finished = true;
+          remainingMs = 0;
+          updateDisplay();
+          playEndSound();
+          if ("vibrate" in navigator) navigator.vibrate([180, 90, 180]);
+        }
+
+        function tick() {
+          remainingMs = Math.max(0, deadline - Date.now());
+          if (remainingMs <= 0) {
+            finishTimer();
+          } else {
+            updateDisplay();
+          }
+        }
+
+        function startTimer() {
+          if (running) {
+            running = false;
+            remainingMs = Math.max(0, deadline - Date.now());
+            clearTick();
+            updateDisplay();
+            return;
+          }
+
+          if (finished || remainingMs <= 0) {
+            const selected = readInputs();
+            if (selected === null) return;
+            initialSeconds = selected;
+            remainingMs = selected * 1000;
+            finished = false;
+          } else if (remainingMs === initialSeconds * 1000) {
+            const selected = readInputs();
+            if (selected === null) return;
+            initialSeconds = selected;
+            remainingMs = selected * 1000;
+          }
+
+          running = true;
+          deadline = Date.now() + remainingMs;
+          updateDisplay();
+          tick();
+          intervalId = window.setInterval(tick, 100);
+        }
+
+        function resetTimer() {
+          clearTick();
+          running = false;
+          finished = false;
+          const selected = readInputs();
+          if (selected !== null) {
+            initialSeconds = selected;
+            remainingMs = selected * 1000;
+          }
+          updateDisplay();
+          startPauseButton.focus();
+        }
+
+        function applyDuration(seconds) {
+          if (running) return;
+          initialSeconds = seconds;
+          remainingMs = seconds * 1000;
+          finished = false;
+          syncInputs(seconds);
+          updateDisplay();
+        }
+
+        async function enterProjectorView() {
+          fullscreenStage.classList.add("is-open");
+          if (fullscreenStage.requestFullscreen) {
+            try {
+              await fullscreenStage.requestFullscreen();
+            } catch (error) {
+              // The full-screen overlay still works when browser policy blocks the API.
+            }
+          }
+          exitFullscreenButton.focus();
+        }
+
+        async function exitProjectorView() {
+          fullscreenStage.classList.remove("is-open");
+          if (document.fullscreenElement && document.exitFullscreen) {
+            try {
+              await document.exitFullscreen();
+            } catch (error) {
+              // Keep the accessible in-page exit control as a fallback.
+            }
+          }
+          fullscreenButton.focus();
+        }
+
+        presetButtons.forEach((button) => {
+          button.addEventListener("click", () =>
+            applyDuration(Number(button.dataset.seconds)),
+          );
+        });
+
+        [minutesInput, secondsInput].forEach((input) => {
+          input.addEventListener("input", () => {
+            if (running) return;
+            presetButtons.forEach((button) =>
+              button.setAttribute("aria-pressed", "false"),
+            );
+            const selected = readInputs();
+            if (selected !== null) {
+              initialSeconds = selected;
+              remainingMs = selected * 1000;
+              finished = false;
+              updateDisplay();
+            }
+          });
+          input.addEventListener("blur", () => {
+            input.value = String(
+              Math.max(
+                Number(input.min),
+                Math.min(
+                  Number(input.max),
+                  Number.parseInt(input.value, 10) || 0,
+                ),
+              ),
+            );
+          });
+        });
+
+        startPauseButton.addEventListener("click", startTimer);
+        resetButton.addEventListener("click", resetTimer);
+        fullscreenButton.addEventListener("click", enterProjectorView);
+        exitFullscreenButton.addEventListener("click", exitProjectorView);
+
+        document.addEventListener("fullscreenchange", () => {
+          if (!document.fullscreenElement)
+            fullscreenStage.classList.remove("is-open");
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (
+            event.key === "Escape" &&
+            fullscreenStage.classList.contains("is-open") &&
+            !document.fullscreenElement
+          ) {
+            fullscreenStage.classList.remove("is-open");
+          }
+          if (event.target.matches("input, textarea, select, button")) return;
+          if (event.code === "Space") {
+            event.preventDefault();
+            startTimer();
+          } else if (event.key.toLowerCase() === "r") {
+            resetTimer();
+          } else if (event.key.toLowerCase() === "f") {
+            if (fullscreenStage.classList.contains("is-open"))
+              exitProjectorView();
+            else enterProjectorView();
+          }
+        });
+
+        window.addEventListener("pagehide", clearTick);
+        syncInputs(initialSeconds);
+        updateDisplay();
+      })();
+    </script>
   </body>
 </html>
