@@ -31,7 +31,7 @@
     />
     <meta
       property="og:image"
-      content="https://eslfunonline.com/images/games/snake.png"
+      content="https://eslfunonline.com/games/snake/image%20copy.png"
     />
     <meta
       property="og:url"
@@ -49,7 +49,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://eslfunonline.com/images/games/snake.png"
+      content="https://eslfunonline.com/games/snake/image%20copy.png"
     />
 
     <!-- AdSense -->
@@ -102,7 +102,7 @@
         "name": "Snake ESL - Classic Snake Game",
         "description": "Play the classic Snake game with an ESL vocabulary twist! Collect English words while growing your snake. Learn vocabulary, test reflexes, and beat your high score.",
         "url": "https://eslfunonline.com/games/snake.html",
-        "image": "https://eslfunonline.com/images/games/snake.png",
+        "image": "https://eslfunonline.com/games/snake/image%20copy.png",
         "author": {
           "@type": "Organization",
           "name": "ESL Fun Online",
@@ -678,6 +678,509 @@
           border: 2px solid white;
         }
       }
+
+      /* Snake ESL arcade redesign */
+      html {
+        min-height: 100%;
+        background: #071b27;
+      }
+
+      body {
+        display: block;
+        min-height: 100vh;
+        min-height: 100svh;
+        overflow-x: clip;
+        background-color: #071b27;
+        background-image:
+          radial-gradient(
+            ellipse at 14% 5%,
+            rgba(34, 197, 94, 0.19),
+            transparent 34%
+          ),
+          radial-gradient(
+            ellipse at 88% 15%,
+            rgba(20, 184, 166, 0.16),
+            transparent 38%
+          ),
+          linear-gradient(145deg, rgba(4, 18, 30, 0.9), rgba(7, 32, 43, 0.82)),
+          url("../images/game-bg-purple.jpg");
+        background-attachment: fixed;
+      }
+
+      body::before {
+        background: linear-gradient(
+          180deg,
+          rgba(2, 10, 19, 0.08),
+          rgba(2, 10, 19, 0.42)
+        );
+      }
+
+      .game-nav-header {
+        position: sticky;
+        width: 100%;
+        min-height: 68px;
+        padding: 0.65rem clamp(0.75rem, 2.4vw, 2rem);
+        border-bottom: 1px solid rgba(167, 243, 208, 0.14);
+        background: rgba(3, 18, 29, 0.78);
+        box-shadow: 0 8px 28px rgba(1, 10, 19, 0.24);
+        backdrop-filter: blur(18px);
+      }
+
+      .back-button {
+        min-height: 44px;
+        border: 1px solid rgba(167, 243, 208, 0.18);
+        background: rgba(15, 43, 52, 0.78);
+      }
+
+      .back-button:hover {
+        background: rgba(20, 83, 71, 0.84);
+        transform: translateY(-1px);
+      }
+
+      .game-title-header {
+        color: #ecfdf5;
+        letter-spacing: 0.015em;
+      }
+
+      .snake-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 336px;
+        align-items: start;
+        gap: 22px;
+        width: min(1500px, calc(100% - 32px));
+        margin: 24px auto 0;
+      }
+
+      .game-container {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin: 0;
+        padding: clamp(1rem, 2.4vw, 2rem);
+        overflow: visible;
+        border: 1px solid rgba(167, 243, 208, 0.19);
+        border-radius: 26px;
+        background: linear-gradient(
+          150deg,
+          rgba(10, 38, 48, 0.94),
+          rgba(12, 28, 47, 0.94)
+        );
+        box-shadow: 0 24px 70px rgba(1, 10, 19, 0.4);
+        color: #ecfdf5;
+      }
+
+      .snake-game-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0 0 1.25rem;
+      }
+
+      .snake-game-heading h2 {
+        margin: 0;
+        color: #f0fdf4;
+        font-size: clamp(1.45rem, 2.8vw, 2rem);
+        letter-spacing: -0.035em;
+      }
+
+      .snake-game-heading p {
+        margin: 0.4rem 0 0;
+        color: #a7c8c2;
+        font-size: 0.92rem;
+      }
+
+      .fullscreen-toggle {
+        display: inline-flex;
+        min-height: 44px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid rgba(167, 243, 208, 0.24);
+        border-radius: 12px;
+        background: rgba(15, 49, 57, 0.8);
+        color: #ecfdf5;
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 750;
+        cursor: pointer;
+        transition:
+          background 160ms ease,
+          transform 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .fullscreen-toggle:hover {
+        transform: translateY(-1px);
+        border-color: rgba(110, 231, 183, 0.72);
+        background: rgba(6, 95, 70, 0.88);
+      }
+
+      .game-info {
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        border: 1px solid rgba(167, 243, 208, 0.14);
+        border-radius: 18px;
+        background: linear-gradient(
+          135deg,
+          rgba(13, 58, 61, 0.76),
+          rgba(15, 35, 53, 0.82)
+        );
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .score-board {
+        gap: 0.75rem;
+        margin: 0;
+      }
+
+      .score-item {
+        min-width: 0;
+        padding: 0.55rem 0.75rem;
+        border: 1px solid rgba(167, 243, 208, 0.1);
+        border-radius: 13px;
+        background: rgba(3, 21, 33, 0.42);
+      }
+
+      .score-label {
+        color: #aac8c2;
+        font-size: 0.75rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .score-value {
+        color: #a7f3d0;
+        font-size: clamp(1.2rem, 2vw, 1.55rem);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .snake-board-shell {
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: clamp(7px, 1.2vw, 12px);
+        border: 1px solid rgba(110, 231, 183, 0.38);
+        border-radius: 22px;
+        background: linear-gradient(
+          145deg,
+          rgba(16, 83, 72, 0.82),
+          rgba(8, 31, 43, 0.96)
+        );
+        box-shadow:
+          0 18px 38px rgba(0, 0, 0, 0.3),
+          inset 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      #gameCanvas {
+        width: min(100%, 600px);
+        height: auto;
+        aspect-ratio: 1;
+        margin: 0;
+        border: 2px solid rgba(167, 243, 208, 0.42);
+        border-radius: 14px;
+        background: #071b27;
+        box-shadow: 0 0 32px rgba(16, 185, 129, 0.14);
+        touch-action: none;
+      }
+
+      .controls {
+        gap: 0.7rem;
+        margin: 1.25rem 0 0.6rem;
+      }
+
+      .btn {
+        min-height: 48px;
+        padding: 0.72rem 1.2rem;
+        border: 1px solid rgba(167, 243, 208, 0.24);
+        border-radius: 13px;
+        background: rgba(17, 54, 62, 0.86);
+        color: #ecfdf5;
+        box-shadow: 0 8px 18px rgba(1, 10, 19, 0.16);
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        border-color: rgba(110, 231, 183, 0.72);
+        background: rgba(21, 77, 71, 0.92);
+      }
+
+      .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.52;
+        transform: none;
+      }
+
+      .btn-primary {
+        border: 0;
+        background: linear-gradient(135deg, #059669, #14b8a6);
+        color: #fff;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #047857, #0f9f91);
+      }
+
+      .mobile-controls {
+        grid-template-columns: repeat(3, 66px);
+        gap: 8px;
+        margin: 1rem auto 0;
+      }
+
+      .direction-btn {
+        width: 66px;
+        height: 60px;
+        border: 1px solid rgba(167, 243, 208, 0.3);
+        border-radius: 16px;
+        background: linear-gradient(
+          145deg,
+          rgba(21, 76, 72, 0.95),
+          rgba(10, 43, 54, 0.98)
+        );
+        box-shadow: 0 7px 16px rgba(1, 10, 19, 0.2);
+        touch-action: manipulation;
+      }
+
+      .direction-btn:hover {
+        background: rgba(6, 95, 70, 0.95);
+      }
+
+      .instructions {
+        margin-top: 1.5rem;
+        padding: 1.25rem 1.4rem;
+        border: 1px solid rgba(167, 243, 208, 0.15);
+        border-radius: 17px;
+        background: rgba(3, 20, 32, 0.5);
+        color: #c6ddd8;
+      }
+
+      .instructions h3 {
+        margin-bottom: 0.65rem;
+        color: #a7f3d0;
+        font-size: 1.05rem;
+      }
+
+      .instructions ul {
+        padding-left: 1.3rem;
+        line-height: 1.7;
+      }
+
+      .instructions li::marker {
+        color: #34d399;
+      }
+
+      .power-up-indicator {
+        margin: 0.9rem auto 0;
+        border-radius: 14px;
+        color: #fef3c7;
+      }
+
+      .snake-ad-rail {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1rem;
+      }
+
+      .snake-ad-card {
+        display: grid;
+        width: 100%;
+        min-height: 292px;
+        align-content: start;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 0;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        background: rgba(5, 10, 27, 0.45);
+      }
+
+      .snake-ad-label {
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .snake-ad-card .adsbygoogle {
+        display: inline-block;
+        width: 300px;
+        height: 250px;
+      }
+
+      .snake-bottom-ad {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        width: min(1200px, calc(100% - 32px));
+        min-height: 120px;
+        justify-items: center;
+        gap: 8px;
+        margin: 22px auto 0;
+        padding: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        background: rgba(5, 13, 28, 0.72);
+      }
+
+      .snake-bottom-ad .adsbygoogle {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+
+      #main-game:fullscreen,
+      #main-game:-webkit-full-screen,
+      #main-game.is-fullscreen-fallback {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: block;
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        height: 100dvh;
+        margin: 0;
+        padding: max(1rem, env(safe-area-inset-top))
+          max(1rem, env(safe-area-inset-right))
+          max(1rem, env(safe-area-inset-bottom))
+          max(1rem, env(safe-area-inset-left));
+        overflow: auto;
+        border: 0;
+        border-radius: 0;
+        background: radial-gradient(ellipse at top, #12483f, #071b27 65%);
+      }
+
+      #main-game:fullscreen .instructions,
+      #main-game:-webkit-full-screen .instructions,
+      #main-game.is-fullscreen-fallback .instructions {
+        display: none;
+      }
+
+      #main-game:fullscreen .snake-board-shell,
+      #main-game:-webkit-full-screen .snake-board-shell,
+      #main-game.is-fullscreen-fallback .snake-board-shell {
+        padding: 10px;
+      }
+
+      #main-game:fullscreen #gameCanvas,
+      #main-game:-webkit-full-screen #gameCanvas,
+      #main-game.is-fullscreen-fallback #gameCanvas {
+        width: min(100%, 72vh, 78vw, 780px);
+      }
+
+      body.snake-fullscreen-fallback,
+      html.snake-fullscreen-fallback {
+        overflow: hidden;
+      }
+
+      body.snake-fullscreen-fallback .game-nav-header,
+      body.snake-fullscreen-fallback .snake-ad-rail,
+      body.snake-fullscreen-fallback .snake-bottom-ad,
+      body.snake-fullscreen-fallback .game-footer {
+        display: none !important;
+      }
+
+      @media (max-width: 1050px) {
+        .snake-layout {
+          grid-template-columns: minmax(0, 1fr);
+          width: min(900px, calc(100% - 32px));
+        }
+
+        .snake-ad-card {
+          width: min(100%, 332px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .snake-layout {
+          width: calc(100% - 20px);
+          margin-top: 12px;
+        }
+
+        .game-container {
+          padding: clamp(0.85rem, 3vw, 1.25rem);
+        }
+
+        .mobile-controls {
+          display: grid;
+        }
+
+        .snake-bottom-ad {
+          width: calc(100% - 20px);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .game-nav-header {
+          min-height: 60px;
+          padding-inline: 0.6rem;
+        }
+
+        .back-button {
+          gap: 0.35rem;
+          padding-inline: 0.6rem;
+          font-size: 0.78rem;
+        }
+
+        .game-title-header {
+          font-size: 0.95rem;
+        }
+
+        .snake-game-heading {
+          align-items: flex-start;
+        }
+
+        .snake-game-heading p {
+          max-width: 230px;
+          font-size: 0.8rem;
+        }
+
+        .fullscreen-toggle {
+          gap: 0.35rem;
+          padding-inline: 0.65rem;
+          font-size: 0.78rem;
+        }
+
+        .game-info {
+          padding: 0.65rem;
+        }
+
+        .score-board {
+          gap: 0.35rem;
+        }
+
+        .score-item {
+          padding: 0.5rem 0.35rem;
+        }
+
+        .score-label {
+          font-size: 0.64rem;
+        }
+
+        .controls {
+          gap: 0.45rem;
+        }
+
+        .btn {
+          padding-inline: 0.75rem;
+          font-size: 0.88rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fullscreen-toggle,
+        .btn,
+        .direction-btn {
+          transition: none;
+        }
+      }
     </style>
   </head>
 
@@ -698,134 +1201,202 @@
       <div style="width: 120px" aria-hidden="true"></div>
     </nav>
 
-    <!-- Main Game Container -->
-    <main id="main-game" class="game-container" role="main">
-      <h2><span aria-hidden="true">🐍</span> Snake ESL</h2>
+    <div class="snake-layout">
+      <!-- Main Game Container -->
+      <main id="main-game" class="game-container" role="main">
+        <header class="snake-game-heading">
+          <div>
+            <h2><span aria-hidden="true">🐍</span> Snake ESL</h2>
+            <p>Collect words, grow your snake, and beat your best score.</p>
+          </div>
+          <button
+            class="fullscreen-toggle"
+            id="fullscreenToggle"
+            type="button"
+            aria-label="Enter fullscreen without ads"
+            aria-pressed="false"
+          >
+            <i class="fas fa-expand" aria-hidden="true"></i>
+            <span>Fullscreen</span>
+          </button>
+        </header>
 
-      <!-- Game Info -->
-      <div
-        class="game-info"
-        role="status"
-        aria-live="polite"
-        aria-label="Game statistics"
-      >
-        <div class="score-board">
-          <div class="score-item">
-            <span class="score-label">Score</span>
-            <span class="score-value" id="score">0</span>
+        <!-- Game Info -->
+        <div
+          class="game-info"
+          role="status"
+          aria-live="polite"
+          aria-label="Game statistics"
+        >
+          <div class="score-board">
+            <div class="score-item">
+              <span class="score-label">Score</span>
+              <span class="score-value" id="score">0</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">High Score</span>
+              <span class="score-value" id="highScore">0</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">Level</span>
+              <span class="score-value" id="level">1</span>
+            </div>
           </div>
-          <div class="score-item">
-            <span class="score-label">High Score</span>
-            <span class="score-value" id="highScore">0</span>
-          </div>
-          <div class="score-item">
-            <span class="score-label">Level</span>
-            <span class="score-value" id="level">1</span>
+          <div class="power-up-indicator" id="powerUpIndicator">
+            <i class="fas fa-bolt"></i>
+            <span id="powerUpText">Power-up Active!</span>
           </div>
         </div>
-        <div class="power-up-indicator" id="powerUpIndicator">
-          <i class="fas fa-bolt"></i>
-          <span id="powerUpText">Power-up Active!</span>
+
+        <!-- Combo Display -->
+        <div
+          class="combo-display"
+          id="comboDisplay"
+          aria-live="assertive"
+          aria-atomic="true"
+        ></div>
+
+        <!-- Game Canvas -->
+        <div class="snake-board-shell">
+          <canvas
+            id="gameCanvas"
+            width="600"
+            height="600"
+            role="img"
+            aria-label="Snake game board - use arrow keys or touch controls to play"
+          ></canvas>
         </div>
-      </div>
 
-      <!-- Combo Display -->
-      <div
-        class="combo-display"
-        id="comboDisplay"
-        aria-live="assertive"
-        aria-atomic="true"
-      ></div>
+        <!-- Controls -->
+        <div class="controls" role="group" aria-label="Game controls">
+          <button
+            class="btn btn-primary"
+            id="startBtn"
+            type="button"
+            aria-label="Start game"
+          >
+            Start Game
+          </button>
+          <button
+            class="btn"
+            id="pauseBtn"
+            type="button"
+            aria-label="Pause game"
+          >
+            Pause
+          </button>
+          <button
+            class="btn"
+            id="resetBtn"
+            type="button"
+            aria-label="Reset game"
+          >
+            Reset
+          </button>
+        </div>
 
-      <!-- Game Canvas -->
-      <canvas
-        id="gameCanvas"
-        width="600"
-        height="600"
-        role="img"
-        aria-label="Snake game board - use arrow keys or touch controls to play"
-      ></canvas>
-
-      <!-- Controls -->
-      <div class="controls" role="group" aria-label="Game controls">
-        <button class="btn btn-primary" id="startBtn" aria-label="Start game">
-          Start Game
-        </button>
-        <button class="btn" id="pauseBtn" aria-label="Pause game">Pause</button>
-        <button class="btn" id="resetBtn" aria-label="Reset game">Reset</button>
-      </div>
-
-      <!-- Mobile Controls -->
-      <div
-        class="mobile-controls"
-        role="group"
-        aria-label="Direction controls for mobile"
-      >
-        <button class="direction-btn" data-direction="up" aria-label="Move up">
-          <i class="fas fa-arrow-up" aria-hidden="true"></i>
-        </button>
-        <button
-          class="direction-btn"
-          data-direction="left"
-          aria-label="Move left"
+        <!-- Mobile Controls -->
+        <div
+          class="mobile-controls"
+          role="group"
+          aria-label="Direction controls for mobile"
         >
-          <i class="fas fa-arrow-left" aria-hidden="true"></i>
-        </button>
-        <button
-          class="direction-btn"
-          data-direction="right"
-          aria-label="Move right"
-        >
-          <i class="fas fa-arrow-right" aria-hidden="true"></i>
-        </button>
-        <button
-          class="direction-btn"
-          data-direction="down"
-          aria-label="Move down"
-        >
-          <i class="fas fa-arrow-down" aria-hidden="true"></i>
-        </button>
-      </div>
+          <button
+            class="direction-btn"
+            data-direction="up"
+            aria-label="Move up"
+          >
+            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+          </button>
+          <button
+            class="direction-btn"
+            data-direction="left"
+            aria-label="Move left"
+          >
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          </button>
+          <button
+            class="direction-btn"
+            data-direction="right"
+            aria-label="Move right"
+          >
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </button>
+          <button
+            class="direction-btn"
+            data-direction="down"
+            aria-label="Move down"
+          >
+            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+          </button>
+        </div>
 
-      <!-- Instructions -->
-      <section class="instructions" aria-label="How to play">
-        <h3>
-          <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
-        </h3>
-        <ul>
-          <li>
-            Use arrow keys (desktop) or touch controls (mobile) to move the
-            snake
-          </li>
-          <li>Collect the food (words) to grow your snake and earn points</li>
-          <li>Avoid hitting the walls or your own tail</li>
-          <li>The game speeds up as you progress through levels</li>
-          <li>Try to beat your high score!</li>
-        </ul>
-      </section>
-    </main>
+        <!-- Instructions -->
+        <section class="instructions" aria-label="How to play">
+          <h3>
+            <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
+          </h3>
+          <ul>
+            <li>
+              Use arrow keys (desktop) or touch controls (mobile) to move the
+              snake
+            </li>
+            <li>Collect the food (words) to grow your snake and earn points</li>
+            <li>Avoid hitting the walls or your own tail</li>
+            <li>The game speeds up as you progress through levels</li>
+            <li>Try to beat your high score!</li>
+          </ul>
+        </section>
 
-    <!-- Game Over Modal -->
-    <div
-      class="modal"
-      id="gameOverModal"
-      role="dialog"
-      aria-labelledby="gameOverTitle"
-      aria-modal="true"
-    >
-      <div class="modal-content">
-        <h2 id="gameOverTitle">Game Over!</h2>
-        <p>Your Score: <span id="finalScore">0</span></p>
-        <p>Level Reached: <span id="finalLevel">1</span></p>
-        <button
-          class="btn btn-primary"
-          id="playAgainBtn"
-          aria-label="Play the game again"
+        <!-- Game Over Modal -->
+        <div
+          class="modal"
+          id="gameOverModal"
+          role="dialog"
+          aria-labelledby="gameOverTitle"
+          aria-modal="true"
+          aria-hidden="true"
         >
-          Play Again
-        </button>
-      </div>
+          <div class="modal-content" tabindex="-1">
+            <h2 id="gameOverTitle">Game Over!</h2>
+            <p>Your Score: <span id="finalScore">0</span></p>
+            <p>Level Reached: <span id="finalLevel">1</span></p>
+            <button
+              class="btn btn-primary"
+              id="playAgainBtn"
+              type="button"
+              aria-label="Play the game again"
+            >
+              Play Again
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <aside class="snake-ad-rail" aria-label="Advertisement">
+        <div class="snake-ad-card">
+          <span class="snake-ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="7458136771"
+          ></ins>
+        </div>
+      </aside>
     </div>
+
+    <section class="snake-bottom-ad" aria-label="Advertisement">
+      <span class="snake-ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="9181358543"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
 
     <script>
       // Game Configuration
@@ -931,6 +1502,8 @@
       const powerUpIndicator = document.getElementById("powerUpIndicator");
       const powerUpText = document.getElementById("powerUpText");
       const comboDisplay = document.getElementById("comboDisplay");
+      const fullscreenToggle = document.getElementById("fullscreenToggle");
+      const mainGame = document.getElementById("main-game");
 
       // Initialize
       highScoreEl.textContent = highScore;
@@ -941,8 +1514,16 @@
       resetBtn.addEventListener("click", resetGame);
       playAgainBtn.addEventListener("click", () => {
         gameOverModal.classList.remove("active");
+        gameOverModal.setAttribute("aria-hidden", "true");
         resetGame();
         startGame();
+      });
+
+      gameOverModal.addEventListener("keydown", (event) => {
+        if (event.key === "Tab") {
+          event.preventDefault();
+          playAgainBtn.focus();
+        }
       });
 
       // Keyboard Controls
@@ -992,6 +1573,7 @@
         if (!gameRunning) return;
 
         const key = e.key;
+        if (key.startsWith("Arrow")) e.preventDefault();
         if (key === "ArrowUp" && dy !== 1) {
           dx = 0;
           dy = -1;
@@ -1057,7 +1639,10 @@
           clearInterval(gameLoop);
           pauseBtn.textContent = "Resume";
         } else {
-          gameLoop = setInterval(updateGame, gameSpeed);
+          gameLoop = setInterval(
+            updateGame,
+            speedBoost ? Math.max(30, gameSpeed / 2) : gameSpeed,
+          );
           pauseBtn.textContent = "Pause";
         }
       }
@@ -1081,6 +1666,10 @@
         speedBoost = false;
         powerUpActive = false;
         powerUpIndicator.classList.remove("active");
+        powerUpText.textContent = "Power-up Active!";
+        comboDisplay.classList.remove("show");
+        gameOverModal.classList.remove("active");
+        gameOverModal.setAttribute("aria-hidden", "true");
         startBtn.textContent = "Start Game";
         startBtn.disabled = false;
         pauseBtn.textContent = "Pause";
@@ -1459,7 +2048,9 @@
         if (speedBoost) {
           speedBoost = false;
           clearInterval(gameLoop);
-          gameLoop = setInterval(updateGame, gameSpeed);
+          if (gameRunning && !gamePaused) {
+            gameLoop = setInterval(updateGame, gameSpeed);
+          }
         }
 
         powerUpActive = false;
@@ -1468,15 +2059,110 @@
 
       function gameOver() {
         clearInterval(gameLoop);
+        clearTimeout(comboTimer);
+        clearTimeout(powerUpTimer);
         gameRunning = false;
+        gamePaused = false;
+        invincible = false;
+        speedBoost = false;
+        powerUpActive = false;
+        powerUpIndicator.classList.remove("active");
         startBtn.textContent = "Start Game";
         startBtn.disabled = false;
         pauseBtn.disabled = true;
+        pauseBtn.textContent = "Pause";
 
         finalScoreEl.textContent = score;
         finalLevelEl.textContent = level;
         gameOverModal.classList.add("active");
+        gameOverModal.setAttribute("aria-hidden", "false");
+        playAgainBtn.focus();
       }
+
+      function syncFullscreenButton() {
+        const isFullscreen =
+          document.fullscreenElement === mainGame ||
+          document.webkitFullscreenElement === mainGame ||
+          mainGame.classList.contains("is-fullscreen-fallback");
+        fullscreenToggle.setAttribute("aria-pressed", String(isFullscreen));
+        fullscreenToggle.setAttribute(
+          "aria-label",
+          isFullscreen ? "Exit fullscreen" : "Enter fullscreen without ads",
+        );
+        fullscreenToggle.innerHTML = `<i class="fas ${isFullscreen ? "fa-compress" : "fa-expand"}" aria-hidden="true"></i><span>${isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>`;
+      }
+
+      function setFullscreenFallback(active) {
+        mainGame.classList.toggle("is-fullscreen-fallback", active);
+        document.body.classList.toggle("snake-fullscreen-fallback", active);
+        document.documentElement.classList.toggle(
+          "snake-fullscreen-fallback",
+          active,
+        );
+        syncFullscreenButton();
+      }
+
+      function toggleFullscreen() {
+        const nativeFullscreen =
+          document.fullscreenElement === mainGame ||
+          document.webkitFullscreenElement === mainGame;
+
+        if (mainGame.classList.contains("is-fullscreen-fallback")) {
+          setFullscreenFallback(false);
+          return;
+        }
+
+        if (nativeFullscreen) {
+          const exitRequest = document.exitFullscreen
+            ? document.exitFullscreen()
+            : document.webkitExitFullscreen?.();
+          exitRequest?.catch?.(() => {});
+          return;
+        }
+
+        try {
+          const requestFullscreen =
+            mainGame.requestFullscreen || mainGame.webkitRequestFullscreen;
+          if (typeof requestFullscreen !== "function") {
+            setFullscreenFallback(true);
+            return;
+          }
+
+          const fullscreenRequest = requestFullscreen.call(mainGame);
+          if (
+            fullscreenRequest &&
+            typeof fullscreenRequest.then === "function"
+          ) {
+            fullscreenRequest
+              .then(syncFullscreenButton)
+              .catch(() => setFullscreenFallback(true));
+          }
+
+          window.setTimeout(() => {
+            if (
+              document.fullscreenElement !== mainGame &&
+              document.webkitFullscreenElement !== mainGame &&
+              !mainGame.classList.contains("is-fullscreen-fallback")
+            ) {
+              setFullscreenFallback(true);
+            }
+          }, 1200);
+        } catch {
+          setFullscreenFallback(true);
+        }
+      }
+
+      fullscreenToggle.addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          mainGame.classList.contains("is-fullscreen-fallback")
+        ) {
+          setFullscreenFallback(false);
+        }
+      });
 
       // Initialize game
       resetGame();
@@ -1493,6 +2179,12 @@
         },
         { passive: false },
       );
+    </script>
+    <script src="../js/game-ads.js"></script>
+    <script>
+      window.addEventListener("load", () => window.refreshGameAds?.(), {
+        once: true,
+      });
     </script>
   </body>
 </html>

@@ -385,3 +385,20 @@ window.resetMobileNavigation = function () {
     initializeNavigation();
   }
 };
+
+// Add the shared hero, ad, and section-navigation experience to resource pages.
+if (/\/resources\//.test(window.location.pathname)) {
+  const navigationScript = document.currentScript;
+  if (
+    navigationScript?.src &&
+    !document.querySelector("script[data-resource-page-experience]")
+  ) {
+    const resourceExperience = document.createElement("script");
+    resourceExperience.src = new URL(
+      "resource-page-experience.js",
+      navigationScript.src,
+    ).href;
+    resourceExperience.dataset.resourcePageExperience = "true";
+    document.head.append(resourceExperience);
+  }
+}

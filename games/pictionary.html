@@ -47,7 +47,7 @@
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Play Pictionary ESL - Draw and guess English words in this classic drawing game! 6 vocabulary categories with 200+ words. Improve vocabulary recognition and creative expression through visual learning."
+      content="Play Pictionary ESL - Draw and guess English words in this classic drawing game! 8 vocabulary categories with 200+ words. Improve vocabulary recognition and creative expression through visual learning."
     />
     <meta name="author" content="ESL Fun Online" />
     <meta name="robots" content="index, follow" />
@@ -60,7 +60,7 @@
     />
     <meta
       property="og:description"
-      content="Draw and guess English words in this classic drawing game! 6 categories with 200+ vocabulary words. Perfect for ESL classrooms and solo practice."
+      content="Draw and guess English words in this classic drawing game! 8 categories with 200+ vocabulary words. Perfect for ESL classrooms and solo practice."
     />
     <meta property="og:type" content="website" />
     <meta
@@ -69,7 +69,7 @@
     />
     <meta
       property="og:image"
-      content="https://eslfunonline.com/images/pictionary-og.png"
+      content="https://eslfunonline.com/games/pictionary/image.png"
     />
     <meta property="og:site_name" content="ESL Fun Online" />
     <meta property="og:locale" content="en_US" />
@@ -79,11 +79,11 @@
     <meta name="twitter:title" content="Pictionary ESL - Drawing Word Game" />
     <meta
       name="twitter:description"
-      content="Draw and guess English words! 6 categories with 200+ vocabulary words for ESL learners."
+      content="Draw and guess English words! 8 categories with 200+ vocabulary words for ESL learners."
     />
     <meta
       name="twitter:image"
-      content="https://eslfunonline.com/images/pictionary-og.png"
+      content="https://eslfunonline.com/games/pictionary/image.png"
     />
 
     <!-- Structured Data - VideoGame Schema -->
@@ -92,9 +92,9 @@
         "@context": "https://schema.org",
         "@type": "VideoGame",
         "name": "Pictionary ESL - Drawing Word Game",
-        "description": "Draw and guess English words in this classic drawing game! Improve your vocabulary recognition and creative expression through visual learning. Features 6 categories with 200+ words.",
+        "description": "Draw and guess English words in this classic drawing game! Improve your vocabulary recognition and creative expression through visual learning. Features 8 categories with 200+ words.",
         "url": "https://eslfunonline.com/games/pictionary.html",
-        "image": "https://eslfunonline.com/images/pictionary-og.png",
+        "image": "https://eslfunonline.com/games/pictionary/image.png",
         "author": {
           "@type": "Organization",
           "name": "ESL Fun Online",
@@ -174,7 +174,7 @@
             "name": "What categories are available in Pictionary ESL?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The game includes 6 vocabulary categories: Animals, Food, Sports, Household items, Nature, and Actions. Each category contains dozens of words appropriate for ESL learners."
+              "text": "The game includes 8 vocabulary categories: Animals, Food & Drink, Everyday Objects, Nature, Sports & Activities, Actions & Verbs, Places, and Emotions & Feelings. Each category contains words appropriate for ESL learners."
             }
           },
           {
@@ -498,15 +498,19 @@
         color: #f59e0b;
       }
 
-      .category-card h4 {
+      .category-card-title {
+        display: block;
         margin: 0.5rem 0;
         color: #e2e8f0;
+        font-weight: 700;
       }
 
-      .category-card p {
+      .category-card-description {
+        display: block;
         margin: 0;
         font-size: 0.85rem;
         color: #94a3b8;
+        line-height: 1.45;
       }
 
       .btn-start {
@@ -885,6 +889,475 @@
           padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
         }
       }
+
+      /* Pictionary play layout and refreshed visual system */
+      body {
+        background-color: #10152e;
+        background-image:
+          linear-gradient(
+            145deg,
+            rgba(12, 20, 48, 0.86),
+            rgba(32, 21, 69, 0.78)
+          ),
+          url("../images/game-bg-purple.jpg");
+        background-attachment: fixed;
+      }
+
+      body::before {
+        background:
+          radial-gradient(
+            ellipse at 12% 5%,
+            rgba(96, 165, 250, 0.2),
+            transparent 38%
+          ),
+          radial-gradient(
+            ellipse at 88% 20%,
+            rgba(192, 132, 252, 0.18),
+            transparent 42%
+          ),
+          linear-gradient(180deg, rgba(8, 15, 38, 0.08), rgba(8, 15, 38, 0.44));
+      }
+
+      .game-nav-header {
+        background: rgba(10, 16, 39, 0.74);
+        border-bottom-color: rgba(191, 219, 254, 0.16);
+        backdrop-filter: blur(18px);
+      }
+
+      .game-title {
+        font-weight: 750;
+        letter-spacing: 0.01em;
+      }
+
+      .pictionary-page-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 336px;
+        align-items: start;
+        gap: 22px;
+        width: min(1500px, calc(100% - 32px));
+        margin: 24px auto 0;
+      }
+
+      .pictionary-page-layout > #main-game {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      .game-header {
+        position: relative;
+        margin-bottom: 1rem;
+        padding: 0 9rem 0.25rem;
+      }
+
+      .game-header h1 {
+        color: #f8fafc;
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        letter-spacing: -0.035em;
+      }
+
+      .game-header h1 i {
+        color: #fbbf24;
+      }
+
+      .game-header p {
+        color: #cbd5e1;
+      }
+
+      .setup-screen,
+      .game-screen {
+        padding: clamp(1rem, 3vw, 2rem);
+        border: 1px solid rgba(226, 232, 240, 0.18);
+        border-radius: 22px;
+        background: linear-gradient(
+          150deg,
+          rgba(24, 35, 70, 0.88),
+          rgba(28, 25, 67, 0.9)
+        );
+        box-shadow: 0 24px 64px rgba(3, 7, 18, 0.35);
+        backdrop-filter: blur(18px);
+      }
+
+      .instructions {
+        margin-top: 0;
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        border-left: 4px solid #60a5fa;
+        background: rgba(30, 64, 175, 0.15);
+      }
+
+      .instructions h3,
+      .category-selection h3 {
+        color: #f8fafc;
+      }
+
+      .instructions li {
+        color: #dbeafe;
+        line-height: 1.55;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      }
+
+      .category-card {
+        min-height: 160px;
+        color: #f8fafc;
+        font: inherit;
+        text-align: center;
+      }
+
+      .category-card.selected {
+        border-color: #a78bfa;
+        background: linear-gradient(
+          145deg,
+          rgba(99, 102, 241, 0.35),
+          rgba(139, 92, 246, 0.24)
+        );
+        box-shadow:
+          0 0 0 2px rgba(167, 139, 250, 0.18),
+          var(--shadow-md);
+      }
+
+      .category-card-description {
+        color: #cbd5e1;
+      }
+
+      .category-card:focus-visible {
+        outline: 3px solid #fbbf24;
+        outline-offset: 3px;
+      }
+
+      .btn-start,
+      .btn-control,
+      .tool-btn {
+        min-height: 44px;
+        transition:
+          transform 160ms ease,
+          filter 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .btn-start:hover:not(:disabled),
+      .btn-control:hover,
+      .tool-btn:hover {
+        filter: brightness(1.08);
+      }
+
+      .game-info {
+        align-items: stretch;
+      }
+
+      .word-display {
+        min-height: 66px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: linear-gradient(120deg, #4f46e5, #7c3aed);
+        box-shadow: 0 12px 28px rgba(79, 70, 229, 0.24);
+      }
+
+      .word-display.hidden-word {
+        background: linear-gradient(120deg, #334155, #475569);
+      }
+
+      .timer-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(15, 23, 42, 0.74);
+        white-space: nowrap;
+      }
+
+      .canvas-container {
+        overflow: hidden;
+        padding: clamp(0.5rem, 1.5vw, 1rem);
+        border: 1px solid rgba(148, 163, 184, 0.72);
+        border-radius: 18px;
+        background: #f8fafc;
+        box-shadow: 0 16px 34px rgba(2, 6, 23, 0.24);
+      }
+
+      #drawingCanvas {
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        border: 1px solid #cbd5e1;
+        background-color: #fff;
+        touch-action: none;
+      }
+
+      .drawing-tools {
+        gap: 0.75rem;
+        justify-content: space-between;
+        border-color: rgba(203, 213, 225, 0.18);
+        background: rgba(15, 23, 42, 0.58);
+      }
+
+      .tool-group {
+        padding: 0.25rem;
+      }
+
+      .tool-label {
+        color: #dbeafe;
+      }
+
+      .tool-btn {
+        border-radius: 10px;
+      }
+
+      .color-btn {
+        flex: 0 0 auto;
+      }
+
+      .game-controls {
+        align-items: center;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .btn-reveal {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      }
+
+      .btn-new-word {
+        background: linear-gradient(135deg, #059669, #10b981);
+      }
+
+      .pictionary-fullscreen-toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid rgba(226, 232, 240, 0.24);
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.72);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+      }
+
+      .pictionary-ad-rail {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1rem;
+      }
+
+      .pictionary-ad-card {
+        display: grid;
+        width: 100%;
+        min-height: 292px;
+        align-content: start;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 0;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        background: rgba(5, 10, 27, 0.45);
+      }
+
+      .pictionary-ad-label {
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .pictionary-ad-card .adsbygoogle {
+        display: inline-block;
+        width: 300px;
+        height: 250px;
+      }
+
+      .pictionary-bottom-ad {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        width: min(1200px, calc(100% - 32px));
+        min-height: 120px;
+        justify-items: center;
+        gap: 8px;
+        margin: 22px auto 0;
+        padding: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        background: rgba(8, 15, 35, 0.72);
+      }
+
+      .pictionary-bottom-ad .adsbygoogle {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+
+      #main-game:fullscreen,
+      #main-game:-webkit-full-screen,
+      #main-game.is-fullscreen-fallback {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        height: 100dvh;
+        margin: 0;
+        padding: max(1rem, env(safe-area-inset-top))
+          max(1rem, env(safe-area-inset-right))
+          max(1rem, env(safe-area-inset-bottom))
+          max(1rem, env(safe-area-inset-left));
+        overflow: auto;
+        border-radius: 0;
+        background: linear-gradient(145deg, #102447, #31215f 58%, #102d55);
+      }
+
+      #main-game:fullscreen .game-header,
+      #main-game:-webkit-full-screen .game-header,
+      #main-game.is-fullscreen-fallback .game-header {
+        display: block;
+      }
+
+      body.pictionary-fullscreen-fallback,
+      html.pictionary-fullscreen-fallback {
+        overflow: hidden;
+      }
+
+      body.pictionary-fullscreen-fallback .game-nav-header,
+      body.pictionary-fullscreen-fallback .pictionary-ad-rail,
+      body.pictionary-fullscreen-fallback .pictionary-bottom-ad,
+      body.pictionary-fullscreen-fallback .game-footer {
+        display: none !important;
+      }
+
+      @media (max-width: 1050px) {
+        .pictionary-page-layout {
+          grid-template-columns: minmax(0, 1fr);
+          width: min(900px, calc(100% - 32px));
+        }
+
+        .pictionary-ad-card {
+          width: min(100%, 332px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .pictionary-page-layout {
+          width: calc(100% - 20px);
+          margin-top: 12px;
+        }
+
+        .game-header {
+          padding: 3.5rem 0 0;
+        }
+
+        .game-header h1 {
+          font-size: 1.75rem;
+        }
+
+        .game-info {
+          gap: 0.65rem;
+        }
+
+        .drawing-tools {
+          align-items: stretch;
+        }
+
+        .tool-group {
+          flex-wrap: wrap;
+        }
+
+        .pictionary-bottom-ad {
+          width: calc(100% - 20px);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .game-nav-header {
+          gap: 0.5rem;
+          padding-inline: 0.65rem;
+        }
+
+        .nav-left {
+          gap: 0.35rem;
+        }
+
+        .nav-btn {
+          padding: 0.5rem 0.65rem;
+        }
+
+        .game-title {
+          gap: 0.3rem;
+          font-size: 0.9rem;
+        }
+
+        .category-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.65rem;
+        }
+
+        .category-card {
+          min-height: 145px;
+          padding: 0.9rem 0.55rem;
+        }
+
+        .game-controls {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .game-controls .btn-control:last-child {
+          grid-column: 1 / -1;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .game-title {
+          font-size: 0.78rem;
+        }
+
+        .nav-btn {
+          gap: 0.3rem;
+          padding-inline: 0.5rem;
+          font-size: 0.72rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .category-card,
+        .btn-start,
+        .btn-control,
+        .tool-btn,
+        .color-btn {
+          transition: none;
+        }
+      }
     </style>
   </head>
 
@@ -907,223 +1380,295 @@
       </div>
     </header>
 
-    <main id="main-game" class="game-container" role="main">
-      <header class="game-header">
-        <h1>
-          <i class="fas fa-paint-brush" aria-hidden="true"></i> Pictionary ESL
-        </h1>
-        <p>Draw vocabulary words and let others guess!</p>
-      </header>
-
-      <!-- Setup Screen -->
-      <div
-        id="setupScreen"
-        class="setup-screen"
-        role="region"
-        aria-label="Game Setup"
-      >
-        <div class="instructions">
-          <h3>
-            <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
-          </h3>
-          <ul>
-            <li>Choose a category to practice vocabulary</li>
-            <li>Click "Start Drawing" to get your first word</li>
-            <li>Draw the word on the canvas (no writing letters!)</li>
-            <li>Use the drawing tools to create your picture</li>
-            <li>Click "Reveal Word" to check your drawing</li>
-            <li>Perfect for solo practice or group games!</li>
-          </ul>
-        </div>
-
-        <div class="category-selection">
-          <h3>
-            <i class="fas fa-th-large" aria-hidden="true"></i> Choose a Category
-          </h3>
-          <div
-            class="category-grid"
-            id="categoryGrid"
-            role="group"
-            aria-label="Vocabulary category selection"
-          ></div>
-        </div>
-
-        <div style="text-align: center">
+    <div class="pictionary-page-layout">
+      <main id="main-game" class="game-container" role="main">
+        <header class="game-header">
+          <h1>
+            <i class="fas fa-paint-brush" aria-hidden="true"></i> Pictionary ESL
+          </h1>
+          <p>Draw vocabulary words and let others guess!</p>
           <button
-            id="startGameBtn"
-            class="btn-start"
-            disabled
-            aria-label="Start drawing game"
+            class="pictionary-fullscreen-toggle"
+            id="fullscreenToggle"
+            type="button"
+            aria-label="Enter fullscreen without ads"
+            aria-pressed="false"
           >
-            <i class="fas fa-play" aria-hidden="true"></i> Start Drawing
+            <i class="fas fa-expand" aria-hidden="true"></i>
+            <span>Fullscreen</span>
           </button>
-        </div>
-      </div>
+        </header>
 
-      <!-- Game Screen -->
-      <div
-        id="gameScreen"
-        class="game-screen"
-        role="region"
-        aria-label="Active Game"
-      >
-        <div class="game-info">
-          <div
-            class="word-display"
-            id="wordDisplay"
-            role="status"
+        <!-- Setup Screen -->
+        <div
+          id="setupScreen"
+          class="setup-screen"
+          role="region"
+          aria-label="Game Setup"
+        >
+          <div class="instructions">
+            <h3>
+              <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
+            </h3>
+            <ul>
+              <li>Choose a category to practice vocabulary</li>
+              <li>Click "Start Drawing" to get your first word</li>
+              <li>Draw the word on the canvas (no writing letters!)</li>
+              <li>Use the drawing tools to create your picture</li>
+              <li>
+                Reveal the word to check your drawing; hide it to resume the
+                timer
+              </li>
+              <li>Perfect for solo practice or group games!</li>
+            </ul>
+          </div>
+
+          <div class="category-selection">
+            <h3>
+              <i class="fas fa-th-large" aria-hidden="true"></i> Choose a
+              Category
+            </h3>
+            <div
+              class="category-grid"
+              id="categoryGrid"
+              role="group"
+              aria-label="Vocabulary category selection"
+            ></div>
+          </div>
+
+          <div style="text-align: center">
+            <button
+              id="startGameBtn"
+              class="btn-start"
+              disabled
+              aria-label="Start drawing game"
+            >
+              <i class="fas fa-play" aria-hidden="true"></i> Start Drawing
+            </button>
+          </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div
+          id="gameScreen"
+          class="game-screen"
+          role="region"
+          aria-label="Active Game"
+        >
+          <div class="game-info">
+            <div
+              class="word-display"
+              id="wordDisplay"
+              role="status"
+              aria-live="polite"
+            >
+              <span id="currentWord">CLICK TO START</span>
+            </div>
+            <div
+              class="timer-display"
+              id="timerDisplay"
+              role="timer"
+              aria-live="off"
+              aria-label="Time remaining"
+            >
+              <i class="fas fa-clock" aria-hidden="true"></i>
+              <span id="timer">60</span>s
+            </div>
+          </div>
+
+          <div class="canvas-container">
+            <canvas
+              id="drawingCanvas"
+              width="800"
+              height="600"
+              tabindex="0"
+              role="img"
+              aria-label="Drawing canvas - use mouse or touch to draw"
+            ></canvas>
+          </div>
+
+          <div class="drawing-tools" role="toolbar" aria-label="Drawing tools">
+            <div class="tool-group" role="group" aria-label="Tool selection">
+              <span class="tool-label" id="tool-label">Tool:</span>
+              <button
+                class="tool-btn active"
+                data-tool="pen"
+                title="Pen"
+                aria-label="Pen tool"
+                aria-pressed="true"
+              >
+                <i class="fas fa-pen" aria-hidden="true"></i>
+              </button>
+              <button
+                class="tool-btn"
+                data-tool="eraser"
+                title="Eraser"
+                aria-label="Eraser tool"
+                aria-pressed="false"
+              >
+                <i class="fas fa-eraser" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="tool-group" role="group" aria-label="Color selection">
+              <span class="tool-label">Color:</span>
+              <button
+                class="color-btn active"
+                data-color="#000000"
+                style="background-color: #000000"
+                title="Black"
+                aria-label="Black color"
+                aria-pressed="true"
+              ></button>
+              <button
+                class="color-btn"
+                data-color="#ef4444"
+                style="background-color: #ef4444"
+                title="Red"
+                aria-label="Red color"
+                aria-pressed="false"
+              ></button>
+              <button
+                class="color-btn"
+                data-color="#3b82f6"
+                style="background-color: #3b82f6"
+                title="Blue"
+                aria-label="Blue color"
+                aria-pressed="false"
+              ></button>
+              <button
+                class="color-btn"
+                data-color="#10b981"
+                style="background-color: #10b981"
+                title="Green"
+                aria-label="Green color"
+                aria-pressed="false"
+              ></button>
+              <button
+                class="color-btn"
+                data-color="#f59e0b"
+                style="background-color: #f59e0b"
+                title="Orange"
+                aria-label="Orange color"
+                aria-pressed="false"
+              ></button>
+              <button
+                class="color-btn"
+                data-color="#8b5cf6"
+                style="background-color: #8b5cf6"
+                title="Purple"
+                aria-label="Purple color"
+                aria-pressed="false"
+              ></button>
+            </div>
+
+            <div class="tool-group">
+              <label for="brushSize" class="tool-label">Size:</label>
+              <input
+                type="range"
+                id="brushSize"
+                min="1"
+                max="20"
+                value="3"
+                aria-label="Brush size"
+              />
+              <span id="sizeValue" aria-live="polite">3</span>px
+            </div>
+
+            <div class="tool-group">
+              <button
+                class="tool-btn"
+                id="clearBtn"
+                type="button"
+                title="Clear Canvas"
+                aria-label="Clear canvas"
+              >
+                <i class="fas fa-trash" aria-hidden="true"></i> Clear
+              </button>
+              <button
+                class="tool-btn"
+                id="undoBtn"
+                type="button"
+                title="Undo last stroke"
+                aria-label="Undo last stroke"
+                disabled
+              >
+                <i class="fas fa-rotate-left" aria-hidden="true"></i> Undo
+              </button>
+            </div>
+          </div>
+
+          <div class="game-controls" role="group" aria-label="Game controls">
+            <button
+              id="revealBtn"
+              class="btn-control btn-reveal"
+              type="button"
+              aria-label="Reveal the word"
+              aria-expanded="false"
+              aria-controls="currentWord"
+            >
+              <i class="fas fa-eye" aria-hidden="true"></i> Reveal Word
+            </button>
+            <button
+              id="pauseTimerBtn"
+              class="btn-control btn-change-category"
+              type="button"
+              aria-label="Pause timer"
+              aria-pressed="false"
+            >
+              <i class="fas fa-pause" aria-hidden="true"></i> Pause
+            </button>
+            <button
+              id="newWordBtn"
+              class="btn-control btn-new-word"
+              type="button"
+              aria-label="Get a new word"
+            >
+              <i class="fas fa-sync-alt" aria-hidden="true"></i> New Word
+            </button>
+            <button
+              id="changeCategoryBtn"
+              class="btn-control btn-change-category"
+              type="button"
+              aria-label="Change vocabulary category"
+            >
+              <i class="fas fa-exchange-alt" aria-hidden="true"></i> Change
+              Category
+            </button>
+          </div>
+          <p
+            id="gameAnnouncement"
+            class="sr-only"
             aria-live="polite"
-          >
-            <span id="currentWord">CLICK TO START</span>
-          </div>
-          <div
-            class="timer-display"
-            id="timerDisplay"
-            role="timer"
-            aria-live="polite"
-            aria-label="Time remaining"
-          >
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span id="timer">60</span>s
-          </div>
+            aria-atomic="true"
+          ></p>
         </div>
+      </main>
 
-        <div class="canvas-container">
-          <canvas
-            id="drawingCanvas"
-            width="800"
-            height="600"
-            role="img"
-            aria-label="Drawing canvas - use mouse or touch to draw"
-          ></canvas>
+      <aside class="pictionary-ad-rail" aria-label="Advertisement">
+        <div class="pictionary-ad-card">
+          <span class="pictionary-ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="5398026204"
+          ></ins>
         </div>
+      </aside>
+    </div>
 
-        <div class="drawing-tools" role="toolbar" aria-label="Drawing tools">
-          <div class="tool-group" role="group" aria-label="Tool selection">
-            <span class="tool-label" id="tool-label">Tool:</span>
-            <button
-              class="tool-btn active"
-              data-tool="pen"
-              title="Pen"
-              aria-label="Pen tool"
-              aria-pressed="true"
-            >
-              <i class="fas fa-pen" aria-hidden="true"></i>
-            </button>
-            <button
-              class="tool-btn"
-              data-tool="eraser"
-              title="Eraser"
-              aria-label="Eraser tool"
-              aria-pressed="false"
-            >
-              <i class="fas fa-eraser" aria-hidden="true"></i>
-            </button>
-          </div>
-
-          <div class="tool-group" role="group" aria-label="Color selection">
-            <span class="tool-label">Color:</span>
-            <button
-              class="color-btn active"
-              data-color="#000000"
-              style="background-color: #000000"
-              title="Black"
-              aria-label="Black color"
-              aria-pressed="true"
-            ></button>
-            <button
-              class="color-btn"
-              data-color="#ef4444"
-              style="background-color: #ef4444"
-              title="Red"
-              aria-label="Red color"
-              aria-pressed="false"
-            ></button>
-            <button
-              class="color-btn"
-              data-color="#3b82f6"
-              style="background-color: #3b82f6"
-              title="Blue"
-              aria-label="Blue color"
-              aria-pressed="false"
-            ></button>
-            <button
-              class="color-btn"
-              data-color="#10b981"
-              style="background-color: #10b981"
-              title="Green"
-              aria-label="Green color"
-              aria-pressed="false"
-            ></button>
-            <button
-              class="color-btn"
-              data-color="#f59e0b"
-              style="background-color: #f59e0b"
-              title="Orange"
-              aria-label="Orange color"
-              aria-pressed="false"
-            ></button>
-            <button
-              class="color-btn"
-              data-color="#8b5cf6"
-              style="background-color: #8b5cf6"
-              title="Purple"
-              aria-label="Purple color"
-              aria-pressed="false"
-            ></button>
-          </div>
-
-          <div class="tool-group">
-            <label for="brushSize" class="tool-label">Size:</label>
-            <input
-              type="range"
-              id="brushSize"
-              min="1"
-              max="20"
-              value="3"
-              aria-label="Brush size"
-            />
-            <span id="sizeValue" aria-live="polite">3</span>px
-          </div>
-
-          <div class="tool-group">
-            <button
-              class="tool-btn"
-              id="clearBtn"
-              title="Clear Canvas"
-              aria-label="Clear canvas"
-            >
-              <i class="fas fa-trash" aria-hidden="true"></i> Clear
-            </button>
-          </div>
-        </div>
-
-        <div class="game-controls" role="group" aria-label="Game controls">
-          <button
-            id="revealBtn"
-            class="btn-control btn-reveal"
-            aria-label="Reveal the word"
-          >
-            <i class="fas fa-eye" aria-hidden="true"></i> Reveal Word
-          </button>
-          <button
-            id="newWordBtn"
-            class="btn-control btn-new-word"
-            aria-label="Get a new word"
-          >
-            <i class="fas fa-sync-alt" aria-hidden="true"></i> New Word
-          </button>
-          <button
-            id="changeCategoryBtn"
-            class="btn-control btn-change-category"
-            aria-label="Change vocabulary category"
-          >
-            <i class="fas fa-exchange-alt" aria-hidden="true"></i> Change
-            Category
-          </button>
-        </div>
-      </div>
-    </main>
+    <section class="pictionary-bottom-ad" aria-label="Advertisement">
+      <span class="pictionary-ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="6971051613"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
 
     <script>
       // Word categories
@@ -1403,11 +1948,14 @@
       let currentWordIndex = 0;
       let wordRevealed = false;
       let timerInterval = null;
+      let timerPaused = false;
       let timeRemaining = 60;
+      const canvasHistory = [];
+      const maxCanvasHistory = 20;
 
       // Canvas setup
       const canvas = document.getElementById("drawingCanvas");
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
       let isDrawing = false;
       let currentTool = "pen";
       let currentColor = "#000000";
@@ -1423,24 +1971,32 @@
       const timerDisplay = document.getElementById("timerDisplay");
       const timer = document.getElementById("timer");
       const revealBtn = document.getElementById("revealBtn");
+      const pauseTimerBtn = document.getElementById("pauseTimerBtn");
       const newWordBtn = document.getElementById("newWordBtn");
       const changeCategoryBtn = document.getElementById("changeCategoryBtn");
       const clearBtn = document.getElementById("clearBtn");
+      const undoBtn = document.getElementById("undoBtn");
       const brushSizeInput = document.getElementById("brushSize");
       const sizeValue = document.getElementById("sizeValue");
+      const gameAnnouncement = document.getElementById("gameAnnouncement");
+      const fullscreenToggle = document.getElementById("fullscreenToggle");
+      const mainGame = document.getElementById("main-game");
+      let fullscreenFallbackActive = false;
 
       // Initialize categories
       function initializeCategories() {
         Object.keys(categories).forEach((key) => {
           const category = categories[key];
-          const card = document.createElement("div");
+          const card = document.createElement("button");
           card.className = "category-card";
+          card.type = "button";
+          card.setAttribute("aria-pressed", "false");
           card.innerHTML = `
             <i class="fas ${category.icon}"></i>
-            <h4>${category.name}</h4>
-            <p>${category.description}</p>
+            <span class="category-card-title">${category.name}</span>
+            <span class="category-card-description">${category.description}</span>
           `;
-          card.onclick = () => selectCategory(key, card);
+          card.addEventListener("click", () => selectCategory(key, card));
           categoryGrid.appendChild(card);
         });
       }
@@ -1449,8 +2005,10 @@
       function selectCategory(key, element) {
         document.querySelectorAll(".category-card").forEach((card) => {
           card.classList.remove("selected");
+          card.setAttribute("aria-pressed", "false");
         });
         element.classList.add("selected");
+        element.setAttribute("aria-pressed", "true");
         selectedCategory = key;
         startGameBtn.disabled = false;
       }
@@ -1465,7 +2023,7 @@
         gameScreen.classList.add("active");
 
         loadNewWord();
-        startTimer();
+        canvas.focus?.();
       });
 
       // Load new word
@@ -1475,23 +2033,63 @@
           currentWordIndex = 0;
         }
 
-        currentWord.textContent = availableWords[currentWordIndex];
         wordRevealed = false;
         wordDisplay.classList.add("hidden-word");
         currentWord.textContent = "❓ ❓ ❓";
+        updateRevealButton();
+        pauseTimerBtn.disabled = false;
+        gameAnnouncement.textContent =
+          "New drawing word ready. The word is hidden.";
         clearCanvas();
         resetTimer();
         currentWordIndex++;
       }
 
-      // Reveal word
+      // Toggle word visibility; revealing pauses the timer, hiding resumes it.
+      function updateRevealButton() {
+        const label = wordRevealed ? "Hide Word" : "Reveal Word";
+        revealBtn.setAttribute(
+          "aria-label",
+          wordRevealed ? "Hide the word" : "Reveal the word",
+        );
+        revealBtn.setAttribute("aria-expanded", String(wordRevealed));
+        revealBtn.innerHTML = `<i class="fas ${wordRevealed ? "fa-eye-slash" : "fa-eye"}" aria-hidden="true"></i> ${label}`;
+      }
+
+      function revealWord(timeUp = false) {
+        if (availableWords.length === 0) return;
+
+        wordRevealed = true;
+        currentWord.textContent =
+          availableWords[currentWordIndex - 1].toUpperCase();
+        wordDisplay.classList.remove("hidden-word");
+        stopTimer();
+        updateRevealButton();
+        pauseTimerBtn.disabled = true;
+        gameAnnouncement.textContent = timeUp
+          ? `Time is up. The word was ${currentWord.textContent}.`
+          : `The word is ${currentWord.textContent}. The timer is paused.`;
+      }
+
+      function hideWord() {
+        if (!wordRevealed) return;
+
+        wordRevealed = false;
+        currentWord.textContent = "❓ ❓ ❓";
+        wordDisplay.classList.add("hidden-word");
+        updateRevealButton();
+        pauseTimerBtn.disabled = timeRemaining <= 0;
+        if (timeRemaining > 0) {
+          startTimer(false);
+          gameAnnouncement.textContent = "Word hidden. Timer resumed.";
+        }
+      }
+
       revealBtn.addEventListener("click", () => {
-        if (!wordRevealed) {
-          currentWord.textContent =
-            availableWords[currentWordIndex - 1].toUpperCase();
-          wordDisplay.classList.remove("hidden-word");
-          wordRevealed = true;
-          stopTimer();
+        if (wordRevealed) {
+          hideWord();
+        } else {
+          revealWord();
         }
       });
 
@@ -1505,15 +2103,23 @@
         setupScreen.classList.remove("hidden");
         document.querySelectorAll(".category-card").forEach((card) => {
           card.classList.remove("selected");
+          card.setAttribute("aria-pressed", "false");
         });
         startGameBtn.disabled = true;
+        selectedCategory = null;
+        wordRevealed = false;
+        pauseTimerBtn.disabled = false;
         clearCanvas();
       });
 
       // Timer functions
-      function startTimer() {
-        timeRemaining = 60;
+      function startTimer(reset = true) {
+        stopTimer();
+        if (reset) timeRemaining = 60;
+        timerPaused = false;
         updateTimerDisplay();
+        updatePauseButton();
+        if (timeRemaining <= 0) return;
 
         timerInterval = setInterval(() => {
           timeRemaining--;
@@ -1522,24 +2128,45 @@
           if (timeRemaining <= 0) {
             stopTimer();
             if (!wordRevealed) {
-              alert(
-                "Time's up! The word was: " +
-                  availableWords[currentWordIndex - 1],
-              );
-              revealBtn.click();
+              revealWord(true);
             }
           }
         }, 1000);
+        updatePauseButton();
       }
 
       function stopTimer() {
         clearInterval(timerInterval);
+        timerInterval = null;
+        updatePauseButton();
       }
 
       function resetTimer() {
-        stopTimer();
-        startTimer();
+        startTimer(true);
       }
+
+      function updatePauseButton() {
+        const isPaused = timerPaused && !wordRevealed;
+        pauseTimerBtn.setAttribute("aria-pressed", String(isPaused));
+        pauseTimerBtn.setAttribute(
+          "aria-label",
+          isPaused ? "Resume timer" : "Pause timer",
+        );
+        pauseTimerBtn.innerHTML = `<i class="fas ${isPaused ? "fa-play" : "fa-pause"}" aria-hidden="true"></i> ${isPaused ? "Resume" : "Pause"}`;
+      }
+
+      pauseTimerBtn.addEventListener("click", () => {
+        if (timerInterval !== null) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          timerPaused = true;
+          gameAnnouncement.textContent = "Timer paused.";
+        } else if (timerPaused && timeRemaining > 0 && !wordRevealed) {
+          startTimer(false);
+          gameAnnouncement.textContent = "Timer resumed.";
+        }
+        updatePauseButton();
+      });
 
       function updateTimerDisplay() {
         timer.textContent = timeRemaining;
@@ -1552,72 +2179,81 @@
         }
       }
 
-      // Canvas drawing
-      canvas.addEventListener("mousedown", startDrawing);
-      canvas.addEventListener("mousemove", draw);
-      canvas.addEventListener("mouseup", stopDrawing);
-      canvas.addEventListener("mouseout", stopDrawing);
+      // Pointer Events unify mouse, pen, and touch; scaled coordinates keep
+      // strokes aligned when the canvas is responsively resized.
+      canvas.addEventListener("pointerdown", startDrawing);
+      canvas.addEventListener("pointermove", draw);
+      canvas.addEventListener("pointerup", stopDrawing);
+      canvas.addEventListener("pointercancel", stopDrawing);
+      canvas.addEventListener("lostpointercapture", stopDrawing);
 
-      // Touch support
-      canvas.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        });
-        canvas.dispatchEvent(mouseEvent);
-      });
-
-      canvas.addEventListener("touchmove", (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousemove", {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        });
-        canvas.dispatchEvent(mouseEvent);
-      });
-
-      canvas.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        const mouseEvent = new MouseEvent("mouseup", {});
-        canvas.dispatchEvent(mouseEvent);
-      });
+      function canvasPoint(event) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (event.clientX - rect.left) * (canvas.width / rect.width),
+          y: (event.clientY - rect.top) * (canvas.height / rect.height),
+        };
+      }
 
       function startDrawing(e) {
+        if (!gameScreen.classList.contains("active") || wordRevealed) return;
+        e.preventDefault();
         isDrawing = true;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
+        saveCanvasState();
+        const { x, y } = canvasPoint(e);
+        ctx.strokeStyle = currentTool === "eraser" ? "#ffffff" : currentColor;
+        ctx.lineWidth = currentTool === "eraser" ? brushSize * 3 : brushSize;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
         ctx.moveTo(x, y);
+        canvas.setPointerCapture?.(e.pointerId);
       }
 
       function draw(e) {
         if (!isDrawing) return;
 
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
+        const { x, y } = canvasPoint(e);
         ctx.lineTo(x, y);
-        ctx.strokeStyle = currentTool === "eraser" ? "#ffffff" : currentColor;
-        ctx.lineWidth = currentTool === "eraser" ? brushSize * 3 : brushSize;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
         ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
       }
 
-      function stopDrawing() {
+      function stopDrawing(e) {
+        if (!isDrawing) return;
         isDrawing = false;
         ctx.beginPath();
+        if (
+          e?.pointerId !== undefined &&
+          canvas.hasPointerCapture?.(e.pointerId)
+        ) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
       }
 
-      function clearCanvas() {
+      function saveCanvasState() {
+        canvasHistory.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        if (canvasHistory.length > maxCanvasHistory) canvasHistory.shift();
+        undoBtn.disabled = canvasHistory.length === 0;
+      }
+
+      function clearCanvas(saveHistory = false) {
+        if (saveHistory) {
+          saveCanvasState();
+        } else {
+          canvasHistory.length = 0;
+          undoBtn.disabled = true;
+        }
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function undoCanvas() {
+        const previousCanvas = canvasHistory.pop();
+        if (!previousCanvas) return;
+        ctx.putImageData(previousCanvas, 0, 0);
+        undoBtn.disabled = canvasHistory.length === 0;
       }
 
       // Tool selection
@@ -1625,8 +2261,10 @@
         btn.addEventListener("click", () => {
           document.querySelectorAll(".tool-btn[data-tool]").forEach((b) => {
             b.classList.remove("active");
+            b.setAttribute("aria-pressed", "false");
           });
           btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
           currentTool = btn.dataset.tool;
         });
       });
@@ -1636,8 +2274,10 @@
         btn.addEventListener("click", () => {
           document.querySelectorAll(".color-btn").forEach((b) => {
             b.classList.remove("active");
+            b.setAttribute("aria-pressed", "false");
           });
           btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
           currentColor = btn.dataset.color;
 
           // Switch to pen if eraser is active
@@ -1654,7 +2294,98 @@
       });
 
       // Clear button
-      clearBtn.addEventListener("click", clearCanvas);
+      clearBtn.addEventListener("click", () => clearCanvas(true));
+      undoBtn.addEventListener("click", undoCanvas);
+
+      function syncFullscreenButton() {
+        const isFullscreen =
+          document.fullscreenElement === mainGame ||
+          document.webkitFullscreenElement === mainGame ||
+          fullscreenFallbackActive;
+        fullscreenToggle.setAttribute("aria-pressed", String(isFullscreen));
+        fullscreenToggle.setAttribute(
+          "aria-label",
+          isFullscreen ? "Exit fullscreen" : "Enter fullscreen without ads",
+        );
+        fullscreenToggle.title = isFullscreen
+          ? "Exit fullscreen"
+          : "Enter fullscreen without ads";
+        fullscreenToggle.innerHTML = `<i class="fas ${isFullscreen ? "fa-compress" : "fa-expand"}" aria-hidden="true"></i><span>${isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>`;
+      }
+
+      function setFullscreenFallback(active) {
+        fullscreenFallbackActive = active;
+        mainGame.classList.toggle("is-fullscreen-fallback", active);
+        document.body.classList.toggle(
+          "pictionary-fullscreen-fallback",
+          active,
+        );
+        document.documentElement.classList.toggle(
+          "pictionary-fullscreen-fallback",
+          active,
+        );
+        syncFullscreenButton();
+      }
+
+      function toggleFullscreen() {
+        const nativeFullscreen =
+          document.fullscreenElement === mainGame ||
+          document.webkitFullscreenElement === mainGame;
+
+        if (fullscreenFallbackActive) {
+          setFullscreenFallback(false);
+          return;
+        }
+
+        if (nativeFullscreen) {
+          const exitRequest = document.exitFullscreen
+            ? document.exitFullscreen()
+            : document.webkitExitFullscreen?.();
+          exitRequest?.catch?.(() => {});
+          return;
+        }
+
+        try {
+          let fullscreenRequest;
+          if (mainGame.requestFullscreen) {
+            fullscreenRequest = mainGame.requestFullscreen();
+          } else if (mainGame.webkitRequestFullscreen) {
+            fullscreenRequest = mainGame.webkitRequestFullscreen();
+          } else {
+            setFullscreenFallback(true);
+            return;
+          }
+
+          if (
+            fullscreenRequest &&
+            typeof fullscreenRequest.then === "function"
+          ) {
+            fullscreenRequest
+              .then(syncFullscreenButton)
+              .catch(() => setFullscreenFallback(true));
+          }
+          window.setTimeout(() => {
+            if (
+              document.fullscreenElement !== mainGame &&
+              document.webkitFullscreenElement !== mainGame &&
+              !fullscreenFallbackActive
+            ) {
+              setFullscreenFallback(true);
+            }
+          }, 1200);
+        } catch {
+          setFullscreenFallback(true);
+        }
+      }
+
+      fullscreenToggle.addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && fullscreenFallbackActive) {
+          setFullscreenFallback(false);
+        }
+      });
 
       // Utility
       function shuffleArray(array) {
@@ -1668,6 +2399,13 @@
       // Initialize
       initializeCategories();
       clearCanvas();
+    </script>
+
+    <script src="../js/game-ads.js"></script>
+    <script>
+      window.addEventListener("load", () => window.refreshGameAds?.(), {
+        once: true,
+      });
     </script>
 
     <!-- Footer -->

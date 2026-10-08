@@ -64,7 +64,7 @@
     />
     <meta
       property="og:image"
-      content="https://eslfunonline.com/images/30-seconds-challenge-og.png"
+      content="https://eslfunonline.com/games/charades/image.png"
     />
     <meta property="og:site_name" content="ESL Fun Online" />
 
@@ -84,7 +84,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://eslfunonline.com/images/30-seconds-challenge-og.png"
+      content="https://eslfunonline.com/games/charades/image.png"
     />
 
     <!-- Structured Data for SEO -->
@@ -95,7 +95,7 @@
         "name": "30 Seconds Challenge - ESL Speaking Game",
         "description": "Race against time to explain 5 words in 30, 60, or 90 seconds! Choose from easy categories like Zoo and Sports or challenge yourself with Economics and Technology. Perfect for improving speaking fluency!",
         "url": "https://eslfunonline.com/games/charades.html",
-        "image": "https://eslfunonline.com/images/30-seconds-challenge-og.png",
+        "image": "https://eslfunonline.com/games/charades/image.png",
         "author": {
           "@type": "Organization",
           "name": "ESL Fun Online",
@@ -225,9 +225,14 @@
       }
 
       body {
-        background-color: #1a1a2e;
-        background: url("../images/game-bg.jpg") center center / cover no-repeat
-          fixed;
+        background-color: #101a37;
+        background-image:
+          linear-gradient(rgba(11, 18, 43, 0.42), rgba(18, 24, 60, 0.64)),
+          url("../images/game-bg-blue.jpg");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
         min-height: 100vh;
         font-family:
           "Inter",
@@ -246,7 +251,18 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.35);
+        background:
+          radial-gradient(
+            ellipse at 18% 0%,
+            rgba(70, 187, 229, 0.18),
+            transparent 42%
+          ),
+          radial-gradient(
+            ellipse at 82% 8%,
+            rgba(168, 85, 247, 0.2),
+            transparent 40%
+          ),
+          linear-gradient(180deg, rgba(8, 15, 38, 0.05), rgba(8, 15, 38, 0.3));
         pointer-events: none;
         z-index: 0;
       }
@@ -415,6 +431,7 @@
         max-width: 900px;
         margin: 1rem auto;
         padding: 1.5rem;
+        position: relative;
       }
 
       @media (max-width: 768px) {
@@ -1368,6 +1385,203 @@
         outline: 3px solid var(--primary-color);
         outline-offset: 2px;
       }
+
+      /* UNO-style game and ad layout */
+      .charades-page-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        width: min(1480px, calc(100% - 32px));
+        grid-template-columns: minmax(0, 1fr) 375px;
+        align-items: start;
+        gap: 20px;
+        margin: 20px auto 0;
+      }
+
+      .charades-page-layout > #main-game {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin: 0;
+      }
+
+      .charades-ad-rail {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 12px;
+      }
+
+      .charades-ad-card {
+        display: grid;
+        width: 100%;
+        min-height: 292px;
+        align-content: start;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 0;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        background: rgba(5, 10, 27, 0.45);
+      }
+
+      .charades-ad-label {
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .charades-ad-card .adsbygoogle {
+        display: inline-block;
+        width: 300px;
+        height: 250px;
+        max-width: 100%;
+      }
+
+      .charades-bottom-ad {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        width: min(1200px, calc(100% - 32px));
+        min-height: 120px;
+        justify-items: center;
+        gap: 8px;
+        margin: 22px auto 0;
+        padding: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        background: rgba(8, 15, 35, 0.72);
+      }
+
+      .charades-bottom-ad .adsbygoogle {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+
+      .charades-fullscreen-toggle {
+        position: absolute;
+        top: 0.5rem;
+        right: 1.5rem;
+        z-index: 20;
+        display: inline-flex;
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.72);
+        color: #fff;
+        font: inherit;
+        font-weight: 650;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+      }
+
+      .charades-fullscreen-toggle:hover {
+        background: rgba(70, 187, 229, 0.28);
+      }
+
+      #main-game:fullscreen,
+      #main-game:-webkit-full-screen,
+      #main-game.is-fullscreen-fallback {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        margin: 0;
+        padding: max(1rem, env(safe-area-inset-top))
+          max(1rem, env(safe-area-inset-right))
+          max(1rem, env(safe-area-inset-bottom))
+          max(1rem, env(safe-area-inset-left));
+        overflow: auto;
+        border-radius: 0;
+        background: linear-gradient(145deg, #102447, #31215f 58%, #102d55);
+      }
+
+      #main-game:fullscreen .game-header,
+      #main-game:-webkit-full-screen .game-header,
+      #main-game.is-fullscreen-fallback .game-header {
+        display: none;
+      }
+
+      #main-game:fullscreen .charades-fullscreen-toggle,
+      #main-game:-webkit-full-screen .charades-fullscreen-toggle,
+      #main-game.is-fullscreen-fallback .charades-fullscreen-toggle {
+        position: fixed;
+        top: max(12px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+      }
+
+      body.charades-fullscreen-fallback,
+      html.charades-fullscreen-fallback {
+        overflow: hidden;
+      }
+
+      body.charades-fullscreen-fallback .page-header,
+      body.charades-fullscreen-fallback .charades-ad-rail,
+      body.charades-fullscreen-fallback .charades-bottom-ad,
+      body.charades-fullscreen-fallback .game-footer {
+        display: none !important;
+      }
+
+      #main-game:fullscreen .results-overlay,
+      #main-game:-webkit-full-screen .results-overlay,
+      #main-game.is-fullscreen-fallback .results-overlay {
+        position: absolute;
+        min-height: 100%;
+      }
+
+      @media (max-width: 1050px) {
+        .charades-page-layout {
+          grid-template-columns: minmax(0, 1fr);
+          width: min(900px, calc(100% - 32px));
+        }
+
+        .charades-ad-card {
+          width: min(100%, 332px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .charades-page-layout {
+          width: calc(100% - 20px);
+          margin-top: 10px;
+        }
+
+        .charades-bottom-ad {
+          width: calc(100% - 20px);
+          margin-top: 18px;
+        }
+
+        .charades-fullscreen-toggle {
+          top: 0.25rem;
+          right: 0.75rem;
+          padding: 0.55rem 0.7rem;
+        }
+
+        .game-container:fullscreen,
+        .game-container:-webkit-full-screen,
+        .game-container.is-fullscreen-fallback {
+          padding: max(4rem, env(safe-area-inset-top)) 0.75rem 1rem;
+        }
+      }
+
+      @media (max-height: 600px) and (min-width: 1051px) {
+        .charades-ad-rail {
+          display: none;
+        }
+      }
     </style>
   </head>
 
@@ -1393,167 +1607,216 @@
       </nav>
     </header>
 
-    <main class="game-container" id="main-game" role="main">
-      <header class="game-header" aria-hidden="true">
-        <h2>
-          <i class="fas fa-stopwatch" aria-hidden="true"></i> 30 Seconds
-          Challenge
-        </h2>
-        <p>Explain 5 words before time runs out!</p>
-      </header>
-
-      <!-- Setup Screen -->
-      <section id="setupScreen" class="setup-screen" aria-label="Game Setup">
-        <div class="instructions" role="region" aria-label="Instructions">
+    <div class="charades-page-layout">
+      <main class="game-container" id="main-game" role="main">
+        <button
+          class="charades-fullscreen-toggle"
+          id="fullscreenToggle"
+          type="button"
+          aria-label="Enter fullscreen without ads"
+          title="Enter fullscreen without ads"
+          aria-pressed="false"
+        >
+          <i class="fas fa-expand" aria-hidden="true"></i>
+          <span>Fullscreen</span>
+        </button>
+        <header class="game-header" aria-hidden="true">
           <h2>
-            <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
+            <i class="fas fa-stopwatch" aria-hidden="true"></i> 30 Seconds
+            Challenge
           </h2>
-          <p>1. Choose your time limit (30, 60, or 90 seconds)</p>
-          <p>2. Select a category (easy or challenging)</p>
-          <p>3. Explain all 5 words on the card before time runs out!</p>
-          <p>
-            4. Your partner or team tries to guess the words you're describing
-          </p>
-        </div>
+          <p>Explain 5 words before time runs out!</p>
+        </header>
 
-        <div class="time-selection" role="group" aria-labelledby="time-label">
-          <h3 id="time-label">
-            <i class="fas fa-clock" aria-hidden="true"></i> Select Time Limit
-          </h3>
-          <div class="time-buttons" role="radiogroup" aria-label="Time options">
-            <button
-              class="time-btn"
-              data-time="30"
-              role="radio"
-              aria-checked="false"
-            >
-              30 Seconds
-            </button>
-            <button
-              class="time-btn"
-              data-time="60"
-              role="radio"
-              aria-checked="false"
-            >
-              60 Seconds
-            </button>
-            <button
-              class="time-btn"
-              data-time="90"
-              role="radio"
-              aria-checked="false"
-            >
-              90 Seconds
-            </button>
+        <!-- Setup Screen -->
+        <section id="setupScreen" class="setup-screen" aria-label="Game Setup">
+          <div class="instructions" role="region" aria-label="Instructions">
+            <h2>
+              <i class="fas fa-info-circle" aria-hidden="true"></i> How to Play
+            </h2>
+            <p>1. Choose your time limit (30, 60, or 90 seconds)</p>
+            <p>2. Select a category (easy or challenging)</p>
+            <p>3. Explain all 5 words on the card before time runs out!</p>
+            <p>
+              4. Your partner or team tries to guess the words you're describing
+            </p>
           </div>
-        </div>
 
-        <div class="categories-section">
-          <div class="difficulty-group">
-            <h3>
-              <i class="fas fa-smile"></i> Easy Categories
-              <span class="difficulty-badge easy">Beginner Friendly</span>
+          <div class="time-selection" role="group" aria-labelledby="time-label">
+            <h3 id="time-label">
+              <i class="fas fa-clock" aria-hidden="true"></i> Select Time Limit
             </h3>
-            <div class="category-grid" id="easyCategoriesGrid"></div>
+            <div class="time-buttons" role="group" aria-label="Time options">
+              <button
+                class="time-btn"
+                data-time="30"
+                type="button"
+                aria-pressed="false"
+              >
+                30 Seconds
+              </button>
+              <button
+                class="time-btn"
+                data-time="60"
+                type="button"
+                aria-pressed="false"
+              >
+                60 Seconds
+              </button>
+              <button
+                class="time-btn"
+                data-time="90"
+                type="button"
+                aria-pressed="false"
+              >
+                90 Seconds
+              </button>
+            </div>
           </div>
 
-          <div class="difficulty-group">
-            <h3>
-              <i class="fas fa-brain"></i> Challenging Categories
-              <span class="difficulty-badge hard">Advanced</span>
-            </h3>
-            <div class="category-grid" id="hardCategoriesGrid"></div>
+          <div class="categories-section">
+            <div class="difficulty-group">
+              <h3>
+                <i class="fas fa-smile"></i> Easy Categories
+                <span class="difficulty-badge easy">Beginner Friendly</span>
+              </h3>
+              <div class="category-grid" id="easyCategoriesGrid"></div>
+            </div>
+
+            <div class="difficulty-group">
+              <h3>
+                <i class="fas fa-brain"></i> Challenging Categories
+                <span class="difficulty-badge hard">Advanced</span>
+              </h3>
+              <div class="category-grid" id="hardCategoriesGrid"></div>
+            </div>
+          </div>
+
+          <div style="text-align: center">
+            <button
+              id="startGameBtn"
+              class="btn-start"
+              disabled
+              aria-label="Start the game"
+            >
+              <i class="fas fa-play" aria-hidden="true"></i> Start Game
+            </button>
+          </div>
+        </section>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="game-screen">
+          <div class="score-panel">
+            <div class="score-item correct">
+              <div class="label">Words</div>
+              <div class="value" id="correctCount">0</div>
+            </div>
+            <div class="score-item rounds">
+              <div class="label">Rounds</div>
+              <div class="value" id="roundCount">0</div>
+            </div>
+          </div>
+
+          <div class="timer-display">
+            <div class="timer-container">
+              <svg class="timer-svg" viewBox="0 0 200 200">
+                <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+                <circle
+                  id="timerProgress"
+                  class="timer-progress"
+                  cx="100"
+                  cy="100"
+                  r="90"
+                ></circle>
+              </svg>
+              <div id="timerCircle" class="timer-circle">--</div>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem">
+              <i class="fas fa-lightbulb"></i> Tap words when guessed correctly!
+            </p>
+          </div>
+
+          <div class="card-display">
+            <div class="category-name" id="currentCategory"></div>
+            <ul class="words-list" id="wordsList"></ul>
+          </div>
+
+          <div class="game-controls">
+            <button
+              id="startTimerBtn"
+              class="btn-control btn-new-card"
+              type="button"
+            >
+              <i class="fas fa-play"></i> Start Timer
+            </button>
+            <button
+              id="changeCategoryBtn"
+              class="btn-control btn-change-category"
+              type="button"
+            >
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
           </div>
         </div>
 
-        <div style="text-align: center">
-          <button
-            id="startGameBtn"
-            class="btn-start"
-            disabled
-            aria-label="Start the game"
-          >
-            <i class="fas fa-play" aria-hidden="true"></i> Start Game
-          </button>
-        </div>
-      </section>
-
-      <!-- Game Screen -->
-      <div id="gameScreen" class="game-screen">
-        <div class="score-panel">
-          <div class="score-item correct">
-            <div class="label">Words</div>
-            <div class="value" id="correctCount">0</div>
+        <!-- Results Overlay -->
+        <div
+          id="resultsOverlay"
+          class="results-overlay"
+          role="dialog"
+          aria-labelledby="resultsTitle"
+          aria-modal="true"
+          aria-hidden="true"
+        >
+          <div class="results-card" tabindex="-1">
+            <h2 id="resultsTitle">
+              <i class="fas fa-trophy" aria-hidden="true"></i> Round Complete!
+            </h2>
+            <div class="big-score" id="roundScore">0/5</div>
+            <div class="message" id="roundMessage">Great job!</div>
+            <button
+              id="continueBtn"
+              class="btn-control btn-new-card"
+              type="button"
+              style="margin: 0 auto"
+            >
+              <i class="fas fa-arrow-right"></i> Next Round
+            </button>
           </div>
-          <div class="score-item rounds">
-            <div class="label">Rounds</div>
-            <div class="value" id="roundCount">0</div>
-          </div>
         </div>
 
-        <div class="timer-display">
-          <div class="timer-container">
-            <svg class="timer-svg" viewBox="0 0 200 200">
-              <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
-              <circle
-                id="timerProgress"
-                class="timer-progress"
-                cx="100"
-                cy="100"
-                r="90"
-              ></circle>
-            </svg>
-            <div id="timerCircle" class="timer-circle">--</div>
-          </div>
-          <p style="color: var(--text-secondary); font-size: 0.9rem">
-            <i class="fas fa-lightbulb"></i> Tap words when guessed correctly!
-          </p>
-        </div>
+        <!-- Confetti Container -->
+        <div
+          id="confettiContainer"
+          class="confetti-container"
+          aria-hidden="true"
+        ></div>
+      </main>
 
-        <div class="card-display">
-          <div class="category-name" id="currentCategory"></div>
-          <ul class="words-list" id="wordsList"></ul>
+      <aside class="charades-ad-rail" aria-label="Advertisement">
+        <div class="charades-ad-card">
+          <span class="charades-ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="6041113329"
+          ></ins>
         </div>
+      </aside>
+    </div>
 
-        <div class="game-controls">
-          <button id="startTimerBtn" class="btn-control btn-new-card">
-            <i class="fas fa-play"></i> Start Timer
-          </button>
-          <button id="newCardBtn" class="btn-control btn-new-card hidden">
-            <i class="fas fa-sync-alt"></i> Next Card
-          </button>
-          <button
-            id="changeCategoryBtn"
-            class="btn-control btn-change-category"
-          >
-            <i class="fas fa-arrow-left"></i> Back
-          </button>
-        </div>
-      </div>
-
-      <!-- Results Overlay -->
-      <div id="resultsOverlay" class="results-overlay">
-        <div class="results-card">
-          <h2><i class="fas fa-trophy"></i> Round Complete!</h2>
-          <div class="big-score" id="roundScore">0/5</div>
-          <div class="message" id="roundMessage">Great job!</div>
-          <button
-            id="continueBtn"
-            class="btn-control btn-new-card"
-            style="margin: 0 auto"
-          >
-            <i class="fas fa-arrow-right"></i> Next Round
-          </button>
-        </div>
-      </div>
-
-      <!-- Confetti Container -->
-      <div
-        id="confettiContainer"
-        class="confetti-container"
-        aria-hidden="true"
-      ></div>
-    </main>
+    <section class="charades-bottom-ad" aria-label="Advertisement">
+      <span class="charades-ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="1247951643"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
 
     <!-- Footer -->
     <footer class="game-footer" role="contentinfo">
@@ -1846,6 +2109,7 @@
       let currentCards = [];
       let currentCardIndex = 0;
       let timerInterval = null;
+      let fullscreenFallbackActive = false;
       let timeRemaining = 0;
       let timerRunning = false;
       let totalCorrect = 0;
@@ -1860,12 +2124,13 @@
       const startGameBtn = document.getElementById("startGameBtn");
       const easyCategoriesGrid = document.getElementById("easyCategoriesGrid");
       const hardCategoriesGrid = document.getElementById("hardCategoriesGrid");
+      const mainGame = document.getElementById("main-game");
+      const fullscreenToggle = document.getElementById("fullscreenToggle");
       const timerCircle = document.getElementById("timerCircle");
       const timerProgress = document.getElementById("timerProgress");
       const currentCategory = document.getElementById("currentCategory");
       const wordsList = document.getElementById("wordsList");
       const startTimerBtn = document.getElementById("startTimerBtn");
-      const newCardBtn = document.getElementById("newCardBtn");
       const changeCategoryBtn = document.getElementById("changeCategoryBtn");
       const correctCountEl = document.getElementById("correctCount");
       const roundCountEl = document.getElementById("roundCount");
@@ -1874,6 +2139,13 @@
       const roundMessageEl = document.getElementById("roundMessage");
       const continueBtn = document.getElementById("continueBtn");
       const confettiContainer = document.getElementById("confettiContainer");
+
+      resultsOverlay.addEventListener("keydown", (event) => {
+        if (event.key === "Tab") {
+          event.preventDefault();
+          continueBtn.focus();
+        }
+      });
 
       // Timer progress ring constants
       const CIRCUMFERENCE = 2 * Math.PI * 90; // 565.48
@@ -1898,6 +2170,8 @@
       function createCategoryButton(category, key, difficulty) {
         const btn = document.createElement("button");
         btn.className = `category-btn ${difficulty}`;
+        btn.type = "button";
+        btn.setAttribute("aria-pressed", "false");
         btn.innerHTML = `<i class="fas ${category.icon}"></i><br>${category.name}`;
         btn.onclick = () => selectCategory(key, difficulty, btn);
         return btn;
@@ -1908,10 +2182,10 @@
         btn.addEventListener("click", () => {
           timeButtons.forEach((b) => {
             b.classList.remove("selected");
-            b.setAttribute("aria-checked", "false");
+            b.setAttribute("aria-pressed", "false");
           });
           btn.classList.add("selected");
-          btn.setAttribute("aria-checked", "true");
+          btn.setAttribute("aria-pressed", "true");
           selectedTime = parseInt(btn.dataset.time);
           checkStartButton();
         });
@@ -1922,6 +2196,7 @@
         document.querySelectorAll(".category-btn").forEach((b) => {
           b.style.background = "rgba(255, 255, 255, 0.1)";
           b.style.borderColor = "rgba(255, 255, 255, 0.2)";
+          b.setAttribute("aria-pressed", "false");
         });
 
         btn.style.background =
@@ -1930,6 +2205,7 @@
             : "rgba(239, 68, 68, 0.3)";
         btn.style.borderColor =
           difficulty === "easy" ? "var(--easy-color)" : "var(--hard-color)";
+        btn.setAttribute("aria-pressed", "true");
 
         selectedCategory = key;
         selectedDifficulty = difficulty;
@@ -1952,7 +2228,9 @@
         updateScoreDisplay();
 
         setupScreen.classList.add("hidden");
+        setupScreen.inert = true;
         gameScreen.classList.add("active");
+        gameScreen.inert = false;
 
         loadNewCard();
       });
@@ -1974,7 +2252,17 @@
           const li = document.createElement("li");
           li.textContent = word;
           li.dataset.index = index;
+          li.setAttribute("role", "button");
+          li.setAttribute("tabindex", "0");
+          li.setAttribute("aria-pressed", "false");
+          li.setAttribute("aria-label", `Mark ${word} as guessed`);
           li.addEventListener("click", () => markWordCorrect(li));
+          li.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              li.click();
+            }
+          });
           wordsList.appendChild(li);
         });
 
@@ -1987,6 +2275,7 @@
         if (!timerRunning || li.classList.contains("completed")) return;
 
         li.classList.add("completed");
+        li.setAttribute("aria-pressed", "true");
         roundCorrect++;
         totalCorrect++;
         updateScoreDisplay();
@@ -2024,13 +2313,19 @@
         }
 
         resultsOverlay.classList.add("show");
+        resultsOverlay.setAttribute("aria-hidden", "false");
+        gameScreen.inert = true;
+        continueBtn.focus();
         playResultSound(roundCorrect);
       }
 
       // Continue to next round
       continueBtn.addEventListener("click", () => {
         resultsOverlay.classList.remove("show");
+        resultsOverlay.setAttribute("aria-hidden", "true");
+        gameScreen.inert = false;
         loadNewCard();
+        startTimerBtn.focus();
       });
 
       // Timer functions
@@ -2059,6 +2354,7 @@
 
       function stopTimer() {
         clearInterval(timerInterval);
+        timerInterval = null;
         timerRunning = false;
       }
 
@@ -2070,7 +2366,6 @@
         timerProgress.style.strokeDashoffset = "0";
         timerProgress.classList.remove("warning", "danger");
         startTimerBtn.classList.remove("hidden");
-        newCardBtn.classList.add("hidden");
       }
 
       function updateTimerDisplay() {
@@ -2210,11 +2505,15 @@
 
       // Button handlers
       startTimerBtn.addEventListener("click", startTimer);
-      newCardBtn.addEventListener("click", loadNewCard);
       changeCategoryBtn.addEventListener("click", () => {
         stopTimer();
+        resultsOverlay.classList.remove("show");
+        resultsOverlay.setAttribute("aria-hidden", "true");
+        gameScreen.inert = false;
         gameScreen.classList.remove("active");
         setupScreen.classList.remove("hidden");
+        setupScreen.inert = false;
+        startGameBtn.focus();
       });
 
       // Utility functions
@@ -2226,51 +2525,102 @@
         return array;
       }
 
-      // Prevent double-tap zoom on iOS for game buttons
-      document
-        .querySelectorAll(
-          ".category-btn, .time-btn, .btn-control, .words-list li",
-        )
-        .forEach((el) => {
-          el.addEventListener(
-            "touchend",
-            (e) => {
-              e.preventDefault();
-              e.target.click();
-            },
-            { passive: false },
-          );
-        });
-
-      // Initialize game when DOM is ready
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initializeCategories);
-      } else {
-        initializeCategories();
-      }
-
-      // Re-attach touch handlers after categories are initialized
-      function attachTouchHandlers() {
-        document.querySelectorAll(".category-btn").forEach((el) => {
-          el.addEventListener(
-            "touchend",
-            (e) => {
-              e.preventDefault();
-              e.target.closest(".category-btn")?.click();
-            },
-            { passive: false },
-          );
-        });
-      }
-
-      // Override initializeCategories to add touch handlers
-      const originalInit = initializeCategories;
-      initializeCategories = function () {
-        originalInit();
-        attachTouchHandlers();
-      };
-
       initializeCategories();
+
+      function syncFullscreenButton() {
+        const nativeFullscreen =
+          document.fullscreenElement === mainGame ||
+          document.webkitFullscreenElement === mainGame;
+        if (nativeFullscreen && fullscreenFallbackActive) {
+          fullscreenFallbackActive = false;
+          mainGame.classList.remove("is-fullscreen-fallback");
+          document.body.classList.remove("charades-fullscreen-fallback");
+          document.documentElement.classList.remove(
+            "charades-fullscreen-fallback",
+          );
+        }
+        const isFullscreen = nativeFullscreen || fullscreenFallbackActive;
+        fullscreenToggle.setAttribute("aria-pressed", String(isFullscreen));
+        fullscreenToggle.setAttribute(
+          "aria-label",
+          isFullscreen ? "Exit fullscreen" : "Enter fullscreen without ads",
+        );
+        fullscreenToggle.title = isFullscreen
+          ? "Exit fullscreen"
+          : "Enter fullscreen without ads";
+        fullscreenToggle.innerHTML = isFullscreen
+          ? '<i class="fas fa-compress" aria-hidden="true"></i><span>Exit fullscreen</span>'
+          : '<i class="fas fa-expand" aria-hidden="true"></i><span>Fullscreen</span>';
+      }
+
+      function setFullscreenFallback(enabled) {
+        fullscreenFallbackActive = enabled;
+        mainGame.classList.toggle("is-fullscreen-fallback", enabled);
+        document.body.classList.toggle("charades-fullscreen-fallback", enabled);
+        document.documentElement.classList.toggle(
+          "charades-fullscreen-fallback",
+          enabled,
+        );
+        syncFullscreenButton();
+      }
+
+      function toggleFullscreen() {
+        const currentFullscreen =
+          document.fullscreenElement || document.webkitFullscreenElement;
+
+        if (currentFullscreen === mainGame) {
+          try {
+            const exitFullscreen =
+              document.exitFullscreen || document.webkitExitFullscreen;
+            exitFullscreen?.call(document)?.catch?.(() => {});
+          } catch (error) {
+            console.warn("Could not exit fullscreen mode.", error);
+          }
+          return;
+        }
+
+        if (fullscreenFallbackActive) {
+          setFullscreenFallback(false);
+          return;
+        }
+
+        const requestFullscreen =
+          mainGame.requestFullscreen || mainGame.webkitRequestFullscreen;
+        if (requestFullscreen) {
+          try {
+            const request = requestFullscreen.call(mainGame);
+            setFullscreenFallback(true);
+            Promise.resolve(request).catch((error) => {
+              console.warn(
+                "Native fullscreen unavailable; expanded game view remains active.",
+                error,
+              );
+            });
+            return;
+          } catch (error) {
+            console.warn(
+              "Native fullscreen unavailable; using expanded view.",
+              error,
+            );
+          }
+        }
+
+        setFullscreenFallback(true);
+      }
+
+      fullscreenToggle.addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !fullscreenFallbackActive) return;
+        setFullscreenFallback(false);
+      });
+    </script>
+    <script src="../js/game-ads.js"></script>
+    <script>
+      window.addEventListener("load", () => window.refreshGameAds?.(), {
+        once: true,
+      });
     </script>
   </body>
 </html>
