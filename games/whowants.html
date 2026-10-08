@@ -611,6 +611,10 @@
         background: rgba(255, 255, 255, 0.1) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
       }
+      button,
+      a {
+        touch-action: manipulation;
+      }
     </style>
   </head>
   <body>
@@ -633,6 +637,13 @@
 
 
     <main id="main-game" class="game-container" role="main">
+      <div
+        id="announcements"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"
+      ></div>
       <!-- Title Screen -->
       <div
         id="title-screen"
@@ -917,6 +928,7 @@
         currentQuestion: 0,
         score: 0,
         selectedAnswer: null,
+        answerConfirmed: false,
         lifelines: {
           fiftyFifty: false,
           hint: false,
@@ -1032,6 +1044,15 @@
         const gameScreen = document.getElementById("game-screen");
         const isTitleScreen = titleScreen.style.display !== "none";
         const isGameScreen = gameScreen.style.display === "block";
+        const target = e.target;
+        const isEditableTarget =
+          target instanceof HTMLElement &&
+          (target.isContentEditable ||
+            ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+
+        if (e.repeat || e.altKey || e.ctrlKey || e.metaKey || isEditableTarget) {
+          return;
+        }
 
         // Escape key - return to title (if in game)
         if (e.key === "Escape" && isGameScreen) {
@@ -1053,11 +1074,10 @@
 
         // Number keys 1-4 for answer selection during game
         if (isGameScreen && ["1", "2", "3", "4"].includes(e.key)) {
-          const answerBtns = document.querySelectorAll(
-            ".answer-btn:not([disabled])"
-          );
+          if (!isActiveQuestion()) return;
+          const answerBtns = document.querySelectorAll(".answer-btn");
           const index = parseInt(e.key) - 1;
-          if (answerBtns[index]) {
+          if (answerBtns[index] && !answerBtns[index].disabled) {
             answerBtns[index].click();
             e.preventDefault();
           }
@@ -1065,7 +1085,7 @@
         }
 
         // F key - use 50/50 lifeline
-        if (e.key === "f" || e.key === "F") {
+        if ((e.key === "f" || e.key === "F") && isActiveQuestion()) {
           const fiftyBtn = document.getElementById("fifty-fifty");
           if (fiftyBtn && !fiftyBtn.classList.contains("used")) {
             useFiftyFifty();
@@ -1075,7 +1095,7 @@
         }
 
         // H key - use hint lifeline
-        if (e.key === "h" || e.key === "H") {
+        if ((e.key === "h" || e.key === "H") && isActiveQuestion()) {
           const hintBtn = document.getElementById("hint");
           if (hintBtn && !hintBtn.classList.contains("used")) {
             useHint();
@@ -1085,7 +1105,7 @@
         }
 
         // K key - use skip lifeline
-        if (e.key === "k" || e.key === "K") {
+        if ((e.key === "k" || e.key === "K") && isActiveQuestion()) {
           const skipBtn = document.getElementById("skip");
           if (skipBtn && !skipBtn.classList.contains("used")) {
             useSkip();
@@ -1201,9 +1221,10 @@
             ) / 100;
 
           // Check for achievements
-          this.checkAchievements(score, totalQuestions);
+          const newAchievements = this.checkAchievements(score, totalQuestions);
 
           this.saveStats();
+          return newAchievements;
         }
 
         checkAchievements(score, totalQuestions) {
@@ -1378,6 +1399,51 @@
           hint: "This place is also called a 'drug store'",
           difficulty: "beginner",
         },
+        {
+          type: "Grammar",
+          question: "Complete the sentence: 'Yesterday, we _____ at home.'",
+          answers: ["are", "was", "were", "be"],
+          correct: 2,
+          hint: "Use the past form of 'be' with 'we'.",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "Choose the correct question for the answer: 'You are ready.'",
+          answers: [
+            "Do you ready?",
+            "Are you ready?",
+            "Is you ready?",
+            "Does you ready?",
+          ],
+          correct: 1,
+          hint: "Make a question by putting the correct form of 'be' before 'you'.",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "The book is _____ the table.",
+          answers: ["in", "on", "at", "to"],
+          correct: 1,
+          hint: "Use the preposition for something resting on a surface.",
+          difficulty: "beginner",
+        },
+        {
+          type: "Grammar",
+          question: "Would you like _____ water?",
+          answers: ["some", "many", "a few", "an"],
+          correct: 0,
+          hint: "Use a quantifier commonly used in polite offers with uncountable nouns.",
+          difficulty: "beginner",
+        },
+        {
+          type: "Vocabulary",
+          question: "An elephant is _____ than a cat.",
+          answers: ["small", "smaller", "largest", "larger"],
+          correct: 3,
+          hint: "Use the comparative form of 'large'.",
+          difficulty: "beginner",
+        },
 
         // Intermediate Level Questions
         {
@@ -1424,7 +1490,7 @@
             "D) Ireland",
           ],
           correct: 2,
-          hint: "Think of Big Ben and the Queen's English",
+          hint: "The UK's currency is pound sterling.",
           difficulty: "intermediate",
         },
         {
@@ -1578,10 +1644,16 @@
         },
         {
           type: "Grammar",
-          question: "Choose the correct form: 'The data _____ inconclusive.'",
-          answers: ["A) is", "B) are", "C) was", "D) were"],
+          question:
+            "In traditional formal English, which sentence treats 'data' as a plural noun?",
+          answers: [
+            "The data is reliable.",
+            "The data are reliable.",
+            "The data has reliable.",
+            "The data was reliable.",
+          ],
           correct: 1,
-          hint: "'Data' can be singular or plural, but in formal English...",
+          hint: "Traditional formal usage matches plural 'data' with a plural verb.",
           difficulty: "advanced",
         },
         {
@@ -1620,7 +1692,72 @@
             "D) A shopping center",
           ],
           correct: 1,
-          hint: "You hear this on the London subway system",
+          hint: "You hear this warning on the London Underground.",
+          difficulty: "advanced",
+        },
+        {
+          type: "Grammar",
+          question: "Complete the third conditional: 'If she had left earlier, she _____ the train.'",
+          answers: [
+            "would catch",
+            "would have caught",
+            "will have caught",
+            "had caught",
+          ],
+          correct: 1,
+          hint: "Third conditional: would have + past participle.",
+          difficulty: "advanced",
+        },
+        {
+          type: "Vocabulary",
+          question: "If someone is meticulous, how do they work?",
+          answers: [
+            "Carelessly and quickly",
+            "With great attention to detail",
+            "Only when supervised",
+            "In a loud and confident way",
+          ],
+          correct: 1,
+          hint: "A meticulous person checks even the smallest details.",
+          difficulty: "advanced",
+        },
+        {
+          type: "Grammar",
+          question: "Complete the inversion: 'Rarely _____ such a clear explanation.'",
+          answers: [
+            "I have heard",
+            "have I heard",
+            "I heard have",
+            "did I have heard",
+          ],
+          correct: 1,
+          hint: "A negative adverb at the beginning often requires auxiliary-subject inversion.",
+          difficulty: "advanced",
+        },
+        {
+          type: "Vocabulary",
+          question: "Which phrase means 'to reach a decision after thinking carefully'?",
+          answers: [
+            "Make a conclusion",
+            "Do a conclusion",
+            "Come to a conclusion",
+            "Take a conclusion",
+          ],
+          correct: 2,
+          hint: "The usual collocation begins with 'come to'.",
+          difficulty: "advanced",
+        },
+        {
+          type: "Grammar",
+          question: "Choose the correct non-defining relative clause: 'The report, _____, was published last week.'",
+          answers: [
+            "that reviewed the results",
+            "which reviewed the results",
+            "what reviewed the results",
+            "who reviewed the results",
+          ],
+          correct: 1,
+          hint: "Use 'which' for a thing in a non-defining clause set off by commas.",
           difficulty: "advanced",
         },
       ];
@@ -1632,6 +1769,7 @@
           currentQuestion: 0,
           score: 0,
           selectedAnswer: null,
+          answerConfirmed: false,
           lifelines: { fiftyFifty: false, hint: false, skip: false },
         };
 
@@ -1643,6 +1781,7 @@
 
         document.getElementById("title-screen").style.display = "none";
         document.getElementById("results-screen").style.display = "none";
+        document.getElementById("stats-screen").style.display = "none";
         document.getElementById("game-screen").style.display = "block";
 
         // Reset lifeline buttons
@@ -1697,8 +1836,13 @@
 
         // Shuffle answers for each question to prevent pattern memorization
         return selectedQuestions.map((question) => {
-          const correctAnswer = question.answers[question.correct];
-          const shuffledAnswers = shuffleArray([...question.answers]);
+          const stripAnswerLabel = (answer) => answer.replace(/^[A-D]\)\s*/, "");
+          const correctAnswer = stripAnswerLabel(
+            question.answers[question.correct]
+          );
+          const shuffledAnswers = shuffleArray([...question.answers]).map(
+            stripAnswerLabel
+          );
           const newCorrectIndex = shuffledAnswers.indexOf(correctAnswer);
 
           return {
@@ -1808,8 +1952,21 @@
           )
         ) {
           scoreManager.resetStats();
+          currentStreak = 0;
+          bestStreak = 0;
+          localStorage.removeItem("whowants_currentStreak");
+          localStorage.removeItem("whowants_bestStreak");
           showStats(); // Refresh the stats display
         }
+      }
+
+      function isActiveQuestion() {
+        return (
+          document.getElementById("game-screen").style.display === "block" &&
+          questions.length > 0 &&
+          gameState.currentQuestion < questions.length &&
+          !gameState.answerConfirmed
+        );
       }
 
       function displayQuestion() {
@@ -1822,10 +1979,14 @@
         document.getElementById("question-text").textContent =
           question.question;
 
-        // Update level display
+        // Reflect the selected mode; mixed mode progresses through fluency levels.
         let level = "Beginner Level";
-        if (gameState.currentQuestion >= 10) level = "Advanced Level";
-        else if (gameState.currentQuestion >= 5) level = "Intermediate Level";
+        if (gameDifficulty === "advanced") {
+          level = "Advanced Level";
+        } else if (gameDifficulty === "mixed") {
+          if (gameState.currentQuestion >= 10) level = "Advanced Level";
+          else if (gameState.currentQuestion >= 5) level = "Intermediate Level";
+        }
         document.getElementById("current-level").textContent = level;
 
         // Update progress bar
@@ -1841,14 +2002,18 @@
         question.answers.forEach((answer, index) => {
           const button = document.createElement("button");
           button.className = "answer-btn";
-          button.textContent = answer;
+          button.textContent = `${String.fromCharCode(65 + index)}) ${answer}`;
           button.onclick = () => selectAnswer(index);
-          button.setAttribute("aria-label", `Option ${index + 1}: ${answer}`);
-          button.setAttribute("role", "button");
+          button.setAttribute(
+            "aria-label",
+            `Option ${index + 1}: ${String.fromCharCode(65 + index)}. ${answer}`
+          );
+          button.setAttribute("aria-pressed", "false");
           answersGrid.appendChild(button);
         });
 
         gameState.selectedAnswer = null;
+        gameState.answerConfirmed = false;
         document.getElementById("confirm-btn").style.display = "none";
         document.getElementById("hint-box").style.display = "none";
 
@@ -1867,11 +2032,13 @@
         // Remove previous selection
         document.querySelectorAll(".answer-btn").forEach((btn) => {
           btn.classList.remove("selected");
+          btn.setAttribute("aria-pressed", "false");
         });
 
         // Select new answer
         const selectedBtn = document.querySelectorAll(".answer-btn")[index];
         selectedBtn.classList.add("selected");
+        selectedBtn.setAttribute("aria-pressed", "true");
         gameState.selectedAnswer = index;
         document.getElementById("confirm-btn").style.display = "inline-block";
 
@@ -1881,7 +2048,8 @@
       }
 
       function confirmAnswer() {
-        if (gameState.selectedAnswer === null) return;
+        if (!isActiveQuestion() || gameState.selectedAnswer === null) return;
+        gameState.answerConfirmed = true;
 
         const question = questions[gameState.currentQuestion];
         const buttons = document.querySelectorAll(".answer-btn");
@@ -1932,7 +2100,7 @@
       }
 
       function useFiftyFifty() {
-        if (gameState.lifelines.fiftyFifty) return;
+        if (!isActiveQuestion() || gameState.lifelines.fiftyFifty) return;
 
         soundFX.play("lifeline");
         gameState.lifelines.fiftyFifty = true;
@@ -1945,6 +2113,11 @@
         for (let i = 0; i < buttons.length && removed < 2; i++) {
           if (i !== question.correct) {
             buttons[i].style.opacity = "0.3";
+            buttons[i].disabled = true;
+            buttons[i].setAttribute(
+              "aria-label",
+              `${buttons[i].textContent.trim()} (removed by 50/50)`
+            );
             buttons[i].onclick = null;
             removed++;
           }
@@ -1955,7 +2128,7 @@
       }
 
       function useHint() {
-        if (gameState.lifelines.hint) return;
+        if (!isActiveQuestion() || gameState.lifelines.hint) return;
 
         soundFX.play("lifeline");
         gameState.lifelines.hint = true;
@@ -1969,7 +2142,7 @@
       }
 
       function useSkip() {
-        if (gameState.lifelines.skip) return;
+        if (!isActiveQuestion() || gameState.lifelines.skip) return;
 
         soundFX.play("lifeline");
         gameState.lifelines.skip = true;
@@ -2101,31 +2274,6 @@
         return shuffled;
       }
 
-      // Add keyboard navigation
-      document.addEventListener("keydown", function (event) {
-        if (document.getElementById("game-screen").style.display === "block") {
-          const buttons = document.querySelectorAll(
-            '.answer-btn:not([style*="opacity: 0.3"])'
-          );
-
-          if (event.key >= "1" && event.key <= "4") {
-            const index = parseInt(event.key) - 1;
-            if (buttons[index]) {
-              selectAnswer(
-                Array.from(document.querySelectorAll(".answer-btn")).indexOf(
-                  buttons[index]
-                )
-              );
-            }
-          } else if (
-            event.key === "Enter" &&
-            gameState.selectedAnswer !== null
-          ) {
-            confirmAnswer();
-          }
-        }
-      });
-
       // Initialize game on page load
       window.addEventListener("load", function () {
         showTitleScreen();
@@ -2138,7 +2286,6 @@
       <nav class="footer-links" aria-label="Footer navigation">
         <a href="../index.html" aria-label="Go to home page"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
         <a href="games.html" aria-label="Go to games list"><i class="fas fa-gamepad" aria-hidden="true"></i> Games</a>
-        <a href="../lessons.html" aria-label="Go to lessons"><i class="fas fa-book" aria-hidden="true"></i> Lessons</a>
         <a href="../contact.html" aria-label="Go to contact page"><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a>
       </nav>
       <p class="footer-copyright">
@@ -2147,15 +2294,5 @@
     </footer>
 
     
-    <!-- iOS double-tap zoom prevention -->
-    <script>
-      document.addEventListener('touchend', function(e) {
-        const now = Date.now();
-        if (now - (this.lastTouch || 0) < 300) {
-          e.preventDefault();
-        }
-        this.lastTouch = now;
-      }, { passive: false });
-    </script>
   </body>
 </html>

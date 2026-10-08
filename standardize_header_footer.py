@@ -137,12 +137,6 @@ FOOTER_TEMPLATE = """<footer>
             <h3><i class="fas fa-link"></i> Quick Links</h3>
             <ul>
               <li>
-                <a href="{P}lessons.html"
-                  ><i class="fas fa-chalkboard-teacher"></i
-                  ><span>Lessons</span></a
-                >
-              </li>
-              <li>
                 <a href="{P}games/games.html"
                   ><i class="fas fa-gamepad"></i><span>Games</span></a
                 >

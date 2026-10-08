@@ -53,7 +53,6 @@ def generate_sitemap(domain="https://eslfunonline.com", output_file="sitemap.xml
         'resources/index.html': 0.9,
         'teacher-hub/index.html': 0.8,
         'contact.html': 0.7,
-        'lessons.html': 0.7,
         'games/': 0.85,
         'resources/': 0.8,
         'teacher-hub/': 0.7,

@@ -267,7 +267,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    
     <!-- CSS Files - Removed main.css to prevent conflicts -->
     <link rel="stylesheet" href="../css/balanceman-page.css" />
     <link
@@ -1117,6 +1116,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="../css/balanceman-redesign.css" />
   </head>
 
   <body>
@@ -1154,378 +1154,398 @@
       </div>
     </header>
 
-    <main
-      class="game-container"
-      role="main"
-      id="main-game"
-      aria-label="Hangman word guessing game"
-    >
-      <header class="game-header">
-        <h1>
-          <i class="fas fa-skull-crossbones" aria-hidden="true"></i> Hangman
-        </h1>
-        <p>Guess the word before the hangman is complete!</p>
-        <p
-          style="
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 0.5rem;
-          "
-          role="note"
-          aria-label="Keyboard shortcuts"
-        >
-          💡 Use keyboard: A-Z to guess, H for hint, Enter for new game, Esc to
-          exit
-        </p>
-      </header>
-
-      <div
-        class="difficulty-selector"
-        id="difficultySelector"
-        role="radiogroup"
-        aria-label="Select difficulty level"
+    <div class="balanceman-page-layout">
+      <main
+        class="game-container"
+        role="main"
+        id="main-game"
+        aria-label="Hangman word guessing game"
       >
-        <h3 id="difficulty-label">Choose Difficulty:</h3>
-        <button
-          class="difficulty-btn active"
-          data-difficulty="easy"
-          role="radio"
-          aria-checked="true"
-          aria-labelledby="difficulty-label"
-        >
-          Easy (4-6 letters)
-        </button>
-        <button
-          class="difficulty-btn"
-          data-difficulty="medium"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="difficulty-label"
-        >
-          Medium (7-9 letters)
-        </button>
-        <button
-          class="difficulty-btn"
-          data-difficulty="hard"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="difficulty-label"
-        >
-          Hard (10+ letters)
-        </button>
-      </div>
+        <header class="game-header">
+          <h1>
+            <i class="fas fa-skull-crossbones" aria-hidden="true"></i> Hangman
+          </h1>
+          <p>Guess the word before the hangman is complete!</p>
+          <p
+            style="
+              font-size: 0.8rem;
+              color: rgba(255, 255, 255, 0.6);
+              margin-top: 0.5rem;
+            "
+            role="note"
+            aria-label="Keyboard shortcuts"
+          >
+            💡 Keyboard: A–Z to guess · H for a hint · S to skip · Enter for
+            next word
+          </p>
+        </header>
 
-      <div
-        class="category-selector"
-        id="categorySelector"
-        role="radiogroup"
-        aria-label="Select word category"
-      >
-        <h3 id="category-label">Choose Category:</h3>
-        <button
-          class="category-btn active"
-          data-category="general"
-          role="radio"
-          aria-checked="true"
-          aria-labelledby="category-label"
-        >
-          General
-        </button>
-        <button
-          class="category-btn"
-          data-category="animals"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          Animals
-        </button>
-        <button
-          class="category-btn"
-          data-category="food"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          Food
-        </button>
-        <button
-          class="category-btn"
-          data-category="colors"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          Colors
-        </button>
-        <button
-          class="category-btn"
-          data-category="family"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          Family
-        </button>
-        <button
-          class="category-btn"
-          data-category="school"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          School
-        </button>
-        <button
-          class="category-btn"
-          data-category="weather"
-          role="radio"
-          aria-checked="false"
-          aria-labelledby="category-label"
-        >
-          Weather
-        </button>
-      </div>
-
-      <div class="balance-area" role="region" aria-label="Game status area">
-        <div class="hangman-display" id="hangmanFigure" aria-hidden="true">
-          <svg viewBox="0 0 200 250" class="hangman-svg">
-            <!-- Gallows -->
-            <line
-              x1="10"
-              y1="230"
-              x2="150"
-              y2="230"
-              stroke="black"
-              stroke-width="4"
-            />
-            <line
-              x1="50"
-              y1="230"
-              x2="50"
-              y2="20"
-              stroke="black"
-              stroke-width="4"
-            />
-            <line
-              x1="50"
-              y1="20"
-              x2="130"
-              y2="20"
-              stroke="black"
-              stroke-width="4"
-            />
-            <line
-              x1="130"
-              y1="20"
-              x2="130"
-              y2="50"
-              stroke="black"
-              stroke-width="4"
-            />
-
-            <!-- Head -->
-            <circle
-              class="hangman-part head"
-              cx="130"
-              cy="70"
-              r="20"
-              stroke="black"
-              stroke-width="4"
-              fill="none"
-              style="display: none"
-            />
-
-            <!-- Body -->
-            <line
-              class="hangman-part body"
-              x1="130"
-              y1="90"
-              x2="130"
-              y2="150"
-              stroke="black"
-              stroke-width="4"
-              style="display: none"
-            />
-
-            <!-- Left Arm -->
-            <line
-              class="hangman-part left-arm"
-              x1="130"
-              y1="110"
-              x2="100"
-              y2="130"
-              stroke="black"
-              stroke-width="4"
-              style="display: none"
-            />
-
-            <!-- Right Arm -->
-            <line
-              class="hangman-part right-arm"
-              x1="130"
-              y1="110"
-              x2="160"
-              y2="130"
-              stroke="black"
-              stroke-width="4"
-              style="display: none"
-            />
-
-            <!-- Left Leg -->
-            <line
-              class="hangman-part left-leg"
-              x1="130"
-              y1="150"
-              x2="110"
-              y2="190"
-              stroke="black"
-              stroke-width="4"
-              style="display: none"
-            />
-
-            <!-- Right Leg -->
-            <line
-              class="hangman-part right-leg"
-              x1="130"
-              y1="150"
-              x2="150"
-              y2="190"
-              stroke="black"
-              stroke-width="4"
-              style="display: none"
-            />
-          </svg>
-        </div>
         <div
-          class="balance-status"
-          id="balanceStatus"
-          role="status"
-          aria-live="polite"
+          class="difficulty-selector"
+          id="difficultySelector"
+          role="group"
+          aria-label="Select difficulty level"
         >
-          Good start! Keep guessing!
+          <h3 id="difficulty-label">Choose Difficulty:</h3>
+          <button
+            class="difficulty-btn active"
+            data-difficulty="easy"
+            aria-pressed="true"
+          >
+            Easy (4-6 letters)
+          </button>
+          <button
+            class="difficulty-btn"
+            data-difficulty="medium"
+            aria-pressed="false"
+          >
+            Medium (7-9 letters)
+          </button>
+          <button
+            class="difficulty-btn"
+            data-difficulty="hard"
+            aria-pressed="false"
+          >
+            Hard (10+ letters)
+          </button>
         </div>
+
         <div
-          class="progress-bar"
-          role="progressbar"
-          aria-label="Wrong guesses progress"
-          aria-valuemin="0"
-          aria-valuemax="6"
-          aria-valuenow="0"
+          class="category-selector"
+          id="categorySelector"
+          role="group"
+          aria-label="Select word category"
         >
-          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          <h3 id="category-label">Choose Category:</h3>
+          <button
+            class="category-btn active"
+            data-category="general"
+            aria-pressed="true"
+          >
+            General
+          </button>
+          <button
+            class="category-btn"
+            data-category="animals"
+            aria-pressed="false"
+          >
+            Animals
+          </button>
+          <button
+            class="category-btn"
+            data-category="food"
+            aria-pressed="false"
+          >
+            Food
+          </button>
+          <button
+            class="category-btn"
+            data-category="colors"
+            aria-pressed="false"
+          >
+            Colors
+          </button>
+          <button
+            class="category-btn"
+            data-category="family"
+            aria-pressed="false"
+          >
+            Family
+          </button>
+          <button
+            class="category-btn"
+            data-category="school"
+            aria-pressed="false"
+          >
+            School
+          </button>
+          <button
+            class="category-btn"
+            data-category="weather"
+            aria-pressed="false"
+          >
+            Weather
+          </button>
         </div>
+
+        <div class="balance-area" role="region" aria-label="Game status area">
+          <div class="hangman-display" id="hangmanFigure" aria-hidden="true">
+            <svg viewBox="0 0 200 250" class="hangman-svg">
+              <!-- Gallows -->
+              <line
+                x1="10"
+                y1="230"
+                x2="150"
+                y2="230"
+                stroke="black"
+                stroke-width="4"
+              />
+              <line
+                x1="50"
+                y1="230"
+                x2="50"
+                y2="20"
+                stroke="black"
+                stroke-width="4"
+              />
+              <line
+                x1="50"
+                y1="20"
+                x2="130"
+                y2="20"
+                stroke="black"
+                stroke-width="4"
+              />
+              <line
+                x1="130"
+                y1="20"
+                x2="130"
+                y2="50"
+                stroke="black"
+                stroke-width="4"
+              />
+
+              <!-- Head -->
+              <circle
+                class="hangman-part head"
+                cx="130"
+                cy="70"
+                r="20"
+                stroke="black"
+                stroke-width="4"
+                fill="none"
+                style="display: none"
+              />
+
+              <!-- Body -->
+              <line
+                class="hangman-part body"
+                x1="130"
+                y1="90"
+                x2="130"
+                y2="150"
+                stroke="black"
+                stroke-width="4"
+                style="display: none"
+              />
+
+              <!-- Left Arm -->
+              <line
+                class="hangman-part left-arm"
+                x1="130"
+                y1="110"
+                x2="100"
+                y2="130"
+                stroke="black"
+                stroke-width="4"
+                style="display: none"
+              />
+
+              <!-- Right Arm -->
+              <line
+                class="hangman-part right-arm"
+                x1="130"
+                y1="110"
+                x2="160"
+                y2="130"
+                stroke="black"
+                stroke-width="4"
+                style="display: none"
+              />
+
+              <!-- Left Leg -->
+              <line
+                class="hangman-part left-leg"
+                x1="130"
+                y1="150"
+                x2="110"
+                y2="190"
+                stroke="black"
+                stroke-width="4"
+                style="display: none"
+              />
+
+              <!-- Right Leg -->
+              <line
+                class="hangman-part right-leg"
+                x1="130"
+                y1="150"
+                x2="150"
+                y2="190"
+                stroke="black"
+                stroke-width="4"
+                style="display: none"
+              />
+            </svg>
+          </div>
+          <div
+            class="balance-status"
+            id="balanceStatus"
+            role="status"
+            aria-live="polite"
+          >
+            Good start! Keep guessing!
+          </div>
+          <div
+            class="progress-bar"
+            role="progressbar"
+            aria-label="Wrong guesses progress"
+            aria-valuemin="0"
+            aria-valuemax="6"
+            aria-valuenow="0"
+          >
+            <div
+              class="progress-fill"
+              id="progressFill"
+              style="width: 0%"
+            ></div>
+          </div>
+          <div
+            class="word-display"
+            id="wordDisplay"
+            role="status"
+            aria-live="polite"
+            aria-label="Current word progress"
+          ></div>
+          <div class="word-hint" id="wordHint" role="note"></div>
+        </div>
+
+        <div class="game-stats" role="region" aria-label="Game statistics">
+          <div class="stat">
+            <div
+              class="stat-value"
+              id="correctGuesses"
+              aria-label="Correct guesses"
+            >
+              0
+            </div>
+            <div class="stat-label">Correct</div>
+          </div>
+          <div class="stat">
+            <div
+              class="stat-value"
+              id="wrongGuesses"
+              aria-label="Wrong guesses"
+            >
+              0
+            </div>
+            <div class="stat-label">Wrong</div>
+          </div>
+          <div class="stat">
+            <div
+              class="stat-value"
+              id="wordsCompleted"
+              aria-label="Words completed"
+            >
+              0
+            </div>
+            <div class="stat-label">Words</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="gameScore" aria-label="Current score">
+              0
+            </div>
+            <div class="stat-label">Score</div>
+          </div>
+          <div class="stat">
+            <div
+              class="stat-value"
+              id="currentStreak"
+              aria-label="Current winning streak"
+            >
+              0
+            </div>
+            <div class="stat-label">Streak</div>
+          </div>
+          <div class="stat">
+            <div
+              class="stat-value"
+              id="bestStreak"
+              aria-label="Best winning streak"
+            >
+              0
+            </div>
+            <div class="stat-label">Best</div>
+          </div>
+        </div>
+
         <div
-          class="word-display"
-          id="wordDisplay"
-          role="status"
-          aria-live="polite"
-          aria-label="Current word progress"
+          class="alphabet-grid"
+          id="alphabetGrid"
+          role="group"
+          aria-label="Letter selection buttons"
         ></div>
-        <div class="word-hint" id="wordHint" role="note"></div>
-      </div>
 
-      <div class="game-stats" role="region" aria-label="Game statistics">
-        <div class="stat">
-          <div
-            class="stat-value"
-            id="correctGuesses"
-            aria-label="Correct guesses"
-          >
-            0
-          </div>
-          <div class="stat-label">Correct</div>
+        <div
+          class="game-message"
+          id="gameMessage"
+          style="display: none"
+          role="alert"
+          aria-live="assertive"
+        ></div>
+        <div class="round-actions" id="roundActions" hidden>
+          <button class="btn btn-primary" id="nextWordBtn" type="button">
+            <i class="fas fa-arrow-right" aria-hidden="true"></i> Next Word
+          </button>
         </div>
-        <div class="stat">
-          <div class="stat-value" id="wrongGuesses" aria-label="Wrong guesses">
-            0
-          </div>
-          <div class="stat-label">Wrong</div>
-        </div>
-        <div class="stat">
-          <div
-            class="stat-value"
-            id="wordsCompleted"
-            aria-label="Words completed"
-          >
-            0
-          </div>
-          <div class="stat-label">Words</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="gameScore" aria-label="Current score">
-            0
-          </div>
-          <div class="stat-label">Score</div>
-        </div>
-        <div class="stat">
-          <div
-            class="stat-value"
-            id="currentStreak"
-            aria-label="Current winning streak"
-          >
-            0
-          </div>
-          <div class="stat-label">Streak</div>
-        </div>
-        <div class="stat">
-          <div
-            class="stat-value"
-            id="bestStreak"
-            aria-label="Best winning streak"
-          >
-            0
-          </div>
-          <div class="stat-label">Best</div>
-        </div>
-      </div>
 
-      <div
-        class="alphabet-grid"
-        id="alphabetGrid"
-        role="group"
-        aria-label="Letter selection buttons"
-      ></div>
+        <div class="game-controls">
+          <button
+            class="btn btn-primary"
+            id="newGameBtn"
+            aria-label="Start a new game"
+          >
+            <i class="fas fa-play" aria-hidden="true"></i> New Game
+          </button>
+          <button
+            class="btn btn-hint"
+            id="hintBtn"
+            aria-label="Get a hint for 5 points penalty"
+          >
+            <i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint (-5
+            pts)
+          </button>
+          <button
+            class="btn btn-secondary"
+            id="skipWordBtn"
+            aria-label="Skip current word"
+          >
+            <i class="fas fa-forward" aria-hidden="true"></i> Skip Word
+          </button>
+          <button
+            class="btn btn-secondary"
+            onclick="window.location.href = 'games.html'"
+            aria-label="Return to games page"
+          >
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
+          </button>
+        </div>
+      </main>
 
-      <div
-        class="game-message"
-        id="gameMessage"
-        style="display: none"
-        role="alert"
-        aria-live="assertive"
-      ></div>
+      <aside class="balanceman-ad-rail" aria-label="Advertisement">
+        <div class="balanceman-ad-card">
+          <span class="balanceman-ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="9319754067"
+          ></ins>
+        </div>
+      </aside>
+    </div>
 
-      <div class="game-controls">
-        <button
-          class="btn btn-primary"
-          id="newGameBtn"
-          aria-label="Start a new game"
-        >
-          <i class="fas fa-play" aria-hidden="true"></i> New Game
-        </button>
-        <button
-          class="btn btn-hint"
-          id="hintBtn"
-          aria-label="Get a hint for 5 points penalty"
-        >
-          <i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint (-5 pts)
-        </button>
-        <button
-          class="btn btn-secondary"
-          id="skipWordBtn"
-          aria-label="Skip current word"
-        >
-          <i class="fas fa-forward" aria-hidden="true"></i> Skip Word
-        </button>
-        <button
-          class="btn btn-secondary"
-          onclick="window.location.href = 'games.html'"
-          aria-label="Return to games page"
-        >
-          <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Games
-        </button>
-      </div>
-    </main>
+    <section class="balanceman-bottom-ad" aria-label="Advertisement">
+      <span class="balanceman-ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2586206204"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
 
     <script>
       class BalanceManGame {
@@ -1541,6 +1561,7 @@
           this.wordsCompleted = 0;
           this.score = 0;
           this.hintUsed = false;
+          this.roundFinished = false;
           this.currentStreak = 0;
           this.bestStreak = 0;
           this.usedWords = new Set();
@@ -1841,6 +1862,8 @@
           document.getElementById("newGameBtn").onclick = () =>
             this.startNewGame();
           document.getElementById("hintBtn").onclick = () => this.showHint();
+          document.getElementById("nextWordBtn").onclick = () =>
+            this.startNewGame();
 
           const skipBtn = document.getElementById("skipWordBtn");
           if (skipBtn) {
@@ -1852,10 +1875,10 @@
             btn.onclick = () => {
               document.querySelectorAll(".difficulty-btn").forEach((b) => {
                 b.classList.remove("active");
-                b.setAttribute("aria-checked", "false");
+                b.setAttribute("aria-pressed", "false");
               });
               btn.classList.add("active");
-              btn.setAttribute("aria-checked", "true");
+              btn.setAttribute("aria-pressed", "true");
               this.difficulty = btn.dataset.difficulty;
               this.usedWords.clear(); // Reset used words when changing difficulty
               this.startNewGame();
@@ -1867,10 +1890,10 @@
             btn.onclick = () => {
               document.querySelectorAll(".category-btn").forEach((b) => {
                 b.classList.remove("active");
-                b.setAttribute("aria-checked", "false");
+                b.setAttribute("aria-pressed", "false");
               });
               btn.classList.add("active");
-              btn.setAttribute("aria-checked", "true");
+              btn.setAttribute("aria-pressed", "true");
               this.currentCategory = btn.dataset.category;
               this.usedWords.clear(); // Reset used words when changing category
               this.startNewGame();
@@ -1880,9 +1903,26 @@
           // Keyboard support
           document.addEventListener("keydown", (e) => {
             const letter = e.key.toUpperCase();
-            if (
-              letter >= "A" &&
-              letter <= "Z" &&
+            if (e.key.toLowerCase() === "h") {
+              e.preventDefault();
+              if (!document.getElementById("hintBtn").disabled) {
+                this.showHint();
+              }
+            } else if (e.key.toLowerCase() === "s") {
+              e.preventDefault();
+              if (!document.getElementById("skipWordBtn").disabled) {
+                this.skipWord();
+              }
+            } else if (e.key === "Enter") {
+              if (this.roundFinished) {
+                e.preventDefault();
+                this.startNewGame();
+              }
+            } else if (
+              /^[A-Z]$/.test(letter) &&
+              !e.metaKey &&
+              !e.ctrlKey &&
+              !e.altKey &&
               !this.guessedLetters.has(letter)
             ) {
               e.preventDefault();
@@ -1891,27 +1931,6 @@
               ).find((btn) => btn.textContent === letter && !btn.disabled);
               if (letterBtn) {
                 this.guessLetter(letter);
-              }
-            } else if (e.key === "Enter") {
-              e.preventDefault();
-              if (document.getElementById("newGameBtn").offsetParent !== null) {
-                this.startNewGame();
-              }
-            } else if (e.key === "h" || e.key === "H") {
-              e.preventDefault();
-              if (!document.getElementById("hintBtn").disabled) {
-                this.showHint();
-              }
-            } else if (e.key === "s" || e.key === "S") {
-              e.preventDefault();
-              const skipBtn = document.getElementById("skipWordBtn");
-              if (skipBtn && !skipBtn.disabled) {
-                this.skipWord();
-              }
-            } else if (e.key === "Escape") {
-              e.preventDefault();
-              if (confirm("Are you sure you want to exit the game?")) {
-                window.location.href = "games.html";
               }
             }
           });
@@ -1922,6 +1941,7 @@
           this.wrongGuesses = 0;
           this.correctGuesses = 0;
           this.hintUsed = false;
+          this.setRoundFinished(false);
 
           // Get random word from selected category and difficulty
           const wordList =
@@ -1961,6 +1981,7 @@
           hintBtn.disabled = false;
           hintBtn.innerHTML =
             '<i class="fas fa-lightbulb" aria-hidden="true"></i> Get Hint (-5 pts)';
+          hintBtn.setAttribute("aria-label", "Get a hint for 5 points penalty");
 
           // Update progress bar
           const progressBar = document.querySelector(".progress-bar");
@@ -1970,16 +1991,23 @@
         }
 
         skipWord() {
+          if (this.roundFinished) return;
+          this.setRoundFinished(true);
           this.currentStreak = 0;
-          this.showMessage("⏭️ Word skipped. Streak reset!", "danger");
+          this.currentWord.split("").forEach((letter) => {
+            if (letter !== " ") this.guessedLetters.add(letter);
+          });
+          this.updateDisplay();
+          this.showMessage(
+            `⏭️ Word skipped: ${this.currentWord}. Your streak has reset.`,
+            "danger",
+          );
           this.updateStats();
-          setTimeout(() => {
-            this.startNewGame();
-          }, 1500);
+          this.saveStats();
         }
 
         guessLetter(letter) {
-          if (this.guessedLetters.has(letter)) return;
+          if (this.roundFinished || this.guessedLetters.has(letter)) return;
 
           this.guessedLetters.add(letter);
 
@@ -2119,6 +2147,8 @@
         }
 
         handleWordComplete() {
+          if (this.roundFinished) return;
+          this.setRoundFinished(true);
           this.wordsCompleted++;
           this.currentStreak++;
 
@@ -2156,10 +2186,6 @@
           this.announceToScreenReader(
             `Congratulations! You completed the word ${this.currentWord}. ${message}`,
           );
-
-          setTimeout(() => {
-            this.startNewGame();
-          }, 2500);
         }
 
         createCelebrationEffect() {
@@ -2211,6 +2237,8 @@
         }
 
         handleGameOver() {
+          if (this.roundFinished) return;
+          this.setRoundFinished(true);
           this.currentStreak = 0;
           this.showMessage(
             `💔 BalanceMan fell! The word was "${this.currentWord}". Streak reset!`,
@@ -2225,25 +2253,7 @@
             `Game over. The word was ${this.currentWord}. Your streak has been reset.`,
           );
 
-          // Disable all letter buttons with animation
-          document.querySelectorAll(".letter-btn").forEach((btn, index) => {
-            setTimeout(() => {
-              btn.disabled = true;
-              btn.style.opacity = "0.5";
-            }, index * 50);
-          });
-
           // Auto-restart after delay
-          setTimeout(() => {
-            const shouldRestart = confirm(
-              "Would you like to try again with a new word?",
-            );
-            if (shouldRestart) {
-              this.startNewGame();
-            } else {
-              window.location.href = "games.html";
-            }
-          }, 3000);
         }
 
         updateDisplay() {
@@ -2301,6 +2311,9 @@
           if (progressFill) {
             progressFill.style.width = `${progressPercent}%`;
           }
+          document
+            .querySelector('[aria-label="Wrong guesses progress"]')
+            ?.setAttribute("aria-valuenow", String(this.wrongGuesses));
 
           // Hide all hangman parts
           document.querySelectorAll(".hangman-part").forEach((part) => {
@@ -2348,11 +2361,22 @@
           document.querySelectorAll(".letter-btn").forEach((btn) => {
             btn.disabled = false;
             btn.classList.remove("correct", "incorrect");
+            btn.style.opacity = "";
+          });
+        }
+
+        setRoundFinished(finished) {
+          this.roundFinished = finished;
+          document.getElementById("roundActions").hidden = !finished;
+          document.getElementById("hintBtn").disabled = finished;
+          document.getElementById("skipWordBtn").disabled = finished;
+          document.querySelectorAll(".letter-btn").forEach((btn) => {
+            btn.disabled = finished;
           });
         }
 
         showHint() {
-          if (!this.hintUsed) {
+          if (!this.hintUsed && !this.roundFinished) {
             document.getElementById("wordHint").textContent =
               `💡 Hint: ${this.currentHint}`;
             this.hintUsed = true;
@@ -2394,6 +2418,7 @@
 
         hideMessage() {
           document.getElementById("gameMessage").style.display = "none";
+          document.getElementById("roundActions").hidden = true;
           document.getElementById("wordHint").textContent =
             "Category: " +
             this.currentCategory.charAt(0).toUpperCase() +
@@ -2430,6 +2455,13 @@
           },
           { passive: false },
         );
+      });
+    </script>
+
+    <script src="../js/game-ads.js"></script>
+    <script>
+      window.addEventListener("load", () => window.refreshGameAds?.(), {
+        once: true,
       });
     </script>
 
@@ -2496,9 +2528,6 @@
         >
         <a href="games.html"
           ><i class="fas fa-gamepad" aria-hidden="true"></i> Games</a
-        >
-        <a href="../lessons.html"
-          ><i class="fas fa-book" aria-hidden="true"></i> Lessons</a
         >
         <a href="../contact.html"
           ><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a

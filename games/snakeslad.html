@@ -147,9 +147,10 @@
         "isFamilyFriendly": true,
         "numberOfPlayers": {
           "@type": "QuantitativeValue",
-          "value": 1
+          "minValue": 2,
+          "maxValue": 4
         },
-        "playMode": "SinglePlayer",
+        "playMode": "MultiPlayer",
         "applicationCategory": "Game",
         "accessibilityFeature": [
           "alternativeText",
@@ -222,7 +223,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
-    
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="../css/snakeslad-page.css" />
@@ -558,6 +558,7 @@
         opacity: 0.3;
       }
     </style>
+    <link rel="stylesheet" href="../css/snakeslad-design.css" />
   </head>
   <body>
     <a href="#main-game" class="skip-link">Skip to game</a>
@@ -580,11 +581,10 @@
     <main id="main-game">
       <div class="particles" id="particles" aria-hidden="true"></div>
 
-      <header class="game-header" role="banner">
+      <header class="game-header">
         <div class="header-content">
           <h1 class="game-title">
-            <span aria-hidden="true">🐍🪜</span> Super Fun English Snakes &
-            Ladders
+            <span aria-hidden="true">🐍🪜</span> English Snakes & Ladders
           </h1>
           <div class="game-controls" role="group" aria-label="Game controls">
             <button
@@ -800,13 +800,30 @@
       <div
         class="setup-screen"
         id="setupScreen"
-        role="main"
+        role="region"
         aria-label="Game setup"
       >
         <div class="setup-container">
-          <h2 class="setup-title">
-            🚀 Start Your English Learning Adventure! 🌟
-          </h2>
+          <section class="setup-hero" aria-labelledby="setupTitle">
+            <div class="setup-hero-copy">
+              <span class="setup-kicker">ROLL · LEARN · CLIMB</span>
+              <h2 class="setup-title" id="setupTitle">
+                Start your English adventure!
+              </h2>
+              <p class="setup-intro">
+                Pick a world, choose your character, and race to square 100.
+                Every roll brings a new chance to learn!
+              </p>
+            </div>
+            <img
+              class="setup-hero-art"
+              src="../images/games/snakes-ladders-adventure.svg"
+              alt="A cheerful green snake climbs a bright ladder beneath the stars"
+              width="520"
+              height="360"
+              fetchpriority="high"
+            />
+          </section>
 
           <!-- Board Selection -->
           <div class="setup-section">
@@ -823,14 +840,52 @@
 
           <!-- Player Selection -->
           <div class="setup-section">
-            <h3><i class="fas fa-user-astronaut"></i> Pick Your Character</h3>
+            <h3><i class="fas fa-users"></i> Build Your Team</h3>
+            <p
+              class="player-selection-hint"
+              id="playerSelectionHint"
+              aria-live="polite"
+            >
+              Choose 2 characters to play. Take turns and race to square 100!
+            </p>
+            <div
+              class="player-count-selection"
+              id="playerCountSelection"
+              role="group"
+              aria-label="Number of players"
+            >
+              <button
+                type="button"
+                class="player-count-option selected"
+                data-player-count="2"
+                aria-pressed="true"
+              >
+                2 players
+              </button>
+              <button
+                type="button"
+                class="player-count-option"
+                data-player-count="3"
+                aria-pressed="false"
+              >
+                3 players
+              </button>
+              <button
+                type="button"
+                class="player-count-option"
+                data-player-count="4"
+                aria-pressed="false"
+              >
+                4 players
+              </button>
+            </div>
             <div
               class="player-selection"
               id="playerSelection"
-              role="radiogroup"
-              aria-label="Character selection"
+              role="group"
+              aria-label="Choose characters for your team"
             >
-              <!-- Player options will be populated here -->
+              <!-- Character cards will be populated here -->
             </div>
           </div>
 
@@ -886,9 +941,23 @@
       <div
         class="game-screen"
         id="gameScreen"
-        role="main"
+        role="region"
         aria-label="Game board"
       >
+        <div class="sl-game-toolbar">
+          <span class="sl-focus-note">Focus mode hides all advertisements</span>
+          <button
+            class="sl-fullscreen-button"
+            id="fullscreenToggle"
+            type="button"
+            onclick="toggleGameFullscreen()"
+            aria-label="Enter ad-free fullscreen game"
+          >
+            <i class="fas fa-expand" aria-hidden="true"></i>
+            <span>Fullscreen · no ads</span>
+          </button>
+        </div>
+
         <!-- Game Status -->
         <div class="game-status" role="status" aria-live="polite">
           <div class="status-item">
@@ -898,7 +967,10 @@
               aria-hidden="true"
             ></div>
             <div>
-              <div style="font-size: 1.1rem; font-weight: 700">
+              <div
+                style="font-size: 1.1rem; font-weight: 700"
+                id="activePlayerLabel"
+              >
                 Your Progress
               </div>
               <div>
@@ -926,8 +998,15 @@
             </div>
           </div>
 
-          <div class="turn-indicator" id="turnIndicator" aria-live="polite">
-            🎲 Roll the Magic Dice! ✨
+          <div class="turn-center">
+            <div class="turn-indicator" id="turnIndicator" aria-live="polite">
+              🎲 Roll the Magic Dice! ✨
+            </div>
+            <div
+              class="turn-roster"
+              id="turnRoster"
+              aria-label="Player turn order"
+            ></div>
           </div>
 
           <div class="status-item">
@@ -959,126 +1038,198 @@
           </div>
         </div>
 
-        <!-- Game Board Container -->
-        <div class="game-board-container">
-          <!-- Game Board -->
-          <div class="board-area">
-            <div
-              class="game-board"
-              id="gameBoard"
-              role="region"
-              aria-label="Game board"
-            >
-              <div class="board-grid" id="boardGrid" role="grid">
-                <!-- Board cells will be generated here -->
-              </div>
+        <!-- Game and ad rail -->
+        <div class="sl-game-layout">
+          <!-- Game Board Container -->
+          <div class="game-board-container">
+            <!-- Game Board -->
+            <div class="board-area">
               <div
-                class="player-piece"
-                id="playerPiece"
-                aria-hidden="true"
-              ></div>
+                class="game-board"
+                id="gameBoard"
+                role="region"
+                aria-label="Game board"
+              >
+                <div class="board-grid" id="boardGrid" role="grid">
+                  <!-- Board cells will be generated here -->
+                </div>
+              </div>
             </div>
-          </div>
 
-          <!-- Game Controls -->
-          <div
-            class="game-controls-panel"
-            role="region"
-            aria-label="Game controls"
-          >
-            <!-- Dice Control -->
-            <div class="control-panel">
-              <h4>🎲 Magic Dice</h4>
-              <div class="dice-container">
+            <!-- Game Controls -->
+            <div
+              class="game-controls-panel"
+              role="region"
+              aria-label="Game controls"
+            >
+              <!-- Dice Control -->
+              <div class="control-panel">
+                <h4>🎲 Magic Dice</h4>
+                <div class="dice-container">
+                  <div
+                    class="dice"
+                    id="dice"
+                    role="img"
+                    aria-label="Dice showing six"
+                    data-value="6"
+                  >
+                    <span class="dice-face" aria-hidden="true">
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                      <span class="dice-cell"></span>
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                      <span class="dice-cell"></span>
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                      <span class="dice-cell"></span>
+                      <span class="dice-cell"
+                        ><span class="dice-pip"></span
+                      ></span>
+                    </span>
+                  </div>
+                  <button
+                    class="roll-btn"
+                    id="rollBtn"
+                    onclick="rollDice()"
+                    aria-label="Roll the dice to move forward"
+                  >
+                    🎲 Roll the Dice!
+                  </button>
+                </div>
+              </div>
+
+              <!-- Question Panel -->
+              <div
+                class="control-panel question-panel"
+                id="questionPanel"
+                role="region"
+                aria-label="Question panel"
+              >
+                <div class="question-title" id="questionTitle">
+                  <i class="fas fa-star"></i> Learning Challenge
+                  <i class="fas fa-star"></i>
+                </div>
                 <div
-                  class="dice"
-                  id="dice"
-                  role="img"
-                  aria-label="Dice showing six"
+                  class="question-content"
+                  id="questionContent"
+                  role="heading"
+                  aria-level="3"
                 >
-                  <i class="fas fa-dice-six"></i>
+                  <!-- Question will be displayed here -->
+                </div>
+                <div
+                  class="question-options"
+                  id="questionOptions"
+                  role="group"
+                  aria-label="Answer options"
+                >
+                  <!-- Options will be displayed here -->
                 </div>
                 <button
-                  class="roll-btn"
-                  id="rollBtn"
-                  onclick="rollDice()"
-                  aria-label="Roll the dice to move forward"
+                  class="continue-btn"
+                  id="continueBtn"
+                  onclick="continueGame()"
+                  style="display: none"
+                  aria-label="Continue to next turn"
                 >
-                  🎲 Roll the Dice!
+                  ✨ Continue Adventure ✨
                 </button>
               </div>
-            </div>
 
-            <!-- Question Panel -->
-            <div
-              class="control-panel question-panel"
-              id="questionPanel"
-              role="region"
-              aria-label="Question panel"
-            >
-              <div class="question-title" id="questionTitle">
-                <i class="fas fa-star"></i> Learning Challenge
-                <i class="fas fa-star"></i>
-              </div>
-              <div
-                class="question-content"
-                id="questionContent"
-                role="heading"
-                aria-level="3"
-              >
-                <!-- Question will be displayed here -->
-              </div>
-              <div
-                class="question-options"
-                id="questionOptions"
-                role="group"
-                aria-label="Answer options"
-              >
-                <!-- Options will be displayed here -->
-              </div>
-              <button
-                class="continue-btn"
-                id="continueBtn"
-                onclick="continueGame()"
-                style="display: none"
-                aria-label="Continue to next turn"
-              >
-                ✨ Continue Adventure ✨
-              </button>
-            </div>
-
-            <!-- Game Info -->
-            <div class="control-panel">
-              <h4>🎯 Your Stats</h4>
-              <div class="game-info">
-                <div class="info-item">
-                  <span><i class="fas fa-footsteps"></i> Moves:</span>
-                  <span
-                    id="moveCount"
-                    class="info-value"
-                    aria-label="Number of moves"
-                    >0</span
-                  >
+              <!-- Game Info -->
+              <div class="control-panel">
+                <h4>🎯 Your Stats</h4>
+                <div class="game-info">
+                  <div class="info-item">
+                    <span><i class="fas fa-footsteps"></i> Moves:</span>
+                    <span
+                      id="moveCount"
+                      class="info-value"
+                      aria-label="Number of moves"
+                      >0</span
+                    >
+                  </div>
+                  <div class="info-item">
+                    <span><i class="fas fa-clock"></i> Time:</span>
+                    <span
+                      id="gameTime"
+                      class="info-value"
+                      aria-label="Game time"
+                      >0:00</span
+                    >
+                  </div>
+                  <div class="info-item">
+                    <span><i class="fas fa-check-circle"></i> Correct:</span>
+                    <span id="correctAnswers" class="info-value">0</span>
+                  </div>
+                  <div class="info-item">
+                    <span><i class="fas fa-percentage"></i> Score:</span>
+                    <span id="accuracyRate" class="info-value">0%</span>
+                  </div>
                 </div>
-                <div class="info-item">
-                  <span><i class="fas fa-clock"></i> Time:</span>
-                  <span id="gameTime" class="info-value" aria-label="Game time"
-                    >0:00</span
-                  >
-                </div>
-                <div class="info-item">
-                  <span><i class="fas fa-check-circle"></i> Correct:</span>
-                  <span id="correctAnswers" class="info-value">0</span>
-                </div>
-                <div class="info-item">
-                  <span><i class="fas fa-percentage"></i> Score:</span>
-                  <span id="accuracyRate" class="info-value">0%</span>
+                <div class="connection-settings" aria-label="Board difficulty">
+                  <h5>Board challenge</h5>
+                  <label class="connection-setting" for="snakeCount">
+                    <span>🐍 Snakes</span>
+                    <output id="snakeCountValue" for="snakeCount">3</output>
+                    <input
+                      id="snakeCount"
+                      type="range"
+                      min="0"
+                      max="6"
+                      step="1"
+                      value="3"
+                      aria-label="Number of snakes on the board"
+                    />
+                  </label>
+                  <label class="connection-setting" for="ladderCount">
+                    <span>🪜 Ladders</span>
+                    <output id="ladderCountValue" for="ladderCount">4</output>
+                    <input
+                      id="ladderCount"
+                      type="range"
+                      min="0"
+                      max="6"
+                      step="1"
+                      value="4"
+                      aria-label="Number of ladders on the board"
+                    />
+                  </label>
+                  <p class="connection-hint">Changes apply immediately.</p>
                 </div>
               </div>
             </div>
           </div>
+          <aside class="sl-ad-rail in-game-ad" aria-label="Advertisement">
+            <div class="sl-ad-card">
+              <span class="sl-ad-label">Advertisement</span>
+              <div id="slInGameAdUnit"></div>
+            </div>
+          </aside>
         </div>
       </div>
+
+      <section class="sl-bottom-ad-section" aria-label="Advertisement">
+        <span class="sl-bottom-ad-label">Advertisement</span>
+        <ins
+          class="adsbygoogle"
+          style="display: block; min-height: 90px"
+          data-ad-client="ca-pub-2456627863532019"
+          data-ad-slot="9107452331"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </section>
 
       <!-- Game Message Modal -->
       <div class="game-message" id="gameMessage">
@@ -1095,17 +1246,18 @@
         // Game State
         let gameState = {
           selectedBoard: null,
-          selectedPlayer: null,
+          selectedPlayerIds: [],
+          playerCount: 2,
+          snakeCount: 3,
+          ladderCount: 4,
+          adFreeMode: false,
+          activePlayerIndex: 0,
+          roster: [],
           selectedContent: null,
-          playerPosition: 1,
-          playerScore: 0,
-          moveCount: 0,
-          correctAnswers: 0,
           gameStartTime: null,
           currentQuestion: null,
           isMoving: false,
           gameOver: false,
-          currentStreak: 0,
           bestStreak: parseInt(localStorage.getItem("sl_bestStreak") || "0"),
           stats: {
             gamesPlayed: parseInt(
@@ -1120,6 +1272,7 @@
         // Audio Context for sound effects
         let audioContext;
         let soundEnabled = true;
+        let gameTimerId = null;
 
         // Initialize audio on first user interaction
         function initAudio() {
@@ -1312,15 +1465,16 @@
 
         // Update streak tracking
         function updateStreak(correct) {
+          const player = getCurrentPlayer();
           if (correct) {
-            gameState.currentStreak++;
-            if (gameState.currentStreak > gameState.bestStreak) {
-              gameState.bestStreak = gameState.currentStreak;
+            player.streak++;
+            if (player.streak > gameState.bestStreak) {
+              gameState.bestStreak = player.streak;
               gameState.stats.bestStreak = gameState.bestStreak;
               saveStats();
             }
           } else {
-            gameState.currentStreak = 0;
+            player.streak = 0;
           }
         }
 
@@ -1330,40 +1484,168 @@
             id: "classic",
             name: "🎲 Classic Board",
             theme: "classic",
-            snakes: { 91: 75, 87: 24, 93: 73, 95: 56, 88: 36 },
-            ladders: { 4: 56, 12: 50, 14: 55, 22: 58, 41: 79, 54: 88 },
+            snakeOptions: [
+              [96, 77],
+              [83, 61],
+              [67, 48],
+              [56, 36],
+              [34, 14],
+              [28, 8],
+            ],
+            ladderOptions: [
+              [3, 24],
+              [18, 39],
+              [43, 64],
+              [72, 91],
+              [11, 32],
+              [31, 52],
+            ],
+            snakes: {},
+            ladders: {},
           },
           {
             id: "jungle",
             name: "🌴 Jungle Adventure",
             theme: "jungle",
-            snakes: { 89: 53, 90: 48, 76: 63, 95: 24, 92: 51 },
-            ladders: { 8: 52, 6: 42, 21: 82, 28: 77, 36: 57, 71: 92 },
+            snakeOptions: [
+              [94, 74],
+              [79, 58],
+              [61, 42],
+              [55, 35],
+              [37, 17],
+              [29, 10],
+            ],
+            ladderOptions: [
+              [4, 25],
+              [22, 43],
+              [47, 68],
+              [71, 92],
+              [9, 30],
+              [32, 53],
+            ],
+            snakes: {},
+            ladders: {},
           },
           {
             id: "ocean",
             name: "🌊 Ocean Quest",
             theme: "ocean",
-            snakes: { 83: 19, 90: 48, 76: 63, 98: 79, 85: 23 },
-            ladders: { 1: 40, 9: 89, 16: 25, 51: 67, 65: 85, 68: 91 },
+            snakeOptions: [
+              [97, 78],
+              [84, 62],
+              [67, 45],
+              [56, 36],
+              [38, 18],
+              [29, 10],
+            ],
+            ladderOptions: [
+              [2, 23],
+              [19, 41],
+              [44, 65],
+              [73, 94],
+              [9, 30],
+              [32, 53],
+            ],
+            snakes: {},
+            ladders: {},
           },
           {
             id: "space",
             name: "🚀 Space Explorer",
             theme: "space",
-            snakes: { 97: 78, 92: 53, 83: 27, 69: 33, 64: 16 },
-            ladders: { 3: 39, 10: 12, 27: 53, 40: 62, 43: 84, 74: 92 },
+            snakeOptions: [
+              [95, 76],
+              [81, 59],
+              [65, 46],
+              [56, 36],
+              [38, 17],
+              [29, 9],
+            ],
+            ladderOptions: [
+              [5, 26],
+              [20, 42],
+              [48, 69],
+              [72, 93],
+              [11, 32],
+              [34, 55],
+            ],
+            snakes: {},
+            ladders: {},
           },
         ];
 
-        // Player options with emoji representations
+        // Character options available for 2-4 player games.
         const players = [
-          { id: "boy", name: "Boy", emoji: "👦", color: "#4ade80" },
-          { id: "girl", name: "Girl", emoji: "👧", color: "#f472b6" },
-          { id: "cat", name: "Cat", emoji: "🐱", color: "#fbbf24" },
-          { id: "dog", name: "Dog", emoji: "🐶", color: "#fb7185" },
-          { id: "robot", name: "Robot", emoji: "🤖", color: "#6366f1" },
-          { id: "alien", name: "Alien", emoji: "👽", color: "#34d399" },
+          {
+            id: "boy",
+            name: "Explorer",
+            description: "Brave explorer",
+            emoji: "🧑‍🚀",
+            color: "#4ade80",
+          },
+          {
+            id: "girl",
+            name: "Artist",
+            description: "Creative artist",
+            emoji: "👩‍🎨",
+            color: "#f472b6",
+          },
+          {
+            id: "cat",
+            name: "Cat",
+            description: "Curious cat",
+            emoji: "🐱",
+            color: "#fbbf24",
+          },
+          {
+            id: "dog",
+            name: "Dog",
+            description: "Happy pup",
+            emoji: "🐶",
+            color: "#fb7185",
+          },
+          {
+            id: "robot",
+            name: "Robot",
+            description: "Clever bot",
+            emoji: "🤖",
+            color: "#6366f1",
+          },
+          {
+            id: "alien",
+            name: "Alien",
+            description: "Cosmic friend",
+            emoji: "👽",
+            color: "#34d399",
+          },
+          {
+            id: "fox",
+            name: "Fox",
+            description: "Quick thinker",
+            emoji: "🦊",
+            color: "#f97316",
+          },
+          {
+            id: "dragon",
+            name: "Dragon",
+            description: "Mighty dragon",
+            emoji: "🐉",
+            color: "#ef4444",
+          },
+          {
+            id: "unicorn",
+            name: "Unicorn",
+            description: "Magic maker",
+            emoji: "🦄",
+            color: "#a855f7",
+          },
+          {
+            id: "wizard",
+            name: "Wizard",
+            description: "Word wizard",
+            emoji: "🧙",
+            color: "#0ea5e9",
+          },
         ];
 
         // Question banks
@@ -1507,16 +1789,65 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {
               if (
-                gameState.playerPosition > 0 &&
+                gameState.roster.length > 0 &&
                 document
                   .getElementById("gameScreen")
                   .classList.contains("active")
               ) {
-                positionPlayerPiece(gameState.playerPosition);
+                gameState.roster.forEach((player) =>
+                  positionPlayerPiece(player.position, player.id),
+                );
+                updateTurnRoster();
                 // Redraw snakes and ladders to match new board size
                 drawSnakesAndLadders();
               }
             }, 100);
+          });
+
+          document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement) {
+              document
+                .getElementById("gameScreen")
+                ?.classList.remove("is-fullscreen-fallback");
+              document.body.classList.remove("sl-fullscreen-fallback");
+            }
+            gameState.adFreeMode = Boolean(
+              document.fullscreenElement ===
+                document.getElementById("gameScreen") ||
+              document
+                .getElementById("gameScreen")
+                ?.classList.contains("is-fullscreen-fallback"),
+            );
+            updateFullscreenButton();
+          });
+
+          ["snakeCount", "ladderCount"].forEach((id) => {
+            document.getElementById(id).addEventListener("input", (event) => {
+              const isSnake = id === "snakeCount";
+              const count = Number(event.currentTarget.value);
+              if (isSnake) gameState.snakeCount = count;
+              else gameState.ladderCount = count;
+              document.getElementById(
+                isSnake ? "snakeCountValue" : "ladderCountValue",
+              ).value = String(count);
+
+              const board = boards.find(
+                (option) => option.id === gameState.selectedBoard,
+              );
+              if (
+                board &&
+                document
+                  .getElementById("gameScreen")
+                  .classList.contains("active")
+              ) {
+                applyConnectionCounts(board);
+                generateBoardGrid();
+                drawSnakesAndLadders();
+                gameState.roster.forEach((player) =>
+                  positionPlayerPiece(player.position, player.id),
+                );
+              }
+            });
           });
 
           // Keyboard navigation
@@ -1525,7 +1856,10 @@
             if (
               e.code === "Space" &&
               !gameState.isMoving &&
-              !gameState.gameOver
+              !gameState.gameOver &&
+              !e.target.closest(
+                "button, input, select, textarea, [contenteditable='true']",
+              )
             ) {
               const rollBtn = document.getElementById("rollBtn");
               if (
@@ -1623,16 +1957,28 @@
             boardSelection.appendChild(boardOption);
           });
 
-          // Populate player options
+          // Set up party-size controls.
+          document
+            .querySelectorAll(".player-count-option")
+            .forEach((button) => {
+              button.onclick = () =>
+                selectPlayerCount(Number(button.dataset.playerCount));
+            });
+
+          // Populate character options.
           const playerSelection = document.getElementById("playerSelection");
           players.forEach((player) => {
             const playerOption = document.createElement("div");
             playerOption.className = "player-option";
             playerOption.dataset.player = player.id;
-            playerOption.textContent = player.emoji;
-            playerOption.setAttribute("role", "radio");
+            playerOption.style.setProperty("--player-color", player.color);
+            playerOption.innerHTML = `<span class="player-emoji" aria-hidden="true">${player.emoji}</span><span class="player-label">${player.name}</span><span class="player-description">${player.description}</span><span class="player-pick-order" aria-hidden="true"></span>`;
+            playerOption.setAttribute("role", "checkbox");
             playerOption.setAttribute("aria-checked", "false");
-            playerOption.setAttribute("aria-label", player.name);
+            playerOption.setAttribute(
+              "aria-label",
+              `${player.name}, ${player.description}`,
+            );
             playerOption.setAttribute("tabindex", "0");
             playerOption.onclick = () => selectPlayer(player.id);
             playerOption.onkeypress = (e) => {
@@ -1643,6 +1989,7 @@
             };
             playerSelection.appendChild(playerOption);
           });
+          refreshPlayerSelection();
 
           // Content selection handlers
           document.querySelectorAll(".content-option").forEach((btn) => {
@@ -1665,21 +2012,75 @@
           );
         }
 
-        function selectPlayer(playerId) {
-          gameState.selectedPlayer = playerId;
-          document.querySelectorAll(".player-option").forEach((opt) => {
-            opt.classList.remove("selected");
-            opt.setAttribute("aria-checked", "false");
-          });
-          const selected = document.querySelector(
-            `[data-player="${playerId}"]`,
+        function selectPlayerCount(count) {
+          gameState.playerCount = Math.max(2, Math.min(4, count));
+          gameState.selectedPlayerIds = gameState.selectedPlayerIds.slice(
+            0,
+            gameState.playerCount,
           );
-          selected.classList.add("selected");
-          selected.setAttribute("aria-checked", "true");
+          document
+            .querySelectorAll(".player-count-option")
+            .forEach((button) => {
+              const isSelected =
+                Number(button.dataset.playerCount) === gameState.playerCount;
+              button.classList.toggle("selected", isSelected);
+              button.setAttribute("aria-pressed", String(isSelected));
+            });
+          refreshPlayerSelection();
           checkCanStart();
           announceToScreenReader(
-            `Character selected: ${players.find((p) => p.id === playerId).name}`,
+            `Playing with ${gameState.playerCount} players.`,
           );
+        }
+
+        function selectPlayer(playerId) {
+          const selectedIndex = gameState.selectedPlayerIds.indexOf(playerId);
+          if (selectedIndex >= 0) {
+            gameState.selectedPlayerIds.splice(selectedIndex, 1);
+          } else if (
+            gameState.selectedPlayerIds.length < gameState.playerCount
+          ) {
+            gameState.selectedPlayerIds.push(playerId);
+          } else {
+            document.getElementById("playerSelectionHint").textContent =
+              `Your team is full. Unselect a character before choosing another.`;
+            announceToScreenReader(
+              "Your team is full. Unselect a character first.",
+            );
+            return;
+          }
+          refreshPlayerSelection();
+          checkCanStart();
+          const selectedNames = gameState.selectedPlayerIds
+            .map((id) => players.find((player) => player.id === id).name)
+            .join(" and ");
+          announceToScreenReader(
+            selectedNames
+              ? `Team selected: ${selectedNames}`
+              : "Choose your characters.",
+          );
+        }
+
+        function refreshPlayerSelection() {
+          const chosen = gameState.selectedPlayerIds.length;
+          const hint = document.getElementById("playerSelectionHint");
+          if (hint) {
+            hint.textContent =
+              chosen === gameState.playerCount
+                ? `Team ready: ${chosen} of ${gameState.playerCount} characters selected. You can start your race!`
+                : `Choose ${gameState.playerCount} characters. ${chosen} of ${gameState.playerCount} selected.`;
+          }
+          document.querySelectorAll(".player-option").forEach((option) => {
+            const index = gameState.selectedPlayerIds.indexOf(
+              option.dataset.player,
+            );
+            const isSelected = index >= 0;
+            option.classList.toggle("selected", isSelected);
+            option.setAttribute("aria-checked", String(isSelected));
+            option.querySelector(".player-pick-order").textContent = isSelected
+              ? String(index + 1)
+              : "";
+          });
         }
 
         function selectContent(contentType) {
@@ -1700,7 +2101,7 @@
         function checkCanStart() {
           const canStart =
             gameState.selectedBoard &&
-            gameState.selectedPlayer &&
+            gameState.selectedPlayerIds.length === gameState.playerCount &&
             gameState.selectedContent;
           document.getElementById("startGameBtn").disabled = !canStart;
         }
@@ -1711,26 +2112,39 @@
           document.getElementById("gameScreen").classList.add("active");
 
           // Initialize game state
-          gameState.playerPosition = 1;
-          gameState.playerScore = 0;
-          gameState.moveCount = 0;
-          gameState.correctAnswers = 0;
-          gameState.currentStreak = 0;
+          gameState.roster = gameState.selectedPlayerIds.map((playerId) => {
+            const player = players.find((option) => option.id === playerId);
+            return {
+              ...player,
+              position: 1,
+              score: 0,
+              moves: 0,
+              correctAnswers: 0,
+              streak: 0,
+            };
+          });
+          gameState.activePlayerIndex = 0;
           gameState.gameStartTime = Date.now();
           gameState.gameOver = false;
+          document.getElementById("turnIndicator").textContent =
+            `🎲 ${getCurrentPlayer().name}'s turn! Roll the dice.`;
 
           // Setup game board
           setupGameBoard();
+          setupInGameAd();
 
           // Position player piece after a brief delay to ensure board is fully rendered
           setTimeout(() => {
             updatePlayerPosition();
+            updateTurnRoster();
             updateGameStatus();
           }, 50);
 
           startGameTimer();
 
-          announceToScreenReader("Game started! Press Space to roll the dice.");
+          announceToScreenReader(
+            `${getCurrentPlayer().name} starts! Press Space to roll the dice.`,
+          );
           playSound("success");
         }
 
@@ -1738,10 +2152,7 @@
           const selectedBoard = boards.find(
             (b) => b.id === gameState.selectedBoard,
           );
-          const selectedPlayer = players.find(
-            (p) => p.id === gameState.selectedPlayer,
-          );
-
+          applyConnectionCounts(selectedBoard);
           // Set board theme
           const gameBoard = document.getElementById("gameBoard");
           const themes = {
@@ -1752,15 +2163,7 @@
           };
           gameBoard.style.background =
             themes[selectedBoard.theme] || themes.classic;
-
-          // Set player avatar
-          const playerAvatar = document.getElementById("playerAvatar");
-          playerAvatar.textContent = selectedPlayer.emoji;
-          playerAvatar.style.background = selectedPlayer.color;
-
-          const playerPiece = document.getElementById("playerPiece");
-          playerPiece.textContent = selectedPlayer.emoji;
-          playerPiece.style.background = selectedPlayer.color;
+          gameBoard.dataset.theme = selectedBoard.theme;
 
           // Set content type display
           document.getElementById("contentType").textContent =
@@ -1770,8 +2173,105 @@
           // Generate board grid
           generateBoardGrid();
 
+          // Create a distinct, color-coded token for each player.
+          createPlayerPieces();
+
           // Draw snakes and ladders
           drawSnakesAndLadders();
+        }
+
+        function applyConnectionCounts(board) {
+          board.snakes = Object.fromEntries(
+            board.snakeOptions.slice(0, gameState.snakeCount),
+          );
+          board.ladders = Object.fromEntries(
+            board.ladderOptions.slice(0, gameState.ladderCount),
+          );
+        }
+
+        async function toggleGameFullscreen() {
+          const gameScreen = document.getElementById("gameScreen");
+          if (!gameScreen.classList.contains("active")) return;
+
+          if (document.fullscreenElement === gameScreen) {
+            await document.exitFullscreen();
+            return;
+          }
+          if (gameScreen.classList.contains("is-fullscreen-fallback")) {
+            gameScreen.classList.remove("is-fullscreen-fallback");
+            document.body.classList.remove("sl-fullscreen-fallback");
+            gameState.adFreeMode = false;
+            updateFullscreenButton();
+            return;
+          }
+
+          gameState.adFreeMode = true;
+          try {
+            if (gameScreen.requestFullscreen) {
+              const enteredFullscreen = await Promise.race([
+                gameScreen
+                  .requestFullscreen()
+                  .then(() => true)
+                  .catch(() => false),
+                new Promise((resolve) =>
+                  window.setTimeout(() => resolve(false), 900),
+                ),
+              ]);
+              if (
+                !enteredFullscreen &&
+                document.fullscreenElement !== gameScreen
+              ) {
+                gameScreen.classList.add("is-fullscreen-fallback");
+                document.body.classList.add("sl-fullscreen-fallback");
+              }
+            } else {
+              throw new Error("Fullscreen API is unavailable");
+            }
+          } catch (error) {
+            gameScreen.classList.add("is-fullscreen-fallback");
+            document.body.classList.add("sl-fullscreen-fallback");
+          }
+          gameState.adFreeMode = true;
+          updateFullscreenButton();
+        }
+
+        function updateFullscreenButton() {
+          const button = document.getElementById("fullscreenToggle");
+          if (!button) return;
+          const isFullscreen =
+            document.fullscreenElement ===
+              document.getElementById("gameScreen") ||
+            document
+              .getElementById("gameScreen")
+              ?.classList.contains("is-fullscreen-fallback");
+          button.innerHTML = isFullscreen
+            ? '<i class="fas fa-compress" aria-hidden="true"></i><span>Exit fullscreen</span>'
+            : '<i class="fas fa-expand" aria-hidden="true"></i><span>Fullscreen · no ads</span>';
+          button.setAttribute(
+            "aria-label",
+            isFullscreen
+              ? "Exit fullscreen game"
+              : "Enter ad-free fullscreen game",
+          );
+        }
+
+        function setupInGameAd() {
+          if (gameState.adFreeMode) return;
+          const container = document.getElementById("slInGameAdUnit");
+          if (!container || container.querySelector(".adsbygoogle")) return;
+
+          const ad = document.createElement("ins");
+          ad.className = "adsbygoogle";
+          ad.style.cssText = "display:inline-block;width:300px;height:250px";
+          ad.dataset.adClient = "ca-pub-2456627863532019";
+          ad.dataset.adSlot = "7630719137";
+          container.appendChild(ad);
+
+          requestAnimationFrame(() => {
+            if (typeof window.refreshGameAds === "function") {
+              window.refreshGameAds();
+            }
+          });
         }
 
         function generateBoardGrid() {
@@ -1879,25 +2379,179 @@
         function createCurvedPath(start, end, type) {
           const startPos = getCellCenter(start);
           const endPos = getCellCenter(end);
+          const namespace = "http://www.w3.org/2000/svg";
+          const group = document.createElementNS(namespace, "g");
+          const dx = endPos.x - startPos.x;
+          const dy = endPos.y - startPos.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          const normalX = -dy / distance;
+          const normalY = dx / distance;
+          const cell = document.getElementById(`cell-${start}`);
+          const cellSize = cell ? cell.getBoundingClientRect().width : 64;
+          const amplitude = Math.min(25, Math.max(11, cellSize * 0.34));
+          const sampleCount = 24;
+          const points = Array.from({ length: sampleCount + 1 }, (_, index) => {
+            const t = index / sampleCount;
+            const wave =
+              Math.sin(t * Math.PI * 2) *
+              amplitude *
+              Math.sin(t * Math.PI) *
+              (start % 2 === 0 ? 1 : -1);
+            return {
+              x: startPos.x + dx * t + normalX * wave,
+              y: startPos.y + dy * t + normalY * wave,
+            };
+          });
+          let d = `M ${points[0].x} ${points[0].y}`;
+          for (let index = 0; index < sampleCount; index++) {
+            const p0 = points[Math.max(0, index - 1)];
+            const p1 = points[index];
+            const p2 = points[index + 1];
+            const p3 = points[Math.min(sampleCount, index + 2)];
+            const c1x = p1.x + (p2.x - p0.x) / 6;
+            const c1y = p1.y + (p2.y - p0.y) / 6;
+            const c2x = p2.x - (p3.x - p1.x) / 6;
+            const c2y = p2.y - (p3.y - p1.y) / 6;
+            d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2.x} ${p2.y}`;
+          }
 
-          const path = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path",
+          if (type !== "snake") {
+            const path = document.createElementNS(namespace, "path");
+            path.setAttribute("d", d);
+            path.classList.add("ladder-path");
+            return path;
+          }
+
+          const defs = document.createElementNS(namespace, "defs");
+          const gradient = document.createElementNS(
+            namespace,
+            "linearGradient",
           );
+          const gradientId = `snake-gradient-${start}-${end}`;
+          gradient.id = gradientId;
+          gradient.setAttribute("x1", "0%");
+          gradient.setAttribute("y1", "0%");
+          gradient.setAttribute("x2", "100%");
+          gradient.setAttribute("y2", "100%");
+          [
+            ["0%", "#38a75c"],
+            ["52%", "#8bd34f"],
+            ["100%", "#1d8051"],
+          ].forEach(([offset, color]) => {
+            const stop = document.createElementNS(namespace, "stop");
+            stop.setAttribute("offset", offset);
+            stop.setAttribute("stop-color", color);
+            gradient.appendChild(stop);
+          });
+          defs.appendChild(gradient);
+          group.appendChild(defs);
 
-          // Create a smooth curve
-          const midX = (startPos.x + endPos.x) / 2;
-          const midY = (startPos.y + endPos.y) / 2;
-          const curve = startPos.x < endPos.x ? -30 : 30;
+          const addPath = (className, width) => {
+            const path = document.createElementNS(namespace, "path");
+            path.setAttribute("d", d);
+            path.setAttribute("class", className);
+            if (width) path.setAttribute("stroke-width", width);
+            group.appendChild(path);
+            return path;
+          };
+          addPath("snake-path");
+          const body = addPath("snake-body");
+          body.style.stroke = `url(#${gradientId})`;
+          addPath("snake-belly");
 
-          const d = `M ${startPos.x} ${startPos.y} Q ${midX + curve} ${midY} ${
-            endPos.x
-          } ${endPos.y}`;
+          const markerCount = Math.max(4, Math.floor(distance / 24));
+          for (let i = 1; i < markerCount; i++) {
+            const t = i / markerCount;
+            const pointIndex = Math.round(t * sampleCount);
+            const point = points[pointIndex];
+            const before = points[Math.max(0, pointIndex - 1)];
+            const after = points[Math.min(sampleCount, pointIndex + 1)];
+            const tangentX = after.x - before.x;
+            const tangentY = after.y - before.y;
+            const angle = (Math.atan2(tangentY, tangentX) * 180) / Math.PI;
+            const tangentLength = Math.hypot(tangentX, tangentY) || 1;
+            const scaleNormalX = -tangentY / tangentLength;
+            const scaleNormalY = tangentX / tangentLength;
 
-          path.setAttribute("d", d);
-          path.classList.add(type === "snake" ? "snake-path" : "ladder-path");
+            [-3.8, 3.8].forEach((offset) => {
+              const x = point.x + scaleNormalX * offset;
+              const y = point.y + scaleNormalY * offset;
+              const scale = document.createElementNS(namespace, "ellipse");
+              scale.setAttribute("cx", x);
+              scale.setAttribute("cy", y);
+              scale.setAttribute("rx", "3.1");
+              scale.setAttribute("ry", "1.8");
+              scale.setAttribute("class", "snake-scale");
+              scale.setAttribute("transform", `rotate(${angle} ${x} ${y})`);
+              group.appendChild(scale);
+            });
+          }
 
-          return path;
+          const headTangentX = points[1].x - points[0].x;
+          const headTangentY = points[1].y - points[0].y;
+          const angle =
+            (Math.atan2(headTangentY, headTangentX) * 180) / Math.PI;
+          const head = document.createElementNS(namespace, "g");
+          head.setAttribute(
+            "transform",
+            `translate(${startPos.x} ${startPos.y}) rotate(${angle})`,
+          );
+          const shadow = document.createElementNS(namespace, "ellipse");
+          shadow.setAttribute("cx", "1");
+          shadow.setAttribute("cy", "2");
+          shadow.setAttribute("rx", "13");
+          shadow.setAttribute("ry", "10");
+          shadow.setAttribute("class", "snake-head-outline");
+          head.appendChild(shadow);
+          const face = document.createElementNS(namespace, "ellipse");
+          face.setAttribute("cx", "0");
+          face.setAttribute("cy", "0");
+          face.setAttribute("rx", "11");
+          face.setAttribute("ry", "8.5");
+          face.setAttribute("class", "snake-head-fill");
+          face.style.fill = `url(#${gradientId})`;
+          head.appendChild(face);
+          [
+            [-3.5, -4],
+            [-3.5, 4],
+          ].forEach(([x, y]) => {
+            const eye = document.createElementNS(namespace, "circle");
+            eye.setAttribute("cx", x);
+            eye.setAttribute("cy", y);
+            eye.setAttribute("r", "2.7");
+            eye.setAttribute("class", "snake-eye-white");
+            head.appendChild(eye);
+            const pupil = document.createElementNS(namespace, "circle");
+            pupil.setAttribute("cx", x + 0.6);
+            pupil.setAttribute("cy", y);
+            pupil.setAttribute("r", "1.2");
+            pupil.setAttribute("class", "snake-eye-pupil");
+            head.appendChild(pupil);
+          });
+          const mouth = document.createElementNS(namespace, "path");
+          mouth.setAttribute("d", "M 7 -3 Q 10 0 7 3");
+          mouth.setAttribute("class", "snake-mouth");
+          head.appendChild(mouth);
+          const tongue = document.createElementNS(namespace, "path");
+          tongue.setAttribute("d", "M 10 0 l 7 0 m -3 0 l 2 -2 m -2 2 l 2 2");
+          tongue.setAttribute("class", "snake-tongue");
+          head.appendChild(tongue);
+          group.appendChild(head);
+
+          const tail = document.createElementNS(namespace, "path");
+          tail.setAttribute("d", "M 0 0 Q -6 -5 -16 0 Q -6 5 0 0 Z");
+          tail.setAttribute("class", "snake-tail");
+          const beforeTail = points[sampleCount - 1];
+          const tailAngle =
+            (Math.atan2(beforeTail.y - endPos.y, beforeTail.x - endPos.x) *
+              180) /
+            Math.PI;
+          tail.setAttribute(
+            "transform",
+            `translate(${endPos.x} ${endPos.y}) rotate(${tailAngle})`,
+          );
+          group.appendChild(tail);
+          return group;
         }
 
         function createLadder(start, end) {
@@ -1905,34 +2559,39 @@
           const startPos = getCellCenter(start);
           const endPos = getCellCenter(end);
 
-          // Left rail
-          const leftRail = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "line",
+          const namespace = "http://www.w3.org/2000/svg";
+          const dx = endPos.x - startPos.x;
+          const dy = endPos.y - startPos.y;
+          const distance = Math.hypot(dx, dy);
+          const normalX = -dy / (distance || 1);
+          const normalY = dx / (distance || 1);
+          const railOffset = 8;
+          const makeLine = (x1, y1, x2, y2, className) => {
+            const line = document.createElementNS(namespace, "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.classList.add(className);
+            return line;
+          };
+          elements.push(
+            makeLine(
+              startPos.x + normalX * railOffset,
+              startPos.y + normalY * railOffset,
+              endPos.x + normalX * railOffset,
+              endPos.y + normalY * railOffset,
+              "ladder-rail",
+            ),
           );
-          leftRail.setAttribute("x1", startPos.x - 8);
-          leftRail.setAttribute("y1", startPos.y);
-          leftRail.setAttribute("x2", endPos.x - 8);
-          leftRail.setAttribute("y2", endPos.y);
-          leftRail.classList.add("ladder-path");
-          elements.push(leftRail);
-
-          // Right rail
-          const rightRail = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "line",
-          );
-          rightRail.setAttribute("x1", startPos.x + 8);
-          rightRail.setAttribute("y1", startPos.y);
-          rightRail.setAttribute("x2", endPos.x + 8);
-          rightRail.setAttribute("y2", endPos.y);
-          rightRail.classList.add("ladder-path");
-          elements.push(rightRail);
-
-          // Rungs
-          const distance = Math.sqrt(
-            Math.pow(endPos.x - startPos.x, 2) +
-              Math.pow(endPos.y - startPos.y, 2),
+          elements.push(
+            makeLine(
+              startPos.x - normalX * railOffset,
+              startPos.y - normalY * railOffset,
+              endPos.x - normalX * railOffset,
+              endPos.y - normalY * railOffset,
+              "ladder-rail",
+            ),
           );
           const numRungs = Math.max(3, Math.floor(distance / 30));
 
@@ -1940,17 +2599,12 @@
             const t = i / numRungs;
             const x = startPos.x + (endPos.x - startPos.x) * t;
             const y = startPos.y + (endPos.y - startPos.y) * t;
-
-            const rung = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "line",
-            );
-            rung.setAttribute("x1", x - 8);
-            rung.setAttribute("y1", y);
-            rung.setAttribute("x2", x + 8);
-            rung.setAttribute("y2", y);
-            rung.classList.add("ladder-rung");
-            elements.push(rung);
+            const x1 = x + normalX * railOffset;
+            const y1 = y + normalY * railOffset;
+            const x2 = x - normalX * railOffset;
+            const y2 = y - normalY * railOffset;
+            elements.push(makeLine(x1, y1, x2, y2, "ladder-rung-shadow"));
+            elements.push(makeLine(x1, y1, x2, y2, "ladder-rung"));
           }
 
           return elements;
@@ -1962,6 +2616,8 @@
           const dice = document.getElementById("dice");
           const rollBtn = document.getElementById("rollBtn");
 
+          document.getElementById("turnIndicator").textContent =
+            `${getCurrentPlayer().emoji} ${getCurrentPlayer().name} is rolling...`;
           dice.classList.add("rolling");
           rollBtn.disabled = true;
           playSound("dice");
@@ -1969,38 +2625,52 @@
           setTimeout(() => {
             const diceValue = Math.floor(Math.random() * 6) + 1;
             dice.innerHTML = getDiceIcon(diceValue);
+            dice.dataset.value = diceValue;
+            dice.setAttribute("aria-label", `Dice showing ${diceValue}`);
             dice.classList.remove("rolling");
-            announceToScreenReader(`You rolled a ${diceValue}`);
+            document.getElementById("turnIndicator").textContent =
+              `✨ ${getCurrentPlayer().name} rolled ${diceValue}! Moving...`;
+            announceToScreenReader(
+              `${getCurrentPlayer().name} rolled a ${diceValue}`,
+            );
 
             movePlayer(diceValue);
           }, 1000);
         }
 
         function getDiceIcon(value) {
-          const icons = [
-            '<i class="fas fa-dice-one"></i>',
-            '<i class="fas fa-dice-two"></i>',
-            '<i class="fas fa-dice-three"></i>',
-            '<i class="fas fa-dice-four"></i>',
-            '<i class="fas fa-dice-five"></i>',
-            '<i class="fas fa-dice-six"></i>',
-          ];
-          return icons[value - 1];
+          const faces = {
+            1: [4],
+            2: [0, 8],
+            3: [0, 4, 8],
+            4: [0, 2, 6, 8],
+            5: [0, 2, 4, 6, 8],
+            6: [0, 2, 3, 5, 6, 8],
+          };
+          const visiblePips = new Set(faces[value] || faces[6]);
+          return `<span class="dice-face" aria-hidden="true">${Array.from(
+            { length: 9 },
+            (_, index) =>
+              `<span class="dice-cell">${
+                visiblePips.has(index) ? '<span class="dice-pip"></span>' : ""
+              }</span>`,
+          ).join("")}</span>`;
         }
 
         function movePlayer(steps) {
           gameState.isMoving = true;
-          gameState.moveCount++;
+          const player = getCurrentPlayer();
+          player.moves++;
 
-          const newPosition = Math.min(gameState.playerPosition + steps, 100);
+          const newPosition = Math.min(player.position + steps, 100);
 
-          animatePlayerMovement(gameState.playerPosition, newPosition, () => {
-            gameState.playerPosition = newPosition;
-            updatePlayerPosition();
+          animatePlayerMovement(player.position, newPosition, player.id, () => {
+            player.position = newPosition;
+            updatePlayerPosition(player.id);
             updateGameStatus();
 
             if (newPosition === 100) {
-              endGame(true);
+              endGame(player);
               return;
             }
 
@@ -2008,8 +2678,8 @@
           });
         }
 
-        function animatePlayerMovement(from, to, callback) {
-          const piece = document.getElementById("playerPiece");
+        function animatePlayerMovement(from, to, playerId, callback) {
+          const piece = document.getElementById(`playerPiece-${playerId}`);
           piece.classList.add("moving");
 
           let current = from;
@@ -2023,7 +2693,7 @@
             }
 
             current++;
-            positionPlayerPiece(current);
+            positionPlayerPiece(current, playerId);
 
             setTimeout(moveNext, stepDelay);
           };
@@ -2031,9 +2701,12 @@
           moveNext();
         }
 
-        function positionPlayerPiece(position) {
+        function positionPlayerPiece(
+          position,
+          playerId = getCurrentPlayer()?.id,
+        ) {
           const cell = document.getElementById(`cell-${position}`);
-          const piece = document.getElementById("playerPiece");
+          const piece = document.getElementById(`playerPiece-${playerId}`);
 
           if (!cell || !piece) return;
 
@@ -2046,55 +2719,123 @@
 
           // Calculate center position relative to game board
           // The piece has transform: translate(-50%, -50%) so we position at the center
-          const centerX = cellRect.left - boardRect.left + cellRect.width / 2;
-          const centerY = cellRect.top - boardRect.top + cellRect.height / 2;
+          const otherPlayersHere = gameState.roster.filter(
+            (player) => player.id !== playerId && player.position === position,
+          ).length;
+          const playerIndex = Math.max(
+            0,
+            gameState.roster.findIndex((player) => player.id === playerId),
+          );
+          const offsetIndex = playerIndex - (gameState.roster.length - 1) / 2;
+          const cellWidth = cellRect.width;
+          const centerX =
+            cellRect.left -
+            boardRect.left -
+            gameBoard.clientLeft +
+            cellRect.width / 2 +
+            offsetIndex * Math.min(8, cellWidth * 0.11);
+          const centerY =
+            cellRect.top -
+            boardRect.top -
+            gameBoard.clientTop +
+            cellRect.height / 2 +
+            (otherPlayersHere ? (playerIndex % 2 ? -1 : 1) * 3 : 0);
 
           piece.style.left = `${centerX}px`;
           piece.style.top = `${centerY}px`;
         }
 
-        function updatePlayerPosition() {
+        function getCurrentPlayer() {
+          return gameState.roster[gameState.activePlayerIndex] || null;
+        }
+
+        function createPlayerPieces() {
+          document
+            .querySelectorAll(".player-piece")
+            .forEach((piece) => piece.remove());
+          const gameBoard = document.getElementById("gameBoard");
+          gameState.roster.forEach((player, index) => {
+            const piece = document.createElement("div");
+            piece.className = "player-piece";
+            piece.id = `playerPiece-${player.id}`;
+            piece.textContent = player.emoji;
+            piece.setAttribute("aria-hidden", "true");
+            piece.style.background = player.color;
+            piece.style.setProperty("--piece-index", index);
+            gameBoard.appendChild(piece);
+            positionPlayerPiece(player.position, player.id);
+          });
+          updatePlayerPosition();
+        }
+
+        function updatePlayerPosition(playerId = getCurrentPlayer()?.id) {
+          const player = gameState.roster.find(
+            (entry) => entry.id === playerId,
+          );
+          if (!player) return;
           document.getElementById("playerPosition").textContent =
-            gameState.playerPosition;
-          positionPlayerPiece(gameState.playerPosition);
+            player.position;
+          const avatar = document.getElementById("playerAvatar");
+          avatar.textContent = player.emoji;
+          avatar.style.background = player.color;
+          document.getElementById("activePlayerLabel").textContent =
+            `${player.name}'s Progress`;
+          positionPlayerPiece(player.position, player.id);
+          updateTurnRoster();
+        }
+
+        function updateTurnRoster() {
+          const roster = document.getElementById("turnRoster");
+          if (!roster) return;
+          roster.innerHTML = "";
+          gameState.roster.forEach((player, index) => {
+            const badge = document.createElement("div");
+            badge.className = `turn-player${index === gameState.activePlayerIndex ? " active" : ""}`;
+            badge.style.setProperty("--player-color", player.color);
+            badge.setAttribute(
+              "aria-label",
+              `${player.name}, square ${player.position}${index === gameState.activePlayerIndex ? ", current turn" : ""}`,
+            );
+            badge.innerHTML = `<span class="turn-player-emoji" aria-hidden="true">${player.emoji}</span><span class="turn-player-name">${player.name}</span><span class="turn-player-position">${player.position}</span>`;
+            roster.appendChild(badge);
+          });
         }
 
         function updateGameStatus() {
-          document.getElementById("playerScore").textContent =
-            gameState.playerScore;
-          document.getElementById("moveCount").textContent =
-            gameState.moveCount;
+          const player = getCurrentPlayer();
+          if (!player) return;
+          document.getElementById("playerScore").textContent = player.score;
+          document.getElementById("moveCount").textContent = player.moves;
           document.getElementById("correctAnswers").textContent =
-            gameState.correctAnswers;
-          document.getElementById("correctStreak").textContent =
-            gameState.currentStreak;
+            player.correctAnswers;
+          document.getElementById("correctStreak").textContent = player.streak;
 
           // Update accuracy rate
           const accuracy =
-            gameState.moveCount > 0
-              ? Math.round(
-                  (gameState.correctAnswers / gameState.moveCount) * 100,
-                )
+            player.moves > 0
+              ? Math.round((player.correctAnswers / player.moves) * 100)
               : 0;
           document.getElementById("accuracyRate").textContent = `${accuracy}%`;
 
           // Update progress bar
           const progressBar = document.getElementById("progressFill");
           if (progressBar) {
-            progressBar.style.width = `${gameState.playerPosition}%`;
+            progressBar.style.width = `${player.position}%`;
             progressBar.parentElement.setAttribute(
               "aria-valuenow",
-              gameState.playerPosition,
+              player.position,
             );
           }
+          updateTurnRoster();
         }
 
         function checkSpecialSquares() {
           const selectedBoard = boards.find(
             (b) => b.id === gameState.selectedBoard,
           );
-          const position = gameState.playerPosition;
-          const piece = document.getElementById("playerPiece");
+          const player = getCurrentPlayer();
+          const position = player.position;
+          const piece = document.getElementById(`playerPiece-${player.id}`);
 
           if (selectedBoard.snakes[position]) {
             piece.classList.add("sliding");
@@ -2107,8 +2848,9 @@
               "Snake Bite! 🐍",
               `Oh no! You slid down from ${position} to ${selectedBoard.snakes[position]}!`,
               () => {
-                gameState.playerPosition = selectedBoard.snakes[position];
-                updatePlayerPosition();
+                player.position = selectedBoard.snakes[position];
+                updatePlayerPosition(player.id);
+                updateGameStatus();
                 showQuestion();
               },
             );
@@ -2123,8 +2865,9 @@
               "Ladder Climb! 🪜",
               `Great! You climbed up from ${position} to ${selectedBoard.ladders[position]}!`,
               () => {
-                gameState.playerPosition = selectedBoard.ladders[position];
-                updatePlayerPosition();
+                player.position = selectedBoard.ladders[position];
+                updatePlayerPosition(player.id);
+                updateGameStatus();
                 showQuestion();
               },
             );
@@ -2159,6 +2902,8 @@
           });
 
           document.getElementById("questionPanel").classList.add("active");
+          document.getElementById("turnIndicator").textContent =
+            `🧠 ${getCurrentPlayer().name}, answer to finish your turn!`;
           announceToScreenReader(
             `Question: ${randomQuestion.question}. Press 1 through 4 to select an answer.`,
           );
@@ -2178,16 +2923,19 @@
           });
 
           const isCorrect = selectedIndex === correct;
+          const player = getCurrentPlayer();
+          document.getElementById("turnIndicator").textContent = isCorrect
+            ? `🎉 Correct, ${player.name}! Continue for the next turn.`
+            : `💪 Keep practicing, ${player.name}! Continue for the next turn.`;
 
           if (isCorrect) {
-            gameState.playerScore += 10;
-            gameState.correctAnswers++;
+            player.score += 10;
+            player.correctAnswers++;
             updateStreak(true);
             playSound("success");
             announceToScreenReader(
-              `Correct! Your score is now ${gameState.playerScore}. Current streak: ${gameState.currentStreak}`,
+              `Correct! ${player.name}'s score is now ${player.score}. Current streak: ${player.streak}`,
             );
-            updateGameStatus();
           } else {
             updateStreak(false);
             playSound("error");
@@ -2196,18 +2944,29 @@
             );
           }
 
+          updateGameStatus();
           document.getElementById("continueBtn").style.display = "block";
         }
 
         function continueGame() {
           document.getElementById("questionPanel").classList.remove("active");
           document.getElementById("continueBtn").style.display = "none";
-          document.getElementById("rollBtn").disabled = false;
           gameState.isMoving = false;
+          gameState.activePlayerIndex =
+            (gameState.activePlayerIndex + 1) % gameState.roster.length;
+          updatePlayerPosition();
+          updateGameStatus();
+          document.getElementById("rollBtn").disabled = false;
+          document.getElementById("turnIndicator").textContent =
+            `🎲 ${getCurrentPlayer().name}'s turn! Roll the dice.`;
+          announceToScreenReader(
+            `${getCurrentPlayer().name}'s turn. Roll the dice.`,
+          );
         }
 
         function startGameTimer() {
-          setInterval(() => {
+          if (gameTimerId !== null) clearInterval(gameTimerId);
+          gameTimerId = setInterval(() => {
             if (!gameState.gameOver && gameState.gameStartTime) {
               const elapsed = Math.floor(
                 (Date.now() - gameState.gameStartTime) / 1000,
@@ -2220,8 +2979,12 @@
           }, 1000);
         }
 
-        function endGame(won) {
+        function endGame(winner) {
           gameState.gameOver = true;
+          if (gameTimerId !== null) {
+            clearInterval(gameTimerId);
+            gameTimerId = null;
+          }
           const gameTime = Math.floor(
             (Date.now() - gameState.gameStartTime) / 1000,
           );
@@ -2229,34 +2992,20 @@
           // Update stats
           gameState.stats.gamesPlayed++;
           gameState.stats.totalTime += gameTime;
-          if (won) {
-            gameState.stats.gamesWon++;
-          }
+          gameState.stats.gamesWon++;
 
           // Save stats
           saveStats();
 
-          if (won) {
-            playSound("win");
-            announceToScreenReader(
-              `Congratulations! You won the game! Final score: ${gameState.playerScore}. Best streak: ${gameState.bestStreak}`,
-            );
-            showMessage(
-              "🎉 Congratulations!",
-              `You won the game!\nTime: ${Math.floor(gameTime / 60)}:${(
-                gameTime % 60
-              )
-                .toString()
-                .padStart(2, "0")}\nScore: ${
-                gameState.playerScore
-              }\nCorrect Answers: ${gameState.correctAnswers}/${
-                gameState.moveCount
-              }\nBest Streak: ${gameState.bestStreak}`,
-              () => {
-                newGame();
-              },
-            );
-          }
+          playSound("win");
+          announceToScreenReader(
+            `${winner.name} won the game with ${winner.score} stars!`,
+          );
+          showMessage(
+            `🏆 ${winner.name} wins!`,
+            `${winner.emoji} ${winner.name} reached square 100!\nScore: ${winner.score} stars\nCorrect answers: ${winner.correctAnswers}\nBest streak: ${gameState.bestStreak}`,
+            () => newGame(),
+          );
 
           updateStats();
         }
@@ -2277,20 +3026,22 @@
         }
 
         function newGame() {
+          if (gameTimerId !== null) {
+            clearInterval(gameTimerId);
+            gameTimerId = null;
+          }
           // Reset game state
           gameState = {
             selectedBoard: null,
-            selectedPlayer: null,
+            selectedPlayerIds: [],
+            playerCount: 2,
+            activePlayerIndex: 0,
+            roster: [],
             selectedContent: null,
-            playerPosition: 1,
-            playerScore: 0,
-            moveCount: 0,
-            correctAnswers: 0,
             gameStartTime: null,
             currentQuestion: null,
             isMoving: false,
             gameOver: false,
-            currentStreak: 0,
             bestStreak: gameState.bestStreak,
             stats: gameState.stats,
           };
@@ -2301,9 +3052,20 @@
           document
             .querySelectorAll(".selected")
             .forEach((el) => el.classList.remove("selected"));
+          document
+            .querySelectorAll(".player-count-option")
+            .forEach((button) => {
+              const isDefault = button.dataset.playerCount === "2";
+              button.classList.toggle("selected", isDefault);
+              button.setAttribute("aria-pressed", String(isDefault));
+            });
+          refreshPlayerSelection();
           document.getElementById("startGameBtn").disabled = true;
           document.getElementById("rollBtn").disabled = false;
           document.getElementById("questionPanel").classList.remove("active");
+          document
+            .querySelectorAll(".player-piece")
+            .forEach((piece) => piece.remove());
         }
 
         function exitGame() {
@@ -2369,9 +3131,6 @@
         >
         <a href="games.html" aria-label="Go to games list"
           ><i class="fas fa-gamepad" aria-hidden="true"></i> Games</a
-        >
-        <a href="../lessons.html" aria-label="Go to lessons"
-          ><i class="fas fa-book" aria-hidden="true"></i> Lessons</a
         >
         <a href="../contact.html" aria-label="Go to contact page"
           ><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a

@@ -112,12 +112,6 @@ const FooterComponent = {
                 </a>
               </li>
               <li>
-                <a href="${basePath}lessons.html">
-                  <i class="fas fa-chalkboard-teacher"></i>
-                  <span>Online Lessons</span>
-                </a>
-              </li>
-              <li>
                 <a href="${basePath}games/games.html">
                   <i class="fas fa-gamepad"></i>
                   <span>Educational Games</span>
