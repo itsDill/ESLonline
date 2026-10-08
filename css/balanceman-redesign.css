@@ -1,4 +1,4 @@
-/* BalanceMan: clear, playful game styling with UNO-inspired ad placements. */
+/* Hangman: clear, playful game styling with UNO-inspired ad placements. */
 :root {
   --bm-ink: #17324b;
   --bm-muted: #60758a;
@@ -245,7 +245,15 @@ body .balanceman-page-layout > .game-container {
   padding: 0.7rem;
   border: 1px solid rgba(44, 120, 131, 0.12);
   border-radius: 19px;
-  background: rgba(255, 255, 255, 0.64);
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      #fff 0,
+      rgba(255, 255, 255, 0.88) 52%,
+      transparent 72%
+    ),
+    rgba(255, 255, 255, 0.64);
+  box-shadow: inset 0 1px 8px rgba(41, 89, 112, 0.06);
 }
 
 .hangman-svg {
@@ -254,20 +262,58 @@ body .balanceman-page-layout > .game-container {
   overflow: visible;
 }
 
-.hangman-svg line:not(.hangman-part) {
+.hangman-svg .hangman-frame {
   stroke: #315e70 !important;
-  stroke-width: 5 !important;
+  stroke-width: 6 !important;
   stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hangman-svg .hangman-rope {
+  stroke: #d49a48 !important;
+  stroke-width: 4 !important;
+  stroke-linecap: round;
+}
+
+.hangman-svg .hangman-rivet {
+  fill: #f5bd61;
+  stroke: #315e70;
+  stroke-width: 2;
 }
 
 .hangman-part {
-  stroke: var(--bm-coral) !important;
-  stroke-width: 5 !important;
+  stroke: var(--bm-teal) !important;
+  stroke-width: 7 !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hangman-part.head circle:first-child {
+  fill: #ffe2b6 !important;
+  stroke: #e89b56 !important;
+  stroke-width: 4 !important;
+}
+
+.hangman-part.head .hangman-face-eye {
+  fill: #17324b !important;
+  stroke: none !important;
+}
+
+.hangman-part.head .hangman-face-smile {
+  fill: none !important;
+  stroke: #a85848 !important;
+  stroke-width: 2 !important;
   stroke-linecap: round;
 }
 
-.hangman-part.head {
-  fill: #fff1d4 !important;
+.hangman-part.left-arm,
+.hangman-part.right-arm {
+  stroke: #e89b56 !important;
+}
+
+.hangman-part.left-leg,
+.hangman-part.right-leg {
+  stroke: #5276bf !important;
 }
 
 .balance-status {
@@ -507,6 +553,18 @@ body .balanceman-page-layout > .game-container {
   transform: none;
 }
 
+.btn-fullscreen {
+  border-color: #c8d9e1 !important;
+  background: #eaf2f6 !important;
+  color: #24465d !important;
+}
+
+.btn-fullscreen[aria-pressed="true"] {
+  border-color: #087f8c !important;
+  background: #dff5ef !important;
+  color: #075d65 !important;
+}
+
 .balanceman-ad-rail {
   display: flex;
   min-width: 0;
@@ -579,6 +637,42 @@ body .balanceman-page-layout > .game-container {
 
 .game-footer .copyright {
   color: rgba(226, 232, 240, 0.64) !important;
+}
+
+.balanceman-page-layout:fullscreen,
+.balanceman-page-layout:-webkit-full-screen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  overflow-y: auto;
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  background:
+    radial-gradient(
+      ellipse at 12% 0%,
+      rgba(52, 211, 191, 0.18),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 92% 18%,
+      rgba(129, 140, 248, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(145deg, #111a35 0%, #19294a 52%, #172c3d 100%);
+}
+
+.balanceman-page-layout:fullscreen > .game-container,
+.balanceman-page-layout:-webkit-full-screen > .game-container {
+  width: min(100%, 1320px);
+  min-height: calc(100vh - 3rem);
+  margin: 0 auto !important;
+  border-radius: 24px;
+}
+
+.balanceman-page-layout:fullscreen .balanceman-ad-rail,
+.balanceman-page-layout:-webkit-full-screen .balanceman-ad-rail {
+  display: none !important;
 }
 
 :where(button, a):focus-visible {

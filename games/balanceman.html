@@ -45,10 +45,10 @@
     />
     <meta
       property="og:image"
-      content="https://eslfunonline.com/images/hangman-preview.png"
+      content="https://eslfunonline.com/games/balanceman/image.png"
     />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content="1672" />
+    <meta property="og:image:height" content="941" />
     <meta
       property="og:url"
       content="https://eslfunonline.com/games/balanceman.html"
@@ -66,7 +66,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://eslfunonline.com/images/hangman-preview.png"
+      content="https://eslfunonline.com/games/balanceman/image.png"
     />
 
     <!-- Canonical URL -->
@@ -126,9 +126,9 @@
         "url": "https://eslfunonline.com/games/balanceman.html",
         "image": {
           "@type": "ImageObject",
-          "url": "https://eslfunonline.com/images/balanceman-preview.png",
-          "width": 1200,
-          "height": 630
+          "url": "https://eslfunonline.com/games/balanceman/image.png",
+          "width": 1672,
+          "height": 941
         },
         "author": {
           "@type": "Organization",
@@ -1270,110 +1270,59 @@
 
         <div class="balance-area" role="region" aria-label="Game status area">
           <div class="hangman-display" id="hangmanFigure" aria-hidden="true">
-            <svg viewBox="0 0 200 250" class="hangman-svg">
-              <!-- Gallows -->
-              <line
-                x1="10"
-                y1="230"
-                x2="150"
-                y2="230"
-                stroke="black"
-                stroke-width="4"
-              />
-              <line
-                x1="50"
-                y1="230"
-                x2="50"
-                y2="20"
-                stroke="black"
-                stroke-width="4"
-              />
-              <line
-                x1="50"
-                y1="20"
-                x2="130"
-                y2="20"
-                stroke="black"
-                stroke-width="4"
-              />
-              <line
-                x1="130"
-                y1="20"
-                x2="130"
-                y2="50"
-                stroke="black"
-                stroke-width="4"
-              />
+            <svg viewBox="0 0 220 250" class="hangman-svg">
+              <line class="hangman-frame" x1="17" y1="230" x2="190" y2="230" />
+              <line class="hangman-frame" x1="48" y1="230" x2="48" y2="20" />
+              <line class="hangman-frame" x1="48" y1="20" x2="140" y2="20" />
+              <line class="hangman-frame" x1="48" y1="57" x2="85" y2="20" />
+              <line class="hangman-rope" x1="140" y1="20" x2="140" y2="47" />
+              <circle class="hangman-rivet" cx="48" cy="230" r="4" />
+              <circle class="hangman-rivet" cx="48" cy="20" r="4" />
 
-              <!-- Head -->
-              <circle
-                class="hangman-part head"
-                cx="130"
-                cy="70"
-                r="20"
-                stroke="black"
-                stroke-width="4"
-                fill="none"
-                style="display: none"
-              />
-
-              <!-- Body -->
+              <g class="hangman-part head" style="display: none">
+                <circle cx="140" cy="68" r="20" />
+                <circle class="hangman-face-eye" cx="133" cy="65" r="1.8" />
+                <circle class="hangman-face-eye" cx="147" cy="65" r="1.8" />
+                <path class="hangman-face-smile" d="M134 74 Q140 80 146 74" />
+              </g>
               <line
                 class="hangman-part body"
-                x1="130"
-                y1="90"
-                x2="130"
-                y2="150"
-                stroke="black"
-                stroke-width="4"
+                x1="140"
+                y1="88"
+                x2="140"
+                y2="151"
                 style="display: none"
               />
-
-              <!-- Left Arm -->
               <line
                 class="hangman-part left-arm"
-                x1="130"
-                y1="110"
-                x2="100"
+                x1="140"
+                y1="108"
+                x2="110"
                 y2="130"
-                stroke="black"
-                stroke-width="4"
                 style="display: none"
               />
-
-              <!-- Right Arm -->
               <line
                 class="hangman-part right-arm"
-                x1="130"
-                y1="110"
-                x2="160"
+                x1="140"
+                y1="108"
+                x2="170"
                 y2="130"
-                stroke="black"
-                stroke-width="4"
                 style="display: none"
               />
-
-              <!-- Left Leg -->
               <line
                 class="hangman-part left-leg"
-                x1="130"
-                y1="150"
-                x2="110"
-                y2="190"
-                stroke="black"
-                stroke-width="4"
+                x1="140"
+                y1="151"
+                x2="119"
+                y2="191"
                 style="display: none"
               />
-
-              <!-- Right Leg -->
               <line
                 class="hangman-part right-leg"
-                x1="130"
-                y1="150"
-                x2="150"
-                y2="190"
-                stroke="black"
-                stroke-width="4"
+                x1="140"
+                y1="151"
+                x2="161"
+                y2="191"
                 style="display: none"
               />
             </svg>
@@ -1513,6 +1462,16 @@
             <i class="fas fa-forward" aria-hidden="true"></i> Skip Word
           </button>
           <button
+            class="btn btn-secondary btn-fullscreen"
+            id="fullscreenBtn"
+            type="button"
+            aria-label="Enter fullscreen mode; ads will be hidden"
+            aria-pressed="false"
+          >
+            <i class="fas fa-expand" aria-hidden="true"></i>
+            <span>Fullscreen</span>
+          </button>
+          <button
             class="btn btn-secondary"
             onclick="window.location.href = 'games.html'"
             aria-label="Return to games page"
@@ -1525,11 +1484,12 @@
       <aside class="balanceman-ad-rail" aria-label="Advertisement">
         <div class="balanceman-ad-card">
           <span class="balanceman-ad-label">Advertisement</span>
+          <!-- Hang Display -->
           <ins
             class="adsbygoogle"
             style="display: inline-block; width: 300px; height: 250px"
             data-ad-client="ca-pub-2456627863532019"
-            data-ad-slot="9319754067"
+            data-ad-slot="9095844045"
           ></ins>
         </div>
       </aside>
@@ -1537,18 +1497,19 @@
 
     <section class="balanceman-bottom-ad" aria-label="Advertisement">
       <span class="balanceman-ad-label">Advertisement</span>
+      <!-- Hangman Display 1 -->
       <ins
         class="adsbygoogle"
         style="display: block; min-height: 90px"
         data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="2586206204"
+        data-ad-slot="9560721783"
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
     </section>
 
     <script>
-      class BalanceManGame {
+      class HangmanGame {
         constructor() {
           this.currentWord = "";
           this.currentHint = "";
@@ -1808,12 +1769,15 @@
 
         loadStats() {
           try {
-            const savedStats = localStorage.getItem("balancemanStats");
+            const savedStats =
+              localStorage.getItem("hangmanStats") ||
+              localStorage.getItem("balancemanStats");
             if (savedStats) {
               const stats = JSON.parse(savedStats);
               this.score = stats.score || 0;
               this.wordsCompleted = stats.wordsCompleted || 0;
               this.bestStreak = stats.bestStreak || 0;
+              localStorage.setItem("hangmanStats", savedStats);
             }
           } catch (e) {
             console.warn("Could not load stats from localStorage", e);
@@ -1828,7 +1792,7 @@
               bestStreak: this.bestStreak,
               lastPlayed: new Date().toISOString(),
             };
-            localStorage.setItem("balancemanStats", JSON.stringify(stats));
+            localStorage.setItem("hangmanStats", JSON.stringify(stats));
           } catch (e) {
             console.warn("Could not save stats to localStorage", e);
           }
@@ -1864,6 +1828,15 @@
           document.getElementById("hintBtn").onclick = () => this.showHint();
           document.getElementById("nextWordBtn").onclick = () =>
             this.startNewGame();
+          document.getElementById("fullscreenBtn").onclick = () =>
+            this.toggleFullscreen();
+
+          document.addEventListener("fullscreenchange", () =>
+            this.updateFullscreenButton(),
+          );
+          document.addEventListener("webkitfullscreenchange", () =>
+            this.updateFullscreenButton(),
+          );
 
           const skipBtn = document.getElementById("skipWordBtn");
           if (skipBtn) {
@@ -1934,6 +1907,58 @@
               }
             }
           });
+        }
+
+        async toggleFullscreen() {
+          const fullscreenElement =
+            document.fullscreenElement || document.webkitFullscreenElement;
+
+          try {
+            if (fullscreenElement) {
+              if (document.exitFullscreen) {
+                await document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              }
+              return;
+            }
+
+            const gameLayout = document.querySelector(
+              ".balanceman-page-layout",
+            );
+            if (gameLayout.requestFullscreen) {
+              await gameLayout.requestFullscreen();
+            } else if (gameLayout.webkitRequestFullscreen) {
+              gameLayout.webkitRequestFullscreen();
+            } else {
+              this.announceToScreenReader(
+                "Fullscreen mode is not supported in this browser.",
+              );
+            }
+          } catch (error) {
+            this.announceToScreenReader(
+              "Fullscreen could not be started. Please try again.",
+            );
+          }
+        }
+
+        updateFullscreenButton() {
+          const button = document.getElementById("fullscreenBtn");
+          const icon = button.querySelector("i");
+          const text = button.querySelector("span");
+          const isFullscreen = Boolean(
+            document.fullscreenElement || document.webkitFullscreenElement,
+          );
+
+          button.setAttribute("aria-pressed", String(isFullscreen));
+          button.setAttribute(
+            "aria-label",
+            isFullscreen
+              ? "Exit fullscreen mode"
+              : "Enter fullscreen mode; ads will be hidden",
+          );
+          icon.className = isFullscreen ? "fas fa-compress" : "fas fa-expand";
+          text.textContent = isFullscreen ? "Exit Fullscreen" : "Fullscreen";
         }
 
         startNewGame() {
@@ -2170,7 +2195,7 @@
           this.createCelebrationEffect();
 
           let message = this.hintUsed
-            ? `🎉 Great job! BalanceMan is safe! (+${totalBonus} points)`
+            ? `🎉 Great job! You saved the word! (+${totalBonus} points)`
             : `🌟 Perfect! No hints needed! (+${totalBonus} points)`;
 
           if (streakBonus > 0) {
@@ -2241,7 +2266,7 @@
           this.setRoundFinished(true);
           this.currentStreak = 0;
           this.showMessage(
-            `💔 BalanceMan fell! The word was "${this.currentWord}". Streak reset!`,
+            `💔 The word was "${this.currentWord}". Better luck next round! Streak reset.`,
             "danger",
           );
 
@@ -2428,7 +2453,7 @@
 
       // Initialize game when page loads
       document.addEventListener("DOMContentLoaded", () => {
-        const game = new BalanceManGame();
+        const game = new HangmanGame();
 
         // Initialize touch support for audio on mobile
         document.addEventListener(
