@@ -124,6 +124,30 @@
         margin: 0;
         padding: 20px 20px 48px;
       }
+      .page-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 0 0 12px;
+      }
+      .page-links a {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        padding: 0 12px;
+        border: 2px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        color: var(--ink);
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .page-links a:hover {
+        border-color: var(--sky);
+        background: var(--slot);
+      }
       .ad-rail {
         display: flex;
         justify-content: center;
@@ -186,7 +210,8 @@
         }
       }
       .game-layout:fullscreen,
-      .game-layout:-webkit-full-screen {
+      .game-layout:-webkit-full-screen,
+      .game-layout.is-fullscreen-fallback {
         display: block;
         width: 100%;
         height: 100vh;
@@ -196,13 +221,23 @@
         padding: 0;
         background: var(--bg);
       }
+      .game-layout.is-fullscreen-fallback {
+        position: fixed;
+        z-index: 10000;
+        inset: 0;
+      }
+      body.game-fullscreen-fallback {
+        overflow: hidden;
+      }
       .game-layout:fullscreen .app,
-      .game-layout:-webkit-full-screen .app {
+      .game-layout:-webkit-full-screen .app,
+      .game-layout.is-fullscreen-fallback .app {
         max-width: 800px;
         margin: 0 auto;
       }
       .game-layout:fullscreen .ad-rail,
-      .game-layout:-webkit-full-screen .ad-rail {
+      .game-layout:-webkit-full-screen .ad-rail,
+      .game-layout.is-fullscreen-fallback .ad-rail {
         display: none !important;
       }
       button {
@@ -452,6 +487,10 @@
       }
       .go {
         margin-top: 28px;
+      }
+      .start-fullscreen {
+        display: flex;
+        margin: 14px auto 0;
       }
       .how {
         margin: 18px 0 0;
@@ -761,6 +800,10 @@
   <body>
     <div class="game-layout" id="gameLayout">
       <div class="app">
+        <nav class="page-links" aria-label="Game navigation">
+          <a href="../games.html">← Back to Games</a>
+          <a href="index.html">How to Play</a>
+        </nav>
         <!-- START -->
         <section id="start" class="screen">
           <header class="hero">
@@ -852,6 +895,15 @@
           <div class="go">
             <button class="btn primary big" id="startBtn">Start game</button>
           </div>
+          <button
+            class="btn icon-btn start-fullscreen"
+            id="startFullscreenBtn"
+            aria-label="Enter fullscreen"
+            title="Enter fullscreen"
+            type="button"
+          >
+            ⛶ Enter fullscreen
+          </button>
           <p class="how">
             Tap the tiles or type on your keyboard. Backspace removes a letter.
           </p>
@@ -955,7 +1007,7 @@
             class="adsbygoogle"
             style="display: inline-block; width: 300px; height: 250px"
             data-ad-client="ca-pub-2456627863532019"
-            data-ad-slot="9319754067"
+            data-ad-slot="8958815501"
           ></ins>
         </div>
       </aside>
@@ -966,7 +1018,7 @@
         class="adsbygoogle"
         style="display: block; min-height: 90px"
         data-ad-client="ca-pub-2456627863532019"
-        data-ad-slot="2586206204"
+        data-ad-slot="7770776784"
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
@@ -1803,37 +1855,86 @@
         }
 
         function updateFullscreenButton() {
-          const button = $("#fullscreenBtn");
+          const layout = $("#gameLayout");
           const active =
-            document.fullscreenElement === $("#gameLayout") ||
-            document.webkitFullscreenElement === $("#gameLayout");
-          button.textContent = active ? "⤢" : "⛶";
-          button.setAttribute(
-            "aria-label",
-            active ? "Exit fullscreen" : "Enter fullscreen",
+            document.fullscreenElement === layout ||
+            document.webkitFullscreenElement === layout ||
+            layout.classList.contains("is-fullscreen-fallback");
+          const label = active ? "Exit fullscreen" : "Enter fullscreen";
+          [$("#fullscreenBtn"), $("#startFullscreenBtn")].forEach((button) => {
+            button.textContent =
+              button.id === "startFullscreenBtn"
+                ? `${active ? "⤢" : "⛶"} ${label}`
+                : active
+                  ? "⤢"
+                  : "⛶";
+            button.setAttribute("aria-label", label);
+            button.title = label;
+          });
+        }
+
+        function enterFallbackFullscreen(layout) {
+          layout.classList.add("is-fullscreen-fallback");
+          document.body.classList.add("game-fullscreen-fallback");
+        }
+
+        function exitFallbackFullscreen(layout) {
+          layout.classList.remove("is-fullscreen-fallback");
+          document.body.classList.remove("game-fullscreen-fallback");
+        }
+
+        function waitForFullscreenRequest(request) {
+          let timeoutId;
+          const timeout = new Promise((resolve, reject) => {
+            timeoutId = window.setTimeout(
+              () => reject(new Error("Fullscreen request timed out.")),
+              1200,
+            );
+          });
+          return Promise.race([request, timeout]).finally(() =>
+            window.clearTimeout(timeoutId),
           );
-          button.title = active ? "Exit fullscreen" : "Enter fullscreen";
         }
 
         async function toggleFullscreen() {
           const layout = $("#gameLayout");
+          const nativeFullscreen =
+            document.fullscreenElement === layout ||
+            document.webkitFullscreenElement === layout;
+          const fallbackFullscreen = layout.classList.contains(
+            "is-fullscreen-fallback",
+          );
           try {
-            if (
-              document.fullscreenElement ||
-              document.webkitFullscreenElement
-            ) {
+            if (nativeFullscreen) {
               if (document.exitFullscreen) await document.exitFullscreen();
               else if (document.webkitExitFullscreen)
                 document.webkitExitFullscreen();
+            } else if (fallbackFullscreen) {
+              exitFallbackFullscreen(layout);
             } else if (layout.requestFullscreen) {
-              await layout.requestFullscreen();
+              await waitForFullscreenRequest(layout.requestFullscreen());
             } else if (layout.webkitRequestFullscreen) {
               layout.webkitRequestFullscreen();
             } else {
-              $("#status").textContent = "Fullscreen is not available here.";
+              enterFallbackFullscreen(layout);
             }
           } catch {
-            $("#status").textContent = "Could not switch fullscreen mode.";
+            if (
+              !document.fullscreenElement &&
+              !document.webkitFullscreenElement
+            )
+              enterFallbackFullscreen(layout);
+          }
+          updateFullscreenButton();
+        }
+
+        function handleFullscreenChange() {
+          const layout = $("#gameLayout");
+          if (
+            document.fullscreenElement === layout ||
+            document.webkitFullscreenElement === layout
+          ) {
+            exitFallbackFullscreen(layout);
           }
           updateFullscreenButton();
         }
@@ -2423,11 +2524,23 @@
           sfx.pop();
         };
         $("#fullscreenBtn").onclick = toggleFullscreen;
-        document.addEventListener("fullscreenchange", updateFullscreenButton);
+        $("#startFullscreenBtn").onclick = toggleFullscreen;
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
         document.addEventListener(
           "webkitfullscreenchange",
-          updateFullscreenButton,
+          handleFullscreenChange,
         );
+        document.addEventListener("keydown", (event) => {
+          const layout = $("#gameLayout");
+          if (
+            event.key === "Escape" &&
+            layout.classList.contains("is-fullscreen-fallback")
+          ) {
+            event.preventDefault();
+            exitFallbackFullscreen(layout);
+            updateFullscreenButton();
+          }
+        });
         $("#heroTiles").onclick = heroAnim;
         $("#review").addEventListener("click", (e) => {
           const b = e.target.closest("button[data-i]");
