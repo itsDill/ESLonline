@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>English Trivia</title>
+    <style>
+      :root {
+        --teal: #0b5d57;
+        --teal-d: #073f3b;
+        --coral: #ff6b35;
+        --sun: #ffc93c;
+        --paper: #fffdf7;
+        --ink: #1d2b2a;
+        --ok: #2f9e5b;
+        --bad: #d64550;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(160deg, var(--teal), var(--teal-d));
+        color: var(--ink);
+        font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px 14px;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--sun);
+        outline-offset: 2px;
+      }
+      #app {
+        width: 100%;
+        max-width: 640px;
+      }
+      .logo {
+        font-family: Georgia, "Palatino Linotype", serif;
+        color: var(--sun);
+        font-size: clamp(2rem, 7vw, 3.2rem);
+        margin: 6px 0 2px;
+        text-align: center;
+      }
+      .sub {
+        color: #d5ece9;
+        text-align: center;
+        margin: 0 0 20px;
+      }
+      .card {
+        background: var(--paper);
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 14px 40px #0006;
+      }
+      .cats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .cat {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        padding: 14px;
+        border: 2px solid #1d2b2a22;
+        border-radius: 12px;
+        background: #fff;
+        text-align: left;
+        color: var(--ink);
+      }
+      .cat:hover {
+        border-color: var(--coral);
+        transform: translateY(-2px);
+      }
+      .cat b {
+        font-size: 1.05rem;
+      }
+      .cat span {
+        font-size: 0.85rem;
+        opacity: 0.7;
+      }
+      .cat.mix {
+        grid-column: 1/-1;
+        background: var(--coral);
+        color: #fff;
+        border-color: var(--coral);
+      }
+      .cat .e {
+        font-size: 1.6rem;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+      .streak {
+        color: var(--coral);
+      }
+      .bar {
+        height: 10px;
+        background: #1d2b2a1a;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 18px;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: var(--ok);
+        transition: background 0.3s;
+      }
+      h2 {
+        font-family: Georgia, serif;
+        font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+        line-height: 1.35;
+        margin: 0 0 18px;
+      }
+      .opts {
+        display: grid;
+        gap: 10px;
+      }
+      .opt {
+        padding: 14px 16px;
+        border: 2px solid #1d2b2a22;
+        border-radius: 12px;
+        background: #fff;
+        text-align: left;
+        font-size: 1.05rem;
+        color: var(--ink);
+      }
+      .opt:hover:not(:disabled) {
+        border-color: var(--coral);
+      }
+      .opt.right {
+        background: #d6f1df;
+        border-color: var(--ok);
+      }
+      .opt.wrong {
+        background: #fbd9dc;
+        border-color: var(--bad);
+      }
+      .opt.gone {
+        opacity: 0.25;
+        text-decoration: line-through;
+      }
+      .opt:disabled {
+        cursor: default;
+      }
+      .fact {
+        margin: 16px 0 0;
+        padding: 12px 14px;
+        background: #fff3c4;
+        border-radius: 10px;
+        min-height: 1em;
+      }
+      .btn {
+        background: var(--coral);
+        color: #fff;
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 22px;
+        font-weight: 700;
+        font-size: 1.05rem;
+      }
+      .btn.alt {
+        background: #1d2b2a14;
+        color: var(--ink);
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .ll {
+        margin-top: 16px;
+      }
+      .big {
+        font-family: Georgia, serif;
+        font-size: 3.4rem;
+        color: var(--coral);
+        text-align: center;
+        line-height: 1.1;
+      }
+      .rank {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 6px 0;
+      }
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 22px;
+        margin: 12px 0;
+        flex-wrap: wrap;
+        text-align: center;
+      }
+      .stats b {
+        display: block;
+        font-size: 1.4rem;
+      }
+      .review {
+        margin-top: 14px;
+        padding: 0;
+        list-style: none;
+      }
+      .review li {
+        padding: 10px 0;
+        border-top: 1px solid #1d2b2a1a;
+      }
+      .review small {
+        color: #1d2b2a99;
+        display: block;
+      }
+      @media (max-width: 480px) {
+        .cats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app"></main>
+    <script>
+      // ---- EDIT QUESTIONS HERE: [question, [4 options], index of right answer, fun fact / explanation] ----
+      const CATS = {
+        Vocabulary: {
+          icon: "📖",
+          qs: [
+            [
+              "What does 'ubiquitous' mean?",
+              ["Rare", "Found everywhere", "Very old", "Dangerous"],
+              1,
+              "It comes from Latin ubique, 'everywhere'.",
+            ],
+            [
+              "Which word is the opposite of 'generous'?",
+              ["Stingy", "Kind", "Brave", "Honest"],
+              0,
+              "Stingy means unwilling to give or spend.",
+            ],
+            [
+              "A synonym for 'enormous' is...",
+              ["Tiny", "Huge", "Quiet", "Narrow"],
+              1,
+              "Enormous, huge, giant and vast all mean very big.",
+            ],
+            [
+              "What is a group of crows called?",
+              ["A flock", "A murder", "A pack", "A herd"],
+              1,
+              "Animal group names like this are called collective nouns.",
+            ],
+            [
+              "What does 'reluctant' mean?",
+              ["Eager", "Unwilling", "Tired", "Angry"],
+              1,
+              "A reluctant person doesn't really want to do something.",
+            ],
+            [
+              "Which word describes someone who speaks two languages?",
+              ["Bilingual", "Bilateral", "Biannual", "Bipolar"],
+              0,
+              "Bi- means two and lingua means tongue.",
+            ],
+            [
+              "'Benevolent' means...",
+              ["Evil", "Kind and helpful", "Lazy", "Confused"],
+              1,
+              "Bene- means good, like in benefit.",
+            ],
+          ],
+        },
+        Grammar: {
+          icon: "✏️",
+          qs: [
+            [
+              "Which sentence is correct?",
+              [
+                "Their going home.",
+                "They're going home.",
+                "There going home.",
+                "Theyre going home.",
+              ],
+              1,
+              "They're = they are.",
+            ],
+            [
+              "'There are ___ people today.'",
+              ["less", "fewer", "lesser", "least"],
+              1,
+              "Use fewer with things you can count.",
+            ],
+            [
+              "'She has lived here ___ 2015.'",
+              ["for", "since", "from", "during"],
+              1,
+              "Since goes with a starting point, for with a length of time.",
+            ],
+            [
+              "Which is correct? '___ did you call?'",
+              ["Who", "Whom", "Whose", "Which"],
+              1,
+              "Whom is the object. Tip: you call him, so whom.",
+            ],
+            [
+              "What is the plural of 'child'?",
+              ["Childs", "Childrens", "Children", "Childes"],
+              2,
+              "Children is already plural, so no extra -s.",
+            ],
+            [
+              "'By next year, I ___ here for ten years.'",
+              ["will work", "will have worked", "worked", "am working"],
+              1,
+              "Future perfect looks ahead and counts back.",
+            ],
+            [
+              "Which of these is an adverb?",
+              ["Quick", "Quickly", "Quickness", "Quicker"],
+              1,
+              "Many adverbs are an adjective + -ly.",
+            ],
+          ],
+        },
+        Idioms: {
+          icon: "💬",
+          qs: [
+            [
+              "'Bite the bullet' means...",
+              [
+                "Eat quickly",
+                "Face something unpleasant bravely",
+                "Get angry",
+                "Tell a lie",
+              ],
+              1,
+              "Soldiers once bit on a bullet during surgery.",
+            ],
+            [
+              "'Once in a blue moon' means...",
+              ["Very rarely", "Every night", "At midnight", "Very soon"],
+              0,
+              "A blue moon is a rare second full moon in a month.",
+            ],
+            [
+              "'Hit the books' means...",
+              ["Fight", "Study hard", "Buy books", "Tidy up"],
+              1,
+              "Time to study!",
+            ],
+            [
+              "'The ball is in your court' means...",
+              [
+                "It's your turn to decide",
+                "You're winning",
+                "You're out",
+                "Play fair",
+              ],
+              0,
+              "It comes from tennis.",
+            ],
+            [
+              "'It costs an arm and a leg' means...",
+              [
+                "It's dangerous",
+                "It's very expensive",
+                "It's painful",
+                "It's free",
+              ],
+              1,
+              "Used when something costs far too much.",
+            ],
+            [
+              "'Let the cat out of the bag' means...",
+              [
+                "Lose a pet",
+                "Reveal a secret",
+                "Make a mistake",
+                "Cause trouble",
+              ],
+              1,
+              "Telling a secret by accident.",
+            ],
+            [
+              "'Burn the midnight oil' means...",
+              [
+                "Work late into the night",
+                "Waste fuel",
+                "Cook dinner",
+                "Start a fire",
+              ],
+              0,
+              "People once worked late by oil lamp.",
+            ],
+          ],
+        },
+        Spelling: {
+          icon: "🔤",
+          qs: [
+            [
+              "Which spelling is correct?",
+              ["Recieve", "Receive", "Receeve", "Recive"],
+              1,
+              "I before E, except after C.",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Accomodation", "Accommodation", "Acommodation", "Accomodasion"],
+              1,
+              "Double c and double m.",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Definately", "Definitely", "Definitly", "Defanitely"],
+              1,
+              "Remember the word 'finite' inside it.",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Necessary", "Neccessary", "Necesary", "Neccesary"],
+              0,
+              "One collar (c) and two sleeves (s).",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Embarass", "Embarrass", "Embarras", "Embaras"],
+              1,
+              "Double r and double s.",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Separate", "Seperate", "Separete", "Seperete"],
+              0,
+              "There's 'a rat' in separate.",
+            ],
+            [
+              "Which spelling is correct?",
+              ["Occured", "Ocurred", "Occurred", "Occurd"],
+              2,
+              "Double the r before -ed.",
+            ],
+          ],
+        },
+        Literature: {
+          icon: "📚",
+          qs: [
+            [
+              "Who wrote 'Romeo and Juliet'?",
+              ["Dickens", "Shakespeare", "Austen", "Orwell"],
+              1,
+              "Shakespeare wrote it around 1595.",
+            ],
+            [
+              "Who wrote the Harry Potter books?",
+              ["Roald Dahl", "J.K. Rowling", "C.S. Lewis", "J.R.R. Tolkien"],
+              1,
+              "The first book came out in 1997.",
+            ],
+            [
+              "Who wrote 'Pride and Prejudice'?",
+              ["Jane Austen", "Emily Brontë", "Mary Shelley", "George Eliot"],
+              0,
+              "Published in 1813.",
+            ],
+            [
+              "In which city is Sherlock Holmes's home at 221B Baker Street?",
+              ["Paris", "Edinburgh", "London", "Dublin"],
+              2,
+              "Fans still send letters to that address.",
+            ],
+            [
+              "Who wrote '1984'?",
+              ["Aldous Huxley", "George Orwell", "H.G. Wells", "Ray Bradbury"],
+              1,
+              "It gave us the phrase 'Big Brother'.",
+            ],
+            [
+              "Which novel is about the whale hunter Captain Ahab?",
+              ["Moby-Dick", "Dracula", "Frankenstein", "Treasure Island"],
+              0,
+              "Written by Herman Melville in 1851.",
+            ],
+            [
+              "Who wrote 'Alice's Adventures in Wonderland'?",
+              ["Lewis Carroll", "Roald Dahl", "Mark Twain", "A. A. Milne"],
+              0,
+              "Lewis Carroll was a pen name.",
+            ],
+          ],
+        },
+        Culture: {
+          icon: "🌍",
+          qs: [
+            [
+              "What do Americans call a British 'lift'?",
+              ["Escalator", "Elevator", "Ladder", "Hoist"],
+              1,
+              "Same machine, different word.",
+            ],
+            [
+              "A British 'biscuit' is closest to an American...",
+              ["Cookie", "Muffin", "Pie", "Cake"],
+              0,
+              "An American 'biscuit' is more like a scone.",
+            ],
+            [
+              "In British English, a big goods vehicle is a...",
+              ["Lorry", "Trolley", "Tram", "Taxi"],
+              0,
+              "Americans say truck.",
+            ],
+            [
+              "Which is the American spelling?",
+              ["Colour", "Color", "Colur", "Collor"],
+              1,
+              "Noah Webster pushed simpler spellings in the 1800s.",
+            ],
+            [
+              "How many letters are in the English alphabet?",
+              ["24", "25", "26", "27"],
+              2,
+              "Five vowels and 21 consonants.",
+            ],
+            [
+              "Which country has the most native English speakers?",
+              ["UK", "USA", "India", "Australia"],
+              1,
+              "The USA has about 300 million.",
+            ],
+            [
+              "The British word for 'sidewalk' is...",
+              ["Pavement", "Lane", "Track", "Curb"],
+              0,
+              "In American English, pavement means the road.",
+            ],
+          ],
+        },
+      };
+      const SECONDS = 15,
+        MIX_COUNT = 10;
+
+      const $app = document.getElementById("app");
+      const el = (t, c, x) => {
+        const e = document.createElement(t);
+        if (c) e.className = c;
+        if (x !== undefined) e.textContent = x;
+        return e;
+      };
+      const shuffle = (a) => {
+        a = [...a];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = (Math.random() * (i + 1)) | 0;
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
+      const save = (k, v) => {
+        try {
+          localStorage.setItem(k, v);
+        } catch (e) {}
+      };
+      const load = (k) => {
+        try {
+          return localStorage.getItem(k);
+        } catch (e) {
+          return null;
+        }
+      };
+      let G, timer;
+
+      function home() {
+        clearInterval(timer);
+        $app.innerHTML = "";
+        $app.append(
+          el("h1", "logo", "English Trivia"),
+          el(
+            "p",
+            "sub",
+            "Pick a category. 15 seconds per question. Build a streak for bonus points!",
+          ),
+        );
+        const card = el("div", "card"),
+          grid = el("div", "cats");
+        const mix = el("button", "cat mix");
+        mix.innerHTML =
+          '<span class="e">🎲</span><b>Mixed Challenge</b><span>10 random questions from every category</span>';
+        mix.onclick = () => start("Mixed");
+        grid.append(mix);
+        Object.entries(CATS).forEach(([n, c]) => {
+          const b = el("button", "cat"),
+            best = load("trivia-best-" + n);
+          b.innerHTML =
+            '<span class="e">' +
+            c.icon +
+            "</span><b>" +
+            n +
+            "</b><span>" +
+            (best ? "Best: " + best : c.qs.length + " questions") +
+            "</span>";
+          b.onclick = () => start(n);
+          grid.append(b);
+        });
+        card.append(grid);
+        $app.append(card);
+      }
+
+      function start(cat) {
+        const pool =
+          cat === "Mixed"
+            ? Object.values(CATS).flatMap((c) => c.qs)
+            : CATS[cat].qs;
+        const qs = shuffle(pool).slice(
+          0,
+          cat === "Mixed" ? MIX_COUNT : pool.length,
+        );
+        G = {
+          cat,
+          qs,
+          i: 0,
+          score: 0,
+          streak: 0,
+          bestStreak: 0,
+          right: 0,
+          missed: [],
+          hint: true,
+          locked: false,
+        };
+        showQ();
+      }
+
+      function showQ() {
+        clearInterval(timer);
+        const [q, opts, ans, fact] = G.qs[G.i];
+        G.locked = false;
+        $app.innerHTML = "";
+        const card = el("div", "card");
+        const top = el("div", "top");
+        top.append(
+          el("span", "", "Question " + (G.i + 1) + "/" + G.qs.length),
+          el(
+            "span",
+            "streak",
+            G.streak > 1 ? "🔥 " + G.streak + " streak" : "",
+          ),
+          el("span", "", "⭐ " + G.score),
+        );
+        const bar = el("div", "bar"),
+          fill = el("i");
+        bar.append(fill);
+        const box = el("div", "opts");
+        const items = shuffle(opts.map((t, i) => [t, i])).map(([t, i], n) => {
+          const b = el("button", "opt", n + 1 + ".  " + t);
+          b.dataset.ok = i === ans ? "1" : "";
+          b.onclick = () => answer(b, items, fact, fill);
+          box.append(b);
+          return b;
+        });
+        const info = el("p", "fact");
+        info.id = "fact";
+        info.hidden = true;
+        const row = el("div", "row"),
+          ll = el("button", "btn alt", "✂️ 50/50");
+        ll.disabled = !G.hint;
+        ll.onclick = () => {
+          G.hint = false;
+          ll.disabled = true;
+          shuffle(items.filter((b) => !b.dataset.ok))
+            .slice(0, 2)
+            .forEach((b) => {
+              b.classList.add("gone");
+              b.disabled = true;
+            });
+        };
+        row.append(ll);
+        const nxt = el(
+          "button",
+          "btn",
+          G.i === G.qs.length - 1 ? "See results" : "Next question",
+        );
+        nxt.id = "next";
+        nxt.hidden = true;
+        nxt.onclick = () => {
+          G.i++;
+          G.i < G.qs.length ? showQ() : results();
+        };
+        row.append(nxt);
+        card.append(top, bar, el("h2", "", q), box, info, row);
+        $app.append(card);
+
+        const end = Date.now() + SECONDS * 1000;
+        G.end = end;
+        timer = setInterval(() => {
+          const left = Math.max(0, end - Date.now());
+          fill.style.width = left / (SECONDS * 10) + "%";
+          fill.style.background = left < 5000 ? "var(--bad)" : "var(--ok)";
+          if (left <= 0) answer(null, items, fact, fill);
+        }, 100);
+      }
+
+      function answer(btn, items, fact, fill) {
+        if (G.locked) return;
+        G.locked = true;
+        clearInterval(timer);
+        const ok = btn && btn.dataset.ok,
+          [q, opts, ans] = G.qs[G.i];
+        items.forEach((b) => {
+          b.disabled = true;
+          if (b.dataset.ok) b.classList.add("right");
+        });
+        const info = document.getElementById("fact");
+        info.hidden = false;
+        if (ok) {
+          const left = Math.max(0, G.end - Date.now()),
+            pts =
+              100 +
+              Math.round((left / (SECONDS * 1000)) * 50) +
+              Math.min(G.streak, 5) * 25;
+          G.score += pts;
+          G.streak++;
+          G.right++;
+          G.bestStreak = Math.max(G.bestStreak, G.streak);
+          info.textContent = "✅ +" + pts + " points. " + fact;
+        } else {
+          if (btn) btn.classList.add("wrong");
+          G.streak = 0;
+          G.missed.push([q, opts[ans], fact]);
+          info.textContent = (btn ? "❌ Not quite. " : "⏰ Time's up! ") + fact;
+        }
+        const n = document.getElementById("next");
+        n.hidden = false;
+        n.focus();
+      }
+
+      function results() {
+        const pct = Math.round((G.right / G.qs.length) * 100),
+          key = "trivia-best-" + G.cat,
+          prev = +load(key) || 0,
+          isBest = G.score > prev;
+        if (isBest) save(key, G.score);
+        const rank =
+          pct >= 90
+            ? "🏆 Grammar Guru"
+            : pct >= 70
+              ? "🧙 Word Wizard"
+              : pct >= 50
+                ? "📖 Rising Reader"
+                : "🌱 Keep Practicing";
+        $app.innerHTML = "";
+        const card = el("div", "card");
+        card.append(
+          el("div", "big", G.score),
+          el("div", "rank", rank + (isBest ? "  (new best!)" : "")),
+        );
+        const st = el("div", "stats");
+        [
+          ["Correct", G.right + "/" + G.qs.length],
+          ["Accuracy", pct + "%"],
+          ["Best streak", "🔥 " + G.bestStreak],
+        ].forEach(([a, b]) => {
+          const d = el("div");
+          d.append(el("b", "", b), el("span", "", a));
+          st.append(d);
+        });
+        card.append(st);
+        if (G.missed.length) {
+          card.append(el("h3", "", "Review your mistakes"));
+          const ul = el("ul", "review");
+          G.missed.forEach(([q, a, f]) => {
+            const li = el("li");
+            li.append(
+              el("div", "", q),
+              el("b", "", "Answer: " + a),
+              el("small", "", f),
+            );
+            ul.append(li);
+          });
+          card.append(ul);
+        } else card.append(el("p", "rank", "Perfect round! No mistakes."));
+        const row = el("div", "row"),
+          again = el("button", "btn", "Play again"),
+          menu = el("button", "btn alt", "Choose category");
+        again.onclick = () => start(G.cat);
+        menu.onclick = home;
+        row.append(again, menu);
+        card.append(row);
+        $app.append(card);
+        again.focus();
+      }
+
+      addEventListener("keydown", (e) => {
+        const n = parseInt(e.key, 10),
+          nx = document.getElementById("next");
+        if (!G || !document.querySelector(".opts")) return;
+        if (n >= 1 && n <= 4 && !G.locked) {
+          const b = document.querySelectorAll(".opt")[n - 1];
+          if (b && !b.disabled) b.click();
+        } else if (
+          e.key === "Enter" &&
+          nx &&
+          !nx.hidden &&
+          document.activeElement !== nx
+        )
+          nx.click();
+      });
+      home();
+    </script>
+  </body>
+</html>

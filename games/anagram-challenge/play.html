@@ -1,0 +1,2483 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <title>Anagram Challenge – English Word Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Baloo+2:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        --bg: #f5f3ff;
+        --surface: #ffffff;
+        --ink: #1d1a4d;
+        --muted: #58557f;
+        --line: #d9d5f5;
+        --slot: #e4e0fa;
+        --chip-on: #ffe3ee;
+        --tile: #ffc93c;
+        --tile-edge: #d99a00;
+        --tile-ink: #3a2a00;
+        --good: #12a883;
+        --good-edge: #0b7a5e;
+        --bad: #f2564b;
+        --bad-edge: #b93a31;
+        --sky: #4c8dff;
+        --sky-edge: #2a63c9;
+        --sky-ink: #fff;
+        --accent: #d81b67;
+        --accent-edge: #9e1049;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #13113a;
+          --surface: #201d58;
+          --ink: #f4f2ff;
+          --muted: #b0addb;
+          --line: #383380;
+          --slot: #2d2a74;
+          --chip-on: #4a1d47;
+          --accent: #ff5c99;
+          --accent-edge: #b72d66;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #13113a;
+        --surface: #201d58;
+        --ink: #f4f2ff;
+        --muted: #b0addb;
+        --line: #383380;
+        --slot: #2d2a74;
+        --chip-on: #4a1d47;
+        --accent: #ff5c99;
+        --accent-edge: #b72d66;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "Atkinson Hyperlegible", system-ui, "Segoe UI", Roboto, sans-serif;
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      .game-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 640px) 320px;
+        align-items: start;
+        justify-content: center;
+        gap: 24px;
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .display,
+      h1,
+      h2,
+      h3,
+      legend,
+      .tile {
+        font-family: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .app {
+        max-width: 640px;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 20px 20px 48px;
+      }
+      .ad-rail {
+        display: flex;
+        justify-content: center;
+        margin-top: 110px;
+      }
+      .ad-card {
+        display: grid;
+        width: 320px;
+        min-height: 292px;
+        align-content: start;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 0;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--surface);
+      }
+      .ad-label {
+        color: var(--muted);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .ad-card .adsbygoogle {
+        display: inline-block;
+        width: 300px;
+        height: 250px;
+      }
+      .bottom-ad {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        width: min(970px, calc(100% - 32px));
+        min-height: 120px;
+        margin: 0 auto 28px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+      }
+      .bottom-ad .adsbygoogle {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+      @media (max-width: 1050px) {
+        .game-layout {
+          display: block;
+          max-width: 680px;
+        }
+        .ad-rail {
+          display: flex;
+          margin-top: 0;
+        }
+      }
+      @media (max-height: 600px) {
+        .in-game-ad {
+          display: none !important;
+        }
+      }
+      .game-layout:fullscreen,
+      .game-layout:-webkit-full-screen {
+        display: block;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        overflow: auto;
+        padding: 0;
+        background: var(--bg);
+      }
+      .game-layout:fullscreen .app,
+      .game-layout:-webkit-full-screen .app {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .game-layout:fullscreen .ad-rail,
+      .game-layout:-webkit-full-screen .ad-rail {
+        display: none !important;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 3px solid var(--sky);
+        outline-offset: 3px;
+      }
+
+      /* ---------- shared tile + cell system ---------- */
+      .row {
+        display: flex;
+        justify-content: center;
+        gap: clamp(3px, 1.2vw, 8px);
+        padding-bottom: 10px;
+      }
+      .cell {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 64px;
+        aspect-ratio: 1/1;
+        position: relative;
+        container-type: inline-size;
+        border-radius: 20cqw;
+      }
+      .tile {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        background: var(--tile);
+        color: var(--tile-ink);
+        border-radius: 20cqw;
+        font-weight: 800;
+        font-size: 58cqw;
+        line-height: 1;
+        text-transform: uppercase;
+        box-shadow: 0 6cqw 0 var(--tile-edge);
+        rotate: var(--r, 0deg);
+        transition:
+          rotate 0.2s,
+          background-color 0.2s,
+          box-shadow 0.08s;
+        display: grid;
+        place-items: center;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .tile:hover {
+        filter: brightness(1.06);
+      }
+      .tile:active {
+        transform: translateY(4cqw);
+        box-shadow: 0 2cqw 0 var(--tile-edge);
+      }
+      .tile.placed {
+        rotate: 0deg;
+      }
+      .tile.locked {
+        background: var(--sky);
+        color: var(--sky-ink);
+        box-shadow: 0 6cqw 0 var(--sky-edge);
+        cursor: default;
+      }
+      .tile.good {
+        background: var(--good);
+        color: #fff;
+        box-shadow: 0 6cqw 0 var(--good-edge);
+        cursor: default;
+      }
+      .tile.wrong {
+        background: var(--bad);
+        color: #fff;
+        box-shadow: 0 6cqw 0 var(--bad-edge);
+      }
+      .slot,
+      .bay {
+        background: var(--slot);
+      }
+      .slot {
+        box-shadow: inset 0 3cqw 0 rgba(0, 0, 0, 0.1);
+      }
+      .bay {
+        opacity: 0.55;
+      }
+
+      /* ---------- buttons & chips ---------- */
+      .btn {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 14px;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn:hover {
+        border-color: var(--muted);
+      }
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 4px 0 var(--accent-edge);
+      }
+      .btn.primary:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--accent-edge);
+      }
+      .btn.big {
+        min-height: 60px;
+        font-size: 1.3rem;
+        border-radius: 18px;
+        width: 100%;
+        font-family: "Baloo 2", system-ui, sans-serif;
+        font-weight: 800;
+      }
+      .icon-btn {
+        min-height: 42px;
+        min-width: 42px;
+        padding: 0 12px;
+      }
+
+      /* ---------- start screen ---------- */
+      .hero {
+        text-align: center;
+        padding: 12px 0 8px;
+      }
+      .hero-tiles {
+        display: flex;
+        justify-content: center;
+        gap: clamp(4px, 1.4vw, 8px);
+        padding-bottom: 10px;
+        cursor: pointer;
+      }
+      .hero-tiles .cell {
+        max-width: 62px;
+      }
+      .hero-tiles .tile {
+        cursor: pointer;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(2.3rem, 9vw, 3.4rem);
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+      .lede {
+        margin: 14px auto 0;
+        max-width: 34ch;
+        color: var(--muted);
+      }
+      fieldset {
+        border: 0;
+        margin: 26px 0 0;
+        padding: 0;
+        min-width: 0;
+      }
+      legend {
+        font-size: 1.3rem;
+        font-weight: 800;
+        padding: 0;
+        margin-bottom: 10px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .chip {
+        position: relative;
+      }
+      .chip input {
+        position: absolute;
+        opacity: 0;
+        inset: 0;
+        cursor: pointer;
+        margin: 0;
+      }
+      .chip span {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 50px;
+        padding: 6px 16px;
+        border-radius: 14px;
+        border: 2px solid var(--line);
+        background: var(--surface);
+        font-weight: 700;
+      }
+      .chip small {
+        font-weight: 400;
+        color: var(--muted);
+        font-size: 0.8rem;
+        line-height: 1.2;
+      }
+      .chip input:checked + span {
+        border-color: var(--accent);
+        background: var(--chip-on);
+        box-shadow: 0 3px 0 var(--accent);
+      }
+      .chip input:focus-visible + span {
+        outline: 3px solid var(--sky);
+        outline-offset: 3px;
+      }
+      .levels .chip {
+        flex: 1 1 150px;
+      }
+      .switch {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        margin-top: 26px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: var(--surface);
+        border: 2px solid var(--line);
+      }
+      .switch input {
+        width: 22px;
+        height: 22px;
+        accent-color: var(--accent);
+        margin: 0;
+      }
+      .switch b {
+        display: block;
+        line-height: 1.2;
+      }
+      .switch small {
+        color: var(--muted);
+      }
+      .go {
+        margin-top: 28px;
+      }
+      .how {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        text-align: center;
+      }
+      .bests {
+        margin: 10px 0 0;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+        min-height: 1.5em;
+      }
+
+      /* ---------- play screen ---------- */
+      .hud {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .hud .stat {
+        flex: 1;
+        font-weight: 700;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 99px;
+        background: var(--surface);
+        border: 2px solid var(--line);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .hud .mid {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .timer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .track {
+        flex: 1;
+        height: 12px;
+        border-radius: 99px;
+        background: var(--slot);
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        width: 100%;
+        background: var(--good);
+        transform-origin: left;
+        transition: background-color 0.3s;
+      }
+      .timer.low .fill {
+        background: var(--bad);
+      }
+      .timer.low #timeLeft {
+        color: var(--bad);
+      }
+      #timeLeft {
+        font-weight: 700;
+        min-width: 2.6em;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .clue {
+        background: var(--surface);
+        border: 2px solid var(--line);
+        border-radius: 22px;
+        padding: 18px 20px;
+        text-align: center;
+        margin-bottom: 22px;
+      }
+      .clue .pic {
+        font-size: clamp(3.4rem, 18vw, 5rem);
+        line-height: 1.1;
+      }
+      .clue .meaning {
+        margin: 6px 0 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .clue .sentence {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+      .blank {
+        display: inline-block;
+        height: 1.1em;
+        border-bottom: 3px solid var(--accent);
+        vertical-align: -0.15em;
+        margin: 0 2px;
+      }
+      .count {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .board {
+        margin-bottom: 6px;
+      }
+      .tray-label {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 10px 0 8px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 14px;
+      }
+      .status {
+        min-height: 1.6em;
+        text-align: center;
+        margin: 12px 0 0;
+        font-weight: 700;
+      }
+      .shake {
+        animation: shake 0.5s;
+      }
+      @keyframes shake {
+        20%,
+        60% {
+          transform: translateX(-8px);
+        }
+        40%,
+        80% {
+          transform: translateX(8px);
+        }
+      }
+      .hop {
+        animation: hop 0.5s both;
+      }
+      @keyframes hop {
+        0% {
+          transform: translateY(0);
+        }
+        35% {
+          transform: translateY(-22%);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .feedback {
+        background: var(--surface);
+        border: 2px solid var(--line);
+        border-left-width: 10px;
+        border-radius: 20px;
+        padding: 16px 20px;
+        margin-top: 18px;
+      }
+      .feedback.ok {
+        border-left-color: var(--good);
+      }
+      .feedback.miss {
+        border-left-color: var(--bad);
+      }
+      .feedback h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        line-height: 1.2;
+      }
+      .feedback .theword {
+        font-family: "Baloo 2", system-ui, sans-serif;
+        font-weight: 800;
+        font-size: 2.2rem;
+        line-height: 1.1;
+        margin: 6px 0 0;
+      }
+      .feedback p {
+        margin: 6px 0 0;
+      }
+      .feedback .pts {
+        font-weight: 700;
+        color: var(--good);
+      }
+      .feedback .row-btns {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .feedback .row-btns .primary {
+        flex: 1 1 160px;
+      }
+
+      /* ---------- results ---------- */
+      .results {
+        text-align: center;
+      }
+      .stars {
+        font-size: 3.2rem;
+        letter-spacing: 0.1em;
+        line-height: 1.1;
+        margin: 10px 0 0;
+        color: var(--tile);
+      }
+      .stars .off {
+        color: var(--slot);
+      }
+      .results h2 {
+        font-size: 2.2rem;
+        margin: 4px 0 0;
+        line-height: 1.1;
+      }
+      .sum {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 16px 0 0;
+      }
+      .review {
+        list-style: none;
+        margin: 22px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+        text-align: left;
+      }
+      .review li {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        background: var(--surface);
+        border: 2px solid var(--line);
+        border-left-width: 8px;
+        border-radius: 16px;
+        padding: 10px 14px;
+      }
+      .review li.ok {
+        border-left-color: var(--good);
+      }
+      .review li.miss {
+        border-left-color: var(--bad);
+      }
+      .review .e {
+        font-size: 2rem;
+        line-height: 1;
+      }
+      .review .t {
+        flex: 1;
+        min-width: 0;
+      }
+      .review .t b {
+        font-family: "Baloo 2", system-ui, sans-serif;
+        font-size: 1.25rem;
+        line-height: 1.2;
+      }
+      .review .t span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+      .end-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      #confetti {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .game-layout {
+          padding: 8px;
+        }
+        .app {
+          padding: 12px 8px 32px;
+        }
+        .bottom-ad {
+          width: calc(100% - 16px);
+          margin-bottom: 16px;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-layout" id="gameLayout">
+      <div class="app">
+        <!-- START -->
+        <section id="start" class="screen">
+          <header class="hero">
+            <h1>
+              <span
+                id="heroTiles"
+                class="hero-tiles"
+                aria-hidden="true"
+                title="Tap to shuffle"
+              ></span>
+              <span class="sr">Anagram </span>Challenge
+            </h1>
+            <p class="lede">
+              Unscramble the letters to build the word. Each word has a picture,
+              a meaning, and a sentence.
+            </p>
+          </header>
+
+          <fieldset>
+            <legend>Choose your level</legend>
+            <div class="chips levels">
+              <label class="chip"
+                ><input type="radio" name="level" value="1" checked /><span
+                  >Starter<small>3–5 letters</small></span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="level" value="2" /><span
+                  >Explorer<small>5–7 letters</small></span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="level" value="3" /><span
+                  >Champion<small>7–10 letters</small></span
+                ></label
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Pick a topic</legend>
+            <div class="chips">
+              <label class="chip"
+                ><input type="radio" name="topic" value="mix" checked /><span
+                  >🎲 Mix</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="food" /><span
+                  >🍕 Food</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="animals" /><span
+                  >🐼 Animals</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="home" /><span
+                  >🛋️ Home</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="travel" /><span
+                  >✈️ Travel</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="people" /><span
+                  >😊 Feelings</span
+                ></label
+              >
+              <label class="chip"
+                ><input type="radio" name="topic" value="work" /><span
+                  >💼 Work &amp; school</span
+                ></label
+              >
+            </div>
+          </fieldset>
+
+          <label class="switch">
+            <input type="checkbox" id="timed" checked />
+            <span
+              ><b>Race the clock</b
+              ><small>Turn this off to play at your own speed.</small></span
+            >
+          </label>
+
+          <div class="go">
+            <button class="btn primary big" id="startBtn">Start game</button>
+          </div>
+          <p class="how">
+            Tap the tiles or type on your keyboard. Backspace removes a letter.
+          </p>
+          <p class="bests" id="bests"></p>
+        </section>
+
+        <!-- PLAY -->
+        <section id="play" class="screen" hidden>
+          <div class="hud">
+            <div class="stat" id="hudWord">Word 1 of 5</div>
+            <div class="mid">
+              <span class="pill" id="hudScore" aria-label="Score">★ 0</span>
+              <span class="pill" id="hudStreak" aria-label="Streak">🔥 0</span>
+            </div>
+            <button
+              class="btn icon-btn"
+              id="soundBtn"
+              aria-label="Sound on"
+              title="Sound"
+            >
+              🔊
+            </button>
+            <button
+              class="btn icon-btn"
+              id="fullscreenBtn"
+              aria-label="Enter fullscreen"
+              title="Enter fullscreen"
+            >
+              ⛶
+            </button>
+            <button
+              class="btn icon-btn"
+              id="quitBtn"
+              aria-label="Quit game"
+              title="Quit"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="timer" id="timerWrap">
+            <div class="track"><div class="fill" id="fill"></div></div>
+            <span id="timeLeft">0:40</span>
+          </div>
+
+          <div class="clue">
+            <div class="pic" id="pic" aria-hidden="true">🍎</div>
+            <p class="meaning" id="meaning"></p>
+            <p class="sentence" id="sentence"></p>
+            <span class="count" id="count"></span>
+          </div>
+
+          <div class="board">
+            <div
+              class="row"
+              id="slots"
+              role="group"
+              aria-label="Your answer"
+            ></div>
+            <p class="tray-label">Letters</p>
+            <div
+              class="row"
+              id="tray"
+              role="group"
+              aria-label="Scrambled letters"
+            ></div>
+          </div>
+
+          <div class="actions" id="actions">
+            <button class="btn" id="shuffleBtn">🔀 Shuffle</button>
+            <button class="btn" id="hintBtn">💡 Hint (−15)</button>
+            <button class="btn" id="clearBtn">Clear</button>
+            <button class="btn" id="skipBtn">Skip</button>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+
+          <div class="feedback" id="feedback" hidden></div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="end" class="screen results" hidden>
+          <div class="stars" id="stars" aria-hidden="true"></div>
+          <h2 id="endTitle">Great work!</h2>
+          <p class="lede" id="endSub"></p>
+          <div class="sum">
+            <span class="pill" id="endScore"></span>
+            <span class="pill" id="endStreak"></span>
+            <span class="pill" id="endBest"></span>
+          </div>
+          <ul class="review" id="review"></ul>
+          <div class="end-actions">
+            <button class="btn primary big" id="againBtn">Play again</button>
+            <button class="btn" id="menuBtn">Change level or topic</button>
+          </div>
+        </section>
+      </div>
+      <aside class="ad-rail in-game-ad" aria-label="Advertisement">
+        <div class="ad-card">
+          <span class="ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="9319754067"
+          ></ins>
+        </div>
+      </aside>
+    </div>
+    <section class="bottom-ad" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2586206204"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
+    <script>
+      document.querySelectorAll(".adsbygoogle").forEach((adUnit) => {
+        if (!adUnit.dataset.adsbygoogleStatus) {
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (error) {
+            console.warn(
+              "Anagram Challenge ad could not be initialized.",
+              error,
+            );
+          }
+        }
+      });
+    </script>
+    <canvas id="confetti" aria-hidden="true"></canvas>
+
+    <script>
+      (() => {
+        const $ = (s) => document.querySelector(s);
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const store = {
+          get(k) {
+            try {
+              return localStorage.getItem(k);
+            } catch {
+              return null;
+            }
+          },
+          set(k, v) {
+            try {
+              localStorage.setItem(k, v);
+            } catch {}
+          },
+        };
+
+        /* ---------- word bank: [topic, level, word, emoji, meaning, sentence] ---------- */
+        const RAW = [
+          // Starter
+          [
+            "food",
+            1,
+            "egg",
+            "🥚",
+            "A round food from a hen. You can boil it or fry it.",
+            "I eat an egg for breakfast.",
+          ],
+          [
+            "food",
+            1,
+            "rice",
+            "🍚",
+            "Small white grains. Many people eat it every day.",
+            "We have rice with chicken tonight.",
+          ],
+          [
+            "food",
+            1,
+            "milk",
+            "🥛",
+            "A white drink that comes from cows.",
+            "She puts milk in her tea.",
+          ],
+          [
+            "food",
+            1,
+            "pizza",
+            "🍕",
+            "A flat, round Italian food with cheese on top.",
+            "Let's order a pizza tonight.",
+          ],
+          [
+            "food",
+            1,
+            "apple",
+            "🍎",
+            "A round red or green fruit.",
+            "An apple a day is good for you.",
+          ],
+          [
+            "animals",
+            1,
+            "fish",
+            "🐟",
+            "It lives in water and swims.",
+            "My brother caught a big fish.",
+          ],
+          [
+            "animals",
+            1,
+            "bird",
+            "🐦",
+            "An animal with wings and feathers. Most can fly.",
+            "A bird is singing outside.",
+          ],
+          [
+            "animals",
+            1,
+            "mouse",
+            "🐭",
+            "A very small animal with a long tail.",
+            "The cat chased the mouse.",
+          ],
+          [
+            "animals",
+            1,
+            "tiger",
+            "🐯",
+            "A big wild cat with orange and black stripes.",
+            "The tiger sleeps in the shade.",
+          ],
+          [
+            "animals",
+            1,
+            "panda",
+            "🐼",
+            "A black and white bear from China.",
+            "The panda eats bamboo all day.",
+          ],
+          [
+            "home",
+            1,
+            "bed",
+            "🛏️",
+            "You sleep on it at night.",
+            "I go to bed at ten o'clock.",
+          ],
+          [
+            "home",
+            1,
+            "chair",
+            "🪑",
+            "You sit on it. It usually has four legs.",
+            "Please sit on this chair.",
+          ],
+          [
+            "home",
+            1,
+            "sofa",
+            "🛋️",
+            "A long, soft seat for two or three people.",
+            "We watch TV on the sofa.",
+          ],
+          [
+            "home",
+            1,
+            "clock",
+            "🕐",
+            "It shows you the time.",
+            "The clock says it is noon.",
+          ],
+          [
+            "home",
+            1,
+            "bath",
+            "🛁",
+            "You wash your whole body in a tub of water.",
+            "He takes a bath every evening.",
+          ],
+          [
+            "travel",
+            1,
+            "taxi",
+            "🚕",
+            "A car with a driver. You pay to go somewhere.",
+            "We took a taxi to the airport.",
+          ],
+          [
+            "travel",
+            1,
+            "train",
+            "🚆",
+            "A long vehicle that runs on rails.",
+            "The train leaves at eight.",
+          ],
+          [
+            "travel",
+            1,
+            "beach",
+            "🏖️",
+            "Sand next to the sea.",
+            "The kids play on the beach.",
+          ],
+          [
+            "travel",
+            1,
+            "hotel",
+            "🏨",
+            "A place where travelers pay to sleep.",
+            "Our hotel is near the station.",
+          ],
+          [
+            "travel",
+            1,
+            "bike",
+            "🚲",
+            "A vehicle with two wheels. You pedal it.",
+            "I ride my bike to school.",
+          ],
+          [
+            "people",
+            1,
+            "happy",
+            "😊",
+            "Feeling good and full of joy.",
+            "She is happy today.",
+          ],
+          [
+            "people",
+            1,
+            "laugh",
+            "😂",
+            "Make a sound when something is funny.",
+            "His jokes make me laugh.",
+          ],
+          [
+            "people",
+            1,
+            "baby",
+            "👶",
+            "A very young child.",
+            "The baby is asleep.",
+          ],
+          [
+            "people",
+            1,
+            "angry",
+            "😠",
+            "Feeling very upset and mad.",
+            "He was angry about the noise.",
+          ],
+          [
+            "people",
+            1,
+            "wave",
+            "👋",
+            "Move your hand to say hello or goodbye.",
+            "I wave to my neighbor every morning.",
+          ],
+          [
+            "work",
+            1,
+            "book",
+            "📚",
+            "Pages with a story or facts that you read.",
+            "I'm reading a good book.",
+          ],
+          [
+            "work",
+            1,
+            "desk",
+            "🖥️",
+            "A table where you read, write, or use a computer.",
+            "My desk is by the window.",
+          ],
+          [
+            "work",
+            1,
+            "class",
+            "🏫",
+            "A group of students who learn together.",
+            "Our class starts at nine.",
+          ],
+          [
+            "work",
+            1,
+            "paper",
+            "📄",
+            "Thin sheets that you write or print on.",
+            "Please give me a sheet of paper.",
+          ],
+          [
+            "work",
+            1,
+            "write",
+            "✍️",
+            "Put words on paper or a screen.",
+            "I write in my notebook every night.",
+          ],
+          // Explorer
+          [
+            "food",
+            2,
+            "banana",
+            "🍌",
+            "A long yellow fruit.",
+            "A banana is a quick snack.",
+          ],
+          [
+            "food",
+            2,
+            "cheese",
+            "🧀",
+            "A yellow or white food made from milk.",
+            "I like cheese on my pasta.",
+          ],
+          [
+            "food",
+            2,
+            "noodle",
+            "🍜",
+            "Long, thin food made from flour. Often in soup.",
+            "She ate a bowl of noodle soup.",
+          ],
+          [
+            "food",
+            2,
+            "tomato",
+            "🍅",
+            "A round red fruit used in salads and sauces.",
+            "Add a tomato to the salad.",
+          ],
+          [
+            "food",
+            2,
+            "coffee",
+            "☕",
+            "A hot brown drink. It helps you stay awake.",
+            "I drink coffee every morning.",
+          ],
+          [
+            "animals",
+            2,
+            "rabbit",
+            "🐰",
+            "A small animal with long ears that hops.",
+            "The rabbit eats a carrot.",
+          ],
+          [
+            "animals",
+            2,
+            "monkey",
+            "🐵",
+            "An animal that climbs trees and has a long tail.",
+            "The monkey jumped from branch to branch.",
+          ],
+          [
+            "animals",
+            2,
+            "zebra",
+            "🦓",
+            "An African animal like a horse, with black and white stripes.",
+            "A zebra runs very fast.",
+          ],
+          [
+            "animals",
+            2,
+            "dolphin",
+            "🐬",
+            "A smart sea animal that jumps out of the water.",
+            "We saw a dolphin from the boat.",
+          ],
+          [
+            "animals",
+            2,
+            "penguin",
+            "🐧",
+            "A black and white bird that swims but cannot fly.",
+            "The penguin walks on the ice.",
+          ],
+          [
+            "home",
+            2,
+            "kitchen",
+            "🍳",
+            "The room where you cook food.",
+            "Dad is cooking in the kitchen.",
+          ],
+          [
+            "home",
+            2,
+            "window",
+            "🪟",
+            "Glass in a wall. You look through it.",
+            "Please open the window.",
+          ],
+          [
+            "home",
+            2,
+            "mirror",
+            "🪞",
+            "Glass that shows your face.",
+            "She looked in the mirror.",
+          ],
+          [
+            "home",
+            2,
+            "pillow",
+            "🛌",
+            "A soft bag for your head in bed.",
+            "I need a new pillow.",
+          ],
+          [
+            "home",
+            2,
+            "fridge",
+            "🧊",
+            "A cold machine that keeps food fresh.",
+            "The milk is in the fridge.",
+          ],
+          [
+            "travel",
+            2,
+            "ticket",
+            "🎫",
+            "A small paper or code that lets you travel or enter.",
+            "I bought a ticket online.",
+          ],
+          [
+            "travel",
+            2,
+            "luggage",
+            "🧳",
+            "Bags and suitcases that you take on a trip.",
+            "My luggage is very heavy.",
+          ],
+          [
+            "travel",
+            2,
+            "island",
+            "🏝️",
+            "Land with water all around it.",
+            "They live on a small island.",
+          ],
+          [
+            "travel",
+            2,
+            "airport",
+            "✈️",
+            "A place where planes take off and land.",
+            "We arrived at the airport early.",
+          ],
+          [
+            "travel",
+            2,
+            "museum",
+            "🏛️",
+            "A building where you look at art or history.",
+            "The museum opens at ten.",
+          ],
+          [
+            "people",
+            2,
+            "family",
+            "👨‍👩‍👧",
+            "Your parents, children, and relatives.",
+            "My family eats dinner together.",
+          ],
+          [
+            "people",
+            2,
+            "lonely",
+            "😔",
+            "Sad because you are alone.",
+            "He felt lonely in the new city.",
+          ],
+          [
+            "people",
+            2,
+            "excited",
+            "🤩",
+            "Very happy about something that will happen.",
+            "I am excited about the trip.",
+          ],
+          [
+            "people",
+            2,
+            "nervous",
+            "😬",
+            "A little afraid or worried.",
+            "She felt nervous before the test.",
+          ],
+          [
+            "people",
+            2,
+            "worried",
+            "😟",
+            "Thinking that something bad may happen.",
+            "Mom is worried about me.",
+          ],
+          [
+            "work",
+            2,
+            "lesson",
+            "📖",
+            "A time when a teacher teaches you.",
+            "Today's lesson is about verbs.",
+          ],
+          [
+            "work",
+            2,
+            "pencil",
+            "✏️",
+            "You write with it. You can erase the marks.",
+            "I need a sharp pencil.",
+          ],
+          [
+            "work",
+            2,
+            "office",
+            "🏢",
+            "A place where people do their work.",
+            "She works in a big office.",
+          ],
+          [
+            "work",
+            2,
+            "meeting",
+            "🤝",
+            "When people come together to talk about work.",
+            "The meeting starts at two.",
+          ],
+          [
+            "work",
+            2,
+            "salary",
+            "💵",
+            "The money you get for your job each month.",
+            "He gets his salary on Friday.",
+          ],
+          // Champion
+          [
+            "food",
+            3,
+            "sandwich",
+            "🥪",
+            "Two pieces of bread with food in the middle.",
+            "I made a sandwich for lunch.",
+          ],
+          [
+            "food",
+            3,
+            "chocolate",
+            "🍫",
+            "A sweet brown food made from cocoa.",
+            "She loves dark chocolate.",
+          ],
+          [
+            "food",
+            3,
+            "broccoli",
+            "🥦",
+            "A green vegetable that looks like a small tree.",
+            "Kids often dislike broccoli.",
+          ],
+          [
+            "food",
+            3,
+            "pancake",
+            "🥞",
+            "A flat, round cake cooked in a pan.",
+            "We had a pancake with honey.",
+          ],
+          [
+            "food",
+            3,
+            "spaghetti",
+            "🍝",
+            "Long, thin Italian pasta.",
+            "He cooked spaghetti with tomato sauce.",
+          ],
+          [
+            "animals",
+            3,
+            "elephant",
+            "🐘",
+            "The biggest land animal. It has a long trunk.",
+            "An elephant never forgets, people say.",
+          ],
+          [
+            "animals",
+            3,
+            "kangaroo",
+            "🦘",
+            "An Australian animal that jumps and carries its baby in a pouch.",
+            "The kangaroo hopped across the field.",
+          ],
+          [
+            "animals",
+            3,
+            "crocodile",
+            "🐊",
+            "A big reptile with sharp teeth that lives in rivers.",
+            "A crocodile can stay still for hours.",
+          ],
+          [
+            "animals",
+            3,
+            "butterfly",
+            "🦋",
+            "An insect with big, colorful wings.",
+            "A butterfly landed on the flower.",
+          ],
+          [
+            "animals",
+            3,
+            "octopus",
+            "🐙",
+            "A sea animal with eight arms.",
+            "The octopus hid under a rock.",
+          ],
+          [
+            "home",
+            3,
+            "bathroom",
+            "🚿",
+            "The room with a shower or bath and a toilet.",
+            "The bathroom is upstairs.",
+          ],
+          [
+            "home",
+            3,
+            "furniture",
+            "🛋️",
+            "Chairs, tables, and beds in a home.",
+            "We bought new furniture.",
+          ],
+          [
+            "home",
+            3,
+            "staircase",
+            "🪜",
+            "Steps that go from one floor to another.",
+            "The staircase is very steep.",
+          ],
+          [
+            "home",
+            3,
+            "curtain",
+            "🪟",
+            "Cloth that covers a window.",
+            "Close the curtain, please.",
+          ],
+          [
+            "home",
+            3,
+            "wardrobe",
+            "👗",
+            "A tall cupboard for your clothes.",
+            "Her wardrobe is full of dresses.",
+          ],
+          [
+            "travel",
+            3,
+            "mountain",
+            "⛰️",
+            "A very high hill.",
+            "We climbed the mountain.",
+          ],
+          [
+            "travel",
+            3,
+            "vacation",
+            "🌴",
+            "A time away from work or school to rest.",
+            "We're on vacation next week.",
+          ],
+          [
+            "travel",
+            3,
+            "passport",
+            "🛂",
+            "A small book that proves who you are when you travel abroad.",
+            "Don't forget your passport.",
+          ],
+          [
+            "travel",
+            3,
+            "adventure",
+            "🧭",
+            "An exciting and sometimes dangerous experience.",
+            "The trip was a big adventure.",
+          ],
+          [
+            "travel",
+            3,
+            "suitcase",
+            "🧳",
+            "A bag with a handle for your clothes on a trip.",
+            "She packed her suitcase last night.",
+          ],
+          [
+            "people",
+            3,
+            "grateful",
+            "🙏",
+            "Feeling thankful for something.",
+            "I'm grateful for your help.",
+          ],
+          [
+            "people",
+            3,
+            "confused",
+            "😕",
+            "Not able to understand something clearly.",
+            "The map made me confused.",
+          ],
+          [
+            "people",
+            3,
+            "curious",
+            "🧐",
+            "Wanting to know or learn more.",
+            "Kids are curious about everything.",
+          ],
+          [
+            "people",
+            3,
+            "cheerful",
+            "😄",
+            "Happy and positive.",
+            "The cheerful waiter smiled at us.",
+          ],
+          [
+            "people",
+            3,
+            "confident",
+            "😎",
+            "Sure about yourself and your skills.",
+            "He felt confident before the speech.",
+          ],
+          [
+            "work",
+            3,
+            "interview",
+            "🎙️",
+            "A formal talk to see if you are right for a job.",
+            "I have a job interview tomorrow.",
+          ],
+          [
+            "work",
+            3,
+            "colleague",
+            "🧑‍💼",
+            "A person you work with.",
+            "My colleague helped me with the report.",
+          ],
+          [
+            "work",
+            3,
+            "deadline",
+            "⏰",
+            "The last day or time to finish something.",
+            "The deadline is Friday.",
+          ],
+          [
+            "work",
+            3,
+            "schedule",
+            "🗓️",
+            "A plan that shows when things will happen.",
+            "My schedule is full this week.",
+          ],
+          [
+            "work",
+            3,
+            "promotion",
+            "📈",
+            "A move to a better, higher job.",
+            "She got a promotion last month.",
+          ],
+        ].map(([cat, lvl, word, emoji, def, sent]) => ({
+          cat,
+          lvl,
+          word,
+          emoji,
+          def,
+          sent,
+        }));
+
+        const LEVELS = {
+          1: { name: "Starter", time: 40 },
+          2: { name: "Explorer", time: 50 },
+          3: { name: "Champion", time: 60 },
+        };
+        const HINT_COST = 15;
+        const shuffle = (a) => {
+          a = a.slice();
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        };
+        const pick = (a) => a[Math.floor(Math.random() * a.length)];
+
+        /* ---------- sound ---------- */
+        let soundOn = store.get("anagram-sound") !== "off";
+        let ac;
+        function tone(freq, dur, type = "sine", vol = 0.07, delay = 0) {
+          if (!soundOn) return;
+          try {
+            ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+            const o = ac.createOscillator(),
+              g = ac.createGain(),
+              t = ac.currentTime + delay;
+            o.type = type;
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(vol, t);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            o.connect(g);
+            g.connect(ac.destination);
+            o.start(t);
+            o.stop(t + dur);
+          } catch {}
+        }
+        const sfx = {
+          pop: () => tone(520, 0.07, "triangle"),
+          back: () => tone(380, 0.07, "triangle"),
+          win: () =>
+            [523, 659, 784, 1047].forEach((f, i) =>
+              tone(f, 0.18, "triangle", 0.08, i * 0.09),
+            ),
+          wrong: () => {
+            tone(180, 0.22, "sawtooth", 0.05);
+            tone(140, 0.25, "sawtooth", 0.05, 0.12);
+          },
+          miss: () =>
+            [392, 330, 262].forEach((f, i) =>
+              tone(f, 0.2, "triangle", 0.07, i * 0.12),
+            ),
+          end: () =>
+            [523, 659, 784, 659, 784, 1047].forEach((f, i) =>
+              tone(f, 0.2, "triangle", 0.08, i * 0.11),
+            ),
+        };
+        function paintSound() {
+          const b = $("#soundBtn");
+          b.textContent = soundOn ? "🔊" : "🔇";
+          b.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off");
+        }
+
+        function updateFullscreenButton() {
+          const button = $("#fullscreenBtn");
+          const active =
+            document.fullscreenElement === $("#gameLayout") ||
+            document.webkitFullscreenElement === $("#gameLayout");
+          button.textContent = active ? "⤢" : "⛶";
+          button.setAttribute(
+            "aria-label",
+            active ? "Exit fullscreen" : "Enter fullscreen",
+          );
+          button.title = active ? "Exit fullscreen" : "Enter fullscreen";
+        }
+
+        async function toggleFullscreen() {
+          const layout = $("#gameLayout");
+          try {
+            if (
+              document.fullscreenElement ||
+              document.webkitFullscreenElement
+            ) {
+              if (document.exitFullscreen) await document.exitFullscreen();
+              else if (document.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+            } else if (layout.requestFullscreen) {
+              await layout.requestFullscreen();
+            } else if (layout.webkitRequestFullscreen) {
+              layout.webkitRequestFullscreen();
+            } else {
+              $("#status").textContent = "Fullscreen is not available here.";
+            }
+          } catch {
+            $("#status").textContent = "Could not switch fullscreen mode.";
+          }
+          updateFullscreenButton();
+        }
+
+        /* ---------- speech ---------- */
+        const canSpeak = "speechSynthesis" in window;
+        function speak(parts) {
+          if (!canSpeak) return;
+          try {
+            speechSynthesis.cancel();
+            parts.forEach((t) => {
+              const u = new SpeechSynthesisUtterance(t);
+              u.lang = "en-US";
+              u.rate = 0.85;
+              speechSynthesis.speak(u);
+            });
+          } catch {}
+        }
+
+        /* ---------- confetti ---------- */
+        function confetti(count, ox, oy, power) {
+          if (reduced) return;
+          const cv = $("#confetti"),
+            ctx = cv.getContext("2d");
+          cv.width = innerWidth;
+          cv.height = innerHeight;
+          const cols = ["#FFC93C", "#FF4F8B", "#12A883", "#4C8DFF", "#FFFFFF"];
+          const ps = Array.from({ length: count }, () => ({
+            x: ox,
+            y: oy,
+            vx: (Math.random() - 0.5) * power,
+            vy: -Math.random() * power * 0.9 - 3,
+            r: Math.random() * 6.28,
+            vr: (Math.random() - 0.5) * 0.4,
+            w: 6 + Math.random() * 6,
+            h: 4 + Math.random() * 5,
+            c: pick(cols),
+          }));
+          const t0 = performance.now();
+          (function frame(t) {
+            const age = t - t0;
+            ctx.clearRect(0, 0, cv.width, cv.height);
+            ps.forEach((p) => {
+              p.vy += 0.25;
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vx *= 0.99;
+              p.r += p.vr;
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate(p.r);
+              ctx.globalAlpha = Math.max(0, 1 - age / 2400);
+              ctx.fillStyle = p.c;
+              ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+              ctx.restore();
+            });
+            if (age < 2400) requestAnimationFrame(frame);
+            else ctx.clearRect(0, 0, cv.width, cv.height);
+          })(t0);
+        }
+
+        /* ---------- screens ---------- */
+        function show(id) {
+          ["start", "play", "end"].forEach((s) => {
+            $("#" + s).hidden = s !== id;
+          });
+          window.scrollTo(0, 0);
+        }
+
+        /* ---------- hero ---------- */
+        function buildHero() {
+          const wrap = $("#heroTiles");
+          wrap.innerHTML = "";
+          [..."ANAGRAM"].forEach((ch) => {
+            const cell = document.createElement("div");
+            cell.className = "cell";
+            const t = document.createElement("div");
+            t.className = "tile";
+            t.textContent = ch;
+            cell.appendChild(t);
+            wrap.appendChild(cell);
+          });
+        }
+        function heroAnim() {
+          if (reduced) return;
+          const cells = [...$("#heroTiles").children];
+          if (cells.length < 2) return;
+          const step =
+            cells[1].getBoundingClientRect().left -
+            cells[0].getBoundingClientRect().left;
+          let perm;
+          do {
+            perm = shuffle(cells.map((_, i) => i));
+          } while (perm.every((p, i) => p === i));
+          cells.forEach((c, i) => {
+            c.firstChild.animate(
+              [
+                {
+                  transform: `translateX(${(perm[i] - i) * step}px) rotate(${(Math.random() - 0.5) * 30}deg)`,
+                },
+                { transform: "translateX(0) rotate(0)" },
+              ],
+              {
+                duration: 900,
+                delay: 350 + i * 70,
+                easing: "cubic-bezier(.2,.9,.3,1.15)",
+                fill: "backwards",
+              },
+            );
+          });
+        }
+
+        /* ---------- bests ---------- */
+        function paintBests() {
+          const parts = [1, 2, 3]
+            .map((l) => {
+              const b = store.get("anagram-best-" + l);
+              return b ? `${LEVELS[l].name} ${b}` : null;
+            })
+            .filter(Boolean);
+          $("#bests").textContent = parts.length
+            ? "Your best scores: " + parts.join("  •  ")
+            : "";
+        }
+
+        /* ---------- game state ---------- */
+        let G = null;
+        let slotEls = [],
+          bayEls = [];
+
+        function startGame() {
+          const level = +document.querySelector("input[name=level]:checked")
+            .value;
+          const topic = document.querySelector(
+            "input[name=topic]:checked",
+          ).value;
+          const timed = $("#timed").checked;
+          const pool = RAW.filter(
+            (w) => w.lvl === level && (topic === "mix" || w.cat === topic),
+          );
+          const n = topic === "mix" ? 8 : 5;
+          G = {
+            level,
+            topic,
+            timed,
+            queue: shuffle(pool).slice(0, n),
+            idx: 0,
+            score: 0,
+            streak: 0,
+            bestStreak: 0,
+            results: [],
+            cur: null,
+          };
+          $("#timerWrap").hidden = !timed;
+          show("play");
+          loadWord();
+        }
+
+        function loadWord() {
+          const entry = G.queue[G.idx];
+          const word = entry.word.toUpperCase(),
+            n = word.length;
+          const letters = [...word];
+
+          // build tiles with a scrambled tray that never spells the word
+          let perm, tray;
+          do {
+            perm = shuffle(letters.map((_, i) => i));
+            tray = [];
+            letters.forEach((ch, k) => {
+              tray[perm[k]] = ch;
+            });
+          } while (tray.join("") === word);
+
+          const c = (G.cur = {
+            entry,
+            word,
+            letters,
+            n,
+            tiles: [],
+            slots: Array(n).fill(null),
+            hints: 0,
+            wrong: 0,
+            ended: false,
+            busy: false,
+            limit: LEVELS[G.level].time,
+            t0: Date.now(),
+            timer: null,
+          });
+
+          const slotsEl = $("#slots"),
+            trayEl = $("#tray");
+          slotsEl.innerHTML = "";
+          trayEl.innerHTML = "";
+          slotEls = [];
+          bayEls = [];
+          for (let i = 0; i < n; i++) {
+            const s = document.createElement("div");
+            s.className = "cell slot";
+            slotsEl.appendChild(s);
+            slotEls.push(s);
+            const b = document.createElement("div");
+            b.className = "cell bay";
+            trayEl.appendChild(b);
+            bayEls.push(b);
+          }
+          letters.forEach((ch, k) => {
+            const el = document.createElement("button");
+            el.className = "tile";
+            el.textContent = ch;
+            el.type = "button";
+            el.setAttribute("aria-label", "Letter " + ch);
+            el.style.setProperty(
+              "--r",
+              ((Math.random() - 0.5) * 8).toFixed(1) + "deg",
+            );
+            const t = {
+              id: k,
+              ch,
+              home: perm[k],
+              slot: null,
+              locked: false,
+              el,
+            };
+            el.addEventListener("click", () => onTile(t));
+            c.tiles.push(t);
+            bayEls[t.home].appendChild(el);
+          });
+
+          // clue
+          $("#pic").textContent = entry.emoji;
+          $("#meaning").textContent = entry.def;
+          const i = entry.sent.toLowerCase().indexOf(entry.word);
+          $("#sentence").innerHTML =
+            entry.sent.slice(0, i) +
+            `<span class="blank" style="width:${Math.max(2.2, n * 0.62)}ch"></span>` +
+            entry.sent.slice(i + entry.word.length);
+          $("#count").textContent = `${n} letters`;
+
+          $("#hudWord").textContent = `Word ${G.idx + 1} of ${G.queue.length}`;
+          paintHud();
+          $("#feedback").hidden = true;
+          $("#actions").hidden = false;
+          $("#status").textContent = "";
+          $("#hintBtn").disabled = false;
+
+          clearInterval(c.timer);
+          if (G.timed) {
+            tickTimer();
+            c.timer = setInterval(tickTimer, 100);
+          }
+        }
+
+        function paintHud() {
+          $("#hudScore").textContent = "★ " + G.score;
+          $("#hudStreak").textContent = "🔥 " + G.streak;
+        }
+
+        function tickTimer() {
+          const c = G.cur;
+          if (!c || c.ended) return;
+          const left = Math.max(0, c.limit - (Date.now() - c.t0) / 1000);
+          $("#fill").style.transform = `scaleX(${left / c.limit})`;
+          const s = Math.ceil(left);
+          $("#timeLeft").textContent =
+            `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+          $("#timerWrap").classList.toggle("low", left / c.limit < 0.25);
+          if (left <= 0) finishWord(false, "time");
+        }
+
+        /* render tiles into their slots/bays with a smooth slide */
+        function render(animate = true) {
+          const c = G.cur;
+          const first = new Map();
+          if (animate && !reduced)
+            c.tiles.forEach((t) => first.set(t, t.el.getBoundingClientRect()));
+          c.tiles.forEach((t) => {
+            const parent = t.slot !== null ? slotEls[t.slot] : bayEls[t.home];
+            if (t.el.parentNode !== parent) parent.appendChild(t.el);
+            t.el.classList.toggle("placed", t.slot !== null);
+            t.el.classList.toggle("locked", t.locked);
+          });
+          if (animate && !reduced) {
+            c.tiles.forEach((t) => {
+              const f = first.get(t),
+                l = t.el.getBoundingClientRect();
+              const dx = f.left - l.left,
+                dy = f.top - l.top;
+              if (dx || dy)
+                t.el.animate(
+                  [
+                    { transform: `translate(${dx}px,${dy}px)` },
+                    { transform: "translate(0,0)" },
+                  ],
+                  { duration: 260, easing: "cubic-bezier(.2,.9,.3,1.2)" },
+                );
+            });
+          }
+        }
+
+        function onTile(t) {
+          const c = G.cur;
+          if (!c || c.ended || c.busy) return;
+          if (t.slot === null) place(t);
+          else if (!t.locked) unplace(t);
+        }
+        function place(t) {
+          const c = G.cur,
+            s = c.slots.indexOf(null);
+          if (s < 0) return;
+          c.slots[s] = t.id;
+          t.slot = s;
+          sfx.pop();
+          render(true);
+          checkFull();
+        }
+        function unplace(t, silent) {
+          const c = G.cur;
+          c.slots[t.slot] = null;
+          t.slot = null;
+          if (!silent) {
+            sfx.back();
+            render(true);
+          }
+        }
+        function clearUnlocked() {
+          const c = G.cur;
+          c.tiles.forEach((t) => {
+            if (t.slot !== null && !t.locked) unplace(t, true);
+          });
+        }
+
+        function checkFull() {
+          const c = G.cur;
+          if (c.slots.some((s) => s === null)) return;
+          const guess = c.slots.map((id) => c.letters[id]).join("");
+          if (guess === c.word) finishWord(true);
+          else wrongGuess();
+        }
+
+        function wrongGuess() {
+          const c = G.cur;
+          c.wrong++;
+          c.busy = true;
+          sfx.wrong();
+          c.tiles.forEach((t) => {
+            if (t.slot !== null && !t.locked) t.el.classList.add("wrong");
+          });
+          const row = $("#slots");
+          row.classList.remove("shake");
+          void row.offsetWidth;
+          row.classList.add("shake");
+          $("#status").textContent =
+            c.wrong >= 2
+              ? "Not quite. Try a hint to reveal a letter."
+              : "Not quite. Try again!";
+          setTimeout(() => {
+            if (G.cur !== c || c.ended) return;
+            c.tiles.forEach((t) => t.el.classList.remove("wrong"));
+            row.classList.remove("shake");
+            clearUnlocked();
+            c.busy = false;
+            render(true);
+          }, 650);
+        }
+
+        function useHint() {
+          const c = G.cur;
+          if (!c || c.ended || c.busy) return;
+          clearUnlocked();
+          const i = c.slots.indexOf(null);
+          if (i < 0) return;
+          const t = c.tiles.find(
+            (t) => !t.locked && t.slot === null && t.ch === c.letters[i],
+          );
+          if (!t) return;
+          c.slots[i] = t.id;
+          t.slot = i;
+          t.locked = true;
+          c.hints++;
+          sfx.pop();
+          render(true);
+          $("#status").textContent = `Hint used: letter ${i + 1} is ${t.ch}.`;
+          checkFull();
+        }
+
+        function shuffleTray() {
+          const c = G.cur;
+          if (!c || c.ended || c.busy) return;
+          const free = c.tiles.filter((t) => t.slot === null);
+          if (free.length < 2) return;
+          const homes = free.map((t) => t.home);
+          let next;
+          do {
+            next = shuffle(homes);
+          } while (next.every((h, i) => h === homes[i]));
+          free.forEach((t, i) => {
+            t.home = next[i];
+          });
+          sfx.pop();
+          render(true);
+        }
+
+        /* ---------- end of a word ---------- */
+        const PRAISE = [
+          "Brilliant!",
+          "Nice one!",
+          "You got it!",
+          "Great job!",
+          "Perfect!",
+          "Awesome!",
+        ];
+
+        function finishWord(ok, reason) {
+          const c = G.cur;
+          if (!c || c.ended) return;
+          c.ended = true;
+          clearInterval(c.timer);
+          const left = Math.max(0, c.limit - (Date.now() - c.t0) / 1000);
+          const e = c.entry;
+          let points = 0,
+            note = "";
+
+          if (ok) {
+            const base = c.n * 10;
+            const bonus = G.timed ? Math.round((left / c.limit) * c.n * 5) : 0;
+            const raw = Math.max(10, base + bonus - c.hints * HINT_COST);
+            const mult = 1 + Math.min(G.streak, 4) * 0.25;
+            points = Math.round(raw * mult);
+            G.score += points;
+            G.streak++;
+            G.bestStreak = Math.max(G.bestStreak, G.streak);
+            note =
+              `+${points} points` +
+              (mult > 1 ? ` (streak bonus ×${mult})` : "");
+            c.tiles.forEach((t, i) => {
+              t.el.classList.add("good");
+              if (!reduced) t.el.style.animation = `hop .5s ${i * 60}ms both`;
+            });
+            sfx.win();
+            const r = slotEls[0].parentNode.getBoundingClientRect();
+            confetti(
+              G.streak >= 3 ? 90 : 45,
+              r.left + r.width / 2,
+              r.top + r.height / 2,
+              14,
+            );
+          } else {
+            G.streak = 0;
+            // reveal the answer
+            clearUnlocked();
+            c.letters.forEach((ch, i) => {
+              if (c.slots[i] !== null) return;
+              const t = c.tiles.find(
+                (t) => t.slot === null && !t.locked && t.ch === ch,
+              );
+              if (t) {
+                t.slot = i;
+                c.slots[i] = t.id;
+                t.locked = true;
+              }
+            });
+            render(true);
+            sfx.miss();
+          }
+          c.tiles.forEach((t) => {
+            t.el.disabled = true;
+          });
+          G.results.push({ entry: e, ok, hints: c.hints, points });
+          paintHud();
+          $("#status").textContent = "";
+          $("#actions").hidden = true;
+
+          const last = G.idx >= G.queue.length - 1;
+          const title = ok
+            ? c.hints
+              ? "Good thinking!"
+              : pick(PRAISE)
+            : reason === "time"
+              ? "Time's up!"
+              : "No problem. Here it is:";
+          const sentence = e.sent.replace(
+            new RegExp(e.word, "i"),
+            (m) => `<strong>${m}</strong>`,
+          );
+          const fb = $("#feedback");
+          fb.className = "feedback " + (ok ? "ok" : "miss");
+          fb.innerHTML = `
+      <h2>${title}${ok && G.streak >= 3 ? ` 🔥 ${G.streak} in a row!` : ""}</h2>
+      <div class="theword">${e.emoji} ${e.word}</div>
+      <p>${e.def}</p>
+      <p>${sentence}</p>
+      ${ok ? `<p class="pts">${note}</p>` : ""}
+      <div class="row-btns">
+        ${canSpeak ? '<button class="btn" id="hearBtn">🔊 Hear it</button>' : ""}
+        <button class="btn primary" id="nextBtn">${last ? "See results" : "Next word"}</button>
+      </div>`;
+          fb.hidden = false;
+          const hear = $("#hearBtn");
+          if (hear) hear.onclick = () => speak([e.word, e.sent]);
+          const next = $("#nextBtn");
+          next.onclick = nextWord;
+          next.focus({ preventScroll: true });
+          fb.scrollIntoView({
+            block: "nearest",
+            behavior: reduced ? "auto" : "smooth",
+          });
+        }
+
+        function nextWord() {
+          G.idx++;
+          if (G.idx >= G.queue.length) endGame();
+          else loadWord();
+        }
+
+        /* ---------- results ---------- */
+        function endGame() {
+          const total = G.results.length,
+            correct = G.results.filter((r) => r.ok).length;
+          const ratio = correct / total;
+          const stars =
+            ratio >= 0.8 ? 3 : ratio >= 0.5 ? 2 : correct > 0 ? 1 : 0;
+          $("#stars").innerHTML = [0, 1, 2]
+            .map((i) => `<span class="${i < stars ? "" : "off"}">★</span>`)
+            .join("");
+          $("#endTitle").textContent = [
+            "Keep practicing!",
+            "Good start!",
+            "Great work!",
+            "Word wizard!",
+          ][stars];
+          $("#endSub").textContent =
+            `You unscrambled ${correct} of ${total} words.`;
+          $("#endScore").textContent = "★ " + G.score + " points";
+          $("#endStreak").textContent = "🔥 Best streak " + G.bestStreak;
+
+          const key = "anagram-best-" + G.level;
+          const prev = +store.get(key) || 0;
+          if (G.score > prev) {
+            store.set(key, String(G.score));
+            $("#endBest").textContent = "🏆 New best!";
+          } else $("#endBest").textContent = "🏆 Best " + prev;
+          paintBests();
+
+          $("#review").innerHTML = G.results
+            .map(
+              (r, i) => `
+      <li class="${r.ok ? "ok" : "miss"}">
+        <span class="e" aria-hidden="true">${r.entry.emoji}</span>
+        <div class="t"><b>${r.entry.word}</b> <span class="sr">${r.ok ? "correct" : "missed"}</span><span>${r.entry.def}</span></div>
+        ${canSpeak ? `<button class="btn icon-btn" data-i="${i}" aria-label="Hear ${r.entry.word}">🔊</button>` : ""}
+      </li>`,
+            )
+            .join("");
+          show("end");
+          sfx.end();
+          if (stars >= 2) confetti(160, innerWidth / 2, innerHeight * 0.35, 18);
+        }
+
+        /* ---------- wiring ---------- */
+        $("#startBtn").onclick = startGame;
+        $("#againBtn").onclick = startGame;
+        $("#menuBtn").onclick = () => {
+          show("start");
+          paintBests();
+          requestAnimationFrame(heroAnim);
+        };
+        $("#quitBtn").onclick = () => {
+          if (G && G.cur) clearInterval(G.cur.timer);
+          show("start");
+          paintBests();
+        };
+        $("#shuffleBtn").onclick = shuffleTray;
+        $("#hintBtn").onclick = useHint;
+        $("#clearBtn").onclick = () => {
+          const c = G.cur;
+          if (!c || c.ended || c.busy) return;
+          clearUnlocked();
+          sfx.back();
+          render(true);
+        };
+        $("#skipBtn").onclick = () => finishWord(false, "skip");
+        $("#soundBtn").onclick = () => {
+          soundOn = !soundOn;
+          store.set("anagram-sound", soundOn ? "on" : "off");
+          paintSound();
+          sfx.pop();
+        };
+        $("#fullscreenBtn").onclick = toggleFullscreen;
+        document.addEventListener("fullscreenchange", updateFullscreenButton);
+        document.addEventListener(
+          "webkitfullscreenchange",
+          updateFullscreenButton,
+        );
+        $("#heroTiles").onclick = heroAnim;
+        $("#review").addEventListener("click", (e) => {
+          const b = e.target.closest("button[data-i]");
+          if (!b) return;
+          const r = G.results[+b.dataset.i];
+          speak([r.entry.word, r.entry.sent]);
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          if ($("#play").hidden || !G || !G.cur) return;
+          const c = G.cur;
+          if (c.ended) {
+            if (
+              e.key === "Enter" &&
+              document.activeElement !== $("#nextBtn") &&
+              document.activeElement.tagName !== "BUTTON"
+            ) {
+              e.preventDefault();
+              nextWord();
+            }
+            return;
+          }
+          if (c.busy) return;
+          if (e.key === "Backspace") {
+            e.preventDefault();
+            for (let i = c.n - 1; i >= 0; i--) {
+              const id = c.slots[i];
+              if (id !== null && !c.tiles[id].locked) {
+                unplace(c.tiles[id]);
+                break;
+              }
+            }
+          } else if (/^[a-z]$/i.test(e.key)) {
+            const ch = e.key.toUpperCase();
+            const t = c.tiles
+              .filter((t) => t.slot === null && t.ch === ch)
+              .sort((a, b) => a.home - b.home)[0];
+            if (t) {
+              e.preventDefault();
+              place(t);
+            }
+          }
+        });
+
+        paintSound();
+        buildHero();
+        paintBests();
+        requestAnimationFrame(() => requestAnimationFrame(heroAnim));
+      })();
+    </script>
+  </body>
+</html>

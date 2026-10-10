@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classroom Jeopardy</title>
+    <style>
+      :root {
+        --ink: #0c1f33;
+        --board: #12395f;
+        --tile: #1b5c99;
+        --tile-hover: #2672b8;
+        --chalk: #f4f1e6;
+        --gold: #ffcc3d;
+        --used: #0e2b47;
+        --c0: #e8505b;
+        --c1: #3fb68b;
+        --c2: #f4a63b;
+        --c3: #9b6fe0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--ink);
+        color: var(--chalk);
+        font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Palatino Linotype", serif;
+        color: var(--gold);
+        font-size: clamp(1.3rem, 3vw, 2rem);
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--gold);
+        outline-offset: 2px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 18px;
+        gap: 12px;
+      }
+      .ghost {
+        background: transparent;
+        border: 2px solid #ffffff55;
+        color: var(--chalk);
+        padding: 6px 14px;
+        border-radius: 8px;
+      }
+      .ghost:hover {
+        border-color: var(--gold);
+      }
+
+      /* Board */
+      #board {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        padding: 8px 18px;
+        background: var(--board);
+        margin: 0 18px;
+        border-radius: 10px;
+      }
+      .cat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: 700;
+        padding: 10px 6px;
+        min-height: 64px;
+        background: #0a2a47;
+        border-radius: 6px;
+        font-size: clamp(0.85rem, 1.9vw, 1.4rem);
+        border-bottom: 4px solid var(--gold);
+      }
+      .tile {
+        border: 0;
+        border-radius: 6px;
+        background: var(--tile);
+        color: var(--gold);
+        font-family: Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(1.4rem, 4.2vw, 3.2rem);
+        min-height: 64px;
+        transition: background 0.15s;
+      }
+      .tile:hover:not(:disabled) {
+        background: var(--tile-hover);
+      }
+      .tile:disabled {
+        background: var(--used);
+        color: transparent;
+        cursor: default;
+      }
+
+      /* Scoreboard */
+      #scores {
+        display: flex;
+        gap: 12px;
+        padding: 14px 18px 18px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .team {
+        flex: 1;
+        min-width: 150px;
+        max-width: 260px;
+        background: #0a2a47;
+        border-radius: 10px;
+        padding: 10px 12px;
+        text-align: center;
+        border-top: 6px solid var(--tc);
+        opacity: 0.75;
+      }
+      .team.turn {
+        opacity: 1;
+        box-shadow: 0 0 0 3px var(--gold);
+      }
+      .team .n {
+        font-weight: 700;
+        font-size: 1.05rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .team .s {
+        font-family: Georgia, serif;
+        font-size: 2.2rem;
+        color: var(--gold);
+        line-height: 1.2;
+      }
+      .team .adj button {
+        background: #ffffff18;
+        border: 0;
+        color: var(--chalk);
+        width: 38px;
+        height: 28px;
+        border-radius: 6px;
+        margin: 0 3px;
+      }
+      .team .pick {
+        font-size: 0.8rem;
+        height: 1em;
+        color: var(--gold);
+      }
+
+      /* Modals */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: #000b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 5;
+      }
+      .modal[hidden] {
+        display: none;
+      }
+      .card {
+        width: 100%;
+        max-width: 900px;
+        background: var(--board);
+        border: 4px solid var(--gold);
+        border-radius: 14px;
+        padding: 26px;
+        text-align: center;
+      }
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      .clue {
+        font-family: Georgia, serif;
+        font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+        line-height: 1.3;
+        margin: 28px 0;
+        min-height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .answer {
+        font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+        color: var(--gold);
+        font-weight: 700;
+        margin: 0 0 20px;
+      }
+      .bar {
+        height: 10px;
+        background: #0a2a47;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 6px;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: var(--gold);
+        transform-origin: left;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        background: var(--gold);
+        color: var(--ink);
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 22px;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      .btn.team-btn {
+        background: var(--tc);
+        color: #fff;
+      }
+      .btn.no {
+        background: #ffffff22;
+        color: var(--chalk);
+      }
+      .dd {
+        color: var(--gold);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .setup label {
+        display: block;
+        text-align: left;
+        margin: 10px 0 4px;
+      }
+      .setup input[type="text"] {
+        width: 100%;
+        font: inherit;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid transparent;
+        background: #fff;
+        color: var(--ink);
+      }
+      .setup .count button {
+        background: #ffffff22;
+        border: 2px solid transparent;
+        color: var(--chalk);
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+      }
+      .setup .count button.on {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      @media (max-width: 600px) {
+        #board {
+          margin: 0 8px;
+          padding: 6px;
+          gap: 5px;
+        }
+        .cat {
+          min-height: 52px;
+        }
+        .tile {
+          min-height: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <h1>Classroom Jeopardy</h1>
+      <button class="ghost" id="end">End game</button>
+    </div>
+    <div id="board" aria-label="Game board"></div>
+    <div id="scores"></div>
+
+    <div class="modal" id="modal" role="dialog" aria-modal="true" hidden>
+      <div class="card" id="card"></div>
+    </div>
+
+    <script>
+      // ---- EDIT THE GAME HERE: 5 categories, 5 clues each, in order of $100 to $500: [clue, answer] ----
+      const BOARD = [
+        {
+          cat: "Grammar",
+          clues: [
+            ["Past tense of 'walk'.", "walked"],
+            ["Choose: He ___ (has / have) a dog.", "has"],
+            [
+              "Fix the mistake: 'She don't like pizza.'",
+              "She doesn't like pizza.",
+            ],
+            ["Complete: I ___ (see) that movie three times.", "have seen"],
+            ["Complete: If I ___ (be) you, I would study more.", "were"],
+          ],
+        },
+        {
+          cat: "Vocabulary",
+          clues: [
+            ["The opposite of 'hot'.", "cold"],
+            ["A place where you can borrow books.", "a library"],
+            ["A synonym for 'happy'.", "glad / joyful / cheerful"],
+            ["The person who lives next door to you.", "a neighbor"],
+            ["To make something better.", "improve"],
+          ],
+        },
+        {
+          cat: "Idioms",
+          clues: [
+            ["'A piece of cake' means this.", "very easy"],
+            [
+              "'It's raining cats and dogs' means this.",
+              "It's raining heavily.",
+            ],
+            [
+              "'Break the ice' means this.",
+              "Start a conversation / make people relax.",
+            ],
+            ["'Under the weather' means this.", "feeling sick"],
+            ["'Spill the beans' means this.", "reveal a secret"],
+          ],
+        },
+        {
+          cat: "Prepositions",
+          clues: [
+            ["I get up ___ 7 o'clock.", "at"],
+            ["My birthday is ___ June.", "in"],
+            ["The cat is hiding ___ the table.", "under"],
+            ["She is good ___ math.", "at"],
+            ["We are interested ___ learning English.", "in"],
+          ],
+        },
+        {
+          cat: "Irregular Verbs",
+          clues: [
+            ["Past simple of 'eat'.", "ate"],
+            ["Past simple of 'buy'.", "bought"],
+            ["Past simple of 'swim'.", "swam"],
+            ["Past simple of 'teach'.", "taught"],
+            ["Past participle of 'write'.", "written"],
+          ],
+        },
+      ];
+      const TIMER_SECONDS = 30; // set to 0 to hide the timer
+      const COLORS = ["var(--c0)", "var(--c1)", "var(--c2)", "var(--c3)"];
+
+      const $ = (id) => document.getElementById(id);
+      const el = (tag, cls, text) => {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text !== undefined) e.textContent = text;
+        return e;
+      };
+      let teams, turn, used, dbl, cur, tick;
+
+      // ---- Setup ----
+      function setup() {
+        let n = 3;
+        const card = $("card");
+        card.className = "card setup";
+        card.innerHTML = "";
+        card.append(
+          el("h1", "", "Classroom Jeopardy"),
+          el("p", "", "How many teams?"),
+        );
+        const count = el("div", "row count"),
+          inputs = el("div");
+        const names = ["Team Red", "Team Green", "Team Orange", "Team Purple"];
+        const fill = () => {
+          inputs.innerHTML = "";
+          for (let i = 0; i < n; i++) {
+            const old = inputs.dataset["n" + i] || names[i];
+            const l = el("label", "", "Team " + (i + 1) + " name"),
+              inp = el("input");
+            inp.type = "text";
+            inp.value = old;
+            inp.maxLength = 20;
+            inp.oninput = () => (inputs.dataset["n" + i] = inp.value);
+            l.append(inp);
+            inputs.append(l);
+          }
+        };
+        [2, 3, 4].forEach((k) => {
+          const b = el("button", k === n ? "on" : "", k);
+          b.onclick = () => {
+            n = k;
+            [...count.children].forEach((c) =>
+              c.classList.toggle("on", c === b),
+            );
+            fill();
+          };
+          count.append(b);
+        });
+        fill();
+        const go = el("button", "btn", "Start game");
+        go.style.marginTop = "20px";
+        go.onclick = () => {
+          teams = [...inputs.querySelectorAll("input")].map((i, k) => ({
+            name: i.value.trim() || names[k],
+            score: 0,
+          }));
+          start();
+        };
+        card.append(count, inputs, go);
+        $("modal").hidden = false;
+        go.focus();
+      }
+
+      function start() {
+        turn = 0;
+        used = new Set();
+        cur = null;
+        dbl = ((Math.random() * 5) | 0) + "-" + (1 + ((Math.random() * 4) | 0)); // one hidden double-points tile (never the first row)
+        $("modal").hidden = true;
+        drawBoard();
+        drawScores();
+      }
+
+      // ---- Board and scores ----
+      function drawBoard() {
+        const b = $("board");
+        b.innerHTML = "";
+        BOARD.forEach((c) => b.append(el("div", "cat", c.cat)));
+        for (let r = 0; r < 5; r++)
+          BOARD.forEach((c, i) => {
+            const t = el("button", "tile", "$" + (r + 1) * 100),
+              key = i + "-" + r;
+            t.disabled = used.has(key);
+            t.onclick = () => openClue(i, r);
+            b.append(t);
+          });
+      }
+      function drawScores() {
+        const s = $("scores");
+        s.innerHTML = "";
+        teams.forEach((t, i) => {
+          const d = el("div", "team" + (i === turn ? " turn" : ""));
+          d.style.setProperty("--tc", COLORS[i]);
+          const adj = el("div", "adj"),
+            minus = el("button", "", "−"),
+            plus = el("button", "", "+");
+          minus.setAttribute("aria-label", "Subtract 100 from " + t.name);
+          plus.setAttribute("aria-label", "Add 100 to " + t.name);
+          minus.onclick = () => {
+            t.score -= 100;
+            drawScores();
+          };
+          plus.onclick = () => {
+            t.score += 100;
+            drawScores();
+          };
+          adj.append(minus, plus);
+          d.append(
+            el("div", "pick", i === turn ? "Picks next" : ""),
+            el("div", "n", t.name),
+            el("div", "s", t.score),
+            adj,
+          );
+          s.append(d);
+        });
+      }
+
+      // ---- Clue ----
+      function openClue(c, r) {
+        const key = c + "-" + r,
+          isDbl = key === dbl,
+          val = (r + 1) * 100 * (isDbl ? 2 : 1),
+          [clue, ans] = BOARD[c].clues[r];
+        cur = { key, val };
+        const card = $("card");
+        card.className = "card";
+        card.innerHTML = "";
+        const meta = el("div", "meta");
+        meta.append(el("span", "", BOARD[c].cat), el("span", "", "$" + val));
+        card.append(meta);
+        if (isDbl) card.append(el("div", "dd", "⭐ DOUBLE POINTS ⭐"));
+        card.append(el("div", "clue", clue));
+        let bar = null;
+        if (TIMER_SECONDS) {
+          bar = el("div", "bar");
+          const i = el("i");
+          bar.append(i);
+          card.append(bar);
+          i.animate([{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }], {
+            duration: TIMER_SECONDS * 1000,
+            easing: "linear",
+            fill: "forwards",
+          });
+          clearTimeout(tick);
+        }
+        const show = el("button", "btn", "Show answer"),
+          back = el("button", "btn no", "Back to board");
+        show.onclick = () => reveal(ans, bar);
+        back.onclick = closeClue;
+        const row = el("div", "row");
+        row.append(show, back);
+        card.append(row);
+        $("modal").hidden = false;
+        show.focus();
+      }
+
+      function reveal(ans, bar) {
+        if (bar) bar.remove();
+        const card = $("card"),
+          row = el("div", "row");
+        card.querySelector(".row").remove();
+        card.append(
+          el("p", "answer", "Answer: " + ans),
+          el("p", "", "Who got it right?"),
+        );
+        teams.forEach((t, i) => {
+          const b = el("button", "btn team-btn", "✓ " + t.name);
+          b.style.setProperty("--tc", COLORS[i]);
+          b.onclick = () => finish(i);
+          row.append(b);
+        });
+        const none = el("button", "btn no", "Nobody");
+        none.onclick = () => finish(-1);
+        row.append(none);
+        card.append(row);
+        row.firstChild.focus();
+      }
+
+      function finish(winner) {
+        used.add(cur.key);
+        if (winner >= 0) {
+          teams[winner].score += cur.val;
+          turn = winner;
+        } else turn = (turn + 1) % teams.length;
+        closeClue();
+        if (used.size === 25) endGame();
+      }
+      function closeClue() {
+        $("modal").hidden = true;
+        cur = null;
+        drawBoard();
+        drawScores();
+      }
+
+      // ---- End ----
+      function endGame() {
+        const top = Math.max(...teams.map((t) => t.score)),
+          winners = teams.filter((t) => t.score === top);
+        const card = $("card");
+        card.className = "card";
+        card.innerHTML = "";
+        card.append(
+          el(
+            "h1",
+            "",
+            "🏆 " +
+              (winners.length > 1 ? "It's a tie!" : winners[0].name + " wins!"),
+          ),
+        );
+        const list = el("div", "clue");
+        list.style.cssText = "flex-direction:column;font-size:1.6rem;gap:6px";
+        [...teams]
+          .sort((a, b) => b.score - a.score)
+          .forEach((t) => list.append(el("div", "", t.name + ": $" + t.score)));
+        const again = el("button", "btn", "Play again");
+        again.onclick = setup;
+        card.append(list, again);
+        $("modal").hidden = false;
+        again.focus();
+      }
+      $("end").onclick = () => {
+        if (teams && confirm("End the game and show the winner?")) endGame();
+      };
+      addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && cur) closeClue();
+      });
+
+      setup();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1929 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019"
+      crossorigin="anonymous"
+    ></script>
+    <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <title>Opposites – Antonym Matching Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        --day: #f4f6fa;
+        --night: #0e1021;
+        --accent: #3d5afe;
+        --accent-edge: #2336b8;
+        --sel: #5b7bff;
+        --bad: #ff4d6d;
+        --panel: #ffffff;
+        --panel-ink: #0e1021;
+        --panel-muted: #565b80;
+        --panel-line: #d5d9e8;
+        --opt-on: #e6eaff;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --panel: #1b1e3b;
+          --panel-ink: #f4f6fa;
+          --panel-muted: #aeb3db;
+          --panel-line: #343867;
+          --opt-on: #2a3170;
+        }
+      }
+      :root[data-theme="dark"] {
+        --panel: #1b1e3b;
+        --panel-ink: #f4f6fa;
+        --panel-muted: #aeb3db;
+        --panel-line: #343867;
+        --opt-on: #2a3170;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      html {
+        background: linear-gradient(90deg, var(--day) 50%, var(--night) 50%);
+        min-height: 100%;
+      }
+      body {
+        margin: 0;
+        background: transparent;
+        color: var(--night);
+        font-family: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+        font-optical-sizing: auto;
+        font-size: 18px;
+        line-height: 1.45;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 3px solid var(--sel);
+        outline-offset: 3px;
+      }
+      .app {
+        max-width: 720px;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 22px 20px 56px;
+      }
+      .game-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 720px) 320px;
+        align-items: start;
+        justify-content: center;
+        gap: 24px;
+        max-width: 1088px;
+        margin: 0 auto;
+      }
+      .ad-rail {
+        display: flex;
+        justify-content: center;
+        margin-top: 110px;
+      }
+      .ad-card {
+        display: grid;
+        width: 320px;
+        min-height: 292px;
+        align-content: start;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 0;
+        border: 1px solid var(--panel-line);
+        border-radius: 14px;
+        background: var(--panel);
+      }
+      .ad-label {
+        color: var(--panel-muted);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .ad-card .adsbygoogle {
+        display: inline-block;
+        width: 300px;
+        height: 250px;
+      }
+      .bottom-ad {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        width: min(970px, calc(100% - 32px));
+        min-height: 120px;
+        margin: 0 auto 28px;
+        padding: 14px;
+        border: 1px solid var(--panel-line);
+        border-radius: 16px;
+        background: var(--panel);
+      }
+      .bottom-ad .adsbygoogle {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+      @media (max-width: 1050px) {
+        .game-layout {
+          display: block;
+          max-width: 760px;
+        }
+        .ad-rail {
+          display: flex;
+          margin-top: 0;
+        }
+      }
+      @media (max-height: 600px) {
+        .in-game-ad {
+          display: none !important;
+        }
+      }
+      .game-layout:fullscreen,
+      .game-layout:-webkit-full-screen {
+        display: block;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        overflow: auto;
+        padding: 0;
+        background: linear-gradient(90deg, var(--day) 50%, var(--night) 50%);
+      }
+      .game-layout:fullscreen .app,
+      .game-layout:-webkit-full-screen .app {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      .game-layout:fullscreen .ad-rail,
+      .game-layout:-webkit-full-screen .ad-rail {
+        display: none !important;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* Text that flips colour across the day / night split */
+      .diff {
+        color: #fff;
+        mix-blend-mode: difference;
+      }
+      .ghost {
+        background: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+        mix-blend-mode: difference;
+        border-radius: 99px;
+        min-height: 42px;
+        padding: 0 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .ghost:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 99px;
+        border: 2px solid #fff;
+        color: #fff;
+        mix-blend-mode: difference;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ---------- the board grid, shared by hero demo and play ---------- */
+      .grid {
+        --gap: clamp(36px, 12vw, 96px);
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: var(--gap);
+      }
+      .col {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+      .threads {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 2;
+      }
+      .chip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 58px;
+        padding: 8px 10px;
+        border-radius: 16px;
+        border: 3px solid transparent;
+        font-weight: 700;
+        font-size: clamp(1.02rem, 4.3vw, 1.35rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+        cursor: pointer;
+        transition:
+          transform 0.12s,
+          background-color 0.2s,
+          box-shadow 0.12s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .col.L .chip {
+        background: var(--night);
+        color: var(--day);
+        box-shadow: 0 4px 0 rgba(14, 16, 33, 0.28);
+      }
+      .col.R .chip {
+        background: var(--day);
+        color: var(--night);
+        box-shadow: 0 4px 0 #8a90b8;
+      }
+      .chip:hover:not(.done):not(.miss) {
+        transform: translateY(-2px);
+      }
+      .chip.sel {
+        outline: 4px solid var(--sel);
+        outline-offset: 3px;
+        transform: translateY(-3px);
+      }
+      .chip.done {
+        background: var(--c) !important;
+        color: var(--night) !important;
+        box-shadow: none !important;
+        cursor: default;
+        transform: none;
+      }
+      .chip.miss {
+        background: transparent !important;
+        border: 3px dashed var(--c);
+        box-shadow: none !important;
+        cursor: default;
+        transform: none;
+      }
+      .col.L .chip.miss {
+        color: var(--night);
+      }
+      .col.R .chip.miss {
+        color: var(--day);
+      }
+      .chip.no {
+        animation: shake 0.45s;
+        outline: 4px solid var(--bad);
+        outline-offset: 3px;
+      }
+      .chip.peek {
+        animation: peek 0.7s 2;
+      }
+      @keyframes shake {
+        20%,
+        60% {
+          transform: translateX(-7px);
+        }
+        40%,
+        80% {
+          transform: translateX(7px);
+        }
+      }
+      @keyframes peek {
+        50% {
+          box-shadow: 0 0 0 7px #ffd23f;
+        }
+      }
+
+      /* ---------- start ---------- */
+      .hero {
+        padding-top: 6px;
+      }
+      h1 {
+        margin: 14px 0 0;
+        text-align: center;
+        font-weight: 800;
+        line-height: 0.95;
+        letter-spacing: -0.035em;
+        font-size: clamp(3.1rem, 15vw, 6.6rem);
+      }
+      .demo {
+        margin: 26px 0 22px;
+        cursor: pointer;
+      }
+      .lede {
+        margin: 0 auto;
+        text-align: center;
+        max-width: 30ch;
+        font-size: 1.12rem;
+      }
+      .panel {
+        background: var(--panel);
+        color: var(--panel-ink);
+        border: 2px solid var(--panel-line);
+        border-radius: 24px;
+        padding: 22px 20px;
+      }
+      .setup {
+        margin-top: 30px;
+      }
+      fieldset {
+        border: 0;
+        margin: 0 0 22px;
+        padding: 0;
+        min-width: 0;
+      }
+      legend {
+        font-weight: 800;
+        font-size: 1.25rem;
+        padding: 0;
+        margin-bottom: 10px;
+      }
+      .opts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .opt {
+        position: relative;
+        flex: 1 1 140px;
+      }
+      .opt input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+      .opt span {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 56px;
+        padding: 6px 16px;
+        border-radius: 14px;
+        border: 2px solid var(--panel-line);
+        font-weight: 700;
+      }
+      .opt small {
+        font-weight: 400;
+        color: var(--panel-muted);
+        font-size: 0.82rem;
+        line-height: 1.25;
+      }
+      .opt input:checked + span {
+        border-color: var(--accent);
+        background: var(--opt-on);
+        box-shadow: 0 3px 0 var(--accent);
+      }
+      .opt input:focus-visible + span {
+        outline: 3px solid var(--sel);
+        outline-offset: 3px;
+      }
+      .btn {
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 14px;
+        border: 2px solid var(--panel-line);
+        background: transparent;
+        color: var(--panel-ink);
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn:hover {
+        border-color: var(--panel-muted);
+      }
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 4px 0 var(--accent-edge);
+      }
+      .btn.primary:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--accent-edge);
+      }
+      .btn.big {
+        width: 100%;
+        min-height: 62px;
+        font-size: 1.3rem;
+        border-radius: 18px;
+        font-weight: 800;
+      }
+      .how {
+        margin: 14px 0 0;
+        color: var(--panel-muted);
+        font-size: 0.95rem;
+        text-align: center;
+      }
+      .bests {
+        margin: 6px 0 0;
+        color: var(--panel-muted);
+        font-size: 0.95rem;
+        text-align: center;
+        min-height: 1.4em;
+      }
+
+      /* ---------- play ---------- */
+      .hud {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .hud .where {
+        flex: 1 1 auto;
+        font-weight: 800;
+        font-size: 1.1rem;
+        min-width: 5.5em;
+      }
+      .timer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .track {
+        flex: 1;
+        height: 14px;
+        border-radius: 99px;
+        border: 2px solid #fff;
+        padding: 1px;
+        mix-blend-mode: difference;
+      }
+      .fill {
+        height: 100%;
+        width: 100%;
+        border-radius: 99px;
+        background: #fff;
+        transform-origin: left;
+      }
+      #timeLeft {
+        font-weight: 700;
+        min-width: 2.8em;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .timer.low .track {
+        mix-blend-mode: normal;
+        border-color: var(--bad);
+      }
+      .timer.low .fill {
+        background: var(--bad);
+      }
+      .prompt {
+        margin: 6px 0 20px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.15rem;
+        min-height: 2.9em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 26px;
+      }
+      .cleared {
+        margin-top: 26px;
+      }
+      .cleared h2,
+      .results h2 {
+        margin: 0;
+        font-size: 1.7rem;
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      .cleared .note {
+        margin: 4px 0 0;
+        color: var(--panel-muted);
+      }
+      .pairs {
+        list-style: none;
+        margin: 16px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .pairs li {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 2px solid var(--panel-line);
+      }
+      .pairs .dot {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        margin-top: 7px;
+      }
+      .pairs .txt {
+        flex: 1;
+        min-width: 0;
+      }
+      .pairs .txt b {
+        font-weight: 800;
+      }
+      .pairs .head {
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+      .pairs .sent {
+        margin: 2px 0 0;
+        color: var(--panel-muted);
+        font-size: 0.95rem;
+        line-height: 1.35;
+      }
+      .pairs .sent b {
+        color: var(--panel-ink);
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+      }
+      .pairs .tag {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--bad);
+        margin-left: 6px;
+      }
+      .pairs .hear {
+        flex: none;
+        min-height: 38px;
+        min-width: 38px;
+        padding: 0 10px;
+        border-radius: 12px;
+      }
+      .row-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .row-btns .btn {
+        flex: 1;
+      }
+
+      /* ---------- results ---------- */
+      .results {
+        text-align: center;
+      }
+      .suns {
+        font-size: 3rem;
+        letter-spacing: 0.12em;
+        line-height: 1.15;
+        margin-bottom: 2px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 10px;
+        margin: 18px 0 0;
+      }
+      .stat {
+        border: 2px solid var(--panel-line);
+        border-radius: 14px;
+        padding: 8px 6px;
+      }
+      .stat b {
+        display: block;
+        font-size: 1.5rem;
+        line-height: 1.15;
+        font-weight: 800;
+      }
+      .stat span {
+        font-size: 0.85rem;
+        color: var(--panel-muted);
+      }
+      .results .pairs {
+        text-align: left;
+      }
+      .end-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      #confetti {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .app {
+          padding: 14px 10px 36px;
+        }
+        .bottom-ad {
+          width: calc(100% - 16px);
+          margin-bottom: 16px;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-layout" id="gameLayout">
+      <div class="app">
+        <!-- START -->
+        <section id="start">
+          <header class="hero">
+            <h1 class="diff">Opposites</h1>
+            <div
+              class="demo grid"
+              id="demo"
+              role="button"
+              tabindex="0"
+              aria-label="Show another example of opposites"
+            >
+              <div class="col L"><span class="chip" id="dL"></span></div>
+              <div class="col R"><span class="chip" id="dR"></span></div>
+              <svg
+                class="threads"
+                id="demoSvg"
+                data-grad="gD"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient
+                    id="gD"
+                    gradientUnits="userSpaceOnUse"
+                    x1="0"
+                    y1="0"
+                    x2="600"
+                    y2="0"
+                  >
+                    <stop offset="0" stop-color="#0E1021" />
+                    <stop offset=".47" stop-color="#0E1021" />
+                    <stop offset=".53" stop-color="#F4F6FA" />
+                    <stop offset="1" stop-color="#F4F6FA" />
+                  </linearGradient>
+                </defs>
+                <g class="lines"></g>
+              </svg>
+            </div>
+            <p class="lede diff">
+              An antonym is a word that means the opposite. Can you match them
+              all?
+            </p>
+          </header>
+
+          <div class="panel setup">
+            <fieldset>
+              <legend>Level</legend>
+              <div class="opts">
+                <label class="opt"
+                  ><input type="radio" name="level" value="1" checked /><span
+                    >Easy<small>Everyday words</small></span
+                  ></label
+                >
+                <label class="opt"
+                  ><input type="radio" name="level" value="2" /><span
+                    >Medium<small>Useful adjectives and verbs</small></span
+                  ></label
+                >
+                <label class="opt"
+                  ><input type="radio" name="level" value="3" /><span
+                    >Hard<small>Advanced vocabulary</small></span
+                  ></label
+                >
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Pace</legend>
+              <div class="opts">
+                <label class="opt"
+                  ><input
+                    type="radio"
+                    name="mode"
+                    value="relaxed"
+                    checked
+                  /><span>Relaxed<small>No timer</small></span></label
+                >
+                <label class="opt"
+                  ><input type="radio" name="mode" value="timed" /><span
+                    >Timed<small>Beat the clock on each board</small></span
+                  ></label
+                >
+              </div>
+            </fieldset>
+            <button class="btn primary big" id="startBtn">
+              Start matching
+            </button>
+            <p class="how">
+              Tap a word, then tap its opposite. Three boards, five pairs each.
+            </p>
+            <p class="bests" id="bests"></p>
+          </div>
+        </section>
+
+        <!-- PLAY -->
+        <section id="play" hidden>
+          <div class="hud">
+            <div class="where diff" id="hudBoard">Board 1 of 3</div>
+            <span class="pill" id="hudScore">Score 0</span>
+            <span class="pill" id="hudCombo">Combo ×0</span>
+            <button class="ghost" id="soundBtn" aria-label="Sound on">
+              🔊
+            </button>
+            <button
+              class="ghost"
+              id="fullscreenBtn"
+              aria-label="Enter fullscreen"
+              title="Enter fullscreen"
+            >
+              ⛶
+            </button>
+            <button class="ghost" id="quitBtn" aria-label="Quit game">✕</button>
+          </div>
+          <div class="timer" id="timerWrap">
+            <div class="track"><div class="fill" id="fill"></div></div>
+            <span class="diff" id="timeLeft">1:20</span>
+          </div>
+          <p class="prompt diff" id="prompt" role="status" aria-live="polite">
+            Tap a word, then tap its opposite.
+          </p>
+
+          <div class="grid" id="board">
+            <div class="col L" id="colL"></div>
+            <div class="col R" id="colR"></div>
+            <svg
+              class="threads"
+              id="boardSvg"
+              data-grad="gB"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient
+                  id="gB"
+                  gradientUnits="userSpaceOnUse"
+                  x1="0"
+                  y1="0"
+                  x2="600"
+                  y2="0"
+                >
+                  <stop offset="0" stop-color="#0E1021" />
+                  <stop offset=".47" stop-color="#0E1021" />
+                  <stop offset=".53" stop-color="#F4F6FA" />
+                  <stop offset="1" stop-color="#F4F6FA" />
+                </linearGradient>
+              </defs>
+              <g class="lines"></g>
+            </svg>
+          </div>
+
+          <div class="actions" id="actions">
+            <button class="ghost" id="peekBtn">💡 Peek (−50)</button>
+            <button class="ghost" id="giveBtn">Show answers</button>
+          </div>
+
+          <div class="panel cleared" id="cleared" hidden></div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="end" hidden>
+          <div class="panel results">
+            <div class="suns" id="suns" aria-hidden="true"></div>
+            <h2 id="endTitle">Nice matching!</h2>
+            <div class="stats">
+              <div class="stat"><b id="sScore">0</b><span>Score</span></div>
+              <div class="stat"><b id="sAcc">0%</b><span>Accuracy</span></div>
+              <div class="stat">
+                <b id="sCombo">0</b><span>Best combo</span>
+              </div>
+              <div class="stat">
+                <b id="sBest">0</b><span id="sBestLabel">Best score</span>
+              </div>
+            </div>
+            <ul class="pairs" id="review"></ul>
+            <div class="end-actions">
+              <button class="btn primary big" id="againBtn">Play again</button>
+              <button class="btn" id="menuBtn">Change level or pace</button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <aside class="ad-rail in-game-ad" aria-label="Advertisement">
+        <div class="ad-card">
+          <span class="ad-label">Advertisement</span>
+          <ins
+            class="adsbygoogle"
+            style="display: inline-block; width: 300px; height: 250px"
+            data-ad-client="ca-pub-2456627863532019"
+            data-ad-slot="9319754067"
+          ></ins>
+        </div>
+      </aside>
+    </div>
+    <section class="bottom-ad" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <ins
+        class="adsbygoogle"
+        style="display: block; min-height: 90px"
+        data-ad-client="ca-pub-2456627863532019"
+        data-ad-slot="2586206204"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </section>
+    <script>
+      document.querySelectorAll(".adsbygoogle").forEach((adUnit) => {
+        if (!adUnit.dataset.adsbygoogleStatus) {
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (error) {
+            console.warn(
+              "Antonym Matching ad could not be initialized.",
+              error,
+            );
+          }
+        }
+      });
+    </script>
+    <canvas id="confetti" aria-hidden="true"></canvas>
+
+    <script>
+      (() => {
+        const $ = (s) => document.querySelector(s);
+        const NS = "http://www.w3.org/2000/svg";
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const store = {
+          get(k) {
+            try {
+              return localStorage.getItem(k);
+            } catch {
+              return null;
+            }
+          },
+          set(k, v) {
+            try {
+              localStorage.setItem(k, v);
+            } catch {}
+          },
+        };
+        const shuffle = (a) => {
+          a = a.slice();
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        };
+        const COLORS = [
+          "#FF8A8A",
+          "#FFC857",
+          "#4FE0B0",
+          "#8AA2FF",
+          "#C79BFF",
+          "#FF9AD5",
+        ];
+        const LEVELS = {
+          1: { name: "Easy", time: 80 },
+          2: { name: "Medium", time: 70 },
+          3: { name: "Hard", time: 60 },
+        };
+        const PER_BOARD = 5,
+          BOARDS = 3;
+
+        /* [level, word, opposite, example sentence containing both] */
+        const PAIRS = [
+          [1, "hot", "cold", "The soup is hot, but the juice is cold."],
+          [1, "big", "small", "I have a big dog and a small cat."],
+          [1, "happy", "sad", "He is happy today, but his sister is sad."],
+          [1, "fast", "slow", "A rabbit is fast and a turtle is slow."],
+          [1, "up", "down", "The cat went up the tree and came down again."],
+          [1, "day", "night", "We work in the day and sleep at night."],
+          [
+            1,
+            "open",
+            "closed",
+            "The shop is open in the morning and closed at night.",
+          ],
+          [1, "loud", "quiet", "The music is loud, but the library is quiet."],
+          [1, "old", "young", "My grandfather is old and my cousin is young."],
+          [1, "full", "empty", "The glass is full, but the bottle is empty."],
+          [
+            1,
+            "clean",
+            "dirty",
+            "The kitchen is clean, but my shoes are dirty.",
+          ],
+          [1, "long", "short", "The river is long, but the road is short."],
+          [1, "thick", "thin", "The book is thick, but the notebook is thin."],
+          [1, "early", "late", "I get up early and go to bed late."],
+          [1, "rich", "poor", "The king was rich, but the farmer was poor."],
+          [1, "dark", "bright", "The cave was dark, but the beach was bright."],
+          [1, "wet", "dry", "My coat is wet, but my hat is dry."],
+          [
+            1,
+            "right",
+            "wrong",
+            "Your answer is right, but his answer is wrong.",
+          ],
+          [1, "good", "bad", "This song is good, but that song is bad."],
+          [
+            1,
+            "buy",
+            "sell",
+            "She wants to buy a car, and he wants to sell it.",
+          ],
+          [1, "come", "go", "Please come to my house, and then we can go out."],
+          [1, "begin", "end", "The film will begin at six and end at eight."],
+          [1, "love", "hate", "I love summer, but I hate winter."],
+
+          [2, "warm", "cool", "The tea is warm, but the lemonade is cool."],
+          [2, "heavy", "light", "The box is heavy, but the bag is light."],
+          [2, "strong", "weak", "The strong wind broke the weak branch."],
+          [
+            2,
+            "honest",
+            "dishonest",
+            "An honest person tells the truth. A dishonest person tells lies.",
+          ],
+          [
+            2,
+            "generous",
+            "selfish",
+            "She is generous, but her brother is selfish.",
+          ],
+          [2, "polite", "rude", "Please be polite and never be rude."],
+          [
+            2,
+            "cheap",
+            "expensive",
+            "This coat is cheap, but that coat is expensive.",
+          ],
+          [
+            2,
+            "easy",
+            "difficult",
+            "The first test was easy, but the second was difficult.",
+          ],
+          [
+            2,
+            "safe",
+            "dangerous",
+            "The park is safe, but the road is dangerous.",
+          ],
+          [
+            2,
+            "lazy",
+            "hardworking",
+            "He is lazy, but his wife is hardworking.",
+          ],
+          [2, "smooth", "rough", "The glass is smooth, but the rock is rough."],
+          [
+            2,
+            "sharp",
+            "blunt",
+            "The knife is sharp, but the scissors are blunt.",
+          ],
+          [
+            2,
+            "accept",
+            "refuse",
+            "I will accept the gift, but he will refuse it.",
+          ],
+          [
+            2,
+            "arrive",
+            "depart",
+            "The train will arrive at six and depart at seven.",
+          ],
+          [
+            2,
+            "increase",
+            "decrease",
+            "Prices increase in summer and decrease in winter.",
+          ],
+          [
+            2,
+            "borrow",
+            "lend",
+            "Can I borrow your pen? Yes, I can lend it to you.",
+          ],
+          [
+            2,
+            "inside",
+            "outside",
+            "The kids are inside, but the dog is outside.",
+          ],
+          [
+            2,
+            "above",
+            "below",
+            "The bird flew above the trees, and the river was below.",
+          ],
+          [
+            2,
+            "victory",
+            "defeat",
+            "Our team celebrated the victory, but the other team accepted defeat.",
+          ],
+          [
+            2,
+            "ancient",
+            "modern",
+            "The castle is ancient, but the hotel is modern.",
+          ],
+          [2, "wide", "narrow", "The road is wide, but the bridge is narrow."],
+          [2, "present", "absent", "Tom was present, but Anna was absent."],
+          [
+            2,
+            "visible",
+            "invisible",
+            "The stars are visible at night, but invisible in the day.",
+          ],
+          [
+            2,
+            "same",
+            "different",
+            "We have the same bag, but different shoes.",
+          ],
+
+          [
+            3,
+            "optimistic",
+            "pessimistic",
+            "She is optimistic, but her brother is pessimistic.",
+          ],
+          [
+            3,
+            "expand",
+            "contract",
+            "Metal will expand in heat and contract in cold.",
+          ],
+          [
+            3,
+            "temporary",
+            "permanent",
+            "It is a temporary job, not a permanent one.",
+          ],
+          [
+            3,
+            "vague",
+            "precise",
+            "His answer was vague, but hers was precise.",
+          ],
+          [3, "cautious", "reckless", "She is cautious, but he is reckless."],
+          [
+            3,
+            "transparent",
+            "opaque",
+            "The glass is transparent, but the wall is opaque.",
+          ],
+          [
+            3,
+            "abundant",
+            "scarce",
+            "Food was abundant in summer but scarce in winter.",
+          ],
+          [3, "humble", "arrogant", "He is humble, but his boss is arrogant."],
+          [
+            3,
+            "encourage",
+            "discourage",
+            "Good teachers encourage students and never discourage them.",
+          ],
+          [
+            3,
+            "complex",
+            "simple",
+            "The rules are complex, but the plan is simple.",
+          ],
+          [
+            3,
+            "approve",
+            "reject",
+            "The boss may approve the plan or reject it.",
+          ],
+          [
+            3,
+            "maximum",
+            "minimum",
+            "The maximum is ten, and the minimum is two.",
+          ],
+          [
+            3,
+            "ascend",
+            "descend",
+            "Climbers ascend the mountain and descend before dark.",
+          ],
+          [
+            3,
+            "guilty",
+            "innocent",
+            "The man was guilty, but his friend was innocent.",
+          ],
+          [
+            3,
+            "rural",
+            "urban",
+            "She grew up in a rural area, but now she lives in an urban one.",
+          ],
+          [
+            3,
+            "voluntary",
+            "compulsory",
+            "The class is voluntary, but the exam is compulsory.",
+          ],
+          [
+            3,
+            "inhale",
+            "exhale",
+            "Inhale slowly through your nose, then exhale through your mouth.",
+          ],
+          [
+            3,
+            "flexible",
+            "rigid",
+            "Her schedule is flexible, but his rules are rigid.",
+          ],
+          [
+            3,
+            "enormous",
+            "tiny",
+            "The elephant is enormous, but the mouse is tiny.",
+          ],
+          [
+            3,
+            "include",
+            "exclude",
+            "The price will include food but exclude drinks.",
+          ],
+          [3, "admire", "despise", "I admire honest people and despise liars."],
+          [
+            3,
+            "fragile",
+            "sturdy",
+            "The glass is fragile, but the table is sturdy.",
+          ],
+          [3, "shallow", "deep", "The lake is shallow, but the sea is deep."],
+          [
+            3,
+            "harmony",
+            "conflict",
+            "The two teams worked in harmony, not in conflict.",
+          ],
+        ].map(([lvl, a, b, sent]) => ({ lvl, a, b, sent }));
+
+        const highlight = (p) =>
+          p.sent.replace(
+            new RegExp(
+              "\\b(" +
+                [p.a, p.b].sort((x, y) => y.length - x.length).join("|") +
+                ")\\w*",
+              "gi",
+            ),
+            "<b>$&</b>",
+          );
+
+        /* ---------- sound ---------- */
+        let soundOn = store.get("opposites-sound") !== "off";
+        let ac;
+        function tone(freq, dur, type = "triangle", vol = 0.07, delay = 0) {
+          if (!soundOn) return;
+          try {
+            ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+            const o = ac.createOscillator(),
+              g = ac.createGain(),
+              t = ac.currentTime + delay;
+            o.type = type;
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(vol, t);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            o.connect(g);
+            g.connect(ac.destination);
+            o.start(t);
+            o.stop(t + dur);
+          } catch {}
+        }
+        const sfx = {
+          pick: () => tone(500, 0.06),
+          ok: () => {
+            tone(660, 0.12);
+            tone(990, 0.2, "triangle", 0.07, 0.09);
+          },
+          no: () => {
+            tone(190, 0.2, "sawtooth", 0.05);
+            tone(150, 0.22, "sawtooth", 0.05, 0.1);
+          },
+          clear: () =>
+            [523, 659, 784, 1047].forEach((f, i) =>
+              tone(f, 0.18, "triangle", 0.08, i * 0.09),
+            ),
+          end: () =>
+            [523, 659, 784, 659, 784, 1047].forEach((f, i) =>
+              tone(f, 0.2, "triangle", 0.08, i * 0.11),
+            ),
+        };
+        function paintSound() {
+          const b = $("#soundBtn");
+          b.textContent = soundOn ? "🔊" : "🔇";
+          b.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off");
+        }
+
+        function updateFullscreenButton() {
+          const button = $("#fullscreenBtn");
+          const active =
+            document.fullscreenElement === $("#gameLayout") ||
+            document.webkitFullscreenElement === $("#gameLayout");
+          button.textContent = active ? "⤢" : "⛶";
+          button.setAttribute(
+            "aria-label",
+            active ? "Exit fullscreen" : "Enter fullscreen",
+          );
+          button.title = active ? "Exit fullscreen" : "Enter fullscreen";
+        }
+
+        async function toggleFullscreen() {
+          const layout = $("#gameLayout");
+          try {
+            if (
+              document.fullscreenElement ||
+              document.webkitFullscreenElement
+            ) {
+              if (document.exitFullscreen) await document.exitFullscreen();
+              else if (document.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+            } else if (layout.requestFullscreen) {
+              await layout.requestFullscreen();
+            } else if (layout.webkitRequestFullscreen) {
+              layout.webkitRequestFullscreen();
+            } else {
+              setPrompt("Fullscreen is not available here.");
+            }
+          } catch {
+            setPrompt("Could not switch fullscreen mode.");
+          }
+          updateFullscreenButton();
+        }
+
+        /* ---------- speech ---------- */
+        const canSpeak = "speechSynthesis" in window;
+        function speak(text) {
+          if (!canSpeak) return;
+          try {
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = "en-US";
+            u.rate = 0.85;
+            speechSynthesis.speak(u);
+          } catch {}
+        }
+
+        /* ---------- confetti ---------- */
+        function confetti(count, ox, oy, power) {
+          if (reduced) return;
+          const cv = $("#confetti"),
+            ctx = cv.getContext("2d");
+          cv.width = innerWidth;
+          cv.height = innerHeight;
+          const ps = Array.from({ length: count }, () => ({
+            x: ox,
+            y: oy,
+            vx: (Math.random() - 0.5) * power,
+            vy: -Math.random() * power * 0.9 - 3,
+            r: Math.random() * 6.28,
+            vr: (Math.random() - 0.5) * 0.4,
+            w: 6 + Math.random() * 6,
+            h: 4 + Math.random() * 5,
+            c: COLORS[(Math.random() * COLORS.length) | 0],
+          }));
+          const t0 = performance.now();
+          (function frame(t) {
+            const age = t - t0;
+            ctx.clearRect(0, 0, cv.width, cv.height);
+            ps.forEach((p) => {
+              p.vy += 0.25;
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vx *= 0.99;
+              p.r += p.vr;
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate(p.r);
+              ctx.globalAlpha = Math.max(0, 1 - age / 2400);
+              ctx.fillStyle = p.c;
+              ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+              ctx.restore();
+            });
+            if (age < 2400) requestAnimationFrame(frame);
+            else ctx.clearRect(0, 0, cv.width, cv.height);
+          })(t0);
+        }
+
+        /* ---------- threads (SVG lines between matched chips) ---------- */
+        const svgEl = (n, attrs) => {
+          const e = document.createElementNS(NS, n);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          return e;
+        };
+        function prepSvg(svg, grid) {
+          const r = grid.getBoundingClientRect();
+          svg.setAttribute("viewBox", `0 0 ${r.width} ${r.height}`);
+          svg.querySelector("linearGradient").setAttribute("x2", r.width);
+          svg.querySelector(".lines").innerHTML = "";
+        }
+        function addThread(svg, grid, L, R, color, o = {}) {
+          const g = grid.getBoundingClientRect(),
+            a = L.getBoundingClientRect(),
+            b = R.getBoundingClientRect();
+          const x1 = a.right - g.left,
+            y1 = a.top - g.top + a.height / 2;
+          const x2 = b.left - g.left,
+            y2 = b.top - g.top + b.height / 2;
+          const dx = (x2 - x1) / 2;
+          const d = `M${x1} ${y1}C${x1 + dx} ${y1} ${x2 - dx} ${y2} ${x2} ${y2}`;
+          const edge = `url(#${svg.dataset.grad})`;
+          const grp = svgEl("g", {});
+          const outline = svgEl("path", {
+            d,
+            fill: "none",
+            stroke: edge,
+            "stroke-width": 10,
+            "stroke-linecap": "round",
+          });
+          const core = svgEl("path", {
+            d,
+            fill: "none",
+            stroke: color,
+            "stroke-width": 4.5,
+            "stroke-linecap": "round",
+          });
+          if (o.missed) {
+            outline.setAttribute("stroke-dasharray", "0.1 10");
+            core.setAttribute("stroke-dasharray", "0.1 10");
+          }
+          const dots = [
+            [x1, y1],
+            [x2, y2],
+          ].map(([cx, cy]) =>
+            svgEl("circle", {
+              cx,
+              cy,
+              r: 7,
+              fill: color,
+              stroke: edge,
+              "stroke-width": 3,
+            }),
+          );
+          grp.append(outline, core, ...dots);
+          svg.querySelector(".lines").appendChild(grp);
+          if (o.animate && !o.missed && !reduced) {
+            const len = outline.getTotalLength();
+            [outline, core].forEach((p) => {
+              p.setAttribute("stroke-dasharray", len);
+              p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], {
+                duration: 420,
+                easing: "ease-out",
+              });
+            });
+            dots.forEach((c) =>
+              c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420 }),
+            );
+          }
+        }
+
+        /* ---------- hero demo ---------- */
+        const DEMOS = [
+          ["hot", "cold"],
+          ["big", "small"],
+          ["up", "down"],
+          ["day", "night"],
+          ["happy", "sad"],
+        ];
+        let di = 0,
+          demoTimer,
+          demoColor = null;
+        function runDemo() {
+          const [a, b] = DEMOS[di % DEMOS.length];
+          di++;
+          const L = $("#dL"),
+            R = $("#dR"),
+            svg = $("#demoSvg"),
+            grid = $("#demo");
+          clearTimeout(demoTimer);
+          [L, R].forEach((c) => c.classList.remove("done"));
+          L.textContent = a;
+          R.textContent = b;
+          demoColor = null;
+          prepSvg(svg, grid);
+          demoTimer = setTimeout(
+            () => {
+              demoColor = COLORS[di % COLORS.length];
+              addThread(svg, grid, L, R, demoColor, { animate: true });
+              setTimeout(
+                () => {
+                  [L, R].forEach((c) => {
+                    c.style.setProperty("--c", demoColor);
+                    c.classList.add("done");
+                  });
+                },
+                reduced ? 0 : 420,
+              );
+            },
+            reduced ? 0 : 600,
+          );
+        }
+        function redrawDemo() {
+          if (!demoColor || $("#start").hidden) return;
+          const svg = $("#demoSvg");
+          prepSvg(svg, $("#demo"));
+          addThread(svg, $("#demo"), $("#dL"), $("#dR"), demoColor);
+        }
+
+        /* ---------- screens + bests ---------- */
+        function show(id) {
+          ["start", "play", "end"].forEach((s) => {
+            $("#" + s).hidden = s !== id;
+          });
+          window.scrollTo(0, 0);
+        }
+        function paintBests() {
+          const parts = [1, 2, 3]
+            .map((l) => {
+              const b = store.get("opposites-best-" + l);
+              return b ? `${LEVELS[l].name} ${b}` : null;
+            })
+            .filter(Boolean);
+          $("#bests").textContent = parts.length
+            ? "Best scores: " + parts.join("  •  ")
+            : "";
+        }
+
+        /* ---------- game ---------- */
+        let G = null,
+          B = null;
+
+        function startGame() {
+          const level = +document.querySelector("input[name=level]:checked")
+            .value;
+          const timed =
+            document.querySelector("input[name=mode]:checked").value ===
+            "timed";
+          const picks = shuffle(PAIRS.filter((p) => p.lvl === level)).slice(
+            0,
+            PER_BOARD * BOARDS,
+          );
+          G = {
+            level,
+            timed,
+            boards: Array.from({ length: BOARDS }, (_, i) =>
+              picks.slice(i * PER_BOARD, (i + 1) * PER_BOARD),
+            ),
+            b: 0,
+            score: 0,
+            combo: 0,
+            bestCombo: 0,
+            matched: 0,
+            mistakes: 0,
+            log: [],
+          };
+          $("#timerWrap").hidden = !timed;
+          show("play");
+          loadBoard();
+        }
+
+        function setPrompt(t) {
+          $("#prompt").textContent = t;
+        }
+        function paintHud() {
+          $("#hudBoard").textContent = `Board ${G.b + 1} of ${BOARDS}`;
+          $("#hudScore").textContent = "Score " + G.score;
+          $("#hudCombo").textContent = "Combo ×" + G.combo;
+        }
+
+        function loadBoard() {
+          if (B) clearInterval(B.timer);
+          const pairs = G.boards[G.b];
+          const items = pairs.map((p, i) => {
+            const flip = Math.random() < 0.5;
+            return {
+              id: i,
+              p,
+              L: flip ? p.b : p.a,
+              R: flip ? p.a : p.b,
+              done: false,
+              ok: false,
+              color: null,
+            };
+          });
+          const left = shuffle(items);
+          let right,
+            tries = 0;
+          do {
+            right = shuffle(items);
+            tries++;
+          } while (
+            tries < 40 &&
+            right.filter((r, i) => r === left[i]).length > 1
+          );
+
+          B = {
+            items,
+            chips: [],
+            sel: null,
+            matches: [],
+            ended: false,
+            timer: null,
+            t0: Date.now(),
+            limit: LEVELS[G.level].time,
+            busy: false,
+          };
+          const colL = $("#colL"),
+            colR = $("#colR");
+          colL.innerHTML = "";
+          colR.innerHTML = "";
+          const make = (item, side, col) => {
+            const el = document.createElement("button");
+            el.type = "button";
+            el.className = "chip";
+            el.textContent = item[side];
+            el.setAttribute("aria-pressed", "false");
+            const chip = { item, side, el, state: "idle" };
+            el.addEventListener("click", () => onChip(chip));
+            col.appendChild(el);
+            B.chips.push(chip);
+          };
+          left.forEach((it) => make(it, "L", colL));
+          right.forEach((it) => make(it, "R", colR));
+
+          prepSvg($("#boardSvg"), $("#board"));
+          $("#cleared").hidden = true;
+          $("#actions").hidden = false;
+          $("#peekBtn").disabled = false;
+          setPrompt("Tap a word, then tap its opposite.");
+          paintHud();
+
+          if (G.timed) {
+            tick();
+            B.timer = setInterval(tick, 100);
+          }
+        }
+
+        function tick() {
+          if (!B || B.ended) return;
+          const left = Math.max(0, B.limit - (Date.now() - B.t0) / 1000);
+          $("#fill").style.transform = `scaleX(${left / B.limit})`;
+          const s = Math.ceil(left);
+          $("#timeLeft").textContent =
+            `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+          $("#timerWrap").classList.toggle("low", left / B.limit < 0.25);
+          if (left <= 0) finishBoard("time");
+        }
+
+        function select(chip) {
+          if (B.sel) {
+            B.sel.el.classList.remove("sel");
+            B.sel.el.setAttribute("aria-pressed", "false");
+          }
+          B.sel = chip;
+          if (chip) {
+            chip.el.classList.add("sel");
+            chip.el.setAttribute("aria-pressed", "true");
+            setPrompt(`What is the opposite of “${chip.item[chip.side]}”?`);
+          } else setPrompt("Tap a word, then tap its opposite.");
+        }
+
+        function onChip(chip) {
+          if (!B || B.ended || B.busy || chip.state !== "idle") return;
+          sfx.pick();
+          if (!B.sel) return select(chip);
+          if (B.sel === chip) return select(null);
+          if (B.sel.side === chip.side) return select(chip);
+          evaluate(B.sel, chip);
+        }
+
+        function evaluate(a, b) {
+          const wa = a.item[a.side],
+            wb = b.item[b.side];
+          if (a.item === b.item) {
+            const color = COLORS[B.matches.length % COLORS.length];
+            const pts = 100 + Math.min(G.combo, 5) * 20;
+            G.score += pts;
+            G.combo++;
+            G.bestCombo = Math.max(G.bestCombo, G.combo);
+            G.matched++;
+            a.item.done = true;
+            a.item.ok = true;
+            a.item.color = color;
+            [a, b].forEach((c) => {
+              c.state = "done";
+              c.el.classList.remove("sel");
+              c.el.classList.add("done");
+              c.el.style.setProperty("--c", color);
+              c.el.disabled = true;
+              c.el.setAttribute("aria-pressed", "false");
+              c.el.setAttribute(
+                "aria-label",
+                `${c.item[c.side]}, matched with ${c.item[c.side === "L" ? "R" : "L"]}`,
+              );
+            });
+            B.sel = null;
+            const L = a.side === "L" ? a : b,
+              R = a.side === "L" ? b : a;
+            B.matches.push({ L: L.el, R: R.el, color });
+            addThread($("#boardSvg"), $("#board"), L.el, R.el, color, {
+              animate: true,
+            });
+            sfx.ok();
+            setPrompt(`Yes! “${wa}” and “${wb}” are opposites. +${pts}`);
+            paintHud();
+            if (B.items.every((i) => i.done))
+              setTimeout(() => finishBoard("clear"), reduced ? 0 : 650);
+          } else {
+            G.combo = 0;
+            G.mistakes++;
+            B.busy = true;
+            [a, b].forEach((c) => {
+              c.el.classList.remove("sel");
+              c.el.classList.add("no");
+            });
+            sfx.no();
+            setPrompt(`“${wa}” and “${wb}” are not opposites. Try again!`);
+            paintHud();
+            setTimeout(() => {
+              [a, b].forEach((c) => {
+                c.el.classList.remove("no");
+                c.el.setAttribute("aria-pressed", "false");
+              });
+              B.sel = null;
+              B.busy = false;
+            }, 480);
+          }
+        }
+
+        function peek() {
+          if (!B || B.ended || B.busy) return;
+          const open = B.items.filter((i) => !i.done);
+          if (!open.length) return;
+          const it = open[Math.floor(Math.random() * open.length)];
+          select(null);
+          B.chips
+            .filter((c) => c.item === it)
+            .forEach((c) => {
+              c.el.classList.remove("peek");
+              void c.el.offsetWidth;
+              c.el.classList.add("peek");
+              setTimeout(() => c.el.classList.remove("peek"), 1500);
+            });
+          G.score = Math.max(0, G.score - 50);
+          paintHud();
+          setPrompt("Peek used (−50). Look for the glowing pair!");
+        }
+
+        function finishBoard(reason) {
+          if (!B || B.ended) return;
+          B.ended = true;
+          clearInterval(B.timer);
+          select(null);
+          const reveal = reason !== "clear";
+          const left = Math.max(0, B.limit - (Date.now() - B.t0) / 1000);
+          let bonus = 0;
+          if (reveal) {
+            B.items
+              .filter((i) => !i.done)
+              .forEach((it) => {
+                const color = COLORS[B.matches.length % COLORS.length];
+                it.color = color;
+                it.done = true;
+                const cs = B.chips.filter((c) => c.item === it);
+                cs.forEach((c) => {
+                  c.state = "miss";
+                  c.el.classList.add("miss");
+                  c.el.style.setProperty("--c", color);
+                  c.el.disabled = true;
+                });
+                const L = cs.find((c) => c.side === "L"),
+                  R = cs.find((c) => c.side === "R");
+                B.matches.push({ L: L.el, R: R.el, color, missed: true });
+                addThread($("#boardSvg"), $("#board"), L.el, R.el, color, {
+                  missed: true,
+                });
+              });
+            G.combo = 0;
+          } else if (G.timed) {
+            bonus = Math.round(left * 3);
+            G.score += bonus;
+          }
+          B.items.forEach((it) =>
+            G.log.push({ p: it.p, ok: it.ok, color: it.color }),
+          );
+          paintHud();
+          $("#actions").hidden = true;
+          setPrompt(
+            reveal
+              ? reason === "time"
+                ? "Time is up. Here are the answers."
+                : "Here are the answers."
+              : "All matched!",
+          );
+
+          const last = G.b >= BOARDS - 1;
+          const sound = reveal ? sfx.no : sfx.clear;
+          sound();
+          const title = reveal
+            ? reason === "time"
+              ? "Time's up!"
+              : "Here are the pairs"
+            : "Board cleared!";
+          const note =
+            !reveal && bonus
+              ? `Time bonus: +${bonus}`
+              : "Read each pair and its sentence.";
+          $("#cleared").innerHTML = `
+      <h2>${title}</h2>
+      <p class="note">${note}</p>
+      <ul class="pairs">${B.items.map((it) => pairRow(it.p, it.color, it.ok)).join("")}</ul>
+      <div class="row-btns"><button class="btn primary" id="nextBtn">${last ? "See results" : "Next board"}</button></div>`;
+          $("#cleared").hidden = false;
+          bindHear($("#cleared"));
+          const nb = $("#nextBtn");
+          nb.onclick = nextBoard;
+          nb.focus({ preventScroll: true });
+          $("#cleared").scrollIntoView({
+            block: "nearest",
+            behavior: reduced ? "auto" : "smooth",
+          });
+          if (!reveal) {
+            const r = $("#board").getBoundingClientRect();
+            confetti(70, r.left + r.width / 2, r.top + r.height / 2, 14);
+          }
+        }
+
+        function pairRow(p, color, ok) {
+          return `<li>
+      <span class="dot" style="background:${color}"></span>
+      <div class="txt"><div class="head">${p.a} ↔ ${p.b}${ok ? "" : '<span class="tag">missed</span>'}</div><p class="sent">${highlight(p)}</p></div>
+      ${canSpeak ? `<button class="btn hear" data-say="${p.sent.replace(/"/g, "&quot;")}" aria-label="Hear the sentence for ${p.a} and ${p.b}">🔊</button>` : ""}
+    </li>`;
+        }
+        function bindHear(root) {
+          root
+            .querySelectorAll("[data-say]")
+            .forEach((b) => (b.onclick = () => speak(b.dataset.say)));
+        }
+
+        function nextBoard() {
+          G.b++;
+          if (G.b >= BOARDS) endGame();
+          else loadBoard();
+          window.scrollTo(0, 0);
+        }
+
+        function endGame() {
+          const total = G.matched + G.mistakes;
+          const acc = total ? Math.round((G.matched / total) * 100) : 0;
+          const suns = G.matched === 0 ? 0 : acc >= 85 ? 3 : acc >= 60 ? 2 : 1;
+          $("#suns").textContent = "🌞".repeat(suns) + "🌚".repeat(3 - suns);
+          $("#endTitle").textContent = [
+            "Keep practicing!",
+            "Good start!",
+            "Nice matching!",
+            "Opposites master!",
+          ][suns];
+          $("#sScore").textContent = G.score;
+          $("#sAcc").textContent = acc + "%";
+          $("#sCombo").textContent = G.bestCombo;
+
+          const key = "opposites-best-" + G.level,
+            prev = +store.get(key) || 0;
+          if (G.score > prev) {
+            store.set(key, String(G.score));
+            $("#sBest").textContent = G.score;
+            $("#sBestLabel").textContent = "New best!";
+          } else {
+            $("#sBest").textContent = prev;
+            $("#sBestLabel").textContent = "Best score";
+          }
+          paintBests();
+
+          $("#review").innerHTML = G.log
+            .map((l) => pairRow(l.p, l.color, l.ok))
+            .join("");
+          bindHear($("#review"));
+          show("end");
+          sfx.end();
+          if (suns >= 2) confetti(150, innerWidth / 2, innerHeight * 0.3, 18);
+        }
+
+        /* ---------- wiring ---------- */
+        $("#startBtn").onclick = startGame;
+        $("#againBtn").onclick = startGame;
+        $("#menuBtn").onclick = () => {
+          show("start");
+          paintBests();
+          requestAnimationFrame(runDemo);
+        };
+        $("#quitBtn").onclick = () => {
+          if (B) clearInterval(B.timer);
+          show("start");
+          paintBests();
+          requestAnimationFrame(runDemo);
+        };
+        $("#peekBtn").onclick = peek;
+        $("#giveBtn").onclick = () => finishBoard("giveup");
+        $("#soundBtn").onclick = () => {
+          soundOn = !soundOn;
+          store.set("opposites-sound", soundOn ? "on" : "off");
+          paintSound();
+          sfx.pick();
+        };
+        $("#fullscreenBtn").onclick = toggleFullscreen;
+        document.addEventListener("fullscreenchange", updateFullscreenButton);
+        document.addEventListener(
+          "webkitfullscreenchange",
+          updateFullscreenButton,
+        );
+        $("#demo").onclick = runDemo;
+        $("#demo").onkeydown = (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            runDemo();
+          }
+        };
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && B && !B.ended && B.sel) select(null);
+        });
+
+        function relayout() {
+          if (!$("#play").hidden && B) {
+            const svg = $("#boardSvg");
+            prepSvg(svg, $("#board"));
+            B.matches.forEach((m) =>
+              addThread(svg, $("#board"), m.L, m.R, m.color, {
+                missed: m.missed,
+              }),
+            );
+          }
+          redrawDemo();
+        }
+        if ("ResizeObserver" in window) {
+          new ResizeObserver(relayout).observe(document.body);
+        } else addEventListener("resize", relayout);
+
+        paintSound();
+        paintBests();
+        (document.fonts && document.fonts.ready
+          ? document.fonts.ready
+          : Promise.resolve()
+        ).then(() => requestAnimationFrame(runDemo));
+      })();
+    </script>
+  </body>
+</html>
