@@ -259,6 +259,29 @@
             Practical English lessons, learning tips, teacher resources, and
             beginner-friendly coding guides.
           </p>
+          <form
+            class="search-bar search-form"
+            role="search"
+            aria-label="Search blog posts"
+          >
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <label for="searchInput" class="sr-only">Search articles</label>
+            <input
+              type="search"
+              class="search-input"
+              placeholder="Search articles..."
+              id="searchInput"
+              autocomplete="off"
+              spellcheck="false"
+              aria-describedby="search-help"
+            />
+            <div id="search-help" class="sr-only">
+              Search article titles, topics, and content
+            </div>
+          </form>
+          <p class="pillar-hero__note">
+            Find lessons, learning tips, and teacher resources
+          </p>
         </div>
       </section>
 
@@ -338,31 +361,9 @@
       </section>
 
       <!-- Search and Sort Controls -->
-      <section
-        class="content-controls"
-        role="search"
-        aria-label="Search and sort blog posts"
-      >
+      <section class="content-controls" aria-label="Blog display controls">
         <div class="container">
           <div class="controls-wrapper">
-            <div class="search-container">
-              <form class="search-form" role="search">
-                <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                <label for="searchInput" class="sr-only">Search articles</label>
-                <input
-                  type="search"
-                  class="search-input"
-                  placeholder="Search articles..."
-                  id="searchInput"
-                  autocomplete="off"
-                  spellcheck="false"
-                  aria-describedby="search-help"
-                />
-                <div id="search-help" class="sr-only">
-                  Enter keywords to search through article titles and content
-                </div>
-              </form>
-            </div>
             <div class="layout-controls">
               <label class="sort-label">Layout:</label>
               <div
@@ -4280,6 +4281,18 @@
 
         function initializeState() {
           state.allPosts = Array.from(elements.blogPosts);
+          state.allPosts.forEach((post) => {
+            post.dataset.searchIndex = normalizeSearchText(
+              [
+                post.dataset.title,
+                post.dataset.category,
+                post.dataset.tags,
+                post.textContent,
+              ]
+                .filter(Boolean)
+                .join(" "),
+            );
+          });
           state.filteredPosts = [...state.allPosts];
           updatePostCount();
           initializeLayout();
@@ -4341,6 +4354,10 @@
 
           // Search with debouncing
           if (elements.searchInput) {
+            elements.searchInput.form?.addEventListener("submit", (event) => {
+              event.preventDefault();
+              filterPosts(elements.searchInput.value);
+            });
             elements.searchInput.addEventListener(
               "input",
               debounce(handleSearchInput, CONFIG.DEBOUNCE_DELAY),
@@ -4441,7 +4458,7 @@
         }
 
         function handleSearchInput(event) {
-          const searchTerm = event.target.value.toLowerCase().trim();
+          const searchTerm = event.target.value;
           filterPosts(searchTerm);
         }
 
@@ -4537,56 +4554,54 @@
           }
         }
 
-        function filterPosts(searchTerm = "") {
+        function filterPosts(searchTerm) {
           if (!elements.blogPosts) return;
 
-          let visibleCount = 0;
-          const currentSearchTerm =
-            searchTerm ||
-            (elements.searchInput
-              ? elements.searchInput.value.toLowerCase().trim()
-              : "");
+          const rawSearchTerm =
+            searchTerm ??
+            (elements.searchInput ? elements.searchInput.value : "");
+          const searchTerms = normalizeSearchText(rawSearchTerm)
+            .split(" ")
+            .filter(Boolean);
+          const matchingPosts = [];
 
-          elements.blogPosts.forEach((post, index) => {
+          elements.blogPosts.forEach((post) => {
             const category = post.dataset.category;
-            const title = (post.dataset.title || "").toLowerCase();
-            const excerpt = (
-              post.querySelector(".post-excerpt")?.textContent || ""
-            ).toLowerCase();
+            const searchIndex =
+              post.dataset.searchIndex ||
+              normalizeSearchText(
+                `${post.dataset.title || ""} ${post.textContent || ""}`,
+              );
 
             const matchesCategory =
               state.currentCategory === "all" ||
               category === state.currentCategory;
-            const matchesSearch =
-              !currentSearchTerm ||
-              title.includes(currentSearchTerm) ||
-              excerpt.includes(currentSearchTerm);
+            const matchesSearch = searchTerms.every((term) =>
+              searchIndex.includes(term),
+            );
 
             const shouldShow = matchesCategory && matchesSearch;
+            if (shouldShow) matchingPosts.push(post);
 
-            // Use requestAnimationFrame for smooth animations
-            requestAnimationFrame(() => {
-              if (shouldShow) {
-                post.classList.remove("hidden");
-                post.classList.add("visible");
-                post.style.display = "block";
-                post.style.animationDelay = `${index * 50}ms`;
-              } else {
-                post.classList.add("hidden");
-                post.classList.remove("visible");
-                post.style.display = "none";
-              }
-            });
-
-            if (shouldShow) visibleCount++;
+            post.classList.toggle("hidden", !shouldShow);
+            post.classList.toggle("visible", shouldShow);
+            post.style.display = shouldShow ? "block" : "none";
           });
 
           // Update UI state
-          updateNoPostsMessage(visibleCount === 0);
-          updatePostCount(visibleCount);
-          state.filteredPosts = Array.from(elements.blogPosts).filter(
-            (post) => !post.classList.contains("hidden"),
-          );
+          updateNoPostsMessage(matchingPosts.length === 0);
+          updatePostCount(matchingPosts.length);
+          state.filteredPosts = matchingPosts;
+        }
+
+        function normalizeSearchText(value) {
+          return String(value || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim()
+            .replace(/[^\p{L}\p{N}]+/gu, " ")
+            .replace(/\s+/g, " ");
         }
 
         function sortPosts() {

@@ -169,11 +169,11 @@
           </p>
           <div class="search-bar">
             <input
-              type="text"
+              type="search"
               id="resourceSearch"
               aria-label="Search English learning resources"
               placeholder="Search resources by title or topic..."
-              onkeyup="searchResources()"
+              oninput="searchResources()"
             />
             <i class="fas fa-search" aria-hidden="true"></i>
           </div>
@@ -1581,14 +1581,23 @@
           const typeMatch =
             currentFilters.type === "all" ||
             resource.type === currentFilters.type;
-          const searchMatch =
-            currentFilters.search === "" ||
-            resource.title
-              .toLowerCase()
-              .includes(currentFilters.search.toLowerCase()) ||
-            resource.description
-              .toLowerCase()
-              .includes(currentFilters.search.toLowerCase());
+          const searchTerms = currentFilters.search
+            .toLowerCase()
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+          const searchIndex = [
+            resource.title,
+            resource.description,
+            resource.type,
+            resource.level,
+            ...resource.topics,
+          ]
+            .join(" ")
+            .toLowerCase();
+          const searchMatch = searchTerms.every((term) =>
+            searchIndex.includes(term),
+          );
 
           return levelMatch && ageMatch && typeMatch && searchMatch;
         });
@@ -1643,7 +1652,7 @@
 
       function searchResources() {
         const searchInput = document.getElementById("resourceSearch");
-        currentFilters.search = searchInput.value;
+        currentFilters.search = searchInput.value.trim().replace(/\s+/g, " ");
         renderResources();
       }
 

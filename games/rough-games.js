@@ -336,7 +336,7 @@
       title: "20 Questions",
       intro:
         "The computer chooses a mystery animal. Ask yes-or-no questions and use the clues to guess it.",
-      how: "The computer secretly picks an animal. Ask supported yes-or-no questions to narrow down the possibilities. A new supported clue uses one of your 20 questions; guesses are free. Guess correctly to earn more points for solving it early.",
+      how: "The computer secretly picks an animal. Choose from the question buttons to narrow down the possibilities. Each different question uses one of your 20 turns; guesses are free. Guess correctly to earn more points for solving it early.",
       kind: "twenty",
     },
     "name-five": {
@@ -431,10 +431,10 @@
 
   root.innerHTML = `
     <p class="breadcrumb"><a href="../games.html">Games</a> / <a href="../new-games.html">Prototype lab</a> / ${esc(game.title)}</p>
-    <section class="hero"><p class="eyebrow">${slug === "20-questions" ? "Mystery animal · English speaking game" : "Free English practice · Starter edition"}</p><h1>${esc(game.title)}</h1><p>${slug === "20-questions" ? "The computer has secretly chosen an animal. Ask yes-or-no questions and use the clues to guess it." : esc(game.intro)}</p></section>
+    <section class="hero"><p class="eyebrow">${slug === "20-questions" ? "Mystery animal" : "Free English practice · Starter edition"}</p><h1>${esc(game.title)}</h1><p>${slug === "20-questions" ? "Choose a category, ask for clues, then guess the animal." : esc(game.intro)}</p></section>
     <div class="content-grid">
       <section class="panel game-panel${slug === "20-questions" ? " tq-game-panel" : ""}" aria-labelledby="play-title"><div class="game-toolbar"><h2 id="play-title">Play a round</h2><span class="score" id="score" aria-live="polite">Score: 0</span></div><div class="game-content" id="game-content"></div><div class="controls"><button class="btn secondary" id="restart" type="button">Restart</button>${slug === "20-questions" ? '<button class="btn secondary tq-fullscreen-button" id="fullscreen-game" type="button" aria-pressed="false">⛶ Fullscreen · no ads</button>' : ""}</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p></section>
-      <aside class="panel"><h2>How to play</h2><p class="hint">${esc(game.how)}</p>${slug === "20-questions" ? "" : '<h2 style="margin-top:1.2rem">About this starter</h2><p class="hint">This is an early playable prototype. Question sets, visuals, and classroom features will grow in later versions.</p>'}</aside>
+      ${slug === "20-questions" ? "" : `<aside class="panel"><h2>How to play</h2><p class="hint">${esc(game.how)}</p><h2 style="margin-top:1.2rem">About this starter</h2><p class="hint">This is an early playable prototype. Question sets, visuals, and classroom features will grow in later versions.</p></aside>`}
     </div>`;
 
   const content = root.querySelector("#game-content");
@@ -443,6 +443,31 @@
   let score = 0;
   let round = 0;
   let state = {};
+  const twentyLevels = [
+    { level: 1, name: "Scout", maxQuestions: 20 },
+    { level: 2, name: "Tracker", maxQuestions: 15 },
+    { level: 3, name: "Expert", maxQuestions: 10 },
+  ];
+  let twentyWins = 0;
+  let selectedTwentyLevel = 1;
+  if (slug === "20-questions") {
+    try {
+      const savedProgress = JSON.parse(
+        localStorage.getItem("twentyQuestionsProgress") || "{}",
+      );
+      twentyWins = Math.max(0, Number(savedProgress.wins) || 0);
+      selectedTwentyLevel = Math.min(
+        twentyLevels.length,
+        Math.max(1, Number(savedProgress.selectedLevel) || 1),
+      );
+    } catch {
+      // Keep level progress for this page session when storage is unavailable.
+    }
+    selectedTwentyLevel = Math.min(
+      selectedTwentyLevel,
+      Math.min(twentyLevels.length, 1 + Math.floor(twentyWins / 2)),
+    );
+  }
   const setFeedback = (message, kind = "info") => {
     feedback.textContent = message;
     feedback.dataset.kind = kind;
@@ -452,6 +477,105 @@
     scoreEl.textContent = `Score: ${score}`;
   };
   const addPoint = (points = 1) => setScore(score + points);
+
+  function unlockedTwentyLevel() {
+    return Math.min(twentyLevels.length, 1 + Math.floor(twentyWins / 2));
+  }
+
+  function updateTwentyLevelControls() {
+    if (slug !== "20-questions") return;
+    const unlocked = unlockedTwentyLevel();
+    if (selectedTwentyLevel > unlocked) selectedTwentyLevel = unlocked;
+    content.querySelectorAll("[data-level]").forEach((button) => {
+      const level = Number(button.dataset.level);
+      button.disabled = level > unlocked;
+      button.setAttribute(
+        "aria-pressed",
+        String(level === selectedTwentyLevel),
+      );
+      button.classList.toggle("is-selected", level === selectedTwentyLevel);
+    });
+    const status = content.querySelector("#tq-level-status");
+    if (status) {
+      const nextLevel = twentyLevels[selectedTwentyLevel - 1];
+      const currentLevel = state.level || selectedTwentyLevel;
+      const highestUnlocked = unlockedTwentyLevel();
+      const unlockProgress =
+        highestUnlocked < twentyLevels.length
+          ? `${2 - (twentyWins % 2)} more solve${2 - (twentyWins % 2) === 1 ? "" : "s"} to unlock Level ${highestUnlocked + 1}`
+          : "All levels unlocked";
+      status.textContent =
+        state.questions > 0 &&
+        !state.finished &&
+        currentLevel !== selectedTwentyLevel
+          ? `Current round: Level ${currentLevel}. Next round: Level ${selectedTwentyLevel} · ${nextLevel.maxQuestions} questions.`
+          : `Level ${selectedTwentyLevel} · ${nextLevel.maxQuestions} questions · ${unlockProgress}`;
+    }
+    const nextRound = content.querySelector("[data-action='next-round']");
+    if (nextRound) {
+      const nextLevel = twentyLevels[selectedTwentyLevel - 1];
+      nextRound.textContent =
+        selectedTwentyLevel === (state.level || selectedTwentyLevel)
+          ? `Next animal · Level ${selectedTwentyLevel}`
+          : `Start Level ${selectedTwentyLevel}`;
+      nextRound.setAttribute(
+        "aria-label",
+        `Start the next round at Level ${selectedTwentyLevel}, ${nextLevel.name}`,
+      );
+    }
+  }
+
+  function selectTwentyLevel(level) {
+    if (level > unlockedTwentyLevel()) return;
+    selectedTwentyLevel = level;
+    const levelInfo = twentyLevels[level - 1];
+    if (state.questions === 0 && !state.finished) {
+      state.level = level;
+      state.maxQuestions = levelInfo.maxQuestions;
+      content.querySelector("#question-limit").textContent =
+        levelInfo.maxQuestions;
+      const progress = content.querySelector(".tq-meter-track");
+      progress.setAttribute("aria-valuemax", String(levelInfo.maxQuestions));
+      content.querySelector("#question-progress").style.width = "0%";
+    }
+    try {
+      localStorage.setItem(
+        "twentyQuestionsProgress",
+        JSON.stringify({ wins: twentyWins, selectedLevel }),
+      );
+    } catch {
+      // Level selection still works for the current page session.
+    }
+    updateTwentyLevelControls();
+  }
+
+  function recordTwentyWin() {
+    const previousUnlockedLevel = unlockedTwentyLevel();
+    twentyWins++;
+    const newlyUnlockedLevel = unlockedTwentyLevel();
+    const levelUnlocked = newlyUnlockedLevel > previousUnlockedLevel;
+    if (levelUnlocked) selectedTwentyLevel = newlyUnlockedLevel;
+    try {
+      localStorage.setItem(
+        "twentyQuestionsProgress",
+        JSON.stringify({
+          wins: twentyWins,
+          selectedLevel: selectedTwentyLevel,
+        }),
+      );
+    } catch {
+      // Round progress still applies for the current page session.
+    }
+    updateTwentyLevelControls();
+    return levelUnlocked;
+  }
+
+  function showTwentyRoundEnd(message) {
+    content.querySelector("#tq-round-end-message").textContent = message;
+    content.querySelector("#tq-round-end").hidden = false;
+    updateTwentyLevelControls();
+    content.querySelector("[data-action='next-round']").focus();
+  }
 
   function render() {
     feedback.textContent = "";
@@ -1031,6 +1155,14 @@
     state.askedTopics = new Set();
     state.clues = [];
     state.guessedAnimals = new Set();
+    state.level = selectedTwentyLevel;
+    state.maxQuestions = twentyLevels[state.level - 1].maxQuestions;
+    const levelButtons = twentyLevels
+      .map(
+        (level) =>
+          `<button type="button" class="tq-level-choice${level.level === selectedTwentyLevel ? " is-selected" : ""}" data-level="${level.level}" aria-pressed="${level.level === selectedTwentyLevel}" ${level.level > unlockedTwentyLevel() ? "disabled" : ""}><span>LEVEL ${level.level}</span><strong>${level.name}</strong><small>${level.maxQuestions} questions</small></button>`,
+      )
+      .join("");
     const questionIdeas = {
       "Body and appearance": [
         "Can it fly?",
@@ -1062,52 +1194,60 @@
     const questionGuide = Object.entries(questionIdeas)
       .map(
         ([category, questions]) =>
-          `<div class="tq-guide-group"><h4>${esc(category)}</h4><div class="tq-guide-questions">${questions
+          `<details class="tq-guide-group" name="tq-question-categories"><summary><span>${esc(category)}</span><span class="tq-category-count">${questions.length} questions</span></summary><div class="tq-guide-questions">${questions
             .map(
               (question) =>
-                `<button type="button" data-suggestion="${esc(question)}">${esc(question)}</button>`,
+                `<button type="button" class="tq-question-choice" data-question="${esc(question)}" aria-pressed="false">${esc(question)}</button>`,
             )
-            .join("")}</div></div>`,
+            .join("")}</div></details>`,
       )
       .join("");
-    const animalOptions = animals
-      .map((animal) => `<option value="${esc(animal.name)}"></option>`)
+    const animalChoices = animals
+      .map(
+        (animal) =>
+          `<button type="button" class="tq-animal-choice" data-guess="${esc(animal.name)}" aria-label="Guess ${esc(animalLabel(animal.name))}"><span aria-hidden="true">${animalEmoji(animal.name)}</span><span>${esc(animal.name)}</span></button>`,
+      )
       .join("");
     content.innerHTML = `
       <div class="tq-game">
-        <div class="tq-how-to" aria-label="How this game works">
-          <strong>How to play</strong>
-          <ol>
-            <li>The computer has secretly chosen one of ${animals.length} animals. You do not choose the animal.</li>
-            <li>Ask a yes-or-no question from the guide. A new supported clue uses one question; unsupported or repeated clues do not.</li>
-            <li>Use the answers to narrow the possibilities. Guess any time—guesses are free. Solve it within 20 questions to score more points.</li>
-          </ol>
-        </div>
         <div class="tq-game-top"><span class="tq-pill"><span aria-hidden="true">🐾</span> ANIMAL MYSTERY</span><span class="tq-round">ROUND ${round + 1}</span></div>
-        <div class="tq-mystery" id="mystery-reveal" aria-hidden="true"><span class="tq-sparkle">✦</span><span class="tq-animal">🐾</span><span class="tq-lock">?</span><span class="tq-sparkle tq-sparkle-two">✦</span></div>
-        <h3 class="tq-prompt">The computer picked an animal…</h3>
-        <p class="tq-subprompt">Ask about its body, abilities, home, or habits. The possible-animal count shows how many animals still fit every clue.</p>
+        <section class="tq-level-panel" aria-label="Challenge levels">
+          <div class="tq-level-heading"><strong>Choose your level</strong><span>Win twice to unlock the next challenge</span></div>
+          <div class="tq-level-options">${levelButtons}</div>
+          <p id="tq-level-status" aria-live="polite">Level ${selectedTwentyLevel} · ${state.maxQuestions} questions · ${twentyWins} solved</p>
+        </section>
+        <div class="tq-intro-row">
+          <div class="tq-mystery" id="mystery-reveal" aria-hidden="true"><span class="tq-sparkle">✦</span><span class="tq-animal">🐾</span><span class="tq-lock">?</span><span class="tq-sparkle tq-sparkle-two">✦</span></div>
+          <div class="tq-intro-copy">
+            <h3 class="tq-prompt">The computer picked an animal…</h3>
+            <p class="tq-subprompt">Ask about its features and use each clue to narrow the list.</p>
+          </div>
+        </div>
         <div class="tq-meter" aria-label="Questions used">
-          <div class="tq-meter-label"><span>Questions used</span><strong><span id="question-count">0</span> / 20</strong></div>
-          <div class="tq-meter-track" role="progressbar" aria-label="Questions used" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"><span id="question-progress"></span></div>
+          <div class="tq-meter-label"><span>Questions used</span><strong><span id="question-count">0</span> / <span id="question-limit">${state.maxQuestions}</span></strong></div>
+          <div class="tq-meter-track" role="progressbar" aria-label="Questions used" aria-valuemin="0" aria-valuemax="${state.maxQuestions}" aria-valuenow="0"><span id="question-progress"></span></div>
           <p class="tq-candidate-count" id="candidate-count" aria-live="polite">Possible animals that fit the clues: ${animals.length}</p>
         </div>
         <div class="tq-ask-box">
-          <label for="question">Ask the computer a yes-or-no question</label>
-          <div class="tq-input-row"><input id="question" type="text" placeholder="For example: Does it have four legs?" autocomplete="off" aria-describedby="question-help"><button class="btn tq-ask-button" type="button" data-action="ask">Ask question <span aria-hidden="true">➜</span></button></div>
-          <p class="tq-field-help" id="question-help">Tap an idea to put it in the box, then press Ask question. Only clues in the guide are understood.</p>
-          <details class="tq-question-guide"><summary>Show question ideas</summary><p class="tq-guide-note">“Yes” means the animal has the feature; “No” means it does not. Each idea can be asked once.</p><div class="tq-guide-groups">${questionGuide}</div></details>
+          <h4 class="tq-choice-heading">Choose a question category <span>Open one category, then tap a question</span></h4>
+          <p class="tq-field-help">“Yes” means the animal has the feature; “No” means it does not. Each question can be asked once.</p>
+          <div class="tq-guide-groups">${questionGuide}</div>
         </div>
         <div class="tq-clue" id="reply" role="status" aria-live="polite"><span class="tq-clue-icon" aria-hidden="true">💭</span><span>Your mystery animal is ready. Ask your first question.</span></div>
         <ol class="tq-clue-log" id="clue-log" aria-label="Question and answer history"></ol>
-        <div class="tq-guess-box">
-          <label for="guess">Guess the animal (free)</label>
-          <div class="tq-input-row"><input id="guess" type="text" list="animal-options" placeholder="Type an animal name…" autocomplete="off" aria-describedby="guess-help"><datalist id="animal-options">${animalOptions}</datalist><button class="btn tq-guess-button" type="button" data-action="guess">Check my guess</button></div>
-          <p class="tq-field-help" id="guess-help">A wrong guess does not use a question. Try another animal.</p>
+        <details class="tq-guess-box" id="tq-guess-options">
+          <summary class="tq-choice-heading">Ready to guess? <span>Open the animal list · guesses are free</span></summary>
+          <p class="tq-field-help">A wrong guess does not use a question. Try another animal.</p>
+          <div class="tq-animal-choices" aria-label="Choose an animal to guess">${animalChoices}</div>
           <button class="tq-reveal-button" type="button" data-action="give-up">Give up and reveal the animal</button>
-        </div>
+        </details>
+        <section class="tq-round-end" id="tq-round-end" aria-live="polite" hidden>
+          <p id="tq-round-end-message"></p>
+          <button class="tq-next-round" type="button" data-action="next-round">Next animal · Level ${selectedTwentyLevel}</button>
+        </section>
         <p class="tq-footnote">Animal facts are simplified for the game. Some real species vary.</p>
       </div>`;
+    updateTwentyLevelControls();
   }
 
   function renderNameFive() {
@@ -1181,9 +1321,11 @@
     } else if (action === "next") {
       round++;
       render();
+    } else if (action === "next-round") {
+      round++;
+      state = {};
+      render();
     } else if (action === "draw-word") drawBingoWord();
-    else if (action === "ask") askQuestion();
-    else if (action === "guess") guessWord();
     else if (action === "give-up")
       finishTwenty(`The mystery animal was ${animalLabel(state.target)}.`);
     else if (action === "check-five") checkFive();
@@ -1207,6 +1349,18 @@
   function handleClick(event) {
     const target = event.target.closest("button");
     if (!target || !content.contains(target)) return;
+    if (target.dataset.level) {
+      selectTwentyLevel(Number(target.dataset.level));
+      return;
+    }
+    if (target.dataset.question) {
+      askQuestion(target.dataset.question);
+      return;
+    }
+    if (target.dataset.guess) {
+      guessWord(target.dataset.guess);
+      return;
+    }
     if (target.dataset.action) {
       handleAction(target);
       return;
@@ -1347,13 +1501,8 @@
     return lines.some((line) => line.every((index) => state.marked.has(index)));
   }
 
-  function askQuestion() {
-    const input = content.querySelector("#question");
-    const question = input.value.trim().toLowerCase();
-    if (!question) {
-      setFeedback("Enter a yes-or-no question first.", "error");
-      return;
-    }
+  function askQuestion(questionText) {
+    const question = questionText.trim().toLowerCase();
     if (state.finished) {
       setFeedback(
         "This round is finished. Choose New animal to play again.",
@@ -1361,9 +1510,9 @@
       );
       return;
     }
-    if (state.questions >= 20) {
+    if (state.questions >= state.maxQuestions) {
       finishTwenty(
-        "You’ve used all 20 questions! The animal was " +
+        `You’ve used all ${state.maxQuestions} questions! The animal was ` +
           animalLabel(state.target) +
           ".",
       );
@@ -1507,7 +1656,7 @@
     );
     if (!topic) {
       setFeedback(
-        "I don’t understand that clue yet. Open “Show question ideas” and choose one of the supported questions. This did not use a turn.",
+        "Choose one of the question buttons shown above. This did not use a turn.",
         "info",
       );
       return;
@@ -1530,7 +1679,7 @@
       );
       return;
     }
-    const askedQuestion = input.value.trim();
+    const askedQuestion = questionText;
     state.questions++;
     state.askedTopics.add(topic.key);
     const trait = topic.trait || topic.key;
@@ -1541,13 +1690,13 @@
     const detail = isYes ? topic.yes : topic.no;
     content.querySelector("#question-count").textContent = state.questions;
     const progress = content.querySelector("#question-progress");
-    progress.style.width = `${state.questions * 5}%`;
+    progress.style.width = `${(state.questions / state.maxQuestions) * 100}%`;
     progress.parentElement.setAttribute(
       "aria-valuenow",
       String(state.questions),
     );
     content.querySelector("#reply").innerHTML =
-      `<span class="tq-clue-icon" aria-hidden="true">${answer === "Yes" ? "✅" : "🙅"}</span><span><strong>${answer}!</strong> ${esc(detail)}<small>Clue ${state.questions} of 20</small></span>`;
+      `<span class="tq-clue-icon" aria-hidden="true">${answer === "Yes" ? "✅" : "🙅"}</span><span><strong>${answer}!</strong> ${esc(detail)}<small>Clue ${state.questions} of ${state.maxQuestions}</small></span>`;
     const clue = document.createElement("li");
     clue.innerHTML = `<span class="tq-log-question">${esc(askedQuestion)}</span><span class="tq-log-answer ${answer === "Yes" ? "is-yes" : "is-no"}">${answer}</span><span class="tq-log-detail">${esc(detail)}</span>`;
     content.querySelector("#clue-log").prepend(clue);
@@ -1561,28 +1710,37 @@
       possibleAnimals.length === 1
         ? "Possible animals that fit the clues: 1 — you may have enough clues to guess!"
         : `Possible animals that fit the clues: ${possibleAnimals.length}`;
-    input.value = "";
-    if (state.questions === 20) {
-      content
-        .querySelectorAll("#question, [data-action='ask'], [data-suggestion]")
-        .forEach((control) => {
-          control.disabled = true;
-        });
+    if (possibleAnimals.length === 1) {
+      content.querySelectorAll(".tq-guide-group").forEach((category) => {
+        category.open = false;
+      });
+      content.querySelector("#tq-guess-options").open = true;
+    }
+    const questionButton = content.querySelector(
+      `[data-question="${CSS.escape(questionText)}"]`,
+    );
+    questionButton.disabled = true;
+    questionButton.classList.add("is-asked");
+    questionButton.setAttribute("aria-pressed", "true");
+    questionButton.textContent = `${questionText} ✓`;
+    if (state.questions >= state.maxQuestions) {
+      content.querySelectorAll("[data-question]").forEach((control) => {
+        control.disabled = true;
+      });
+      content.querySelectorAll(".tq-guide-group").forEach((category) => {
+        category.open = false;
+      });
+      content.querySelector("#tq-guess-options").open = true;
       setFeedback(
-        "That was question 20. Make your final free guess, or reveal the answer.",
+        `That was your final question for Level ${state.level}. Make your free guess, or reveal the answer.`,
         "info",
       );
       content.querySelector("[data-action='give-up']").focus();
     }
   }
 
-  function guessWord() {
-    const input = content.querySelector("#guess");
-    const guess = input.value.trim().toLowerCase();
-    if (!guess) {
-      setFeedback("Type your guess in the box first.", "error");
-      return;
-    }
+  function guessWord(guessText) {
+    const guess = guessText.toLowerCase();
     if (state.finished) {
       setFeedback(
         "This round is finished. Choose New animal to play again.",
@@ -1590,24 +1748,11 @@
       );
       return;
     }
-    if (!state.animals.some((animal) => animal.name === guess)) {
-      setFeedback(
-        "Choose an animal from the suggestions in the guess box. That guess was not counted as a question.",
-        "info",
-      );
-      input.focus();
-      return;
-    }
     if (state.guessedAnimals.has(guess)) {
-      setFeedback(
-        "You already tried that animal. Use a clue to narrow it down.",
-        "info",
-      );
-      input.select();
       return;
     }
     if (guess === state.target) {
-      const pointsEarned = Math.max(1, 20 - state.questions);
+      const pointsEarned = Math.max(1, state.maxQuestions - state.questions);
       addPoint(pointsEarned);
       state.guessed = true;
       state.finished = true;
@@ -1625,13 +1770,28 @@
       setFeedback(`Mystery solved! +${pointsEarned} points`, "success");
       content
         .querySelectorAll(
-          "#question, #guess, [data-action='ask'], [data-action='guess'], [data-action='give-up'], [data-suggestion]",
+          "[data-question], [data-guess], [data-action='give-up']",
         )
         .forEach((control) => {
           control.disabled = true;
         });
+      const levelUnlocked = recordTwentyWin();
+      showTwentyRoundEnd(
+        levelUnlocked
+          ? `Level ${selectedTwentyLevel} unlocked! Choose your next challenge.`
+          : "Animal solved! Ready for another round?",
+      );
     } else {
       state.guessedAnimals.add(guess);
+      const guessButton = content.querySelector(
+        `[data-guess="${CSS.escape(guess)}"]`,
+      );
+      guessButton.disabled = true;
+      guessButton.classList.add("is-wrong");
+      guessButton.setAttribute(
+        "aria-label",
+        `${animalLabel(guess)} was not the mystery animal.`,
+      );
       content.querySelector("#reply").innerHTML =
         `<span class="tq-clue-icon" aria-hidden="true">🤔</span><span><strong>Not ${esc(animalLabel(guess))} this time.</strong> Keep collecting clues and try another guess.<small>Your secret animal is still hidden!</small></span>`;
       const possibleAnimals = state.animals.filter(
@@ -1644,8 +1804,6 @@
           ? "Possible animals that fit the clues: 1 — you may have enough clues to guess!"
           : `Possible animals that fit the clues: ${possibleAnimals.length}`;
       setFeedback("Not quite — you can keep asking and guessing.", "error");
-      input.value = "";
-      input.focus();
     }
   }
 
@@ -1659,16 +1817,19 @@
     content.querySelector("#mystery-reveal .tq-lock").textContent = "✓";
     content.querySelector(".tq-game").classList.add("is-solved");
     content.querySelector("#candidate-count").textContent =
-      `Possible animals: 1 — mystery revealed (${animalLabel(state.target)}).`;
+      `Possible animals that fit the clues: 1 — mystery revealed (${animalLabel(state.target)}).`;
     content.querySelector("#reply").innerHTML =
       `<span class="tq-clue-icon" aria-hidden="true">🔍</span><span><strong>Round complete!</strong> ${esc(message)}<small>Press New animal to meet another mystery animal.</small></span>`;
     content
       .querySelectorAll(
-        "#question, #guess, [data-action='ask'], [data-action='guess'], [data-action='give-up'], [data-suggestion]",
+        "[data-question], [data-guess], [data-action='give-up']",
       )
       .forEach((control) => {
         control.disabled = true;
       });
+    showTwentyRoundEnd(
+      "Mystery revealed. Choose a level or play another animal.",
+    );
     setFeedback("Mystery revealed. Start a new round to play again.", "info");
   }
 
@@ -1741,25 +1902,7 @@
   }
 
   content.addEventListener("click", handleClick);
-  if (slug === "20-questions") {
-    content.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter") return;
-      if (event.target.id === "question") {
-        event.preventDefault();
-        askQuestion();
-      } else if (event.target.id === "guess") {
-        event.preventDefault();
-        guessWord();
-      }
-    });
-  }
   content.addEventListener("click", (event) => {
-    const suggestion = event.target.closest("[data-suggestion]");
-    if (suggestion) {
-      const input = content.querySelector("#question");
-      input.value = suggestion.dataset.suggestion;
-      input.focus();
-    }
     const reveal = event.target.closest("[data-reveal-answer]");
     if (reveal) content.querySelector("#jeopardy-answer").hidden = false;
     const award = event.target.closest("[data-award]");
@@ -1814,6 +1957,10 @@
         gamePanel.classList.contains("is-fullscreen-fallback");
       document.body.classList.toggle("tq-fullscreen-active", active);
       fullscreenButton.setAttribute("aria-pressed", String(active));
+      fullscreenButton.setAttribute(
+        "aria-label",
+        active ? "Exit fullscreen" : "Enter fullscreen without ads",
+      );
       fullscreenButton.textContent = active
         ? "⤢ Exit fullscreen"
         : "⛶ Fullscreen · no ads";

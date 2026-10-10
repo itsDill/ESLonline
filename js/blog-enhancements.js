@@ -593,13 +593,8 @@
     initSearchEnhancement() {
       const searchInput = document.querySelector(".search-input");
       if (searchInput) {
-        const debouncedSearch = this.debounce(
-          this.performSearch.bind(this),
-          CONFIG.DEBOUNCE_DELAY,
-        );
-        searchInput.addEventListener("input", debouncedSearch);
-
-        // Add search suggestions
+        // The main blog controller owns filtering, result counts, and no-match
+        // state. Keep suggestions here without attaching a competing filter.
         this.initSearchSuggestions(searchInput);
       }
     }
@@ -657,45 +652,10 @@
         if (suggestionItem) {
           const term = suggestionItem.dataset.term;
           searchInput.value = term;
-          this.performSearch(term);
+          searchInput.dispatchEvent(new Event("input", { bubbles: true }));
           suggestions.style.display = "none";
         }
       });
-    }
-
-    performSearch(query = "") {
-      const posts = document.querySelectorAll(".blog-post");
-      const searchTerm =
-        query || document.querySelector(".search-input")?.value || "";
-      let visibleCount = 0;
-
-      posts.forEach((post) => {
-        const title = post
-          .querySelector(".post-title")
-          .textContent.toLowerCase();
-        const excerpt = post
-          .querySelector(".post-excerpt")
-          .textContent.toLowerCase();
-        const category = post.dataset.category;
-
-        const matches =
-          title.includes(searchTerm.toLowerCase()) ||
-          excerpt.includes(searchTerm.toLowerCase()) ||
-          category.includes(searchTerm.toLowerCase());
-
-        if (matches || !searchTerm.trim()) {
-          post.style.display = "block";
-          visibleCount++;
-        } else {
-          post.style.display = "none";
-        }
-      });
-
-      // Update no posts message
-      const noPostsMsg = document.getElementById("noPosts");
-      if (noPostsMsg) {
-        noPostsMsg.style.display = visibleCount === 0 ? "block" : "none";
-      }
     }
 
     initPostAnimations() {

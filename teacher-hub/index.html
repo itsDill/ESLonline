@@ -172,11 +172,11 @@
           </p>
           <div class="search-bar">
             <input
-              type="text"
+              type="search"
               id="toolSearch"
               aria-label="Search teacher tools"
               placeholder="Search tools by name or type..."
-              onkeyup="searchTools()"
+              oninput="searchTools()"
             />
             <i class="fas fa-search" aria-hidden="true"></i>
           </div>
@@ -668,12 +668,22 @@
         const filtered = tools.filter((tool) => {
           const categoryMatch =
             currentCategory === "all" || tool.category === currentCategory;
-          const searchMatch =
-            currentSearch === "" ||
-            tool.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
-            tool.description
-              .toLowerCase()
-              .includes(currentSearch.toLowerCase());
+          const searchTerms = currentSearch
+            .toLowerCase()
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+          const searchIndex = [
+            tool.name,
+            tool.description,
+            tool.useCase,
+            tool.category,
+          ]
+            .join(" ")
+            .toLowerCase();
+          const searchMatch = searchTerms.every((term) =>
+            searchIndex.includes(term),
+          );
 
           return categoryMatch && searchMatch;
         });
@@ -717,16 +727,20 @@
         currentCategory = category;
         renderTools();
 
-        // Update active button
-        document.querySelectorAll(".filter-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        event.target.classList.add("active");
+        // Update category buttons without relying on the legacy global event.
+        document
+          .querySelectorAll('[data-filter="category"]')
+          .forEach((button) => {
+            button.classList.toggle(
+              "active",
+              button.dataset.value === category,
+            );
+          });
       }
 
       function searchTools() {
         const searchInput = document.getElementById("toolSearch");
-        currentSearch = searchInput.value;
+        currentSearch = searchInput.value.trim().replace(/\s+/g, " ");
         renderTools();
       }
 

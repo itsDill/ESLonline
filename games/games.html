@@ -733,7 +733,7 @@
         </p>
         <h1 class="pillar-hero__title">🎮 Learn English Through Games</h1>
         <p class="pillar-hero__subtitle">
-          Practice vocabulary, grammar, and speaking with 15 free English games.
+          Practice vocabulary, grammar, and speaking with 16 free English games.
         </p>
         <div class="search-bar">
           <input
@@ -2162,6 +2162,28 @@
           tags: ["tower", "vocabulary", "balance", "strategy", "puzzle"],
           featured: false,
         },
+        {
+          id: 19,
+          title: "20 Questions: Animal Mystery",
+          description:
+            "Ask yes-or-no questions, collect clues, and guess the mystery animal while practicing English speaking and animal vocabulary.",
+          cardDescription:
+            "Ask animal questions, follow the clues, and solve the mystery.",
+          skill: "speaking",
+          difficulty: "beginner",
+          cefr: "a1",
+          ageGroups: ["young-learners", "kids", "teens", "adults"],
+          topics: ["speaking", "animals", "guessing", "vocabulary"],
+          devices: ["mobile", "tablet", "desktop"],
+          image: "20-questions/image.png",
+          link: "20-questions/play.html",
+          icon: "fas fa-question-circle",
+          plays: 0,
+          duration: "5-15 min",
+          tags: ["20 questions", "animals", "speaking", "guessing"],
+          featured: true,
+          comingSoon: false,
+        },
       ];
 
       const DISPLAY_AD_AFTER_GAMES = 12;
@@ -2401,7 +2423,7 @@
 
         // Search input
         searchInput.addEventListener("input", function () {
-          searchTerm = this.value.toLowerCase();
+          searchTerm = this.value.toLowerCase().trim().replace(/\s+/g, " ");
           toggleClearSearch();
           applyFiltersAndSearch();
         });
@@ -2537,13 +2559,20 @@
             activeFilters.level.includes(game.cefr);
 
           // Search filter
-          const searchMatch =
-            searchTerm === "" ||
-            game.title.toLowerCase().includes(searchTerm) ||
-            game.description.toLowerCase().includes(searchTerm) ||
-            game.skill.toLowerCase().includes(searchTerm) ||
-            game.cefr.toLowerCase().includes(searchTerm) ||
-            game.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
+          const searchTerms = searchTerm.split(/\s+/).filter(Boolean);
+          const searchIndex = [
+            game.title,
+            game.description,
+            game.skill,
+            game.cefr,
+            game.difficulty,
+            ...game.tags,
+          ]
+            .join(" ")
+            .toLowerCase();
+          const searchMatch = searchTerms.every((term) =>
+            searchIndex.includes(term),
+          );
 
           return (
             deviceMatch &&

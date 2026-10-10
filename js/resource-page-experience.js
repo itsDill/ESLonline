@@ -205,7 +205,7 @@
     }
     heroHeading.classList.add("rpe-hero-title");
 
-    if (!hero.querySelector(".rpe-hero-kicker")) {
+    if (!hero.querySelector(".rpe-hero-kicker, .pillar-hero__eyebrow")) {
       const kicker = document.createElement("span");
       kicker.className = "rpe-hero-kicker";
       kicker.textContent = theme.label;
@@ -214,7 +214,7 @@
 
     if (
       !hero.querySelector(
-        ".hero-subtitle, .hero-description, .rpe-hero-summary",
+        ".hero-subtitle, .hero-description, .pillar-hero__subtitle, .rpe-hero-summary",
       ) &&
       description
     ) {
@@ -231,11 +231,25 @@
   }
 
   function ensureAd(hero) {
+    const path = window.location.pathname;
+    const adAnchor = /\/resources\/(?:index\.html)?$/.test(path)
+      ? document.querySelector(".resources-section")
+      : /\/resources\/lessons-and-blog\/blog\.html$/.test(path)
+        ? document.querySelector(".blog-container")
+        : null;
+
+    function placeAd(section) {
+      if (adAnchor) adAnchor.insertAdjacentElement("afterend", section);
+      else if (section.previousElementSibling !== hero)
+        hero.insertAdjacentElement("afterend", section);
+    }
+
     let ad = document.querySelector("ins.adsbygoogle[data-ad-slot]");
     if (ad) {
       const section = ad.closest("section") || ad.parentElement;
       section?.classList.add("rpe-ad-band");
       ad.parentElement?.classList.add("rpe-ad-inner");
+      if (section) placeAd(section);
       return section || hero;
     }
 
@@ -252,7 +266,7 @@
           data-ad-format="auto"
           data-full-width-responsive="true"></ins>
       </div>`;
-    hero.insertAdjacentElement("afterend", section);
+    placeAd(section);
 
     if (
       !document.querySelector(
@@ -304,6 +318,12 @@
   }
 
   function ensureLocalNavigation(hero, adSection, title) {
+    const path = window.location.pathname;
+    const localNavAnchor = /\/resources\/(?:index\.html)?$/.test(path)
+      ? document.querySelector(".filter-section")
+      : /\/resources\/lessons-and-blog\/blog\.html$/.test(path)
+        ? document.querySelector(".content-controls")
+        : adSection || hero;
     let nav = document.querySelector(
       ".quick-nav, nav[aria-label*='section' i], nav[aria-label*='page' i]",
     );
@@ -325,7 +345,7 @@
       nav.setAttribute("aria-label", `Sections in ${title}`);
       nav.innerHTML =
         '<span class="rpe-nav-title">Explore this page</span><div class="quick-nav-links"></div>';
-      const insertionPoint = adSection || hero;
+      const insertionPoint = localNavAnchor || hero;
       insertionPoint.insertAdjacentElement("afterend", nav);
     } else {
       nav.classList.add("rpe-section-nav");
