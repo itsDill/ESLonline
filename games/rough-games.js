@@ -334,8 +334,9 @@
     },
     "20-questions": {
       title: "20 Questions",
-      intro: "Think of the secret word by asking yes-or-no questions.",
-      how: "The starter version has one hidden answer. Ask up to 20 yes-or-no questions, then guess the word.",
+      intro:
+        "The computer chooses a mystery animal. Ask yes-or-no questions and use the clues to guess it.",
+      how: "The computer secretly picks an animal. Ask supported yes-or-no questions to narrow down the possibilities. A new supported clue uses one of your 20 questions; guesses are free. Guess correctly to earn more points for solving it early.",
       kind: "twenty",
     },
     "name-five": {
@@ -430,10 +431,10 @@
 
   root.innerHTML = `
     <p class="breadcrumb"><a href="../games.html">Games</a> / <a href="../new-games.html">Prototype lab</a> / ${esc(game.title)}</p>
-    <section class="hero"><p class="eyebrow">${slug === "20-questions" ? "Mystery animal · English speaking game" : "Free English practice · Starter edition"}</p><h1>${esc(game.title)}</h1><p>${slug === "20-questions" ? "Think of an animal, ask yes-or-no questions, and use each clue to solve the mystery." : esc(game.intro)}</p></section>
+    <section class="hero"><p class="eyebrow">${slug === "20-questions" ? "Mystery animal · English speaking game" : "Free English practice · Starter edition"}</p><h1>${esc(game.title)}</h1><p>${slug === "20-questions" ? "The computer has secretly chosen an animal. Ask yes-or-no questions and use the clues to guess it." : esc(game.intro)}</p></section>
     <div class="content-grid">
       <section class="panel game-panel${slug === "20-questions" ? " tq-game-panel" : ""}" aria-labelledby="play-title"><div class="game-toolbar"><h2 id="play-title">Play a round</h2><span class="score" id="score" aria-live="polite">Score: 0</span></div><div class="game-content" id="game-content"></div><div class="controls"><button class="btn secondary" id="restart" type="button">Restart</button>${slug === "20-questions" ? '<button class="btn secondary tq-fullscreen-button" id="fullscreen-game" type="button" aria-pressed="false">⛶ Fullscreen · no ads</button>' : ""}</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p></section>
-      <aside class="panel"><h2>How to play</h2><p class="hint">${esc(game.how)}</p><h2 style="margin-top:1.2rem">About this starter</h2><p class="hint">This is an early playable prototype. Question sets, visuals, and classroom features will grow in later versions.</p></aside>
+      <aside class="panel"><h2>How to play</h2><p class="hint">${esc(game.how)}</p>${slug === "20-questions" ? "" : '<h2 style="margin-top:1.2rem">About this starter</h2><p class="hint">This is an early playable prototype. Question sets, visuals, and classroom features will grow in later versions.</p>'}</aside>
     </div>`;
 
   const content = root.querySelector("#game-content");
@@ -455,6 +456,9 @@
   function render() {
     feedback.textContent = "";
     feedback.dataset.kind = "info";
+    if (slug === "20-questions") {
+      root.querySelector("#restart").textContent = "New animal";
+    }
     if (game.kind === "word-search") renderWordSearch();
     else if (game.kind === "scramble") renderScramble();
     else if (game.kind === "matching") renderMatching();
@@ -561,6 +565,12 @@
           land: true,
           africa: true,
           asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
         },
       },
       {
@@ -579,8 +589,14 @@
           swim: true,
           dangerous: false,
           land: false,
-          africa: false,
-          asia: false,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -599,8 +615,14 @@
           swim: true,
           dangerous: false,
           land: true,
-          africa: false,
+          africa: true,
           asia: false,
+          wings: true,
+          feathers: true,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -621,6 +643,12 @@
           land: true,
           africa: false,
           asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -639,8 +667,14 @@
           swim: false,
           dangerous: false,
           land: true,
-          africa: false,
-          asia: false,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -661,6 +695,12 @@
           land: true,
           africa: true,
           asia: true,
+          wings: true,
+          feathers: true,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -681,6 +721,12 @@
           land: true,
           africa: true,
           asia: true,
+          wings: false,
+          feathers: false,
+          tail: false,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
         },
       },
       {
@@ -701,6 +747,12 @@
           land: true,
           africa: true,
           asia: false,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
         },
       },
       {
@@ -721,9 +773,255 @@
           land: true,
           africa: true,
           asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: true,
+          carnivore: false,
+          herbivore: true,
+        },
+      },
+      {
+        name: "dog",
+        traits: {
+          water: false,
+          fly: false,
+          fur: true,
+          stripes: false,
+          pet: true,
+          trunk: false,
+          mammal: true,
+          legs: true,
+          big: false,
+          eggs: false,
+          swim: true,
+          dangerous: false,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: true,
+        },
+      },
+      {
+        name: "lion",
+        traits: {
+          water: false,
+          fly: false,
+          fur: true,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: true,
+          legs: true,
+          big: true,
+          eggs: false,
+          swim: true,
+          dangerous: true,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
+        },
+      },
+      {
+        name: "zebra",
+        traits: {
+          water: false,
+          fly: false,
+          fur: true,
+          stripes: true,
+          pet: false,
+          trunk: false,
+          mammal: true,
+          legs: true,
+          big: true,
+          eggs: false,
+          swim: true,
+          dangerous: false,
+          land: true,
+          africa: true,
+          asia: false,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
+        },
+      },
+      {
+        name: "shark",
+        traits: {
+          water: true,
+          fly: false,
+          fur: false,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: false,
+          legs: false,
+          big: true,
+          eggs: false,
+          swim: true,
+          dangerous: true,
+          land: false,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
+        },
+      },
+      {
+        name: "snake",
+        traits: {
+          water: false,
+          fly: false,
+          fur: false,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: false,
+          legs: false,
+          big: false,
+          eggs: true,
+          swim: true,
+          dangerous: true,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
+        },
+      },
+      {
+        name: "monkey",
+        traits: {
+          water: false,
+          fly: false,
+          fur: true,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: true,
+          legs: true,
+          big: false,
+          eggs: false,
+          swim: true,
+          dangerous: false,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
+        },
+      },
+      {
+        name: "rabbit",
+        traits: {
+          water: false,
+          fly: false,
+          fur: true,
+          stripes: false,
+          pet: true,
+          trunk: false,
+          mammal: true,
+          legs: true,
+          big: false,
+          eggs: false,
+          swim: false,
+          dangerous: false,
+          land: true,
+          africa: false,
+          asia: false,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
+        },
+      },
+      {
+        name: "crocodile",
+        traits: {
+          water: true,
+          fly: false,
+          fur: false,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: false,
+          legs: true,
+          big: true,
+          eggs: true,
+          swim: true,
+          dangerous: true,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: false,
+          feathers: false,
+          tail: true,
+          shell: false,
+          carnivore: true,
+          herbivore: false,
+        },
+      },
+      {
+        name: "butterfly",
+        traits: {
+          water: false,
+          fly: true,
+          fur: false,
+          stripes: false,
+          pet: false,
+          trunk: false,
+          mammal: false,
+          legs: false,
+          big: false,
+          eggs: true,
+          swim: false,
+          dangerous: false,
+          land: true,
+          africa: true,
+          asia: true,
+          wings: true,
+          feathers: false,
+          tail: false,
+          shell: false,
+          carnivore: false,
+          herbivore: true,
         },
       },
     ];
+    const birds = new Set(["penguin", "eagle"]);
+    const insects = new Set(["butterfly"]);
+    animals.forEach((animal) => {
+      animal.traits.bird = birds.has(animal.name);
+      animal.traits.insect = insects.has(animal.name);
+    });
     state.animals = animals;
     state.targetAnimal = animals[Math.floor(Math.random() * animals.length)];
     state.target = state.targetAnimal.name;
@@ -731,7 +1029,85 @@
     state.guessed = false;
     state.finished = false;
     state.askedTopics = new Set();
-    content.innerHTML = `<div class="tq-game"><div class="tq-game-top"><span class="tq-pill"><span aria-hidden="true">🐾</span> ANIMAL MYSTERY</span><span class="tq-round">ROUND ${round + 1}</span></div><div class="tq-mystery" id="mystery-reveal" aria-hidden="true"><span class="tq-sparkle">✦</span><span class="tq-animal">🐾</span><span class="tq-lock">?</span><span class="tq-sparkle tq-sparkle-two">✦</span></div><h3 class="tq-prompt">I’m thinking of an animal…</h3><p class="tq-subprompt">Ask yes-or-no questions, collect clues, and make your guess!</p><div class="tq-meter" aria-label="Questions used"><div class="tq-meter-label"><span>Question power</span><strong><span id="question-count">0</span> / 20</strong></div><div class="tq-meter-track"><span id="question-progress"></span></div></div><div class="tq-ask-box"><label for="question">What would you like to ask?</label><div class="tq-input-row"><input id="question" type="text" placeholder="Does it have four legs?" autocomplete="off"><button class="btn tq-ask-button" type="button" data-action="ask">Ask it <span aria-hidden="true">➜</span></button></div><div class="tq-quick-questions" aria-label="Question ideas"><span>Try asking:</span><button type="button" data-suggestion="Can it fly?">Can it fly?</button><button type="button" data-suggestion="Does it have fur?">Does it have fur?</button><button type="button" data-suggestion="Is it a pet?">Is it a pet?</button></div></div><div class="tq-clue" id="reply" role="status" aria-live="polite"><span class="tq-clue-icon" aria-hidden="true">💭</span><span>Your first clue is waiting…</span></div><ol class="tq-clue-log" id="clue-log" aria-label="Clues so far"></ol><div class="tq-guess-box"><label for="guess">Ready to guess?</label><div class="tq-input-row"><input id="guess" type="text" placeholder="Type an animal name…" autocomplete="off"><button class="btn tq-guess-button" type="button" data-action="guess">Lock in guess 🔒</button></div></div><p class="tq-footnote">Questions are counted when you ask. Guesses are free—take your best shot!</p></div>`;
+    state.clues = [];
+    state.guessedAnimals = new Set();
+    const questionIdeas = {
+      "Body and appearance": [
+        "Can it fly?",
+        "Does it have wings?",
+        "Does it have feathers?",
+        "Does it have fur?",
+        "Does it have stripes?",
+        "Does it have a tail?",
+        "Does it have a shell?",
+        "Does it have a trunk?",
+        "Does it have four legs?",
+      ],
+      "Home and habits": [
+        "Does it live in water?",
+        "Can it swim?",
+        "Is it a pet?",
+      ],
+      "Animal facts": [
+        "Is it a bird?",
+        "Is it an insect?",
+        "Is it a mammal?",
+        "Is it bigger than a person?",
+        "Does it lay eggs?",
+        "Is it dangerous?",
+        "Does it eat meat?",
+        "Does it eat plants?",
+      ],
+    };
+    const questionGuide = Object.entries(questionIdeas)
+      .map(
+        ([category, questions]) =>
+          `<div class="tq-guide-group"><h4>${esc(category)}</h4><div class="tq-guide-questions">${questions
+            .map(
+              (question) =>
+                `<button type="button" data-suggestion="${esc(question)}">${esc(question)}</button>`,
+            )
+            .join("")}</div></div>`,
+      )
+      .join("");
+    const animalOptions = animals
+      .map((animal) => `<option value="${esc(animal.name)}"></option>`)
+      .join("");
+    content.innerHTML = `
+      <div class="tq-game">
+        <div class="tq-how-to" aria-label="How this game works">
+          <strong>How to play</strong>
+          <ol>
+            <li>The computer has secretly chosen one of ${animals.length} animals. You do not choose the animal.</li>
+            <li>Ask a yes-or-no question from the guide. A new supported clue uses one question; unsupported or repeated clues do not.</li>
+            <li>Use the answers to narrow the possibilities. Guess any time—guesses are free. Solve it within 20 questions to score more points.</li>
+          </ol>
+        </div>
+        <div class="tq-game-top"><span class="tq-pill"><span aria-hidden="true">🐾</span> ANIMAL MYSTERY</span><span class="tq-round">ROUND ${round + 1}</span></div>
+        <div class="tq-mystery" id="mystery-reveal" aria-hidden="true"><span class="tq-sparkle">✦</span><span class="tq-animal">🐾</span><span class="tq-lock">?</span><span class="tq-sparkle tq-sparkle-two">✦</span></div>
+        <h3 class="tq-prompt">The computer picked an animal…</h3>
+        <p class="tq-subprompt">Ask about its body, abilities, home, or habits. The possible-animal count shows how many animals still fit every clue.</p>
+        <div class="tq-meter" aria-label="Questions used">
+          <div class="tq-meter-label"><span>Questions used</span><strong><span id="question-count">0</span> / 20</strong></div>
+          <div class="tq-meter-track" role="progressbar" aria-label="Questions used" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"><span id="question-progress"></span></div>
+          <p class="tq-candidate-count" id="candidate-count" aria-live="polite">Possible animals that fit the clues: ${animals.length}</p>
+        </div>
+        <div class="tq-ask-box">
+          <label for="question">Ask the computer a yes-or-no question</label>
+          <div class="tq-input-row"><input id="question" type="text" placeholder="For example: Does it have four legs?" autocomplete="off" aria-describedby="question-help"><button class="btn tq-ask-button" type="button" data-action="ask">Ask question <span aria-hidden="true">➜</span></button></div>
+          <p class="tq-field-help" id="question-help">Tap an idea to put it in the box, then press Ask question. Only clues in the guide are understood.</p>
+          <details class="tq-question-guide"><summary>Show question ideas</summary><p class="tq-guide-note">“Yes” means the animal has the feature; “No” means it does not. Each idea can be asked once.</p><div class="tq-guide-groups">${questionGuide}</div></details>
+        </div>
+        <div class="tq-clue" id="reply" role="status" aria-live="polite"><span class="tq-clue-icon" aria-hidden="true">💭</span><span>Your mystery animal is ready. Ask your first question.</span></div>
+        <ol class="tq-clue-log" id="clue-log" aria-label="Question and answer history"></ol>
+        <div class="tq-guess-box">
+          <label for="guess">Guess the animal (free)</label>
+          <div class="tq-input-row"><input id="guess" type="text" list="animal-options" placeholder="Type an animal name…" autocomplete="off" aria-describedby="guess-help"><datalist id="animal-options">${animalOptions}</datalist><button class="btn tq-guess-button" type="button" data-action="guess">Check my guess</button></div>
+          <p class="tq-field-help" id="guess-help">A wrong guess does not use a question. Try another animal.</p>
+          <button class="tq-reveal-button" type="button" data-action="give-up">Give up and reveal the animal</button>
+        </div>
+        <p class="tq-footnote">Animal facts are simplified for the game. Some real species vary.</p>
+      </div>`;
   }
 
   function renderNameFive() {
@@ -808,6 +1184,8 @@
     } else if (action === "draw-word") drawBingoWord();
     else if (action === "ask") askQuestion();
     else if (action === "guess") guessWord();
+    else if (action === "give-up")
+      finishTwenty(`The mystery animal was ${animalLabel(state.target)}.`);
     else if (action === "check-five") checkFive();
   }
 
@@ -978,7 +1356,7 @@
     }
     if (state.finished) {
       setFeedback(
-        "This round is finished. Choose Restart to play again.",
+        "This round is finished. Choose New animal to play again.",
         "error",
       );
       return;
@@ -1015,37 +1393,24 @@
         patterns: [/\b(wings|wing)\b/],
         yes: "It has wings.",
         no: "It doesn’t have wings.",
-        animals: ["penguin", "eagle"],
       },
       {
         key: "feathers",
         patterns: [/\b(feather|feathers)\b/],
         yes: "It has feathers.",
         no: "It doesn’t have feathers.",
-        animals: ["penguin", "eagle"],
       },
       {
         key: "tail",
         patterns: [/\b(tail|tails)\b/],
         yes: "It has a tail.",
         no: "It doesn’t have a tail.",
-        animals: [
-          "elephant",
-          "dolphin",
-          "penguin",
-          "tiger",
-          "cat",
-          "eagle",
-          "giraffe",
-          "turtle",
-        ],
       },
       {
         key: "shell",
         patterns: [/\b(shell|shells)\b/],
         yes: "It has a shell.",
         no: "It doesn’t have a shell.",
-        animals: ["turtle"],
       },
       {
         key: "fur",
@@ -1072,6 +1437,18 @@
         no: "It doesn’t have a trunk.",
       },
       {
+        key: "bird",
+        patterns: [/\b(bird|birds)\b/],
+        yes: "It is a bird.",
+        no: "It isn’t a bird.",
+      },
+      {
+        key: "insect",
+        patterns: [/\b(insect|insects|bug|bugs)\b/],
+        yes: "It is an insect.",
+        no: "It isn’t an insect.",
+      },
+      {
         key: "mammal",
         patterns: [/\b(mammal|mammals)\b/],
         yes: "It is a mammal.",
@@ -1079,13 +1456,13 @@
       },
       {
         key: "legs",
-        patterns: [/\b(legs|leg)\b/],
+        patterns: [/\b(four|4)\s+legs\b/, /\b(all four)\s+legs\b/],
         yes: "It has four legs.",
         no: "It doesn’t have four legs.",
       },
       {
         key: "big",
-        patterns: [/\b(big|large|huge|bigger|larger)\b/],
+        patterns: [/\b(bigger|larger)\s+than\s+(a\s+)?(person|human|people)\b/],
         yes: "It is bigger than a person.",
         no: "It isn’t bigger than a person.",
       },
@@ -1097,9 +1474,12 @@
       },
       {
         key: "swim",
-        patterns: [/\b(swim|swimming|swimmer|swimmers)\b/],
-        yes: "It is a strong swimmer.",
-        no: "It isn’t known for swimming.",
+        patterns: [
+          /\b(can|does|is able to)\b.*\b(swim|swimming)\b/,
+          /\b(swim|swimming)\b/,
+        ],
+        yes: "It can swim.",
+        no: "It cannot swim.",
       },
       {
         key: "dangerous",
@@ -1108,36 +1488,18 @@
         no: "It isn’t usually dangerous to people.",
       },
       {
-        key: "land",
-        patterns: [/\b(land|ground)\b/],
-        yes: "It spends time on land.",
-        no: "It doesn’t spend time on land.",
-      },
-      {
-        key: "africa",
-        patterns: [/\b(africa|african)\b/],
-        yes: "It lives in Africa.",
-        no: "It doesn’t live in Africa.",
-      },
-      {
-        key: "asia",
-        patterns: [/\b(asia|asian)\b/],
-        yes: "It lives in Asia.",
-        no: "It doesn’t live in Asia.",
-      },
-      {
         key: "diet",
         patterns: [/\b(meat|carnivore|eat other animals|prey)\b/],
         yes: "It eats other animals.",
         no: "It doesn’t usually eat other animals.",
-        animals: ["dolphin", "penguin", "tiger", "cat", "eagle", "frog"],
+        trait: "carnivore",
       },
       {
         key: "plant-diet",
         patterns: [/\b(plant|plants|grass|leaves|herbivore|herbivores)\b/],
         yes: "It eats plants.",
         no: "It doesn’t usually eat plants.",
-        animals: ["elephant", "giraffe", "turtle"],
+        trait: "herbivore",
       },
     ];
     const topic = topics.find((candidate) =>
@@ -1145,13 +1507,15 @@
     );
     if (!topic) {
       setFeedback(
-        "Try asking about flying, feathers, fur, a shell, diet, size, or habitat.",
+        "I don’t understand that clue yet. Open “Show question ideas” and choose one of the supported questions. This did not use a turn.",
         "info",
       );
       return;
     }
     if (
-      /\b(not|never|cannot|can't|doesn't|isn't|aren't|don't)\b/.test(question)
+      /\b(no|not|never|cannot|can't|doesn't|isn't|aren't|don't)\b/.test(
+        question,
+      )
     ) {
       setFeedback(
         "Try asking the question in a positive form, like “Can it fly?”",
@@ -1166,24 +1530,50 @@
       );
       return;
     }
+    const askedQuestion = input.value.trim();
     state.questions++;
     state.askedTopics.add(topic.key);
-    const isYes = topic.animals
-      ? topic.animals.includes(state.target)
-      : Boolean(state.targetAnimal.traits[topic.key]);
+    const trait = topic.trait || topic.key;
+    const isYes = Boolean(state.targetAnimal.traits[trait]);
+    const matchesClue = (animal) => Boolean(animal.traits[trait]);
+    state.clues.push({ askedQuestion, topic, isYes, matchesClue });
     const answer = isYes ? "Yes" : "No";
     const detail = isYes ? topic.yes : topic.no;
     content.querySelector("#question-count").textContent = state.questions;
-    content.querySelector("#question-progress").style.width =
-      `${state.questions * 5}%`;
+    const progress = content.querySelector("#question-progress");
+    progress.style.width = `${state.questions * 5}%`;
+    progress.parentElement.setAttribute(
+      "aria-valuenow",
+      String(state.questions),
+    );
     content.querySelector("#reply").innerHTML =
       `<span class="tq-clue-icon" aria-hidden="true">${answer === "Yes" ? "✅" : "🙅"}</span><span><strong>${answer}!</strong> ${esc(detail)}<small>Clue ${state.questions} of 20</small></span>`;
     const clue = document.createElement("li");
-    clue.innerHTML = `<span class="tq-log-answer ${answer === "Yes" ? "is-yes" : "is-no"}">${answer}</span><span>${esc(detail)}</span>`;
+    clue.innerHTML = `<span class="tq-log-question">${esc(askedQuestion)}</span><span class="tq-log-answer ${answer === "Yes" ? "is-yes" : "is-no"}">${answer}</span><span class="tq-log-detail">${esc(detail)}</span>`;
     content.querySelector("#clue-log").prepend(clue);
+    const possibleAnimals = state.animals.filter(
+      (animal) =>
+        !state.guessedAnimals.has(animal.name) &&
+        state.clues.every((clue) => clue.matchesClue(animal) === clue.isYes),
+    );
+    const candidateCount = content.querySelector("#candidate-count");
+    candidateCount.textContent =
+      possibleAnimals.length === 1
+        ? "Possible animals that fit the clues: 1 — you may have enough clues to guess!"
+        : `Possible animals that fit the clues: ${possibleAnimals.length}`;
     input.value = "";
-    if (state.questions === 20)
-      setFeedback(`Last question used! Make your final guess.`, "info");
+    if (state.questions === 20) {
+      content
+        .querySelectorAll("#question, [data-action='ask'], [data-suggestion]")
+        .forEach((control) => {
+          control.disabled = true;
+        });
+      setFeedback(
+        "That was question 20. Make your final free guess, or reveal the answer.",
+        "info",
+      );
+      content.querySelector("[data-action='give-up']").focus();
+    }
   }
 
   function guessWord() {
@@ -1194,11 +1584,31 @@
       return;
     }
     if (state.finished) {
-      setFeedback("This round is finished. Restart to play again.", "error");
+      setFeedback(
+        "This round is finished. Choose New animal to play again.",
+        "error",
+      );
+      return;
+    }
+    if (!state.animals.some((animal) => animal.name === guess)) {
+      setFeedback(
+        "Choose an animal from the suggestions in the guess box. That guess was not counted as a question.",
+        "info",
+      );
+      input.focus();
+      return;
+    }
+    if (state.guessedAnimals.has(guess)) {
+      setFeedback(
+        "You already tried that animal. Use a clue to narrow it down.",
+        "info",
+      );
+      input.select();
       return;
     }
     if (guess === state.target) {
-      addPoint(Math.max(1, 21 - state.questions));
+      const pointsEarned = Math.max(1, 20 - state.questions);
+      addPoint(pointsEarned);
       state.guessed = true;
       state.finished = true;
       content
@@ -1208,22 +1618,31 @@
         animalEmoji(state.target);
       content.querySelector("#mystery-reveal .tq-lock").textContent = "✓";
       content.querySelector(".tq-game").classList.add("is-solved");
+      content.querySelector("#candidate-count").textContent =
+        "Possible animals that fit the clues: 1 — mystery solved!";
       content.querySelector("#reply").innerHTML =
         `<span class="tq-clue-icon" aria-hidden="true">🎉</span><span><strong>You got it!</strong> The mystery animal was ${esc(animalLabel(state.target))}!<small>Great guessing — round complete!</small></span>`;
-      setFeedback(
-        `Mystery solved! +${Math.max(1, 21 - state.questions)} points`,
-        "success",
-      );
+      setFeedback(`Mystery solved! +${pointsEarned} points`, "success");
       content
         .querySelectorAll(
-          "#question, #guess, [data-action='ask'], [data-action='guess'], [data-suggestion]",
+          "#question, #guess, [data-action='ask'], [data-action='guess'], [data-action='give-up'], [data-suggestion]",
         )
         .forEach((control) => {
           control.disabled = true;
         });
     } else {
+      state.guessedAnimals.add(guess);
       content.querySelector("#reply").innerHTML =
         `<span class="tq-clue-icon" aria-hidden="true">🤔</span><span><strong>Not ${esc(animalLabel(guess))} this time.</strong> Keep collecting clues and try another guess.<small>Your secret animal is still hidden!</small></span>`;
+      const possibleAnimals = state.animals.filter(
+        (animal) =>
+          !state.guessedAnimals.has(animal.name) &&
+          state.clues.every((clue) => clue.matchesClue(animal) === clue.isYes),
+      );
+      content.querySelector("#candidate-count").textContent =
+        possibleAnimals.length === 1
+          ? "Possible animals that fit the clues: 1 — you may have enough clues to guess!"
+          : `Possible animals that fit the clues: ${possibleAnimals.length}`;
       setFeedback("Not quite — you can keep asking and guessing.", "error");
       input.value = "";
       input.focus();
@@ -1239,11 +1658,13 @@
       animalEmoji(state.target);
     content.querySelector("#mystery-reveal .tq-lock").textContent = "✓";
     content.querySelector(".tq-game").classList.add("is-solved");
+    content.querySelector("#candidate-count").textContent =
+      `Possible animals: 1 — mystery revealed (${animalLabel(state.target)}).`;
     content.querySelector("#reply").innerHTML =
-      `<span class="tq-clue-icon" aria-hidden="true">🔍</span><span><strong>Round complete!</strong> ${esc(message)}<small>Press Restart to meet another mystery animal.</small></span>`;
+      `<span class="tq-clue-icon" aria-hidden="true">🔍</span><span><strong>Round complete!</strong> ${esc(message)}<small>Press New animal to meet another mystery animal.</small></span>`;
     content
       .querySelectorAll(
-        "#question, #guess, [data-action='ask'], [data-action='guess'], [data-suggestion]",
+        "#question, #guess, [data-action='ask'], [data-action='guess'], [data-action='give-up'], [data-suggestion]",
       )
       .forEach((control) => {
         control.disabled = true;
@@ -1267,6 +1688,15 @@
         frog: "🐸",
         giraffe: "🦒",
         turtle: "🐢",
+        dog: "🐶",
+        lion: "🦁",
+        zebra: "🦓",
+        shark: "🦈",
+        snake: "🐍",
+        monkey: "🐒",
+        rabbit: "🐰",
+        crocodile: "🐊",
+        butterfly: "🦋",
       }[animal] || "🐾"
     );
   }
@@ -1311,6 +1741,18 @@
   }
 
   content.addEventListener("click", handleClick);
+  if (slug === "20-questions") {
+    content.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      if (event.target.id === "question") {
+        event.preventDefault();
+        askQuestion();
+      } else if (event.target.id === "guess") {
+        event.preventDefault();
+        guessWord();
+      }
+    });
+  }
   content.addEventListener("click", (event) => {
     const suggestion = event.target.closest("[data-suggestion]");
     if (suggestion) {
@@ -1359,7 +1801,7 @@
 
   root.querySelector("#restart").addEventListener("click", () => {
     round = slug === "20-questions" ? round + 1 : 0;
-    setScore(0);
+    if (slug !== "20-questions") setScore(0);
     state = {};
     render();
   });
