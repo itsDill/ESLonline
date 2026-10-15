@@ -1,123 +1,154 @@
 #!/usr/bin/env python3
-"""
-Sitemap Generator for ESL Fun Online
-Generates comprehensive sitemap.xml with all HTML pages
-"""
+"""Generate sitemap.xml from canonical, indexable HTML pages in this repo."""
 
-import os
+import sys
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlsplit
 
-def get_last_modified(filepath):
-    """Get last modified date of file"""
+
+ROOT = Path(__file__).resolve().parent
+SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+SKIP_DIRS = {
+    ".git",
+    ".venv",
+    ".dev-files",
+    ".idea",
+    ".vscode",
+    "__pycache__",
+    "node_modules",
+    "students",
+    "teachers",
+}
+SKIP_FILES = {
+    "404.html",
+    "header-template.html",
+    "idioms-grid-section.html",
+    "idioms-compact.html",
+    "offline.html",
+    "register.html",
+}
+
+
+class PageMetadataParser(HTMLParser):
+    """Read canonical and robots metadata without requiring third-party packages."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.canonical = None
+        self.noindex = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag.lower() == "link" and "canonical" in attrs.get("rel", "").lower().split():
+            self.canonical = attrs.get("href", "").strip() or None
+        elif tag.lower() == "meta" and attrs.get("name", "").lower() in {
+            "robots",
+            "googlebot",
+        }:
+            directives = attrs.get("content", "").lower().replace(" ", "").split(",")
+            if "noindex" in directives:
+                self.noindex = True
+
+
+def should_skip(path):
+    """Exclude non-page fragments, private folders, and backup copies."""
+    relative = path.relative_to(ROOT)
+    if any(part in SKIP_DIRS or part.startswith(".") for part in relative.parts[:-1]):
+        return True
+    name = path.name.lower()
+    return (
+        name in SKIP_FILES
+        or "backup" in name
+        or name.endswith("-old.html")
+        or name.endswith(".bak.html")
+    )
+
+
+def read_page_metadata(path):
+    parser = PageMetadataParser()
     try:
-        timestamp = os.path.getmtime(filepath)
-        return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
-    except:
-        return datetime.now().strftime('%Y-%m-%d')
+        parser.feed(path.read_text(encoding="utf-8", errors="replace"))
+    except OSError as error:
+        print(f"Skipping unreadable page {path.relative_to(ROOT)}: {error}")
+        return None, True
+    return parser.canonical, parser.noindex
+
+
+def source_matches_url(path, url):
+    """Prefer the file whose path directly represents a canonical URL on collisions."""
+    url_path = urlsplit(url).path
+    expected = ROOT / "index.html" if url_path in {"", "/"} else ROOT / url_path.lstrip("/")
+    if url_path.endswith("/"):
+        expected = expected / "index.html"
+    return path.resolve() == expected.resolve()
+
+
+def last_modified(path):
+    """Return a UTC date from the source file's mtime, or None if unavailable."""
+    try:
+        return datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).date().isoformat()
+    except OSError:
+        return None
+
 
 def generate_sitemap(domain="https://eslfunonline.com", output_file="sitemap.xml"):
-    """Generate sitemap.xml from all HTML files"""
-    
-    root = Path('/Users/dillchalisas/ESLonline')
-    
-    # Skip these directories
-    skip_dirs = {'.git', '.venv', '.dev-files', '.idea', '.vscode', '__pycache__', 'coding'}
-    skip_files = {'header-template.html', 'idioms-grid-section.html'}
-    
-    # Create XML root
-    urlset = ET.Element('urlset')
-    urlset.set('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
-    urlset.set('xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1')
-    
-    files_added = 0
-    
-    # Collect all HTML files
-    html_files = []
-    for html_file in sorted(root.rglob('*.html')):
-        # Skip certain directories and files
-        if any(part in html_file.parts for part in skip_dirs):
-            continue
-        if html_file.name in skip_files:
-            continue
-        if 'backup' in html_file.name or '-old' in html_file.name:
-            continue
-        
-        html_files.append(html_file)
-    
-    # Add URLs with priority based on importance
-    priority_map = {
-        'index.html': 1.0,
-        'games/games.html': 0.9,
-        'resources/index.html': 0.9,
-        'teacher-hub/index.html': 0.8,
-        'contact.html': 0.7,
-        'games/': 0.85,
-        'resources/': 0.8,
-        'teacher-hub/': 0.7,
-        '.html': 0.6,  # default
-    }
-    
-    for html_file in html_files:
-        try:
-            relative_path = html_file.relative_to(root)
-            url_path = str(relative_path).replace('\\', '/')
-            full_url = f"{domain}/{url_path}" if url_path != 'index.html' else domain
-            
-            # Determine priority
-            priority = 0.6
-            for key, val in priority_map.items():
-                if key in str(relative_path).lower():
-                    priority = max(priority, val)
-                    break
-            
-            # Get last modified date
-            last_modified = get_last_modified(str(html_file))
-            
-            # Add URL to sitemap
-            url_element = ET.SubElement(urlset, 'url')
-            loc = ET.SubElement(url_element, 'loc')
-            loc.text = full_url
-            lastmod = ET.SubElement(url_element, 'lastmod')
-            lastmod.text = last_modified
-            changefreq = ET.SubElement(url_element, 'changefreq')
-            changefreq.text = 'weekly' if 'game' in str(relative_path).lower() else 'monthly'
-            priority_elem = ET.SubElement(url_element, 'priority')
-            priority_elem.text = str(round(priority, 1))
-            
-            files_added += 1
-            
-        except Exception as e:
-            print(f"Error processing {html_file}: {e}")
-    
-    # Pretty print
-    tree = ET.ElementTree(urlset)
-    ET.indent(tree, space="  ")  # Python 3.9+
-    
-    # Write to file
-    output_path = root / output_file
-    tree.write(output_path, encoding='utf-8', xml_declaration=True)
-    
-    print(f"✅ Sitemap generated: {output_file}")
-    print(f"📊 Total URLs: {files_added}")
-    print(f"📁 Location: {output_path}")
-    print(f"\n🔗 Submit to Google Search Console:")
-    print(f"   https://www.google.com/ping?sitemap={domain}/{output_file}")
-    
-    return files_added
+    """Write sitemap entries only for unique, same-site canonical pages not marked noindex."""
+    site = urlsplit(domain.rstrip("/"))
+    if site.scheme not in {"http", "https"} or not site.netloc:
+        raise ValueError("domain must be an absolute http(s) URL")
 
-def generate_sitemap_index(domain="https://eslfunonline.com"):
-    """Generate sitemap index if multiple sitemaps needed"""
-    # For now, single sitemap should be sufficient
-    # This can be extended if sitemap grows beyond 50k URLs
-    pass
+    pages = {}
+    for html_file in sorted(ROOT.rglob("*.html")):
+        if should_skip(html_file):
+            continue
+
+        canonical, noindex = read_page_metadata(html_file)
+        if noindex or not canonical:
+            continue
+
+        parsed = urlsplit(canonical)
+        if (
+            parsed.scheme not in {"http", "https"}
+            or parsed.netloc.lower() != site.netloc.lower()
+            or parsed.query
+            or parsed.fragment
+        ):
+            print(f"Skipping non-site or non-canonical URL in {html_file.relative_to(ROOT)}: {canonical}")
+            continue
+
+        existing = pages.get(canonical)
+        if existing is None or source_matches_url(html_file, canonical):
+            pages[canonical] = html_file
+        elif not source_matches_url(existing, canonical):
+            print(
+                f"Skipping duplicate canonical {canonical} from "
+                f"{html_file.relative_to(ROOT)}; keeping {existing.relative_to(ROOT)}"
+            )
+
+    urlset = ET.Element("urlset", xmlns=SITEMAP_NS)
+    for canonical, source in sorted(pages.items()):
+        url_element = ET.SubElement(urlset, "url")
+        ET.SubElement(url_element, "loc").text = canonical
+        modified = last_modified(source)
+        if modified:
+            ET.SubElement(url_element, "lastmod").text = modified
+
+    tree = ET.ElementTree(urlset)
+    ET.indent(tree, space="  ")
+    output_path = Path(output_file)
+    if not output_path.is_absolute():
+        output_path = ROOT / output_path
+    tree.write(output_path, encoding="utf-8", xml_declaration=True)
+
+    print(f"Sitemap generated: {output_path}")
+    print(f"Canonical indexable URLs: {len(pages)}")
+    return len(pages)
+
 
 if __name__ == "__main__":
-    import sys
-    
-    # Allow custom domain and output file as arguments
     domain = sys.argv[1] if len(sys.argv) > 1 else "https://eslfunonline.com"
     output = sys.argv[2] if len(sys.argv) > 2 else "sitemap.xml"
-    
     generate_sitemap(domain, output)
