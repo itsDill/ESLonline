@@ -26,6 +26,7 @@
       crossorigin="anonymous"
     ></script>
     <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <script src="../js/game-analytics.js" defer></script>
 
     <!-- Google tag (gtag.js) -->
     <script
@@ -2107,6 +2108,11 @@
         }
 
         function startGame() {
+          window.eslGameAnalytics?.start("snakes_and_ladders", {
+            game_name: "English Snakes & Ladders",
+            board: gameState.selectedBoard,
+            player_count: gameState.playerCount,
+          });
           // Hide setup screen, show game screen
           document.getElementById("setupScreen").style.display = "none";
           document.getElementById("gameScreen").classList.add("active");
@@ -2980,6 +2986,7 @@
         }
 
         function endGame(winner) {
+          if (gameState.gameOver) return;
           gameState.gameOver = true;
           if (gameTimerId !== null) {
             clearInterval(gameTimerId);
@@ -2988,6 +2995,12 @@
           const gameTime = Math.floor(
             (Date.now() - gameState.gameStartTime) / 1000,
           );
+          window.eslGameAnalytics?.complete("snakes_and_ladders", {
+            outcome: "win",
+            score: winner.score,
+            correct_answers: winner.correctAnswers,
+            duration_seconds: gameTime,
+          });
 
           // Update stats
           gameState.stats.gamesPlayed++;

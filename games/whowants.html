@@ -17,6 +17,7 @@
     <!-- AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2456627863532019" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <script src="../js/game-analytics.js" defer></script>
     
     <!-- Google tag (gtag.js) -->
     <script
@@ -1765,6 +1766,10 @@
       let questions = [];
 
       function startGame() {
+        window.eslGameAnalytics?.start("millionaire_english_quiz", {
+          game_name: "Millionaire English Quiz",
+          difficulty: gameDifficulty,
+        });
         gameState = {
           currentQuestion: 0,
           score: 0,
@@ -2171,6 +2176,12 @@
         const percentage = Math.round(
           (gameState.score / questions.length) * 100
         );
+        window.eslGameAnalytics?.complete("millionaire_english_quiz", {
+          difficulty: gameDifficulty,
+          score: gameState.score,
+          question_count: questions.length,
+          score_percent: percentage,
+        });
 
         // Update streak (perfect score = 15/15)
         const isPerfect = gameState.score === questions.length;

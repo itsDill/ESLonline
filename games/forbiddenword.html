@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="google-adsense-account" content="ca-pub-2456627863532019" />
+    <script src="../js/game-analytics.js" defer></script>
     <title>The Forbidden Word - ESL Taboo Game | ESL Fun Online</title>
 
     <!-- Canonical URL -->
@@ -2699,6 +2700,10 @@
       // Start game
       startGameBtn.addEventListener("click", () => {
         if (!selectedDifficulty || !gameWords[selectedDifficulty]) return;
+        window.eslGameAnalytics?.start("forbidden_word", {
+          game_name: "The Forbidden Word",
+          difficulty: selectedDifficulty,
+        });
         clearInterval(timerInterval);
         clearTimeout(actionTimeoutId);
         actionTimeoutId = null;
@@ -2864,6 +2869,12 @@
         const total = correctCount + skippedCount;
         const accuracy =
           total > 0 ? Math.round((correctCount / total) * 100) : 0;
+        window.eslGameAnalytics?.complete("forbidden_word", {
+          difficulty: selectedDifficulty,
+          correct_count: correctCount,
+          skipped_count: skippedCount,
+          accuracy_percent: accuracy,
+        });
 
         document.getElementById("finalCorrect").textContent = correctCount;
         document.getElementById("finalSkipped").textContent = skippedCount;

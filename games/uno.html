@@ -54,6 +54,7 @@
       gtag("js", new Date());
       gtag("config", "G-9G9RD6BHLN");
     </script>
+    <script src="../js/game-analytics.js" defer></script>
     <!-- Favicon and Icons - Optimized for Google Search -->
     <link rel="icon" href="../favicon.ico" sizes="any" />
     <link
@@ -3851,6 +3852,9 @@
 
       // Initialize game
       function initGame() {
+        window.eslGameAnalytics?.start("uno_word_challenge", {
+          game_name: "UNO Word Challenge",
+        });
         gameState.gameStartTime = Date.now();
         gameState.moveCount = 0;
         createDeck();
@@ -4750,12 +4754,18 @@
 
       // End game
       function endGame(playerWon) {
+        if (gameState.gameOver) return;
         gameState.gameOver = true;
         clearInterval(gameTimerInterval);
         gameTimerInterval = null;
         gameState.stats.gamesPlayed++;
 
         const gameTime = Date.now() - gameState.gameStartTime;
+        window.eslGameAnalytics?.complete("uno_word_challenge", {
+          outcome: playerWon ? "win" : "loss",
+          duration_seconds: Math.round(gameTime / 1000),
+          move_count: gameState.moveCount,
+        });
 
         if (playerWon) {
           gameState.stats.gamesWon++;
