@@ -231,6 +231,8 @@
   }
 
   function ensureAd(hero) {
+    if (document.body.dataset.disableResourceAds === "true") return null;
+
     const path = window.location.pathname;
     const adAnchor = /\/resources\/(?:index\.html)?$/.test(path)
       ? document.querySelector(".resources-section")
@@ -329,7 +331,7 @@
     );
     const headings = [
       ...document.querySelectorAll(
-        "main h2, main h3, article h2, article h3, body > h2, body > h3",
+        "main h2, section h2, article h2, body > h2",
       ),
     ]
       .filter(
@@ -353,6 +355,7 @@
         nav.setAttribute("aria-label", `Sections in ${title}`);
     }
     if (
+      adSection &&
       nav.compareDocumentPosition(adSection) & Node.DOCUMENT_POSITION_PRECEDING
     ) {
       adSection.insertAdjacentElement("afterend", nav);
