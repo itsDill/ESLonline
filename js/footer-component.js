@@ -46,19 +46,13 @@ const FooterComponent = {
 
             <!-- Social Media Links -->
             <div class="social-links">
-              <a href="#" class="social-link" data-tooltip="Facebook">
+              <a href="https://www.facebook.com/eslfunonline" class="social-link" data-tooltip="Facebook" aria-label="ESL Fun Online on Facebook" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook-f"></i>
               </a>
-              <a href="#" class="social-link" data-tooltip="Twitter">
+              <a href="https://twitter.com/eslfunonline" class="social-link" data-tooltip="Twitter" aria-label="ESL Fun Online on Twitter" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-twitter"></i>
               </a>
-              <a href="#" class="social-link" data-tooltip="LinkedIn">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a href="#" class="social-link" data-tooltip="YouTube">
-                <i class="fab fa-youtube"></i>
-              </a>
-              <a href="#" class="social-link" data-tooltip="Instagram">
+              <a href="https://www.instagram.com/eslfunonline" class="social-link" data-tooltip="Instagram" aria-label="ESL Fun Online on Instagram" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-instagram"></i>
               </a>
             </div>
@@ -130,15 +124,15 @@ const FooterComponent = {
                 </a>
               </li>
               <li>
-                <a href="#" onclick="openFeedbackModal()">
+                <a href="${basePath}contact.html">
                   <i class="fas fa-star"></i>
-                  <span>Leave Feedback</span>
+                  <span>Send Feedback</span>
                 </a>
               </li>
               <li>
-                <a href="#" onclick="openSupportModal()">
+                <a href="${basePath}contact.html">
                   <i class="fas fa-question-circle"></i>
-                  <span>Get Support</span>
+                  <span>Contact Support</span>
                 </a>
               </li>
             </ul>
@@ -148,7 +142,7 @@ const FooterComponent = {
         <!-- Enhanced Footer Bottom -->
         <div class="footer-bottom">
           <div class="footer-bottom-left">
-            <p>&copy; 2025 <strong>ESL Fun Online</strong>. All rights reserved.</p>
+            <p>&copy; 2026 <strong>ESL Fun Online</strong>. All rights reserved.</p>
             <p class="footer-subtitle">Empowering learners worldwide since 2020</p>
           </div>
           
@@ -233,16 +227,6 @@ const FooterComponent = {
           window.addEventListener('scroll', toggleBackToTop);
           toggleBackToTop(); // Initial check
         }
-      }
-      
-      // Feedback modal
-      function openFeedbackModal() {
-        showNotification('Feedback form coming soon! Please contact us directly for now.', 'info');
-      }
-      
-      // Support modal
-      function openSupportModal() {
-        showNotification('Support chat coming soon! Please use our contact form for help.', 'info');
       }
       
       // Notification system
