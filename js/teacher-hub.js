@@ -135,7 +135,7 @@
       title: "Maths Test",
       category: "assessment",
       description:
-        "A quick maths practice tool; this activity is not specific to English learning.",
+        "Use quick arithmetic questions for a warm-up or short numeracy break.",
       type: "practice",
       level: ["any"],
       skills: ["maths", "numeracy"],
@@ -144,36 +144,6 @@
       icon: "fas fa-calculator",
       url: "./tools/maths-test.html",
       useCase: "Offer a short maths warm-up or practice task",
-    },
-    {
-      id: "chinese-flashcards",
-      title: "Chinese Flashcards",
-      category: "assessment",
-      description:
-        "Review Chinese vocabulary with digital flashcards. This resource is for Chinese study, not English vocabulary.",
-      type: "practice",
-      level: ["any"],
-      skills: ["vocabulary", "recall"],
-      contexts: ["independent practice", "classroom"],
-      keywords: ["flash cards", "word review", "Chinese language"],
-      icon: "fas fa-clone",
-      url: "../resources/tools/flashcards-chinese.html",
-      useCase: "Review Chinese words with digital cards",
-    },
-    {
-      id: "japanese-flashcards",
-      title: "Japanese Flashcards",
-      category: "assessment",
-      description:
-        "Review Japanese vocabulary with digital flashcards. This resource is for Japanese study, not English vocabulary.",
-      type: "practice",
-      level: ["any"],
-      skills: ["vocabulary", "recall"],
-      contexts: ["independent practice", "classroom"],
-      keywords: ["flash cards", "word review", "Japanese language"],
-      icon: "fas fa-clone",
-      url: "../resources/tools/flashcards-japanese.html",
-      useCase: "Review Japanese words with digital cards",
     },
     {
       id: "speaking-activities",
@@ -204,21 +174,6 @@
       useCase: "Choose a speaking task for the lesson",
     },
     {
-      id: "swot-analysis",
-      title: "SWOT Analysis Tool",
-      category: "planning",
-      description:
-        "Use a structured strengths, weaknesses, opportunities, and threats framework.",
-      type: "interactive",
-      level: ["any"],
-      skills: ["critical thinking", "business English", "writing"],
-      contexts: ["teens", "adults", "online lesson", "classroom", "group work"],
-      keywords: ["strategic planning", "framework", "business"],
-      icon: "fas fa-chart-pie",
-      url: "./tools/swot-analysis.html",
-      useCase: "Structure a business English discussion or analysis",
-    },
-    {
       id: "business-vocabulary-quiz",
       title: "Business Vocabulary Quiz",
       category: "assessment",
@@ -245,32 +200,12 @@
       useCase: "Check learners' understanding of workplace terms",
     },
     {
-      id: "case-study-test",
-      title: "Business Case Study Test",
-      category: "assessment",
-      description:
-        "Read a business scenario and answer questions from a consultant's perspective.",
-      type: "practice",
-      level: ["any"],
-      skills: ["reading", "business English", "critical thinking"],
-      contexts: [
-        "adults",
-        "online lesson",
-        "classroom",
-        "independent practice",
-      ],
-      keywords: ["case study", "scenario", "comprehension", "consultant"],
-      icon: "fas fa-folder-open",
-      url: "./tools/case-study.html",
-      useCase: "Discuss a workplace scenario and its options",
-    },
-    {
       id: "industry-keywords",
       title: "Industry Keywords & Vocabulary",
       category: "generator",
       description:
         "Explore professional terms across industry topics using flashcards and quizzes.",
-      type: "practice",
+      type: "resource",
       level: ["beginner", "intermediate", "advanced"],
       skills: ["vocabulary", "business English", "reading"],
       contexts: [
@@ -287,7 +222,7 @@
       ],
       icon: "fas fa-tags",
       url: "./tools/keywords.html",
-      useCase: "Review professional vocabulary by topic",
+      useCase: "Choose a topic and review its industry vocabulary",
     },
     {
       id: "jobs-vocabulary",
@@ -304,27 +239,6 @@
       url: "../resources/tools/jobs.html",
       useCase: "Introduce jobs vocabulary or prepare interview practice",
     },
-    {
-      id: "christmas-tree-activity",
-      title: "Christmas Tree Activity",
-      category: "game-support",
-      description:
-        "An interactive seasonal decorating activity for a festive class break.",
-      type: "activity",
-      level: ["any"],
-      skills: ["seasonal vocabulary", "speaking", "classroom games"],
-      contexts: [
-        "classroom",
-        "online lesson",
-        "children",
-        "teens",
-        "group work",
-      ],
-      keywords: ["holiday", "Christmas", "festive", "winter"],
-      icon: "fas fa-tree",
-      url: "./tools/christmas-tree.html",
-      useCase: "Add a seasonal activity to a holiday lesson",
-    },
   ];
 
   const categoryLabels = {
@@ -338,6 +252,7 @@
     interactive: "Interactive tool",
     activity: "Class activity",
     practice: "Practice & reference",
+    resource: "Learning resource",
   };
   const levelLabels = {
     beginner: "Beginner",
@@ -465,7 +380,7 @@
               .join("");
         const isSaved = saved.has(resource.id);
         return `
-        <article class="teacher-resource-card">
+        <article class="teacher-resource-card teacher-resource-card--${resource.category}">
           <a href="${resource.url}" class="tool-card" aria-label="Open ${resource.title}">
             <span class="tool-icon" aria-hidden="true"><i class="${resource.icon}"></i></span>
             <div class="tool-content">
