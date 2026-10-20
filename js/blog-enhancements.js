@@ -522,7 +522,10 @@
   // Enhanced blog navigation for main blog page
   class BlogNavigation {
     constructor() {
-      if (document.querySelector(".posts-container")) {
+      if (
+        document.querySelector(".posts-container") &&
+        !document.getElementById("searchInput")
+      ) {
         this.initBlogFeatures();
       }
     }

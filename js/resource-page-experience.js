@@ -320,6 +320,8 @@
   }
 
   function ensureLocalNavigation(hero, adSection, title) {
+    if (document.body.dataset.disableSectionNavigation === "true") return;
+
     const path = window.location.pathname;
     const localNavAnchor = /\/resources\/(?:index\.html)?$/.test(path)
       ? document.querySelector(".filter-section")
@@ -397,13 +399,25 @@
   }
 
   function setActiveGlobalNavigation() {
+    const isBlogIndex = /\/resources\/lessons-and-blog\/blog\.html$/.test(
+      window.location.pathname,
+    );
+
     document
       .querySelectorAll("header .nav-link, header nav a")
       .forEach((link) => {
-        if (
-          /resources\/index\.html|resources\/?$/.test(
-            link.getAttribute("href") || "",
-          )
+        const href = link.getAttribute("href") || "";
+        if (isBlogIndex && /(?:^|\/)blog\.html(?:[?#].*)?$/.test(href)) {
+          link.classList.add("rpe-active");
+          link.setAttribute("aria-current", "page");
+        } else if (isBlogIndex) {
+          link.classList.remove("rpe-active");
+          if (link.getAttribute("aria-current") === "page") {
+            link.removeAttribute("aria-current");
+          }
+        } else if (
+          !isBlogIndex &&
+          /resources\/index\.html|resources\/?$/.test(href)
         ) {
           link.classList.add("rpe-active");
         }
