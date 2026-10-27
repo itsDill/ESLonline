@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071b2b" />
+    <title>Word Putt — Mini Golf Vocabulary</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f3fbff;
+        --muted: #9ab4c3;
+        --panel: rgba(10, 32, 47, 0.88);
+        --line: rgba(185, 225, 238, 0.16);
+        --mint: #a4f3c2;
+        --gold: #ffd879;
+        --coral: #ff9a87;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background: radial-gradient(
+          ellipse at 50% -20%,
+          #1b4760 0,
+          #0b2538 48%,
+          #071522 100%
+        );
+        font:
+          15px/1.5 Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      .page {
+        width: min(1320px, 100%);
+        margin: 0 auto;
+        padding: 22px 24px 28px;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+        color: #0c3028;
+        background: linear-gradient(145deg, #c0ffd2, #6bdc9a);
+        box-shadow: 0 7px 24px #69e29a2b;
+        font-size: 21px;
+      }
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .stat-pill {
+        padding: 8px 13px;
+        color: #d6e8ed;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #102c3c99;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      .stat-pill strong {
+        color: var(--gold);
+        margin-left: 4px;
+      }
+      .icon-button {
+        width: 38px;
+        height: 38px;
+        color: #d7e7ec;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #102c3c99;
+        cursor: pointer;
+      }
+      .icon-button:hover {
+        border-color: #9eddbc88;
+        background: #173a4d;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 18px;
+        align-items: stretch;
+      }
+      .course-card,
+      .side-card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--panel);
+        box-shadow: 0 20px 60px #0003;
+        overflow: hidden;
+      }
+      .course-card {
+        min-width: 0;
+      }
+      .course-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 19px;
+        border-bottom: 1px solid var(--line);
+      }
+      .course-title {
+        font-size: 13px;
+        font-weight: 750;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .course-hint {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .scene-wrap {
+        position: relative;
+        height: clamp(390px, 53vw, 630px);
+        min-height: 390px;
+        overflow: hidden;
+        background: #a9d8d1;
+      }
+      #course {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        cursor: grab;
+      }
+      #course.is-dragging {
+        cursor: grabbing;
+      }
+      .scene-vignette {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        box-shadow: inset 0 0 80px #09253727;
+      }
+      .shot-tag {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        padding: 7px 11px;
+        color: #eafff0;
+        border: 1px solid #e8fff044;
+        border-radius: 999px;
+        background: #072a2bc2;
+        backdrop-filter: blur(7px);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      .scene-status {
+        position: absolute;
+        right: 14px;
+        top: 14px;
+        max-width: 46%;
+        padding: 7px 11px;
+        color: #153139;
+        border-radius: 999px;
+        background: #f0fff0d9;
+        font-size: 11px;
+        font-weight: 750;
+        text-align: center;
+      }
+      .course-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 18px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .course-foot strong {
+        color: #dff7e7;
+      }
+      .side-card {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+      }
+      .eyebrow {
+        color: var(--mint);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+      .question-count {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      h1 {
+        margin: 14px 0 10px;
+        font-size: clamp(23px, 2.5vw, 30px);
+        line-height: 1.18;
+        letter-spacing: -0.035em;
+      }
+      .sentence {
+        margin: 0;
+        padding: 15px 15px 16px;
+        color: #d2e3e9;
+        border: 1px solid #c6e7ea1b;
+        border-radius: 15px;
+        background: #071d2b88;
+        font-size: 15px;
+        line-height: 1.75;
+      }
+      .blank {
+        display: inline-block;
+        min-width: 70px;
+        color: var(--gold);
+        border-bottom: 2px solid #ffd879a6;
+        font-weight: 800;
+        text-align: center;
+      }
+      .answer-tip {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .divider {
+        height: 1px;
+        margin: 19px 0;
+        background: var(--line);
+      }
+      .control-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .control-head output {
+        color: var(--gold);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"] {
+        display: block;
+        width: 100%;
+        height: 22px;
+        margin: 0;
+        accent-color: #91e8ad;
+        cursor: pointer;
+      }
+      .range-ends {
+        display: flex;
+        justify-content: space-between;
+        color: #7593a3;
+        font-size: 10px;
+      }
+      .power-control {
+        margin-top: 17px;
+      }
+      .shoot-button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 13px 15px;
+        color: #092d25;
+        border: 0;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #bfffd0, #78e3a2);
+        box-shadow: 0 8px 24px #76e3a22b;
+        font-weight: 850;
+        cursor: pointer;
+        transition:
+          transform 0.16s,
+          filter 0.16s;
+      }
+      .shoot-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+      }
+      .shoot-button:disabled {
+        opacity: 0.48;
+        cursor: wait;
+      }
+      .feedback {
+        min-height: 58px;
+        margin-top: 13px;
+        padding: 11px 12px;
+        color: #a7bdc8;
+        border-radius: 12px;
+        background: #071d2b8c;
+        font-size: 12px;
+      }
+      .feedback.good {
+        color: #c1f5d0;
+        background: #103b2c8a;
+      }
+      .feedback.bad {
+        color: #ffd0c8;
+        background: #482b2c99;
+      }
+      .feedback strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 13px;
+      }
+      .help-note {
+        margin-top: auto;
+        padding-top: 16px;
+        color: #7593a3;
+        font-size: 11px;
+      }
+      .overlay {
+        position: fixed;
+        z-index: 5;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: #061521c9;
+        backdrop-filter: blur(8px);
+      }
+      .overlay[hidden] {
+        display: none;
+      }
+      .modal {
+        width: min(450px, 100%);
+        padding: 30px;
+        border: 1px solid #c7f6d531;
+        border-radius: 24px;
+        background: linear-gradient(155deg, #14374a, #0a2030);
+        box-shadow: 0 24px 80px #0007;
+        text-align: center;
+      }
+      .modal-icon {
+        display: grid;
+        place-items: center;
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 15px;
+        border-radius: 18px;
+        color: #103727;
+        background: linear-gradient(145deg, #c0ffd2, #6bdc9a);
+        font-size: 27px;
+      }
+      .modal h2 {
+        margin: 6px 0 8px;
+        font-size: 30px;
+      }
+      .modal p {
+        color: #aac3ce;
+      }
+      .modal .shoot-button {
+        margin-top: 20px;
+      }
+      .error-message {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 30px;
+        color: #13323c;
+        background: linear-gradient(140deg, #b7e7d2, #90c6d3);
+        text-align: center;
+      }
+      .error-message[hidden] {
+        display: none;
+      }
+      @media (max-width: 850px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .side-card {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          column-gap: 22px;
+        }
+        .question-block {
+          grid-column: 1 / -1;
+        }
+        .divider {
+          display: none;
+        }
+        .controls {
+          margin-top: 18px;
+        }
+        .feedback {
+          align-self: end;
+        }
+        .help-note {
+          grid-column: 1 / -1;
+        }
+      }
+      @media (max-width: 560px) {
+        .page {
+          padding: 13px 12px 20px;
+        }
+        .topbar {
+          margin-bottom: 12px;
+        }
+        .brand {
+          gap: 8px;
+          font-size: 12px;
+        }
+        .brand-mark {
+          width: 35px;
+          height: 35px;
+        }
+        .stat-pill {
+          padding: 7px 9px;
+          font-size: 11px;
+        }
+        .scene-wrap {
+          height: 440px;
+          min-height: 360px;
+        }
+        .course-head {
+          padding: 12px 14px;
+        }
+        .course-hint {
+          display: none;
+        }
+        .course-foot {
+          padding: 10px 13px;
+          font-size: 10px;
+        }
+        .side-card {
+          display: flex;
+          padding: 17px;
+        }
+        .controls {
+          margin-top: 0;
+        }
+        .feedback {
+          min-height: 50px;
+        }
+        .help-note {
+          padding-top: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">⛳</span> Word Putt
+        </div>
+        <div class="top-actions">
+          <div class="stat-pill">
+            HOLE <strong id="hole-stat">1 / 30</strong>
+          </div>
+          <div class="stat-pill">
+            STROKES <strong id="stroke-stat">0</strong>
+          </div>
+          <button
+            class="icon-button"
+            id="sound-button"
+            type="button"
+            aria-label="Toggle sound"
+            title="Toggle sound"
+          >
+            ♪
+          </button>
+        </div>
+      </header>
+      <div class="layout">
+        <section class="course-card" aria-label="Mini golf course">
+          <div class="course-head">
+            <div class="course-title">🌿 Vocabulary course</div>
+            <div class="course-hint">
+              Aim for the green with the best answer
+            </div>
+          </div>
+          <div class="scene-wrap">
+            <canvas
+              id="course"
+              aria-label="Three-dimensional mini golf course"
+            ></canvas>
+            <div class="scene-vignette"></div>
+            <div class="shot-tag">TEE OFF</div>
+            <div class="scene-status" id="scene-status">
+              Set your aim, then take your shot
+            </div>
+            <div class="error-message" id="scene-error" hidden>
+              <div>
+                <strong>3D course couldn't load.</strong><br />Check your
+                connection and reload to try again.
+              </div>
+            </div>
+          </div>
+          <div class="course-foot">
+            <span
+              >🏌️ <strong>Par 3</strong> · Drag the ball back, then release to
+              shoot</span
+            ><span id="level-label">LEVEL 1 · 6 HOLES</span>
+          </div>
+        </section>
+        <aside class="side-card">
+          <div class="question-block">
+            <div class="eyebrow">Read the sentence</div>
+            <div class="question-count" id="question-count">
+              Question 1 of 30 · Level 1
+            </div>
+            <h1>Which word completes the sentence?</h1>
+            <p class="sentence" id="sentence"></p>
+            <p class="answer-tip">
+              Aim your shot at the matching word on the course.
+            </p>
+          </div>
+          <div class="divider"></div>
+          <div class="controls">
+            <div class="control-head">
+              <label for="aim">Aim</label><output id="aim-value">0°</output>
+            </div>
+            <input
+              id="aim"
+              type="range"
+              min="-28"
+              max="28"
+              step="1"
+              value="0"
+              aria-label="Aim angle"
+            />
+            <div class="range-ends">
+              <span>← LEFT</span><span>RIGHT →</span>
+            </div>
+            <div class="power-control">
+              <div class="control-head">
+                <label for="power">Shot power</label
+                ><output id="power-value">82%</output>
+              </div>
+              <input
+                id="power"
+                type="range"
+                min="45"
+                max="100"
+                step="1"
+                value="82"
+                aria-label="Shot power"
+              />
+              <div class="range-ends"><span>SOFT</span><span>FULL</span></div>
+            </div>
+            <button class="shoot-button" id="shoot" type="button">
+              <span aria-hidden="true">⛳</span> Take your shot
+            </button>
+          </div>
+          <div class="feedback" id="feedback" aria-live="polite">
+            Choose an answer by aiming at one of the three word greens.
+          </div>
+          <div class="help-note">
+            Drag the ball backward and release to shoot. The dotted tracer and
+            landing ring preview your pull; use the sliders or shot button as an
+            alternative.
+          </div>
+        </aside>
+      </div>
+    </main>
+    <div class="overlay" id="result-overlay" hidden>
+      <div class="modal">
+        <div class="modal-icon">🏆</div>
+        <div class="eyebrow">Course complete</div>
+        <h2>Nice round!</h2>
+        <p id="final-score"></p>
+        <button class="shoot-button" id="play-again" type="button">
+          Play another round
+        </button>
+      </div>
+    </div>
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js";
+
+      const rounds = [
+        {
+          sentence:
+            'The tiny kitten was <span class="blank">_____</span> beside the huge dog.',
+          answers: ["brave", "small", "bright"],
+          correct: 1,
+          definition: "not large in size",
+        },
+        {
+          sentence:
+            'Maya felt <span class="blank">_____</span> after she finished the long race.',
+          answers: ["tired", "polite", "empty"],
+          correct: 0,
+          definition: "needing rest or sleep",
+        },
+        {
+          sentence:
+            'Please <span class="blank">_____</span> the window; the room is too warm.',
+          answers: ["borrow", "close", "open"],
+          correct: 2,
+          definition: "to move something so it is not shut",
+        },
+        {
+          sentence:
+            'The opposite of <span class="blank">_____</span> is "noisy."',
+          answers: ["quiet", "quick", "kind"],
+          correct: 0,
+          definition: "making very little sound",
+        },
+        {
+          sentence:
+            'We use an umbrella when the weather is <span class="blank">_____</span>.',
+          answers: ["sunny", "rainy", "windy"],
+          correct: 1,
+          definition: "with a lot of rain",
+        },
+        {
+          sentence:
+            'A person who shares and helps others is <span class="blank">_____</span>.',
+          answers: ["careful", "selfish", "generous"],
+          correct: 2,
+          definition: "happy to give or share",
+        },
+        {
+          sentence:
+            'The museum exhibit was so <span class="blank">_____</span> that we stayed for hours.',
+          answers: ["fascinating", "ordinary", "sleepy"],
+          correct: 0,
+          definition: "extremely interesting",
+        },
+        {
+          sentence:
+            'The clouds began to <span class="blank">_____</span> and the sun came out.',
+          answers: ["gather", "clear", "darken"],
+          correct: 1,
+          definition: "to become bright and free of clouds",
+        },
+        {
+          sentence:
+            'I finally <span class="blank">_____</span> my keys beneath a magazine.',
+          answers: ["found", "lost", "lent"],
+          correct: 0,
+          definition: "discovered something you were looking for",
+        },
+        {
+          sentence:
+            'Could you <span class="blank">_____</span> the instructions before we begin?',
+          answers: ["ignore", "forget", "review"],
+          correct: 2,
+          definition: "to look at something again",
+        },
+        {
+          sentence:
+            'The path was <span class="blank">_____</span> after the rain, so we walked slowly.',
+          answers: ["slippery", "dusty", "smooth"],
+          correct: 0,
+          definition: "easy to slide on",
+        },
+        {
+          sentence:
+            'Despite the chilly weather, the hikers stayed <span class="blank">_____</span>.',
+          answers: ["silent", "cheerful", "thirsty"],
+          correct: 1,
+          definition: "happy and positive",
+        },
+        {
+          sentence:
+            'You can borrow books for free from the <span class="blank">_____</span>.',
+          answers: ["stadium", "library", "bakery"],
+          correct: 1,
+          definition: "a place where people can read or borrow books",
+        },
+        {
+          sentence:
+            'Please speak <span class="blank">_____</span> so everyone can understand you.',
+          answers: ["quietly", "roughly", "clearly"],
+          correct: 2,
+          definition: "in a way that is easy to understand",
+        },
+        {
+          sentence:
+            'A lion is a <span class="blank">_____</span> that hunts other animals.',
+          answers: ["predator", "vegetarian", "visitor"],
+          correct: 0,
+          definition: "an animal that hunts other animals for food",
+        },
+        {
+          sentence:
+            'We had to <span class="blank">_____</span> the picnic until the rain stopped.',
+          answers: ["prepare", "postpone", "cancelled"],
+          correct: 1,
+          definition: "to arrange for something to happen later",
+        },
+        {
+          sentence:
+            'This old glass is <span class="blank">_____</span>, so please handle it gently.',
+          answers: ["flexible", "heavy", "fragile"],
+          correct: 2,
+          definition: "easily broken or damaged",
+        },
+        {
+          sentence:
+            'It was <span class="blank">_____</span> of him to interrupt the speaker.',
+          answers: ["rude", "patient", "generous"],
+          correct: 0,
+          definition: "not polite or considerate",
+        },
+        {
+          sentence:
+            'At zero degrees Celsius, water can turn into a <span class="blank">_____</span>.',
+          answers: ["liquid", "solid", "gas"],
+          correct: 1,
+          definition: "a firm object that keeps its shape",
+        },
+        {
+          sentence:
+            'An <span class="blank">_____</span> uses telescopes to study stars and planets.',
+          answers: ["engineer", "artist", "astronomer"],
+          correct: 2,
+          definition: "a scientist who studies objects in space",
+        },
+        {
+          sentence:
+            'The neighbors worked together to <span class="blank">_____</span> the problem.',
+          answers: ["solve", "create", "repeat"],
+          correct: 0,
+          definition: "to find an answer to a problem",
+        },
+        {
+          sentence:
+            'She was <span class="blank">_____</span> to hear that her friends planned a party.',
+          answers: ["worried", "delighted", "confused"],
+          correct: 1,
+          definition: "very pleased and happy",
+        },
+        {
+          sentence:
+            'The bridge was badly <span class="blank">_____</span> in the storm.',
+          answers: ["decorated", "protected", "damaged"],
+          correct: 2,
+          definition: "harmed or broken",
+        },
+        {
+          sentence:
+            'Although the directions looked complicated, the diagram made them <span class="blank">_____</span>.',
+          answers: ["accidental", "comprehensible", "distant"],
+          correct: 1,
+          definition: "easy to understand",
+        },
+        {
+          sentence:
+            'The scientist made a careful <span class="blank">_____</span> before writing her report.',
+          answers: ["observation", "invitation", "decision"],
+          correct: 0,
+          definition: "the act of watching something closely",
+        },
+        {
+          sentence:
+            'We should <span class="blank">_____</span> water by turning off the tap while brushing.',
+          answers: ["waste", "conserve", "spill"],
+          correct: 1,
+          definition: "to use something carefully and avoid waste",
+        },
+        {
+          sentence:
+            'The team celebrated their <span class="blank">_____</span> after months of practice.',
+          answers: ["achievement", "argument", "departure"],
+          correct: 0,
+          definition: "something important accomplished through effort",
+        },
+        {
+          sentence:
+            'Please <span class="blank">_____</span> your answer with a reason from the story.',
+          answers: ["remove", "avoid", "support"],
+          correct: 2,
+          definition: "to give evidence or reasons for an idea",
+        },
+        {
+          sentence:
+            'The village is <span class="blank">_____</span> by mountains on three sides.',
+          answers: ["surrounded", "invented", "divided"],
+          correct: 0,
+          definition: "with something all around it",
+        },
+        {
+          sentence:
+            'The instructions were <span class="blank">_____</span>, so nobody knew what to do.',
+          answers: ["accurate", "vague", "regular"],
+          correct: 1,
+          definition: "not clearly explained or expressed",
+        },
+      ];
+      const targetX = [-6.4, 0, 6.4];
+      const targetZ = [21, 25, 21];
+      const targetRadius = 2.65;
+      const $ = (id) => document.getElementById(id);
+      const canvas = $("course");
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color("#a9d8d1");
+      scene.fog = new THREE.Fog("#a9d8d1", 90, 130);
+      canvas.addEventListener("webglcontextlost", (event) => {
+        event.preventDefault();
+        $("scene-error").hidden = false;
+      });
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 18, -24);
+      camera.lookAt(0, 0, 12);
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: false,
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      scene.add(new THREE.HemisphereLight("#e9fff7", "#376b63", 2.5));
+      const sun = new THREE.DirectionalLight("#fff4d8", 3.2);
+      sun.position.set(-8, 18, -2);
+      sun.castShadow = true;
+      sun.shadow.mapSize.set(2048, 2048);
+      sun.shadow.camera.left = -22;
+      sun.shadow.camera.right = 22;
+      sun.shadow.camera.top = 30;
+      sun.shadow.camera.bottom = -18;
+      scene.add(sun);
+
+      const mat = (color, roughness = 0.9) =>
+        new THREE.MeshStandardMaterial({ color, roughness });
+      const makeGrassTexture = () => {
+        const grassCanvas = document.createElement("canvas");
+        grassCanvas.width = 256;
+        grassCanvas.height = 256;
+        const ctx = grassCanvas.getContext("2d");
+        ctx.fillStyle = "#78ae68";
+        ctx.fillRect(0, 0, 256, 256);
+        for (let i = 0; i < 1800; i++) {
+          const shade = Math.random() > 0.5 ? "#a4ce78" : "#4e8d55";
+          ctx.globalAlpha = 0.12 + Math.random() * 0.2;
+          ctx.fillStyle = shade;
+          ctx.fillRect(
+            Math.random() * 256,
+            Math.random() * 256,
+            1 + Math.random() * 2,
+            1 + Math.random() * 4,
+          );
+        }
+        ctx.globalAlpha = 1;
+        const texture = new THREE.CanvasTexture(grassCanvas);
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(3, 8);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        return texture;
+      };
+      const makeMowedTexture = () => {
+        const grassCanvas = document.createElement("canvas");
+        grassCanvas.width = 256;
+        grassCanvas.height = 512;
+        const ctx = grassCanvas.getContext("2d");
+        const bands = ["#88c96f", "#79ba66", "#8dce73", "#78b963"];
+        for (let i = 0; i < bands.length; i++) {
+          ctx.fillStyle = bands[i];
+          ctx.fillRect(0, i * 128, 256, 128);
+        }
+        for (let i = 0; i < 1600; i++) {
+          ctx.globalAlpha = 0.1 + Math.random() * 0.16;
+          ctx.fillStyle = Math.random() > 0.5 ? "#d6ec92" : "#42784c";
+          ctx.fillRect(
+            Math.random() * 256,
+            Math.random() * 512,
+            1 + Math.random() * 2,
+            1 + Math.random() * 3,
+          );
+        }
+        ctx.globalAlpha = 1;
+        const texture = new THREE.CanvasTexture(grassCanvas);
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1, 2);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        return texture;
+      };
+      const fairwayTexture = makeMowedTexture();
+      fairwayTexture.repeat.set(1, 1);
+      fairwayTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      const water = new THREE.Mesh(
+        new THREE.PlaneGeometry(90, 90),
+        mat("#51aab0"),
+      );
+      water.rotation.x = -Math.PI / 2;
+      water.position.y = -0.68;
+      water.receiveShadow = true;
+      scene.add(water);
+      const island = new THREE.Mesh(
+        new THREE.BoxGeometry(22, 0.7, 46),
+        new THREE.MeshStandardMaterial({
+          map: makeGrassTexture(),
+          roughness: 1,
+        }),
+      );
+      island.position.set(0, -0.38, 13);
+      island.receiveShadow = true;
+      island.castShadow = true;
+      scene.add(island);
+      const fairwayMat = new THREE.MeshStandardMaterial({
+        color: "#ffffff",
+        map: fairwayTexture,
+        roughness: 1,
+      });
+      const fairwayShape = new THREE.Shape();
+      fairwayShape.moveTo(-2.6, -7);
+      fairwayShape.lineTo(2.6, -7);
+      fairwayShape.bezierCurveTo(3.2, 2, 5.3, 15, 8.7, 25);
+      fairwayShape.lineTo(-8.7, 25);
+      fairwayShape.bezierCurveTo(-5.3, 15, -3.2, 2, -2.6, -7);
+      fairwayShape.closePath();
+      const fairway = new THREE.Mesh(
+        new THREE.ShapeGeometry(fairwayShape, 48),
+        fairwayMat,
+      );
+      fairway.rotation.x = -Math.PI / 2;
+      fairway.position.set(0, 0.005, 8);
+      fairway.receiveShadow = true;
+      scene.add(fairway);
+      const fringeMat = mat("#a6ce75");
+      const makeFringe = (x, flip) => {
+        const shape = new THREE.Shape();
+        const sign = flip ? -1 : 1;
+        shape.moveTo(sign * 2.6, -7);
+        shape.lineTo(sign * 3.6, -7);
+        shape.bezierCurveTo(sign * 4.5, 2, sign * 6.3, 15, sign * 10.1, 25);
+        shape.lineTo(sign * 8.7, 25);
+        shape.bezierCurveTo(sign * 5.3, 15, sign * 3.2, 2, sign * 2.6, -7);
+        shape.closePath();
+        const patch = new THREE.Mesh(
+          new THREE.ShapeGeometry(shape, 48),
+          fringeMat,
+        );
+        patch.rotation.x = -Math.PI / 2;
+        patch.position.set(x, 0.012, 8);
+        patch.receiveShadow = true;
+        scene.add(patch);
+      };
+      makeFringe(0, false);
+      makeFringe(0, true);
+
+      const makePuttingSurface = (color) => {
+        const shape = new THREE.Shape();
+        shape.moveTo(-2.95, -2.35);
+        shape.bezierCurveTo(-3.35, -0.5, -2.65, 2.45, -0.65, 2.85);
+        shape.bezierCurveTo(1.45, 3.25, 3.15, 1.65, 2.8, -0.55);
+        shape.bezierCurveTo(2.5, -2.4, 0.75, -3.1, -0.55, -2.85);
+        shape.bezierCurveTo(-1.75, -2.75, -2.3, -2.05, -2.95, -2.35);
+        shape.closePath();
+        const greenCanvas = document.createElement("canvas");
+        greenCanvas.width = 256;
+        greenCanvas.height = 256;
+        const greenContext = greenCanvas.getContext("2d");
+        greenContext.fillStyle = color;
+        greenContext.fillRect(0, 0, 256, 256);
+        for (let i = 0; i < 2500; i++) {
+          greenContext.globalAlpha = 0.08 + Math.random() * 0.1;
+          greenContext.fillStyle = Math.random() > 0.5 ? "#d0ef9b" : "#276b48";
+          greenContext.fillRect(Math.random() * 256, Math.random() * 256, 1, 1);
+        }
+        greenContext.globalAlpha = 1;
+        const greenTexture = new THREE.CanvasTexture(greenCanvas);
+        greenTexture.colorSpace = THREE.SRGBColorSpace;
+        const material = new THREE.MeshStandardMaterial({
+          map: greenTexture,
+          color: "#ffffff",
+          roughness: 0.88,
+          side: THREE.DoubleSide,
+        });
+        const green = new THREE.Mesh(
+          new THREE.ShapeGeometry(shape, 32),
+          material,
+        );
+        green.rotation.x = -Math.PI / 2;
+        green.receiveShadow = true;
+        return green;
+      };
+
+      const cupGeometry = new THREE.CircleGeometry(0.38, 32);
+      const cupMaterial = new THREE.MeshBasicMaterial({
+        color: "#122b25",
+        side: THREE.DoubleSide,
+      });
+
+      function makeWordSprite(text, index) {
+        const c = document.createElement("canvas");
+        c.width = 512;
+        c.height = 150;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "rgba(7, 31, 39, 0.94)";
+        ctx.beginPath();
+        ctx.roundRect(6, 6, 500, 138, 30);
+        ctx.fill();
+        ctx.strokeStyle = ["#9deab2", "#ffd879", "#a8d7ff"][index];
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.roundRect(9, 9, 494, 132, 27);
+        ctx.stroke();
+        ctx.fillStyle = "#f3fff5";
+        ctx.font = "800 48px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, 256, 75, 450);
+        const texture = new THREE.CanvasTexture(c);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        const sprite = new THREE.Sprite(
+          new THREE.SpriteMaterial({ map: texture, transparent: true }),
+        );
+        sprite.scale.set(4.5, 1.32, 1);
+        sprite.position.set(0, 4.25, 0);
+        sprite.renderOrder = 5;
+        return sprite;
+      }
+      const targets = [];
+      for (let i = 0; i < 3; i++) {
+        const x = targetX[i],
+          z = targetZ[i];
+        const collarDisk = new THREE.Mesh(
+          new THREE.CircleGeometry(3.25, 48),
+          mat("#92bd70"),
+        );
+        collarDisk.rotation.x = -Math.PI / 2;
+        collarDisk.position.set(x, 0.018, z);
+        scene.add(collarDisk);
+        const green = makePuttingSurface(["#62b96f", "#70c47b", "#5fb36c"][i]);
+        green.position.set(x, 0.032, z);
+        green.receiveShadow = true;
+        scene.add(green);
+        const greenEdge = new THREE.Mesh(
+          new THREE.TorusGeometry(3.04, 0.055, 8, 64),
+          mat("#c0d98a"),
+        );
+        greenEdge.rotation.x = Math.PI / 2;
+        greenEdge.position.set(x, 0.055, z);
+        scene.add(greenEdge);
+        const collar = new THREE.Mesh(
+          new THREE.TorusGeometry(0.45, 0.07, 8, 32),
+          mat("#d8dda4"),
+        );
+        collar.rotation.x = Math.PI / 2;
+        collar.position.set(x, 0.065, z + 0.8);
+        scene.add(collar);
+        const cup = new THREE.Mesh(cupGeometry, cupMaterial);
+        cup.rotation.x = -Math.PI / 2;
+        cup.position.set(x, 0.04, z + 0.8);
+        scene.add(cup);
+        const pole = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.035, 0.05, 2.2, 8),
+          mat("#f4f2dc", 0.45),
+        );
+        pole.position.set(x, 1.12, z + 0.8);
+        pole.castShadow = true;
+        scene.add(pole);
+        const flag = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.8, 0.42),
+          new THREE.MeshStandardMaterial({
+            color: ["#ff836e", "#f4c95d", "#72c9f0"][i],
+            side: THREE.DoubleSide,
+            roughness: 0.7,
+          }),
+        );
+        flag.position.set(x + 0.4, 1.92, z + 0.8);
+        flag.rotation.y = -0.12;
+        scene.add(flag);
+        const label = makeWordSprite("...", i);
+        label.position.x = x;
+        label.position.z = z - 0.35;
+        label.renderOrder = 5;
+        scene.add(label);
+        targets.push({
+          x,
+          z,
+          green,
+          label,
+          baseColor: ["#62b96f", "#70c47b", "#5fb36c"][i],
+        });
+      }
+
+      const hazards = [];
+      const makeSandTrap = (x, z, width, depth, rotation = 0) => {
+        const trap = new THREE.Mesh(
+          new THREE.CircleGeometry(1, 48),
+          new THREE.MeshStandardMaterial({
+            color: "#d8c38b",
+            roughness: 1,
+            side: THREE.DoubleSide,
+          }),
+        );
+        trap.scale.set(width / 2, depth / 2, 1);
+        trap.rotation.x = -Math.PI / 2;
+        trap.rotation.z = rotation;
+        trap.position.set(x, 0.026, z);
+        scene.add(trap);
+        const lip = new THREE.Mesh(
+          new THREE.TorusGeometry(1, 0.045, 6, 48),
+          mat("#b39d6f"),
+        );
+        lip.scale.set(width / 2, depth / 2, 1);
+        lip.rotation.x = Math.PI / 2;
+        lip.rotation.z = rotation;
+        lip.position.set(x, 0.045, z);
+        scene.add(lip);
+        hazards.push({
+          type: "sand",
+          x,
+          z,
+          radiusX: width / 2,
+          radiusZ: depth / 2,
+          rotation,
+        });
+      };
+      const makeWaterHazard = (x, z, width, depth) => {
+        const pond = new THREE.Mesh(
+          new THREE.CircleGeometry(1, 48),
+          new THREE.MeshStandardMaterial({
+            color: "#3198a0",
+            roughness: 0.22,
+            metalness: 0.18,
+            transparent: true,
+            opacity: 0.95,
+            side: THREE.DoubleSide,
+          }),
+        );
+        pond.scale.set(width / 2, depth / 2, 1);
+        pond.rotation.x = -Math.PI / 2;
+        pond.position.set(x, 0.018, z);
+        scene.add(pond);
+        const bank = new THREE.Mesh(
+          new THREE.TorusGeometry(1, 0.075, 8, 56),
+          mat("#e1cf9c"),
+        );
+        bank.scale.set(width / 2 + 0.16, depth / 2 + 0.16, 1);
+        bank.rotation.x = Math.PI / 2;
+        bank.position.set(x, 0.035, z);
+        scene.add(bank);
+        hazards.push({
+          type: "water",
+          x,
+          z,
+          radiusX: width / 2,
+          radiusZ: depth / 2,
+          rotation: 0,
+        });
+      };
+      makeSandTrap(-8.4, 25.5, 5.2, 3.2, -0.22);
+      makeSandTrap(8.4, 25.5, 5.2, 3.2, 0.22);
+      makeSandTrap(-3.8, 29.3, 3.6, 2.5, -0.15);
+      makeSandTrap(3.8, 29.3, 3.6, 2.5, 0.15);
+      makeWaterHazard(-2, 29.2, 5.6, 2.6);
+      makeWaterHazard(2, 29.2, 5.6, 2.6);
+
+      const tee = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.05, 1.25, 0.18, 32),
+        mat("#7aaf65"),
+      );
+      tee.position.set(0, 0.1, -3.2);
+      tee.castShadow = true;
+      tee.receiveShadow = true;
+      scene.add(tee);
+      const teeMark = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.12, 0.08, 16),
+        mat("#f7e28d"),
+      );
+      teeMark.position.set(0, 0.23, -3.2);
+      scene.add(teeMark);
+      const ballCanvas = document.createElement("canvas");
+      ballCanvas.width = 512;
+      ballCanvas.height = 256;
+      const ballContext = ballCanvas.getContext("2d");
+      ballContext.fillStyle = "#fffdf0";
+      ballContext.fillRect(0, 0, ballCanvas.width, ballCanvas.height);
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 16; col++) {
+          const x = col * 32 + (row % 2) * 16;
+          const y = row * 32 + 16;
+          ballContext.beginPath();
+          ballContext.ellipse(x, y, 5, 3.5, 0, 0, Math.PI * 2);
+          ballContext.fillStyle = "#e4e5d9";
+          ballContext.fill();
+          ballContext.beginPath();
+          ballContext.ellipse(x, y - 1, 3.5, 2, 0, 0, Math.PI * 2);
+          ballContext.fillStyle = "#fffef9";
+          ballContext.fill();
+        }
+      }
+      const ballTexture = new THREE.CanvasTexture(ballCanvas);
+      ballTexture.colorSpace = THREE.SRGBColorSpace;
+      const ball = new THREE.Mesh(
+        new THREE.SphereGeometry(0.31, 24, 18),
+        new THREE.MeshStandardMaterial({
+          color: "#fffdf0",
+          map: ballTexture,
+          roughness: 0.22,
+          metalness: 0.02,
+        }),
+      );
+      ball.position.set(0, 0.58, -3.2);
+      ball.castShadow = true;
+      scene.add(ball);
+      const ballShadow = new THREE.Mesh(
+        new THREE.CircleGeometry(0.33, 24),
+        new THREE.MeshBasicMaterial({
+          color: "#143a32",
+          transparent: true,
+          opacity: 0.28,
+        }),
+      );
+      ballShadow.rotation.x = -Math.PI / 2;
+      ballShadow.position.set(0, 0.25, -3.2);
+      scene.add(ballShadow);
+      const aimLine = new THREE.Line(
+        new THREE.BufferGeometry(),
+        new THREE.LineDashedMaterial({
+          color: "#fff3b0",
+          transparent: true,
+          opacity: 0.95,
+          dashSize: 0.4,
+          gapSize: 0.23,
+        }),
+      );
+      scene.add(aimLine);
+      const landingRing = new THREE.Mesh(
+        new THREE.TorusGeometry(0.55, 0.055, 8, 40),
+        new THREE.MeshBasicMaterial({
+          color: "#fff3b0",
+          transparent: true,
+          opacity: 0.88,
+        }),
+      );
+      landingRing.rotation.x = Math.PI / 2;
+      landingRing.position.y = 0.075;
+      scene.add(landingRing);
+      const landingDot = new THREE.Mesh(
+        new THREE.CircleGeometry(0.13, 20),
+        new THREE.MeshBasicMaterial({
+          color: "#fff3b0",
+          transparent: true,
+          opacity: 0.75,
+        }),
+      );
+      landingDot.rotation.x = -Math.PI / 2;
+      landingDot.position.y = 0.06;
+      scene.add(landingDot);
+
+      let hole = 0,
+        strokes = 0,
+        moving = false,
+        dragging = false,
+        shotFrame = 0,
+        soundOn = false,
+        buttonAction = "shoot";
+      let shotData = null,
+        audioContext = null;
+      const origin = new THREE.Vector3(0, 0.58, -3.2);
+      const ballRadius = 0.31;
+      const durationMs = 2450;
+      const getShotDistance = (power) => 18 + (power - 45) * 0.34;
+      const getShotProgress = (time) => 1 - (1 - time) ** 2;
+      const getBallHeight = (time) => {
+        const launchTime = 0.18;
+        const flight = Math.min(time / launchTime, 1);
+        const hop = 0.42 * 4 * flight * (1 - flight);
+        const teeLift =
+          (origin.y - ballRadius) * Math.max(1 - time / launchTime, 0);
+        return ballRadius + hop + teeLift;
+      };
+      function updateLabels() {
+        $("hole-stat").textContent =
+          `${Math.min(hole + 1, rounds.length)} / ${rounds.length}`;
+        $("stroke-stat").textContent = String(strokes);
+        $("question-count").textContent =
+          `Question ${hole + 1} of ${rounds.length} · Level ${Math.floor(hole / 6) + 1}`;
+        $("level-label").textContent =
+          `LEVEL ${Math.floor(hole / 6) + 1} · 6 HOLES`;
+        $("sentence").innerHTML = rounds[hole].sentence;
+        rounds[hole].answers.forEach((word, i) => {
+          const ctx = targets[i].label.material.map; // refresh canvas-backed label texture
+          const textureCanvas = ctx.image;
+          const g = textureCanvas.getContext("2d");
+          g.clearRect(0, 0, textureCanvas.width, textureCanvas.height);
+          g.fillStyle = "rgba(7, 31, 39, 0.94)";
+          g.beginPath();
+          g.roundRect(6, 6, 500, 138, 30);
+          g.fill();
+          g.strokeStyle = ["#9deab2", "#ffd879", "#a8d7ff"][i];
+          g.lineWidth = 6;
+          g.beginPath();
+          g.roundRect(9, 9, 494, 132, 27);
+          g.stroke();
+          g.fillStyle = "#f3fff5";
+          g.font = "800 48px system-ui, sans-serif";
+          g.textAlign = "center";
+          g.textBaseline = "middle";
+          g.fillText(word, 256, 75, 450);
+          ctx.needsUpdate = true;
+          targets[i].green.material.color.set(targets[i].baseColor);
+        });
+        camera.position.x = 0;
+        camera.lookAt(0, 0, 12);
+        $("feedback").className = "feedback";
+        $("feedback").textContent =
+          "Choose an answer by aiming at one of the three word greens.";
+        $("scene-status").textContent = "Set your aim, then take your shot";
+        $("shoot").disabled = false;
+        updateAim();
+      }
+      function updateAim() {
+        const angleDegrees = Number($("aim").value);
+        const angle = THREE.MathUtils.degToRad(angleDegrees);
+        const power = Number($("power").value);
+        $("aim-value").textContent =
+          `${angleDegrees > 0 ? "+" : ""}${angleDegrees}°`;
+        $("power-value").textContent = `${power}%`;
+        if (moving) return;
+        const distance = getShotDistance(power);
+        const dx = Math.sin(angle) * distance;
+        const dz = Math.cos(angle) * distance;
+        const points = [];
+        for (let i = 0; i <= 36; i++) {
+          const t = i / 36;
+          const progress = getShotProgress(t);
+          points.push(
+            new THREE.Vector3(
+              dx * progress,
+              getBallHeight(t),
+              -3.2 + dz * progress,
+            ),
+          );
+        }
+        aimLine.geometry.dispose();
+        aimLine.geometry = new THREE.BufferGeometry().setFromPoints(points);
+        aimLine.computeLineDistances();
+        aimLine.visible = true;
+        landingRing.position.x = landingDot.position.x = dx;
+        landingRing.position.z = landingDot.position.z = -3.2 + dz;
+        landingRing.visible = landingDot.visible = true;
+      }
+      $("aim").addEventListener("input", updateAim);
+      $("power").addEventListener("input", updateAim);
+
+      const dragStart = { x: 0, y: 0, pointerId: null };
+      const pointer = new THREE.Vector2();
+      const raycaster = new THREE.Raycaster();
+      function updateDragAim(clientX, clientY) {
+        const pullX = dragStart.x - clientX;
+        const pullY = Math.max(0, clientY - dragStart.y);
+        const angle = THREE.MathUtils.clamp(
+          THREE.MathUtils.radToDeg(Math.atan2(pullX, Math.max(pullY, 8))),
+          -28,
+          28,
+        );
+        const pullLength = Math.hypot(pullX, pullY);
+        const power = THREE.MathUtils.clamp(
+          45 + ((pullLength - 18) / 130) * 55,
+          45,
+          100,
+        );
+        $("aim").value = String(Math.round(angle));
+        $("power").value = String(Math.round(power));
+        updateAim();
+        $("scene-status").textContent = "Release to take your shot";
+        $("feedback").textContent =
+          "Pull back farther for more power; pull sideways to aim.";
+      }
+      canvas.addEventListener("pointerdown", (event) => {
+        if (moving || dragging || buttonAction !== "shoot") return;
+        const rect = canvas.getBoundingClientRect();
+        pointer.set(
+          ((event.clientX - rect.left) / rect.width) * 2 - 1,
+          -((event.clientY - rect.top) / rect.height) * 2 + 1,
+        );
+        raycaster.setFromCamera(pointer, camera);
+        const ballScreen = ball.position.clone().project(camera);
+        const ballX = rect.left + ((ballScreen.x + 1) / 2) * rect.width;
+        const ballY = rect.top + ((1 - ballScreen.y) / 2) * rect.height;
+        const nearBall =
+          Math.hypot(event.clientX - ballX, event.clientY - ballY) <= 38;
+        if (!nearBall && !raycaster.intersectObject(ball, false).length) return;
+        dragging = true;
+        dragStart.x = event.clientX;
+        dragStart.y = event.clientY;
+        dragStart.pointerId = event.pointerId;
+        canvas.classList.add("is-dragging");
+        canvas.setPointerCapture(event.pointerId);
+        $("scene-status").textContent = "Pull back, then release";
+      });
+      canvas.addEventListener("pointermove", (event) => {
+        if (!dragging || event.pointerId !== dragStart.pointerId) return;
+        updateDragAim(event.clientX, event.clientY);
+      });
+      canvas.addEventListener("pointerup", (event) => {
+        if (!dragging || event.pointerId !== dragStart.pointerId) return;
+        const pullDistance = Math.hypot(
+          dragStart.x - event.clientX,
+          dragStart.y - event.clientY,
+        );
+        dragging = false;
+        dragStart.pointerId = null;
+        canvas.classList.remove("is-dragging");
+        const pullBack = event.clientY - dragStart.y;
+        if (pullDistance >= 16 && pullBack >= 12) shoot();
+        else updateAim();
+      });
+      canvas.addEventListener("pointercancel", () => {
+        dragging = false;
+        dragStart.pointerId = null;
+        canvas.classList.remove("is-dragging");
+        updateAim();
+      });
+
+      function beep(frequency, length = 0.12) {
+        if (!soundOn) return;
+        audioContext ||= new AudioContext();
+        const oscillator = audioContext.createOscillator(),
+          gain = audioContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioContext.currentTime + length,
+        );
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + length);
+      }
+      function shoot() {
+        if (moving || buttonAction !== "shoot") return;
+        ball.position.copy(origin);
+        ballShadow.position.set(0, 0.25, -3.2);
+        const angle = THREE.MathUtils.degToRad(Number($("aim").value));
+        const power = Number($("power").value);
+        const distance = getShotDistance(power);
+        const dx = Math.sin(angle) * distance;
+        const dz = Math.cos(angle) * distance;
+        const desiredCameraX = THREE.MathUtils.clamp(dx * 0.34, -2.6, 2.6);
+        camera.position.x = desiredCameraX;
+        camera.lookAt(0, 0, 12);
+        const rollAxis = new THREE.Vector3(dz, 0, -dx).normalize();
+        shotData = {
+          start: performance.now(),
+          dx,
+          dz,
+          distance,
+          angle,
+          rollAxis,
+          startQuaternion: ball.quaternion.clone(),
+        };
+        moving = true;
+        shotFrame = 0;
+        strokes += 1;
+        $("stroke-stat").textContent = String(strokes);
+        $("shoot").disabled = true;
+        $("scene-status").textContent = "Ball in flight…";
+        $("feedback").className = "feedback";
+        $("feedback").textContent = "Watch your shot…";
+        aimLine.visible = landingRing.visible = landingDot.visible = false;
+        beep(230, 0.17);
+      }
+      $("shoot").addEventListener("click", () =>
+        buttonAction === "next" ? nextHole() : shoot(),
+      );
+
+      function finishShot() {
+        moving = false;
+        updateAim();
+        let hazard = null;
+        for (let step = 1; step <= 60 && !hazard; step++) {
+          const progress = getShotProgress(step / 60);
+          const shotX = shotData.dx * progress;
+          const shotZ = -3.2 + shotData.dz * progress;
+          hazard = hazards.find((item) => {
+            const dx = shotX - item.x;
+            const dz = shotZ - item.z;
+            const cos = Math.cos(item.rotation);
+            const sin = Math.sin(item.rotation);
+            const localX = dx * cos + dz * sin;
+            const localZ = -dx * sin + dz * cos;
+            return (
+              (localX / item.radiusX) ** 2 + (localZ / item.radiusZ) ** 2 <= 1
+            );
+          });
+          if (hazard) {
+            ball.position.set(shotX, ballRadius, shotZ);
+            ballShadow.position.set(shotX, 0.025, shotZ);
+          }
+        }
+        if (hazard) {
+          $("feedback").className = "feedback bad";
+          $("feedback").innerHTML =
+            hazard.type === "water"
+              ? "<strong>Splash! The ball landed in the water.</strong> Try again and steer around the pond."
+              : "<strong>In the bunker!</strong> The ball found the sand. Try another shot toward the green.";
+          $("scene-status").textContent =
+            hazard.type === "water"
+              ? "Water hazard — try again"
+              : "Sand trap — try again";
+          $("shoot").disabled = false;
+          $("shoot").textContent = "Take another shot";
+          buttonAction = "shoot";
+          beep(hazard.type === "water" ? 140 : 190, 0.3);
+          return;
+        }
+        let nearest = -1,
+          nearestDistance = Infinity;
+        targets.forEach((target, i) => {
+          const d = Math.hypot(
+            ball.position.x - target.x,
+            ball.position.z - target.z,
+          );
+          if (d < nearestDistance) {
+            nearestDistance = d;
+            nearest = i;
+          }
+        });
+        const round = rounds[hole];
+        const hitGreen = nearestDistance < targetRadius;
+        if (hitGreen && nearest === round.correct) {
+          targets[nearest].green.material.color.set("#a2efa8");
+          $("feedback").className = "feedback good";
+          $("feedback").innerHTML =
+            `<strong>Great putt! That's correct.</strong> “${round.answers[nearest]}” means ${round.definition}.`;
+          $("scene-status").textContent = "On the right green!";
+          beep(660, 0.22);
+          setTimeout(() => beep(880, 0.28), 130);
+          buttonAction = "next";
+          $("shoot").textContent =
+            hole === rounds.length - 1 ? "See your score" : "Next hole →";
+          $("shoot").disabled = false;
+        } else {
+          $("feedback").className = "feedback bad";
+          if (hitGreen) {
+            $("feedback").innerHTML =
+              `<strong>Not quite — you landed on “${round.answers[nearest]}.”</strong> Try again. Hint: ${round.definition}.`;
+            $("scene-status").textContent = "Wrong green — take another shot";
+          } else {
+            $("feedback").innerHTML =
+              `<strong>Just missed the greens!</strong> Adjust your angle or power and try again. Hint: ${round.definition}.`;
+            $("scene-status").textContent = "Missed — adjust and try again";
+          }
+          $("shoot").disabled = false;
+          $("shoot").textContent = "Take another shot";
+          buttonAction = "shoot";
+          if (hitGreen) targets[nearest].green.material.color.set("#e99179");
+          beep(165, 0.3);
+        }
+      }
+      function nextHole() {
+        hole += 1;
+        buttonAction = "shoot";
+        $("shoot").textContent = "⛳  Take your shot";
+        if (hole >= rounds.length) {
+          $("final-score").textContent =
+            `You finished in ${strokes} strokes. ${strokes <= rounds.length + 2 ? "Excellent putting and vocabulary!" : "Keep practicing — your next round will be even better!"}`;
+          $("result-overlay").hidden = false;
+          return;
+        }
+        ball.position.copy(origin);
+        ballShadow.position.set(0, 0.25, -3.2);
+        $("aim").value = "0";
+        $("power").value = "82";
+        updateLabels();
+      }
+      $("play-again").addEventListener("click", () => {
+        hole = 0;
+        strokes = 0;
+        ball.position.copy(origin);
+        ballShadow.position.set(0, 0.25, -3.2);
+        buttonAction = "shoot";
+        $("result-overlay").hidden = true;
+        $("shoot").textContent = "⛳  Take your shot";
+        updateLabels();
+      });
+      $("sound-button").addEventListener("click", () => {
+        soundOn = !soundOn;
+        $("sound-button").textContent = soundOn ? "♫" : "♪";
+        $("sound-button").setAttribute(
+          "aria-label",
+          soundOn ? "Turn sound off" : "Turn sound on",
+        );
+        if (soundOn) beep(520, 0.1);
+      });
+      function resize() {
+        const width = canvas.clientWidth,
+          height = canvas.clientHeight;
+        if (!width || !height) return;
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
+      const resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(canvas);
+      window.addEventListener("resize", resize);
+      resize();
+      updateLabels();
+      function animate(now) {
+        requestAnimationFrame(animate);
+        if (moving && shotData) {
+          const t = Math.min((now - shotData.start) / durationMs, 1);
+          const progress = getShotProgress(t);
+          const x = shotData.dx * progress,
+            z = -3.2 + shotData.dz * progress;
+          ball.position.set(x, getBallHeight(t), z);
+          const roll = new THREE.Quaternion().setFromAxisAngle(
+            shotData.rollAxis,
+            (shotData.distance * progress) / ballRadius,
+          );
+          ball.quaternion.copy(shotData.startQuaternion).multiply(roll);
+          ballShadow.position.set(x, 0.025, z);
+          ballShadow.material.opacity =
+            0.3 - (ball.position.y - ballRadius) * 0.2;
+          shotFrame = t;
+          if (t >= 1) {
+            ball.position.y = ballRadius;
+            finishShot();
+          }
+        }
+        renderer.render(scene, camera);
+      }
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>
