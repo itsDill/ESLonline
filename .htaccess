@@ -84,6 +84,7 @@ FileETag None
     # Keep high-traffic pages from the retired coding section useful via relevant replacements.
     RewriteRule ^coding/codingresources\.html$ /resources/lessons-and-blog/coding-getting-started.html [R=301,L]
     RewriteRule ^coding/javascript\.html$ /resources/lessons-and-blog/coding-getting-started.html [R=301,L]
+    RewriteRule ^coding/(?:computerbasics|ai)\.html$ /resources/lessons-and-blog/coding-getting-started.html [R=301,L]
     RewriteRule ^coding/projects/guessing-game\.html$ /games/games.html [R=301,L]
     RewriteRule ^vocab/intermediate\.html$ /resources/vocabulary/vintermediate.html [R=301,L]
     RewriteRule ^vocab/vbeginner\.html$ /resources/vocabulary/vbeginner.html [R=301,L]
@@ -96,12 +97,24 @@ FileETag None
     RewriteRule ^english/vocab-school\.html$ /resources/english/vocab-school.html [R=301,L]
     RewriteRule ^english/onet\.html$ /resources/english/onet.html [R=301,L]
     RewriteRule ^english/phrasal-verbs\.html$ /resources/english/phrasal-verbs.html [R=301,L]
+    RewriteRule ^english/(.+)$ /resources/english/$1 [R=301,L]
+    # Redirect moved English and business pages when their current destination exists.
     RewriteRule ^business/email-templates\.html$ /resources/business/email-templates.html [R=301,L]
     RewriteRule ^business/vocabulary\.html$ /resources/business/vocabulary.html [R=301,L]
+    RewriteRule ^business/(.+)$ /resources/business/$1 [R=301,L]
+    # The compact idioms file is a fragment with placeholder definitions; use the complete lesson.
+    RewriteRule ^idioms-compact\.html$ /resources/english/idioms.html [R=301,L]
     RewriteRule ^daɪˌvɜːrsɪfɪˈkeɪʃən/?$ /resources/business/vocabulary.html [R=301,L]
     # Preserve legacy blog URLs after moving articles into resources/lessons-and-blog/.
     RewriteRule ^blog/?$ /resources/lessons-and-blog/blog.html [R=301,L]
     RewriteRule ^blog/(.+)$ /resources/lessons-and-blog/$1 [R=301,L]
+    # Normalize root-relative footer URLs that were emitted relative to a nested resource page.
+    RewriteCond %{DOCUMENT_ROOT}/$1 -f
+    RewriteRule ^resources/[^/]+/(resources/.*|games/.*|teacher-hub/.*|privacy\.html|terms\.html|cookies\.html)$ /$1 [R=301,L]
+    RewriteRule ^resources/[^/]+/coding/(?:codingresources|computerbasics|ai)\.html$ /resources/lessons-and-blog/coding-getting-started.html [R=301,L]
+    # Older shared footers use image paths relative to their resource folder.
+    RewriteRule ^resources/[^/]+/images/(.+)$ /images/$1 [R=301,L]
+    RewriteRule ^resources/(css|images)/(.+)$ /$1/$2 [R=301,L]
     # Other coding URLs were retired and have no direct replacement.
     RewriteRule ^coding(?:/.*)?$ - [G,L]
 </IfModule>

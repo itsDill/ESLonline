@@ -17,6 +17,10 @@
             "/resources/lessons-and-blog/coding-getting-started.html",
           "/coding/javascript.html":
             "/resources/lessons-and-blog/coding-getting-started.html",
+          "/coding/computerbasics.html":
+            "/resources/lessons-and-blog/coding-getting-started.html",
+          "/coding/ai.html":
+            "/resources/lessons-and-blog/coding-getting-started.html",
           "/coding/projects/guessing-game.html": "/games/games.html",
           "/blog/coding-getting-started.html":
             "/resources/lessons-and-blog/coding-getting-started.html",
@@ -34,6 +38,7 @@
           "/business/email-templates.html":
             "/resources/business/email-templates.html",
           "/business/vocabulary.html": "/resources/business/vocabulary.html",
+          "/idioms-compact.html": "/resources/english/idioms.html",
           "/blog/professional-communication-skills.html":
             "/resources/lessons-and-blog/professional-communication-skills.html",
           "/daɪˌvɜːrsɪfɪˈkeɪʃən/": "/resources/business/vocabulary.html",
@@ -46,7 +51,28 @@
           // Keep the original path if it contains malformed percent encoding.
         }
 
-        const destination = redirects[path];
+        let destination = redirects[path];
+        if (
+          !destination &&
+          /^\/(?:english|business)\/[^/]+\.html$/i.test(path)
+        ) {
+          destination = `/resources${path}`;
+        }
+        if (
+          !destination &&
+          /^\/resources\/[^/]+\/(?:resources|games|teacher-hub)\//i.test(path)
+        ) {
+          destination = path.replace(/^\/resources\/[^/]+/i, "");
+        }
+        if (
+          !destination &&
+          /^\/resources\/[^/]+\/coding\/(?:codingresources|computerbasics|ai)\.html$/i.test(
+            path,
+          )
+        ) {
+          destination =
+            "/resources/lessons-and-blog/coding-getting-started.html";
+        }
         if (destination) {
           window.__legacyRedirecting = true;
           window.location.replace(
