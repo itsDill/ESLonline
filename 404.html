@@ -13,6 +13,20 @@
             "/resources/vocabulary/vintermediate.html",
           "/tools/dice.html": "/teacher-hub/tools/dice.html",
           "/tools/tools.html": "/resources/tools/tools.html",
+          "/coding/codingresources.html":
+            "/resources/lessons-and-blog/coding-getting-started.html",
+          "/coding/javascript.html":
+            "/resources/lessons-and-blog/coding-getting-started.html",
+          "/coding/projects/guessing-game.html": "/games/games.html",
+          "/blog/coding-getting-started.html":
+            "/resources/lessons-and-blog/coding-getting-started.html",
+          "/blog/lesson-fluency-2026.html":
+            "/resources/lessons-and-blog/lesson-fluency-2026.html",
+          "/blog/grammar-beginner.html":
+            "/resources/lessons-and-blog/grammar-beginner.html",
+          "/vocab/vadvanced.html": "/resources/vocabulary/vadvanced.html",
+          "/english/eiken-grade3.html": "/resources/english/eiken-grade3.html",
+          "/english/eiken-grade4.html": "/resources/english/eiken-grade4.html",
           "/english/vocab-school.html": "/resources/english/vocab-school.html",
           "/english/onet.html": "/resources/english/onet.html",
           "/english/phrasal-verbs.html":
@@ -34,6 +48,7 @@
 
         const destination = redirects[path];
         if (destination) {
+          window.__legacyRedirecting = true;
           window.location.replace(
             destination + window.location.search + window.location.hash,
           );
@@ -41,17 +56,22 @@
       })();
     </script>
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN"
-    ></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+      // Do not count client-side legacy redirects as genuine 404 page views.
+      if (!window.__legacyRedirecting) {
+        const gtagScript = document.createElement("script");
+        gtagScript.async = true;
+        gtagScript.src =
+          "https://www.googletagmanager.com/gtag/js?id=G-9G9RD6BHLN";
+        document.head.appendChild(gtagScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-9G9RD6BHLN");
       }
-      gtag("js", new Date());
-      gtag("config", "G-9G9RD6BHLN");
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
