@@ -563,149 +563,206 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="../../css/xo-play.css" />
   </head>
-  <body>
-    <div class="game-container">
-      <div class="header">
-        <h1>❌⭕ XO</h1>
-        <p>Answer English questions to mark your spots and win!</p>
+  <body class="xo-play-page">
+    <a href="#main-game" class="xo-skip-link">Skip to game</a>
+    <header class="game-nav-header" role="banner">
+      <nav class="nav-left" aria-label="Game navigation">
+        <a href="../../index.html" class="nav-btn" aria-label="Go to home page">
+          <i class="fas fa-home" aria-hidden="true"></i><span>Home</span>
+        </a>
+        <a href="../games.html" class="nav-btn" aria-label="Go to all games">
+          <i class="fas fa-gamepad" aria-hidden="true"></i><span>Games</span>
+        </a>
+      </nav>
+      <div class="game-title">
+        <i class="fas fa-hashtag" aria-hidden="true"></i> XO Vocabulary
+        Challenge
       </div>
+    </header>
 
-      <div class="game-area">
-        <!-- Setup Screen -->
-        <div class="setup-screen" id="setupScreen">
-          <h2>🎮 Prepare for Battle</h2>
-
-          <!-- Difficulty Selection -->
-          <div class="setup-section">
-            <h3>Select Difficulty</h3>
-            <div class="setup-buttons" id="difficultyButtons">
-              <button class="setup-btn" onclick="selectDifficulty('easy')">
-                ⭐ Easy<br /><span class="difficulty-label"
-                  >Computer plays slower</span
-                >
-              </button>
-              <button
-                class="setup-btn selected"
-                onclick="selectDifficulty('medium')"
-              >
-                ⭐⭐ Medium<br /><span class="difficulty-label"
-                  >Balanced play</span
-                >
-              </button>
-              <button class="setup-btn" onclick="selectDifficulty('hard')">
-                ⭐⭐⭐ Hard<br /><span class="difficulty-label"
-                  >Computer plays smart</span
-                >
-              </button>
-            </div>
-          </div>
-
-          <!-- Player Mark Selection -->
-          <div class="setup-section">
-            <h3>Choose Your Mark</h3>
-            <div class="setup-buttons" id="markButtons">
-              <button class="setup-btn selected" onclick="selectMark('x')">
-                ✅ X<br /><span class="difficulty-label"
-                  >Play as X (first)</span
-                >
-              </button>
-              <button class="setup-btn" onclick="selectMark('o')">
-                ⭕ O<br /><span class="difficulty-label"
-                  >Play as O (second)</span
-                >
-              </button>
-            </div>
-          </div>
-
-          <!-- Start Button -->
-          <button class="start-btn" onclick="startGame()" id="startBtn">
-            <i class="fas fa-play"></i> Start Game
-          </button>
-        </div>
-
-        <!-- Game Screen -->
-        <div class="game-screen" id="gameScreen">
-          <!-- Game Stats -->
-          <div class="game-info">
-            <div class="info-box">
-              <div class="label">Your Mark</div>
-              <div class="value" id="playerMarkDisplay">X</div>
-            </div>
-            <div class="info-box">
-              <div class="label">Difficulty</div>
-              <span class="difficulty-badge" id="difficultyDisplay"
-                >Medium</span
-              >
-            </div>
-            <div class="info-box">
-              <div class="label">Score</div>
-              <div class="value" id="scoreDisplay">0-0-0</div>
-            </div>
-          </div>
-
-          <!-- Game Status -->
-          <div class="game-status" id="gameStatus">Loading...</div>
-
-          <!-- Question Section -->
-          <div
-            id="questionSection"
-            class="question-section"
-            style="display: none"
-          >
-            <div class="question-header">
-              <span class="question-icon"
-                ><i class="fas fa-lightbulb"></i
-              ></span>
-              <div class="question" id="questionText"></div>
-            </div>
-            <div class="options" id="optionsContainer"></div>
-          </div>
-
-          <!-- Game Board -->
-          <div class="board" id="gameBoard"></div>
-
-          <!-- Controls -->
-          <div class="controls">
-            <button class="btn btn-primary" onclick="resetGame()">
-              <i class="fas fa-redo"></i> New Game
-            </button>
-            <button class="btn btn-setup" onclick="backToSetup()">
-              <i class="fas fa-cog"></i> Change Settings
-            </button>
-            <button
-              class="btn btn-secondary"
-              onclick="window.location.href = 'games.html'"
-            >
-              <i class="fas fa-arrow-left"></i> Exit
-            </button>
-          </div>
-
-          <!-- Statistics -->
-          <div class="stats">
-            <div class="stat-item">
-              <div class="stat-label">Wins</div>
-              <div class="stat-value" id="winCount">0</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Losses</div>
-              <div class="stat-value" id="lossCount">0</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Draws</div>
-              <div class="stat-value" id="drawCount">0</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="back-link">
-        <a href="games.html"
-          ><i class="fas fa-arrow-left"></i> Back to All Games</a
+    <div class="xo-page-shell">
+      <div class="xo-game-layout">
+        <main
+          class="game-container"
+          id="main-game"
+          aria-label="XO vocabulary game"
         >
+          <div class="header">
+            <h1>❌⭕ XO</h1>
+            <p>Answer English questions to mark your spots and win!</p>
+          </div>
+
+          <div class="game-area">
+            <!-- Setup Screen -->
+            <div class="setup-screen" id="setupScreen">
+              <h2>🎮 Prepare for Battle</h2>
+
+              <!-- Difficulty Selection -->
+              <div class="setup-section">
+                <h3>Select Difficulty</h3>
+                <div class="setup-buttons" id="difficultyButtons">
+                  <button class="setup-btn" onclick="selectDifficulty('easy')">
+                    ⭐ Easy<br /><span class="difficulty-label"
+                      >Computer plays slower</span
+                    >
+                  </button>
+                  <button
+                    class="setup-btn selected"
+                    onclick="selectDifficulty('medium')"
+                  >
+                    ⭐⭐ Medium<br /><span class="difficulty-label"
+                      >Balanced play</span
+                    >
+                  </button>
+                  <button class="setup-btn" onclick="selectDifficulty('hard')">
+                    ⭐⭐⭐ Hard<br /><span class="difficulty-label"
+                      >Computer plays smart</span
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <!-- Player Mark Selection -->
+              <div class="setup-section">
+                <h3>Choose Your Mark</h3>
+                <div class="setup-buttons" id="markButtons">
+                  <button class="setup-btn selected" onclick="selectMark('x')">
+                    ✅ X<br /><span class="difficulty-label"
+                      >Play as X (first)</span
+                    >
+                  </button>
+                  <button class="setup-btn" onclick="selectMark('o')">
+                    ⭕ O<br /><span class="difficulty-label"
+                      >Play as O (second)</span
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <!-- Start Button -->
+              <button class="start-btn" onclick="startGame()" id="startBtn">
+                <i class="fas fa-play"></i> Start Game
+              </button>
+            </div>
+
+            <!-- Game Screen -->
+            <div class="game-screen" id="gameScreen">
+              <!-- Game Stats -->
+              <div class="game-info">
+                <div class="info-box">
+                  <div class="label">Your Mark</div>
+                  <div class="value" id="playerMarkDisplay">X</div>
+                </div>
+                <div class="info-box">
+                  <div class="label">Difficulty</div>
+                  <span class="difficulty-badge" id="difficultyDisplay"
+                    >Medium</span
+                  >
+                </div>
+                <div class="info-box">
+                  <div class="label">Score</div>
+                  <div class="value" id="scoreDisplay">0-0-0</div>
+                </div>
+              </div>
+
+              <!-- Game Status -->
+              <div class="game-status" id="gameStatus">Loading...</div>
+
+              <!-- Question Section -->
+              <div
+                id="questionSection"
+                class="question-section"
+                style="display: none"
+              >
+                <div class="question-header">
+                  <span class="question-icon"
+                    ><i class="fas fa-lightbulb"></i
+                  ></span>
+                  <div class="question" id="questionText"></div>
+                </div>
+                <div class="options" id="optionsContainer"></div>
+              </div>
+
+              <!-- Game Board -->
+              <div class="board" id="gameBoard"></div>
+
+              <!-- Controls -->
+              <div class="controls">
+                <button class="btn btn-primary" onclick="resetGame()">
+                  <i class="fas fa-redo"></i> New Game
+                </button>
+                <button class="btn btn-setup" onclick="backToSetup()">
+                  <i class="fas fa-cog"></i> Change Settings
+                </button>
+                <button
+                  class="btn btn-secondary"
+                  onclick="window.location.href = '../games.html'"
+                >
+                  <i class="fas fa-arrow-left"></i> Exit
+                </button>
+              </div>
+
+              <!-- Statistics -->
+              <div class="stats">
+                <div class="stat-item">
+                  <div class="stat-label">Wins</div>
+                  <div class="stat-value" id="winCount">0</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Losses</div>
+                  <div class="stat-value" id="lossCount">0</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Draws</div>
+                  <div class="stat-value" id="drawCount">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="back-link">
+            <a href="../games.html"
+              ><i class="fas fa-arrow-left"></i> Back to All Games</a
+            >
+          </div>
+        </main>
+        <aside class="xo-ad-rail" aria-label="Advertisement">
+          <div class="xo-ad-card">
+            <span class="xo-ad-label">Advertisement</span>
+            <ins
+              class="adsbygoogle"
+              style="display: inline-block; width: 300px; height: 250px"
+              data-ad-client="ca-pub-2456627863532019"
+              data-ad-slot="9319754067"
+            ></ins>
+          </div>
+        </aside>
       </div>
+
+      <section class="xo-bottom-ad" aria-label="Advertisement">
+        <span class="xo-ad-label">Advertisement</span>
+        <ins
+          class="adsbygoogle"
+          style="display: block; min-height: 90px"
+          data-ad-client="ca-pub-2456627863532019"
+          data-ad-slot="2586206204"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </section>
+
+      <footer class="xo-footer">
+        <a href="../../index.html">Home</a>
+        <a href="../games.html">More games</a>
+        <a href="../../privacy.html">Privacy</a>
+        <a href="../../contact.html">Contact</a>
+        <span>© 2026 ESL Fun Online</span>
+      </footer>
     </div>
 
+    <script src="../../js/game-ads.js"></script>
     <script>
       // Game Configuration
       let gameConfig = {
